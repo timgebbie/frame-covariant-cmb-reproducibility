@@ -55,6 +55,9 @@ lost. Every released figure plots a **multipole** mean-square: *Annals II* p. 36
 notes that these hold for general geometries while mode mean-squares hold only
 for almost-Robertson–Walker ones.
 
+This is a Boltzmann code written from scratch. The only external code it is
+checked against is **CMBFAST** — nothing else, deliberately, to avoid scope creep.
+
 Equation numbers throughout are **published** numbers. The published and arXiv
 numberings of the Annals papers differ, and not by a constant offset.
 
@@ -91,18 +94,12 @@ footnote in the supplement; the full forensics stay in `provenance/`.
 
 **These are possible extensions, not claims made by the current release.**
 
-- **v1.5.0** — the high-ℓ O(ε²ℓ) couplings, and the restricted case, which must
-  recover v1.0.0's numbers. That makes v1.5.0 a recovery and a check rather than
-  a new claim.
-- **v2.0.0** — calibration and data-science release, including Planck data and
-  the first ΛCDM angular power spectrum. *Calibration* there means calibrating
-  the solver against standard results; it does **not** mean calibrating the
-  amplitude of an effect. The ΛCDM spectrum is not an extension of this release
-  but a different computation: *Annals II* §8.3.2 is standard CDM, flat and
-  matter dominated, and its C_ℓ is a closed-form Sachs–Wolfe result with the
-  transfer function set to unity. A ΛCDM spectrum needs a recombination history,
-  tight coupling, diffusion damping and an integrated Sachs–Wolfe contribution
-  from Λ.
+- **v1.5.0** — the high-ℓ O(ε²ℓ) effects, **gated on Paper 1**, and the
+  restricted case, which must recover v1.0.0's numbers. That makes the restricted
+  part a recovery and a check rather than a new claim.
+- **v2.0.0** — calibration and data-science release, including Planck data.
+  *Calibration* there means calibrating the solver against standard results; it
+  does **not** mean calibrating the amplitude of an effect.
 - **A fractional-contribution form of the source decomposition**, each term drawn
   as its share of C_ℓ and summing to one by construction.
 
@@ -209,10 +206,13 @@ content rests with the author.
 The public version history follows semantic versioning:
 
 ```text
-v1.0.0        first public analytical reproducibility release — Annals II recovered
+v1.0.0        first public analytical reproducibility release — the CDM and
+              LambdaCDM angular power spectra in the almost-FLRW formulation,
+              Eq. (186) from Eq. (176), by both the mode route and the covariant
+              route of Eqs. (187) and (188)
 v1.0.1        documentation or metadata updates without a scientific change
-v1.5.0        compatible scientific extension — high-ell couplings, and the
-              restricted case as a recovery and check of v1.0.0
+v1.5.0        compatible scientific extension — the high-ell effects, gated on
+              Paper 1, and the restricted case as a recovery and check of v1.0.0
 v2.0.0        calibration and data-science release, including Planck data
 v3.0.0        incompatible model, interface or scientific-scope change
 ```
