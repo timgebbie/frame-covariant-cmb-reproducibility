@@ -243,3 +243,65 @@ def test_annals_ii_199_needs_the_square_in_its_denominator():
     # the two cases Annals II actually uses
     assert abs(float(gamma(2)) - 1.0) < 1e-12  # m = 2, used by (201): unaffected
     assert abs(float(gamma(1.5)) - 0.8862269) < 1e-6  # m = 1, used by (204): 11.4% low
+
+
+# --- the chain closes numerically, not only symbolically --------------------
+
+
+def _stream():
+    import numpy as np
+
+    from functions.harmonics.free_streaming import analytic_projection, free_stream
+
+    return np, free_stream, analytic_projection
+
+
+def test_f4_variable_is_exactly_the_spherical_bessel_function():
+    """alpha_l^{-1} tau_l = j_l(k_com (eta - eta_i)), to integrator precision.
+
+    Appendix F, p. 380, says the free-streaming solution is spherical Bessel. This
+    pins which normalisation it is bare in: the (F.4) variable, which is also the
+    one in which the hierarchy takes the external Ma & Bertschinger form. The
+    normalisation that makes the coefficients external makes the solution bare.
+
+    Convention imported: none. The spherical Bessel recurrence is an independent
+    fact about j_l, not a statement taken from Annals II.
+    """
+    np, free_stream, analytic = _stream()
+    eta = np.linspace(0.0, 20.0, 400)
+    sol = free_stream(1.0, eta, ell_max=80, normalisation="alpha")
+    window = (eta > 2) & (eta < 18)
+    for ell in (0, 1, 2, 3, 5, 8, 12, 20):
+        j = analytic(1.0, eta, 0.0, ell)
+        assert np.max(np.abs(sol.values[window, ell] - j[window])) < 1e-8, ell
+
+
+def test_the_three_normalisations_are_one_solution():
+    """(F.1), (F.3) and (F.4) integrate to the same tau_l."""
+    np, free_stream, _ = _stream()
+    eta = np.linspace(0.0, 20.0, 400)
+    window = (eta > 2) & (eta < 18)
+    ref = free_stream(1.0, eta, ell_max=80, normalisation="covariant").covariant()
+    for norm in ("beta", "alpha"):
+        got = free_stream(1.0, eta, ell_max=80, normalisation=norm).covariant()
+        assert np.max(np.abs(got[window, :30] - ref[window, :30])) < 1e-4, norm
+
+
+def test_sign_control_fails_in_a_known_shape():
+    """D1. Flipping the relative sign destroys the projection.
+
+    Both couplings then carry the same sign, so the hierarchy grows instead of
+    projecting an oscillatory solution onto higher multipoles. It does not merely
+    disagree — it diverges, which is why it is the cheapest wiring check in the
+    bundle. Acceptance criterion 4.
+    """
+    np, free_stream, analytic = _stream()
+    eta = np.linspace(0.0, 20.0, 400)
+    window = (eta > 2) & (eta < 18)
+    good = free_stream(1.0, eta, ell_max=80, normalisation="alpha")
+    bad = free_stream(1.0, eta, ell_max=80, normalisation="alpha", sign_control=True)
+    for ell in (2, 5, 10):
+        j = analytic(1.0, eta, 0.0, ell)
+        assert np.max(np.abs(good.values[window, ell] - j[window])) < 1e-8, ell
+        # the control is orders of magnitude out, not marginally wrong
+        assert np.max(np.abs(bad.values[window, ell])) > 1e3 * np.max(np.abs(j[window])), ell

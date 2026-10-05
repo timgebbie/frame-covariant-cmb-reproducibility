@@ -16,10 +16,10 @@ v1.0.0 is complete when all six hold, and not before.
 
 | | Criterion | Status |
 |---|---|---|
-| 1 | the free-streaming recursion reproduces (F.1)–(F.4), with the external matches of (F.3) and (F.4) checked numerically rather than asserted | **open** — chain verified symbolically; external comparison not yet built |
+| 1 | the free-streaming recursion reproduces (F.1)–(F.4), with the external matches of (F.3) and (F.4) checked numerically rather than asserted | **part closed** — the chain now closes numerically: $\alpha_\ell^{-1}\tau_\ell = j_\ell(k_{\rm com}\Delta\eta)$ to $10^{-10}$, and all three normalisations integrate to one solution. **Remaining:** read the three external hierarchies from their own sources rather than through Appendix F |
 | 2 | a covariant → mode → covariant round trip returns the input to machine precision | **open** |
 | 3 | both harmonic phase conventions run end to end; only one reproduces the real, opposite-sign form of the external hierarchies, and the bundle adopts and names that one | **open** — wording agreed and adopted, Q1 closed |
-| 4 | a known-wrong control runs and fails in a known shape | **open** — restated. The $\pm(\ell+2)$ control is **withdrawn** to v1.5.0, where that term exists, and replaced by a relative-sign control on the free-streaming bracket (D1). See Q2, closed |
+| 4 | a known-wrong control runs and fails in a known shape | **closed** — D1 runs and diverges rather than projecting; the correct recursion matches $j_\ell$ to $10^{-10}$ beside it. Restated: The $\pm(\ell+2)$ control is **withdrawn** to v1.5.0, where that term exists, and replaced by a relative-sign control on the free-streaming bracket (D1). See Q2, closed |
 | 5 | the almost-Friedmann–Lemaître temperature spectrum is recovered over $2\le\ell\le20$ to 5% | **open** — range and tolerance now **derived and closed**, see Q3 |
 | 6 | every number the paper prints is regenerated here, or marked not-machine-checkable with the reason | **open** — closes at manuscript freeze. `v1.0.0-rc` is tagged on criteria 1–5; `v1.0.0` requires all six, Q5 closed |
 
