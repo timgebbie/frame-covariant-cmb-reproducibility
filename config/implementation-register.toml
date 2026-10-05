@@ -197,6 +197,56 @@ test = ""
 note = "gives $\\ell_A\\simeq203$, hence $2\\le\\ell\\le20$ at 5\\%"
 
 [[equations]]
+key = "cl_mode_route"
+quantity = "$C_\\ell = \\frac{2}{\\pi}\\frac{\\beta_\\ell^2}{(2\\ell+1)^2}\\int \\frac{dk}{k}k^3|\\tau_\\ell|^2$"
+source = "AnnalsII"
+equation = "(186), p. 368"
+module = ""
+object = ""
+test = "test_mode_route_and_covariant_route_to_cl_are_identical"
+note = "PENDING implementation --- \\textbf{the v1.0.0 target}. Prefactor identity already asserted"
+
+[[equations]]
+key = "cl_multipole_meansquare"
+quantity = "$\\langle\\tau_{A_\\ell}\\tau^{A_\\ell}\\rangle = \\frac{\\beta_\\ell}{2\\pi^2}\\int k^2dk|\\tau_\\ell|^2$"
+source = "AnnalsII"
+equation = "(187), p. 368"
+module = ""
+object = ""
+test = "test_mode_route_and_covariant_route_to_cl_are_identical"
+note = "PENDING implementation --- the covariant route, not attainable in the canonical treatment"
+
+[[equations]]
+key = "cl_covariant_route"
+quantity = "$C_\\ell = \\Delta_\\ell(2\\ell+1)^{-1}\\langle\\tau_{A_\\ell}\\tau^{A_\\ell}\\rangle$"
+source = "AnnalsII"
+equation = "(188), p. 368"
+module = ""
+object = ""
+test = "test_mode_route_and_covariant_route_to_cl_are_identical"
+note = "PENDING implementation --- identical to (186); proven exactly"
+
+[[equations]]
+key = "cl_sachs_wolfe"
+quantity = "$C^{\\rm SW}_\\ell = \\frac{1}{2\\pi}H_0^4\\Omega_0^{1.54}\\int\\frac{dk}{k^2}P(k)j_\\ell^2(k\\Delta\\eta_*)$"
+source = "AnnalsII"
+equation = "(198), p. 371"
+module = "functions.spectra.sachs_wolfe"
+object = "cl_sachs_wolfe_quadrature"
+test = "test_the_analytic_reduction_matches_the_quadrature"
+note = "criterion 5a's target. Integrated directly in $k$, independent of (199)"
+
+[[equations]]
+key = "cl_large_scale"
+quantity = "large-scale closed form, $n=1$"
+source = "AnnalsII"
+equation = "(200), (201), p. 372"
+module = "functions.spectra.sachs_wolfe"
+object = "cl_large_scale_reduced"
+test = "test_g5_printed_201_is_short_by_the_comoving_distance"
+note = "finding \\textbf{G5}: the printed (201) omits the factor $\\chi$ from the reduction"
+
+[[equations]]
 key = "source_split"
 quantity = "$S_P$, $S_{\\rm DISW}$, $S_{\\rm ISW}$ --- the temperature source split"
 source = "AnnalsII"

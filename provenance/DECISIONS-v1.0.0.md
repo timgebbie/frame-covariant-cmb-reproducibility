@@ -18,7 +18,7 @@ Last amended 2026-10-05.
 | | Decision |
 |---|---|
 | **S1** | **v1.0.0 covers everything in Annals I, Annals II and the supporting literature**, with errors, typos and physics corrected in light of what the preprint correction established. The deliverable is the **CDM and ΛCDM angular power spectra in the almost-Friedmann–Lemaître formulation**: Eq. (186) computed from Eq. (176), by the mode route and by the covariant route of Eqs. (187) and (188). |
-| **S2** | **v1.5.0 is the high-$\ell$ $O(\varepsilon^2\ell)$ effects.** It is **gated on Paper 1**, which P1-T is writing. It also carries the $\pm(\ell+2)$ control, where that term exists, and the restricted case as a recovery and check of v1.0.0. |
+| **S2** | **v1.5.0 is the high-$\ell$ $O(\varepsilon^2\ell)$ effects, and it carries BOTH nonlinear corrections** — the gravitational coupling to the kinematic quantities, $\delta\dot\tau_{NL}$, and the nonlinear Thomson scattering coupling to the baryon velocity, $\dot{\delta C}_{NL}$. Both are named in thesis Chapters 2 and 6; see the thesis-abstract entry below for the displayed forms. It is **gated on Paper 1**, which P1-T is writing. It also carries the $\pm(\ell+2)$ control, where that term exists, and the restricted case as a recovery and check of v1.0.0. *Accepted 2026-10-05.* |
 | **S3** | **v2.0.0 is calibration and data science**, including Planck. *Calibration* means calibrating the solver against standard results, never calibrating the amplitude of an effect. |
 | **S4** | **This is a Boltzmann code written from scratch.** The only external code it is checked against is **CMBFAST** — nothing else, deliberately, to avoid scope creep. |
 | **S5** | This stream's remit is **v1.0.0 and v1.5.0**. |
@@ -137,9 +137,12 @@ $(2\ell+1)\beta_\ell^{-1}$ factor explicit, and ends by naming the chapter's
 purpose: *"clarifying the connection between the more usual approaches (for
 example that of Hu-Sugiyama) and the CGI treatment for scalar perturbations (for
 example the alternative scalar covariant treatment of Challinor-Lasenby)."*
-**Proposal: the "supporting literature" of S1 is therefore specifically
-Hu & Sugiyama and Challinor & Lasenby**, alongside the mode-representation
-antecedent Wilson & Silk and the external hierarchies already read.
+**Proposal, revised 2026-10-05 after the PI corrected it — see the note on
+attribution below.** The supporting literature of S1 is **Hu & Sugiyama**, which
+is the treatment the formulation was developed from and checked against.
+**Challinor & Lasenby is contemporaneous and independent** and is used only for
+convention translation, not as an antecedent. Wilson & Silk is the
+mode-representation antecedent named by Chapter 1.
 
 **Chapter 6 carries TWO nonlinear corrections, not one.** The gravitational
 coupling to the kinematic quantities,
@@ -156,8 +159,8 @@ v_B^{a_\ell\rangle}+\tfrac12\tau^{A_\ell a}v^B_a\Big].$$
 Chapter 2's abstract names both: *"a coupling between the radiation multipole and
 the baryonic velocity via nonlinear Thomson scattering and a gravitational
 coupling between the radiation multipoles and the kinematic quantities."*
-**Proposal: S2's statement of v1.5.0 should name both**, since this stream has
-been tracking only the gravitational one.
+**ACCEPTED 2026-10-05: S2 names both.** This stream had been tracking only the
+gravitational one.
 
 **Chapter 6's cancellation claim is frame-dependent in the source itself**:
 *"gravitational nonlinearity ... leads to cancellation on small-scales when
@@ -173,3 +176,45 @@ in 1+3 covariant and gauge invariant (CGI) form."* That the mode-representation
 antecedent is **Wilson & Silk** supports reading Appendix F's `[81]` as a typo for
 `[82]`. It is supporting evidence, not a verification: resolving G4 still needs
 Eq. (7) of the paper itself. **G4 stays open.**
+
+---
+
+## Attribution — how the related work is positioned, and what is not said
+
+**Recorded 2026-10-05 on the PI's account.** This entry exists so that a later
+session does not write something that misstates the lineage. It governs
+*language*; it changes no physics and makes no claim in any released artefact.
+
+### What the bundle says
+
+| Work | How it is positioned | Why |
+|---|---|---|
+| **Hu & Sugiyama** | the treatment this formulation was **developed from and checked against** | the PI's own account, and demonstrable: the acceptance spine matches their Eq. (6) directly, in the $\beta$ normalisation |
+| **Challinor & Lasenby** | a **contemporaneous and independent** covariant treatment | used in this project only for **convention translation** — it works in the opposite signature, and the conventions sheet carries a row mapping to it |
+| **Wilson & Silk** | the **mode-representation antecedent**, named as such by thesis Chapter 1 | and the subject of finding **G4** |
+| **Ellis, Treciokas & Matravers (1983)** | the PSTF lineage the covariant treatment rests on | GE98, MGE99 and the thesis all cite it for the same lemmas, so they are one source |
+
+### What the bundle does not say
+
+**No priority claim appears in any released artefact.** The bundle reproduces; it
+does not argue (**L4**), and the project's voice rule is that the work corrects
+quietly and does not dig up skeletons. A priority dispute is the clearest possible
+case of something that belongs outside a reproducibility bundle: it cannot be
+settled by running code, and asserting it would undercut the one thing the bundle
+is for.
+
+**Equally, the bundle must not imply the reverse.** The $1+3$ covariant line here
+runs Ellis–Treciokas–Matravers $\to$ GE98 and MGE99 $\to$ Annals I and II. It does
+**not** derive from Challinor & Lasenby, and no wording should suggest that it
+responds to or follows from that treatment. *Annals II*'s own abstract speaks of
+clarifying the connection to it; this bundle neither contradicts nor amplifies
+that sentence.
+
+The accurate and sufficient statement is that the two covariant treatments are
+contemporaneous and independent. That is what is written, and nothing further.
+
+### Polarisation
+
+**Polarisation is out of scope for v1.0.0 and v1.5.0.** If it is ever taken up,
+**Challinor & Lasenby is the prior work** and must be cited as such. Recorded here
+so that the question is already answered before anyone reaches it.

@@ -58,6 +58,12 @@ for almost-Robertson–Walker ones.
 This is a Boltzmann code written from scratch. The only external code it is
 checked against is **CMBFAST** — nothing else, deliberately, to avoid scope creep.
 
+**Hu & Sugiyama** is the treatment this formulation was developed from and
+checked against, which is why the acceptance spine matches their Eq. (6)
+directly. **Challinor & Lasenby** is a contemporaneous and independent covariant
+treatment, used here only for convention translation, since it works in the
+opposite signature.
+
 Equation numbers throughout are **published** numbers. The published and arXiv
 numberings of the Annals papers differ, and not by a constant offset.
 
@@ -94,9 +100,11 @@ footnote in the supplement; the full forensics stay in `provenance/`.
 
 **These are possible extensions, not claims made by the current release.**
 
-- **v1.5.0** — the high-ℓ O(ε²ℓ) effects, **gated on Paper 1**, and the
-  restricted case, which must recover v1.0.0's numbers. That makes the restricted
-  part a recovery and a check rather than a new claim.
+- **v1.5.0** — the high-ℓ O(ε²ℓ) effects, **gated on Paper 1**, carrying **both**
+  nonlinear corrections: the gravitational coupling to the kinematic quantities,
+  δτ̇_NL, and the nonlinear Thomson scattering coupling to the baryon velocity,
+  δĊ_NL. Also the restricted case, which must recover v1.0.0's numbers, making
+  that part a recovery and a check rather than a new claim.
 - **v2.0.0** — calibration and data-science release, including Planck data.
   *Calibration* there means calibrating the solver against standard results; it
   does **not** mean calibrating the amplitude of an effect.
@@ -211,8 +219,11 @@ v1.0.0        first public analytical reproducibility release — the CDM and
               Eq. (186) from Eq. (176), by both the mode route and the covariant
               route of Eqs. (187) and (188)
 v1.0.1        documentation or metadata updates without a scientific change
-v1.5.0        compatible scientific extension — the high-ell effects, gated on
-              Paper 1, and the restricted case as a recovery and check of v1.0.0
+v1.5.0        compatible scientific extension — the high-ell effects, carrying
+              BOTH nonlinear corrections (the gravitational coupling to the
+              kinematic quantities and the nonlinear Thomson coupling to the
+              baryon velocity), gated on Paper 1, with the restricted case as a
+              recovery and check of v1.0.0
 v2.0.0        calibration and data-science release, including Planck data
 v3.0.0        incompatible model, interface or scientific-scope change
 ```

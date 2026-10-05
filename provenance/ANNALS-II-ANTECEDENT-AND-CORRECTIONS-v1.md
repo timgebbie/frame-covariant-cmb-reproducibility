@@ -361,3 +361,81 @@ $-\dot\kappa\Delta_{T\ell}$ are Thomson scattering, not free streaming.
 
 **Wilson remains unread** — pre-arXiv, and **G4** leaves it ambiguous which paper
 is meant. The release states **three** external hierarchies, not four.
+
+---
+
+## G4 — supporting evidence, 2026-10-05. Still open
+
+The thesis chapter whose published form is *Annals I* opens by stating that the
+angular correlation functions are obtained *"following the Wilson-Silk approach
+for the mode representation, but derived and dealt with in $1+3$ covariant and
+gauge invariant (CGI) form."*
+
+That the mode-representation antecedent is **Wilson \& Silk** supports reading
+Appendix F's `[81]` as a typo for `[82]`, which is Wilson \& Silk (1981), rather
+than as a naming slip for `[81]`, Wilson (1983).
+
+**This is supporting evidence, not a verification.** Resolving the citation still
+requires Eq. (7) of the paper itself, and this bundle does not settle a citation
+by inference. **G4 remains open**, and the release continues to state three
+external hierarchies rather than four.
+
+---
+
+## G5 — Annals II (201) omits the comoving distance from the reduction
+
+**Class: material, and it moves an acceptance criterion — therefore RAISED, not
+footnoted.** Found 2026-10-05 while building the Sachs–Wolfe spectrum.
+
+§8.3.1, p. 372. From (198) with $P(k)=Ak^{n-1}$, Annals II writes
+
+$$C_\ell=\frac{1}{2\pi}AH_0^4\Omega_0^{1.54}\int\frac{dk}{k^2}\,k^{n-1}
+j_\ell^2(k\chi)\tag{200}$$
+
+and states that "using (199) for $m=2$ ($n=1$)" gives
+
+$$C_\ell=\frac{A}{2}H_0^4\Omega_0^{1.54}\frac{1}{(2\ell+3)(2\ell+1)(2\ell-1)}.
+\tag{201}$$
+
+**The reduction carries a factor $\chi$ that the display does not.** Substituting
+$z=k\chi$ into (200),
+
+$$\int dk\,k^{n-3}j_\ell^2(k\chi)=\chi^{2-n}\int dz\,z^{n-3}j_\ell^2(z)
+=\chi^{2-n}\,I(m=3-n),$$
+
+so $n=1$ carries one factor of $\chi$, and with $I(2)=\pi/[(2\ell+3)(2\ell+1)
+(2\ell-1)]$ the result is $(A\chi/2)H_0^4\Omega_0^{1.54}/[(2\ell+3)(2\ell+1)
+(2\ell-1)]$.
+
+**Demonstrated numerically, not argued.** (198) integrated directly in $k$, with
+no change of variable and no use of (199), agrees with the reduction to eight
+digits and exceeds the printed (201) by exactly $\Delta\eta_*$ at every $\ell$
+tested:
+
+| $\ell$ | 2 | 5 | 10 | 20 | 30 |
+|---|---|---|---|---|---|
+| quadrature / printed (201) | 1.939725 | 1.939724 | 1.939722 | 1.939735 | 1.939740 |
+
+against $\Delta\eta_*=1.939725/H_0$ for the flat matter-dominated background at
+$z_*=1100$. The ratio is the distance, at every multipole, to six figures.
+
+**Note that (199) is not at fault here.** At $m=2$ the printed identity is exact,
+because $\Gamma(2)=1$ — that is finding **G3**. G5 is independent of G3: a factor
+dropped between (200) and (201), not an error in the identity used to get there.
+
+**What moves.** (201) sets the large-scale CDM normalisation. Normalising the
+amplitude $A$ through the printed form makes it too large by $\Delta\eta_*\approx
+1.94$ — not a small correction. Nothing involving a sign or an $\ell$-weight
+moves; the $\ell$-dependence of (201) is correct.
+
+**Why it is raised rather than footnoted.** It changes the target of acceptance
+criterion **5a**, *"the Sachs–Wolfe limit is recovered over $2\le\ell\le20$ to
+5%"*. Comparing a correct reconstruction against the printed (201) would show a
+94% discrepancy and read as a failure of the reconstruction.
+
+**Proposed resolution:** criterion 5a's target becomes **(198) itself** — equally
+closed-form, and the quantity (201) is a reduction of — with (201) carried in
+`provenance/` as a corrected expression. On that target 5a is already met at the
+analytic level: the quadrature and the reduction agree to $10^{-5}$.
+
+**Status: raised to P1-T and the PI. Criterion 5a's target awaits confirmation.**

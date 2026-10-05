@@ -160,3 +160,78 @@ six closed. One DOI, reserved early so the paper has something to cite and minte
 on publication of v1.0.0. No release ever claims a done-condition it has not met.
 
 **Status: closed.**
+
+---
+
+## Q6 — the v1.0.0 target restated, and what it does to criterion 5
+
+**Raised by the PI, 2026-10-05.** The staging was under-specified and this stream
+had it partly wrong.
+
+**The target of v1.0.0 is the CDM angular power spectrum: Eq. (186) computed from
+Eq. (176)**, with (187) and (188) as the covariant route to the same number.
+Equation numbers are identical in the published and arXiv editions here.
+
+$$C_\ell=\frac{2}{\pi}\frac{\beta_\ell^2}{(2\ell+1)^2}\int_0^\infty\frac{dk}{k}\,
+k^3|\tau_\ell(k,\eta_0)|^2\tag{186}$$
+
+$$\langle\tau_{A_\ell}\tau^{A_\ell}\rangle\simeq\frac{\beta_\ell}{2\pi^2}
+\int k^2dk\,|\tau_\ell(k,\eta_0)|^2,\qquad
+C_\ell=\Delta_\ell(2\ell+1)^{-1}\langle\tau_{A_\ell}\tau^{A_\ell}\rangle
+\tag{187, 188}$$
+
+**The two routes are identical**, exactly, given $\Delta_\ell=4\pi\beta_\ell/
+(2\ell+1)$ — proven in `tests/`. That identity is the paper's own point stated as
+a test: §7.1.4 says that at linear order the solutions do not differ importantly
+from the canonical treatment, and that what the covariant formulation buys is the
+route through the multipole mean-squares, *"not attainable in the canonical
+treatment."* **The route is the result.**
+
+### What this stream had wrong
+
+**$\Lambda$CDM was placed at v2.0.0 on a bad argument.** This stream said it
+needed a recombination history, tight coupling and diffusion damping. All three
+are required by v1.0.0's own target, because (176) carries the acoustic and
+Doppler sources and §8 carries the damping. The marginal cost of $\Lambda$CDM
+over CDM is the expansion law (185) and the late-ISW term already present in
+$S_{\rm ISW}$ (179). **$\Lambda$CDM belongs at v1.5.0**, as the PI proposed.
+
+### Consequence: criterion 5 is now wrong as written
+
+Criterion 5 reads *"the almost-Friedmann–Lemaître temperature spectrum is
+recovered over $2\le\ell\le20$ to 5%"*. That range was derived in **Q3** for the
+§8.3.1 **Sachs–Wolfe-only closed form**, where $\cos(kr_s)$ is dropped by taking
+$r_s^*\to0$. With the target restated to (186) from (176) — which retains the
+acoustic and Doppler sources — that restriction does not apply, and the
+acceptance range should extend through the acoustic peaks and into the damping
+tail.
+
+**Q3's derivation is not withdrawn.** It remains correct and useful as a check on
+the **Sachs–Wolfe limit**, and is worth keeping as a separate sub-criterion
+because it is a closed-form target with no free parameters.
+
+**Decision required.** Criterion 5 becomes two:
+
+| | Statement | Target |
+|---|---|---|
+| **5a** | the Sachs–Wolfe limit is recovered over $2\le\ell\le20$ to 5% | §8.3.1 closed form; already derived, Q3 |
+| **5b** | the CDM angular power spectrum is recovered to a stated tolerance over a stated range | (186) from (176) — **range and tolerance to be set** |
+
+5b's range and tolerance cannot be derived the way 5a's was, because there is no
+closed form to bound the error against. The honest options are an external
+Boltzmann code at the level of the observable, or the canonical analytic
+treatment of Hu & Sugiyama. **This reopens Q3's option 3b**, which was set aside
+when the target was thought to be the §8 closed form alone.
+
+**External target settled, 2026-10-05: CMBFAST, and nothing else.** The bundle is
+a Boltzmann code written from scratch; it is checked against CMBFAST at best, and
+no other code, deliberately, to avoid scope creep.
+
+**ΛCDM moves into v1.0.0.** Both the CDM and the ΛCDM angular power spectra are
+wanted in the almost-Friedmann–Lemaître setting at v1.0.0, so that the high-$\ell$
+extension at v1.5.0 is a clean delta rather than a change of model. v1.5.0 is the
+high-$\ell$ effects and is gated on Paper 1.
+
+**Still open:** 5b's tolerance and $\ell$ range against CMBFAST.
+
+**Status: open on the numbers only. Not blocking the current work.**

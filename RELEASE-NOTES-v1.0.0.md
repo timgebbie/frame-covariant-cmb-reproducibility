@@ -20,7 +20,8 @@ v1.0.0 is complete when all six hold, and not before.
 | 2 | a covariant → mode → covariant round trip returns the input to machine precision | **open** |
 | 3 | both harmonic phase conventions run end to end; only one reproduces the real, opposite-sign form of the external hierarchies, and the bundle adopts and names that one | **closed** — D1 runs both; the adopted normalisation sits on $j_\ell$ to $10^{-10}$ while the other diverges by $5\times10^{6}$ at $\ell=2$. The adopted convention is named in the supplement, \S2 |
 | 4 | a known-wrong control runs and fails in a known shape | **closed** — D1 runs and diverges rather than projecting; the correct recursion matches $j_\ell$ to $10^{-10}$ beside it. Restated: The $\pm(\ell+2)$ control is **withdrawn** to v1.5.0, where that term exists, and replaced by a relative-sign control on the free-streaming bracket (D1). See Q2, closed |
-| 5 | the almost-Friedmann–Lemaître temperature spectrum is recovered over $2\le\ell\le20$ to 5% | **open** — range and tolerance now **derived and closed**, see Q3 |
+| 5a | the Sachs–Wolfe limit is recovered over $2\le\ell\le20$ to 5% | **open** — range and tolerance derived, Q3 |
+| 5b | the **CDM and ΛCDM** angular power spectra are recovered to a stated tolerance over a stated range, checked against **CMBFAST** | **open** — external target settled; tolerance and range to be set, Q6 |
 | 6 | every number the paper prints is regenerated here, or marked not-machine-checkable with the reason | **open** — closes at manuscript freeze. `v1.0.0-rc` is tagged on criteria 1–5; `v1.0.0` requires all six, Q5 closed |
 
 ## What is in this tree now
@@ -85,6 +86,9 @@ acceptance criterion is still raised rather than footnoted.
 
 ## Known not to be in v1.0.0
 
-- the high-$\ell$ $O(\varepsilon^2\ell)$ couplings — **v1.5.0**;
+- the high-$\ell$ $O(\varepsilon^2\ell)$ effects and **both** nonlinear
+  corrections, gravitational and nonlinear-Thomson — **v1.5.0**, gated on Paper 1;
 - Planck data, likelihoods, any calibration — **v2.0.0**;
+- any external code check other than **CMBFAST**, deliberately, to avoid scope
+  creep;
 - any claim the paper makes. The bundle reproduces; it does not argue.
