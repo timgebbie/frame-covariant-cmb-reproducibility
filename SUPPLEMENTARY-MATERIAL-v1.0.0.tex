@@ -1,0 +1,48 @@
+% Computational supplement to the associated paper.
+% Build:  latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.0.0.tex
+%
+% This supplement documents what the reproducibility bundle computes and how its
+% outputs are generated. It makes no claim that is not in the paper.
+\documentclass[11pt,a4paper]{article}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+
+\title{Computational supplement\\
+\large $1+3$ covariant CMB anisotropies --- analytical reproducibility bundle v1.0.0}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Scope}
+This supplement accompanies the v1.0.0 analytical release. The bundle is an
+independent reconstruction, from first $1+3$ covariant principles, of the
+almost-Friedmann--Lema\^itre results of Gebbie, Dunsby \& Ellis,
+\emph{Annals of Physics} \textbf{282}, 321 (2000). It reproduces; it does not
+argue. No new effect is claimed.
+
+\section{The acceptance spine}
+Appendix F of that paper, pp.~379--380, Eqs.~(F.1)--(F.4), links the covariant
+mode recursion to external treatments written in real coefficients. Reproducing
+that chain tests the harmonic normalisation without introducing a representation.
+
+\section{Conventions}
+The normative sheet is carried, generated rather than copied, at
+\texttt{provenance/conventions.md}. Equation numbers in this bundle are the
+published numbers.
+
+\section{Reproduction}
+\begin{verbatim}
+python scripts/run_all.py --strict
+\end{verbatim}
+
+\section{Figures}
+% One subsection per canonical figure, each naming its generating script.
+% Pending: see RELEASE-NOTES-v1.0.0.md.
+
+\end{document}
