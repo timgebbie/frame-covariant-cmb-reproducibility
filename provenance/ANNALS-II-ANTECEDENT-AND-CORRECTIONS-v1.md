@@ -439,3 +439,31 @@ closed-form, and the quantity (201) is a reduction of — with (201) carried in
 analytic level: the quadrature and the reduction agree to $10^{-5}$.
 
 **Status: raised to P1-T and the PI. Criterion 5a's target awaits confirmation.**
+
+---
+
+## G5 — confirmed independently, 2026-10-05
+
+The obvious objection to G5 is that $\chi$ might be absorbed into the
+normalisation of $A$, in which case "correcting" (201) would introduce an error
+rather than remove one. **It is not.** The companion equation settles it.
+
+(201) and (204) are reduced the same way from (198), but from **different
+definitions of $P(k)$**:
+
+| | $P(k)$ | reduction | at $n=1$ |
+|---|---|---|---|
+| (201), via (J.1) | $Ak^{n-1}$ | $\int dk\,k^{n-3}j_\ell^2 \to \chi^{2-n}$ | $\chi^1$ — **one factor of $\chi$** |
+| (204), via (J.3) | $BT^2(k)k^{n}$, $T=1$ | $\int dk\,k^{n-2}j_\ell^2 \to \chi^{1-n}$ | $\chi^0=1$ — **no $\chi$** |
+
+So (204) is $\chi$-free *as printed and correctly so*, while (201) should carry
+one factor. Verified by quadrature at $n=1$: the (J.3) route reproduces
+$1/[2\ell(\ell+1)]$ with no distance factor to within $10^{-5}$ at $\ell=2,10,30$.
+
+**The asymmetry is explained by the two appendix definitions of $P(k)$, which
+differ by one power of $k$ — not by a units convention in which $\chi=1$.** If
+$\chi$ were being set to unity it would have to be absent from both reductions,
+and it is not.
+
+**G5 therefore stands.** The printed (201) omits one factor of the comoving
+distance.

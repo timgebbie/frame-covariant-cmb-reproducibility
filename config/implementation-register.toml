@@ -247,6 +247,26 @@ test = "test_g5_printed_201_is_short_by_the_comoving_distance"
 note = "finding \\textbf{G5}: the printed (201) omits the factor $\\chi$ from the reduction"
 
 [[equations]]
+key = "fftlog_kernel"
+quantity = "closed-form k-integral kernel at complex $m$, $\\int z^{-m}j_\\ell^2(z)dz$"
+source = "AnnalsII"
+equation = "(199), p. 372, corrected"
+module = "functions.spectra.kernels"
+object = "bessel_square_kernel"
+test = "test_complex_kernel_reduces_to_the_real_identity"
+note = "G3 corrected makes it usable as a transform kernel, not only a spot formula"
+
+[[equations]]
+key = "fftlog_primary"
+quantity = "primary-term $k$-integral by power-law decomposition"
+source = "AnnalsII"
+equation = "(176) primary term, (198)"
+module = "functions.spectra.kernels"
+object = "fftlog_primary_integral"
+test = "test_fftlog_matches_quadrature_on_a_non_power_law_integrand"
+note = "route 3, the hybrid. No oscillatory quadrature; the tilt is load-bearing"
+
+[[equations]]
 key = "source_split"
 quantity = "$S_P$, $S_{\\rm DISW}$, $S_{\\rm ISW}$ --- the temperature source split"
 source = "AnnalsII"
