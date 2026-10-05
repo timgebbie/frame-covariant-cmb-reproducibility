@@ -19,8 +19,8 @@ v1.0.0 is complete when all six hold, and not before.
 | 1 | the free-streaming recursion reproduces (F.1)–(F.4), with the external matches of (F.3) and (F.4) checked numerically rather than asserted | **open** — chain verified symbolically; external comparison not yet built |
 | 2 | a covariant → mode → covariant round trip returns the input to machine precision | **open** |
 | 3 | both harmonic phase conventions run, and only one reproduces the real, opposite-sign form of the external hierarchies | **open** — wording change requested, see `provenance/OPEN-QUESTIONS-v1.0.0.md` Q1 |
-| 4 | both sign choices of $\pm(\ell+2)$ run, the wrong one growing $\propto\ell$ | **open** — scope question, see Q2 |
-| 5 | the almost-Friedmann–Lemaître temperature spectrum is recovered to a stated tolerance | **open** — comparison target unresolved, see Q3 |
+| 4 | a known-wrong control runs and fails in a known shape | **open** — restated. The $\pm(\ell+2)$ control is **withdrawn** to v1.5.0, where that term exists, and replaced by a relative-sign control on the free-streaming bracket (D1). See Q2, closed |
+| 5 | the almost-Friedmann–Lemaître temperature spectrum is recovered to a stated tolerance | **open** — targets settled; the tolerance still needs an $\ell$ range, see Q3 |
 | 6 | every number the paper prints is regenerated here, or marked not-machine-checkable with the reason | **open** — depends on manuscript freeze, see Q5 |
 
 ## What is in this tree now
@@ -36,7 +36,29 @@ v1.0.0 is complete when all six hold, and not before.
   chain, the adjointness of the hierarchy and the mode recursion, and the two
   rephasing statements;
 - `scripts/` — the strict and rerun routes, manifest generation and checking, and
-  the generated conventions copy.
+  the generated conventions copy;
+- `captions/FIGURE-PLAN-v1.0.0.md` — the agreed specification for the figure set.
+
+## The figure set
+
+Agreed with the PI on 2026-10-05 and specified in `captions/FIGURE-PLAN-v1.0.0.md`.
+Eight released figures: **F1** the Appendix F match, which is where the bundle's
+independence lives; **F2** truncation convergence, run in both frames because
+Annals II footnote 29 on p. 365 makes a checkable claim about it; **F3** the
+angular autocorrelation with a residual panel, the key figure; **F4** the
+real-space $C(\theta)$; **F5** the source decomposition of §7.1.1 with its three
+auto- and three cross-spectra, drawn in two frames because the split is
+frame-dependent while the total is not; **F6** the impact of the approximations;
+**F7** frame specialisation from a generic $u^a$; **F8** the coupling schematic.
+
+Four diagnostics are **not** released as figures, because a control is not
+evidence: the relative-sign control, the round-trip residual as a number, the
+source terms plotted directly, and the no-monopole check.
+
+The palette was **re-validated** against the house surfaces rather than inherited
+— worst adjacent CVD $\Delta E$ 9.1 light and 8.4 dark, normal-vision 22.9 and
+19.8 — and the two light-mode slots below 3:1 contrast are confirmed, so the
+direct-label rule is load-bearing rather than decorative.
 
 ## Findings recorded so far
 

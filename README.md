@@ -11,15 +11,12 @@ what an artefact will contain, not what it currently contains.
 
 ---
 
-## Key figure: recovered spectrum and residual
+## Key figure: angular autocorrelation and residual
 
-*Specification.* Figure **C1** — the recovered almost-Friedmann–Lemaître
-temperature spectrum plotted against its comparison target, with a residual panel
+*Specification.* Figure **F3** — the recovered almost-Friedmann–Lemaître angular
+autocorrelation plotted against its comparison target, with a residual panel
 beneath sharing the x-axis. The residual panel is the claim; the overlay is
 context. Agreement is stated as a number.
-
-> The comparison target for C1 is an open specification item. See
-> `provenance/OPEN-QUESTIONS-v1.0.0.md`.
 
 ---
 
@@ -36,84 +33,116 @@ It is written bottom-up. It is not a port of, or a wrapper on, an existing
 Boltzmann code, and it inherits no other code's conventions.
 
 **The acceptance spine is Annals II Appendix F, pp. 379–380, Eqs. (F.1)–(F.4)**,
-where the covariant mode recursion is matched to four external treatments — Hu &
-Sugiyama; Wilson & Silk, Eq. (7); Ma & Bertschinger, Eqs. (49)/(50); and Seljak &
-Zaldarriaga, Eq. (3d) — all written in real coefficients. Reproducing that chain
-is a representation-free test of the harmonic normalisation, because a basis
-phase leaking into the coupling coefficients would break every one of the
-matches.
+where the covariant mode recursion is matched to external treatments written in
+real coefficients. Reproducing that chain is a representation-free test of the
+harmonic normalisation, because a basis phase leaking into the coupling
+coefficients would break every one of the matches. **That match, figure F1, is
+where this bundle's independence lives** — not the spectrum comparison, whose
+target descends from the same antecedent.
+
+**The solution is carried with a generic $u^a$.** The explicit frames — the
+Newtonian frame $\tilde\sigma_{ab}=0$, in which Annals II itself solves (p. 365),
+and the energy frame $q_a=0$ — appear as choices made at the end rather than
+assumed at the start. That is the difference the $1+3$ covariant approach buys,
+and no gauge-fixed treatment can exhibit it.
 
 Nomenclature is kept strictly separate throughout, following Appendix F:
 $\tau_\ell$ are **mode** coefficients, $\tau_{A_\ell}$ are **multipole**
 coefficients. The distinction is not made in Bardeen-variable treatments.
-Conflating them in code is how a sign is lost.
+Conflating them in code is how a sign is lost. Every released figure plots a
+**multipole** mean-square: Annals II p. 366 notes that these hold for general
+geometries while the mode mean-squares hold only for almost-Robertson–Walker
+ones.
 
 Equation numbers in this bundle are **published** numbers. The published and
 arXiv numberings of the Annals papers differ, and not by a constant offset.
 
-## Figure C1 — recovered spectrum against its comparison target
+## Figure F1 — the Appendix F match
 
-*Specification.* Two series plus a residual panel beneath, sharing the x-axis.
-Never a dual y-axis. Agreement is reported as a number; the word *agrees* is not
-used.
+The free-streaming recursion against each external treatment of (F.1)–(F.4), one
+panel per treatment. Four comparisons are four panels, not four colours on one
+axis. This figure carries the independence of the bundle's cross-check.
 
-## Figure C2 — the free-streaming recursion against the external forms
+## Figure F2 — truncation convergence
 
-*Specification.* Small multiples, one panel per external treatment of
-Eqs. (F.1)–(F.4). Four comparisons are four panels, not four colours on one axis.
-This figure, not C1, carries the independence of the bundle's cross-check.
+One series per $\ell_{\max}$, log y. Annals II Appendix E, pp. 378–379, warns that
+truncation in the multipole hierarchy is dangerous even in the
+almost-Friedmann–Lemaître case: if any four consecutive harmonics vanish, the
+shear must vanish exactly. Run in both frames, because footnote 29 on p. 365
+asserts that the Newtonian choice removes the truncation problem — a checkable
+claim.
 
-## Figure C3 — known-wrong control
+## Figure F3 — angular autocorrelation
 
-*Specification.* Two series: the reconstruction, and the same recursion run with
-the sign of the $\ell-2$ shear coupling reversed, which grows $\propto\ell$. The
-wrong curve is drawn in the control slot and is labelled *control*. A known-wrong
-curve of known shape is the most legible wiring check in the bundle.
+Recovered $C_\ell$ against its target, residual panel beneath. The key figure.
 
-## Figure C4 — convergence against $\ell_{\max}$
+## Figure F4 — real-space angular correlation
 
-*Specification.* One series per truncation, log y. Annals II, Appendix E,
-pp. 378–379, warns that truncation in the multipole hierarchy is dangerous even
-in the almost-Friedmann–Lemaître case: if any four consecutive harmonics vanish,
-the shear must vanish exactly. This figure makes that warning quantitative, and
-it is the hinge to v1.5.0.
+$C(\theta)$, the basis-free companion to F3.
 
-## Figure C5 — round-trip residual
+## Figure F5 — source decomposition, in two frames
 
-*Specification.* A single number with its tolerance, not a chart: the residual of
-a covariant → mode → covariant round trip. If it is machine precision, it is not
-a chart.
+The split of §7.1.1, pp. 365–366: the integral solution (176) projects three
+sources through $j_\ell$ — the primary Sachs–Wolfe and acoustic term (177),
+secondary Doppler during slow decoupling (178), and the integrated, late- and
+early-ISW terms (179).
 
-## Figure C6 — schematic of the coupling structure
+$C_\ell$ is quadratic in the source, so the three pieces **do not add**: the upper
+panel carries the three auto-spectra and the total, the lower panel the three
+signed cross-spectra. Drawn in two frames, because the split is frame-dependent
+while the total is not — which is the covariance argument made quantitative.
 
-*Specification.* A diagram, no computation: where each coupling sits in the
-hierarchy. Generated by a script like every other figure, so that the manifest
-and the caption rule cover it.
+## Figure F6 — impact of the approximations
+
+Ratios to the full result: the slow-decoupling order, the diffusion damping
+$e^{-(k/k_D)^2}$, and the small-scale cancellation of §7.1.3.
+
+## Figure F7 — frame specialisation
+
+The generic-$u^a$ solution specialised to the Newtonian and energy frames, with
+their difference beneath and the dipole shown separately — the dipole is where
+the frame lives, and $\ell\ge2$ is where it does not.
+
+## Figure F8 — coupling schematic
+
+Where each coupling sits in the hierarchy. No data; generated by a script like
+every other figure.
 
 ## Figure sequence
 
 | Figure | Artefact | Evidence category |
 |---|---|---|
-| **C1** | recovered spectrum with residual panel | acceptance |
-| **C2** | recursion against the external hierarchies | cross-check |
-| **C3** | reversed-sign control | control |
-| **C4** | convergence against $\ell_{\max}$ | diagnostic |
-| **C5** | round-trip residual (a number) | acceptance |
-| **C6** | coupling-structure schematic | schematic |
+| **F1** | Appendix F match, small multiples | cross-check |
+| **F2** | truncation convergence against $\ell_{\max}$ | diagnostic |
+| **F3** | angular autocorrelation with residual panel | acceptance |
+| **F4** | real-space angular correlation $C(\theta)$ | acceptance |
+| **F5** | source decomposition with cross terms, two frames | acceptance |
+| **F6** | impact of the approximations | diagnostic |
+| **F7** | frame specialisation | cross-check |
+| **F8** | coupling schematic | schematic |
+
+Controls are not evidence and are not released as figures; they live in
+`diagnostics/`, with the round-trip residual reported as a number rather than a
+chart.
 
 Every figure ships as a versioned PDF/PNG pair in `figures/`. Every caption is
 standalone in `captions/` and names the script that produced the figure. The
-caption is the specification, not a description.
+caption is the specification, not a description; `captions/FIGURE-PLAN-v1.0.0.md`
+is the specification for the set.
 
 ## Future situation: possible extensions
 
 **These are possible extensions, not claims made by the current release.**
 
-- **v1.5.0** — the high-$\ell$ $O(\varepsilon^2\ell)$ couplings of Paper 1,
-  gated on v1.0.0 passing its acceptance criteria in full.
+- **v1.5.0** — the high-$\ell$ $O(\varepsilon^2\ell)$ couplings of Paper 1, and
+  the restricted case, which must recover v1.0.0's numbers. That makes v1.5.0 a
+  recovery and a check rather than a new claim.
 - **v2.0.0** — calibration and data-science release, including Planck data.
   *Calibration* there means calibrating the solver against standard results. It
   does **not** mean calibrating the amplitude of an effect.
+- **A fractional-contribution form of F5**, each term drawn as its share of
+  $C_\ell$ and summing to one by construction — scale-free, so the Sachs–Wolfe
+  plateau and the damping tail read equally well.
 
 ## Scientific boundary
 
@@ -196,7 +225,8 @@ The public version history follows semantic versioning:
 ```text
 v1.0.0        first public analytical reproducibility release — Annals II recovered
 v1.0.1        documentation or metadata updates without a scientific change
-v1.5.0        compatible scientific extension — the high-ell couplings of Paper 1
+v1.5.0        compatible scientific extension — high-ell couplings, and the
+              restricted case as a recovery and check of v1.0.0
 v2.0.0        calibration and data-science release, including Planck data
 v3.0.0        incompatible model, interface or scientific-scope change
 ```
@@ -212,6 +242,14 @@ The development lineage:
 | Correction to astro-ph/9912072 | withdrew the 1999 claim of a new effect | fixes the scientific boundary above |
 | Conventions gate C1 | the normative sign and $\ell$-weight sheet | source of `provenance/conventions.md` |
 | Paper 1 | the $1+3$ route to lensing from the exact hierarchy | the paper this bundle reproduces |
+| v1.5.0, planned | the restricted case | a **recovery and check** of v1.0.0, not a new result |
+
+## Disclosure of AI assistance
+
+The code, tests and documentation in this bundle were written with AI assistance
+(Claude, Anthropic). Derivations were checked against the published sources
+rather than generated from them, and every finding carries its printed equation
+number in `provenance/`. Responsibility for the content rests with the author.
 
 ## DOI, citation and license
 

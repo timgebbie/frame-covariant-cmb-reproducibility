@@ -52,71 +52,81 @@ Both facts are asserted executably in `tests/test_appendix_f_chain.py`.
 
 ---
 
-## Q2 — the $\pm(\ell+2)$ control is second order at general $\ell$
+## Q2 — the $\pm(\ell+2)$ control — **WITHDRAWN 2026-10-05**
 
-**Brief §3, criterion 4** asks that both sign choices of $\pm(\ell+2)$ run, the
-wrong one growing $\propto\ell$.
+**Decided with the PI: the control is withdrawn from v1.0.0 and replaced.**
 
-**Why it cannot hold as written.** Annals II, Appendix E, p. 378 states that
-$F_{A_\ell}$ and $\sigma_{ab}$ are each at most $O(\varepsilon)$. The shear
-coupling $\sigma^{bc}\tau_{bcA_\ell}$ is therefore $O(\varepsilon^2)$ and is
-absent from the almost-Friedmann–Lemaître hierarchy at general $\ell$ — which is
-why (F.1) carries no shear term at all. It survives only at $\ell=2$, where
-$\tau_{\ell-2}$ is the zeroth-order monopole; there $(\ell+2)$ is the number 4 and
-there is no $\ell$-growth to exhibit. Settling a sign at $\ell=2$ is in any case
-the specialisation the project's index-algebra rule forbids.
+The reason is the one the question raised: Annals II, Appendix E, p. 378 states
+that $F_{A_\ell}$ and $\sigma_{ab}$ are each at most $O(\varepsilon)$, so the shear
+coupling $\sigma^{bc}\tau_{bcA_\ell}$ is $O(\varepsilon^2)$ and is absent from the
+almost-Friedmann–Lemaître hierarchy at general $\ell$ — which is why (F.1)
+carries no shear term at all. A control built on it would exercise a term this
+release does not contain, and settling anything at $\ell=2$ alone is the
+specialisation the index-algebra rule forbids.
 
-**Proposed restatement.** The coefficient is carried in the recursion as a
-**switchable wiring control** for figure C3, labelled as a control and explicitly
-not an almost-Friedmann–Lemaître result; the physics claim moves to v1.5.0.
+**Replacement: D1, a relative-sign control on the free-streaming bracket.** The
+bracket is run with its relative sign flipped — the $\lambda^2=-1$ case of Q1 —
+which is in v1.0.0's physics and which exercises the convention question that is
+actually live. It is a wiring check, so it lives in `diagnostics/` and is not a
+released figure: a control is not evidence.
 
-**Status: open.**
+The $\pm(\ell+2)$ control moves to **v1.5.0**, where the term it exercises exists.
+
+**Status: closed.**
 
 ---
 
-## Q3 — figure C1 has no published curve to overlay
+## Q3 — figure F3's comparison target, and the tolerance's $\ell$ range
 
 **Brief §3, criterion 5** asks that the almost-Friedmann–Lemaître temperature
-spectrum of Annals II be recovered to a stated tolerance, and **brief §6** makes
-C1 — recovered spectrum against the published one — the key figure.
+spectrum of Annals II be recovered to a stated tolerance.
 
 **What the source contains.** Annals II has **no figures and no tables**: 74
 pages, four embedded images, all page furniture or equation strips. Its §8
 derives the angular power spectrum in **closed form** (around Eqs. (196) and
 (201)), on large scales, with the transfer function set to unity in places. There
-is no published curve.
+is no published curve to overlay.
 
-**Consequence.** Evaluating Annals II's own formula and comparing it to a
-reconstruction derived from Annals II's own hierarchy is a self-consistency
-check, not the independent cross-check the brief's rationale rests on. The
-independence of this bundle lives in Appendix F — that is, in figure **C2**, not
-in C1.
+**Consequence, now recorded in the README.** Evaluating Annals II's own formula
+and comparing it to a reconstruction derived from Annals II's own hierarchy is a
+self-consistency check. **The independence of this bundle lives in F1**, the
+Appendix F match, not in F3.
 
-**Options for C1's second series:**
+**Reading taken, pending confirmation.** F3 carries two comparisons: the analytic
+spherical-Bessel solution of the (F.1) recursion, which Appendix F names on
+p. 380, as the machine-precision acceptance test; and §8's closed form as the
+paper-facing comparison. The frame decision has since made the second cleaner
+than it was when this question was written — §8 is a Newtonian-frame result, and
+v1.0.0 now carries a generic $u^a$ and specialises explicitly, so the comparison
+is against the paper's own specialisation rather than against an inherited frame
+choice.
 
-1. the analytic spherical-Bessel solution of the (F.1) recursion, which Appendix F
-   itself names on p. 380 — representation-free, machine-precision tolerance;
-2. an external Boltzmann code, compared at the level of the observable $C_\ell$;
-3. Annals II §8's closed-form $C_\ell$, with the $\ell$ range stated explicitly.
+**Still required: the $\ell$ range.** §8 is a large-scale result with the transfer
+function set to unity in places, so criterion 5's tolerance is meaningless
+without a stated range. Either state it, or authorise this stream to set it from
+where the §8 approximations hold and record the derivation in `provenance/`.
 
-**Recommendation:** (1) as the acceptance test and (3) as the paper-facing
-figure, with the independence claim relocated to C2.
-
-**Status: open.**
+**Status: open — one line needed.**
 
 ---
 
-## Q4 — one of the four external hierarchies may not be independently obtainable
+## Q4 — Wilson & Silk — **ON HOLD 2026-10-05, at the PI's direction**
 
 Appendix F matches the recursion to four external treatments. Wilson & Silk
-(1981) predates arXiv. If its Eq. (7) is transcribed from Appendix F rather than
-read from the paper, it is **not an independent source** — the project's own rule
-is that independent checks are counted by their sources, not by their arguments.
+(1981) predates arXiv and has not been obtained.
 
-**Handling:** unless a copy of Wilson & Silk is supplied, the spine is **three**
-external hierarchies and the release says so.
+**Handling, agreed.** F1 ships with **three panels** — Hu & Sugiyama, Ma &
+Bertschinger Eqs. (49)/(50), Seljak & Zaldarriaga Eq. (3d) — and the release
+states three external hierarchies, not four. Nothing blocks on it, and a copy
+turning up later is purely additive: a fourth panel.
 
-**Status: open.**
+> **Do not quote Wilson & Silk Eq. (7) from Annals II Appendix F and count it as
+> a fourth source.** Independent checks are counted by their sources, not by
+> their arguments; a coefficient transcribed through Annals II is the same source
+> as Annals II. This is recorded here precisely because it is the mistake a later
+> session would make in good faith.
+
+**Status: on hold. Not blocking.**
 
 ---
 

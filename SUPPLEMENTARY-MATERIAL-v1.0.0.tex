@@ -31,6 +31,27 @@ Appendix F of that paper, pp.~379--380, Eqs.~(F.1)--(F.4), links the covariant
 mode recursion to external treatments written in real coefficients. Reproducing
 that chain tests the harmonic normalisation without introducing a representation.
 
+\section{Frames, and what v1.5.0 then is}
+The solution is carried with a \textbf{generic} $u^a$. The explicit frames appear
+as choices made at the end, not assumed at the start: the Newtonian frame
+$\tilde\sigma_{ab}=0$, which is the specialisation Annals II itself makes at
+p.~365 in order to remove the shear terms, and the energy frame $q_a=0$. Carrying
+the generic threading and specialising late is the difference the $1+3$ covariant
+approach buys; a gauge-fixed treatment fixes the frame before the hierarchy is
+solved and cannot exhibit it.
+
+This is also what fixes the status of the next release. Because v1.0.0 is the
+general case, \textbf{v1.5.0's restricted case is a recovery and a check} --- it
+must return v1.0.0's numbers, and that requirement is the regression test rather
+than a new result.
+
+Two consequences are visible in the figures. The decomposition of the temperature
+source into primary, Doppler and integrated terms (\S7.1.1, Eqs.~(177)--(179)) is
+frame-dependent, while the total is not, so it is drawn in two frames. And
+footnote~29 on p.~365 asserts that the Newtonian choice also removes the high-$\ell$
+truncation difficulty of Appendix~E; that is a checkable claim, and the
+convergence figure checks it in both frames.
+
 \section{Conventions}
 The normative sheet is carried, generated rather than copied, at
 \texttt{provenance/conventions.md}. Equation numbers in this bundle are the

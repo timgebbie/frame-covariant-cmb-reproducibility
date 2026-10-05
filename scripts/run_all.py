@@ -26,15 +26,27 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
-#: (label, module path relative to the repository root). Pending entries are
-#: reported, not skipped silently — a missing stage must be visible.
+#: Released figures, in build order: the recursion first, then convergence, then
+#: everything that depends on a trusted solution. (label, path from the root).
+#: Pending entries are reported, not skipped silently — a missing stage must be
+#: visible. The specification for the set is captions/FIGURE-PLAN-v1.0.0.md.
 STAGES: list[tuple[str, str]] = [
-    ("C2  recursion against the external hierarchies", "scripts/figure_c2_recursion.py"),
-    ("C3  known-wrong control", "scripts/figure_c3_control.py"),
-    ("C4  convergence against ell_max", "scripts/figure_c4_convergence.py"),
-    ("C5  round-trip residual", "scripts/figure_c5_roundtrip.py"),
-    ("C6  coupling-structure schematic", "scripts/figure_c6_schematic.py"),
-    ("C1  recovered spectrum with residual panel", "scripts/figure_c1_spectrum.py"),
+    ("F1  Appendix F match", "scripts/figure_f1_appendix_f.py"),
+    ("F2  truncation convergence, both frames", "scripts/figure_f2_truncation.py"),
+    ("F3  angular autocorrelation", "scripts/figure_f3_spectrum.py"),
+    ("F4  real-space angular correlation", "scripts/figure_f4_correlation.py"),
+    ("F5  source decomposition, two frames", "scripts/figure_f5_sources.py"),
+    ("F6  impact of the approximations", "scripts/figure_f6_approximations.py"),
+    ("F7  frame specialisation", "scripts/figure_f7_frames.py"),
+    ("F8  coupling schematic", "scripts/figure_f8_schematic.py"),
+]
+
+#: Diagnostics. A control is not evidence, so these are not released figures.
+DIAGNOSTICS: list[tuple[str, str]] = [
+    ("D1  relative-sign control", "scripts/diagnostic_d1_sign_control.py"),
+    ("D2  round-trip residual (a number)", "scripts/diagnostic_d2_roundtrip.py"),
+    ("D3  source terms against k", "scripts/diagnostic_d3_sources.py"),
+    ("D4  no monopole in the CGI approach", "scripts/diagnostic_d4_monopole.py"),
 ]
 
 
@@ -55,21 +67,23 @@ def main() -> int:
     if run([sys.executable, "-m", "pytest", "-q"], "regression suite"):
         failures.append("tests")
 
-    pending = []
-    for label, script in STAGES:
-        if not (ROOT / script).exists():
-            pending.append(label)
-            continue
-        if run([sys.executable, script], label):
-            failures.append(label)
+    pending: dict[str, list[str]] = {"figures": [], "diagnostics": []}
+    for group, stages in (("figures", STAGES), ("diagnostics", DIAGNOSTICS)):
+        for label, script in stages:
+            if not (ROOT / script).exists():
+                pending[group].append(label)
+                continue
+            if run([sys.executable, script], label):
+                failures.append(label)
 
-    print("\n--- outputs " + "-" * 49)
-    if pending:
-        print(f"{len(pending)} of {len(STAGES)} stages pending:")
-        for label in pending:
-            print(f"    PENDING  {label}")
-    else:
-        print("all stages generated")
+    for group, stages in (("figures", STAGES), ("diagnostics", DIAGNOSTICS)):
+        print(f"\n--- {group} " + "-" * max(0, 56 - len(group)))
+        if pending[group]:
+            print(f"{len(pending[group])} of {len(stages)} pending:")
+            for label in pending[group]:
+                print(f"    PENDING  {label}")
+        else:
+            print(f"all {group} generated")
 
     print("\n--- provenance " + "-" * 46)
     if run([sys.executable, "scripts/sync_conventions.py", "--check"], "conventions copy"):
@@ -86,8 +100,9 @@ def main() -> int:
     if failures:
         print("NOT CLEAN — " + ", ".join(failures))
         return 1
-    if pending and args.strict:
-        print("NOT RELEASABLE — stages pending; see RELEASE-NOTES-v1.0.0.md")
+    outstanding = pending["figures"] + pending["diagnostics"]
+    if outstanding and args.strict:
+        print(f"NOT RELEASABLE — {len(outstanding)} pending; see RELEASE-NOTES-v1.0.0.md")
         return 1
     print("CLEAN")
     return 0
