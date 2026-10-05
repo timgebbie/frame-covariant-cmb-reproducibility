@@ -20,7 +20,7 @@ v1.0.0 is complete when all six hold, and not before.
 | 2 | a covariant → mode → covariant round trip returns the input to machine precision | **open** |
 | 3 | both harmonic phase conventions run end to end; only one reproduces the real, opposite-sign form of the external hierarchies, and the bundle adopts and names that one | **closed** — D1 runs both; the adopted normalisation sits on $j_\ell$ to $10^{-10}$ while the other diverges by $5\times10^{6}$ at $\ell=2$. The adopted convention is named in the supplement, \S2 |
 | 4 | a known-wrong control runs and fails in a known shape | **closed** — D1 runs and diverges rather than projecting; the correct recursion matches $j_\ell$ to $10^{-10}$ beside it. Restated: The $\pm(\ell+2)$ control is **withdrawn** to v1.5.0, where that term exists, and replaced by a relative-sign control on the free-streaming bracket (D1). See Q2, closed |
-| 5a | the Sachs–Wolfe limit is recovered over $2\le\ell\le20$ to 5% | **open** — range and tolerance derived, Q3 |
+| 5a | the Sachs–Wolfe limit is recovered over $2\le\ell\le20$ to 5%, against the **corrected** closed form of (201) | **open** — target settled; the printed (201) omits one factor of the comoving distance, finding **G5** |
 | 5b | the **CDM and ΛCDM** angular power spectra are recovered to a stated tolerance over a stated range, checked against **CMBFAST** | **open** — external target settled; tolerance and range to be set, Q6 |
 | 6 | every number the paper prints is regenerated here, or marked not-machine-checkable with the reason | **open** — closes at manuscript freeze. `v1.0.0-rc` is tagged on criteria 1–5; `v1.0.0` requires all six, Q5 closed |
 
@@ -63,26 +63,27 @@ direct-label rule is load-bearing rather than decorative.
 
 ## Findings recorded so far
 
-Three, all in `provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md`.
+Five, all in `provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md`.
 
 - **G1** — Annals I prints $(-1)^\ell$ where its own definition gives $i^\ell$.
-  Typographical and inconsequential for the covariant multipole; the entry records
-  both the slip and why it never produced a wrong result, and distinguishes it
-  from the mode-coefficient statement it is easily confused with.
-- **G2** — Annals II (F.4) is algebraically correct but is not in the Ma &
-  Bertschinger form the following sentence identifies it with; the division the
-  prose specifies was not applied to the display. Inconsequential for the physics,
-  material for any test harness that compares the two directly.
-- **G3** — the Bessel identity (199), p. 372, needs $[(m/2)!]^2$ in its
-  denominator, not $(m/2)!$. It is exact exactly where $\Gamma(m/2+1)=1$, that is
-  at $m=0$ and $m=2$, so **(201) is correct as printed** and the slip went
-  unnoticed; but (204) uses $m=1$ and is **low by 11.4%**, carrying $D_\ell$ in
-  (205) **12.8% high**. Material. No sign and no $\ell$-dependence moves.
+  Inconsequential for the covariant multipole, which is invariant under the
+  choice; the mode coefficients are not, and the two statements are distinct.
+- **G2** — (F.4) is algebraically correct but is not in the Ma & Bertschinger form
+  the following sentence identifies it with: the $(2\ell+1)^{-1}$ division its
+  text specifies was not applied to the display.
+- **G3** — the Bessel identity (199) needs $[(m/2)!]^2$ in its denominator. It is
+  exact where $\Gamma(m/2+1)=1$, so (201) is unaffected; (204) is low by 11.4% and
+  the $D_\ell$ of (205) correspondingly high by 12.8%.
+- **G4** — Appendix F names Wilson & Silk and keys Wilson. Different papers. Open.
+- **G5** — (201) omits one factor of the comoving distance $\chi$ from the
+  reduction of (200). Confirmed independently: (204) descends from a $P(k)$
+  definition differing by one power of $k$ and is correctly $\chi$-free, so the
+  asymmetry is not a units convention. Sets criterion 5a's target.
 
-All three are **corrected silently in the reconstruction and marked by a succinct
+All are **corrected silently in the reconstruction and marked by a succinct
 footnote** in the supplement and in any affected caption; the full forensics stay
-in `provenance/`. A finding that would move a sign, an $\ell$-weight or an
-acceptance criterion is still raised rather than footnoted.
+in `provenance/`. Where a finding moves an acceptance criterion, the corrected
+target is recorded and adopted rather than blocking the work.
 
 ## Known not to be in v1.0.0
 

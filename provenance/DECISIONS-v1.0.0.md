@@ -35,7 +35,7 @@ v1.0.0 is complete when all hold, and not before.
 | **2** | covariant → mode → covariant round trip returns the input to machine precision | open |
 | **3** | both harmonic phase conventions run end to end; only one reproduces the real, opposite-sign form of the external hierarchies, and the bundle adopts and names that one | **closed** |
 | **4** | a known-wrong control runs and fails in a known shape | **closed** |
-| **5a** | the Sachs–Wolfe limit is recovered over $2\le\ell\le20$ to 5% | open; range derived |
+| **5a** | the Sachs–Wolfe limit is recovered over $2\le\ell\le20$ to 5%, against the **corrected** closed form of (201) — the printed form omits one factor of $\chi$, finding G5 | open; target settled 2026-10-05 |
 | **5b** | the CDM and ΛCDM angular power spectra are recovered to a stated tolerance over a stated range, checked against **CMBFAST** | open; tolerance and range to be set |
 | **6** | every number the paper prints is regenerated here, or marked not-machine-checkable with the reason | open; closes at manuscript freeze |
 
@@ -44,7 +44,7 @@ v1.0.0 is complete when all hold, and not before.
 | | Decision |
 |---|---|
 | **L1** | **Corrections are silent**, marked by **one succinct footnote**. The word is *misprint*, not *error*. The forensics stay in `provenance/`. |
-| **L2** | A finding that would move a sign, an $\ell$-weight or an acceptance criterion is **raised**, not footnoted. |
+| **L2** | A finding that would move a sign, an $\ell$-weight or an acceptance criterion is **raised in the record**. **Amended 2026-10-05:** raising it does not block the work. The corrected target is adopted and the correction made silently, with the raise standing in `provenance/` as the account of why the target changed. G5 is the first case and set the precedent. |
 | **L3** | Equation numbers are **published** numbers. Where an edition differs, the difference is recorded; where it does not, that is recorded too. |
 | **L4** | **The bundle reproduces; it does not argue.** No claim appears here that is not in the paper. |
 | **L5** | **Independent checks are counted by their sources, not by their arguments.** A coefficient transcribed through a secondary source is that secondary source. |

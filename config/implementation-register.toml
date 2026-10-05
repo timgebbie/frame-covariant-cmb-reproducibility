@@ -267,6 +267,16 @@ test = "test_fftlog_matches_quadrature_on_a_non_power_law_integrand"
 note = "route 3, the hybrid. No oscillatory quadrature; the tilt is load-bearing"
 
 [[equations]]
+key = "line_of_sight"
+quantity = "integrated terms, $\\int d\\eta\\,S(k,\\eta)\\,j_\\ell(k\\Delta\\eta)$"
+source = "AnnalsII"
+equation = "(176), p. 365"
+module = "functions.spectra.bessel_table"
+object = "line_of_sight"
+test = "test_line_of_sight_matches_direct_evaluation"
+note = "route 3's tabulated half: two distinct Bessel arguments, so no closed form"
+
+[[equations]]
 key = "source_split"
 quantity = "$S_P$, $S_{\\rm DISW}$, $S_{\\rm ISW}$ --- the temperature source split"
 source = "AnnalsII"

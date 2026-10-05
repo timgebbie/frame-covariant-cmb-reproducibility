@@ -344,3 +344,39 @@ def test_external_hierarchies_match_the_bundle_at_machine_precision():
         assert abs(scale - 1.0) < 1e-10, (form, scale)
         err = np.max(np.abs(ext[window, :26] * scale - ref[window, :26]))
         assert err < 1e-11, (form, err)
+
+
+# --- the v1.0.0 target: C_l by two routes, (186) and (187)+(188) ------------
+
+
+def test_mode_route_and_covariant_route_to_cl_are_identical():
+    """Annals II (186) equals (187) with (188), exactly.
+
+    (186)  C_l = (2/pi) beta_l^2/(2l+1)^2 Int (dk/k) k^3 |tau_l(k,eta_0)|^2
+    (187)  <tau_Al tau^Al> = (1/2pi^2) beta_l Int k^2 dk |tau_l(k,eta_0)|^2
+    (188)  C_l = Delta_l (2l+1)^-1 <tau_Al tau^Al>
+
+    with Delta_l = 4 pi beta_l/(2l+1), Annals I (119). Both carry the same
+    k-integral, so the identity is a statement about the prefactors alone.
+
+    **This is the point of the paper, as a test.** Section 7.1.4 says that at
+    linear order the solutions do not differ importantly from the canonical
+    treatment; what the covariant formulation buys is the route through the
+    multipole mean-squares, "not attainable in the canonical treatment". The two
+    routes must therefore agree exactly, and they do.
+
+    Convention imported: none. Arithmetic on the printed prefactors.
+    """
+    beta = lambda n: 2**n * sp.factorial(n) ** 2 / sp.factorial(2 * n)  # noqa: E731
+    delta = lambda n: 4 * sp.pi * beta(n) / (2 * n + 1)  # noqa: E731
+
+    mode_route = 2 / sp.pi * beta(ELL) ** 2 / (2 * ELL + 1) ** 2
+    covariant_route = delta(ELL) / (2 * ELL + 1) * beta(ELL) / (2 * sp.pi**2)
+
+    assert _zero(mode_route - covariant_route)
+
+    # and exactly, over a range of ell
+    for n in ELL_RANGE:
+        a = sp.Rational(sp.nsimplify(mode_route.subs(ELL, n) * sp.pi))
+        b = sp.Rational(sp.nsimplify(covariant_route.subs(ELL, n) * sp.pi))
+        assert a == b, n
