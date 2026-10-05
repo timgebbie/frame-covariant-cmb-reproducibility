@@ -43,6 +43,7 @@ STAGES: list[tuple[str, str]] = [
 
 #: Diagnostics. A control is not evidence, so these are not released figures.
 DIAGNOSTICS: list[tuple[str, str]] = [
+    ("D0  criterion 5 ell range, and G3", "scripts/derive_ell_range.py"),
     ("D1  relative-sign control", "scripts/diagnostic_d1_sign_control.py"),
     ("D2  round-trip residual (a number)", "scripts/diagnostic_d2_roundtrip.py"),
     ("D3  source terms against k", "scripts/diagnostic_d3_sources.py"),

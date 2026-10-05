@@ -20,7 +20,7 @@ v1.0.0 is complete when all six hold, and not before.
 | 2 | a covariant → mode → covariant round trip returns the input to machine precision | **open** |
 | 3 | both harmonic phase conventions run, and only one reproduces the real, opposite-sign form of the external hierarchies | **open** — wording change requested, see `provenance/OPEN-QUESTIONS-v1.0.0.md` Q1 |
 | 4 | a known-wrong control runs and fails in a known shape | **open** — restated. The $\pm(\ell+2)$ control is **withdrawn** to v1.5.0, where that term exists, and replaced by a relative-sign control on the free-streaming bracket (D1). See Q2, closed |
-| 5 | the almost-Friedmann–Lemaître temperature spectrum is recovered to a stated tolerance | **open** — targets settled; the tolerance still needs an $\ell$ range, see Q3 |
+| 5 | the almost-Friedmann–Lemaître temperature spectrum is recovered over $2\le\ell\le20$ to 5% | **open** — range and tolerance now **derived and closed**, see Q3 |
 | 6 | every number the paper prints is regenerated here, or marked not-machine-checkable with the reason | **open** — depends on manuscript freeze, see Q5 |
 
 ## What is in this tree now
@@ -62,7 +62,7 @@ direct-label rule is load-bearing rather than decorative.
 
 ## Findings recorded so far
 
-Two, both in `provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md`.
+Three, all in `provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md`.
 
 - **G1** — Annals I prints $(-1)^\ell$ where its own definition gives $i^\ell$.
   Typographical and inconsequential for the covariant multipole; the entry records
@@ -72,6 +72,11 @@ Two, both in `provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md`.
   Bertschinger form the following sentence identifies it with; the division the
   prose specifies was not applied to the display. Inconsequential for the physics,
   material for any test harness that compares the two directly.
+- **G3** — the Bessel identity (199), p. 372, needs $[(m/2)!]^2$ in its
+  denominator, not $(m/2)!$. It is exact exactly where $\Gamma(m/2+1)=1$, that is
+  at $m=0$ and $m=2$, so **(201) is correct as printed** and the slip went
+  unnoticed; but (204) uses $m=1$ and is **low by 11.4%**, carrying $D_\ell$ in
+  (205) **12.8% high**. Material. No sign and no $\ell$-dependence moves.
 
 ## Known not to be in v1.0.0
 

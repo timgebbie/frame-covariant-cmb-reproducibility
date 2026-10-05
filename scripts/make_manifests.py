@@ -28,11 +28,19 @@ IMMUTABLE_MANIFEST = ROOT / "IMMUTABLE-MANIFEST-SHA256.txt"
 EXCLUDE_DIRS = {".git", "__pycache__", ".pytest_cache", ".venv", "venv", ".ipynb_checkpoints"}
 EXCLUDE_FILES = {FILE_MANIFEST.name, IMMUTABLE_MANIFEST.name}
 
-#: Paths whose contents are frozen once recorded, relative to the repository root.
-IMMUTABLE_PREFIXES = (
-    "source/",
-    "provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md",
-)
+#: Paths frozen once recorded, relative to the repository root. Frozen reference
+#: material only: anything here changing at all is a release-blocking event.
+IMMUTABLE_PREFIXES = ("source/",)
+
+#: Paths that may only GROW. The corrections record has to take new findings, so
+#: freezing its hash would raise a release-blocking alarm every time the bundle
+#: did its job — and an alarm that cries wolf is worse than no alarm. Instead the
+#: guard stores the length and hash of what has been written so far and verifies
+#: that those bytes are unchanged: appending is fine, rewriting history is not.
+#: This is the project's append-only discipline, enforced rather than trusted.
+APPEND_ONLY = ("provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md",)
+
+APPEND_GUARD = "provenance/append-guard.txt"
 
 
 def sha256(path: Path) -> str:
@@ -61,6 +69,39 @@ def is_immutable(rel: str) -> bool:
     return any(rel == pre or rel.startswith(pre) for pre in IMMUTABLE_PREFIXES)
 
 
+def write_append_guard() -> None:
+    lines = []
+    for rel in APPEND_ONLY:
+        data = (ROOT / rel).read_bytes()
+        lines.append(f"{len(data)} {hashlib.sha256(data).hexdigest()}  {rel}")
+    (ROOT / APPEND_GUARD).write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
+
+
+def check_append_guard() -> bool:
+    """True if every append-only file still begins with exactly what was recorded."""
+    guard = ROOT / APPEND_GUARD
+    if not guard.exists():
+        print(f"FAIL  {APPEND_GUARD} is missing — run without --check to seed it")
+        return False
+    ok = True
+    for line in guard.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        head, rel = line.rsplit("  ", 1)
+        length, digest = head.split()
+        data = (ROOT / rel).read_bytes()
+        prefix = data[: int(length)]
+        if len(prefix) < int(length) or hashlib.sha256(prefix).hexdigest() != digest:
+            print(f"FAIL  {rel} was rewritten, not appended to")
+            print("        ^ RELEASE-BLOCKING: a recorded finding moved")
+            ok = False
+        elif len(data) > int(length):
+            print(f"PASS  {rel} grew by {len(data) - int(length)} bytes (append)")
+        else:
+            print(f"PASS  {rel} unchanged")
+    return ok
+
+
 def render(paths: list[Path]) -> str:
     lines = []
     for p in paths:
@@ -79,13 +120,19 @@ def main() -> int:
     frozen = render([p for p in files if is_immutable(p.relative_to(ROOT).as_posix())])
 
     if not args.check:
+        write_append_guard()
+        # the guard is itself a tracked file, so recompute after writing it
+        files = tracked_files()
+        full = render(files)
+        frozen = render([p for p in files if is_immutable(p.relative_to(ROOT).as_posix())])
         FILE_MANIFEST.write_text(full, encoding="utf-8", newline="\n")
         IMMUTABLE_MANIFEST.write_text(frozen, encoding="utf-8", newline="\n")
+        print(f"wrote {APPEND_GUARD}      {len(APPEND_ONLY)} append-only files")
         print(f"wrote {FILE_MANIFEST.name}      {len(files)} files")
         print(f"wrote {IMMUTABLE_MANIFEST.name} {len(frozen.splitlines())} files")
         return 0
 
-    failed = False
+    failed = not check_append_guard()
     for manifest, expected, label in (
         (FILE_MANIFEST, full, "file"),
         (IMMUTABLE_MANIFEST, frozen, "immutable"),

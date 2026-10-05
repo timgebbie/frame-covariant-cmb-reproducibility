@@ -198,3 +198,48 @@ def test_mode_bracket_relative_sign_tracks_lambda_squared():
         assert sp.simplify(relative(scale) - 1) == 0
     for scale in (sp.I, -sp.I):  # lam^2 = -1
         assert sp.simplify(relative(scale) + 1) == 0
+
+
+# --- finding G3: Annals II (199), the Bessel identity of §8.3 ---------------
+
+
+def test_annals_ii_199_needs_the_square_in_its_denominator():
+    """(199) as printed is exact only where Gamma(m/2+1) = 1, i.e. m = 0 and 2.
+
+    Convention imported: none — this is arithmetic on the printed identity
+    against the integral it claims to equal. See
+    provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md, finding G3.
+    """
+    from scipy.integrate import quad
+    from scipy.special import gamma, spherical_jn
+
+    def numeric(m: int, ell: int) -> float:
+        f = lambda z: spherical_jn(ell, z) ** 2 / z**m  # noqa: E731
+        total, a = 0.0, 1e-8
+        for b in (1, 10, 50, 200, 1000, 5000, 20000):
+            value, _ = quad(f, a, b, limit=400)
+            total += value
+            a = b
+        return total + 1 / (2 * (1 + m) * a ** (1 + m))
+
+    def closed(m, ell, square):
+        d = gamma(m / 2 + 1) ** (2 if square else 1)
+        return (
+            (float(sp.pi) / 2 ** (m + 2))
+            * gamma(m + 1)
+            * gamma(ell - m / 2 + 0.5)
+            / (d * gamma(ell + m / 2 + 1.5))
+        )
+
+    for m in (0, 1, 2, 3):
+        for ell in (2, 10):
+            n = numeric(m, ell)
+            assert abs(float(closed(m, ell, square=True)) / n - 1) < 2e-5, (m, ell)
+            # the printed form is the corrected one multiplied by Gamma(m/2+1),
+            # so it is exact exactly where that gamma is 1 — at m = 0 and m = 2
+            printed_ratio = float(closed(m, ell, square=False)) / n
+            assert abs(printed_ratio - float(gamma(m / 2 + 1))) < 2e-5, (m, ell)
+
+    # the two cases Annals II actually uses
+    assert abs(float(gamma(2)) - 1.0) < 1e-12  # m = 2, used by (201): unaffected
+    assert abs(float(gamma(1.5)) - 0.8862269) < 1e-6  # m = 1, used by (204): 11.4% low
