@@ -1,149 +1,110 @@
-# $1+3$ covariant CMB anisotropies — analytical reproducibility bundle
+# 1+3 covariant CMB anisotropies reproducibility bundle
 
-**Release v1.0.0 — in preparation.** This tree is the pre-release skeleton: the
-layout, licences, provenance discipline and test harness are in place; the
-reconstruction itself is being built. Sections marked *specification* describe
-what an artefact will contain, not what it currently contains.
+Version: v1.0.0 — First public analytical reproducibility release. Supplementary
+code and materials for: Tim Gebbie, *"(Paper 1 title to be confirmed),"*
+arXiv: identifier to be assigned.
 
-- **Associated paper:** Paper 1 (preprint identifier to be assigned)
-- **Supplementary materials:** `SUPPLEMENTARY-MATERIAL-v1.0.0.tex`, compiled to
-  `supplementary-materials/supplement-v1.0.0.pdf`
-- **Code licence:** MIT · **Content licence:** CC BY 4.0 (see `CONTENT-LICENSE.md`)
+## Key figure: recursion and external hierarchies
 
----
+![F1 — the covariant free-streaming recursion against three external hierarchies](figures/f1-appendix-f-v1.0.0.png)
 
-## Key figure: angular autocorrelation and residual
+The covariant free-streaming recursion of *Annals II* Appendix F against Hu &
+Sugiyama Eq. (6), Ma & Bertschinger Eqs. (49)/(50) and Seljak & Zaldarriaga
+Eq. (3d), each read from its own paper. Residuals of 10⁻¹³–10⁻¹⁴ against a 10⁻¹¹
+threshold, at overall scale exactly 1. Two distinct normalisations, both matched.
 
-*Specification.* Figure **F3** — the recovered almost-Friedmann–Lemaître angular
-autocorrelation plotted against its comparison target, with a residual panel
-beneath sharing the x-axis. The residual panel is the claim; the overlay is
-context. Agreement is stated as a number.
-
----
+> **The designated key figure for v1.0.0 is Figure 3, the recovered angular
+> autocorrelation with its residual panel** — the recovery of *Annals II*'s
+> physics, which is what the release is for. Figure 1 leads this release
+> candidate because Figure 3 is not yet built, and because the two answer
+> different questions: Figure 3 is the **recovery**, Figure 1 is the
+> **independence**. Figure 3's comparison target descends from the same
+> antecedent, so it is a self-consistency check however well it agrees; the
+> independent cross-check lives in Figure 1. A reader should not mistake one for
+> the other.
 
 ## Current situation: v1.0.0
 
-v1.0.0 is an **independent Python reconstruction, from first $1+3$ covariant
-principles, of the almost-Friedmann–Lemaître results of**
-
-> T. Gebbie, P. K. S. Dunsby and G. F. R. Ellis, *$1+3$ covariant cosmic
-> microwave background anisotropies II: the almost-Friedmann–Lemaître model*,
-> **Annals of Physics 282, 321–394 (2000)**, `doi:10.1006/aphy.2000.6034`.
+v1.0.0 is an **independent Python reconstruction, from first 1+3 covariant
+principles, of the almost-Friedmann–Lemaître results of** T. Gebbie,
+P. K. S. Dunsby and G. F. R. Ellis, *1+3 covariant cosmic microwave background
+anisotropies II: the almost-Friedmann–Lemaître model*, **Annals of Physics 282,
+321–394 (2000)**, [doi:10.1006/aphy.2000.6034](https://doi.org/10.1006/aphy.2000.6034).
 
 It is written bottom-up. It is not a port of, or a wrapper on, an existing
 Boltzmann code, and it inherits no other code's conventions.
 
-**The acceptance spine is Annals II Appendix F, pp. 379–380, Eqs. (F.1)–(F.4)**,
-where the covariant mode recursion is matched to external treatments written in
-real coefficients. Reproducing that chain is a representation-free test of the
+**The acceptance spine is Appendix F, pp. 379–380, Eqs. (F.1)–(F.4)**, where the
+covariant mode recursion is matched to external treatments written in real
+coefficients. Reproducing that chain is a representation-free test of the
 harmonic normalisation, because a basis phase leaking into the coupling
-coefficients would break every one of the matches. **That match, figure F1, is
-where this bundle's independence lives** — not the spectrum comparison, whose
-target descends from the same antecedent.
+coefficients would break every one of the matches. That match is where this
+bundle's independence lives — not the spectrum comparison, whose target descends
+from the same antecedent.
 
-**The solution is carried with a generic $u^a$.** The explicit frames — the
-Newtonian frame $\tilde\sigma_{ab}=0$, in which Annals II itself solves (p. 365),
-and the energy frame $q_a=0$ — appear as choices made at the end rather than
-assumed at the start. That is the difference the $1+3$ covariant approach buys,
-and no gauge-fixed treatment can exhibit it.
+**The solution is carried with a generic 4-velocity.** The explicit frames — the
+Newtonian frame in which *Annals II* itself solves at p. 365, and the energy
+frame — appear as choices made at the end rather than assumed at the start. That
+is the difference the 1+3 covariant approach buys, and no gauge-fixed treatment
+can exhibit it.
 
-Nomenclature is kept strictly separate throughout, following Appendix F:
-$\tau_\ell$ are **mode** coefficients, $\tau_{A_\ell}$ are **multipole**
-coefficients. The distinction is not made in Bardeen-variable treatments.
-Conflating them in code is how a sign is lost. Every released figure plots a
-**multipole** mean-square: Annals II p. 366 notes that these hold for general
-geometries while the mode mean-squares hold only for almost-Robertson–Walker
-ones.
+Nomenclature is kept strictly separate, following Appendix F: τ_ℓ are **mode**
+coefficients, τ_{A_ℓ} are **multipole** coefficients. The distinction is not made
+in Bardeen-variable treatments, and conflating them in code is how a sign is
+lost. Every released figure plots a **multipole** mean-square: *Annals II* p. 366
+notes that these hold for general geometries while mode mean-squares hold only
+for almost-Robertson–Walker ones.
 
-Equation numbers in this bundle are **published** numbers. The published and
-arXiv numberings of the Annals papers differ, and not by a constant offset.
+Equation numbers throughout are **published** numbers. The published and arXiv
+numberings of the Annals papers differ, and not by a constant offset.
 
-## Figure F1 — the Appendix F match
+### Figure 1: the Appendix F match
 
 The free-streaming recursion against each external treatment of (F.1)–(F.4), one
-panel per treatment. Four comparisons are four panels, not four colours on one
-axis. This figure carries the independence of the bundle's cross-check.
+panel per treatment; four comparisons are four panels, not four colours on one
+axis. Hu & Sugiyama write the recursion in the β normalisation, Ma & Bertschinger
+and Seljak & Zaldarriaga in the α normalisation, which is why Appendix F prints
+both (F.3) and (F.4). Three panels, not four: Wilson is pre-arXiv and *Annals II*
+names Wilson & Silk while keying Wilson.
 
-## Figure F2 — truncation convergence
+### Legacy treatment from [Annals of Physics 282, 321 (2000)](https://doi.org/10.1006/aphy.2000.6034)
 
-One series per $\ell_{\max}$, log y. Annals II Appendix E, pp. 378–379, warns that
-truncation in the multipole hierarchy is dangerous even in the
-almost-Friedmann–Lemaître case: if any four consecutive harmonics vanish, the
-shear must vanish exactly. Run in both frames, because footnote 29 on p. 365
-asserts that the Newtonian choice removes the truncation problem — a checkable
-claim.
+This bundle reconstructs its antecedent rather than porting it, and is built to
+find that paper's remaining errors rather than to agree with it. Four have been
+recorded so far, all in `provenance/`:
 
-## Figure F3 — angular autocorrelation
+- **G1** — *Annals I* prints (−1)^ℓ where its own definition gives i^ℓ.
+  Inconsequential for the covariant multipole, which is invariant under the
+  choice; the mode coefficients are not, and the two statements are distinct.
+- **G2** — (F.4) is algebraically correct but is not in the Ma & Bertschinger
+  form the following sentence identifies it with: the (2ℓ+1)⁻¹ division its text
+  specifies was not applied to the display.
+- **G3** — the Bessel identity (199) needs [(m/2)!]² in its denominator. It is
+  exact where Γ(m/2+1) = 1, so (201) is unaffected; (204) is low by 11.4% and the
+  D_ℓ of (205) correspondingly high by 12.8%.
+- **G4** — Appendix F names Wilson & Silk and keys Wilson. Different papers.
 
-Recovered $C_\ell$ against its target, residual panel beneath. The key figure.
-
-## Figure F4 — real-space angular correlation
-
-$C(\theta)$, the basis-free companion to F3.
-
-## Figure F5 — source decomposition, in two frames
-
-The split of §7.1.1, pp. 365–366: the integral solution (176) projects three
-sources through $j_\ell$ — the primary Sachs–Wolfe and acoustic term (177),
-secondary Doppler during slow decoupling (178), and the integrated, late- and
-early-ISW terms (179).
-
-$C_\ell$ is quadratic in the source, so the three pieces **do not add**: the upper
-panel carries the three auto-spectra and the total, the lower panel the three
-signed cross-spectra. Drawn in two frames, because the split is frame-dependent
-while the total is not — which is the covariance argument made quantitative.
-
-## Figure F6 — impact of the approximations
-
-Ratios to the full result: the slow-decoupling order, the diffusion damping
-$e^{-(k/k_D)^2}$, and the small-scale cancellation of §7.1.3.
-
-## Figure F7 — frame specialisation
-
-The generic-$u^a$ solution specialised to the Newtonian and energy frames, with
-their difference beneath and the dipole shown separately — the dipole is where
-the frame lives, and $\ell\ge2$ is where it does not.
-
-## Figure F8 — coupling schematic
-
-Where each coupling sits in the hierarchy. No data; generated by a script like
-every other figure.
-
-## Figure sequence
-
-| Figure | Artefact | Evidence category |
-|---|---|---|
-| **F1** | Appendix F match, small multiples | cross-check |
-| **F2** | truncation convergence against $\ell_{\max}$ | diagnostic |
-| **F3** | angular autocorrelation with residual panel | acceptance |
-| **F4** | real-space angular correlation $C(\theta)$ | acceptance |
-| **F5** | source decomposition with cross terms, two frames | acceptance |
-| **F6** | impact of the approximations | diagnostic |
-| **F7** | frame specialisation | cross-check |
-| **F8** | coupling schematic | schematic |
-
-Controls are not evidence and are not released as figures; they live in
-`diagnostics/`, with the round-trip residual reported as a number rather than a
-chart.
-
-Every figure ships as a versioned PDF/PNG pair in `figures/`. Every caption is
-standalone in `captions/` and names the script that produced the figure. The
-caption is the specification, not a description; `captions/FIGURE-PLAN-v1.0.0.md`
-is the specification for the set.
+Each is corrected silently in the reconstruction and marked by a succinct
+footnote in the supplement; the full forensics stay in `provenance/`.
 
 ## Future situation: possible extensions
 
 **These are possible extensions, not claims made by the current release.**
 
-- **v1.5.0** — the high-$\ell$ $O(\varepsilon^2\ell)$ couplings of Paper 1, and
-  the restricted case, which must recover v1.0.0's numbers. That makes v1.5.0 a
-  recovery and a check rather than a new claim.
-- **v2.0.0** — calibration and data-science release, including Planck data.
-  *Calibration* there means calibrating the solver against standard results. It
-  does **not** mean calibrating the amplitude of an effect.
-- **A fractional-contribution form of F5**, each term drawn as its share of
-  $C_\ell$ and summing to one by construction — scale-free, so the Sachs–Wolfe
-  plateau and the damping tail read equally well.
+- **v1.5.0** — the high-ℓ O(ε²ℓ) couplings, and the restricted case, which must
+  recover v1.0.0's numbers. That makes v1.5.0 a recovery and a check rather than
+  a new claim.
+- **v2.0.0** — calibration and data-science release, including Planck data and
+  the first ΛCDM angular power spectrum. *Calibration* there means calibrating
+  the solver against standard results; it does **not** mean calibrating the
+  amplitude of an effect. The ΛCDM spectrum is not an extension of this release
+  but a different computation: *Annals II* §8.3.2 is standard CDM, flat and
+  matter dominated, and its C_ℓ is a closed-form Sachs–Wolfe result with the
+  transfer function set to unity. A ΛCDM spectrum needs a recombination history,
+  tight coupling, diffusion damping and an integrated Sachs–Wolfe contribution
+  from Λ.
+- **A fractional-contribution form of the source decomposition**, each term drawn
+  as its share of C_ℓ and summing to one by construction.
 
 ## Scientific boundary
 
@@ -151,20 +112,17 @@ This is an analytical reproducibility bundle for the associated paper and its
 supplement. It is not an empirical calibration, not a parameter-estimation
 pipeline, and not a Boltzmann code for general use.
 
-**No new effect is claimed here, and none is reported.** The exact $1+3$
-covariant radiation multipole hierarchy contains couplings between the shear
-$\sigma_{ab}$ and the temperature multipoles $\tau_{A_\ell}$ whose coefficient
-grows linearly in $\ell$. Their $O(\varepsilon^2\ell)$ content is **gravitational
-lensing together with observer aberration**, with no residue. Nothing in this
-bundle is a detection claim.
+**No new effect is claimed here, and none is reported.** The exact 1+3 covariant
+radiation multipole hierarchy contains couplings between the shear and the
+temperature multipoles whose coefficient grows linearly in ℓ. Their O(ε²ℓ)
+content is **gravitational lensing together with observer aberration**, with no
+residue. Nothing here is a detection claim.
 
-Two statements must travel together, and neither stands alone:
-
-- the nonlinear contribution $\delta\tau_{NL}$ **matters** — it is not negligible
-  and it is not an artefact; and
-- it **adds nothing** — it redistributes power rather than creating it, because
-  $\delta\tau^{NL}\propto\Phi\Phi$ makes its contribution to $C_\ell$ quartic in
-  $\Phi$ while the linear $C_\ell$ is quadratic.
+Two statements must travel together, and neither stands alone: the nonlinear
+contribution δτ_NL **matters** — it is not negligible and not an artefact — and
+it **adds nothing**, redistributing power rather than creating it, because
+δτ_NL ∝ ΦΦ makes its contribution to C_ℓ quartic in Φ while the linear C_ℓ is
+quadratic.
 
 The bundle reproduces; it does not argue. Any physics claim belongs to the paper,
 and no claim appears here that is not in the paper.
@@ -172,17 +130,21 @@ and no claim appears here that is not in the paper.
 ## Repository structure
 
 ```text
-config/                  Accepted scientific and release configurations
-functions/               The reconstruction: harmonics, recursion, solution
+config/                  Accepted scientific and release configurations, and the
+                         implementation register that the audit tables derive from
+functions/harmonics/     PSTF weights, the recursion in three normalisations, and
+                         the external hierarchies as printed in their own papers
+functions/plotting/      House visual style, shared by every figure
 scripts/                 Active reproduction and verification commands
 tests/                   Compact claim-bearing regression suite
 data/                    No empirical data are required at v1.0.0
 outputs/                 Machine-readable curve and summary evidence
 figures/                 Versioned PDF/PNG figure pairs
-tables/                  Generated CSV/LaTeX publication tables
-captions/                Standalone captions for the selected evidence
+tables/                  Generated audit tables: equations, parameters, notation
+captions/                Standalone captions, and the figure plan for the set
 diagnostics/             Generated scientific acceptance checks
-source/                  Frozen target-paper reference material
+source/source-v1/        Frozen target-paper source (pending manuscript freeze)
+source/source-v2/        Computational conformity and clarification inserts
 provenance/              Theory-to-code traceability and the corrections record
 supplementary-materials/ Compiled computational supplement
 ```
@@ -190,11 +152,11 @@ supplementary-materials/ Compiled computational supplement
 ## Installation
 
 ```bash
-python -m venv .venv && . .venv/bin/activate     # Windows: .venv\Scripts\activate
+python -m venv .venv && . .venv/bin/activate     # Windows: .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 ```
 
-Python 3.13 is the verified interpreter.
+Python 3.13 is the verified interpreter. PowerShell 5.1 has no `&&`; use `;`.
 
 ## Reproducing the active outputs
 
@@ -208,6 +170,8 @@ recomputes the manifests, and fails if any artefact differs from the recorded
 hash. `--rerun` is the development route.
 
 ```bash
+python scripts/make_tables.py          # regenerate the audit tables
+python scripts/make_figure_pages.py    # regenerate the supplement's figure section
 python scripts/make_manifests.py       # regenerate the two SHA256 manifests
 python scripts/sync_conventions.py     # regenerate provenance/conventions.md
 pytest -q                              # the claim-bearing regression suite
@@ -215,9 +179,30 @@ pytest -q                              # the claim-bearing regression suite
 
 ## Verification status
 
-**Pre-release.** The acceptance criteria for v1.0.0 are recorded in
-`RELEASE-NOTES-v1.0.0.md`; none is yet closed. The harness runs and the seeded
-checks pass. Verification counts will be reported here at release.
+**Pre-release.** 45 tests pass and 2 skip; the harness runs clean. The acceptance
+criteria for v1.0.0 are recorded in `RELEASE-NOTES-v1.0.0.md`; two of six are
+closed. Verification counts will be reported here at release.
+
+`config/implementation-register.toml` links every published equation the numerics
+implement to its provenance, to the `.py` file and object implementing it, and to
+the test that checks it. `scripts/make_tables.py` generates the equations,
+parameters and notation tables from it, and `tests/test_register.py` resolves
+every module, object and test named in it — so a rename breaks the build rather
+than quietly falsifying a table in a published supplement. The parameters table
+distinguishes values taken from the source paper from standard values that are
+not, from values derived here, and from values stipulated for this release.
+
+Two manifests guard the tree. `FILE-MANIFEST-SHA256.txt` is the release
+fingerprint; `IMMUTABLE-MANIFEST-SHA256.txt` covers frozen reference material,
+where any change is release-blocking. The corrections record is append-guarded
+rather than frozen, because it must take new findings: appending is allowed and
+rewriting recorded bytes is not.
+
+*Disclosure of AI assistance.* The code, tests and documentation in this bundle
+were written with AI assistance (Claude, Anthropic). Derivations were checked
+against the published sources rather than generated from them, and every finding
+carries its printed equation number in `provenance/`. Responsibility for the
+content rests with the author.
 
 ## Version-control policy
 
@@ -241,24 +226,23 @@ The development lineage:
 | Stage | What it established | Bearing on this bundle |
 |---|---|---|
 | Correction to astro-ph/9912072 | withdrew the 1999 claim of a new effect | fixes the scientific boundary above |
-| Conventions gate C1 | the normative sign and $\ell$-weight sheet | source of `provenance/conventions.md` |
-| Paper 1 | the $1+3$ route to lensing from the exact hierarchy | the paper this bundle reproduces |
-| v1.5.0, planned | the restricted case | a **recovery and check** of v1.0.0, not a new result |
-
-## Disclosure of AI assistance
-
-The code, tests and documentation in this bundle were written with AI assistance
-(Claude, Anthropic). Derivations were checked against the published sources
-rather than generated from them, and every finding carries its printed equation
-number in `provenance/`. Responsibility for the content rests with the author.
+| Conventions gate C1 | the normative sign and ℓ-weight sheet | source of `provenance/conventions.md` |
+| Paper 1 | the 1+3 route to lensing from the exact hierarchy | the paper this bundle reproduces |
+| v1.5.0, planned | the restricted case | a recovery and check of v1.0.0, not a new result |
 
 ## DOI, citation and license
 
-**Associated paper:** identifier to be assigned.
+**ZivaHub/Figshare DOI:** [https://doi.org/10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509)
+— reserved, and active on publication of v1.0.0. This is the concept DOI: it
+always resolves to the latest version, so it is the one to cite.
 
-**DOI:** [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509) — reserved on ZivaHub (UCT), and
-active on publication of v1.0.0. This is the concept DOI: it always resolves to
-the latest version, so it is the one to cite.
+**Suggested paper citation:** Gebbie, Tim (2026). *(Paper 1 title to be
+confirmed)*. arXiv: identifier to be assigned.
+
+**Associated antecedent:** Gebbie, T.; Dunsby, P. K. S.; Ellis, G. F. R. (2000).
+*1+3 covariant cosmic microwave background anisotropies II: the
+almost-Friedmann–Lemaître model*. Annals of Physics **282**, 321–394.
+[doi:10.1006/aphy.2000.6034](https://doi.org/10.1006/aphy.2000.6034)
 
 **Code:** MIT License, see `LICENSE`.
 

@@ -1,55 +1,114 @@
 % Computational supplement to the associated paper.
-% Build:  latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.0.0.tex
+% Build:  pdflatex SUPPLEMENTARY-MATERIAL-v1.0.0.tex  (twice, for the table refs)
 %
-% This supplement documents what the reproducibility bundle computes and how its
-% outputs are generated. It makes no claim that is not in the paper.
-\documentclass[11pt,a4paper]{article}
-\usepackage{lmodern}
+% Structure follows the house exemplar,
+% github.com/timgebbie/correlation-emergence-reproducibility:
+% Scientific scope -> Theory-to-computation map -> the physics -> Parameter and
+% numerical evidence -> Numerical resolution and reproducibility -> Interpretive
+% limits. Different physics, same structure.
+%
+% Tables and the figure section are GENERATED. Do not edit them here:
+%   scripts/make_tables.py        -> tables/*.tex
+%   scripts/make_figure_pages.py  -> supplementary-materials/figures-v1.0.0.tex
+\documentclass[11pt]{article}
+\usepackage[margin=0.82in]{geometry}
 \usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
 \usepackage{amsmath,amssymb}
-\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
 \usepackage{booktabs}
-\usepackage[hidelinks]{hyperref}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{pdflscape}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{hyperref}
 
-\title{Computational supplement\\
-\large $1+3$ covariant CMB anisotropies --- analytical reproducibility bundle v1.0.0}
-\author{}
-\date{}
+\title{Computational Supplement:\\$1+3$ Covariant CMB Anisotropies}
+\author{Tim Gebbie}
+\date{v1.0.0 --- First public analytical reproducibility release\\5 October 2026}
 
 \begin{document}
 \maketitle
 
-\section{Scope}
-This bundle is archived at \texttt{doi:10.25375/uct.34069509}, active on publication of
-v1.0.0.
+\section{Scientific scope}
+This supplement records the analytical companion to the associated paper. The
+bundle is an independent Python reconstruction, from first $1+3$ covariant
+principles, of the almost-Friedmann--Lema\^itre results of Gebbie, Dunsby \&
+Ellis, \emph{Annals of Physics} \textbf{282}, 321--394 (2000),
+\texttt{doi:10.1006/aphy.2000.6034}. It is archived at
+\texttt{doi:10.25375/uct.34069509}, active on publication of v1.0.0.
 
-This supplement accompanies the v1.0.0 analytical release. The bundle is an
-independent reconstruction, from first $1+3$ covariant principles, of the
-almost-Friedmann--Lema\^itre results of Gebbie, Dunsby \& Ellis,
-\emph{Annals of Physics} \textbf{282}, 321 (2000). It reproduces; it does not
-argue. No new effect is claimed.
+It is written bottom-up: not a port of, and not a wrapper on, an existing
+Boltzmann code, and it inherits no other code's conventions. It reproduces; it
+does not argue. No new effect is claimed.
 
-\section{The acceptance spine}
-Appendix F of that paper, pp.~379--380, Eqs.~(F.1)--(F.4), links the covariant
-mode recursion to external treatments written in real coefficients. Reproducing
-that chain tests the harmonic normalisation without introducing a
-representation.\footnote{The comparison applies the $(2\ell+1)^{-1}$ division
-that the text preceding (F.4) specifies and the display omits; (F.4) is otherwise
-correct as printed. A misprint, recorded in
+Department of Statistical Sciences, University of Cape Town.
+\texttt{tim.gebbie@uct.ac.za}
+
+\section{Theory-to-computation map}
+Table~\ref{tab:equations} links each published equation the numerics implement to
+its provenance and to the \texttt{.py} file and object implementing it, together
+with the test that checks it. Table~\ref{tab:notation} gives the notation and the
+names the quantities carry in the code.
+
+Both are \emph{generated} from \texttt{config/implementation-register.toml} by
+\texttt{scripts/make\_tables.py}, and \texttt{tests/test\_register.py} resolves
+every module, object and test named in them. They cannot drift from the code: a
+rename breaks the build rather than quietly falsifying a table printed here.
+
+The harmonic normalisation is
+$Q_{A_\ell}=(-k_{\rm phys})^{-\ell}\mathrm{D}_{\langle A_\ell\rangle}Q$. Both
+candidate conventions are run end to end; only this one reproduces the real,
+opposite-sign form of the external
+hierarchies.\footnote{\emph{Annals~I} prints $(-1)^\ell$ at the corresponding
+step where its own definition gives $i^\ell$. The covariant multipole
+$\tau_{A_\ell}$ is invariant under the choice, so the misprint never produced a
+wrong result; the mode coefficients are not invariant, and the two statements are
+distinct. Both are asserted as tests. A misprint, recorded in
 \texttt{provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md}.}
 
-Three external treatments are used. Wilson \& Silk is not reproduced here: a
-coefficient transcribed through Appendix~F would be the same source as Appendix~F
-rather than an independent fourth.
+Nomenclature is kept strictly separate: $\tau_\ell$ are \textbf{mode}
+coefficients and $\tau_{A_\ell}$ are \textbf{multipole} coefficients.
+\emph{Annals~II} notes that the distinction is not made in Bardeen-variable
+treatments. Every released figure plots a multipole mean-square, which holds for
+general geometries, rather than a mode mean-square, which holds only for
+almost-Robertson--Walker ones.
 
-\section{Frames, and what v1.5.0 then is}
+\input{tables/equations-v1.0.0.tex}
+\input{tables/notation-v1.0.0.tex}
+
+\section{The acceptance spine}
+Appendix~F of the antecedent, pp.~379--380, Eqs.~(F.1)--(F.4), links the
+covariant mode recursion to external treatments written in real coefficients.
+Reproducing that chain tests the harmonic normalisation without introducing a
+representation, and it is where this bundle's independence
+lies.\footnote{The comparison applies the $(2\ell+1)^{-1}$ division that the text
+preceding (F.4) specifies and the display omits; (F.4) is otherwise correct as
+printed. A misprint, recorded.}
+
+Three external treatments are used --- Hu \& Sugiyama Eq.~(6), Ma \& Bertschinger
+Eqs.~(49) and (50), and Seljak \& Zaldarriaga Eq.~(3d) --- each transcribed from
+its own paper. Hu \& Sugiyama write the recursion in the $\beta$ normalisation
+and the other two in the $\alpha$ normalisation, which is why Appendix~F prints
+both (F.3) and (F.4). A basis phase leaking into the couplings would break at
+least one of the two matches.
+
+Wilson is not reproduced: a coefficient transcribed through Appendix~F would be
+the same source as Appendix~F rather than an independent fourth, the paper is
+pre-arXiv, and Appendix~F names Wilson \& Silk while keying Wilson.
+
+\section{Frames and specialisation}
 The solution is carried with a \textbf{generic} $u^a$. The explicit frames appear
 as choices made at the end, not assumed at the start: the Newtonian frame
-$\tilde\sigma_{ab}=0$, which is the specialisation Annals II itself makes at
-p.~365 in order to remove the shear terms, and the energy frame $q_a=0$. Carrying
-the generic threading and specialising late is the difference the $1+3$ covariant
-approach buys; a gauge-fixed treatment fixes the frame before the hierarchy is
-solved and cannot exhibit it.
+$\tilde\sigma_{ab}=0$, which is the specialisation \emph{Annals~II} itself makes
+at p.~365 in order to remove the shear terms, and the energy frame $q_a=0$.
+Carrying the generic threading and specialising late is the difference the $1+3$
+covariant approach buys; a gauge-fixed treatment fixes the frame before the
+hierarchy is solved and cannot exhibit it.
 
 This is also what fixes the status of the next release. Because v1.0.0 is the
 general case, \textbf{v1.5.0's restricted case is a recovery and a check} --- it
@@ -58,29 +117,16 @@ than a new result.
 
 Two consequences are visible in the figures. The decomposition of the temperature
 source into primary, Doppler and integrated terms (\S7.1.1, Eqs.~(177)--(179)) is
-frame-dependent, while the total is not, so it is drawn in two frames. And
-footnote~29 on p.~365 asserts that the Newtonian choice also removes the high-$\ell$
-truncation difficulty of Appendix~E; that is a checkable claim, and the
-convergence figure checks it in both frames.
+frame-dependent while the total is not, so it is drawn in two frames. And
+footnote~29 on p.~365 asserts that the Newtonian choice also removes the
+high-$\ell$ truncation difficulty of Appendix~E; that is a checkable claim, and
+the convergence figure checks it in both frames.
 
-\section{Conventions}
-The normative sheet is carried, generated rather than copied, at
-\texttt{provenance/conventions.md}. Equation numbers in this bundle are the
-published numbers.
-
-The harmonic normalisation is
-$Q_{A_\ell}=(-k_{\rm phys})^{-\ell}\mathrm{D}_{\langle A_\ell\rangle}Q$. Both
-candidate conventions are run end to end; only this one reproduces the real,
-opposite-sign form of the external
-hierarchies.\footnote{Annals~I prints $(-1)^\ell$ at the corresponding step where
-its own definition gives $i^\ell$. The covariant multipole $\tau_{A_\ell}$ is
-invariant under the choice, so the misprint never produced a wrong result; the
-mode coefficients are not invariant, and the two statements are distinct. Both
-are asserted as tests.}
-
-\section{Comparison, and its range}
-The $C_\ell$ comparison is Sachs--Wolfe only, so its tolerance is bounded by the
-acoustic modulation dropped in reaching it. The range is derived, not chosen:
+\section{Comparison and its range}
+The $C_\ell$ comparison is Sachs--Wolfe only: (196) descends from (181), in which
+the acoustic modulation $\cos(k r_s)$ is dropped by taking $r_s^*\to0$, and
+\S8.3.2 sets the transfer function to unity. Its accuracy is therefore bounded by
+the term that was dropped. The range is derived, not chosen:
 $2\le\ell\le20$ at 5\%, generated by
 \texttt{scripts/derive\_ell\_range.py}.\footnote{That derivation uses the Bessel
 identity of \S8.3, which requires $[(m/2)!]^2$ in its denominator. As printed it
@@ -88,13 +134,67 @@ is exact where $\Gamma(m/2+1)=1$, so the large-scale result (201) is unaffected;
 the horizon-scale normalisation (204) and the $D_\ell$ of (205) are. A misprint,
 corrected silently and recorded.}
 
-\section{Reproduction}
+\section{Evidence}
+Each figure is generated by the script named in its caption and is accompanied by
+a standalone caption file in \texttt{captions/}. This section is itself generated
+by \texttt{scripts/make\_figure\_pages.py}, so a figure appears here only once it
+exists in the tree, and what is outstanding is stated rather than omitted.
+
+\input{supplementary-materials/figures-v1.0.0.tex}
+
+\section{Parameter and numerical evidence}
+Table~\ref{tab:parameters} lists every number the numerics use. Its
+\emph{provenance} column distinguishes values taken from the source paper, from
+standard values that are not, from values derived here, and from values
+stipulated for this release. The distinction matters: $\Omega_\gamma h^2$ is a
+standard value and not one the antecedent supplies, and it enters only through
+$R(\eta_*)$ and hence the sound speed.
+
+\input{tables/parameters-v1.0.0.tex}
+
+\section{Numerical resolution and reproducibility}
+The hierarchy is integrated with an explicit Runge--Kutta method of order~8
+(\texttt{DOP853}) at relative tolerance $10^{-10}$ and absolute tolerance
+$10^{-12}$, truncated at $\ell_{\max}=80$ with comparisons restricted to
+$\ell\le25$ so that reflection from the truncation does not contaminate them.
+The acceptance threshold used in the figures, $10^{-11}$, sits an order above the
+integrator floor.
+
+The release route is
 \begin{verbatim}
 python scripts/run_all.py --strict
 \end{verbatim}
+which regenerates every output, figure and table, recomputes the SHA-256
+manifests, and fails if any artefact differs from the recorded hash.
+\texttt{FILE-MANIFEST-SHA256.txt} is the release fingerprint;
+\texttt{IMMUTABLE-MANIFEST-SHA256.txt} covers frozen reference material, where
+any change is release-blocking. The corrections record is append-guarded rather
+than frozen, because it must take new findings: appending is permitted and
+rewriting recorded bytes is not.
 
-\section{Figures}
-% One subsection per canonical figure, each naming its generating script.
-% Pending: see RELEASE-NOTES-v1.0.0.md.
+Weights are carried as exact rationals rather than floating-point numbers
+wherever a sign or an $\ell$-weight is asserted.
+
+\section{Interpretive limits}
+This is an analytical reproducibility bundle for the associated paper and its
+supplement. It is not an empirical calibration, not a parameter-estimation
+pipeline, and not a Boltzmann code for general use. No new effect is claimed and
+none is reported.
+
+The release does \textbf{not} produce a $\Lambda$CDM angular power spectrum, and
+the distinction is not a matter of effort. \emph{Annals~II}'s own \S8.3.2 model is
+standard CDM --- $h=0.5$, $\Omega_B=0.05$, flat and matter dominated --- and its
+$C_\ell$ is a closed-form Sachs--Wolfe result on large scales with the transfer
+function set to unity. A $\Lambda$CDM spectrum requires a recombination history,
+tight coupling, diffusion damping and an integrated Sachs--Wolfe contribution
+from $\Lambda$: a full Boltzmann solve, not an extension of the analytic
+reconstruction. It is the \textbf{v2.0.0} deliverable, where \emph{calibration}
+means calibrating the solver against standard results.
+
+Two statements must travel together, and neither stands alone: the nonlinear
+contribution $\delta\tau_{NL}$ \textbf{matters} --- it is not negligible and not
+an artefact --- and it \textbf{adds nothing}, redistributing power rather than
+creating it, because $\delta\tau_{NL}\propto\Phi\Phi$ makes its contribution to
+$C_\ell$ quartic in $\Phi$ while the linear $C_\ell$ is quadratic.
 
 \end{document}

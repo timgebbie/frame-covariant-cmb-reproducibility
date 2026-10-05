@@ -1,0 +1,417 @@
+# Implementation register — the audit spine of this bundle.
+#
+# One entry per quantity that the numerics implement, linking
+#
+#     published equation  ->  provenance  ->  the code that implements it
+#                                          ->  the test that checks it
+#
+# \\texttt{scripts/make\\_tables.py} generates tables/ from this file, and the supplement
+# includes those tables. \\texttt{tests/test\\_register.py} checks that every \\texttt{module} and
+# \\texttt{object} named here actually resolves, so a rename breaks the build rather than
+# silently falsifying the table.
+#
+# \\textbf{Equation numbers are PUBLISHED numbers.} The published and arXiv numberings
+# of the Annals papers differ, and not by a constant offset.
+
+[meta]
+version = "1.0.0"
+generated_by = "scripts/make_tables.py"
+
+# --- sources, cited once and referenced by key ------------------------------
+
+[sources.AnnalsI]
+text = "T. Gebbie and G. F. R. Ellis, Annals of Physics 282, 285 (2000)"
+short = "Annals I"
+
+[sources.AnnalsII]
+text = "T. Gebbie, P. K. S. Dunsby and G. F. R. Ellis, Annals of Physics 282, 321 (2000)"
+short = "Annals II"
+doi = "10.1006/aphy.2000.6034"
+
+[sources.HS]
+text = "W. Hu and N. Sugiyama, Physical Review D 51, 2599 (1995)"
+short = "Hu \\& Sugiyama"
+
+[sources.MB]
+text = "C.-P. Ma and E. Bertschinger, Astrophysical Journal 455, 7 (1995)"
+short = "Ma \\& Bertschinger"
+
+[sources.SZ]
+text = "U. Seljak and M. Zaldarriaga, Astrophysical Journal 469, 437 (1996)"
+short = "Seljak \\& Zaldarriaga"
+
+[sources.DLMF]
+text = "NIST Digital Library of Mathematical Functions, spherical Bessel recurrences"
+short = "DLMF"
+
+# --- equations ---------------------------------------------------------------
+
+[[equations]]
+key = "beta"
+quantity = "$\\beta_\\ell = O^{A_\\ell}O_{A_\\ell} = (\\ell!)^2 2^\\ell/(2\\ell)!$"
+source = "AnnalsI"
+equation = "(24)"
+module = "functions.harmonics.weights"
+object = "beta"
+test = "test_beta_module_matches_symbolic_exactly"
+note = "exact rationals, never floats"
+
+[[equations]]
+key = "beta_recurrence"
+quantity = "$\\beta_\\ell = \\frac{\\ell}{2\\ell-1}\\beta_{\\ell-1}$, $\\beta_{\\ell+1} = \\frac{\\ell+1}{2\\ell+1}\\beta_\\ell$"
+source = "AnnalsI"
+equation = "(25)"
+module = "functions.harmonics.weights"
+object = "beta"
+test = "test_beta_recurrence_descending_general_ell"
+note = "verified at general $\\ell$ symbolically"
+
+[[equations]]
+key = "delta"
+quantity = "$\\Delta_\\ell = 4\\pi\\beta_\\ell/(2\\ell+1)$"
+source = "AnnalsI"
+equation = "(119)"
+module = "functions.harmonics.weights"
+object = "delta_over_pi"
+test = ""
+note = "$4\\pi$ factored out so the result stays rational"
+
+[[equations]]
+key = "alpha"
+quantity = "$\\alpha_\\ell$, defined by $\\beta_\\ell = \\alpha_\\ell^{-1}(2\\ell+1)$"
+source = "AnnalsII"
+equation = "App. F, p. 380"
+module = "functions.harmonics.weights"
+object = "alpha"
+test = "test_f4_is_direct_substitution_into_f3"
+note = "the normalisation in which (F.4) takes the external form"
+
+[[equations]]
+key = "F1_weight"
+quantity = "free-streaming weight $w_\\ell = (\\ell+1)^2/[(2\\ell+3)(2\\ell+1)]$"
+source = "AnnalsII"
+equation = "(F.1), p. 379"
+module = "functions.harmonics.weights"
+object = "free_streaming_weight"
+test = "test_f1_weight_is_the_mode_recursion_weight_shifted"
+note = "the hierarchy is the adjoint of the mode recursion"
+
+[[equations]]
+key = "F1"
+quantity = "covariant recursion $-\\dot\\tau_\\ell = (k_{\\rm com}/a)[w_\\ell\\tau_{\\ell+1}-\\tau_{\\ell-1}]$"
+source = "AnnalsII"
+equation = "(F.1), p. 379"
+module = "functions.harmonics.free_streaming"
+object = "free_stream"
+test = "test_the_three_normalisations_are_one_solution"
+note = "\\texttt{normalisation='covariant'}. $k$ here is COMOVING"
+
+[[equations]]
+key = "F3"
+quantity = "$\\beta$-normalised recursion, conformal time"
+source = "AnnalsII"
+equation = "(F.3), p. 380"
+module = "functions.harmonics.free_streaming"
+object = "free_stream"
+test = "test_the_three_normalisations_are_one_solution"
+note = "\\texttt{normalisation='beta'}. Matches Hu \\& Sugiyama"
+
+[[equations]]
+key = "F4"
+quantity = "$\\alpha$-normalised recursion"
+source = "AnnalsII"
+equation = "(F.4), p. 380"
+module = "functions.harmonics.free_streaming"
+object = "free_stream"
+test = "test_f4_variable_is_exactly_the_spherical_bessel_function"
+note = "\\texttt{normalisation='alpha'}. Applies the $(2\\ell+1)^{-1}$ division the text specifies and the display omits --- finding G2"
+
+[[equations]]
+key = "bessel_solution"
+quantity = "free-streaming solution $\\alpha_\\ell^{-1}\\tau_\\ell = j_\\ell(k_{\\rm com}\\Delta\\eta)$"
+source = "AnnalsII"
+equation = "App. F, p. 380"
+module = "functions.harmonics.free_streaming"
+object = "analytic_projection"
+test = "test_f4_variable_is_exactly_the_spherical_bessel_function"
+note = "matched to $1.2\\times10^{-10}$"
+
+[[equations]]
+key = "HS6"
+quantity = "$\\dot\\Theta_\\ell = k[\\frac{\\ell}{2\\ell-1}\\Theta_{\\ell-1}-\\frac{\\ell+1}{2\\ell+3}\\Theta_{\\ell+1}]$"
+source = "HS"
+equation = "(6), p. 2601"
+module = "functions.harmonics.external"
+object = "WEIGHTS"
+test = "test_external_hierarchies_match_the_bundle_at_machine_precision"
+note = "$\\beta$ normalisation. Read from the source paper, not through Appendix F"
+
+[[equations]]
+key = "MB49"
+quantity = "$\\dot F_{\\nu\\ell} = \\frac{k}{2\\ell+1}[\\ell F_{\\nu(\\ell-1)}-(\\ell+1)F_{\\nu(\\ell+1)}]$"
+source = "MB"
+equation = "(49), (50)"
+module = "functions.harmonics.external"
+object = "WEIGHTS"
+test = "test_external_hierarchies_match_the_bundle_at_machine_precision"
+note = "$\\alpha$ normalisation. arXiv copy carries the same numbers as print"
+
+[[equations]]
+key = "SZ3d"
+quantity = "$\\dot\\Delta_{T\\ell} = \\frac{k}{2\\ell+1}[\\ell\\Delta_{T(\\ell-1)}-(\\ell+1)\\Delta_{T(\\ell+1)}]$"
+source = "SZ"
+equation = "(3d)"
+module = "functions.harmonics.external"
+object = "WEIGHTS"
+test = "test_external_hierarchies_match_the_bundle_at_machine_precision"
+note = "$\\alpha$ normalisation. Thomson term dropped"
+
+[[equations]]
+key = "sign_control"
+quantity = "relative-sign control: the $\\lambda^2=-1$ normalisation, run as a wiring check"
+source = "AnnalsII"
+equation = "(F.1), p. 379"
+module = "functions.harmonics.free_streaming"
+object = "free_stream"
+test = "test_sign_control_fails_in_a_known_shape"
+note = "`sign_control=True`. Criterion 4, and criterion 3 in executable form"
+
+[[equations]]
+key = "bessel_integral"
+quantity = "$\\int_0^\\infty z^{-m}j_\\ell^2(z)\\,dz$, corrected to carry $[(m/2)!]^2$"
+source = "AnnalsII"
+equation = "(199), p. 372"
+module = "scripts.derive_ell_range"
+object = "bessel_integral_corrected"
+test = "test_annals_ii_199_needs_the_square_in_its_denominator"
+note = "finding G3. Printed form exact only at $m=0,2$"
+
+[[equations]]
+key = "acoustic_scale"
+quantity = "$\\ell_A = \\pi\\Delta\\eta_*/r_s$, bounding criterion 5's range"
+source = "AnnalsII"
+equation = "\\S8.3.2, p. 372"
+module = "scripts.derive_ell_range"
+object = "acoustic_scale"
+test = ""
+note = "gives $\\ell_A\\simeq203$, hence $2\\le\\ell\\le20$ at 5\\%"
+
+[[equations]]
+key = "source_split"
+quantity = "$S_P$, $S_{\\rm DISW}$, $S_{\\rm ISW}$ --- the temperature source split"
+source = "AnnalsII"
+equation = "(177), (178), (179), p. 366"
+module = ""
+object = ""
+test = ""
+note = "PENDING --- figure F5"
+
+[[equations]]
+key = "integral_solution"
+quantity = "integral solution, $\\beta_\\ell\\tau_\\ell(\\eta_0)/(2\\ell+1)$ projected through $j_\\ell$"
+source = "AnnalsII"
+equation = "(176), p. 365"
+module = ""
+object = ""
+test = ""
+note = "PENDING --- figures F3, F5"
+
+[[equations]]
+key = "truncation"
+quantity = "truncation condition: four consecutive vanishing harmonics force $\\sigma_{ab}=0$"
+source = "AnnalsII"
+equation = "App. E, (E.1), p. 378"
+module = ""
+object = ""
+test = ""
+note = "PENDING --- figure F2"
+
+# --- parameters ---------------------------------------------------------------
+
+[[parameters]]
+symbol = "$k_{\\rm com}$"
+code = "K_COM"
+value = "1.0"
+units = "arbitrary; sets the time unit $1/k_{\\rm com}$"
+source = "stipulated"
+where = "scripts/figure_f1_appendix_f.py"
+note = "free streaming is scale-free, so one mode suffices"
+
+[[parameters]]
+symbol = "$\\ell_{\\max}$"
+code = "ELL_MAX"
+value = "80"
+units = "---"
+source = "stipulated"
+where = "scripts/figure_f1_appendix_f.py"
+note = "integration truncation; comparisons use $\\ell\\le25$ so reflection does not contaminate"
+
+[[parameters]]
+symbol = "$\\ell_{\\rm compared}$"
+code = "ELL_COMPARED"
+value = "25"
+units = "---"
+source = "stipulated"
+where = "scripts/figure_f1_appendix_f.py"
+note = "well below $\\ell_{\\max}$"
+
+[[parameters]]
+symbol = "rtol, atol"
+code = "rtol, atol"
+value = "$10^{-10}$, $10^{-12}$"
+units = "---"
+source = "stipulated"
+where = "functions/harmonics/free_streaming.py"
+note = "DOP853. Sets the $10^{-11}$ acceptance threshold in F1"
+
+[[parameters]]
+symbol = "$z_*$"
+code = "Z_STAR"
+value = "1100"
+units = "---"
+source = "standard"
+where = "scripts/derive_ell_range.py"
+note = "last scattering. NOT taken from Annals II"
+
+[[parameters]]
+symbol = "$h$"
+code = "H"
+value = "0.5"
+units = "---"
+source = "AnnalsII \\S8.3.2"
+where = "scripts/derive_ell_range.py"
+note = "the paper's own standard CDM model"
+
+[[parameters]]
+symbol = "$\\Omega_B$"
+code = "OMEGA_B"
+value = "0.05"
+units = "---"
+source = "AnnalsII \\S8.3.2"
+where = "scripts/derive_ell_range.py"
+note = "the paper's own standard CDM model"
+
+[[parameters]]
+symbol = "$\\Omega_\\gamma h^2$"
+code = "OMEGA_GAMMA_H2"
+value = "$2.47\\times10^{-5}$"
+units = "---"
+source = "standard"
+where = "scripts/derive_ell_range.py"
+note = "\\textbf{not from Annals II.} Enters only through $R(\\eta_*)$, hence $c_s$"
+
+[[parameters]]
+symbol = "tolerance"
+code = "ADOPTED_TOLERANCE"
+value = "5\\%"
+units = "---"
+source = "derived"
+where = "scripts/derive_ell_range.py"
+note = "criterion 5; gives $2\\le\\ell\\le20$"
+
+[[parameters]]
+symbol = "acceptance threshold"
+code = "---"
+value = "$10^{-11}$"
+units = "---"
+source = "stipulated"
+where = "scripts/figure_f1_appendix_f.py"
+note = "an order above the integrator floor"
+
+# --- notation -----------------------------------------------------------------
+
+[[notation]]
+symbol = "$\\tau(x,e)$"
+code = "---"
+meaning = "temperature anisotropy as a function of position and direction"
+note = ""
+
+[[notation]]
+symbol = "$\\tau_{A_\\ell}$"
+code = "---"
+meaning = "\\textbf{multipole} coefficients --- the covariant objects"
+note = "valid for general geometries; what every released figure plots"
+
+[[notation]]
+symbol = "$\\tau_\\ell$"
+code = "tau, values"
+meaning = "\\textbf{mode} coefficients"
+note = "almost-Robertson--Walker only. Conflating these two is how a sign is lost"
+
+[[notation]]
+symbol = "$O^{A_\\ell}$"
+code = "---"
+meaning = "$e^{\\langle A_\\ell\\rangle}$, the PSTF basis on the sphere"
+note = "Annals I (15)"
+
+[[notation]]
+symbol = "$Q_{A_\\ell}$"
+code = "---"
+meaning = "harmonic basis tensor, $(-k_{\\rm phys})^{-\\ell}\\mathrm{D}_{\\langle A_\\ell\\rangle}Q$"
+note = "the adopted normalisation; see criterion 3"
+
+[[notation]]
+symbol = "$\\beta_\\ell$"
+code = "beta"
+meaning = "$O^{A_\\ell}O_{A_\\ell}$"
+note = "Hu \\& Sugiyama's normalisation"
+
+[[notation]]
+symbol = "$\\alpha_\\ell$"
+code = "alpha"
+meaning = "$(2\\ell+1)/\\beta_\\ell$"
+note = "Ma \\& Bertschinger's and Seljak \\& Zaldarriaga's normalisation"
+
+[[notation]]
+symbol = "$k_{\\rm com}$"
+code = "k_com"
+meaning = "comoving wavenumber"
+note = "\\textbf{never a bare \\texttt{k} in this codebase}"
+
+[[notation]]
+symbol = "$k_{\\rm phys}$"
+code = "k_phys"
+meaning = "physical wavenumber, $k_{\\rm com}/a$"
+note = "Appendix F's $k$ is comoving; the conventions sheet's is physical"
+
+[[notation]]
+symbol = "$\\eta$"
+code = "eta"
+meaning = "conformal time, $dt = a\\,d\\eta$"
+note = ""
+
+[[notation]]
+symbol = "$\\Delta\\eta_*$"
+code = "d_eta"
+meaning = "$\\eta_0-\\eta_*$"
+note = ""
+
+[[notation]]
+symbol = "$j_\\ell$"
+code = "spherical_jn"
+meaning = "spherical Bessel function"
+note = "the free-streaming solution"
+
+[[notation]]
+symbol = "$u^a$"
+code = "---"
+meaning = "the threading 4-velocity"
+note = "carried generic; frames are specialisations made at the end"
+
+[[notation]]
+symbol = "$\\sigma_{ab}$"
+code = "---"
+meaning = "shear"
+note = "$\\sigma$ is the shear and nothing else"
+
+[[notation]]
+symbol = "$A_a$"
+code = "---"
+meaning = "acceleration, $\\dot u_a$"
+note = ""
+
+[[notation]]
+symbol = "$\\Theta_\\ell$"
+code = "---"
+meaning = "Hu \\& Sugiyama's multipole variable"
+note = "$\\beta$-normalised"

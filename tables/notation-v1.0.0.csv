@@ -1,0 +1,17 @@
+symbol,code,meaning,note
+"$\tau(x,e)$",---,temperature anisotropy as a function of position and direction,
+$\tau_{A_\ell}$,---,\textbf{multipole} coefficients --- the covariant objects,valid for general geometries; what every released figure plots
+$\tau_\ell$,"tau, values",\textbf{mode} coefficients,almost-Robertson--Walker only. Conflating these two is how a sign is lost
+$O^{A_\ell}$,---,"$e^{\langle A_\ell\rangle}$, the PSTF basis on the sphere",Annals I (15)
+$Q_{A_\ell}$,---,"harmonic basis tensor, $(-k_{\rm phys})^{-\ell}\mathrm{D}_{\langle A_\ell\rangle}Q$",the adopted normalisation; see criterion 3
+$\beta_\ell$,beta,$O^{A_\ell}O_{A_\ell}$,Hu \& Sugiyama's normalisation
+$\alpha_\ell$,alpha,$(2\ell+1)/\beta_\ell$,Ma \& Bertschinger's and Seljak \& Zaldarriaga's normalisation
+$k_{\rm com}$,k_com,comoving wavenumber,\textbf{never a bare \texttt{k} in this codebase}
+$k_{\rm phys}$,k_phys,"physical wavenumber, $k_{\rm com}/a$",Appendix F's $k$ is comoving; the conventions sheet's is physical
+$\eta$,eta,"conformal time, $dt = a\,d\eta$",
+$\Delta\eta_*$,d_eta,$\eta_0-\eta_*$,
+$j_\ell$,spherical_jn,spherical Bessel function,the free-streaming solution
+$u^a$,---,the threading 4-velocity,carried generic; frames are specialisations made at the end
+$\sigma_{ab}$,---,shear,$\sigma$ is the shear and nothing else
+$A_a$,---,"acceleration, $\dot u_a$",
+$\Theta_\ell$,---,Hu \& Sugiyama's multipole variable,$\beta$-normalised

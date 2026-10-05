@@ -1,0 +1,11 @@
+symbol,code,value,units,source,where,note
+$k_{\rm com}$,K_COM,1.0,arbitrary; sets the time unit $1/k_{\rm com}$,stipulated,scripts/figure_f1_appendix_f.py,"free streaming is scale-free, so one mode suffices"
+$\ell_{\max}$,ELL_MAX,80,---,stipulated,scripts/figure_f1_appendix_f.py,integration truncation; comparisons use $\ell\le25$ so reflection does not contaminate
+$\ell_{\rm compared}$,ELL_COMPARED,25,---,stipulated,scripts/figure_f1_appendix_f.py,well below $\ell_{\max}$
+"rtol, atol","rtol, atol","$10^{-10}$, $10^{-12}$",---,stipulated,functions/harmonics/free_streaming.py,DOP853. Sets the $10^{-11}$ acceptance threshold in F1
+$z_*$,Z_STAR,1100,---,standard,scripts/derive_ell_range.py,last scattering. NOT taken from Annals II
+$h$,H,0.5,---,AnnalsII \S8.3.2,scripts/derive_ell_range.py,the paper's own standard CDM model
+$\Omega_B$,OMEGA_B,0.05,---,AnnalsII \S8.3.2,scripts/derive_ell_range.py,the paper's own standard CDM model
+$\Omega_\gamma h^2$,OMEGA_GAMMA_H2,$2.47\times10^{-5}$,---,standard,scripts/derive_ell_range.py,"\textbf{not from Annals II.} Enters only through $R(\eta_*)$, hence $c_s$"
+tolerance,ADOPTED_TOLERANCE,5\%,---,derived,scripts/derive_ell_range.py,criterion 5; gives $2\le\ell\le20$
+acceptance threshold,---,$10^{-11}$,---,stipulated,scripts/figure_f1_appendix_f.py,an order above the integrator floor
