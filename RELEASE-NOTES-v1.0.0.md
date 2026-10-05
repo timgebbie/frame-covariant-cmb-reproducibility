@@ -18,10 +18,10 @@ v1.0.0 is complete when all six hold, and not before.
 |---|---|---|
 | 1 | the free-streaming recursion reproduces (F.1)–(F.4), with the external matches of (F.3) and (F.4) checked numerically rather than asserted | **open** — chain verified symbolically; external comparison not yet built |
 | 2 | a covariant → mode → covariant round trip returns the input to machine precision | **open** |
-| 3 | both harmonic phase conventions run, and only one reproduces the real, opposite-sign form of the external hierarchies | **open** — wording change requested, see `provenance/OPEN-QUESTIONS-v1.0.0.md` Q1 |
+| 3 | both harmonic phase conventions run end to end; only one reproduces the real, opposite-sign form of the external hierarchies, and the bundle adopts and names that one | **open** — wording agreed and adopted, Q1 closed |
 | 4 | a known-wrong control runs and fails in a known shape | **open** — restated. The $\pm(\ell+2)$ control is **withdrawn** to v1.5.0, where that term exists, and replaced by a relative-sign control on the free-streaming bracket (D1). See Q2, closed |
 | 5 | the almost-Friedmann–Lemaître temperature spectrum is recovered over $2\le\ell\le20$ to 5% | **open** — range and tolerance now **derived and closed**, see Q3 |
-| 6 | every number the paper prints is regenerated here, or marked not-machine-checkable with the reason | **open** — depends on manuscript freeze, see Q5 |
+| 6 | every number the paper prints is regenerated here, or marked not-machine-checkable with the reason | **open** — closes at manuscript freeze. `v1.0.0-rc` is tagged on criteria 1–5; `v1.0.0` requires all six, Q5 closed |
 
 ## What is in this tree now
 
@@ -77,6 +77,11 @@ Three, all in `provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md`.
   at $m=0$ and $m=2$, so **(201) is correct as printed** and the slip went
   unnoticed; but (204) uses $m=1$ and is **low by 11.4%**, carrying $D_\ell$ in
   (205) **12.8% high**. Material. No sign and no $\ell$-dependence moves.
+
+All three are **corrected silently in the reconstruction and marked by a succinct
+footnote** in the supplement and in any affected caption; the full forensics stay
+in `provenance/`. A finding that would move a sign, an $\ell$-weight or an
+acceptance criterion is still raised rather than footnoted.
 
 ## Known not to be in v1.0.0
 

@@ -3,10 +3,10 @@ message: "If you use this software, please cite the associated paper and this so
 title: "1+3 covariant CMB anisotropies: analytical reproducibility software"
 type: software
 version: "1.0.0"
-# TODO(PI): confirm the author list for Paper 1 before release.
 authors:
   - family-names: Gebbie
     given-names: Tim
+doi: "10.25375/uct.34069509"
 license: MIT
 abstract: >-
   An independent Python reconstruction, from first 1+3 covariant principles, of

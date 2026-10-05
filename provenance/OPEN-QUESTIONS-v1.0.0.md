@@ -6,7 +6,7 @@ is settled by the issuing stream.**
 
 ---
 
-## Q1 — criterion 3 is meetable; only the word *self-consistent* needs changing
+## Q1 — criterion 3's wording — **CLOSED 2026-10-05**
 
 **Brief §3, criterion 3** asks that both harmonic phase conventions run and that
 **only one** be self-consistent.
@@ -48,7 +48,14 @@ checks are counted by their sources.
 
 Both facts are asserted executably in `tests/test_appendix_f_chain.py`.
 
-**Status: open — wording change requested, no scope change.**
+**Agreed wording, adopted.**
+
+> Both harmonic phase conventions run end to end; only one reproduces the real,
+> opposite-sign form of the external hierarchies, and the bundle adopts and names
+> that one. Separately, the covariant multipole is shown invariant under the
+> choice, so the two statements are not conflated again.
+
+**Status: closed.**
 
 ---
 
@@ -141,13 +148,15 @@ turning up later is purely additive: a fourth panel.
 
 ---
 
-## Q5 — acceptance criterion 6 depends on another stream
+## Q5 — release staging — **CLOSED 2026-10-05**
 
 **Brief §3, criterion 6** requires every number the paper prints to be
 regenerated here, or marked not-machine-checkable with a reason. That cannot
 close until the paper's manuscript is frozen.
 
-**Handling:** stage the release — criteria 1–5 first, criterion 6 on manuscript
-freeze. Noted so that v1.0.0 is not reported complete while 6 is outstanding.
+**Decided: option 5a, release candidate then release.** `v1.0.0-rc` is tagged
+when criteria 1–5 close; `v1.0.0` is the release at manuscript freeze, with all
+six closed. One DOI, reserved early so the paper has something to cite and minted
+on publication of v1.0.0. No release ever claims a done-condition it has not met.
 
-**Status: open, sequencing only.**
+**Status: closed.**

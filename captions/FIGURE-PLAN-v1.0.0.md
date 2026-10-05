@@ -15,8 +15,13 @@ unchanged.
 
 ## Binding rules
 
-The house rules, plus two adopted in this release.
+The house rules, plus those adopted in this release.
 
+0. **Be faithful to the $1+3$ approach wherever possible.** Where a quantity can
+   be written covariantly or in mode form, the covariant form is carried and
+   reduced to modes only where a comparison requires it. Where a frame can be
+   left generic, it is left generic and specialised explicitly at the end. This
+   governs every choice below, and every choice not anticipated below.
 1. **Plot multipole mean-squares, never mode mean-squares.** Annals II, p. 366:
    the multipole mean-squares $\langle\tau_{A_\ell}\tau^{A_\ell}\rangle$ "are
    given for general geometries, while the mode mean-squares are only for
@@ -37,6 +42,12 @@ The house rules, plus two adopted in this release.
    one.
 8. Every figure is **rendered and looked at** before its caption is signed off.
    The validator checks colour, not layout.
+9. **Corrections are silent, and marked by one footnote.** Where a figure depends
+   on a corrected expression, its caption carries a single footnote naming the
+   printed equation and pointing to
+   `provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md`. The word is
+   *misprint*, not *error*; the caption carries no narrative. The footnote
+   register is at the foot of that file. F1's caption carries †1.
 
 ## Palette
 

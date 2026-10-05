@@ -6,7 +6,8 @@ reconstruction itself is being built. Sections marked *specification* describe
 what an artefact will contain, not what it currently contains.
 
 - **Associated paper:** Paper 1 (preprint identifier to be assigned)
-- **Supplementary materials:** `SUPPLEMENTARY-MATERIAL-v1.0.0.tex`
+- **Supplementary materials:** `SUPPLEMENTARY-MATERIAL-v1.0.0.tex`, compiled to
+  `supplementary-materials/supplement-v1.0.0.pdf`
 - **Code licence:** MIT · **Content licence:** CC BY 4.0 (see `CONTENT-LICENSE.md`)
 
 ---
@@ -255,7 +256,9 @@ number in `provenance/`. Responsibility for the content rests with the author.
 
 **Associated paper:** identifier to be assigned.
 
-**DOI:** to be minted on first public release.
+**DOI:** [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509) — reserved on ZivaHub (UCT), and
+active on publication of v1.0.0. This is the concept DOI: it always resolves to
+the latest version, so it is the one to cite.
 
 **Code:** MIT License, see `LICENSE`.
 
