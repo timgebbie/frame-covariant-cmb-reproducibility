@@ -257,3 +257,107 @@ entry above.
 | †1 | **G2** — (F.4) requires the $(2\ell+1)^{-1}$ division its prose specifies before it is in the Ma & Bertschinger form | F1 caption; supplement §Acceptance spine |
 | †2 | **G3** — (199) requires $[(m/2)!]^2$; (201) is unaffected, (204) and (205) are not | supplement §Comparison; `diagnostics/ell-range-v1.0.0.txt` |
 | †3 | **G1** — the $(-1)^\ell$ / $i^\ell$ slip in Annals I, inconsequential for the covariant multipole | supplement §Conventions |
+
+---
+
+## G4 — Appendix F's Wilson citation names one paper and keys another
+
+**Class: typographical, but consequential for verification.**
+**Found 2026-10-05, while assembling the external sources for figure F1.**
+
+Appendix F, p. 380, writes:
+
+> "This can be immediately seen to be the same mode equation for $\ell>2$ as in Hu
+> and Sugiyama [39] and Wilson and Silk [81, Eq. (7)])."
+
+In Annals II's own reference list, p. 392:
+
+| key | reference |
+|---|---|
+| **[81]** | M. L. Wilson, *Astrophys. J.* **273** (1983), 2 — **Wilson alone** |
+| **[82]** | M. L. Wilson and J. Silk, *Astrophys. J.* **243** (1981), 14 — Wilson **and Silk** |
+
+So the name says Wilson & Silk (1981) and the key points to Wilson (1983). One of
+the two is wrong, and they are different papers: [82] is the flat-case
+Boltzmann-hierarchy paper, [81] its negative-curvature sequel.
+
+**Not resolved here.** Resolving it means reading Eq. (7) of each and seeing which
+is the mode equation in question; both are pre-arXiv. The likely reading is that
+the key is a typo for [82], since Appendix F is explicitly the flat $K=0$ case,
+but *likely* is not a verification and this bundle does not guess a citation.
+
+**Why it is logged rather than silently fixed.** A reader checking the acceptance
+spine against the named source would open the wrong paper and find no Eq. (7)
+matching — and would reasonably conclude the reconstruction was wrong. The same
+class as **G2**: harmless to the physics, costly to anyone verifying.
+
+**Consequence for F1.** Already recorded under Q4: the figure ships with the three
+hierarchies that can be sourced independently, and the Wilson panel waits on a
+library copy. Quoting Eq. (7) through Appendix F would make it the same source as
+Appendix F, not a fourth.
+
+**Status:** open, non-blocking. Needs one library visit, not a decision.
+
+---
+
+## External sources for the F1 panels — what has been read, and from where
+
+Recorded so that no later session counts a coefficient twice (§3a).
+
+| Annals II key | Paper | Status |
+|---|---|---|
+| **[69]** | Seljak & Zaldarriaga, *ApJ* **469** (1996), 437 | **read, verbatim**, from the arXiv HTML of astro-ph/9603033. Eq. (3d): $\dot\Delta^{(S)}_{T\ell}=\frac{k}{2\ell+1}[\ell\Delta^{(S)}_{T(\ell-1)}-(\ell+1)\Delta^{(S)}_{T(\ell+1)}]-\dot\kappa\Delta^{(S)}_{T\ell}$, $\ell>2$. Free-streaming part matches this bundle exactly |
+| **[56]** | Ma & Bertschinger, *ApJ* **455** (1995), 7 | **not yet read from source.** An HTML render returned a paraphrase, not the displayed equation. A paraphrase is not a reading |
+| **[39]** | Hu & Sugiyama, *ApJ* **444** (1995), 489 | not yet read |
+| **[40]** | Hu & Sugiyama, *Phys. Rev. D* **51** (1995), 2599 | not yet read |
+| **[81]/[82]** | Wilson (1983) / Wilson & Silk (1981) | pre-arXiv; and see **G4** — which one is cited is itself unresolved |
+
+**Equation numbers must be recorded with their edition.** Annals II cites Ma &
+Bertschinger's *published* (49)/(50). An arXiv copy may number differently, and
+this project has already been bitten by assuming a constant offset between
+editions.
+
+---
+
+## Criterion 1 — closed 2026-10-05. The external hierarchies, read from source
+
+The three obtainable external treatments were transcribed from their own papers,
+not through Appendix F, and integrated as printed.
+
+| Annals II key | Source, as read | Weights as printed | Appendix F form |
+|---|---|---|---|
+| **[40]** | Hu & Sugiyama, *Phys. Rev. D* **51** (1995), 2599, **Eq. (6)**, p. 2601 | $\ell/(2\ell-1)$, $(\ell+1)/(2\ell+3)$ | **(F.3)**, the $\beta$ normalisation |
+| **[56]** | Ma & Bertschinger, *Astrophys. J.* **455** (1995), 7, **Eqs. (49)**, **(50)** | $\ell/(2\ell+1)$, $(\ell+1)/(2\ell+1)$ | **(F.4)**, the $\alpha$ normalisation |
+| **[69]** | Seljak & Zaldarriaga, *Astrophys. J.* **469** (1996), 437, **Eq. (3d)** | $\ell/(2\ell+1)$, $(\ell+1)/(2\ell+1)$ | **(F.4)** |
+
+**Result.** Against the bundle's own integration, with the monopole normalisation
+common and therefore an overall scale of exactly $1.000000$:
+
+| | max abs difference over $\ell\le25$ | relative |
+|---|---|---|
+| HS vs (F.3) | $1.3\times10^{-13}$ | $5\times10^{-14}$ |
+| MB vs (F.4) | $1.4\times10^{-14}$ | $3\times10^{-14}$ |
+| SZ vs (F.4) | $1.4\times10^{-14}$ | $3\times10^{-14}$ |
+
+**Two distinct normalisations, both matched.** That is the substance: Hu &
+Sugiyama write the hierarchy in the $\beta$ variable and Ma & Bertschinger and
+Seljak & Zaldarriaga in the $\alpha$ variable, and Appendix F prints (F.3) and
+(F.4) for exactly that reason. A basis phase leaking into the couplings would
+break at least one of the two.
+
+**Two things the sources corrected in the asking.**
+
+- The mode equation attributed to "Hu and Sugiyama [39, 40]" is in **[40]**, the
+  *Physical Review D* paper. It was not located in **[39]**, *Astrophys. J.* **444**
+  (1995), 489, which works from the integral solution. Same class as **G4**: a
+  reader following [39] alone does not find it.
+- **MB's arXiv copy numbers its hierarchy (49) and (50)** — the same numbers
+  Annals II cites from the published paper. No offset here, unlike the Annals I
+  and II case. Recorded because the absence of an offset is as worth knowing as
+  its presence.
+
+**Scattering terms dropped.** HS's $-\dot\tau\Theta_\ell$ and SZ's
+$-\dot\kappa\Delta_{T\ell}$ are Thomson scattering, not free streaming.
+
+**Wilson remains unread** — pre-arXiv, and **G4** leaves it ambiguous which paper
+is meant. The release states **three** external hierarchies, not four.

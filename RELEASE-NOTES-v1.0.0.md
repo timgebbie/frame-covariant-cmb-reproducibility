@@ -16,7 +16,7 @@ v1.0.0 is complete when all six hold, and not before.
 
 | | Criterion | Status |
 |---|---|---|
-| 1 | the free-streaming recursion reproduces (F.1)–(F.4), with the external matches of (F.3) and (F.4) checked numerically rather than asserted | **part closed** — the chain now closes numerically: $\alpha_\ell^{-1}\tau_\ell = j_\ell(k_{\rm com}\Delta\eta)$ to $10^{-10}$, and all three normalisations integrate to one solution. **Remaining:** read the three external hierarchies from their own sources rather than through Appendix F |
+| 1 | the free-streaming recursion reproduces (F.1)–(F.4), with the external matches of (F.3) and (F.4) checked numerically rather than asserted | **closed** — HS Eq. (6), MB Eqs. (49)/(50) and SZ Eq. (3d) read from their own papers and integrated as printed; they match the bundle to $10^{-13}$–$10^{-14}$ at scale exactly 1. Two distinct normalisations, both matched |
 | 2 | a covariant → mode → covariant round trip returns the input to machine precision | **open** |
 | 3 | both harmonic phase conventions run end to end; only one reproduces the real, opposite-sign form of the external hierarchies, and the bundle adopts and names that one | **open** — wording agreed and adopted, Q1 closed |
 | 4 | a known-wrong control runs and fails in a known shape | **closed** — D1 runs and diverges rather than projecting; the correct recursion matches $j_\ell$ to $10^{-10}$ beside it. Restated: The $\pm(\ell+2)$ control is **withdrawn** to v1.5.0, where that term exists, and replaced by a relative-sign control on the free-streaming bracket (D1). See Q2, closed |

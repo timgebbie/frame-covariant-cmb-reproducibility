@@ -305,3 +305,42 @@ def test_sign_control_fails_in_a_known_shape():
         assert np.max(np.abs(good.values[window, ell] - j[window])) < 1e-8, ell
         # the control is orders of magnitude out, not marginally wrong
         assert np.max(np.abs(bad.values[window, ell])) > 1e3 * np.max(np.abs(j[window])), ell
+
+
+# --- criterion 1: the external hierarchies, read from their own papers -------
+
+
+def test_external_hierarchies_match_the_bundle_at_machine_precision():
+    """Hu & Sugiyama, Ma & Bertschinger and Seljak & Zaldarriaga, as printed.
+
+    Each is transcribed in functions/harmonics/external.py from the source paper,
+    not through Annals II Appendix F — a coefficient read through Appendix F would
+    be the same source as Appendix F.
+
+    Two distinct normalisations are involved and both must match:
+      HS Eq. (6) carries l/(2l-1), (l+1)/(2l+3)  -> Annals II (F.3), beta
+      MB Eqs. (49)/(50) and SZ Eq. (3d) carry l/(2l+1), (l+1)/(2l+1) -> (F.4), alpha
+
+    That two different external normalisations both land on the same covariant
+    solution is the content of the acceptance spine. A basis phase leaking into
+    the couplings would break at least one of them.
+    """
+    import numpy as np
+
+    from functions.harmonics.external import APPENDIX_F, integrate_external
+    from functions.harmonics.free_streaming import free_stream
+
+    eta = np.linspace(0.0, 20.0, 400)
+    window = (eta > 2) & (eta < 18)
+    mine = {
+        "(F.3)": free_stream(1.0, eta, ell_max=80, normalisation="beta").values,
+        "(F.4)": free_stream(1.0, eta, ell_max=80, normalisation="alpha").values,
+    }
+    for form in ("HS", "MB", "SZ"):
+        ref = mine[APPENDIX_F[form]]
+        ext = integrate_external(form, 1.0, eta, ell_max=80)
+        scale = ref[window, 0].mean() / ext[window, 0].mean()
+        # the monopole normalisation is common, so the scale must be exactly one
+        assert abs(scale - 1.0) < 1e-10, (form, scale)
+        err = np.max(np.abs(ext[window, :26] * scale - ref[window, :26]))
+        assert err < 1e-11, (form, err)
