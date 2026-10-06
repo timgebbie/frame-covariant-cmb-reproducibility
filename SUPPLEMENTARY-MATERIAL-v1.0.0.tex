@@ -105,10 +105,22 @@ pre-arXiv, and Appendix~F names Wilson \& Silk while keying Wilson.
 The solution is carried with a \textbf{generic} $u^a$. The explicit frames appear
 as choices made at the end, not assumed at the start: the Newtonian frame
 $\tilde\sigma_{ab}=0$, which is the specialisation \emph{Annals~II} itself makes
-at p.~365 in order to remove the shear terms, and the energy frame $q_a=0$.
-Carrying the generic threading and specialising late is the difference the $1+3$
-covariant approach buys; a gauge-fixed treatment fixes the frame before the
-hierarchy is solved and cannot exhibit it.
+at p.~365 in order to remove the shear terms, and the \textbf{total-energy frame}
+$q_a=0$. Carrying the generic threading and specialising late is the difference
+the $1+3$ covariant approach buys; a gauge-fixed treatment fixes the frame before
+the hierarchy is solved and cannot exhibit it.
+
+\paragraph{``CDM'' names two different things, and this supplement keeps them
+apart.} \emph{CDM the model} is a cosmology --- flat, matter dominated, no
+$\Lambda$ --- and it is one of the two models this release delivers a spectrum
+for. \emph{The CDM frame} is a choice of threading $u^a$, and it is the
+total-energy frame $q_a=0$: cold dark matter is pressureless and geodesic and
+carries no energy flux of its own, so the threading in which the CDM is at rest
+is the one in which the total energy flux vanishes. The two are independent. The
+$\Lambda$CDM \emph{model} is computed in the same \emph{frame}, and a change of
+model is not a change of frame. In the code the models are named
+\texttt{CDM\_MODEL} and \texttt{LCDM\_MODEL} and the frames \texttt{"energy"} and
+\texttt{"newtonian"}, so the two cannot be confused at a call site.
 
 This is also what fixes the status of the next release. Because v1.0.0 is the
 general case, \textbf{v1.5.0's restricted case is a recovery and a check} --- it
@@ -187,15 +199,21 @@ supplement. It is not an empirical calibration, not a parameter-estimation
 pipeline, and not a Boltzmann code for general use. No new effect is claimed and
 none is reported.
 
-The release does \textbf{not} produce a $\Lambda$CDM angular power spectrum, and
-the distinction is not a matter of effort. \emph{Annals~II}'s own \S8.3.2 model is
-standard CDM --- $h=0.5$, $\Omega_B=0.05$, flat and matter dominated --- and its
-$C_\ell$ is a closed-form Sachs--Wolfe result on large scales with the transfer
-function set to unity. A $\Lambda$CDM spectrum requires a recombination history,
-tight coupling, diffusion damping and an integrated Sachs--Wolfe contribution
-from $\Lambda$: a full Boltzmann solve, not an extension of the analytic
-reconstruction. It is the \textbf{v2.0.0} deliverable, where \emph{calibration}
-means calibrating the solver against standard results.
+\emph{Annals~II}'s own \S8.3.2 model is standard CDM --- $h=0.5$,
+$\Omega_B=0.05$, flat and matter dominated --- and the $C_\ell$ it prints there is
+a closed-form Sachs--Wolfe result on large scales with the transfer function set
+to unity. This release goes past that in one respect and one only: it computes
+the spectrum from the hierarchy rather than from the closed form, and it computes
+it for the $\Lambda$CDM model as well, which \emph{Annals~II} does not treat. The
+marginal cost is the expansion law and the late-time integrated term; every other
+ingredient --- recombination, tight coupling, diffusion damping --- is already
+required by the CDM case and is not additional. No new \emph{physics} is
+introduced by $\Lambda$, and none is claimed.
+
+What the release does \textbf{not} do is calibrate. Comparison is made against
+CMBFAST and against nothing else, over a derived range, as a check that the
+reconstruction is right --- not as a fit. Parameter estimation and calibration
+against data are the \textbf{v2.0.0} deliverable.
 
 Two statements must travel together, and neither stands alone: the nonlinear
 contribution $\delta\tau_{NL}$ \textbf{matters} --- it is not negligible and not

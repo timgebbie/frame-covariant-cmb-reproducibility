@@ -22,6 +22,7 @@ import sys
 from fractions import Fraction
 from pathlib import Path
 
+import pytest
 import sympy as sp
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -200,49 +201,10 @@ def test_mode_bracket_relative_sign_tracks_lambda_squared():
         assert sp.simplify(relative(scale) + 1) == 0
 
 
-# --- finding G3: Annals II (199), the Bessel identity of §8.3 ---------------
-
-
-def test_annals_ii_199_needs_the_square_in_its_denominator():
-    """(199) as printed is exact only where Gamma(m/2+1) = 1, i.e. m = 0 and 2.
-
-    Convention imported: none — this is arithmetic on the printed identity
-    against the integral it claims to equal. See
-    provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md, finding G3.
-    """
-    from scipy.integrate import quad
-    from scipy.special import gamma, spherical_jn
-
-    def numeric(m: int, ell: int) -> float:
-        f = lambda z: spherical_jn(ell, z) ** 2 / z**m  # noqa: E731
-        total, a = 0.0, 1e-8
-        for b in (1, 10, 50, 200, 1000, 5000, 20000):
-            value, _ = quad(f, a, b, limit=400)
-            total += value
-            a = b
-        return total + 1 / (2 * (1 + m) * a ** (1 + m))
-
-    def closed(m, ell, square):
-        d = gamma(m / 2 + 1) ** (2 if square else 1)
-        return (
-            (float(sp.pi) / 2 ** (m + 2))
-            * gamma(m + 1)
-            * gamma(ell - m / 2 + 0.5)
-            / (d * gamma(ell + m / 2 + 1.5))
-        )
-
-    for m in (0, 1, 2, 3):
-        for ell in (2, 10):
-            n = numeric(m, ell)
-            assert abs(float(closed(m, ell, square=True)) / n - 1) < 2e-5, (m, ell)
-            # the printed form is the corrected one multiplied by Gamma(m/2+1),
-            # so it is exact exactly where that gamma is 1 — at m = 0 and m = 2
-            printed_ratio = float(closed(m, ell, square=False)) / n
-            assert abs(printed_ratio - float(gamma(m / 2 + 1))) < 2e-5, (m, ell)
-
-    # the two cases Annals II actually uses
-    assert abs(float(gamma(2)) - 1.0) < 1e-12  # m = 2, used by (201): unaffected
-    assert abs(float(gamma(1.5)) - 0.8862269) < 1e-6  # m = 1, used by (204): 11.4% low
+# Finding G3, the Bessel identity of Annals II (199), belongs to the spectra
+# layer and is tested in tests/test_sachs_wolfe.py against the tuned numerical
+# integrator there. The duplicate that stood here used a slower inline
+# integrator and was removed rather than kept in step.
 
 
 # --- the chain closes numerically, not only symbolically --------------------
@@ -380,3 +342,42 @@ def test_mode_route_and_covariant_route_to_cl_are_identical():
         a = sp.Rational(sp.nsimplify(mode_route.subs(ELL, n) * sp.pi))
         b = sp.Rational(sp.nsimplify(covariant_route.subs(ELL, n) * sp.pi))
         assert a == b, n
+
+
+# ---------------------------------------------------------------------------
+# Staging guard: v1.0.0 must carry no O(l) coupling
+# ---------------------------------------------------------------------------
+
+
+def test_no_coupling_in_the_v1_hierarchy_grows_with_ell():
+    """**The staging contract, as arithmetic.**
+
+    v1.0.0 reproduces the *linearised* hierarchy of Annals II. The high-$\\ell$
+    couplings this project restores at v1.5.0 grow with $\\ell$; the linear ones
+    do not --- every coupling in (F.1)-(F.4) and in the three external
+    hierarchies is a ratio of linear polynomials and tends to a constant.
+
+    So "no $O(\\ell)$ coupling has leaked into v1.0.0" is not a promise to be
+    taken on trust, it is a bounded-ness statement that can be asserted. If a
+    v1.5.0 coupling is ever wired in early, some weight acquires a factor of
+    $\\ell$ and this test fails at large $\\ell$ before anything downstream is
+    believed.
+    """
+    from functions.harmonics.external import WEIGHTS
+    from functions.harmonics.weights import free_streaming_weight
+
+    ells = [2, 10, 100, 1000, 10000]
+
+    # the bundle's own moment-hierarchy weight, (l+1)^2/[(2l+3)(2l+1)] -> 1/4
+    bundle = [float(free_streaming_weight(l)) for l in ells]
+    assert all(0.0 < w < 0.5 for w in bundle)
+    assert bundle[-1] == pytest.approx(0.25, abs=1e-4)
+
+    # every external hierarchy, as printed in its own paper
+    for form, (lower, upper) in WEIGHTS.items():
+        for l in ells:
+            assert 0.0 < lower(l) < 1.0, (form, l, "lower")
+            assert 0.0 < upper(l) < 1.0, (form, l, "upper")
+        # and the limits are constants, not growing
+        assert lower(10000) == pytest.approx(0.5, abs=1e-3), form
+        assert upper(10000) == pytest.approx(0.5, abs=1e-3), form

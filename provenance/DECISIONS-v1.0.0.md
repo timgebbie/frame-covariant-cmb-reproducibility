@@ -24,6 +24,9 @@ Last amended 2026-10-05.
 | **S5** | This stream's remit is **v1.0.0 and v1.5.0**. |
 | **S6** | The bundle is a **separate repository**, publishable and DOI-able from the start. Publisher PDFs are never carried into it. |
 | **S7** | Both CDM and ΛCDM are wanted **in the almost-FLRW setting at v1.0.0**, so that the high-$\ell$ extension at v1.5.0 is a clean delta rather than a change of model. |
+| **S8** | **“CDM” names a model, not a frame, and the two are kept lexically apart.** The CDM *model* is a cosmology; the CDM *frame* is the **total-energy frame** $q_a=0$, the threading in which the cold dark matter is at rest, because CDM is pressureless and geodesic and carries no energy flux of its own. They are independent: the ΛCDM model is computed in the same frame as the CDM model. In code the models are `CDM_MODEL` and `LCDM_MODEL` and the frames are `"energy"` and `"newtonian"`. *Accepted 2026-10-06.* |
+| **S9** | **v1.0.0 carries no $O(\ell)$ coupling, and this is asserted rather than promised.** Every coupling in (F.1)–(F.4) and in the three external hierarchies is a ratio of linear polynomials and tends to a constant; a v1.5.0 coupling wired in early would acquire a factor of $\ell$ and fail `tests/test_appendix_f_chain.py::test_no_coupling_in_the_v1_hierarchy_grows_with_ell` at large $\ell$. Raised by Coordination, 2026-10-06. |
+| **S10** | **v1.0.0 is committed and pushed before v1.5.0 begins**, not held open against it. v1.5.0 is gated on Paper 1; v1.0.0 is not, and the two must not be allowed to block each other. *Accepted 2026-10-06.* |
 
 ## A — Acceptance criteria
 

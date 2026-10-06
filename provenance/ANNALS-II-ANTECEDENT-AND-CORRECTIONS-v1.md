@@ -467,3 +467,62 @@ and it is not.
 
 **G5 therefore stands.** The printed (201) omits one factor of the comoving
 distance.
+
+---
+
+## G6 — the thesis abstract and Annals II disagree on a sign in the ISW source (179)
+
+**Status: open. Implemented with the published sign and a switch. Not blocking.**
+
+§7.1.1, p. 366. The integrated source of the temperature anisotropy is printed as
+
+$$S_{\rm ISW}(\eta,k)=V e^{-(k/k_D)^2}\Big[\big[\Phi_A'-\Phi_H'\big](k,\eta)
+-aH\big[\tilde\delta_T+3\Phi_A\big](k,\eta)\Big]\tag{179}$$
+
+The thesis abstract carries the same expression with $+aH[\tilde\delta_T+3\Phi_A]$.
+
+**This is not a transcription slip in one of the two.** The published *Annals of
+Physics* text and the arXiv preprint `astro-ph/9904408` agree with each other on
+the minus sign; the thesis abstract is the outlier, and it is internally
+consistent in its own typesetting. Both readings are legible, so the
+disagreement cannot be resolved by reading more carefully — only by derivation.
+
+**Why it is not cosmetic.** The second term is not an ordinary
+integrated-Sachs–Wolfe contribution. The ISW proper, $\Phi_A'-\Phi_H'$,
+*vanishes identically* in a flat matter-dominated background, where the
+potentials are constant. The $aH[\tilde\delta_T+3\Phi_A]$ term does not: with
+$aH=2/\eta$ in Einstein–de Sitter it survives everywhere the visibility is
+non-zero. So the disputed sign governs a term that is the *entire* integrated
+contribution in exactly the regime v1.0.0 delivers — standard CDM. It is
+asserted as a test that the two readings differ by more than 10% of the source,
+so the finding is not moot:
+`tests/test_sources.py::test_g6_is_not_a_no_op`.
+
+**How it is carried.** `functions.spectra.sources.source_integrated` takes
+`isw_sign`, defaulting to `PUBLISHED_ISW_SIGN = -1.0`. The alternative is
+`THESIS_ISW_SIGN = +1.0`. It is not a free parameter: any other value raises.
+Published equation numbers and the published reading are the default throughout
+this bundle, and a finding does not change that until it is settled.
+
+**What will settle it, and it is not an argument.** Two discriminators, both
+available once the $k$-integral of (176) runs end to end:
+
+1. **The large-scale plateau.** On scales well outside the horizon at last
+   scattering the CDM spectrum must reduce to the ordinary Sachs–Wolfe result,
+   which is (198) and which this bundle already computes independently. Only one
+   sign can leave the plateau intact; the other adds a term of the same order
+   with a definite sign and tilts it.
+2. **The frame statement.** $\tilde\delta_T+3\Phi_A$ is a threading-dependent
+   combination, and the total of (176) is not. Recomputing (176) in the Newtonian
+   and energy frames and demanding that the *sum* of the three sources be
+   invariant is a check the individual terms cannot pass and the total must. Only
+   one sign can survive it.
+
+Discriminator 1 is cheap and comes with the v1.0.0 deliverable. Discriminator 2
+arrives with the generic-$u^a$ machinery already scheduled for figures F5 and
+F7. **G6 is therefore scheduled to close inside v1.0.0, not deferred past it**,
+and it is recorded here now so that the default is on the record before the
+number it affects is published.
+
+**No correction is made yet.** Correcting silently requires knowing which way;
+here the bundle does not yet, and says so.
