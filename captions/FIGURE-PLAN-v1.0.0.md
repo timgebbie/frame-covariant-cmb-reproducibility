@@ -120,7 +120,7 @@ clear of the all-pairs constraint; the panel title names the treatment. Four
 comparisons are four panels, never four colours on one axis.
 
 The comparison applies the $(2\ell+1)^{-1}$ division that (F.4)'s prose specifies
-and its display omits — see `provenance/`, finding **G2**. Without it the panel
+and its display omits — see `provenance/`, finding **B-2**. Without it the panel
 reports a $(2\ell+1)$ mismatch that is not a defect of the reconstruction.
 
 ### F2 — truncation convergence

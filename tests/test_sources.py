@@ -26,7 +26,6 @@ from functions.spectra.sources import (
     mode_multipole,
     source_doppler,
     source_integrated,
-    source_primary,
     temperature_transfer,
 )
 
@@ -149,8 +148,8 @@ def test_isw_sign_is_a_finding_not_a_free_parameter():
         source_integrated(history, scattering, 100.0, aH=aH, isw_sign=0.0)
 
 
-def test_g6_is_not_a_no_op():
-    """The two readings of (179) give different sources. G6 has consequences.
+def test_b6_sign_alternative_is_not_a_no_op():
+    """The two readings of (179) give different sources. B-6 has consequences.
 
     Worth asserting explicitly: if the threading term happened to be negligible
     the finding would be moot, and the record should not claim otherwise.
@@ -166,7 +165,7 @@ def test_g6_is_not_a_no_op():
 
 
 def test_in_eds_with_constant_potentials_only_the_threading_term_survives():
-    """The discriminator for G6, stated as a test while the finding is open.
+    """The discriminator for B-6, stated as a test while the finding is open.
 
     Einstein-de Sitter has Phi' = 0, so (179)'s integrated-Sachs-Wolfe proper
     vanishes identically and whatever remains is the disputed term alone. That it

@@ -46,6 +46,19 @@ It is written bottom-up: not a port of, and not a wrapper on, an existing
 Boltzmann code, and it inherits no other code's conventions. It reproduces; it
 does not argue. No new effect is claimed.
 
+The background expansion is \emph{derived} from the $1+3$ covariant energy
+constraint rather than transcribed from a printed expansion law, so that the
+antecedent's own Eqs.~(185) and~(G.3) are checks on this bundle and not its
+sources. That ordering is what makes a reconstruction an audit, and it is load
+bearing: a port would have inherited the misprint recorded
+below.\footnote{The Gauss constraint at (G.3) prints $+\tfrac23\Theta^2$ where
+the companion thesis and the Carg\`ese lectures Eq.~(55) carry
+$-\tfrac23\Theta^2$. In the Friedmann limit the printed sign gives
+$H^2=K/a^2-(\mu+\Lambda)/3$, which for a flat section is $-(\mu+\Lambda)/3$ and
+so has no solution at positive energy density. A misprint, recorded; the derived
+background already carries the correct sign, and a test now pins it so that a
+later edit towards the printed form fails rather than passes.}
+
 Department of Statistical Sciences, University of Cape Town.
 \texttt{tim.gebbie@uct.ac.za}
 
@@ -90,16 +103,78 @@ lies.\footnote{The comparison applies the $(2\ell+1)^{-1}$ division that the tex
 preceding (F.4) specifies and the display omits; (F.4) is otherwise correct as
 printed. A misprint, recorded.}
 
-Three external treatments are used --- Hu \& Sugiyama Eq.~(6), Ma \& Bertschinger
-Eqs.~(49) and (50), and Seljak \& Zaldarriaga Eq.~(3d) --- each transcribed from
-its own paper. Hu \& Sugiyama write the recursion in the $\beta$ normalisation
-and the other two in the $\alpha$ normalisation, which is why Appendix~F prints
-both (F.3) and (F.4). A basis phase leaking into the couplings would break at
-least one of the two matches.
+Four external treatments are used --- Hu \& Sugiyama Eq.~(6), Wilson Eq.~(8),
+Ma \& Bertschinger Eqs.~(49) and (50), and Seljak \& Zaldarriaga Eq.~(3d) ---
+each transcribed from its own paper. Hu \& Sugiyama and Wilson write the
+recursion in the $\beta$ normalisation and the other two in the $\alpha$
+normalisation, which is why Appendix~F prints both (F.3) and (F.4). A basis phase
+leaking into the couplings would break at least one of the two matches.
 
-Wilson is not reproduced: a coefficient transcribed through Appendix~F would be
-the same source as Appendix~F rather than an independent fourth, the paper is
-pre-arXiv, and Appendix~F names Wilson \& Silk while keying Wilson.
+Wilson is the strongest of the four, and not because of his weights, which are
+Hu \& Sugiyama's. He writes the recursion in the \emph{imaginary} convention,
+with both bracket terms positive under an overall $-ikT$, where the others carry
+opposite signs under a real $k$. The two are related by
+$\Theta_\ell=i^\ell\delta_\ell$, which turns one form into the other exactly.
+He is integrated complex and as printed, and the phase removed only afterwards;
+transforming the equation first would assume the identity under test. That the
+transformed solution is \emph{real} to $10^{-10}$ is a separate assertion from
+that it agrees. Wilson therefore tests the phase convention --- the subject of
+\S2's footnote and of acceptance criterion~3 --- from a source published before
+any of the others.\footnote{Appendix~F's prose names ``Wilson \& Silk'' while
+its key is Wilson alone, and it cites Wilson's Eq.~(7), which is the quadrupole
+equation; the $\ell>2$ hierarchy is his Eq.~(8). Two misprints in one citation,
+recorded; neither moves a result.}
+
+\section{Conventions, and what the comparison does and does not settle}
+\label{sec:conventions}
+The same hierarchy is written four different ways in the literature this bundle
+checks against, and the differences are not cosmetic. Table~\ref{tab:conventions}
+is the translation, generated from
+\texttt{config/implementation-register.toml} so that it cannot drift from the
+code, with the test that checks each row.
+
+\paragraph{There are exactly two conventions, and they differ by $c^2=-1$.}
+Changing the harmonic normalisation
+$Q_{A_\ell}=\lambda^{-\ell}\mathrm D_{\langle A_\ell\rangle}Q$ rescales the mode
+coefficients as $\tau_\ell\to c^\ell\tau_\ell$ with $c=\lambda'/\lambda$. A
+recursion $\tau_\ell'=k[A_\ell\tau_{\ell-1}+B_\ell\tau_{\ell+1}]$ then carries
+$(A_\ell/c,\,B_\ell c)$, so the ratio $B/A$ picks up $c^2$. At $c=i$ an
+opposite-sign real bracket becomes a same-sign bracket under an overall $i$.
+Hu \& Sugiyama, Ma \& Bertschinger and Seljak \& Zaldarriaga print the first;
+Wilson prints the second. That is the whole of the difference, and it is asserted
+symbolically rather than described.
+
+\paragraph{What the four-source match establishes.} The $\ell$-weights, which are
+convention-independent, are confirmed by four sources in two normalisations. The
+bundle is shown to sit at the same $c^2$ as Hu \& Sugiyama, Ma \& Bertschinger
+and Seljak \& Zaldarriaga, and Wilson is shown to sit at the other.
+
+\paragraph{What it does not establish, and this release says so.} It does
+\textbf{not} establish that
+$Q_{A_\ell}=(-k_{\rm phys})^{-\ell}\mathrm D_{\langle A_\ell\rangle}Q$ is the
+right reading of \emph{Annals~I}'s definition. Rephasing \emph{both sides} of a
+comparison by $i^\ell$ is a change of variable and cannot fail --- measured at
+$6.2\times10^{-15}$ either way --- so a match constrains the convention only
+where the phase applied to the external source is fixed from outside the
+comparison. For three of the four, no phase is applied, and that is a choice
+rather than a derivation.
+
+\paragraph{The exception, and it is the useful one.} \emph{Annals~II} states, in
+the line following its flat-case mode functions, that the covariant form
+``differs by a factor of $i^{-\ell}$ from Wilson since we are using plain mode
+functions instead of plane waves''. That phase is specified by the antecedent,
+not chosen here. So Wilson's panel in Figure~1 is the one comparison carrying
+information about the convention, and it is checked in two independent ways: the
+transformed solution agrees with the reconstruction, \emph{and} it is real to
+$10^{-10}$, which the agreement alone would not show.
+
+Acceptance criterion~3 was therefore \textbf{reopened} and restated to the claim
+the evidence supports. Settling it needs \emph{Annals~I}'s definition of
+$Q_{A_\ell}$, not a better match. Nothing computed here depends on it: the
+covariant $\tau_{A_\ell}$ is invariant under the choice, the mode coefficients
+are not, and every released figure plots the invariant quantity.
+
+\input{tables/conventions-v1.0.0.tex}
 
 \section{Frames and specialisation}
 The solution is carried with a \textbf{generic} $u^a$. The explicit frames appear
@@ -140,7 +215,21 @@ the acoustic modulation $\cos(k r_s)$ is dropped by taking $r_s^*\to0$, and
 \S8.3.2 sets the transfer function to unity. Its accuracy is therefore bounded by
 the term that was dropped. The range is derived, not chosen:
 $2\le\ell\le20$ at 5\%, generated by
-\texttt{scripts/derive\_ell\_range.py}. The comparison is made against the
+\texttt{scripts/derive\_ell\_range.py}.
+
+The wider comparison cites CMBFAST for its \emph{method} --- line-of-sight
+integration, Seljak \& Zaldarriaga, the same reference the antecedent's own
+bibliography carries --- and compares against \textbf{CAMB} and \textbf{CLASS},
+because the Fortran~77 original is unmaintained and effectively unrunnable.
+Saying so is more honest than claiming a comparison against a code nobody can
+run. The tolerance is \emph{measured} rather than chosen: the CAMB--CLASS
+mutual difference is the floor, since no agreement can be claimed tighter than
+two trusted independent codes agree with each other. It is reported in three
+bands, whose failure modes differ --- $2\le\ell<30$, cosmic-variance dominated
+and meaningful only binned; $30\le\ell<1000$, the acoustic peaks, where a
+hierarchy or recursion error actually shows; and $1000\le\ell\le2000$, the
+damping tail, where $C_\ell$ is small and fractional differences blow up on a
+vanishing signal. The comparison is made against the
 corrected closed form.\footnote{The reduction of (200) carries a factor of the
 comoving distance that the displayed (201) does not; substituting $z=k\chi$ gives
 $\chi^{2-n}$, which is $\chi^1$ at $n=1$. The companion result (204) descends
@@ -151,6 +240,19 @@ identity of \S8.3, which requires $[(m/2)!]^2$ in its denominator. As printed it
 is exact where $\Gamma(m/2+1)=1$, so the large-scale result (201) is unaffected;
 the horizon-scale normalisation (204) and the $D_\ell$ of (205) are. A misprint,
 corrected silently and recorded.}
+
+
+The external codes of criterion 5b are compared in
+\texttt{provenance/EXTERNAL-CODE-COMPARISON-v1.md}, which records what CAMB and
+CLASS each model and --- more to the point --- what the comparison structurally
+cannot settle. Neither carries the $1+3$ covariant formalism, neither
+distinguishes mode from multipole coefficients, and neither carries the
+$O(\varepsilon^2\ell)$ couplings of v1.5.0. So 5b is a check on the
+\emph{linear} reconstruction and is incapable of validating the nonlinear
+extension, which is precisely why v1.0.0 must carry no $O(\ell)$ coupling: if
+one leaked in, the disagreement with CAMB and CLASS would be indistinguishable
+from a bug. The canonical parameter set switches reionisation, lensing and
+massive neutrinos \textbf{off}, each being physics this bundle does not model.
 
 \section{Evidence}
 Each figure is generated by the script named in its caption and is accompanied by

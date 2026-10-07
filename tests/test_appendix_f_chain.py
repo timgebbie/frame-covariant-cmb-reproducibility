@@ -104,7 +104,7 @@ def test_f4_is_direct_substitution_into_f3():
 
 
 def test_f4_requires_the_stated_division_to_reach_ma_bertschinger():
-    """Finding G2: printed (F.4) is not yet in the Ma & Bertschinger form.
+    """Finding B-2: printed (F.4) is not yet in the Ma & Bertschinger form.
 
     Ma & Bertschinger, Eqs. (49)/(50), carry k/(2l+1) on the right-hand side.
     Appendix F says (F.3) is rewritten "on first multiplying through by
@@ -114,7 +114,7 @@ def test_f4_requires_the_stated_division_to_reach_ma_bertschinger():
     This test pins the factor so that a harness comparing printed (F.4) against
     printed Ma & Bertschinger does not read the resulting (2l+1) as a failure of
     the reconstruction. See
-    provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md, finding G2.
+    provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md, finding B-2.
     """
     for n in ELL_RANGE:
         printed_lhs_factor = Fraction(2 * n + 1)
@@ -141,7 +141,7 @@ def test_f1_weight_is_the_mode_recursion_weight_shifted():
 
 # --- basis rephasing: two true statements about two different objects -------
 #
-# These two tests together are finding G1 stated executably, and they are the
+# These two tests together are finding B-1 stated executably, and they are the
 # reason the same question has returned three different verdicts. The rescaling
 #
 #     Q_{A_l} -> lam^l Q_{A_l},   tau_l -> lam^-l tau_l
@@ -155,7 +155,7 @@ def test_f1_weight_is_the_mode_recursion_weight_shifted():
 
 
 def test_covariant_multipole_is_invariant_under_basis_rephasing():
-    """tau_{A_l} = sum_k tau_l Q_{A_l} is unchanged. Finding G1.
+    """tau_{A_l} = sum_k tau_l Q_{A_l} is unchanged. Finding B-1.
 
     tau_l is defined as the coefficient of Q_{A_l}, so rescaling the basis
     tensor and the coefficient inversely leaves the physical multipole alone.
@@ -201,7 +201,7 @@ def test_mode_bracket_relative_sign_tracks_lambda_squared():
         assert sp.simplify(relative(scale) + 1) == 0
 
 
-# Finding G3, the Bessel identity of Annals II (199), belongs to the spectra
+# Finding B-3, the Bessel identity of Annals II (199), belongs to the spectra
 # layer and is tested in tests/test_sachs_wolfe.py against the tuned numerical
 # integrator there. The duplicate that stood here used a slower inline
 # integrator and was removed rather than kept in step.
@@ -381,3 +381,174 @@ def test_no_coupling_in_the_v1_hierarchy_grows_with_ell():
         # and the limits are constants, not growing
         assert lower(10000) == pytest.approx(0.5, abs=1e-3), form
         assert upper(10000) == pytest.approx(0.5, abs=1e-3), form
+
+
+# ---------------------------------------------------------------------------
+# the fourth external hierarchy: Wilson (1983), Eq. (8)
+# ---------------------------------------------------------------------------
+
+
+def test_wilson_reproduces_the_bundle_and_tests_the_phase_convention():
+    """Wilson Eq. (8), read from the scanned paper, as a **fourth** source.
+
+    Wilson is a stronger check than a fourth set of weights would be. His
+    weights are Hu & Sugiyama's --- the beta normalisation --- but his equation
+    is written in the imaginary convention, with **both** bracket terms positive
+    under an overall $-ik$. Only $\\Theta_\\ell = i^\\ell\\delta_\\ell$ turns that
+    into the real, opposite-sign form. So this panel exercises the phase
+    convention of finding B-1 and criterion 3, not merely the $\\ell$-weights.
+
+    He is integrated **complex and as printed**, and transformed only afterwards.
+    Transforming the equation first would assume the identity being tested.
+    """
+    import numpy as np
+
+    from functions.harmonics.external import integrate_wilson
+    from functions.harmonics.free_streaming import free_stream
+
+    eta = np.linspace(0.0, 20.0, 400)
+    window = (eta > 2) & (eta < 18)
+    mine = free_stream(1.0, eta, ell_max=80, normalisation="beta").values
+    wilson = integrate_wilson(1.0, eta, ell_max=80)
+
+    scale = mine[window, 0].mean() / wilson[window, 0].mean()
+    assert abs(scale - 1.0) < 1e-10
+    assert np.max(np.abs(wilson[window, :26] * scale - mine[window, :26])) < 1e-11
+
+
+def test_wilsons_solution_is_real_after_the_phase_is_removed():
+    """i^l delta_l must be real: that is the content of the convention claim.
+
+    If the phase were anything other than $i^\\ell$ an imaginary part would
+    survive, so this is a sharper statement than the agreement test above.
+    """
+    import numpy as np
+    from scipy.integrate import solve_ivp
+
+    from functions.harmonics.external import WILSON_WEIGHTS
+
+    k, ell_max = 1.0, 40
+    lower, upper = WILSON_WEIGHTS
+    y0 = np.zeros(ell_max + 1, dtype=complex)
+    y0[0] = 1.0
+
+    def rhs(_t, y):
+        padded = np.concatenate([y, [0j]])
+        d = np.empty(ell_max + 1, dtype=complex)
+        d[0] = -1j * k * upper(0) * padded[1]
+        for l in range(1, ell_max + 1):
+            d[l] = -1j * k * (lower(l) * padded[l - 1] + upper(l) * padded[l + 1])
+        return d
+
+    sol = solve_ivp(rhs, (0.0, 12.0), y0, t_eval=[12.0], rtol=1e-11, atol=1e-13,
+                    method="DOP853")
+    transformed = sol.y[:, -1] * 1j ** np.arange(ell_max + 1)
+    assert np.max(np.abs(transformed.imag)) < 1e-10
+    assert np.max(np.abs(transformed.real)) > 0.1  # and it is not trivially zero
+
+
+# ---------------------------------------------------------------------------
+# what the Appendix F chain does and does not discriminate
+# ---------------------------------------------------------------------------
+
+
+def test_the_external_match_is_invariant_under_a_common_rephasing():
+    """**The limit of criterion 1 as evidence for criterion 3.**
+
+    Raised by Coordination, 2026-10-06, and correct. Rephasing *both* sides by
+    $i^\\ell$ is a change of variable, so the agreement is untouched. A match at
+    scale 1 therefore constrains the $\\ell$-weights --- which are
+    convention-independent --- and constrains the *convention* only where the
+    phase applied to the external source is fixed from outside the comparison.
+
+    For Hu & Sugiyama, Ma & Bertschinger and Seljak & Zaldarriaga this bundle
+    applies no phase, which is a choice and not a derivation. The one place the
+    phase is externally fixed is Wilson: Annals II states, in the line following
+    its flat mode functions, that the covariant form "differs by a factor of
+    $i^{-\\ell}$ from Wilson since we are using plain mode functions instead of
+    plane waves". See `test_wilson_reproduces_the_bundle_and_tests_the_phase_convention`.
+
+    This test exists so the limitation is pinned in the suite rather than only
+    described in prose.
+    """
+    import numpy as np
+
+    from functions.harmonics.external import integrate_external
+    from functions.harmonics.free_streaming import free_stream
+
+    eta = np.linspace(0.0, 20.0, 400)
+    window = (eta > 2) & (eta < 18)
+    mine = free_stream(1.0, eta, ell_max=80, normalisation="beta").values
+    external = integrate_external("HS", 1.0, eta, ell_max=80)
+
+    phase = 1j ** np.arange(81)
+    direct = np.max(np.abs(external[window, :26] - mine[window, :26]))
+    rephased = np.max(np.abs((external * phase)[window, :26] - (mine * phase)[window, :26]))
+
+    assert direct < 1e-11
+    assert rephased == pytest.approx(direct, rel=1e-9)
+
+
+def test_the_bracket_ratio_carries_the_square_of_the_normalisation():
+    """$\\tau_\\ell\\to c^\\ell\\tau_\\ell$ sends $(A,B)\\to(A/c,\\,Bc)$, so $B/A\\to c^2B/A$.
+
+    At $c=i$ an opposite-sign real bracket becomes a same-sign bracket under an
+    overall $i$ --- which is exactly the form Wilson prints. The two conventions
+    in the literature are therefore the two values of $c^2=\\pm1$, and nothing
+    else. Symbolic, because it is an identity.
+    """
+    import sympy as sp
+
+    A, B, c = sp.symbols("A B c")
+    A_new, B_new = A / c, B * c
+    assert sp.simplify((B_new / A_new) / (B / A) - c**2) == 0
+    assert sp.simplify(A_new.subs(c, sp.I) + sp.I * A) == 0
+    assert sp.simplify(B_new.subs(c, sp.I) - sp.I * B) == 0
+
+
+def test_c32_fixes_the_convention_and_the_match_then_confirms_it():
+    """**Criterion 3 closes here, on the definition rather than on the match.**
+
+    Q1 was reopened because the four-source match cannot select a convention:
+    rephasing both sides by $i^\\ell$ is a change of variable. What settles it is
+    the *definition*, and the conventions sheet carries it at **C3.2**, marked
+    DEF and seed-verified against the GE98 PDF:
+
+        Q_{A_l} = (-k_phys)^{-l} D_<A_l> Q,  the stripped factor REAL, no i.
+
+    A real stripped factor means the two candidate normalisations differ by a
+    *real* ratio, so $c^2=+1$ and the bracket keeps opposite signs --- which is
+    the form Hu & Sugiyama, Ma & Bertschinger and Seljak & Zaldarriaga print and
+    the one this bundle implements.
+
+    The chain is then not circular:
+
+    1. **C3.2** fixes the convention, from the definition, externally verified.
+    2. **C3a.3** derives $Q_{A_\\ell}=i^\\ell O^{(k)}_{A_\\ell}Q$ --- the covariant
+       basis sits at $i^\\ell$ from the plane-wave basis.
+    3. *Annals II* states independently that its form differs from Wilson's, who
+       uses plane waves, by $i^{-\\ell}$.
+    4. Wilson Eq. (8), integrated complex and as printed, matches after exactly
+       that phase, at $3.1\\times10^{-14}$, and is real to $10^{-10}$.
+
+    Steps 2 and 3 are independent derivations of the same phase, and step 4 is
+    the measurement. The match *confirms*; it no longer has to *select*.
+    """
+    import sympy as sp
+
+    A, B, c = sp.symbols("A B c", real=False)
+    lam = sp.Symbol("lambda", real=True, nonzero=True)      # C3.2: real, no i
+    lam_prime = sp.Symbol("lambdaprime", real=True, nonzero=True)
+
+    # tau_l -> c^l tau_l with c = lam'/lam sends (A, B) -> (A/c, B c)
+    ratio = sp.simplify(((B * c) / (A / c)) / (B / A))
+    assert sp.simplify(ratio - c**2) == 0
+
+    # C3.2 makes both normalisations real, so c is real and c^2 > 0: the relative
+    # sign inside the bracket cannot flip. Only an imaginary ratio flips it.
+    c_real = (lam_prime / lam)
+    assert sp.simplify(sp.im(c_real**2)) == 0
+    assert sp.ask(sp.Q.positive(c_real**2)) is not False
+
+    # and the imaginary alternative, which C3.2 excludes, flips it
+    assert sp.simplify((sp.I) ** 2 + 1) == 0

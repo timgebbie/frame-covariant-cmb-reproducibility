@@ -1,8 +1,10 @@
 """The temperature sources and the integral solution, Annals II §7.1.1.
 
-Published equation numbers. The transcriptions below were made from the printed
-text and cross-checked against the arXiv typesetting; where the two editions
-differ that is recorded, not silently reconciled.
+**Published equation numbers, now confirmed rather than assumed.** The forms
+below were checked character by character against the accepted Annals of Physics
+manuscript source, whose labels `temp-anisotropy`, `primary`, `doppler` and
+`secondary` generate exactly (176), (177), (178) and (179). See
+`provenance/EQUATION-NUMBERS-ANNALS-II-v1.md`.
 
     (177)  S_P(eta,k)    = D(eta_0,k) [ (dT + Phi_A) + kappa' v_B ]
 
@@ -34,17 +36,27 @@ total is an observable. The module therefore returns the three terms separately
 *and* their combination, and never lets a caller plot one alone without saying
 which frame it was computed in.
 
-**Finding G6.** The thesis abstract carries the opposite sign on the
-$aH[\\delta T + 3\\Phi_A]$ term of (179) from the one the published paper and the
-arXiv preprint both carry. It is not settled by transcription --- both readings
-are internally typeset consistently --- so it is carried as a switch,
-`isw_sign`, defaulting to the published value, and the discriminating test is
-stated in the findings record.
+**Finding B-6, closed.** The thesis abstract carries the opposite sign on the
+$aH[\\delta T+3\\Phi_A]$ term of (179). It is **settled in favour of the published
+minus**, by the antecedent's own derivation at (106)--(111): $\\tilde{\\mathcal
+B}_1=(k/a)(\\delta\\tilde T+\\Phi_A)$ at (106), so the $-a^2H\\tilde{\\mathcal B}_1$
+term of (107) contributes $-aH(\\delta\\tilde T+\\Phi_A)$, and (107)'s separate
+$-2Hak\\Phi_A$ supplies the rest: $1+2=3$. The sign is doubly sourced and cannot
+flip by one slip. See the findings record.
+
+`isw_sign` is **kept as a control, not as an open question** --- a known-wrong
+alternative that must change the answer. That is a diagnostic, and it is why the
+default is not simply hard-coded.
 
 Nothing here manufactures a recombination history. $\\kappa'$, $\\kappa''$, the
 visibility $V$ and the damping scale $k_D$ are supplied, because inventing them
 inside the source terms would make the source terms untestable against an
-analytic visibility. Tight coupling, (180)--(182), supplies them.
+analytic visibility. **Slow decoupling** --- (98), (102) and (111), with the
+$C_0,C_1,C_2$ coefficients at (90) --- supplies them.
+
+(Those numbers were previously cited in this bundle as "(180)-(182)", which is
+wrong: (181) is the Sachs-Wolfe/acoustic result of \u00a77.1.2. Resolved against the
+accepted manuscript; see `provenance/EQUATION-NUMBERS-ANNALS-II-v1.md`.)
 """
 
 from __future__ import annotations
@@ -70,7 +82,7 @@ __all__ = [
     "THESIS_ISW_SIGN",
 ]
 
-# Finding G6. The published paper and the arXiv preprint agree on -1; the thesis
+# Finding B-6. The published paper and the arXiv preprint agree on -1; the thesis
 # abstract reads +1. Carried, not resolved.
 PUBLISHED_ISW_SIGN = -1.0
 THESIS_ISW_SIGN = +1.0
@@ -179,6 +191,8 @@ def source_doppler(
     history: PerturbationHistory,
     scattering: ScatteringHistory,
     k_com: float,
+    *,
+    weight: np.ndarray | None = None,
 ) -> np.ndarray:
     """(178). V exp[-(k/k_D)^2] [ (1/3) k tau_1 + (kappa' v_B)' ].
 
@@ -186,13 +200,20 @@ def source_doppler(
     rather than contracted to $(\\kappa'v_B)'$: they are equal, and keeping the
     printed form means a transcription error shows up as a disagreement with the
     contracted form instead of hiding inside it. The test asserts the equality.
+
+    `weight` is the weight the bracket carries, defaulting to the visibility
+    $\\mathcal V$ as (178) prints it. Approximation **A-2** records why this
+    bundle passes the opacity of (98) instead when computing a spectrum:
+    $\\mathcal V\\kappa'\\sim\\kappa'^2e^{-\\kappa}$ is enormous, and with it the
+    Sachs-Wolfe plateau does not exist.
     """
     v_b = np.asarray(history.v_b, dtype=float)
     kappa_prime = np.asarray(scattering.kappa_prime, dtype=float)
     bracket = (1.0 / 3.0) * k_com * np.asarray(history.tau_1, dtype=float) + (
         kappa_prime * history.derivative("v_b") + scattering.kappa_double_prime() * v_b
     )
-    return np.asarray(scattering.visibility, dtype=float) * scattering.diffusion(k_com) * bracket
+    chosen = scattering.visibility if weight is None else np.asarray(weight, dtype=float)
+    return np.asarray(chosen, dtype=float) * scattering.diffusion(k_com) * bracket
 
 
 def source_integrated(
@@ -202,10 +223,20 @@ def source_integrated(
     *,
     aH: np.ndarray,
     isw_sign: float = PUBLISHED_ISW_SIGN,
+    weight: np.ndarray | None = None,
 ) -> np.ndarray:
-    """(179). V exp[-(k/k_D)^2] [ (Phi_A' - Phi_H') + s aH (dT + 3 Phi_A) ].
+    """(179). W exp[-(k/k_D)^2] [ (Phi_A' - Phi_H') + s aH (dT + 3 Phi_A) ].
 
-    `isw_sign` is **finding G6**: $s=-1$ is the published and arXiv reading,
+    `weight` is $W$: the weight the **gravitational** source carries. It
+    defaults to the visibility $\\mathcal V$, which is what (179) prints, and
+    `functions.spectra.decoupling.Weighting` supplies the opacity $e^{-\\kappa}$
+    of (98) instead where a late integrated Sachs-Wolfe term is wanted. It is a
+    parameter rather than something a caller divides back out afterwards, because
+    a caller dividing by $\\mathcal V$ divides by zero wherever the visibility has
+    fallen to nothing --- which is exactly the epoch the late ISW lives in.
+    Approximation **A-1**.
+
+    `isw_sign` is **finding B-6**: $s=-1$ is the published and arXiv reading,
     $s=+1$ the thesis abstract's. `aH` comes from `functions.background`, sampled
     on the same conformal-time grid, and is not recomputed here --- the background
     is one object with one definition, and (179) consumes it.
@@ -218,7 +249,8 @@ def source_integrated(
         + 3.0 * np.asarray(history.phi_a, dtype=float)
     )
     bracket = isw + isw_sign * threading
-    return np.asarray(scattering.visibility, dtype=float) * scattering.diffusion(k_com) * bracket
+    chosen = scattering.visibility if weight is None else np.asarray(weight, dtype=float)
+    return np.asarray(chosen, dtype=float) * scattering.diffusion(k_com) * bracket
 
 
 # ----------------------------------------------------------------------------

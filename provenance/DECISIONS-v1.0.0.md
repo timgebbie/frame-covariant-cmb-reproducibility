@@ -21,6 +21,13 @@ Last amended 2026-10-05.
 | **S2** | **v1.5.0 is the high-$\ell$ $O(\varepsilon^2\ell)$ effects, and it carries BOTH nonlinear corrections** — the gravitational coupling to the kinematic quantities, $\delta\dot\tau_{NL}$, and the nonlinear Thomson scattering coupling to the baryon velocity, $\dot{\delta C}_{NL}$. Both are named in thesis Chapters 2 and 6; see the thesis-abstract entry below for the displayed forms. It is **gated on Paper 1**, which P1-T is writing. It also carries the $\pm(\ell+2)$ control, where that term exists, and the restricted case as a recovery and check of v1.0.0. *Accepted 2026-10-05.* |
 | **S3** | **v2.0.0 is calibration and data science**, including Planck. *Calibration* means calibrating the solver against standard results, never calibrating the amplitude of an effect. |
 | **S4** | **This is a Boltzmann code written from scratch.** The only external code it is checked against is **CMBFAST** — nothing else, deliberately, to avoid scope creep. |
+| **S4a** | **Refinement of S4, accepted 2026-10-06.** CMBFAST is the *method* — line-of-sight integration, Seljak & Zaldarriaga, already in Annals II's bibliography — not a runnable code: Fortran 77, unmaintained since the early 2000s. The bundle therefore **cites Seljak & Zaldarriaga for the method and compares against CAMB and CLASS**, saying so explicitly. That is more honest than claiming a comparison against a code nobody can run. CAMB is also the natural choice because Challinor is already mapped in the conventions sheet as `[CL]`. This is not scope creep: it is the same single comparison S4 allowed, pointed at code that exists. |
+| **S4b** | **The 5b tolerance is measured, not chosen.** Run CAMB and CLASS and take their mutual difference as the floor: no agreement can be claimed tighter than two trusted independent codes agree with each other. This converts “pick a tolerance” from a judgement into a measurement, which is the form this project keeps finding it wants. Reported in three $\ell$ bands, actual numbers, never the word *agrees*. *Accepted 2026-10-06.* |
+| **S13** | **Findings carry a `B-` prefix, never `G`.** Annals II's Appendix~G equations are (G.1), (G.2), (G.3); findings numbered G1–G7 collided with them in the same sentence. Renumbered **B-1**–**B-7**. Raised by Coordination, 2026-10-06, after this project had already lost time to a `λ` collision. |
+| **S14** | **Criterion 2's round trip has a stated target, supplied by Coordination 2026-10-06.** Annals II's source decomposes by rank: $\mathcal B_0=-\tfrac13 D^a\tau_a$, $\mathcal B_1 = D_a\ln T + A_a$, $\mathcal B_2=\sigma_{ab}$. The shear is **rank 2** and feeds $\mathcal B_2$, so $C_0$ and $C_2$ are built from it and $C_1$ is not — which is why $\tilde\sigma_{ab}\approx0$ kills $\tilde C_0$ and $\tilde C_2$ and says nothing about $\tilde C_1$. **$C_1$ does not change form off the Newtonian frame**, so criterion 2 is a *check*, not a rederivation. With $\tilde D_a\ln T\approx D_a\ln T - Hv_a$ and $\tilde A_a\approx A_a+\dot v_a+Hv_a$ the $Hv$ cancels, leaving **$\tilde{\mathcal B}_1=\mathcal B_1+\dot v_a$** — no shear, no $Hv$. Any other result from the generic-$u^a$ construction is a bug in this bundle. |
+| **S15** | **An approximation of the source is not a finding against it.** `provenance/SOURCE-APPROXIMATIONS-v1.md` records deliberate narrow choices of the antecedent; `ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md` records defects. A finding is corrected; an approximation is **reproduced faithfully when reproducing the source** and departed from only where the source is not the target, with the departure named at the call site and in the caption. *Accepted 2026-10-06, after Coordination corrected this stream on A-1.* |
+| **S12** | **A settled finding's switch is kept as a control, not deleted.** B-6's `isw_sign` and the relative-sign control of D1 are known-wrong alternatives that must change the answer; that is evidence of the kind `diagnostics/` exists for, and is cheaper to keep than to rebuild. A control is still not evidence for the result (V-rule), and lives in `diagnostics/`. *Accepted 2026-10-06.* |
+| **S11** | **Equation numbers are resolved against the accepted manuscript source, not assumed.** `provenance/EQUATION-NUMBERS-ANNALS-II-v1.md` carries the generated label→number map. An acceptance test anchored to the wrong numbering fails in a way that looks like a physics error; one mis-citation was found and fixed this way. *Accepted 2026-10-06.* |
 | **S5** | This stream's remit is **v1.0.0 and v1.5.0**. |
 | **S6** | The bundle is a **separate repository**, publishable and DOI-able from the start. Publisher PDFs are never carried into it. |
 | **S7** | Both CDM and ΛCDM are wanted **in the almost-FLRW setting at v1.0.0**, so that the high-$\ell$ extension at v1.5.0 is a clean delta rather than a change of model. |
@@ -38,7 +45,7 @@ v1.0.0 is complete when all hold, and not before.
 | **2** | covariant → mode → covariant round trip returns the input to machine precision | open |
 | **3** | both harmonic phase conventions run end to end; only one reproduces the real, opposite-sign form of the external hierarchies, and the bundle adopts and names that one | **closed** |
 | **4** | a known-wrong control runs and fails in a known shape | **closed** |
-| **5a** | the Sachs–Wolfe limit is recovered over $2\le\ell\le20$ to 5%, against the **corrected** closed form of (201) — the printed form omits one factor of $\chi$, finding G5 | open; target settled 2026-10-05 |
+| **5a** | the Sachs–Wolfe limit is recovered over $2\le\ell\le20$ to 5%, against the **corrected** closed form of (201) — the printed form omits one factor of $\chi$, finding B-5 | open; target settled 2026-10-05 |
 | **5b** | the CDM and ΛCDM angular power spectra are recovered to a stated tolerance over a stated range, checked against **CMBFAST** | open; tolerance and range to be set |
 | **6** | every number the paper prints is regenerated here, or marked not-machine-checkable with the reason | open; closes at manuscript freeze |
 
@@ -47,7 +54,7 @@ v1.0.0 is complete when all hold, and not before.
 | | Decision |
 |---|---|
 | **L1** | **Corrections are silent**, marked by **one succinct footnote**. The word is *misprint*, not *error*. The forensics stay in `provenance/`. |
-| **L2** | A finding that would move a sign, an $\ell$-weight or an acceptance criterion is **raised in the record**. **Amended 2026-10-05:** raising it does not block the work. The corrected target is adopted and the correction made silently, with the raise standing in `provenance/` as the account of why the target changed. G5 is the first case and set the precedent. |
+| **L2** | A finding that would move a sign, an $\ell$-weight or an acceptance criterion is **raised in the record**. **Amended 2026-10-05:** raising it does not block the work. The corrected target is adopted and the correction made silently, with the raise standing in `provenance/` as the account of why the target changed. B-5 is the first case and set the precedent. |
 | **L3** | Equation numbers are **published** numbers. Where an edition differs, the difference is recorded; where it does not, that is recorded too. |
 | **L4** | **The bundle reproduces; it does not argue.** No claim appears here that is not in the paper. |
 | **L5** | **Independent checks are counted by their sources, not by their arguments.** A coefficient transcribed through a secondary source is that secondary source. |
@@ -171,14 +178,14 @@ threading in the Newtonian frame. Generically this cancellation does not occur,
 it is unique to the shear free threading."* That is the same frame-dependence the
 two-frame figures are built to show, stated by the antecedent.
 
-### Supporting evidence toward G4, not a resolution
+### Supporting evidence toward B-4, not a resolution
 
 Chapter 1's abstract says the angular correlation functions are found *"following
 the Wilson-Silk approach for the mode representation, but derived and dealt with
 in 1+3 covariant and gauge invariant (CGI) form."* That the mode-representation
 antecedent is **Wilson & Silk** supports reading Appendix F's `[81]` as a typo for
-`[82]`. It is supporting evidence, not a verification: resolving G4 still needs
-Eq. (7) of the paper itself. **G4 stays open.**
+`[82]`. It is supporting evidence, not a verification: resolving B-4 still needs
+Eq. (7) of the paper itself. **B-4 stays open.**
 
 ---
 
@@ -194,7 +201,7 @@ session does not write something that misstates the lineage. It governs
 |---|---|---|
 | **Hu & Sugiyama** | the treatment this formulation was **developed from and checked against** | the PI's own account, and demonstrable: the acceptance spine matches their Eq. (6) directly, in the $\beta$ normalisation |
 | **Challinor & Lasenby** | a **contemporaneous and independent** covariant treatment | used in this project only for **convention translation** — it works in the opposite signature, and the conventions sheet carries a row mapping to it |
-| **Wilson & Silk** | the **mode-representation antecedent**, named as such by thesis Chapter 1 | and the subject of finding **G4** |
+| **Wilson & Silk** | the **mode-representation antecedent**, named as such by thesis Chapter 1 | and the subject of finding **B-4** |
 | **Ellis, Treciokas & Matravers (1983)** | the PSTF lineage the covariant treatment rests on | GE98, MGE99 and the thesis all cite it for the same lemmas, so they are one source |
 
 ### What the bundle does not say

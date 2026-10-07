@@ -33,7 +33,7 @@ ROOT = Path(__file__).resolve().parents[1]
 STAGES: list[tuple[str, str]] = [
     ("F1  Appendix F match", "scripts/figure_f1_appendix_f.py"),
     ("F2  truncation convergence, both frames", "scripts/figure_f2_truncation.py"),
-    ("F3  angular autocorrelation", "scripts/figure_f3_spectrum.py"),
+    ("F3  angular power spectrum, both routes", "scripts/figure_f3_angular_spectrum.py"),
     ("F4  real-space angular correlation", "scripts/figure_f4_correlation.py"),
     ("F5  source decomposition, two frames", "scripts/figure_f5_sources.py"),
     ("F6  impact of the approximations", "scripts/figure_f6_approximations.py"),
@@ -43,12 +43,18 @@ STAGES: list[tuple[str, str]] = [
 
 #: Diagnostics. A control is not evidence, so these are not released figures.
 DIAGNOSTICS: list[tuple[str, str]] = [
-    ("D0  criterion 5 ell range, and G3", "scripts/derive_ell_range.py"),
+    ("D0  criterion 5 ell range, and B-3", "scripts/derive_ell_range.py"),
     ("D1  relative-sign control", "scripts/diagnostic_d1_sign_control.py"),
     ("D2  round-trip residual (a number)", "scripts/diagnostic_d2_roundtrip.py"),
     ("D3  source terms against k", "scripts/diagnostic_d3_sources.py"),
     ("D4  no monopole in the CGI approach", "scripts/diagnostic_d4_monopole.py"),
 ]
+
+
+#: The portability gate. It runs first and its failure is release-blocking:
+#: nothing ships from this bundle that has only ever run where it was
+#: written. Adopted from Coordination's audit, 2026-10-06.
+GATE = ("portability", "scripts/check_portability.py")
 
 
 def run(cmd: list[str], label: str) -> int:
@@ -69,6 +75,12 @@ def main() -> int:
         failures.append("tests")
 
     pending: dict[str, list[str]] = {"figures": [], "diagnostics": []}
+    label, script = GATE
+    if run([sys.executable, script], label) != 0:
+        print("\n" + "=" * 60)
+        print("NOT RELEASABLE  --  portability gate failed")
+        return 1
+
     for group, stages in (("figures", STAGES), ("diagnostics", DIAGNOSTICS)):
         for label, script in stages:
             if not (ROOT / script).exists():
@@ -85,6 +97,12 @@ def main() -> int:
                 print(f"    PENDING  {label}")
         else:
             print(f"all {group} generated")
+
+    print("\n--- tables " + "-" * 50)
+    if run([sys.executable, "scripts/make_tables.py"], "audit tables"):
+        failures.append("tables")
+    if run([sys.executable, "scripts/make_figure_pages.py"], "figure pages"):
+        failures.append("figure pages")
 
     print("\n--- provenance " + "-" * 46)
     if run([sys.executable, "scripts/sync_conventions.py", "--check"], "conventions copy"):

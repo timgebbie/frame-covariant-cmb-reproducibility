@@ -59,3 +59,68 @@ def test_radiation_start_is_regular():
     model = Background(omega_m=0.3, omega_lambda=0.7, omega_r=8.5e-5)
     assert model.eta_of_a(0.0) == pytest.approx(0.0, abs=1e-12)
     assert np.all(np.diff(model.eta_of_a(np.linspace(0.0, 1.0, 50))) > 0.0)
+
+
+# ---------------------------------------------------------------------------
+# The Gauss constraint and Annals II (G.3)
+# ---------------------------------------------------------------------------
+
+
+def test_the_gauss_constraint_sign_is_the_corrected_one_and_the_printed_one_has_no_solution():
+    """**Finding B-7.** Annals II (G.3) prints $+\\tfrac23\\Theta^2$; the thesis and
+    Cargese (55) print $-\\tfrac23\\Theta^2$. The FLRW limit decides it.
+
+    The $1+3$ Gauss constraint, with shear and vorticity switched off,
+
+        R3 = 2 mu + 2 Lambda - (2/3) Theta^2,
+
+    reduces at ``R3 = 6K/a^2``, ``Theta = 3H`` to ``H^2 = (mu+Lambda)/3 - K/a^2``,
+    the Friedmann equation. The printed sign gives ``H^2 = K/a^2 - (mu+Lambda)/3``,
+    which in the **flat** case is ``-(mu+Lambda)/3``: negative for any positive
+    energy density, so there is no solution. (Coordination's independent check
+    reached the same verdict; its intermediate form carried ``-K/a^2`` where this
+    convention, ``R3 = +6K/a^2`` for a closed section, gives ``+K/a^2``. The
+    conclusion is unaffected --- the flat case settles it without reference to
+    ``K`` at all.)
+
+    The point of this test is not that the misprint exists --- that belongs in the
+    findings record --- but that **this bundle cannot inherit it**. The background
+    is derived from the constraint rather than transcribed from (G.3), and this
+    test pins the derived form against the implementation, so a later "correction"
+    of the code towards the printed equation fails here.
+    """
+    import sympy as sp
+
+    H, mu, Lam, K, a, Theta, R3 = sp.symbols("H mu Lambda K a Theta R3", positive=True)
+
+    def friedmann(sign: int):
+        constraint = sp.Eq(R3, 2 * mu + 2 * Lam + sign * sp.Rational(2, 3) * Theta**2)
+        reduced = constraint.subs({R3: 6 * K / a**2, Theta: 3 * H})
+        return sp.solve(reduced, H**2)[0]
+
+    corrected, printed = friedmann(-1), friedmann(+1)
+    assert sp.simplify(corrected - ((mu + Lam) / 3 - K / a**2)) == 0
+    assert sp.simplify(printed - (K / a**2 - (mu + Lam) / 3)) == 0
+
+    # flat case: the printed sign admits no solution with positive energy density
+    assert printed.subs({K: 0}) == sp.simplify(-(mu + Lam) / 3)
+    assert printed.subs({mu: 1, Lam: 0, K: 0, a: 1}) < 0
+
+    # and the implementation carries the corrected form, identically in a
+    h0, om_r, om_m, om_l = sp.symbols("H0 Omega_r Omega_m Omega_Lambda", positive=True)
+    om_k = 1 - om_r - om_m - om_l
+    mu_of_a = 3 * h0**2 * (om_r / a**4 + om_m / a**3)
+    implemented = h0**2 * (om_r / a**4 + om_m / a**3 + om_k / a**2 + om_l)
+    assert sp.simplify(
+        implemented - corrected.subs({mu: mu_of_a, Lam: 3 * h0**2 * om_l, K: -(h0**2) * om_k})
+    ) == 0
+
+
+def test_the_implementation_agrees_numerically_with_the_friedmann_reduction():
+    """The symbolic identity above, evaluated through the code that actually runs."""
+    model = Background(omega_m=0.3, omega_lambda=0.7, omega_r=8.5e-5)
+    a = np.array([1e-3, 1e-2, 0.1, 0.5, 1.0])
+    mu = 3.0 * (model.omega_r / a**4 + model.omega_m / a**3)
+    lam = 3.0 * model.omega_lambda
+    curvature = -model.omega_k / a**2
+    assert np.allclose((model.conformal_hubble(a) / a) ** 2, (mu + lam) / 3.0 - curvature)

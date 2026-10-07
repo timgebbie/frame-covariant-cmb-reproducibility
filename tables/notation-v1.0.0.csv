@@ -1,6 +1,6 @@
 symbol,code,meaning,note
 "$\Phi_A$, $\Phi_H$","phi_a, phi_h",the two gauge-invariant potentials entering (177) and (179),
-$\tilde\delta_T$,delta_T,covariant temperature perturbation,threading-dependent; $\tilde\delta_T+3\Phi_A$ is the combination in dispute (G6)
+$\tilde\delta_T$,delta_T,covariant temperature perturbation,threading-dependent; $\tilde\delta_T+3\Phi_A$ is the combination in dispute (B-6)
 $\tilde\tau_1$,tau_1,"the dipole, which supplies the Doppler term of (178)",
 $\tilde v_B$,v_b,baryon velocity,
 "$\kappa'$, $\kappa''$",kappa_prime,differential optical depth and its conformal-time derivative,"supplied, never manufactured inside the source terms"

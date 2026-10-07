@@ -8,7 +8,7 @@ Published equation numbers. Identical in the published and arXiv editions.
             = (pi/2^{m+2}) m! (l - m/2 - 1/2)! / [ (m/2)! (l + m/2 + 1/2)! ]
 
         **As printed, (199) is correct only where Gamma(m/2+1) = 1, that is at
-        m = 0 and m = 2.** The denominator requires [(m/2)!]^2. Finding G3.
+        m = 0 and m = 2.** The denominator requires [(m/2)!]^2. Finding B-3.
 
 (200)   with P(k) = A k^{n-1} (J.1)
 
@@ -51,7 +51,7 @@ __all__ = [
 
 
 def bessel_integral(m: float, ell: float) -> float:
-    """(199), corrected: the denominator carries [(m/2)!]^2. Finding G3."""
+    """(199), corrected: the denominator carries [(m/2)!]^2. Finding B-3."""
     return (
         (pi / 2 ** (m + 2))
         * gamma(m + 1)

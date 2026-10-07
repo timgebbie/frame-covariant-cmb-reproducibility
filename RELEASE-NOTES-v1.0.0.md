@@ -16,12 +16,12 @@ v1.0.0 is complete when all six hold, and not before.
 
 | | Criterion | Status |
 |---|---|---|
-| 1 | the free-streaming recursion reproduces (F.1)–(F.4), with the external matches of (F.3) and (F.4) checked numerically rather than asserted | **closed** — HS Eq. (6), MB Eqs. (49)/(50) and SZ Eq. (3d) read from their own papers and integrated as printed; they match the bundle to $10^{-13}$–$10^{-14}$ at scale exactly 1. Two distinct normalisations, both matched |
-| 2 | a covariant → mode → covariant round trip returns the input to machine precision | **open** |
-| 3 | both harmonic phase conventions run end to end; only one reproduces the real, opposite-sign form of the external hierarchies, and the bundle adopts and names that one | **closed** — D1 runs both; the adopted normalisation sits on $j_\ell$ to $10^{-10}$ while the other diverges by $5\times10^{6}$ at $\ell=2$. The adopted convention is named in the supplement, \S2 |
+| 1 | the free-streaming recursion reproduces (F.1)–(F.4), with the external matches of (F.3) and (F.4) checked numerically rather than asserted | **closed** — HS Eq. (6), **Wilson Eq. (8)**, MB Eqs. (49)/(50) and SZ Eq. (3d), each read from its own paper and integrated as printed; all match the bundle to $10^{-13}$–$10^{-14}$ at scale exactly 1. **Four** hierarchies, in two normalisations *and* two phase conventions — Wilson is written in the imaginary convention and tests the phase, not only the $\ell$-weights |
+| 2 | a covariant → mode → covariant round trip returns the input to machine precision | **open — target stated, 2026-10-06.** The round trip must return $\tilde{\mathcal B}_1=\mathcal B_1+\dot v_a$: no shear (it is rank 2 and feeds $\mathcal B_2$) and no $Hv$ (it cancels between the two transformations). $C_1$ does not change form off the Newtonian frame, so this is a check rather than a rederivation. See S14 |
+| 3 | both harmonic phase conventions run end to end; the convention is fixed by the **definition** of $Q_{A_\ell}$, and the external match then confirms it | **CLOSED 2026-10-07**, on `conventions.md` **C3.2** — marked DEF and seed-verified against the GE98 PDF: $Q_{A_\ell}=(-k_{\rm phys})^{-\ell}\mathrm D_{\langle A_\ell\rangle}Q$, the stripped factor **real, no $i$**. A real stripped factor forces $c^2=+1$ and the opposite-sign bracket. **C3a.3** then derives $Q_{A_\ell}=i^\ell O^{(k)}_{A_\ell}Q$, and *Annals II* independently states its form sits at $i^{-\ell}$ from Wilson's plane-wave basis — two derivations of the same phase, measured at $3.1\times10^{-14}$ with the transformed solution real to $10^{-10}$. The earlier wording was circular and was **reopened 2026-10-06** before this closed it; see Q1 |
 | 4 | a known-wrong control runs and fails in a known shape | **closed** — D1 runs and diverges rather than projecting; the correct recursion matches $j_\ell$ to $10^{-10}$ beside it. Restated: The $\pm(\ell+2)$ control is **withdrawn** to v1.5.0, where that term exists, and replaced by a relative-sign control on the free-streaming bracket (D1). See Q2, closed |
-| 5a | the Sachs–Wolfe limit is recovered over $2\le\ell\le20$ to 5%, against the **corrected** closed form of (201) | **open** — target settled; the printed (201) omits one factor of the comoving distance, finding **G5** |
-| 5b | the **CDM and ΛCDM** angular power spectra are recovered to a stated tolerance over a stated range, checked against **CMBFAST** | **open** — external target settled; tolerance and range to be set, Q6 |
+| 5a | the Sachs–Wolfe limit is recovered over $2\le\ell\le20$ to 5%, against the **corrected** closed form of (201) | **open** — target settled; the printed (201) omits one factor of the comoving distance, finding **B-5** |
+| 5b | the **CDM and ΛCDM** angular power spectra are recovered to a **measured** tolerance over three stated $\ell$ bands, checked against **CAMB and CLASS** | **open — unblocked 2026-10-06.** CMBFAST is cited for the *method* (line-of-sight integration, Seljak & Zaldarriaga, the same reference already in Annals II's bibliography); the *comparison* is against its maintained descendants, because the Fortran 77 original is effectively unrunnable. Recombination is **equilibrium Saha** at present, which places last scattering but decouples too sharply and too early; Peebles' effective three-level atom is required before this criterion can be met, and is named here rather than discovered later. **The tolerance is measured, not chosen**: the CAMB–CLASS mutual difference is the floor, since no claim of agreement tighter than two trusted codes agree with each other is admissible. Three bands, because the failure modes differ: $2\le\ell<30$ (cosmic-variance dominated, binned), $30\le\ell<1000$ (the acoustic peaks, where a hierarchy or recursion error actually shows), $1000\le\ell\le2000$ (damping tail, where $C_\ell$ is small and fractional differences blow up on a vanishing signal). Actual numbers stated; never the word *agrees* |
 | 6 | every number the paper prints is regenerated here, or marked not-machine-checkable with the reason | **open** — closes at manuscript freeze. `v1.0.0-rc` is tagged on criteria 1–5; `v1.0.0` requires all six, Q5 closed |
 
 ## What is in this tree now
@@ -65,17 +65,17 @@ direct-label rule is load-bearing rather than decorative.
 
 Five, all in `provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md`.
 
-- **G1** — Annals I prints $(-1)^\ell$ where its own definition gives $i^\ell$.
+- **B-1** — Annals I prints $(-1)^\ell$ where its own definition gives $i^\ell$.
   Inconsequential for the covariant multipole, which is invariant under the
   choice; the mode coefficients are not, and the two statements are distinct.
-- **G2** — (F.4) is algebraically correct but is not in the Ma & Bertschinger form
+- **B-2** — (F.4) is algebraically correct but is not in the Ma & Bertschinger form
   the following sentence identifies it with: the $(2\ell+1)^{-1}$ division its
   text specifies was not applied to the display.
-- **G3** — the Bessel identity (199) needs $[(m/2)!]^2$ in its denominator. It is
+- **B-3** — the Bessel identity (199) needs $[(m/2)!]^2$ in its denominator. It is
   exact where $\Gamma(m/2+1)=1$, so (201) is unaffected; (204) is low by 11.4% and
   the $D_\ell$ of (205) correspondingly high by 12.8%.
-- **G4** — Appendix F names Wilson & Silk and keys Wilson. Different papers. Open.
-- **G5** — (201) omits one factor of the comoving distance $\chi$ from the
+- **B-4** — Appendix F names Wilson & Silk and keys Wilson. Different papers. Open.
+- **B-5** — (201) omits one factor of the comoving distance $\chi$ from the
   reduction of (200). Confirmed independently: (204) descends from a $P(k)$
   definition differing by one power of $k$ and is correctly $\chi$-free, so the
   asymmetry is not a units convention. Sets criterion 5a's target.

@@ -20,7 +20,7 @@ explicit 1/a against a proper-time derivative):
 (F.4), with beta_l = alpha_l^{-1}(2l+1). The display as printed keeps (2l+1) on
 the left; the text preceding it specifies a division by (2l+1) which was not
 applied, and only after that division is it the Ma & Bertschinger form. We divide.
-See provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md, finding G2.
+See provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md, finding B-2.
 
     -(alpha_l^{-1} tau_l)'  =  (k_com/(2l+1)) [ (l+1)(alpha_{l+1}^{-1} tau_{l+1})
                                                 - l (alpha_{l-1}^{-1} tau_{l-1}) ].
@@ -50,7 +50,7 @@ Normalisation = Literal["covariant", "beta", "alpha"]
 EQUATION = {
     "covariant": "(F.1)",
     "beta": "(F.3)",
-    "alpha": "(F.4), after the division its text specifies — finding G2",
+    "alpha": "(F.4), after the division its text specifies — finding B-2",
 }
 
 

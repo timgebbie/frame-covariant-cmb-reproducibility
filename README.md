@@ -6,12 +6,15 @@ arXiv: identifier to be assigned.
 
 ## Key figure: recursion and external hierarchies
 
-![F1 — the covariant free-streaming recursion against three external hierarchies](figures/f1-appendix-f-v1.0.0.png)
+![F1 — the covariant free-streaming recursion against four external hierarchies](figures/f1-appendix-f-v1.0.0.png)
 
 The covariant free-streaming recursion of *Annals II* Appendix F against Hu &
-Sugiyama Eq. (6), Ma & Bertschinger Eqs. (49)/(50) and Seljak & Zaldarriaga
-Eq. (3d), each read from its own paper. Residuals of 10⁻¹³–10⁻¹⁴ against a 10⁻¹¹
-threshold, at overall scale exactly 1. Two distinct normalisations, both matched.
+Sugiyama Eq. (6), Wilson Eq. (8), Ma & Bertschinger Eqs. (49)/(50) and Seljak &
+Zaldarriaga Eq. (3d), each read from its own paper. Residuals of 10⁻¹³–10⁻¹⁴
+against a 10⁻¹¹ threshold, at overall scale exactly 1. Two distinct
+normalisations and two distinct phase conventions — Wilson writes the recursion
+in the imaginary convention, so his panel tests the phase and not only the
+ℓ-weights.
 
 > **The designated key figure for v1.0.0 is Figure 3, the recovered angular
 > autocorrelation with its residual panel** — the recovery of *Annals II*'s
@@ -82,16 +85,16 @@ This bundle reconstructs its antecedent rather than porting it, and is built to
 find that paper's remaining errors rather than to agree with it. Four have been
 recorded so far, all in `provenance/`:
 
-- **G1** — *Annals I* prints (−1)^ℓ where its own definition gives i^ℓ.
+- **B-1** — *Annals I* prints (−1)^ℓ where its own definition gives i^ℓ.
   Inconsequential for the covariant multipole, which is invariant under the
   choice; the mode coefficients are not, and the two statements are distinct.
-- **G2** — (F.4) is algebraically correct but is not in the Ma & Bertschinger
+- **B-2** — (F.4) is algebraically correct but is not in the Ma & Bertschinger
   form the following sentence identifies it with: the (2ℓ+1)⁻¹ division its text
   specifies was not applied to the display.
-- **G3** — the Bessel identity (199) needs [(m/2)!]² in its denominator. It is
+- **B-3** — the Bessel identity (199) needs [(m/2)!]² in its denominator. It is
   exact where Γ(m/2+1) = 1, so (201) is unaffected; (204) is low by 11.4% and the
   D_ℓ of (205) correspondingly high by 12.8%.
-- **G4** — Appendix F names Wilson & Silk and keys Wilson. Different papers.
+- **B-4** — Appendix F names Wilson & Silk and keys Wilson. Different papers.
 
 Each is corrected silently in the reconstruction and marked by a succinct
 footnote in the supplement; the full forensics stay in `provenance/`.

@@ -17,7 +17,7 @@ power law that integral is exact:
         = (pi/2^{m+2}) Gamma(m+1) Gamma(l - m/2 + 1/2)
           / [ Gamma(m/2+1)^2 Gamma(l + m/2 + 3/2) ]
 
-which is Annals II (199) **with the squared denominator** --- finding G3. As
+which is Annals II (199) **with the squared denominator** --- finding B-3. As
 printed it is exact only where Gamma(m/2+1) = 1, that is at m = 0 and m = 2, and
 m = 2 is the case the paper uses for (201), which is why the slip survived.
 
@@ -49,7 +49,7 @@ kernel is the antecedent's own (199), corrected.
 from __future__ import annotations
 
 import numpy as np
-from scipy.special import gamma, loggamma
+from scipy.special import loggamma
 
 __all__ = ["bessel_square_kernel", "convergence_window", "fftlog_primary_integral"]
 

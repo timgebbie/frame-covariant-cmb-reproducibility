@@ -44,6 +44,10 @@ short = "Seljak \\& Zaldarriaga"
 text = "Derived in this bundle from the 1+3 covariant constraints"
 short = "this work"
 
+[sources.WI]
+text = "M. L. Wilson, Astrophysical Journal 273, 2 (1983)"
+short = "Wilson"
+
 [sources.DLMF]
 text = "NIST Digital Library of Mathematical Functions, spherical Bessel recurrences"
 short = "DLMF"
@@ -76,7 +80,7 @@ quantity = "$\\Delta_\\ell = 4\\pi\\beta_\\ell/(2\\ell+1)$"
 source = "AnnalsI"
 equation = "(119)"
 module = "functions.harmonics.weights"
-object = "delta_over_pi"
+object = "delta_over_four_pi"
 test = ""
 note = "$4\\pi$ factored out so the result stays rational"
 
@@ -128,7 +132,7 @@ equation = "(F.4), p. 380"
 module = "functions.harmonics.free_streaming"
 object = "free_stream"
 test = "test_f4_variable_is_exactly_the_spherical_bessel_function"
-note = "\\texttt{normalisation='alpha'}. Applies the $(2\\ell+1)^{-1}$ division the text specifies and the display omits --- finding G2"
+note = "\\texttt{normalisation='alpha'}. Applies the $(2\\ell+1)^{-1}$ division the text specifies and the display omits --- finding B-2"
 
 [[equations]]
 key = "bessel_solution"
@@ -188,7 +192,7 @@ equation = "(199), p. 372"
 module = "scripts.derive_ell_range"
 object = "bessel_integral_corrected"
 test = "test_corrected_bessel_identity_matches_quadrature"
-note = "finding G3. Printed form exact only at $m=0,2$"
+note = "finding B-3. Printed form exact only at $m=0,2$"
 
 [[equations]]
 key = "acoustic_scale"
@@ -207,8 +211,168 @@ source = "ThisWork"
 equation = "the $1+3$ energy constraint"
 module = "functions.background.flrw"
 object = "Background"
-test = "test_the_constraint_holds_along_the_solution"
-note = "\\textbf{derived, not transcribed}: (185) is a check on this, not its source. Supplies $aH$ to (179)"
+test = "test_the_gauss_constraint_sign_is_the_corrected_one_and_the_printed_one_has_no_solution"
+note = "\\textbf{derived, not transcribed}: (185) and (G.3) are checks on this, not its source. Carries the corrected Gauss sign (\\textbf{B-7}) and supplies $aH$ to (179)"
+
+[[equations]]
+key = "power_spectrum_j1"
+quantity = "$\\mathcal P(k) = \\mathcal A(k\\eta_0)^{n-1}$"
+source = "AnnalsII"
+equation = "(J.1)"
+module = "functions.spectra.transfer"
+object = "power_spectrum_j1"
+test = "test_j1_is_constant_at_n_equals_one_and_eta0_drops_out"
+note = "the definition (201) descends from; $\\eta_0^{n-1}=1$ at $n=1$, so \\textbf{B-5} is unaffected by it"
+
+[[equations]]
+key = "power_spectrum_j3"
+quantity = "$\\mathcal P(k) = \\mathcal B k^n T^2(k)$"
+source = "AnnalsII"
+equation = "(J.3)"
+module = "functions.spectra.transfer"
+object = "power_spectrum_j3"
+test = "test_j1_and_j3_differ_by_one_power_of_k"
+note = "one power of $k$ more than (J.1) --- the fact that settled \\textbf{B-5}. (204) descends from this"
+
+[[equations]]
+key = "transfer_function"
+quantity = "$T(k) = [1+(ak+(bk)^{3/2}+(ck)^2)^\\nu]^{-1/\\nu}$"
+source = "AnnalsII"
+equation = "(J.5)"
+module = "functions.spectra.transfer"
+object = "transfer_function"
+test = "test_b10_the_printed_transfer_function_diverges_where_it_must_vanish"
+note = "\\textbf{finding B-10}: printed with $+1/\\nu$, which diverges as $k^2$ where it must vanish. Corrected silently"
+
+[[equations]]
+key = "wilson_hierarchy"
+quantity = "$\\dot\\delta_\\ell = -n_e\\sigma_T\\delta_\\ell - ikT\\{\\frac{\\ell}{2\\ell-1}\\delta_{\\ell-1} + \\frac{\\ell+1}{2\\ell+3}[1-\\frac{\\ell(\\ell+2)K}{k^2}]\\delta_{\\ell+1}\\}$"
+source = "WI"
+equation = "(8), p. 4"
+module = "functions.harmonics.external"
+object = "integrate_wilson"
+test = "test_wilson_reproduces_the_bundle_and_tests_the_phase_convention"
+note = "the \\textbf{fourth} external hierarchy. $\\beta$ normalisation but the \\emph{imaginary} convention, so it tests the phase (B-1, criterion 3) and not only the $\\ell$-weights. Annals II cites Wilson (7), which is the quadrupole --- \\textbf{B-9}"
+
+[[equations]]
+key = "saha_ionisation"
+quantity = "$x_e(z)$, equilibrium Saha"
+source = "ThisWork"
+equation = "standard; not in the antecedent"
+module = "functions.spectra.decoupling"
+object = "saha_ionisation"
+test = "test_saha_is_monotone_and_spans_the_full_range"
+note = "equilibrium only --- adequate to place last scattering, \\textbf{not} adequate for criterion 5b"
+
+[[equations]]
+key = "visibility"
+quantity = "$\\mathcal V(k,\\eta)\\simeq\\kappa' e^{-\\kappa}$"
+source = "AnnalsII"
+equation = "\\S5.2"
+module = "functions.spectra.decoupling"
+object = "RecombinationHistory"
+test = "test_the_visibility_is_a_normalised_probability_density"
+note = "probability of last scattering in $d\\eta$; $\\int\\mathcal V\\,d\\eta=1$ is checked, not assumed"
+
+[[equations]]
+key = "damping_factor"
+quantity = "$\\mathcal D(\\eta_0,k)=\\int d\\eta\\,\\mathcal V e^{-(k/k_D)^2}\\simeq e^{-(k/k_D)^2}$"
+source = "AnnalsII"
+equation = "(101), \\S5.2"
+module = "functions.spectra.decoupling"
+object = "RecombinationHistory"
+test = "test_the_visibility_is_a_normalised_probability_density"
+note = "the approximation holds \\emph{because} $\\mathcal V$ is normalised"
+
+[[equations]]
+key = "slow_decoupling_two_weights"
+quantity = "the integral solution with $e^{-\\kappa}$ on gravitational and $\\kappa'e^{-\\kappa}$ on scattering sources"
+source = "AnnalsII"
+equation = "(98), \\S5"
+module = "functions.spectra.decoupling"
+object = "Weighting"
+test = "test_the_two_weightings_are_distinct_objects"
+note = "both weights are the antecedent's own; see \\texttt{provenance/SOURCE-APPROXIMATIONS-v1.md}, \\textbf{A-1}"
+
+[[equations]]
+key = "slow_decoupling_visibility"
+quantity = "the same solution with both weights replaced by $\\mathcal V$"
+source = "AnnalsII"
+equation = "(102), \\S5"
+module = "functions.spectra.decoupling"
+object = "Weighting"
+test = "test_the_visibility_weighting_cannot_carry_a_late_isw"
+note = "a \\textbf{deliberate} slow-decoupling approximation, stated in the text. It cannot carry a late-ISW --- \\textbf{A-1}, not a finding"
+
+[[equations]]
+key = "diffusion_scale"
+quantity = "$\\gamma\\simeq\\frac{k^2}{6\\kappa'}\\frac{R^2+\\frac45(1+R)}{(1+R)^2}=k^2/k_D^2$"
+source = "AnnalsII"
+equation = "(168), \\S6"
+module = "functions.spectra.decoupling"
+object = "diffusion_scale"
+test = "test_damping_suppresses_small_scales_and_leaves_large_ones"
+note = "(168) prints the damping \\emph{rate}; $k_D$ is its accumulated integral, the Hu \\& Sugiyama form it cites"
+
+[[equations]]
+key = "c_coefficients"
+quantity = "$-C_0=\\tfrac52 a\\mathcal B_2$, $-C_1=\\tfrac1k(a\\mathcal B_1+\\kappa' v_B)$, $-C_2=\\tfrac1{k^2}a\\mathcal B_2$"
+source = "AnnalsII"
+equation = "(90), \\S5"
+module = ""
+object = ""
+test = ""
+note = "PENDING --- needed for criterion 2. $\\mathcal B_2=\\sigma_{ab}$ is rank 2, so the shear reaches $C_0$ and $C_2$ and \\textbf{not} $C_1$"
+
+[[equations]]
+key = "acoustic_pair"
+quantity = "$\\tilde\\tau_1' = -\\frac{R'}{1+R}\\tilde\\tau_1 - \\frac{k}{1+R}\\delta\\tilde T - k\\Phi_A$; $\\delta\\tilde T' = -aH\\Phi_A - \\Phi_H' + \\frac k3\\tilde\\tau_1$"
+source = "AnnalsII"
+equation = "(152), (153), \\S7.1"
+module = "functions.spectra.acoustic"
+object = "solve_acoustic"
+test = "test_the_pair_reduces_to_the_printed_oscillator_exactly"
+note = "the \\textbf{general} object; (154) is this pair with the expansion-coupled term dropped. Supplies $\\delta\\tilde T$ and $\\tilde\\tau_1$ to (177)--(179)"
+
+[[equations]]
+key = "acoustic_oscillator"
+quantity = "$\\delta\\tilde T'' + \\frac{R'}{1+R}\\delta\\tilde T' + k^2c_s^2\\delta\\tilde T = -\\Phi_H'' - \\frac{R'}{1+R}\\Phi_H' - \\frac{k^2}{3}\\Phi_A$"
+source = "AnnalsII"
+equation = "(154), \\S7.1"
+module = "functions.spectra.acoustic"
+object = "solve_acoustic"
+test = "test_the_pair_reduces_to_the_printed_oscillator_exactly"
+note = "recovered \\emph{symbolically} from (152)/(153); the residual is exactly the small-scale approximation the text names"
+
+[[equations]]
+key = "sound_speed"
+quantity = "$c_s^2 = 1/(3(1+R))$, $R=3\\rho_M/4\\rho_R$"
+source = "AnnalsII"
+equation = "\\S6"
+module = "functions.spectra.acoustic"
+object = "sound_speed_squared"
+test = "test_sound_speed_limits"
+note = "$\\Omega_\\gamma h^2$ is a \\textbf{standard} value, not one the antecedent supplies; it enters only here"
+
+[[equations]]
+key = "acoustic_solution"
+quantity = "$\\delta\\tilde T+\\Phi_A \\approx [\\delta\\tilde T(0)+(1+R)\\Phi_A]\\cos(kr_s) - R\\Phi_A$"
+source = "AnnalsII"
+equation = "(180), \\S7.1.2"
+module = "functions.spectra.acoustic"
+object = "sachs_wolfe_at_last_scattering"
+test = "test_the_integration_converges_to_the_closed_form_180_as_r_is_held_constant"
+note = "the \\textbf{constant-}$R$ solution; the integration converges to it as $R$ is held constant, which is why the pair is integrated instead"
+
+[[equations]]
+key = "sachs_wolfe_last_scattering"
+quantity = "$[\\delta\\tilde T+\\Phi_A](\\eta_*) \\approx \\tfrac13\\Phi_A(0)(1+3R_*)\\cos(kr_s^*) - R_*\\Phi_A(0)$"
+source = "AnnalsII"
+equation = "(181), \\S7.1.2"
+module = "functions.spectra.acoustic"
+object = "sachs_wolfe_at_last_scattering"
+test = "test_b8_equation_181_sign_is_fixed_by_its_own_limit"
+note = "\\textbf{finding B-8}: printed with $+R_*$, which contradicts (180) and its own $r_s^*\\to0$ limit. Corrected silently; (196) descends from this"
 
 [[equations]]
 key = "integral_solution"
@@ -247,38 +411,38 @@ source = "AnnalsII"
 equation = "(179), \\S7.1.1"
 module = "functions.spectra.sources"
 object = "source_integrated"
-test = "test_g6_is_not_a_no_op"
-note = "the sign of the second term is \\textbf{finding G6}, carried as a switch and open"
+test = "test_b6_sign_alternative_is_not_a_no_op"
+note = "the sign of the second term is \\textbf{finding B-6}, carried as a switch and open"
 
 [[equations]]
 key = "cl_mode_route"
 quantity = "$C_\\ell = \\frac{2}{\\pi}\\frac{\\beta_\\ell^2}{(2\\ell+1)^2}\\int \\frac{dk}{k}k^3|\\tau_\\ell|^2$"
 source = "AnnalsII"
 equation = "(186), p. 368"
-module = ""
-object = ""
-test = "test_mode_route_and_covariant_route_to_cl_are_identical"
-note = "PENDING implementation --- \\textbf{the v1.0.0 target}. Prefactor identity already asserted"
+module = "functions.spectra.angular"
+object = "cl_mode_route"
+test = "test_the_harmonic_normalisation_cancels_out_of_186_exactly"
+note = "\\textbf{the v1.0.0 target}. With (176)'s $\\alpha_\\ell^{-1}\\tau_\\ell$ the prefactor is \\emph{exactly} 1"
 
 [[equations]]
 key = "cl_multipole_meansquare"
 quantity = "$\\langle\\tau_{A_\\ell}\\tau^{A_\\ell}\\rangle = \\frac{\\beta_\\ell}{2\\pi^2}\\int k^2dk|\\tau_\\ell|^2$"
 source = "AnnalsII"
 equation = "(187), p. 368"
-module = ""
-object = ""
-test = "test_mode_route_and_covariant_route_to_cl_are_identical"
-note = "PENDING implementation --- the covariant route, not attainable in the canonical treatment"
+module = "functions.spectra.angular"
+object = "multipole_mean_square"
+test = "test_188_is_delta_over_2l_plus_1_times_187"
+note = "the covariant route, not attainable in the canonical treatment. Holds for general geometries where the mode mean-square does not"
 
 [[equations]]
 key = "cl_covariant_route"
 quantity = "$C_\\ell = \\Delta_\\ell(2\\ell+1)^{-1}\\langle\\tau_{A_\\ell}\\tau^{A_\\ell}\\rangle$"
 source = "AnnalsII"
 equation = "(188), p. 368"
-module = ""
-object = ""
-test = "test_mode_route_and_covariant_route_to_cl_are_identical"
-note = "PENDING implementation --- identical to (186); proven exactly"
+module = "functions.spectra.angular"
+object = "cl_covariant_route"
+test = "test_the_two_routes_agree_to_machine_precision_on_real_input"
+note = "identical to (186), proven exactly and now computed both ways: $\\Delta_\\ell = 4\\pi\\beta_\\ell/(2\\ell+1)$"
 
 [[equations]]
 key = "cl_sachs_wolfe"
@@ -297,8 +461,8 @@ source = "AnnalsII"
 equation = "(200), (201), p. 372"
 module = "functions.spectra.sachs_wolfe"
 object = "cl_large_scale_reduced"
-test = "test_g5_printed_201_is_short_by_the_comoving_distance"
-note = "finding \\textbf{G5}: the printed (201) omits the factor $\\chi$ from the reduction"
+test = "test_b5_printed_201_is_short_by_the_comoving_distance"
+note = "finding \\textbf{B-5}: the printed (201) omits the factor $\\chi$ from the reduction"
 
 [[equations]]
 key = "fftlog_kernel"
@@ -308,7 +472,7 @@ equation = "(199), p. 372, corrected"
 module = "functions.spectra.kernels"
 object = "bessel_square_kernel"
 test = "test_complex_kernel_reduces_to_the_real_identity"
-note = "G3 corrected makes it usable as a transform kernel, not only a spot formula"
+note = "B-3 corrected makes it usable as a transform kernel, not only a spot formula"
 
 [[equations]]
 key = "fftlog_primary"
@@ -329,26 +493,6 @@ module = "functions.spectra.bessel_table"
 object = "line_of_sight"
 test = "test_line_of_sight_matches_direct_evaluation"
 note = "route 3's tabulated half: two distinct Bessel arguments, so no closed form"
-
-[[equations]]
-key = "source_split"
-quantity = "$S_P$, $S_{\\rm DISW}$, $S_{\\rm ISW}$ --- the temperature source split"
-source = "AnnalsII"
-equation = "(177), (178), (179), p. 366"
-module = ""
-object = ""
-test = ""
-note = "PENDING --- figure F5"
-
-[[equations]]
-key = "integral_solution"
-quantity = "integral solution, $\\beta_\\ell\\tau_\\ell(\\eta_0)/(2\\ell+1)$ projected through $j_\\ell$"
-source = "AnnalsII"
-equation = "(176), p. 365"
-module = ""
-object = ""
-test = ""
-note = "PENDING --- figures F3, F5"
 
 [[equations]]
 key = "truncation"
@@ -464,7 +608,7 @@ note = ""
 symbol = "$\\tilde\\delta_T$"
 code = "delta_T"
 meaning = "covariant temperature perturbation"
-note = "threading-dependent; $\\tilde\\delta_T+3\\Phi_A$ is the combination in dispute (G6)"
+note = "threading-dependent; $\\tilde\\delta_T+3\\Phi_A$ is the combination in dispute (B-6)"
 
 [[notation]]
 symbol = "$\\tilde\\tau_1$"
@@ -603,3 +747,84 @@ symbol = "$\\Theta_\\ell$"
 code = "---"
 meaning = "Hu \\& Sugiyama's multipole variable"
 note = "$\\beta$-normalised"
+
+# --- conventions ---------------------------------------------------------------
+# How each treatment in the foundational literature writes the same hierarchy,
+# and how this bundle checked it. Generated into the supplement as the
+# convention-translation table, so it cannot drift from the code.
+#
+# `phase` is the distinction finding B-1 and acceptance criterion 3 are about:
+# the two conventions are related by tau_l -> c^l tau_l with c^2 = -1, and
+# nothing else. `applied` is the transformation this bundle applied before
+# comparing --- "none" where none was applied, which is a CHOICE and is why Q1
+# was reopened.
+
+[[conventions]]
+source = "AnnalsII"
+where = "(F.1), Appendix F"
+variable = "$\\tau_\\ell$"
+weights = "$\\frac{(\\ell+1)^2}{(2\\ell+3)(2\\ell+1)}$ on $\\tau_{\\ell+1}$, $1$ on $\\tau_{\\ell-1}$"
+phase = "covariant; $Q_{A_\\ell}=(-k_{\\rm phys})^{-\\ell}\\mathrm D_{\\langle A_\\ell\\rangle}Q$"
+applied = "---, this is the reference"
+checked = "arithmetic on $\\beta_\\ell$ alone; no representation introduced"
+test = "test_beta_recursion_at_general_ell"
+
+[[conventions]]
+source = "AnnalsII"
+where = "(F.3), Appendix F"
+variable = "$\\beta_\\ell\\tau_\\ell$"
+weights = "$\\frac{\\ell}{2\\ell-1}$, $\\frac{\\ell+1}{2\\ell+3}$"
+phase = "real, opposite-sign bracket"
+applied = "none"
+checked = "(F.1)$\\to$(F.3) by multiplying through by $\\beta_\\ell$, as exact rationals"
+test = "test_beta_recursion_at_general_ell"
+
+[[conventions]]
+source = "AnnalsII"
+where = "(F.4), Appendix F"
+variable = "$\\alpha_\\ell^{-1}\\tau_\\ell$"
+weights = "$\\frac{\\ell}{2\\ell+1}$, $\\frac{\\ell+1}{2\\ell+1}$"
+phase = "real, opposite-sign bracket"
+applied = "the $(2\\ell+1)^{-1}$ the prose states and the display omits"
+checked = "\\textbf{finding B-2}: printed (F.4) is not yet in the Ma \\& Bertschinger form"
+test = "test_printed_f4_is_not_the_ma_bertschinger_form"
+
+[[conventions]]
+source = "HS"
+where = "Eq. (6), p. 2601"
+variable = "$\\Theta_\\ell$"
+weights = "$\\frac{\\ell}{2\\ell-1}$, $\\frac{\\ell+1}{2\\ell+3}$"
+phase = "real, opposite-sign bracket"
+applied = "none --- \\emph{a choice}, see Q1"
+checked = "integrated as printed from its own paper, never through Appendix F"
+test = "test_external_hierarchies_match_the_bundle_at_machine_precision"
+
+[[conventions]]
+source = "WI"
+where = "Eq. (8), p. 4"
+variable = "$\\delta_\\ell$"
+weights = "$\\frac{\\ell}{2\\ell-1}$, $\\frac{\\ell+1}{2\\ell+3}$"
+phase = "\\textbf{imaginary}; both bracket terms $+$ under an overall $-ikT$"
+applied = "$\\Theta_\\ell=i^\\ell\\delta_\\ell$ --- \\textbf{fixed by the antecedent}, which states the $i^{-\\ell}$ itself"
+checked = "integrated \\emph{complex and as printed}; the phase removed only afterwards, and the result asserted real to $10^{-10}$ separately from that it agrees"
+test = "test_wilson_reproduces_the_bundle_and_tests_the_phase_convention"
+
+[[conventions]]
+source = "MB"
+where = "Eqs. (49), (50)"
+variable = "$F_{\\nu\\ell}$"
+weights = "$\\frac{\\ell}{2\\ell+1}$, $\\frac{\\ell+1}{2\\ell+1}$"
+phase = "real, opposite-sign bracket"
+applied = "none --- \\emph{a choice}, see Q1"
+checked = "integrated as printed from its own paper; synchronous and conformal Newtonian gauges"
+test = "test_external_hierarchies_match_the_bundle_at_machine_precision"
+
+[[conventions]]
+source = "SZ"
+where = "Eq. (3d)"
+variable = "$\\Delta_{T\\ell}$"
+weights = "$\\frac{\\ell}{2\\ell+1}$, $\\frac{\\ell+1}{2\\ell+1}$"
+phase = "real, opposite-sign bracket"
+applied = "none --- \\emph{a choice}, see Q1"
+checked = "integrated as printed; also the method CMBFAST implements, cited for criterion 5b"
+test = "test_external_hierarchies_match_the_bundle_at_machine_precision"

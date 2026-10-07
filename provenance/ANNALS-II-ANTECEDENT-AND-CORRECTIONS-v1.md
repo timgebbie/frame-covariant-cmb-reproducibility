@@ -30,7 +30,7 @@ resolved from the published PDF.
 
 ---
 
-## G1 — Annals I prints $(-1)^\ell$ where its own definition gives $i^\ell$
+## B-1 — Annals I prints $(-1)^\ell$ where its own definition gives $i^\ell$
 
 **Class: typographical, inconsequential.** Carried forward from the conventions
 gate as the model entry.
@@ -72,7 +72,7 @@ basis. Both statements are asserted executably in
 
 ---
 
-## G2 — Annals II (F.4) is not in the form it is immediately identified with
+## B-2 — Annals II (F.4) is not in the form it is immediately identified with
 
 **Class: typographical for the physics; material for the test harness.**
 **Found 2026-10-05, before any code was written, by reading Appendix F against
@@ -122,7 +122,7 @@ Recorded so that later sessions do not re-derive them.
 |---|---|---|
 | (F.1) → (F.2), multiplication through by $\beta_\ell$ | $\beta_\ell = \ell/(2\ell-1)\,\beta_{\ell-1}$ and $\beta_{\ell+1} = (\ell+1)/(2\ell+1)\,\beta_\ell$ | exact, both terms |
 | (F.2) → (F.3), proper to conformal time | $dt = a\,d\eta$ | exact |
-| (F.3) → (F.4), substitution of $\beta_\ell=\alpha_\ell^{-1}(2\ell+1)$ | — | exact; see G2 for the form question |
+| (F.3) → (F.4), substitution of $\beta_\ell=\alpha_\ell^{-1}(2\ell+1)$ | — | exact; see B-2 for the form question |
 | (F.1) weight $(\ell+1)^2/\big[(2\ell+3)(2\ell+1)\big]$ | the mode-recursion weight $\ell^2/\big[(2\ell+1)(2\ell-1)\big]$ at $\ell\to\ell+1$ | exact — the hierarchy is the adjoint of the mode recursion |
 
 ---
@@ -143,7 +143,7 @@ $\tau_\ell$ and $\tau_{A_\ell}$.
 
 ---
 
-## G3 — Annals II (199) is correct only at even $m$; (204) and (205) inherit a 12.8% error
+## B-3 — Annals II (199) is correct only at even $m$; (204) and (205) inherit a 12.8% error
 
 **Class: material.** **Found 2026-10-05, before the solver was written, while
 deriving the $\ell$ range for the release's tolerance.**
@@ -236,7 +236,7 @@ So a correction is now surfaced in three places and no more:
 
 This supersedes the earlier instruction that a **material** finding be raised to
 the paper stream before anything is built on it. It is no longer a gate; the
-footnote and this record are the mechanism. **G3 is therefore corrected silently
+footnote and this record are the mechanism. **B-3 is therefore corrected silently
 with a footnote**, not raised as a blocker. A finding that would change a sign, an
 $\ell$-weight, or an acceptance criterion is still raised, because that changes
 what the bundle is testing rather than what it prints.
@@ -254,13 +254,13 @@ entry above.
 
 | Footnote | Resolves to | Appears in |
 |---|---|---|
-| †1 | **G2** — (F.4) requires the $(2\ell+1)^{-1}$ division its prose specifies before it is in the Ma & Bertschinger form | F1 caption; supplement §Acceptance spine |
-| †2 | **G3** — (199) requires $[(m/2)!]^2$; (201) is unaffected, (204) and (205) are not | supplement §Comparison; `diagnostics/ell-range-v1.0.0.txt` |
-| †3 | **G1** — the $(-1)^\ell$ / $i^\ell$ slip in Annals I, inconsequential for the covariant multipole | supplement §Conventions |
+| †1 | **B-2** — (F.4) requires the $(2\ell+1)^{-1}$ division its prose specifies before it is in the Ma & Bertschinger form | F1 caption; supplement §Acceptance spine |
+| †2 | **B-3** — (199) requires $[(m/2)!]^2$; (201) is unaffected, (204) and (205) are not | supplement §Comparison; `diagnostics/ell-range-v1.0.0.txt` |
+| †3 | **B-1** — the $(-1)^\ell$ / $i^\ell$ slip in Annals I, inconsequential for the covariant multipole | supplement §Conventions |
 
 ---
 
-## G4 — Appendix F's Wilson citation names one paper and keys another
+## B-4 — Appendix F's Wilson citation names one paper and keys another
 
 **Class: typographical, but consequential for verification.**
 **Found 2026-10-05, while assembling the external sources for figure F1.**
@@ -289,7 +289,7 @@ but *likely* is not a verification and this bundle does not guess a citation.
 **Why it is logged rather than silently fixed.** A reader checking the acceptance
 spine against the named source would open the wrong paper and find no Eq. (7)
 matching — and would reasonably conclude the reconstruction was wrong. The same
-class as **G2**: harmless to the physics, costly to anyone verifying.
+class as **B-2**: harmless to the physics, costly to anyone verifying.
 
 **Consequence for F1.** Already recorded under Q4: the figure ships with the three
 hierarchies that can be sourced independently, and the Wilson panel waits on a
@@ -310,7 +310,7 @@ Recorded so that no later session counts a coefficient twice (§3a).
 | **[56]** | Ma & Bertschinger, *ApJ* **455** (1995), 7 | **not yet read from source.** An HTML render returned a paraphrase, not the displayed equation. A paraphrase is not a reading |
 | **[39]** | Hu & Sugiyama, *ApJ* **444** (1995), 489 | not yet read |
 | **[40]** | Hu & Sugiyama, *Phys. Rev. D* **51** (1995), 2599 | not yet read |
-| **[81]/[82]** | Wilson (1983) / Wilson & Silk (1981) | pre-arXiv; and see **G4** — which one is cited is itself unresolved |
+| **[81]/[82]** | Wilson (1983) / Wilson & Silk (1981) | pre-arXiv; and see **B-4** — which one is cited is itself unresolved |
 
 **Equation numbers must be recorded with their edition.** Annals II cites Ma &
 Bertschinger's *published* (49)/(50). An arXiv copy may number differently, and
@@ -349,7 +349,7 @@ break at least one of the two.
 
 - The mode equation attributed to "Hu and Sugiyama [39, 40]" is in **[40]**, the
   *Physical Review D* paper. It was not located in **[39]**, *Astrophys. J.* **444**
-  (1995), 489, which works from the integral solution. Same class as **G4**: a
+  (1995), 489, which works from the integral solution. Same class as **B-4**: a
   reader following [39] alone does not find it.
 - **MB's arXiv copy numbers its hierarchy (49) and (50)** — the same numbers
   Annals II cites from the published paper. No offset here, unlike the Annals I
@@ -359,12 +359,12 @@ break at least one of the two.
 **Scattering terms dropped.** HS's $-\dot\tau\Theta_\ell$ and SZ's
 $-\dot\kappa\Delta_{T\ell}$ are Thomson scattering, not free streaming.
 
-**Wilson remains unread** — pre-arXiv, and **G4** leaves it ambiguous which paper
+**Wilson remains unread** — pre-arXiv, and **B-4** leaves it ambiguous which paper
 is meant. The release states **three** external hierarchies, not four.
 
 ---
 
-## G4 — supporting evidence, 2026-10-05. Still open
+## B-4 — supporting evidence, 2026-10-05. Still open
 
 The thesis chapter whose published form is *Annals I* opens by stating that the
 angular correlation functions are obtained *"following the Wilson-Silk approach
@@ -377,12 +377,12 @@ than as a naming slip for `[81]`, Wilson (1983).
 
 **This is supporting evidence, not a verification.** Resolving the citation still
 requires Eq. (7) of the paper itself, and this bundle does not settle a citation
-by inference. **G4 remains open**, and the release continues to state three
+by inference. **B-4 remains open**, and the release continues to state three
 external hierarchies rather than four.
 
 ---
 
-## G5 — Annals II (201) omits the comoving distance from the reduction
+## B-5 — Annals II (201) omits the comoving distance from the reduction
 
 **Class: material, and it moves an acceptance criterion — therefore RAISED, not
 footnoted.** Found 2026-10-05 while building the Sachs–Wolfe spectrum.
@@ -420,7 +420,7 @@ against $\Delta\eta_*=1.939725/H_0$ for the flat matter-dominated background at
 $z_*=1100$. The ratio is the distance, at every multipole, to six figures.
 
 **Note that (199) is not at fault here.** At $m=2$ the printed identity is exact,
-because $\Gamma(2)=1$ — that is finding **G3**. G5 is independent of G3: a factor
+because $\Gamma(2)=1$ — that is finding **B-3**. B-5 is independent of B-3: a factor
 dropped between (200) and (201), not an error in the identity used to get there.
 
 **What moves.** (201) sets the large-scale CDM normalisation. Normalising the
@@ -442,9 +442,9 @@ analytic level: the quadrature and the reduction agree to $10^{-5}$.
 
 ---
 
-## G5 — confirmed independently, 2026-10-05
+## B-5 — confirmed independently, 2026-10-05
 
-The obvious objection to G5 is that $\chi$ might be absorbed into the
+The obvious objection to B-5 is that $\chi$ might be absorbed into the
 normalisation of $A$, in which case "correcting" (201) would introduce an error
 rather than remove one. **It is not.** The companion equation settles it.
 
@@ -465,12 +465,12 @@ differ by one power of $k$ — not by a units convention in which $\chi=1$.** If
 $\chi$ were being set to unity it would have to be absent from both reductions,
 and it is not.
 
-**G5 therefore stands.** The printed (201) omits one factor of the comoving
+**B-5 therefore stands.** The printed (201) omits one factor of the comoving
 distance.
 
 ---
 
-## G6 — the thesis abstract and Annals II disagree on a sign in the ISW source (179)
+## B-6 — the thesis abstract and Annals II disagree on a sign in the ISW source (179)
 
 **Status: open. Implemented with the published sign and a switch. Not blocking.**
 
@@ -520,9 +520,455 @@ available once the $k$-integral of (176) runs end to end:
 
 Discriminator 1 is cheap and comes with the v1.0.0 deliverable. Discriminator 2
 arrives with the generic-$u^a$ machinery already scheduled for figures F5 and
-F7. **G6 is therefore scheduled to close inside v1.0.0, not deferred past it**,
+F7. **B-6 is therefore scheduled to close inside v1.0.0, not deferred past it**,
 and it is recorded here now so that the default is on the record before the
 number it affects is published.
 
 **No correction is made yet.** Correcting silently requires knowing which way;
 here the bundle does not yet, and says so.
+
+---
+
+## B-7 — Annals II (G.3) prints $+\tfrac23\Theta^2$ in the Gauss constraint
+
+**Status: confirmed misprint. The bundle does not inherit it, by construction.**
+
+Appendix G. The $1+3$ Gauss constraint is printed with $+\tfrac23\Theta^2$ where
+thesis Ch. 2 and the Cargèse lectures Eq. (55) both carry $-\tfrac23\Theta^2$.
+
+**Raised by Coordination via P1-T, 2026-10-06, with an independent FLRW-limit
+derivation. Confirmed here symbolically.** With shear and vorticity switched off,
+
+$${}^3R = 2\mu + 2\Lambda - \tfrac23\Theta^2,$$
+
+and substituting ${}^3R=6K/a^2$, $\Theta=3H$ gives
+
+$$H^2=\frac{\mu+\Lambda}{3}-\frac{K}{a^2},$$
+
+the Friedmann equation. The printed sign gives instead
+
+$$H^2=\frac{K}{a^2}-\frac{\mu+\Lambda}{3},$$
+
+which in the **flat** case is $-(\mu+\Lambda)/3$ — negative for any positive
+energy density, so there is no solution. The flat case settles it on its own,
+without reference to $K$.
+
+*One note on the algebra, for the record rather than as a correction of
+substance.* Coordination's intermediate form was $H^2=-(\mu+\Lambda)/3-K/a^2$;
+in the convention used here, ${}^3R=+6K/a^2$ for a closed spatial section, the
+curvature term comes out $+K/a^2$. The verdict is identical and does not depend
+on it.
+
+**Why the bundle is not exposed.** `functions/background/flrw.py` derives the
+expansion law from the covariant energy constraint rather than transcribing
+(G.3), which was a decision taken for independence and not in anticipation of
+this finding. The corrected sign is therefore what the code already carries. It
+is now **pinned**, so that a later well-meaning edit towards the printed equation
+fails a test rather than quietly changing the background:
+`tests/test_background.py::test_the_gauss_constraint_sign_is_the_corrected_one_and_the_printed_one_has_no_solution`,
+with a numerical companion that evaluates the same identity through the code that
+actually runs.
+
+**This is the general case, not a lucky one.** B-7 is the third finding (with B-1
+and B-6) in which an independently derived quantity disagrees with a printed one.
+Deriving rather than transcribing is what makes the reconstruction an audit; a
+port would have inherited every one of them silently.
+
+---
+
+## B-4 — closed, 2026-10-06. A mis-named citation, not an ambiguous one
+
+**Status: closed. Misprint in the prose; the key is correct.**
+
+Appendix F, after (F.3), reads:
+
+> "This can be immediately seen to be the same mode equation for $\ell>2$ as in
+> Hu & Sugiyama [HS95a] and **Wilson & Silk** [W83] (eqn 7)."
+
+Resolved against the accepted manuscript source. **Both papers are in Annals II's
+own bibliography, under different keys**:
+
+| key | entry |
+|---|---|
+| `W83` | M. L. Wilson, *Ap. J.* **273**, 2 (1983) — **one author** |
+| `WS` | M. L. Wilson and J. Silk, *Ap. J.* **243**, 14 (1981) — two authors |
+
+So the text names the 1981 two-author paper while the key points at the 1983
+single-author one. **The key is right and the prose is wrong**, on the evidence
+of usage: `W83` is cited at eleven places throughout the paper, including every
+other reference to this hierarchy, while `WS` is cited exactly once, in the
+introduction. Coordination reached the same conclusion independently and adds
+that the 1983 paper is paper II, treating negative spatial curvature, and is the
+one whose Eq. (7) carries the $\ell>2$ free-streaming mode equation.
+
+**What this changes.** Nothing in the code: the release states three external
+hierarchies and reproduces three. What it removes is the *reason* B-4 was open —
+there is no longer a question of which paper is meant, and **no library copy is
+needed**. ApJ of that vintage is openly readable through NASA ADS, bibcode
+`1983ApJ...273....2W`.
+
+**One item does not close with it.** The paper's *title* is not recorded here.
+Volume, page and year are confirmed from Annals II's own bibliography; the title
+is not, and web access is not available from this environment, so it is left to
+be supplied from the ADS record rather than written from memory. It is needed
+only if Wilson is ever added as a fourth external check.
+
+---
+
+## B-7 — confirmed verbatim against the accepted manuscript, 2026-10-06
+
+B-7 was recorded on Coordination's report plus a symbolic derivation. It is now
+confirmed against the source itself. Appendix G reads:
+
+```latex
+The almost-Friedmann-Lema\^{\i}tre Gauss-Codacci relation (Hamiltonian
+constraint) is
+\begin{equation}
+^3 R \simeq 2 \rho + \frac23 \Theta^2\;.
+\label{h-constraint}
+\end{equation}
+```
+
+The label `h-constraint` generates **(G.3)**. The sign is `+\frac23 \Theta^2` as
+reported. Note also that no $\Lambda$ appears in the printed constraint, so the
+corrected form in the paper's own notation is ${}^3R \simeq 2\rho -
+\tfrac23\Theta^2$, reducing to $H^2=\rho/3-K/a^2$. **B-7 stands, now on primary
+evidence rather than on report.**
+
+---
+
+## B-2 and B-3 — confirmed verbatim against the accepted manuscript, 2026-10-06
+
+**B-2.** Appendix F, immediately before (F.4), reads "(on first multiplying
+through by $(2\ell+1)^{-1}$)", and the display that follows carries
+$-(2\ell+1)(\alpha_\ell^{-1}\tau_\ell)'$ on the left — the division is stated in
+the prose and absent from the display. Exactly as recorded.
+
+**B-3.** (199) is printed as
+
+```latex
+\int_0^{\infty} {dz \over z^m} j_{\ell}^2 (z) = {\pi \over 2^{m+2}}
+{m! \over (m/2)!}{ (\ell - \frac{m}{2} - \frac{1}{2} )! \over
+(\ell + \frac{m}{2} + \frac{1}{2})!}
+```
+
+— a **single** $(m/2)!$ in the denominator where the identity requires
+$[(m/2)!]^2$. Exactly as recorded.
+
+Both findings were derived by reimplementation before the source was available.
+That they survive contact with it is the point of the method.
+
+---
+
+## B-6 — CLOSED, 2026-10-06. The published sign is derived and correct
+
+**Status: closed. The thesis abstract carries the misprint, not Annals II.**
+
+B-6 was recorded as unresolvable by reading, needing a derivation. It needed no
+external derivation: **Annals II derives it itself**, in §5, and the chain
+survives checking. Resolved against the accepted manuscript.
+
+**The chain, with the paper's own equation numbers.**
+
+(106) defines the mode coefficient in the Newtonian frame:
+
+$$\tilde{\mathcal B}_1 \approx \frac{k}{a}\big(\delta\tilde T + \Phi_A\big)
+\qquad\Longrightarrow\qquad \frac{a\tilde{\mathcal B}_1}{k}=\delta\tilde T+\Phi_A$$
+
+(107) gives its conformal-time derivative:
+
+$$(a\tilde{\mathcal B}_1)' \approx -a^2H\tilde{\mathcal B}_1
++ k(\Phi_A'-\Phi_H') - 2Hak\Phi_A + \tfrac13k^2\tilde\tau_1$$
+
+(108) and (109) connect it to the integral-solution coefficient:
+
+$$-\tilde C_1' - (\kappa'\tilde v_B)' \approx +\tfrac1k(a\tilde{\mathcal B}_1)',
+\qquad
+-\tilde C_1 \approx \kappa'\tilde v_B + (\delta\tilde T+\Phi_A)$$
+
+Dividing (107) by $k$ and substituting (106) into its **first** term,
+
+$$-\frac{a^2H\tilde{\mathcal B}_1}{k}
+= -aH\left(\frac{a\tilde{\mathcal B}_1}{k}\right)
+= -aH\big(\delta\tilde T+\Phi_A\big),$$
+
+so (110) reads
+
+$$-\tilde C_1' \approx (\kappa'\tilde v_B)' + \tfrac13k\tilde\tau_1
++ (\Phi_A'-\Phi_H') \underbrace{- aH(\delta\tilde T+\Phi_A) - 2aH\Phi_A}
+_{=\;-aH(\delta\tilde T+3\Phi_A)}$$
+
+and the factor of 3 is $1+2$, exactly as (111) and hence (179) print it.
+
+**Why the sign cannot be a misprint in Annals II.** It is *doubly sourced*. The
+$-aH(\delta\tilde T+\Phi_A)$ comes from the $-a^2H\tilde{\mathcal B}_1$ term that
+the conversion to conformal time produces; the $-2aH\Phi_A$ comes from a separate,
+explicitly printed term in (107). A plus sign in (179) would require both to flip
+independently, which no single typesetting slip does — and it would also break the
+$1+2=3$ that makes (111)'s coefficient come out right. **The published minus is
+correct; the thesis abstract is the misprint.**
+
+**One claim of this record's own is corrected.** B-6's first entry said the
+disputed term is "the entire integrated contribution" in a matter-dominated
+background. Arithmetically that holds — $\Phi'=0$ there, so the ISW proper
+vanishes — but it overstated the term's standing. Annals II's **(112)** drops it
+explicitly, along with the Doppler and baryon terms, as second order "both in
+terms of the scattering time and in the almost-Friedmann–Lemaître sense", in
+order to recover the canonical integral solution. So it is the entire *retained*
+integrated contribution at the order (176) keeps, and a term the antecedent
+itself discards one equation later. Both statements are true and only the pair is
+honest. Corrected here rather than quietly amended above.
+
+**What this changes in the code.** Nothing computes differently: the default was
+already `PUBLISHED_ISW_SIGN = -1.0`. The switch is **kept**, but it is now a
+control rather than an open question — a known-wrong alternative that must change
+the answer, which is the kind of thing `diagnostics/` exists for. Its test is
+retained and renamed in intent: it demonstrates that the settled sign matters,
+rather than that an unsettled one might.
+
+**With this, B-1–B-7 are all closed.**
+
+---
+
+## B-8 — Annals II (181) carries $+R_*\Phi_A$ where (180) gives $-R_*\Phi_A$
+
+**Status: confirmed misprint, corrected silently. Found 2026-10-06 by
+reimplementation, confirmed symbolically.**
+
+§7.1.2. (180) gives the acoustic solution at last scattering,
+
+$$\delta\tilde T(\eta,k)+\Phi_A(\eta_*,k)\approx\big[\delta\tilde T(0,k)+(1+R)
+\Phi_A(0,k)\big]\cos(kr_s)\;\mathbf{-}\;R\,\Phi_A(\eta_*,k)$$
+
+and (181), the same quantity after the adiabatic substitution
+$\delta\tilde T(0,k)\sim\tfrac13\Delta(0,k)\sim-\tfrac23\Phi_A(0,k)$ and
+$\Phi_A(\eta_*)\approx\Phi_A(0)$, prints
+
+$$[\delta\tilde T+\Phi_A](\eta_*,k)\approx+\tfrac13\Phi_A(0,k)(1+3R_*)
+\cos(kr^*_s)\;\mathbf{+}\;R_*\Phi_A(0,k)\;\sim\;\tfrac13\Phi_A(0,k).$$
+
+**The oscillating parts agree exactly; the constant terms differ by
+$2R_*\Phi_A$.** Substituting the adiabatic value into (180) gives
+$(\tfrac13+R_*)\Phi_A\cos(kr_s^*)-R_*\Phi_A$, whose oscillating coefficient is
+$\tfrac13(1+3R_*)\Phi_A$ — exactly (181)'s. So (181) is (180) with one sign
+flipped.
+
+**(181)'s own stated limit settles which is right.** The text takes
+$r_s^*\to0$, so $\cos\to1$:
+
+| | value at $\cos(kr_s^*)=1$ |
+|---|---|
+| as printed, $+R_*$ | $\tfrac13\Phi_A(1+6R_*)$ |
+| with $-R_*$ | $\tfrac13\Phi_A$ — **exactly** |
+
+The text asserts the result "$\sim\tfrac13\Phi_A(0,k)$". With the minus sign that
+is an identity requiring nothing further. With the plus it holds only if
+$R_*\to0$ as well, which is neither stated nor true at last scattering
+($R_*\sim0.6$ for the §8.3.2 parameters). **The minus is correct**, and it is
+also the form Hu & Sugiyama print.
+
+**Size.** Taken literally the printed (181) overstates the amplitude by
+$1+6R_*\approx4.6$, hence $C_\ell$ by a factor of order twenty. It did not
+propagate: the text's own next step uses $\tfrac13\Phi_A$, which is the corrected
+value, and (196) descends from that. So the printed chain is self-correcting
+downstream and **no published number moves**.
+
+**Why it is recorded anyway.** Anyone reimplementing (181) as printed — which is
+what this bundle set out to do — gets a normalisation wrong by a factor of
+twenty with no indication that anything is amiss, because the result is smooth
+and plausible. That is precisely the failure mode this reconstruction exists to
+expose. Corrected silently, marked by one footnote, with the forensics here.
+
+Asserted symbolically rather than numerically, so it cannot drift:
+`tests/test_acoustic.py::test_b8_equation_181_sign_is_fixed_by_its_own_limit`.
+
+---
+
+## B-4 — the Wilson reference, resolved further, 2026-10-06
+
+Coordination supplied the ADS bibcode and noted that reading Wilson's Eq. (7)
+*directly* would make it a genuine fourth source, where quoting it through
+Appendix F would not — which is this bundle's own rule applied correctly.
+
+**The scanned paper is reachable.** `articles.adsabs.harvard.edu/pdf/
+1983ApJ...273....2W` serves it, where the `ui.adsabs.harvard.edu` record does
+not. The **title is confirmed** and can go into the `.bib`:
+
+> M. L. Wilson, *"On the Anisotropy of the Cosmological Background Matter and
+> Radiation Distribution. II. The Radiation Anisotropy in Models with Negative
+> Spatial Curvature,"* **Ap. J. 273**, 2 (1983).
+
+Coordination's description — paper II, negative spatial curvature — is confirmed
+by the title itself.
+
+**Equation (7) is not transcribable from here.** It is on p. 3, and the OCR of
+the 1983 scan returns it as
+
+```
+Ó₂ = -Töneσ_T Ó₂ - íH - ikT[δ₀ + 1(1 - 3K/k²)δ₃]
+```
+
+with the following line, the $\ell>2$ case, as
+
+```
+I > 2, ôt= — neffTá, — ikT I ¿I-! + /+ 1 (2/- 1 '',_1' 2/ + 3
+```
+
+That second line *appears* to be $\dot\delta_\ell = -n_e\sigma_T\delta_\ell -
+ikT[\frac{\ell}{2\ell-1}\delta_{\ell-1} + \frac{\ell+1}{2\ell+3}\delta_{\ell+1}]$
+— the $\beta$ normalisation, which is what Annals II claims and what Hu &
+Sugiyama Eq. (6) carries.
+
+**It is not added as a fourth source on that basis, and the reason is the
+project's own rule.** Reading $(2\ell-1)$ and $(2\ell+3)$ out of `(2/- 1` and
+`2/ + 3` is not transcription; it is pattern-matching the garbled text against
+the hierarchy this bundle already has, which is reading the expected answer back
+out of noise. A fourth check obtained that way would be a *worse* failure than
+quoting through Appendix F, because it would look independent and not be.
+
+**What is needed:** a human-legible read of p. 3, Eq. (7). The PDF is openly
+available at the URL above; one person looking at it settles it in a minute.
+Until then the release continues to state **three** external hierarchies, which
+is accurate and blocks nothing. F1's fourth panel waits on that read.
+
+---
+
+## B-4 — CLOSED, 2026-10-06. Wilson read directly; F1 has its fourth panel
+
+The PI supplied the scanned paper. Both halves of B-4 are now settled from
+primary sources.
+
+**The citation.** Appendix F's prose names "Wilson & Silk" and keys `W83`, which
+the bibliography gives as **M. L. Wilson alone**, *Ap. J.* **273**, 2 (1983) —
+title confirmed from the paper itself:
+
+> *"On the Anisotropy of the Cosmological Background Matter and Radiation
+> Distribution. II. The Radiation Anisotropy in Models with Negative Spatial
+> Curvature."*
+
+Wilson & Silk is the earlier *Ap. J.* **243**, 14 (1981), paper I. **The key is
+right and the prose is wrong.**
+
+**Wilson is now a genuine fourth external hierarchy**, read from his own paper
+and not through Appendix F, and it is a *stronger* check than a fourth set of
+weights would have been. See B-9 for the equation number, and the note below for
+why the convention matters.
+
+---
+
+## B-9 — Annals II cites Wilson's Eq. (7); the $\ell>2$ hierarchy is his Eq. (8)
+
+**Status: confirmed misprint. Not load-bearing; recorded for the citation.**
+
+Appendix F: *"the same mode equation for $\ell>2$ as in Hu & Sugiyama [HS95a] and
+Wilson & Silk [W83] **(eqn 7)**."* Wilson's numbered equations on pp. 3–4 are
+
+| | |
+|---|---|
+| (5) | $\dot\delta_0 = -\tfrac13 ikT\delta_1 + \tfrac23\dot h$ |
+| (6) | $\dot\delta_1 = -n_e\sigma_T(\delta_1-4v) - ikT[\delta_0 + \tfrac25(1-3K/k^2)\delta_2]$ |
+| **(7)** | $\dot\delta_2 = -\tfrac9{10}n_e\sigma_T\delta_2 - \tfrac43\dot H - ikT[\tfrac25\delta_1 + \tfrac37(1-8K/k^2)\delta_3]$ |
+| **(8)** | $\ell>2$: $\dot\delta_\ell = -n_e\sigma_T\delta_\ell - ikT\left\{\dfrac{\ell}{2\ell-1}\delta_{\ell-1} + \dfrac{\ell+1}{2\ell+3}\left[1-\dfrac{\ell(\ell+2)K}{k^2}\right]\delta_{\ell+1}\right\}$ |
+
+(7) is the **quadrupole** equation, with its own $\tfrac9{10}n_e\sigma_T$,
+$-\tfrac43\dot H$ and the coefficients $\tfrac25$, $\tfrac37$. The $\ell>2$
+hierarchy Annals II describes is **(8)**. The citation points one equation early.
+
+**Why it matters only for the citation.** The physics Annals II attributes is
+genuinely in Wilson — it is simply at (8). Nothing downstream moves.
+
+---
+
+## Wilson as the fourth source — and why it is the strongest of the four
+
+Wilson's weights are $\ell/(2\ell-1)$ and $(\ell+1)/(2\ell+3)$: the **$\beta$**
+normalisation, the same as Hu & Sugiyama and therefore (F.3). The curvature
+factor $[1-\ell(\ell+2)K/k^2]$ is also Hu & Sugiyama's, and is unity at $K=0$.
+
+**But he writes it in a different convention**, and that is the interesting part.
+Both of his bracket terms carry a **plus**, under an overall $-ikT$, where Hu &
+Sugiyama carry opposite signs under a real $k$. The two are related by a phase:
+
+$$\Theta_\ell = i^\ell\delta_\ell$$
+
+turns the same-sign imaginary form into the opposite-sign real form, **exactly**.
+Substituting $\delta_\ell=(-i)^\ell\Theta_\ell$ into (8) at $K=0$ gives
+$\Theta_\ell' = k[\tfrac{\ell}{2\ell-1}\Theta_{\ell-1} -
+\tfrac{\ell+1}{2\ell+3}\Theta_{\ell+1}]$, which is Hu & Sugiyama Eq. (6)
+term for term.
+
+So Wilson is not a fourth instance of the same test. **He tests the phase
+convention** — the subject of finding B-1 and acceptance criterion 3 — from a
+source written before any of the others, in the convention Annals I's own
+definition implies. He is integrated **complex and as printed**, and the phase is
+removed only afterwards; transforming the equation first would assume the
+identity under test. That the result is real to $10^{-10}$ is a separate
+assertion from that it agrees.
+
+**Result: $3.1\times10^{-14}$** against a $10^{-11}$ threshold, overall scale
+exactly 1. F1 now carries four panels.
+
+Criterion 1 is restated: **four** external hierarchies, in two normalisations and
+two phase conventions, each read from its own paper.
+
+---
+
+## B-10 — Annals II (J.5) prints the transfer function with $+1/\nu$
+
+**Status: confirmed misprint, corrected silently. Load-bearing for the matter
+power spectrum. Found 2026-10-06 by reimplementation.**
+
+Appendix J. The Bond & Efstathiou parametrised transfer function is printed as
+
+$$T(k)=\Big[1+\big(ak+(bk)^{3/2}+(ck)^2\big)^{\nu}\Big]^{\mathbf{+}1/\nu}$$
+
+with $a=6.4\Gamma^{-1}$, $b=3.0\Gamma^{-1}$, $c=1.7\Gamma^{-1}$ (in $h^{-1}$ Mpc)
+and $\nu=1.13$. **The exponent should be $-1/\nu$.**
+
+**As printed it inverts the physics.** A transfer function *suppresses* small
+scales: modes entering the horizon during radiation domination stagnate, so
+$T\to0$ as $k\to\infty$. With $+1/\nu$ the bracket's $(ck)^{2\nu}$ term dominates
+and $T\to(ck)^2$, growing without bound:
+
+| $k$ [Mpc$^{-1}$] | 0.001 | 0.01 | 0.1 | 1 | 10 |
+|---|---|---|---|---|---|
+| as printed | 1.016 | 1.237 | 5.29 | $1.2\times10^{2}$ | $6.7\times10^{3}$ |
+| corrected | 0.985 | 0.808 | 0.189 | $8.2\times10^{-3}$ | $1.5\times10^{-4}$ |
+
+The two are exact reciprocals, which is the cleanest statement of the error.
+
+**Why the text's own check does not catch it.** Appendix J says "the transfer
+function $T(k)\sim+1$ on large scales", and that is true of *both* forms: as
+$k\to0$ the bracket tends to 1 and $1^{\pm1/\nu}=1$. The large-scale limit cannot
+distinguish them. Only the small-scale limit can, and only $-1/\nu$ gives the
+$k^{-2}$ falloff that the Bond & Efstathiou form is a fit *to* — verified here as
+a log-log slope of $-2.00\pm0.05$ over a decade where $(ck)^2$ dominates, rather
+than at a point.
+
+**Size.** Unbounded. There is no regime in which the printed form is usable for
+the matter power spectrum; $P(k)\propto T^2$ would rise as $k^4$ at high $k$.
+
+**Where it bites and where it does not.** §8.3.2's $C_\ell$ comparison sets
+$T=1$, so the printed (201)/(204) are untouched and **no published number
+moves**. It bites the moment the transfer function is actually used, which is
+what v1.0.0 does.
+
+Corrected silently; `transfer_function_printed` is kept so the difference is
+demonstrable, and `tests/test_transfer.py` asserts both the divergence and the
+reciprocal relation.
+
+---
+
+## A note on $\Gamma$, recorded as a parameter and not as a finding
+
+Appendix J says $\Gamma\simeq\Omega_0h$ and then, for $h=0.5$ and
+$\Omega_B=0.05$, states $\Gamma=0.48$. For that model $\Omega_0h=0.50$, so the
+stated value carries an unnamed baryon correction of about 4%. The standard
+corrections of that period, $\Gamma=\Omega_0h\exp[-\Omega_B(1+\sqrt{2h}/\Omega_0)]$,
+give $0.452$ — not $0.48$ either.
+
+**This is not recorded as a finding**, because the text says *approximately* and
+the $\Gamma$ convention genuinely varied between authors at the time. The
+bundle uses the paper's own $0.48$, and `ANNALS_II_GAMMA` carries the discrepancy
+in a comment with a test pinning it, so that nobody later "fixes" it to $0.5$ on
+the grounds that the text says $\Omega_0h$.

@@ -1,3 +1,3 @@
 source: C:\Users\01404122\Documents\Claude\NonlinearShear\docs\conventions.md
 sha256: 064a3b659cd95502d2cbd94b9c123c7312178c6143cb6f764b964b5deed7d68e
-generated: 2026-10-05
+generated: 2026-10-06

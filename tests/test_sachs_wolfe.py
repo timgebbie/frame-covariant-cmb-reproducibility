@@ -1,4 +1,4 @@
-"""The Sachs-Wolfe spectrum of Annals II §8.3, and finding G5.
+"""The Sachs-Wolfe spectrum of Annals II §8.3, and finding B-5.
 
 Convention imported: none. Arithmetic and quadrature on the printed equations.
 """
@@ -47,8 +47,8 @@ def test_the_analytic_reduction_matches_the_quadrature():
         assert abs(r / q - 1) < 1e-5, ell
 
 
-def test_g5_printed_201_is_short_by_the_comoving_distance():
-    """Finding G5. (201) as printed omits the factor chi from the reduction.
+def test_b5_printed_201_is_short_by_the_comoving_distance():
+    """Finding B-5. (201) as printed omits the factor chi from the reduction.
 
     Substituting z = k chi into (200) gives Int dk k^{n-3} j_l^2(k chi)
     = chi^{2-n} Int dz z^{n-3} j_l^2(z), so n = 1 carries one factor of chi.

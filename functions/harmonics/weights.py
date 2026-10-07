@@ -28,7 +28,7 @@ from fractions import Fraction
 from functools import lru_cache
 from math import factorial
 
-__all__ = ["beta", "alpha", "delta_over_pi", "free_streaming_weight"]
+__all__ = ["beta", "alpha", "delta_over_four_pi", "free_streaming_weight"]
 
 
 def _check_ell(ell: int, minimum: int = 0) -> int:
@@ -64,7 +64,7 @@ def alpha(ell: int) -> Fraction:
 
 
 @lru_cache(maxsize=None)
-def delta_over_pi(ell: int) -> Fraction:
+def delta_over_four_pi(ell: int) -> Fraction:
     """Delta_l / (4 pi) = beta_l / (2l+1)  —  Gebbie & Ellis (2000), Eq. (119).
 
     The factor 4 pi is kept out so the result stays an exact rational. Multiply

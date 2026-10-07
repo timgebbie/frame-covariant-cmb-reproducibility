@@ -4,7 +4,7 @@ Regenerate with:  python scripts/sync_conventions.py --source <path>
 
 Source      : C:\Users\01404122\Documents\Claude\NonlinearShear\docs\conventions.md
 SHA-256     : 064a3b659cd95502d2cbd94b9c123c7312178c6143cb6f764b964b5deed7d68e
-Generated   : 2026-10-05
+Generated   : 2026-10-06
 
 The normative sheet lives in the project repository and is owned by the
 conventions gate. This bundle carries a generated copy so that the code and the
