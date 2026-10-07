@@ -354,7 +354,7 @@ def test_no_coupling_in_the_v1_hierarchy_grows_with_ell():
 
     v1.0.0 reproduces the *linearised* hierarchy of Annals II. The high-$\\ell$
     couplings this project restores at v1.5.0 grow with $\\ell$; the linear ones
-    do not --- every coupling in (F.1)-(F.4) and in the three external
+    do not --- every coupling in (F.1)-(F.4) and in the external
     hierarchies is a ratio of linear polynomials and tends to a constant.
 
     So "no $O(\\ell)$ coupling has leaked into v1.0.0" is not a promise to be
@@ -552,3 +552,40 @@ def test_c32_fixes_the_convention_and_the_match_then_confirms_it():
 
     # and the imaginary alternative, which C3.2 excludes, flips it
     assert sp.simplify((sp.I) ** 2 + 1) == 0
+
+
+def test_wilson_silk_1981_is_the_same_equation_as_wilson_1983_at_zero_curvature():
+    """**The fifth source, and the falsification of a good hypothesis.**
+
+    Coordination proposed, from the 1983 paper being in the imaginary
+    convention, that if Wilson & Silk 1981 were in the *real* one then the same
+    first author had published in both conventions two years apart --- direct
+    evidence that the phase is a convention and not a fact.
+
+    **The scan refutes it.** W&S 1981 Eq. (7) reads
+
+        l > 2,  delta_l^dot = -n_e sigma_T c delta_l
+                  - i k T c [ l/(2l-1) delta_{l-1} + (l+1)/(2l+3) delta_{l+1} ]
+
+    --- the **same** same-sign imaginary form, under the same overall $-ikTc$,
+    with the same weights. Wilson published in one convention, consistently,
+    twice. The 1983 paper is the negative-curvature generalisation and differs
+    only by the factor $[1-\\ell(\\ell+2)K/k^2]$, which is unity in the flat case
+    this bundle compares in.
+
+    So the two are the *same equation* at $K=0$, and this test says so rather
+    than drawing a fifth panel that would show an identical curve. The negative
+    result is worth as much as the positive one would have been: the convention
+    splits by author lineage, not by paper, which is a cleaner statement than the
+    hypothesis would have given.
+    """
+    from functions.harmonics.external import WILSON_WEIGHTS
+
+    lower, upper = WILSON_WEIGHTS
+    for l in (3, 5, 20, 200):
+        # W&S 1981 Eq. (7), flat, read from p. 15
+        assert lower(l) == pytest.approx(l / (2 * l - 1))
+        assert upper(l) == pytest.approx((l + 1) / (2 * l + 3))
+        # Wilson 1983 Eq. (8) adds [1 - l(l+2) K/k^2], which is 1 at K = 0
+        curvature_factor = 1.0 - l * (l + 2) * 0.0 / 1.0
+        assert curvature_factor == 1.0

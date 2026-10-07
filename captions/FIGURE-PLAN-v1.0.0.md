@@ -110,9 +110,11 @@ comparison target is derived from the same antecedent.
 ### F1 — the Appendix F match
 
 One panel per external treatment of Eqs. (F.1)–(F.4), pp. 379–380: Hu & Sugiyama,
-Ma & Bertschinger Eqs. (49)/(50), Seljak & Zaldarriaga Eq. (3d). **Three panels,
-not four** — Wilson & Silk Eq. (7) is on hold, and quoting it from Appendix F
-would make it one source with Annals II rather than an independent fourth.
+Ma & Bertschinger Eqs. (49)/(50), Seljak & Zaldarriaga Eq. (3d), **Wilson Eq.
+(8)**. **Four panels from five sources** — Wilson & Silk Eq. (7) (1981) was read
+from its own page and is the earliest of the set, but at $K=0$ it is Wilson
+(1983) Eq. (8) exactly, so it is credited rather than drawn: an identical curve
+in a fifth box would present one check as two.
 
 Each panel carries exactly two series: the reconstruction in slot 1, that
 treatment in slot 2. Only two hues appear in the whole figure, which keeps it
@@ -223,7 +225,7 @@ A control is not evidence. These live in `diagnostics/`.
 
 | | What | Why here |
 |---|---|---|
-| **D1** | relative-sign control: the free-streaming bracket run with its relative sign flipped, which is the $\lambda^2=-1$ case | the cheapest wiring check in the bundle, and it exercises the convention question that is live at v1.0.0. **It replaces the $\pm(\ell+2)$ control**, which would have exercised a second-order term the release does not contain |
+| **D1** | relative-sign control: the free-streaming bracket run with its relative sign flipped, which is the $c^2=-1$ case | the cheapest wiring check in the bundle, and it exercises the convention question that is live at v1.0.0. **It replaces the $\pm(\ell+2)$ control**, which would have exercised a second-order term the release does not contain |
 | **D2** | round-trip residual, covariant → mode → covariant | a number with its tolerance. If it is machine precision it is not a chart |
 | **D3** | the source terms (177)–(179) plotted directly against $k$ | the direct picture of the three printed equations, strictly linear and free of the cross-term question. Nearly free once F5 exists |
 | **D4** | no monopole in the CGI approach | Annals II p. 366 states it; a test, not a picture |

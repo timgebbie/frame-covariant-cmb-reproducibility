@@ -48,6 +48,10 @@ short = "this work"
 text = "M. L. Wilson, Astrophysical Journal 273, 2 (1983)"
 short = "Wilson"
 
+[sources.WS]
+text = "M. L. Wilson and J. Silk, Astrophysical Journal 243, 14 (1981)"
+short = "Wilson \\& Silk"
+
 [sources.DLMF]
 text = "NIST Digital Library of Mathematical Functions, spherical Bessel recurrences"
 short = "DLMF"
@@ -176,7 +180,7 @@ note = "$\\alpha$ normalisation. Thomson term dropped"
 
 [[equations]]
 key = "sign_control"
-quantity = "relative-sign control: the $\\lambda^2=-1$ normalisation, run as a wiring check"
+quantity = "relative-sign control: the $c^2=-1$ normalisation, run as a wiring check"
 source = "AnnalsII"
 equation = "(F.1), p. 379"
 module = "functions.harmonics.free_streaming"
@@ -808,6 +812,16 @@ phase = "\\textbf{imaginary}; both bracket terms $+$ under an overall $-ikT$"
 applied = "$\\Theta_\\ell=i^\\ell\\delta_\\ell$ --- \\textbf{fixed by the antecedent}, which states the $i^{-\\ell}$ itself"
 checked = "integrated \\emph{complex and as printed}; the phase removed only afterwards, and the result asserted real to $10^{-10}$ separately from that it agrees"
 test = "test_wilson_reproduces_the_bundle_and_tests_the_phase_convention"
+
+[[conventions]]
+source = "WS"
+where = "Eq. (7), p. 15"
+variable = "$\\delta_\\ell$"
+weights = "$\\frac{\\ell}{2\\ell-1}$, $\\frac{\\ell+1}{2\\ell+3}$"
+phase = "\\textbf{imaginary}, as Wilson 1983 --- \\emph{not} the real form"
+applied = "none required: at $K=0$ it is Wilson 1983 (8) exactly"
+checked = "read from its own page. The \\textbf{earliest} of the five and a fifth source for the weights, but \\textbf{not} a fifth numerical check --- the same equation cannot check itself"
+test = "test_wilson_silk_1981_is_the_same_equation_as_wilson_1983_at_zero_curvature"
 
 [[conventions]]
 source = "MB"

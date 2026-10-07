@@ -26,7 +26,7 @@ Under $Q_{A_\ell}\to\lambda^\ell Q_{A_\ell}$, $\tau_\ell\to\lambda^{-\ell}
 - the **mode** bracket of (F.1) is **not**. Its raising and lowering terms
   acquire $\lambda^{-1}$ and $\lambda^{+1}$, so their relative coefficient
   carries $\lambda^{-2}$ and **the relative sign flips whenever
-  $\lambda^2=-1$**. The two candidate normalisations — $(-k)^{-\ell}
+  $c^2=-1$**. The two candidate normalisations — $(-k)^{-\ell}
   \mathrm{D}_{\langle A_\ell\rangle}Q$ and $(+ik)^{-\ell}\mathrm{D}_{\langle
   A_\ell\rangle}Q$ — differ by exactly $\lambda=i$, so they fall on opposite
   sides of that flip. A real $\lambda$ keeps the printed opposite-sign bracket; an
@@ -72,7 +72,7 @@ release does not contain, and settling anything at $\ell=2$ alone is the
 specialisation the index-algebra rule forbids.
 
 **Replacement: D1, a relative-sign control on the free-streaming bracket.** The
-bracket is run with its relative sign flipped — the $\lambda^2=-1$ case of Q1 —
+bracket is run with its relative sign flipped — the $c^2=-1$ case of Q1 —
 which is in v1.0.0's physics and which exercises the convention question that is
 actually live. It is a wiring check, so it lives in `diagnostics/` and is not a
 released figure: a control is not evidence.
@@ -281,8 +281,8 @@ been implemented in the other convention, the same three could have been matched
 by applying $i^\ell$ to them, and nothing in the chain would have objected.
 
 **The algebra, stated once.** Changing the harmonic normalisation
-$Q_{A_\ell}=\lambda^{-\ell}\mathrm D_{\langle A_\ell\rangle}Q$ rescales
-$\tau_\ell\to c^\ell\tau_\ell$ with $c=\lambda'/\lambda$. A recursion
+$Q_{A_\ell}=\mu^{-\ell}\mathrm D_{\langle A_\ell\rangle}Q$ rescales
+$\tau_\ell\to c^\ell\tau_\ell$ with $c=\mu'/\mu$. A recursion
 $\tau_\ell'=k[A_\ell\tau_{\ell-1}+B_\ell\tau_{\ell+1}]$ becomes
 $(A_\ell/c,\;B_\ell c)$, so **$B/A\to c^2B/A$**. At $c=i$ an opposite-sign real
 bracket becomes a same-sign bracket under an overall $i$. The two conventions in
@@ -384,3 +384,74 @@ by reimplementation.
 what closes criterion 3. C3.5 — the sign $\lambda=-1$ of a *scalar's* mode
 coefficient — is **STIPULATED** and is a different quantity. Criterion 3 rests on
 the verified one.
+
+---
+
+## A note on symbols, 2026-10-07
+
+The conventions sheet renamed `λ` to `s_Q` on 2026-10-06 because `λ` meant three
+unrelated things two rows apart — in *Annals I/II* it is $k_{\rm phys}$, in C3.5
+it was a scalar's sign, and in the P-3 row it is a basis rescaling.
+
+**This bundle used it for a fourth thing**: "the $\lambda^2=-1$ normalisation".
+That is now written **$c^2=-1$**, matching the symbol this bundle's own algebra
+already used in `functions/spectra/angular.py` and the Appendix F tests.
+
+Entries written before that date are **left as they were**. The findings record
+is append-only and rewriting a historical entry to use a later symbol would be
+exactly the kind of silent edit the guard exists to prevent. Where an older entry
+says $\lambda^2=-1$, read $c^2=-1$.
+
+---
+
+## Q4 — SETTLED 2026-10-07, and the answer is five sources
+
+**Coordination withdrew its reading and adopted this stream's; log rows v1.10.44
+and v1.10.46.** The record:
+
+*Annals II* means **M. L. Wilson 1983, *Ap. J.* 273, 2**, and its $\ell>2$
+hierarchy is **Eq. (8)**. The key `W83` is consistent across every citation in
+`cbrII.tex`; `\cite{WS}` appears exactly once, at l.215; and the load-bearing
+$i^{-\ell}$ sentence at l.1364 names "Wilson" alone over `W83`. Only two prose
+instances, l.500 and l.4037, write "\& Silk". **The key is right in every case
+and the prose is the slip in two** — finding B-4, now corroborated by a full
+citation sweep rather than by the bibliography alone.
+
+**F1's fourth panel on Wilson 1983 Eq. (8) stands, and nothing in the bundle
+changes.**
+
+### The fifth source is real, and its phase is unknown
+
+P1-T read **Wilson & Silk 1981, *Ap. J.* 243, 14, Eq. (7)** from a PI-supplied
+scan: $\ell>2$, coefficients $\ell/(2\ell-1)$ and $(\ell+1)/(2\ell+3)$. That pin
+does not pass through *Annals II*. It is a different paper, independently
+verified, and the **earliest of the set**.
+
+**What it gives:** a fifth independent source for the $\ell$-weights. The release
+may state five external hierarchies, and F1 may take a fifth panel.
+
+**What it does not give:** its phase convention. P1-T reported the weights, not
+the relative sign, nor whether the coefficients are real. **This bundle will not
+state which $c^2$ it sits at until someone has read the page.**
+
+### The hypothesis worth testing — Coordination's, and it is a good one
+
+Wilson 1983 Eq. (8) prints the **imaginary, same-sign** form. If Wilson & Silk
+1981 Eq. (7) prints the **real, opposite-sign** form, then *the same first author
+published in both conventions two years apart*.
+
+That would be direct evidence, from a single author, that the phase is a
+**convention and not a fact** — which is the content of the criterion 3 question,
+arriving from outside this project entirely.
+
+**It is a hypothesis, not a claim.** The scan settles it, and nothing may be
+written either way until it is read. **Status: awaiting the W&S 1981 scan from
+the PI.** Additive; blocks nothing.
+
+### Attribution rule, adopted
+
+*Annals II*'s Appendix F match and its $i^{-\ell}$ statement are about the **1983**
+paper. **Wilson & Silk 1981 may be cited for the weights, never for *Annals II*'s
+comparison.** *Annals II*'s own name/key mismatch is a defect in *Annals II* and
+is recorded here as B-4; Coordination carries the corresponding documentation
+row in `provenance.md`.

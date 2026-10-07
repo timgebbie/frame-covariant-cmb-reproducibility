@@ -51,6 +51,17 @@ DIAGNOSTICS: list[tuple[str, str]] = [
 ]
 
 
+#: Handover emissions. These are not figures and not diagnostics: they are
+#: quantities another stream's floats need, which this bundle computes anyway
+#: and would otherwise discard. They run with everything else so that the CSVs
+#: in outputs/ cannot fall out of step with the code that made them --- the
+#: emissions module existed for a day before this step did, and nothing was
+#: produced in that time.
+EMISSIONS: list[tuple[str, str]] = [
+    ("Paper 1 floats: fig:efficiency, fig:bulk", "scripts/emit_paper1_floats.py"),
+]
+
+
 #: The portability gate. It runs first and its failure is release-blocking:
 #: nothing ships from this bundle that has only ever run where it was
 #: written. Adopted from Coordination's audit, 2026-10-06.
@@ -74,14 +85,15 @@ def main() -> int:
     if run([sys.executable, "-m", "pytest", "-q"], "regression suite"):
         failures.append("tests")
 
-    pending: dict[str, list[str]] = {"figures": [], "diagnostics": []}
+    pending: dict[str, list[str]] = {"figures": [], "diagnostics": [], "emissions": []}
     label, script = GATE
     if run([sys.executable, script], label) != 0:
         print("\n" + "=" * 60)
         print("NOT RELEASABLE  --  portability gate failed")
         return 1
 
-    for group, stages in (("figures", STAGES), ("diagnostics", DIAGNOSTICS)):
+    for group, stages in (("figures", STAGES), ("diagnostics", DIAGNOSTICS),
+                          ("emissions", EMISSIONS)):
         for label, script in stages:
             if not (ROOT / script).exists():
                 pending[group].append(label)
@@ -89,7 +101,8 @@ def main() -> int:
             if run([sys.executable, script], label):
                 failures.append(label)
 
-    for group, stages in (("figures", STAGES), ("diagnostics", DIAGNOSTICS)):
+    for group, stages in (("figures", STAGES), ("diagnostics", DIAGNOSTICS),
+                          ("emissions", EMISSIONS)):
         print(f"\n--- {group} " + "-" * max(0, 56 - len(group)))
         if pending[group]:
             print(f"{len(pending[group])} of {len(stages)} pending:")

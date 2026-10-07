@@ -1,8 +1,8 @@
 # 1+3 covariant CMB anisotropies reproducibility bundle
 
 Version: v1.0.0 — First public analytical reproducibility release. Supplementary
-code and materials for: Tim Gebbie, *"(Paper 1 title to be confirmed),"*
-arXiv: identifier to be assigned.
+code and materials for: Tim Gebbie, *"Frame covariance of CMB lensing in the exact $1+3$ covariant radiation hierarchy,"*
+arXiv: identifier assigned on submission.
 
 ## Key figure: recursion and external hierarchies
 
@@ -76,7 +76,9 @@ The free-streaming recursion against each external treatment of (F.1)–(F.4), o
 panel per treatment; four comparisons are four panels, not four colours on one
 axis. Hu & Sugiyama write the recursion in the β normalisation, Ma & Bertschinger
 and Seljak & Zaldarriaga in the α normalisation, which is why Appendix F prints
-both (F.3) and (F.4). Three panels, not four: Wilson is pre-arXiv and *Annals II*
+both (F.3) and (F.4). **Four panels from five sources**: Wilson & Silk (1981) is
+the earliest and was read from its own page, but at $K=0$ it is Wilson (1983)
+Eq. (8) exactly, so it is credited and not drawn — *Annals II*
 names Wilson & Silk while keying Wilson.
 
 ### Legacy treatment from [Annals of Physics 282, 321 (2000)](https://doi.org/10.1006/aphy.2000.6034)
@@ -251,7 +253,7 @@ The development lineage:
 always resolves to the latest version, so it is the one to cite.
 
 **Suggested paper citation:** Gebbie, Tim (2026). *(Paper 1 title to be
-confirmed)*. arXiv: identifier to be assigned.
+Frame covariance of CMB lensing in the exact 1+3 covariant radiation hierarchy"*. arXiv: identifier assigned on submission.
 
 **Associated antecedent:** Gebbie, T.; Dunsby, P. K. S.; Ellis, G. F. R. (2000).
 *1+3 covariant cosmic microwave background anisotropies II: the

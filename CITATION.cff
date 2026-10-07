@@ -12,8 +12,18 @@ abstract: >-
   An independent Python reconstruction, from first 1+3 covariant principles, of
   the almost-Friedmann-Lemaitre results of Gebbie, Dunsby & Ellis, Annals of
   Physics 282, 321 (2000). Analytical release; no empirical data are required.
+preferred-citation:
+  type: article
+  title: "Frame covariance of CMB lensing in the exact 1+3 covariant radiation hierarchy"
+  authors:
+    - family-names: Gebbie
+      given-names: Tim
+  # arXiv identifier is assigned on submission; filled at manuscript freeze
+  # (acceptance criterion 6).
 keywords:
   - cosmic microwave background
   - 1+3 covariant formalism
   - multipole hierarchy
   - reproducibility
+  - CMB lensing
+  - frame covariance

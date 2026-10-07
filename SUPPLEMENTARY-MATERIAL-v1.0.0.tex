@@ -27,7 +27,7 @@
 \usepackage{microtype}
 \usepackage{hyperref}
 
-\title{Computational Supplement:\\$1+3$ Covariant CMB Anisotropies}
+\title{Computational Supplement\\\large Frame covariance of CMB lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
 \date{v1.0.0 --- First public analytical reproducibility release\\5 October 2026}
 
@@ -35,7 +35,7 @@
 \maketitle
 
 \section{Scientific scope}
-This supplement records the analytical companion to the associated paper. The
+This supplement records the analytical companion to \emph{Frame covariance of CMB lensing in the exact $1+3$ covariant radiation hierarchy}. The
 bundle is an independent Python reconstruction, from first $1+3$ covariant
 principles, of the almost-Friedmann--Lema\^itre results of Gebbie, Dunsby \&
 Ellis, \emph{Annals of Physics} \textbf{282}, 321--394 (2000),
@@ -135,8 +135,8 @@ code, with the test that checks each row.
 
 \paragraph{There are exactly two conventions, and they differ by $c^2=-1$.}
 Changing the harmonic normalisation
-$Q_{A_\ell}=\lambda^{-\ell}\mathrm D_{\langle A_\ell\rangle}Q$ rescales the mode
-coefficients as $\tau_\ell\to c^\ell\tau_\ell$ with $c=\lambda'/\lambda$. A
+$Q_{A_\ell}=\mu^{-\ell}\mathrm D_{\langle A_\ell\rangle}Q$ rescales the mode
+coefficients as $\tau_\ell\to c^\ell\tau_\ell$ with $c=\mu'/\mu$. A
 recursion $\tau_\ell'=k[A_\ell\tau_{\ell-1}+B_\ell\tau_{\ell+1}]$ then carries
 $(A_\ell/c,\,B_\ell c)$, so the ratio $B/A$ picks up $c^2$. At $c=i$ an
 opposite-sign real bracket becomes a same-sign bracket under an overall $i$.
@@ -294,6 +294,59 @@ rewriting recorded bytes is not.
 
 Weights are carried as exact rationals rather than floating-point numbers
 wherever a sign or an $\ell$-weight is asserted.
+
+\section{Beyond this release: the almost-EGS bounds}
+The Ehlers--Geren--Sachs theorem states that exact CMB isotropy for all
+fundamental observers in an expanding dust universe forces exact
+Friedmann--Lema\^itre--Robertson--Walker geometry. The \emph{almost}-EGS theorem
+of Stoeger, Maartens \& Ellis, \emph{Ap.~J.} \textbf{443}, 1 (1995) relaxes that
+to bounds: limits on the CMB multipoles $\tau_{A_\ell}$ become limits on
+$\sigma_{ab}$, $\omega_{ab}$, $\dot u_a$, $E_{ab}$ and $H_{ab}$.
+
+Those bounds are stated in the \emph{covariant multipoles} --- not in mode
+coefficients --- which is what this bundle computes and what a gauge-fixed code
+cannot supply without a translation. Applying them is therefore natural work for
+this formalism, and it is \textbf{v2.0.0} work, because it is a calibration
+against data rather than an analytical reconstruction.
+
+\begin{table}[h]
+\centering\footnotesize
+\caption{The structure v2.0.0 fills. \textbf{No cell is computed at v1.0.0}, and
+none is quoted here from memory: observational columns are filled from the
+mission papers at v2.0.0 under the same rule that equation numbers are resolved
+from the source.}\label{tab:egs}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Mission} & \textbf{$\ell$ reach} & \textbf{bound, standard CDM} & \textbf{bound, $\Lambda$CDM} \\
+\midrule
+COBE-DMR (1992)   & $\lesssim20$   & \emph{the original} & \emph{not in the original} \\
+WMAP (2003--2013) & $\lesssim1000$ & pending & pending \\
+Planck (2013--2018)& $\lesssim2500$ & pending & pending \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Why the table needs both columns.} \textbf{The original bounds were
+derived for a CDM model, not for $\Lambda$CDM}, and the difference is not
+cosmetic. The argument converts multipole limits into limits on $\sigma/H$ using
+the background expansion, and $\Lambda$ changes $H(z)$ at low redshift. More
+sharply, $\Lambda$ adds a source the original did not have: the late integrated
+Sachs--Wolfe effect contributes to exactly the low-$\ell$ multipoles the COBE
+bounds rest on. In standard CDM it is absent --- $\Phi$ is constant, which this
+bundle's growth factor reproduces to six figures --- and in $\Lambda$CDM it is
+not, $\Phi$ falling to $0.779$ of its early value by today. A low-$\ell$ limit
+therefore constrains a \emph{different combination} in the two models, so a bound
+quoted for one is not a bound for the other. The CDM column has a published
+precedent; the $\Lambda$CDM column is new.
+
+\paragraph{Beyond v2.0.0.} The published bounds are first order in the anisotropy
+parameter. The natural extension is the next order, and this project is placed to
+make it because \textbf{v1.5.0 supplies the $O(\varepsilon^2\ell)$ couplings a
+second-order argument needs} and no external code carries them. Stated as a
+direction and not a plan: it is gated on v1.5.0, and the correction's sign and
+size are unknown until it is done. It is recorded so the v2.0.0 table is built in
+a shape that can take it. See
+\texttt{provenance/ALMOST-EGS-BOUNDS-v1.md}.
 
 \section{Interpretive limits}
 This is an analytical reproducibility bundle for the associated paper and its

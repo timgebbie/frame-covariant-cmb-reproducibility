@@ -17,8 +17,9 @@ acceptance threshold marked. Hu \\& Sugiyama write the recursion in the $\\beta$
 normalisation and Ma \\& Bertschinger and Seljak \\& Zaldarriaga in the $\\alpha$
 normalisation, which is why Appendix~F prints both (F.3) and (F.4); a basis phase
 leaking into the couplings would break at least one match. Overall scale is
-exactly $1.000000000$ --- nothing is fitted. Three panels, not four: Wilson is
-pre-arXiv and the citation is ambiguous.
+exactly $1.000000000$ --- nothing is fitted. Four panels from five sources:
+Wilson \\& Silk (1981) is the earliest, but at $K=0$ it is Wilson (1983)
+Eq.~(8) exactly, so it is credited rather than drawn.
 """
 +++
 
@@ -51,8 +52,18 @@ the acceptance threshold marked.
 |---|---|---|---|
 | Hu & Sugiyama, *Phys. Rev. D* **51** (1995), 2599, Eq. (6) | $\ell/(2\ell-1)$, $(\ell+1)/(2\ell+3)$ | (F.3), $\beta$ | $1.2\times10^{-13}$ |
 | Wilson, *Astrophys. J.* **273** (1983), 2, Eq. (8) | $\ell/(2\ell-1)$, $(\ell+1)/(2\ell+3)$ | (F.3), $\beta$ | $3.1\times10^{-14}$ |
+| Wilson & Silk, *Astrophys. J.* **243** (1981), 14, Eq. (7) | $\ell/(2\ell-1)$, $(\ell+1)/(2\ell+3)$ | (F.3), $\beta$ | *not drawn — see below* |
 | Ma & Bertschinger, *Astrophys. J.* **455** (1995), 7, Eqs. (49), (50) | $\ell/(2\ell+1)$, $(\ell+1)/(2\ell+1)$ | (F.4), $\alpha$ | $1.3\times10^{-14}$ |
 | Seljak & Zaldarriaga, *Astrophys. J.* **469** (1996), 437, Eq. (3d) | $\ell/(2\ell+1)$, $(\ell+1)/(2\ell+1)$ | (F.4), $\alpha$ | $1.3\times10^{-14}$ |
+
+**Five sources, four panels, and the fifth is deliberate.** Wilson & Silk
+1981 Eq. (7) is the earliest of the set and was read from its own page. At $K=0$
+— which is what this figure compares in — it is Wilson 1983 Eq. (8) **exactly**:
+the 1983 paper is the negative-curvature generalisation and differs only by
+$[1-\ell(\ell+2)K/k^2]$. It is therefore a fifth independent source for the
+$\ell$-weights and **not** a fifth numerical check, and it is credited here
+rather than drawn, because an identical curve in a fifth box would present one
+check as two.
 
 **Two distinct normalisations and two distinct phase conventions.** Hu &
 Sugiyama and Wilson write the recursion in the $\beta$ variable; Ma &
@@ -67,7 +78,11 @@ afterwards; transforming the equation first would assume the identity under test
 That the transformed solution is *real* to $10^{-10}$ is asserted separately from
 that it agrees. His panel therefore tests the phase convention — the subject of
 finding B-1 and acceptance criterion 3 — from a source published before any of
-the others. Appendix F prints both (F.3) and (F.4) for exactly that
+the others. Wilson & Silk 1981 is in the **same** imaginary convention, which
+settles a hypothesis worth recording: Wilson did *not* publish in two conventions
+two years apart. The split is by author lineage — Wilson's two papers in the
+imaginary convention, the other three in the real one — which is consistent with
+*Annals II* naming its $i^{-\ell}$ relation against Wilson specifically. Appendix F prints both (F.3) and (F.4) for exactly that
 reason. A basis phase leaking into the coupling coefficients would break at least
 one of the two matches, which is what makes this a representation-free test of
 the harmonic normalisation.
@@ -75,15 +90,10 @@ the harmonic normalisation.
 **Overall scale is exactly 1.000000000.** The monopole normalisation is common to
 all four and nothing is fitted.
 
-**Three panels, not four.** Wilson is not reproduced: the paper is pre-arXiv, and
-Appendix F's citation names Wilson & Silk while its key points to Wilson —
-see `provenance/`, finding **B-4**. Quoting Eq. (7) through Appendix F would make
-it the same source as Appendix F rather than an independent fourth.
-
-Thomson scattering terms, $-\dot\tau\Theta_\ell$ in Hu & Sugiyama and
-$-\dot\kappa\Delta_{T\ell}$ in Seljak & Zaldarriaga, are dropped: they are not
-free streaming.
-
-†1 The comparison with (F.4) applies the $(2\ell+1)^{-1}$ division that the text
-preceding it specifies and its display omits. A misprint; see `provenance/`,
-finding **B-2**.
+**Four panels from five sources, and the fifth is deliberate.** Wilson & Silk,
+*Astrophys. J.* **243**, 14 (1981), Eq. (7) was read from its own page and is the
+earliest of the set. At $K=0$ --- the case this figure compares in --- it is
+Wilson (1983) Eq. (8) **exactly**; the 1983 paper is the negative-curvature
+generalisation and differs only by $[1-\ell(\ell+2)K/k^2]$. It is therefore a
+fifth independent source for the $\ell$-weights and **not** a fifth numerical
+check, and an identical curve in a fifth box would present one check as two.

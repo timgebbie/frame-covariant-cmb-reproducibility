@@ -3,8 +3,8 @@
 Regenerate with:  python scripts/sync_conventions.py --source <path>
 
 Source      : C:\Users\01404122\Documents\Claude\NonlinearShear\docs\conventions.md
-SHA-256     : 064a3b659cd95502d2cbd94b9c123c7312178c6143cb6f764b964b5deed7d68e
-Generated   : 2026-10-06
+SHA-256     : e22f5e19b2d2ea70e5805d03474bee3b6196833273708499df644f947e63be70
+Generated   : 2026-10-07
 
 The normative sheet lives in the project repository and is owned by the
 conventions gate. This bundle carries a generated copy so that the code and the
@@ -57,6 +57,16 @@ names the convention it imported.
 > of `τ_{A_ℓ}` is **(53)** against (54) — while `O^{A_ℓ} = e^⟨A_ℓ⟩` is **(15) in
 > both**. So a blanket offset is wrong and each number must be resolved
 > individually from the PDFs.
+>
+> **Re-pointed 2026-10-06, after P1-T found the C3 rows still carrying arXiv
+> numbers while the paper cites print.** Rows now carry **both**, written
+> `(pub) pub = (arXiv) arXiv`, rather than replacing one with the other —
+> `provenance.md` and the stream notes cite arXiv throughout and would desync
+> under a replacement. **Resolved so far:** Helmholtz 47/48 · harmonic
+> normalisation 48/49 · `G_ℓ[Q]` 49/50 · mode expansion of `τ_{A_ℓ}` 53/54 ·
+> `O^{A_ℓ} = e^⟨A_ℓ⟩` 15 in both. Every other number in this sheet is **arXiv
+> and unresolved** — resolve it from the PDF before it goes into print, and do
+> not interpolate an offset.
 >
 > **The sheet's content is unaffected; only its citations are.** Nothing is
 > withdrawn here. But anything citing this sheet into print must carry the
@@ -124,11 +134,11 @@ names the convention it imported.
 
 | | Statement | Source | Kind |
 |---|---|---|---|
-| C3.1 | Helmholtz: **`D^a D_a Q = −k_phys² Q`**, `k_phys = k/a`, `Q` time-independent | GE98 **(48)**; Th **(1.47)** | DEF |
-| C3.2 | **`Q_{A_ℓ} = (−k_phys)^{−ℓ} D_⟨A_ℓ⟩ Q`**. The stripped factor is **`(−k_phys)^ℓ`: real, no `i`.** For a real eigenfunction `Q`, every `Q_{A_ℓ}` is real | GE98 **(49)**; Th **(1.48)**; restated in GE98 p.23 below (134), and in Th App. D footnote to **(D.44)** as `(−λ)^{−ℓ}D_⟨A_ℓ⟩Q = Q_{A_ℓ}` | DEF. **Seed verified against the PDF, 2026-10-03** |
-| C3.3 | Mode function `G_ℓ[Q] = O^{A_ℓ}Q_{A_ℓ} = (−k_phys)^{−ℓ}O^{A_ℓ}D_⟨A_ℓ⟩Q` | GE98 (50), (51); Th (1.50) | DEF |
-| C3.4 | Mode expansion `τ_{A_ℓ}(x) = Σ_k τ_ℓ(t,k)(−k_phys)^{−ℓ}D_⟨A_ℓ⟩Q = Σ_k τ_ℓ Q_{A_ℓ}` | GE98 (54); Th (1.48) ff. | DEF |
-| C3.5 | **The sign of a scalar's mode coefficient, `X = λ Σ_k X(k) Q`, is not fixed by any source.** GE98 never expands a scalar field. The thesis and both manuscripts write gradients as `D_a X = +(k/a) X(k) Q_a`, which under C3.2 means **`λ = −1`**. **STIPULATED HERE: λ = −1**, because that is the existing usage, and it must be stated wherever a mode coefficient is | Th App. D **(D.44)**: `(D_a ln ρ_M)^k = +(k/a)Δ(k)Q_a`. Consequence under C3.2 by IA: `D_aX = −λ k X(k) Q_a`, `D_⟨aD_b⟩X = +λ k² X(k) Q_ab` | STIPULATED HERE |
+| C3.1 | Helmholtz: **`D^a D_a Q = −k_phys² Q`**, `k_phys = k/a`, `Q` time-independent | GE98 **(47)** pub = (48) arXiv; Th **(1.47)** | DEF |
+| C3.2 | **`Q_{A_ℓ} = (−k_phys)^{−ℓ} D_⟨A_ℓ⟩ Q`**. The stripped factor is **`(−k_phys)^ℓ`: real, no `i`.** For a real eigenfunction `Q`, every `Q_{A_ℓ}` is real | GE98 **(48)** pub = (49) arXiv; Th **(1.48)**; restated in GE98 p.23 below (134), and in Th App. D footnote to **(D.44)** as `(−λ)^{−ℓ}D_⟨A_ℓ⟩Q = Q_{A_ℓ}` | DEF. **Seed verified against the PDF, 2026-10-03** |
+| C3.3 | Mode function `G_ℓ[Q] = O^{A_ℓ}Q_{A_ℓ} = (−k_phys)^{−ℓ}O^{A_ℓ}D_⟨A_ℓ⟩Q` | GE98 **(49)** pub = (50) arXiv; (51) arXiv, published number not resolved; Th (1.50) | DEF |
+| C3.4 | Mode expansion `τ_{A_ℓ}(x) = Σ_k τ_ℓ(t,k)(−k_phys)^{−ℓ}D_⟨A_ℓ⟩Q = Σ_k τ_ℓ Q_{A_ℓ}` | GE98 **(53)** pub = (54) arXiv; Th (1.48) ff. | DEF |
+| C3.5 | **The sign of a scalar's mode coefficient, `X = s_Q Σ_k X(k) Q`, is not fixed by any source.** *(Renamed from `λ` 2026-10-06 — see the warning below C3.6.)* GE98 never expands a scalar field. The thesis and both manuscripts write gradients as `D_a X = +(k/a) X(k) Q_a`, which under C3.2 means **`s_Q = −1`**. **STIPULATED HERE: s_Q = −1**, because that is the existing usage, and it must be stated wherever a mode coefficient is | Th App. D **(D.44)**: `(D_a ln ρ_M)^k = +(k/a)Δ(k)Q_a`. Consequence under C3.2 by IA: `D_aX = −s_Q k X(k) Q_a`, `D_⟨aD_b⟩X = +s_Q k² X(k) Q_ab` | STIPULATED HERE |
 | C3.6 | The radial eigenfunction has real stripped factor too: `O^{A_ℓ}_{(χ)}D_⟨A_ℓ⟩Q = (−k_phys)^ℓ O^{A_ℓ}_{(χ)}O^{(k)}_{A_ℓ}R_ℓ` | GE98 **(72)**, first relation | RES. The **second** relation of (72), `O^{A_ℓ}Q_{A_ℓ} = (−k_phys)^ℓ Q_ℓ`, has a factor `(−k)^ℓ` too many under C3.2 and (62), (67). Apparent misprint, low consequence (results note, G3) |
 
 ### C3a — Plane waves, and the phase they carry
@@ -137,10 +147,27 @@ names the convention it imported.
 |---|---|---|---|
 | C3a.1 | GE98's flat plane wave is **`Q = exp(−i k_phys e^{(k)}_a x^a)`** | GE98 **(145)** | DEF |
 | C3a.2 | `D_⟨A_ℓ⟩ Q = (−i k_phys)^ℓ O^{(k)}_{A_ℓ} Q` | GE98 **(147)** = (59); Th **(1.58)** | RES (calculus on C3a.1) |
-| C3a.3 | **Hence, under C3.2, `Q_{A_ℓ} = (−k)^{−ℓ}(−ik)^ℓ O^{(k)}_{A_ℓ}Q = i^ℓ O^{(k)}_{A_ℓ} Q`.** | Arithmetic on GE98 (49) and (147) | RES, CONF: imports the plane wave of GE98 (145) |
+| C3a.3 | **Hence, under C3.2, `Q_{A_ℓ} = (−k)^{−ℓ}(−ik)^ℓ O^{(k)}_{A_ℓ}Q = i^ℓ O^{(k)}_{A_ℓ} Q`.** | Arithmetic on GE98 (48) pub = (49) arXiv, and (147) arXiv | RES, CONF: imports the plane wave of GE98 (145) |
 | C3a.4 | **GE98 (60) = (148), Th (1.59) and Th (A.50) print `Q_{A_ℓ} = (−1)^ℓ O^{(k)}_{A_ℓ}Q`. That is inconsistent with C3.2 + C3a.2.** It is the phase of the definition `Q_{A_ℓ} = (+ik)^{−ℓ}D_⟨A_ℓ⟩Q`, not of GE98 (49) | GE98 (60), (148); Th (1.59), (A.50). **One source**: Th Ch. 1 and App. A reproduce GE98 | RES: **error under C3.2** |
 | C3a.5 | **The contraction-count rule.** If a two-mode product `N_{A}(k′) M_{B}(k)` is projected onto `Q_{C}(k*)` with `c` index pairs contracted, the aligned mode-form coefficient carries **`(−1)^c` relative to the uncontracted coupling** under C3a.3, and **`+1`** under the printed C3a.4. Acceleration rank-lowering of τ (`A^bτ_{bA_ℓ}`, c = 1) flips. Shear (`σ^{bc}τ_{bcA_ℓ}`, c = 2) and both rank-raising couplings (c = 0) do not | Arithmetic: `i^{ℓ+m}/i^{ℓ+m−2c} = (−1)^c`, with Th (A.51) as the product rule | RES, CONF: imports GE98 (145) and Th (A.51). **Same argument as stream H, H-1 route 1, located at its source. Not an independent check** (§3a) |
 | C3a.6 | The thesis Fourier kernel is `e^{+ik·x}` (Th (A.42)) while GE98's plane wave is `e^{−ik·x}` (GE98 (145)). A Fourier coefficient of the thesis multiplies `Q(−k)`, whose `Q_{A_ℓ}` phase is `(−i)^ℓ`. **Any calculation that mixes the two must say which is used** | Th (A.42); GE98 (145) | DEF clash, recorded |
+
+> ### `λ` means three different things in the sources. Do not reuse it.
+>
+> **2026-10-06, Coordination.** Before this sheet was swept, `λ` appeared here
+> for three unrelated quantities, two rows apart:
+>
+> | Where | Meaning |
+> |---|---|
+> | **Annals I/II, and C3.2's source column** | `λ = k_phys = k/a`. Annals II App. G states `D^aD_aQ = −λ²Q` and `(−λ)^{−ℓ}D_⟨A_ℓ⟩Q = Q_{A_ℓ}` |
+> | **C3.5, as originally written** | the sign of a scalar's mode coefficient. **Renamed `s_Q`** |
+> | **The P-3 resolution above** | a basis rescaling, `Q_{A_ℓ} → λ^ℓ Q_{A_ℓ}` |
+>
+> P1-B reported a relative sign "carrying `λ⁻²`", which is harmless under the
+> first reading — a positive `a²/k²` — and something else entirely under the
+> second. **That is the same class of ambiguity that cost this project five days
+> on P-3**, and it had reappeared inside the document written to prevent it.
+> Primary sources own `λ`; this sheet does not get to borrow it.
 
 ## C4 — The harmonic recursion
 

@@ -64,7 +64,7 @@ All notable changes to this bundle are recorded here. The version policy is in
 - `tests/test_register.py` — resolves every reference in the register, so the
   audit tables cannot drift from the code.
 - `functions/harmonics/free_streaming.py`, `functions/harmonics/external.py` —
-  the recursion in three normalisations, and the three external hierarchies as
+  the recursion in three normalisations, and the external hierarchies as
   printed in their own papers.
 - `functions/plotting/style.py` and figure **F1**, the Appendix F match.
 

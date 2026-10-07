@@ -972,3 +972,103 @@ the $\Gamma$ convention genuinely varied between authors at the time. The
 bundle uses the paper's own $0.48$, and `ANNALS_II_GAMMA` carries the discrepancy
 in a comment with a test pinning it, so that nobody later "fixes" it to $0.5$ on
 the grounds that the text says $\Omega_0h$.
+
+
+---
+
+## Wilson & Silk 1981 — the fifth source, and a hypothesis falsified
+
+**2026-10-07. Not a finding: a negative result, recorded because it is worth as
+much as the positive one would have been.**
+
+Coordination proposed a sharp test. Wilson 1983 Eq. (8) prints the **imaginary,
+same-sign** form. If Wilson & Silk 1981 Eq. (7) printed the **real,
+opposite-sign** form, then the same first author published in both conventions
+two years apart — direct evidence, from one author, that the phase is a
+convention and not a fact, arriving from outside this project.
+
+**The scan refutes it.** W&S 1981 Eq. (7), p. 15, read from the PI-supplied scan:
+
+$$\ell>2,\qquad \dot\delta_\ell = -n_e\sigma_T c\,\delta_\ell
+- ikTc\left[\frac{\ell}{2\ell-1}\delta_{\ell-1}
++ \frac{\ell+1}{2\ell+3}\delta_{\ell+1}\right]$$
+
+Same weights, same same-sign bracket, same overall $-ikTc$. **Wilson published in
+one convention, consistently, twice.** The 1983 paper is the negative-curvature
+generalisation — it is the flat equation with $[1-\ell(\ell+2)K/k^2]$ on the
+$\delta_{\ell+1}$ term — and the 1981 paper, being spatially flat throughout,
+carries no such factor. Paper I flat, paper II curved, exactly as Coordination
+described them.
+
+**What it gives.** A **fifth independent source** for the $\ell$-weights, the
+earliest of the set, read from its own page and not through Appendix F. And a
+*second* source in the imaginary convention, which makes that convention
+demonstrably a used one rather than an idiosyncrasy of a single paper.
+
+**What it does not give, and F1 does not pretend otherwise.** At $K=0$ it is
+Wilson 1983 Eq. (8) *exactly*. It is therefore **not a fifth numerical check**,
+and **F1 keeps four panels**. Drawing an identical curve in a fifth box would
+present one check as two, which is the kind of padding this bundle exists to
+avoid. The source is credited in the conventions table and in F1's caption; it is
+not given a panel it has not earned.
+
+**The cleaner statement the negative result buys.** The convention splits by
+**author lineage**, not by paper: Wilson's two papers in the imaginary
+convention, Hu \& Sugiyama, Ma \& Bertschinger and Seljak \& Zaldarriaga in the
+real one. That is a more useful thing to know than the hypothesis would have
+been, and it is consistent with *Annals II* naming the $i^{-\ell}$ relation
+against Wilson specifically.
+
+---
+
+## Lineage note L-1 — Pitrou's correction to MGE99 (60), and why it is not live at v1.0.0
+
+**Not a B-finding.** There is no defect in *Annals II* here. This is a published
+correction to a *different* paper in the lineage, recorded because v1.5.0 and
+v2.0.0 go where it bites and v1.0.0 does not. Raised by Coordination from P1-T,
+2026-10-07.
+
+**The correction.** Pitrou, *Class. Quantum Grav.* **26**, 065006 (2009), §7.5,
+p. 39, corrects Maartens, Gebbie & Ellis, *Phys. Rev. D* **59**, 083506 (1999),
+Eq. (60): a missing factor 6. It carries the $-3$ before $\rho_R v_B^av_B^b$ in
+(63) to $-7$, and the $I_\emptyset v^{a_1}v^{a_2}$ coefficient in the collision
+multipoles from 3 to 7. It is a **second-order Thomson collision term**, arising
+from the change to the baryon frame.
+
+### Does *Annals II* reproduce MGE99 (60)? **No.**
+
+Asked by Coordination, and answered from the source rather than assumed.
+*Annals II* cites MGE99 at eight places — lines 165, 179, 183, 243, 247, 252,
+262, 319 — for the **nonlinear framework**, never for the collision term. Its own
+collision term is printed at (68):
+
+```latex
+C[x,e] \approx \dot{\kappa} (e^a v_a^B - \tau)
+```
+
+**That is linear in $v_B$.** There is no $v_B^av_B^b$ term anywhere in it, so
+there is nothing for the factor 6 to be missing from. *Annals II* takes MGE99's
+exact framework and then linearises the scattering, which is what its `$\approx$`
+denotes — equality "to at least O[1] in the almost-Friedmann–Lemaître sense", by
+its own convention statement.
+
+### Consequence, stated rather than assumed
+
+| release | reaches a second-order collision term? | exposed to L-1? |
+|---|---|---|
+| **v1.0.0** | **no** — (68) is linear in $v_B$ and the target is almost-FLRW | **no** |
+| **v1.5.0** | **yes** — decision S2 carries the nonlinear-Thomson coupling $\dot{\delta C}_{NL}$, which is this territory | **yes** |
+| **v2.0.0** | yes, inherited from v1.5.0 | **yes** |
+
+**v1.0.0 is not exposed, and that is checked rather than believed.** The
+implemented collision term is the one in `functions/spectra/sources.py`, whose
+scattering enters only through $\kappa'v_B$ and $(\kappa'\tilde v_B)'$ — linear
+in $v_B$ throughout, as (177) and (178) print it.
+
+**v1.5.0 must adopt the corrected coefficients from the outset.** When
+$\dot{\delta C}_{NL}$ is implemented it should be built on Pitrou's corrected
+MGE99 (60), **not** on (60) as printed — and the first thing to check there is
+whether the $-7$ and the coefficient 7 reproduce from the baryon-frame change
+independently, since this bundle's standing method is to derive rather than
+transcribe. Flagged here so that the v1.5.0 stream meets it before writing code
+rather than after.

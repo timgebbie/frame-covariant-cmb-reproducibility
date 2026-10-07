@@ -43,6 +43,24 @@ Read from source, 2026-10-05:
          2/5 and 3/7 (1 - 8K/k^2); the l > 2 hierarchy is his **(8)**. Finding
          B-9.
 
+  **WS** M. L. Wilson and J. Silk, *Astrophys. J.* **243**, 14 (1981), **Eq. (7)**,
+         p. 15, read from the scanned paper (Annals II reference [WS]):
+
+             l > 2,  delta_l^dot = -n_e sigma_T c delta_l
+                       - i k T c [ l/(2l-1) delta_{l-1}
+                                   + (l+1)/(2l+3) delta_{l+1} ].
+
+         **Identical to Wilson (8) at K = 0**, which is what this bundle
+         compares in: same weights, same same-sign imaginary form, same overall
+         -ikT. Wilson 1983 is the negative-curvature generalisation and adds the
+         factor [1 - l(l+2)K/k^2]; this is the flat paper and has no such factor.
+
+         It is therefore a **fifth independent source for the l-weights** --- the
+         earliest of the set, read from its own page and not through Annals II ---
+         but it is **not a fifth numerical check**, because at K = 0 it is the
+         same equation. It is recorded, and F1 does not draw it as a separate
+         panel: an identical curve in a fifth box would present one check as two.
+
   **SZ** Seljak & Zaldarriaga, *Astrophys. J.* **469** (1996), 437, **Eq. (3d)**
          (Annals II reference [69]):
 
@@ -89,10 +107,11 @@ CITATION = {
     "MB": "Ma & Bertschinger, Astrophys. J. 455 (1995), 7, Eqs. (49), (50)",
     "SZ": "Seljak & Zaldarriaga, Astrophys. J. 469 (1996), 437, Eq. (3d)",
     "WI": "M. L. Wilson, Astrophys. J. 273 (1983), 2, Eq. (8)",
+    "WS": "M. L. Wilson and J. Silk, Astrophys. J. 243 (1981), 14, Eq. (7)",
 }
 
 #: Which Annals II Appendix F equation each external form corresponds to.
-APPENDIX_F = {"HS": "(F.3)", "MB": "(F.4)", "SZ": "(F.4)", "WI": "(F.3)"}
+APPENDIX_F = {"HS": "(F.3)", "MB": "(F.4)", "SZ": "(F.4)", "WI": "(F.3)", "WS": "(F.3)"}
 
 
 def integrate_external(

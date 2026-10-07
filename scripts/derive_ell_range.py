@@ -27,10 +27,15 @@ import sys
 from pathlib import Path
 
 import numpy as np
-from scipy.integrate import quad
-from scipy.special import gamma, spherical_jn
+from scipy.special import gamma
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from functions.spectra.sachs_wolfe import (  # noqa: E402
+    bessel_integral_numeric,
+)
+
 OUT = ROOT / "diagnostics" / "ell-range-v1.0.0.txt"
 
 # --- Annals II §8.3.2 model -------------------------------------------------
@@ -40,15 +45,6 @@ TOLERANCES = (0.01, 0.02, 0.05, 0.10)
 ADOPTED_TOLERANCE = 0.05
 
 
-def bessel_integral_numeric(m: int, ell: int) -> float:
-    """int_0^inf dz z^{-m} j_ell(z)^2, by quadrature with an analytic tail."""
-    f = lambda z: spherical_jn(ell, z) ** 2 / z**m  # noqa: E731
-    total, a = 0.0, 1e-8
-    for b in (1, 10, 50, 200, 1000, 5000, 20000):
-        value, _ = quad(f, a, b, limit=400)
-        total += value
-        a = b
-    return total + 1 / (2 * (1 + m) * a ** (1 + m))  # <sin^2> = 1/2
 
 
 def bessel_integral_printed(m: float, ell: float) -> float:

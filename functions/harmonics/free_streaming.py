@@ -91,7 +91,7 @@ def _rhs(norm: Normalisation, ell_max: int, k_com: float, sign_control: bool):
     """d/d(eta) of the hierarchy, in `norm`.
 
     `sign_control` flips the relative sign of the two couplings. That is the
-    lambda^2 = -1 case of the harmonic phase question: it is not a different
+    c^2 = -1 case of the harmonic phase question: it is not a different
     physical model, it is the same recursion written in the other candidate
     normalisation, and it must fail to reproduce the external form.
     """

@@ -31,7 +31,7 @@ and by the covariant route of (187)+(188), which are proven identical.
 | Archive | DOI `10.25375/uct.34069509` reserved on ZivaHub, MIT, **private draft, not published** |
 
 **What is already proven, and need not be redone.** The Appendix F chain closes
-numerically against three external hierarchies read from their own papers, in two
+numerically against **five** sources read from their own papers (four drawn), in two
 distinct normalisations, at $10^{-13}$–$10^{-14}$. $\alpha_\ell^{-1}\tau_\ell =
 j_\ell(k_{\rm com}\Delta\eta)$ to $10^{-10}$. The mode and covariant routes to
 $C_\ell$ are identical exactly. The numerical strategy — route 3, the hybrid — is
@@ -40,7 +40,7 @@ built and cross-verified both ways.
 ## How to run it
 
 ```powershell
-cd C:\Users\01404122\Documents\Claude\NonlinearShear-bundle
+cd <the bundle working directory>   # the repository is frame-covariant-cmb-reproducibility
 python -m venv .venv ; .venv\Scripts\Activate.ps1 ; pip install -r requirements.txt
 python scripts\run_all.py --rerun     # expect CLEAN
 pytest -q                             # expect 100 passed, 2 skipped
