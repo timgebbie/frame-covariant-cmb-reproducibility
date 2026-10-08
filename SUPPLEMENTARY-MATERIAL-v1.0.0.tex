@@ -103,10 +103,14 @@ lies.\footnote{The comparison applies the $(2\ell+1)^{-1}$ division that the tex
 preceding (F.4) specifies and the display omits; (F.4) is otherwise correct as
 printed. A misprint, recorded.}
 
-Four external treatments are used --- Hu \& Sugiyama Eq.~(6), Wilson Eq.~(8),
-Ma \& Bertschinger Eqs.~(49) and (50), and Seljak \& Zaldarriaga Eq.~(3d) ---
-each transcribed from its own paper. Hu \& Sugiyama and Wilson write the
-recursion in the $\beta$ normalisation and the other two in the $\alpha$
+\textbf{Five} external treatments are read and \textbf{four} are drawn ---
+Hu \& Sugiyama Eq.~(6), Wilson (1983) Eq.~(8), Ma \& Bertschinger Eqs.~(49) and
+(50), and Seljak \& Zaldarriaga Eq.~(3d) --- each transcribed from its own paper.
+The fifth is Wilson \& Silk (1981) Eq.~(7), the earliest of them and likewise
+read from its own page: at $K=0$ it \emph{is} Wilson (1983) Eq.~(8), so it is
+credited and not drawn, four panels carrying four independent numerical checks.
+Hu \& Sugiyama and Wilson write the recursion in the $\beta$ normalisation ---
+the normalisation their Eq.~(2) fixes --- and the other two in the $\alpha$
 normalisation, which is why Appendix~F prints both (F.3) and (F.4). A basis phase
 leaking into the couplings would break at least one of the two matches.
 
@@ -120,10 +124,16 @@ transforming the equation first would assume the identity under test. That the
 transformed solution is \emph{real} to $10^{-10}$ is a separate assertion from
 that it agrees. Wilson therefore tests the phase convention --- the subject of
 \S2's footnote and of acceptance criterion~3 --- from a source published before
-any of the others.\footnote{Appendix~F's prose names ``Wilson \& Silk'' while
-its key is Wilson alone, and it cites Wilson's Eq.~(7), which is the quadrupole
-equation; the $\ell>2$ hierarchy is his Eq.~(8). Two misprints in one citation,
-recorded; neither moves a result.}
+any of the others.\footnote{Appendix~F's citation pairs the name of one paper
+with the key of another. Both papers are real and both numbers are right for the
+paper they belong to: Wilson \& Silk (1981) Eq.~(7) \emph{is} the $\ell>2$
+hierarchy, and Wilson (1983) Eq.~(7) is that paper's quadrupole equation while
+its Eq.~(8) is the hierarchy. The prose names Wilson \& Silk, the key is Wilson
+alone and consistent across every citation, and the load-bearing $i^{-\ell}$
+remark names Wilson alone --- so the match and the phase remark are about
+Wilson (1983), and the number beside them is correct for the 1981 paper the
+prose names. One mismatched pairing, not two independent misprints; recorded,
+and it moves no result.}
 
 \section{Conventions, and what the comparison does and does not settle}
 \label{sec:conventions}
@@ -144,10 +154,14 @@ Hu \& Sugiyama, Ma \& Bertschinger and Seljak \& Zaldarriaga print the first;
 Wilson prints the second. That is the whole of the difference, and it is asserted
 symbolically rather than described.
 
-\paragraph{What the four-source match establishes.} The $\ell$-weights, which are
-convention-independent, are confirmed by four sources in two normalisations. The
-bundle is shown to sit at the same $c^2$ as Hu \& Sugiyama, Ma \& Bertschinger
-and Seljak \& Zaldarriaga, and Wilson is shown to sit at the other.
+\paragraph{What the match establishes.} The $\ell$-weights, which are
+convention-independent, are confirmed by five sources in two normalisations,
+four of them drawn and numerically independent. The bundle is shown to sit at
+the same $c^2$ as Hu \& Sugiyama, Ma \& Bertschinger and Seljak \& Zaldarriaga,
+and Wilson is shown to sit at the other. \emph{Both} Wilson papers are in the
+imaginary convention, which settles a standing hypothesis in the negative: no
+author published this recursion in both conventions, so the split is between
+authors and not within one.
 
 \paragraph{What it does not establish, and this release says so.} It does
 \textbf{not} establish that
@@ -175,6 +189,24 @@ covariant $\tau_{A_\ell}$ is invariant under the choice, the mode coefficients
 are not, and every released figure plots the invariant quantity.
 
 \input{tables/conventions-v1.0.0.tex}
+
+\paragraph{What this release does not yet carry, and why it is named here.}
+Table~\ref{tab:conventions} translates between the treatments this bundle is
+\emph{checked against}. A second table --- the couplings of the associated paper
+written in the conventions of Maartens, Gebbie \& Ellis (1999), Challinor
+(2000), the thesis in \textbf{both} of the conventions it uses, Beneke \& Fidler
+(2010) and Pitrou (2009) --- is conventions bookkeeping of a different kind and
+is produced by the conventions gate rather than by a bundle version. It is not
+printed here because it does not yet exist, and an empty box in a released
+document is worse than an acknowledged gap.
+
+Its acceptance is stated now so that it cannot be weakened later: every cell
+derived from a line of the normative conventions sheet, no cell blank, and where
+a treatment has no counterpart the cell says so. \textbf{The thesis takes two
+columns and they must differ.} If they come out identical the two conventions
+have been conflated --- which is precisely the error the table exists to
+prevent, and the error that cost this project three analytic passes before the
+sheet was written.
 
 \section{Frames and specialisation}
 The solution is carried with a \textbf{generic} $u^a$. The explicit frames appear

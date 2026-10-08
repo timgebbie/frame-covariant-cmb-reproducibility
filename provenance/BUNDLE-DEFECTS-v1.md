@@ -617,3 +617,58 @@ like part of the supplement where it sits. `source/source-v2/` is defined as
 cheapest check that would have caught this — comparing two sorted lists — was
 not written because the quantity being watched had been chosen for how easy it
 was to print. When a gate reports a number, ask what it would fail to notice.
+
+### T-6, note 2026-10-08: the first live run, and a transport limitation
+
+The git comparison fired correctly on its first real use and named five
+untracked files. Four were not a defect in the tree but an artefact of how the
+correction reached it: **the device bridge writes files and cannot delete
+them.** A rename performed in the development container therefore arrives on
+the publishing machine as an *addition*, leaving the old name in place, and
+`git rm --cached` clears the index without touching the working tree. So
+`outputs/paper1-fig-bulk.csv`, `outputs/paper1-fig-efficiency.csv`,
+`outputs/paper1-emissions-params.txt` and `scripts/emit_paper1_floats.py`
+survived their own rename.
+
+This is the second transport limitation worth recording beside the PNG
+re-encoding: **renames and deletions do not cross the bridge, only content
+does.** Any rename is therefore two operations — write the new name across,
+then delete the old name on the publishing machine — and the second one has to
+be asked for explicitly. The gate catching it on the first run is the system
+working; it would otherwise have shipped four duplicate files inside the
+fingerprint.
+
+The fifth file, P1-T's supplement handover, is a real open question and the
+gate is right to keep failing on it. It is draft material *for* the supplement,
+not a supplementary material and not frozen reference, so neither tracking it
+where it sits nor freezing it under `source/` is correct. It is folded into
+`SUPPLEMENTARY-MATERIAL-v1.0.0.tex` and removed; until then the tree is
+honestly not releasable, which is what the red gate says.
+
+### T-6, closed 2026-10-08: the handover is folded and the gate is clean
+
+P1-T's handover is incorporated and the file removed. It was **not** pasted:
+most of its App. C material was already in the supplement, so the fold is four
+surgical edits plus one new paragraph, and it corrected the supplement where it
+had fallen behind the resolved Wilson question.
+
+| was | now |
+|---|---|
+| "Four external treatments are used" | **five read, four drawn** --- Wilson \& Silk (1981) Eq.~(7) credited, and not drawn because at $K=0$ it *is* Wilson (1983) Eq.~(8) |
+| "Two misprints in one citation" | **one mismatched pairing.** Both papers are real and both numbers are right for the paper they belong to; *Annals II* pairs the 1981 name with the 1983 key and a number correct for 1981 |
+| "the four-source match" | the five-source match, with the added finding that **both** Wilson papers are in the imaginary convention --- so no author published in both, and the hypothesis that one had is dead |
+| (absent) | Hu \& Sugiyama Eq.~(2) cited as where the $\beta$ normalisation is fixed |
+
+**The translations table was deliberately not pasted.** The handover carries it
+as a `\PH{}` placeholder gated on the conventions gate, and an empty box in a
+*released* supplement is worse than an acknowledged gap --- the paper's own rule
+that a precise empty caption beats a plausible curve applies to a draft, not to
+a document that ships. The supplement now names the table, says why it is
+absent, and states its acceptance in advance, including the one that matters:
+the thesis takes two columns and **they must differ**.
+
+One citation is left as the bundle has it. The handover gives Ma \& Bertschinger
+Eqs.~(63) and (64) where this bundle integrates and cites Eqs.~(49) and (50).
+Ma \& Bertschinger print the hierarchy in two gauges, so both may be correct for
+different displays — and under S11 that is resolved from the source, not agreed
+between streams. **Open, and raised rather than silently reconciled.**
