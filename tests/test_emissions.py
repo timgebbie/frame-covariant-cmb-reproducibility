@@ -72,17 +72,19 @@ def test_the_running_integral_returns_to_the_endpoint():
 
     assert ray.running[0] == 0.0
     assert ray.running[-1] == pytest.approx(ray.endpoint)
-    assert np.isfinite(ray.bulk_fraction)
+    assert np.isfinite(ray.running_excursion)
 
 
-def test_the_bulk_fraction_is_reported_and_not_silently_tolerated():
-    """A source that does *not* cancel in the bulk must produce a large number.
+def test_the_running_excursion_is_reported_and_not_silently_tolerated():
+    """A running integral that wanders through the bulk must produce a large number.
 
-    The point is that `bulk_fraction` reports rather than judges: if v1.5.0's
-    operator fails to cancel through the bulk, that is a finding for P1-T and
-    this code must surface it, not absorb it.
+    The point is that `running_excursion` reports rather than judges. It was
+    called `bulk_fraction` until finding T-5, after a claim in Paper 1's caption
+    that turned out to be inverted; the measurement was always this flatness
+    statistic and is unchanged. Only the name, which had begun to carry an
+    argument, is different.
     """
     eta_0 = CDM_MODEL.eta_0
     eta = np.linspace(0.05, eta_0, 2000)
     ray = line_of_sight_field(4, 3.0, eta=eta, source=np.ones_like(eta), eta_0=eta_0)
-    assert ray.bulk_fraction > 0.1
+    assert ray.running_excursion > 0.1

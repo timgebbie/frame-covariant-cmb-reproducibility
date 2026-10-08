@@ -33,6 +33,7 @@ machine. It did not, briefly: see finding T-1.
 from __future__ import annotations
 
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -60,6 +61,64 @@ FORBIDDEN = re.compile(
 def source_files() -> list[Path]:
     """The bundle's text files: everything it ships, minus what a text gate cannot read."""
     return [p for p in bundle_files(ROOT) if p.suffix not in BINARY_SUFFIXES]
+
+
+def git_tracked() -> set[str] | None:
+    """What a clean `git clone` would deliver, or None when git cannot answer.
+
+    Returns None without a `.git` directory or without a usable `git` — the
+    normal case for a reader who downloaded a zip, and for any environment that
+    is not the publishing checkout. The check below is then skipped rather than
+    failed: absence of git is not evidence of anything.
+    """
+    if not (ROOT / ".git").exists():
+        return None
+    try:
+        out = subprocess.run(
+            ["git", "-C", str(ROOT), "ls-files", "-z"],
+            capture_output=True, check=True, timeout=60,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return {p for p in out.stdout.decode("utf-8", "replace").split("\0") if p}
+
+
+def check_against_git(failures: list[str]) -> str:
+    """The published tree and the fingerprinted tree must be the same tree.
+
+    **Finding T-6.** `bundle_files()` answers *what is in this folder*. Git
+    answers *what a clean checkout will contain*. Those are different questions,
+    and the release fingerprint is only meaningful for the second — a reader
+    verifies a clone, not somebody's working directory.
+
+    They disagreed, and the disagreement was invisible to every gate in place:
+    `data/.gitkeep` was tracked but deleted from disk, while an untracked file
+    sat in `supplementary-materials/`. **One file each way, so the counts came
+    out equal at 106 and 106** — and the portability gate prints a count, while
+    the manifest test asserts arithmetic on counts. Nothing compared the sets.
+    A clean checkout would have failed `make_manifests.py --check` for a reason
+    nobody would have found quickly, and a clean checkout is this project's
+    stated acceptance.
+    """
+    tracked = git_tracked()
+    if tracked is None:
+        return "      (no git here; a clean-checkout comparison was not possible)"
+
+    here = {p.relative_to(ROOT).as_posix() for p in bundle_files(ROOT)}
+    only_git, only_disk = sorted(tracked - here), sorted(here - tracked)
+    for rel in only_git:
+        failures.append(
+            f"{rel}: tracked by git but absent from the working tree — a clean "
+            "clone restores it and the fingerprint does not describe it"
+        )
+    for rel in only_disk:
+        failures.append(
+            f"{rel}: in the working tree but untracked — it is inside the "
+            "fingerprint and a clean clone will not have it"
+        )
+    if only_git or only_disk:
+        return ""
+    return f"      git agrees: {len(tracked)} tracked files, same set."
 
 
 def main() -> int:
@@ -97,6 +156,9 @@ def main() -> int:
         ):
             failures.append(f"{rel}: entry point builds paths without anchoring to __file__")
 
+    # The published tree and the fingerprinted tree must be the same tree (T-6).
+    git_note = check_against_git(failures)
+
     if failures:
         print(f"FAIL  {len(failures)} portability problem(s):")
         for f in failures:
@@ -115,6 +177,8 @@ def main() -> int:
           "no absolute paths, no mixed line endings")
     print(f"      {len(shipped) - 2} manifest entries expected "
           "(the two manifests cannot hash themselves).")
+    if git_note:
+        print(git_note)
     print("      This rules out what a machine can see. A clean checkout on the")
     print("      PI's machine remains the acceptance.")
 

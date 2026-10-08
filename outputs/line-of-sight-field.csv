@@ -1,4 +1,4 @@
-# ell=20 k_com=6.000000000000e+01 endpoint=-1.950789968672e+00 bulk_fraction=1.196428e-01
+# ell=20 k_com=6.000000000000e+01 endpoint=-1.950789968672e+00 running_excursion=1.196428e-01
 # alpha_l=5.389888459797e+06  beta_l=7.606836450479e-06
 # running = the integral of (176) accumulated from eta_* outward,
 #           which is alpha_l^-1 tau_l, the normalisation (176) returns

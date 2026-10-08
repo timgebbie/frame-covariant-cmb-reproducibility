@@ -381,3 +381,239 @@ drawing `fig:bulk`. The aliasing criterion depends on $k$, and the ray's $k$ is
 seven times smaller than the spectrum's band edge — which the criterion would
 have said in one line had I applied it instead of extrapolating from it. A
 correct rule, applied, beats the same rule used as an intuition.
+
+---
+
+### T-1, update 2026-10-08: which machine generates the fingerprint
+
+T-1 made the fingerprint independent of what is lying in a folder. A second
+question surfaced when the corrected tree was transferred to the PI's machine
+and `make_manifests.py --check` was run there: **two working copies existed,
+and they held different files.**
+
+| file | development container | PI's machine |
+|---|---|---|
+| `tests/__init__.py` | absent | present, since the bundle began |
+| `source/.gitkeep` | absent | present |
+| `supplementary-materials/stream-P1T-to-supplement-2026-10-07.tex` | absent | present — P1-T's handover, added that morning |
+
+None of this is drift in the T-1 sense; the gate was working exactly as built
+and said so precisely, including the release-blocking flag on `source/`, which
+is correct behaviour for a new file appearing under frozen material even when
+the file is innocuous.
+
+**The rule this settles: the manifest is generated on the machine that
+publishes.** A fingerprint written in a working copy and carried to the
+publishing tree describes the wrong tree, and whichever copy is behind wins by
+accident. The publishing tree is authoritative for *which files exist*; a
+working copy is authoritative only for *the content it changed*. So the
+sequence after any transfer is: reconcile the file set, then regenerate the
+manifests **there**, then commit.
+
+**A transport limitation, recorded because it will recur.** The same transfer
+moved 31 files. Every text file and both PDFs arrived byte-exact — the manifest
+check named only three differences, all of them PNGs. The bridge re-encodes
+PNG images. Nothing is wrong with the images, but their hashes move, so **PNG
+figures cannot be shipped across it**: they are regenerated on the target
+machine instead, which `run_all.py --rerun` does, and which is what the rule
+above says to do anyway.
+
+---
+
+## T-4 — the release harness tested the previous run's artefacts
+
+**Raised 2026-10-08, on the first `run_all.py --rerun` after the file set
+changed. Severity: material. A false failure, not a missed one.** Corrected the
+same day.
+
+`run_all.py` ran the regression suite **first**, before regenerating figures,
+tables, outputs and manifests. So on `--rerun` — the route whose whole purpose
+is to rewrite those artefacts — the suite tested the artefacts from the
+*previous* run.
+
+It surfaced the moment it could do damage. With three files reconciled into the
+tree, `--rerun` reported:
+
+```text
+FAILED tests/test_bundle_file_selection.py::test_the_manifest_covers_every_bundle_file_but_itself
+  assert 106 == (101 + 2)
+...
+--- manifest rewrite ---
+wrote FILE-MANIFEST-SHA256.txt      104 files
+============================================================
+NOT CLEAN — tests
+```
+
+**The run announced a failure and then, eleven lines later, fixed the thing it
+had failed on.** The tree was correct when the run ended; the verdict said
+otherwise. Nothing was wrong with the test — it asserts a real invariant, and
+it was the test that caught the file-set divergence in the first place. What was
+wrong was asking it a question before the answer had been written.
+
+T-1's entry says it in as many words: *a gate that cries wolf gets ignored,
+which is how a real drift gets through.* This is that failure mode arriving
+from the other direction — not a gate that passes when it should fail, but one
+that fails when it should pass, which erodes the same trust and does it faster,
+because a false alarm is visible and a false pass is not.
+
+### The correction
+
+The suite now runs **last**, after every artefact it could be testing has been
+regenerated, in both modes. The cost is losing fail-fast — a broken tree is
+found after the figures are drawn rather than before — and that is the right
+trade: a correct verdict late beats a wrong verdict early. `--strict` is
+unaffected in substance, since nothing should change there anyway.
+
+### Status
+
+**Closed.** Ordering is a property of the harness, now stated in the code where
+it is enforced rather than left to the order the steps happened to be written
+in.
+
+---
+
+## T-5 — a quantity named for the conclusion it was expected to support
+
+**Raised 2026-10-08 by the PI. Severity: material.** No number changed; the
+name did, and the name was doing argumentative work.
+
+### Origin, which is upstream of this bundle
+
+Paper 1's caption for `fig:bulk` read:
+
+> The bulk contribution cancels; what survives is the lever-arm endpoint, and
+> that endpoint is the lensing.
+
+**That is backwards**, and the PI established it from the section rather than
+from the caption: $\Delta e_\perp(0)=0$ kills the *lower boundary* term, so what
+survives is the **bulk integral**, which on exchanging the double integral is
+$-\int(\chi_*-\chi)\nabla_\perp\Phi_A\,\dd\chi$ — the deflection with the
+lensing efficiency inside it. The endpoint vanishes; the bulk is the signal.
+
+P1-T's float specification of 2026-10-06 was written from that caption, so the
+inverted statement reached this stream as a work order and had been live for two
+days.
+
+### What it did here
+
+The emission dutifully produced a statistic whose **name** asserted the
+inverted claim: `bulk_fraction`, read naturally as *the fraction of the signal
+contributed by the bulk*, reported as `0.1196`. A reader comparing that against
+"the bulk cancels" would conclude the cancellation was failing at the 12% level.
+
+Both readings are wrong, and the code was never computing either:
+
+```python
+interior = slice(len(running) // 10, -len(running) // 10)
+max(abs(running[interior] - endpoint)) / abs(endpoint)
+```
+
+That is the **largest excursion of the running line-of-sight integral away from
+its final value, through the middle 80% of the ray, relative to that final
+value**. A flatness measure. It cannot be a bulk-over-total ratio, because the
+running integral *is* the total — such a ratio built from it is identically
+zero, which is why the "~0.95 if something is off" the question anticipated was
+never reachable.
+
+**And 12% is a real, sensible number read correctly.** The ray's integral
+arrives within 12% of its endpoint by $\chi=3.195$ — 1.3% of the way from last
+scattering — then drifts within that band and settles to 5% only over the final
+11% of the ray. That is the signature of a source dominated by the
+last-scattering spike with a late integrated Sachs–Wolfe contribution spread
+along the line of sight, at the ~12% level, for $\Lambda$CDM at $\ell=20$. It
+is a property of (176)'s integrand and says nothing whatever about the
+$O(\varepsilon^2\ell)$ aberration operator of Eq. (28), which does not exist
+until v1.5.0 and is what the bulk-versus-endpoint question is actually about.
+
+### The correction
+
+`RayEmission.bulk_fraction` is now `RayEmission.running_excursion`, documented
+by its formula. The computation is byte-identical; the CSV header and the
+parameter file carry the new name and a statement of what it does and does not
+speak to.
+
+### The lesson, which is the reason this has an entry at all
+
+**A number named after the conclusion it is expected to support will be read as
+evidence for that conclusion, whatever it computes.** The inversion originated
+in a caption, travelled through a specification into a property name, and from
+there into a CSV header that P1-T would have plotted. Nothing checked it,
+because every step was faithful to the step above it. The defence is the one
+this project already applies to equation numbers: name the thing by what it
+*is*, resolve claims against the derivation, and let the agreement be an
+observation rather than a label.
+
+**One consequence is worth more than the correction.** Under the corrected
+statement, the surviving bulk term carries the factor $(\chi_*-\chi)$ — which
+is exactly the lensing efficiency `fig:efficiency` already shows emerging from
+the lever arm. The two figures stop being independent checks and become the two
+halves of one argument, and the bundle already emits the kernel both need.
+
+### Status
+
+**Closed here; the caption and the specification are the PI's and P1-T's to
+correct.** Recorded in this bundle because the inverted claim reached the code
+and was shipped in an output header.
+
+---
+
+## T-6 — the fingerprinted tree and the published tree were not the same tree
+
+**Raised 2026-10-08, from a `git ls-tree -r --name-only HEAD` listing the PI
+pasted. Severity: release-blocking.** Corrected the same day.
+
+### How it surfaced, and why nothing had caught it
+
+The gates answer *what is in this folder*. Git answers *what a clean checkout
+will contain*. **The release fingerprint is only meaningful for the second** — a
+reader verifies a clone, not somebody's working directory — and the two had
+drifted apart in both directions at once:
+
+| | |
+|---|---|
+| `data/.gitkeep` | tracked by git, **deleted from the working tree** |
+| `supplementary-materials/stream-P1T-to-supplement-2026-10-07.tex` | in the working tree, **untracked** |
+
+**One file each way, so the counts came out equal: 106 against 106.** The
+portability gate prints a count. `test_the_manifest_covers_every_bundle_file_but_itself`
+asserts arithmetic on counts. Nothing compared the sets, so both passed on a
+tree where a clean clone would have failed `make_manifests.py --check` — and *a
+clean checkout is this project's stated acceptance*. The failure would have
+appeared at the worst moment, on someone else's machine, with the fingerprint
+apparently sound everywhere it had been checked.
+
+This completes a family. **T-1** was the fingerprint absorbing junk that was in
+the folder. **T-6** is the fingerprint missing files that were not. Both reduce
+to the same mistake: treating the working directory as the thing being
+released.
+
+### The correction
+
+`check_portability.check_against_git()` compares `git ls-files` against
+`bundle_files()` and **fails on any difference in either direction**, naming the
+file and saying which way it is wrong. It returns a note and no failure when
+`.git` or `git` is unavailable, which is the normal case for a reader who
+downloaded a zip and for any non-publishing environment: absence of git is not
+evidence of anything, and a gate that fails on it would be the T-4 mistake
+again.
+
+The untracked case fails too, deliberately. A file inside the fingerprint that
+a clone will not have is as wrong as the reverse, and failing forces the
+question — *where does this file belong?* — instead of letting the mismatch sit.
+
+### What the two files themselves need
+
+`data/.gitkeep` is redundant beside `data/README.md`, exactly as `source/.gitkeep`
+is redundant beside `source/README.md`; neither directory needs a keeper. It is
+removed from tracking rather than restored to disk.
+
+The P1-T handover is **input**, not a supplementary material, and ships looking
+like part of the supplement where it sits. `source/source-v2/` is defined as
+"computational conformity and clarification inserts", which is what it is.
+
+### The general lesson
+
+**Equal counts are not an equal set, and every gate here was counting.** The
+cheapest check that would have caught this — comparing two sorted lists — was
+not written because the quantity being watched had been chosen for how easy it
+was to print. When a gate reports a number, ask what it would fail to notice.

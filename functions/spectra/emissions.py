@@ -127,14 +127,23 @@ class RayEmission:
     endpoint: float
 
     @property
-    def bulk_fraction(self) -> float:
-        """How much of the running integral lives away from the endpoints.
+    def running_excursion(self) -> float:
+        """max|running(chi) - endpoint| over the interior 80% of the ray, / |endpoint|.
 
-        P1-T's acceptance for `fig:bulk` is that the local operator does not fall off
-        through the bulk while the running integral still returns to the endpoint
-        value. This is the number that statement is made with. It is **reported,
-        not asserted**: if the bulk does not cancel that is a finding, and this
-        module must not hide it behind a tolerance.
+        **Named for what it computes, not for what it was once hoped to show**
+        --- finding T-5. It was called `bulk_fraction`, after a claim in Paper
+        1's caption that has since been found inverted, and the name made it
+        read as *the fraction of the signal contributed by the bulk*. It is not
+        that, and it never was: the running integral **is** the total, so a
+        bulk-over-total ratio built from it is identically zero.
+
+        What it measures is **flatness**: how far the accumulated line-of-sight
+        integral of (176) wanders from its final value through the middle of
+        the ray, with the first and last tenth trimmed because the integral
+        necessarily starts at zero and necessarily ends at the endpoint.
+
+        It is **reported, never asserted**. Nothing in v1.0.0 is required to
+        cancel, so there is no tolerance to hide anything behind.
         """
         if self.endpoint == 0.0:
             return float("nan")
@@ -182,7 +191,7 @@ class RayEmission:
         a, b = float(alpha(self.ell)), float(beta(self.ell))
         with open(path, "w", encoding="utf-8", newline="\n") as fh:
             fh.write(f"# ell={self.ell} k_com={self.k_com:.12e} "
-                     f"endpoint={self.endpoint:.12e} bulk_fraction={self.bulk_fraction:.6e}\n")
+                     f"endpoint={self.endpoint:.12e} running_excursion={self.running_excursion:.6e}\n")
             fh.write(f"# alpha_l={a:.12e}  beta_l={b:.12e}\n")
             fh.write("# running = the integral of (176) accumulated from eta_* outward,\n")
             fh.write("#           which is alpha_l^-1 tau_l, the normalisation (176) returns\n")

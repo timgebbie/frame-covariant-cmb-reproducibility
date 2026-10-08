@@ -58,7 +58,7 @@ DIAGNOSTICS: list[tuple[str, str]] = [
 #: emissions module existed for a day before this step did, and nothing was
 #: produced in that time.
 EMISSIONS: list[tuple[str, str]] = [
-    ("Paper 1 floats: fig:efficiency, fig:bulk", "scripts/emit_paper1_floats.py"),
+    ("handover fields: lensing kernel, line-of-sight ray", "scripts/emit_handover_fields.py"),
 ]
 
 
@@ -81,9 +81,6 @@ def main() -> int:
     args = ap.parse_args()
 
     failures: list[str] = []
-
-    if run([sys.executable, "-m", "pytest", "-q"], "regression suite"):
-        failures.append("tests")
 
     pending: dict[str, list[str]] = {"figures": [], "diagnostics": [], "emissions": []}
     label, script = GATE
@@ -127,6 +124,15 @@ def main() -> int:
             failures.append("manifests")
     else:
         run([sys.executable, "scripts/make_manifests.py"], "manifest rewrite")
+
+    # **The regression suite runs LAST, after everything it could be testing has
+    # been regenerated** --- finding T-4. It used to run first, which meant that
+    # on `--rerun` it tested the *previous* run's artefacts: after any change to
+    # the file set it reported `NOT CLEAN -- tests` against a stale manifest that
+    # the very same run then rewrote correctly. A gate that fails while the tree
+    # is fine is worse than no gate, because the next failure gets dismissed too.
+    if run([sys.executable, "-m", "pytest", "-q"], "regression suite"):
+        failures.append("tests")
 
     print("\n" + "=" * 60)
     if failures:

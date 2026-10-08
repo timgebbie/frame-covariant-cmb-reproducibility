@@ -197,3 +197,40 @@ def test_the_released_figures_are_in_the_bundle():
         "supplementary-materials/supplement-v1.0.0.pdf",
     ):
         assert rel in selected, f"{rel} fell out of the fingerprint"
+
+
+# ---------------------------------------------------------------------------
+# T-6: the published tree and the fingerprinted tree
+# ---------------------------------------------------------------------------
+
+
+def test_the_git_comparison_skips_cleanly_without_git():
+    """A reader with a downloaded zip has no `.git`, and must not see a failure.
+
+    Absence of git is not evidence of anything, so the check returns a note and
+    adds nothing to `failures`.
+    """
+    import check_portability
+
+    failures: list[str] = []
+    note = check_portability.check_against_git(failures)
+    if check_portability.git_tracked() is None:
+        assert failures == []
+        assert "not possible" in note
+
+
+def test_the_git_comparison_catches_a_set_difference_that_counts_would_miss():
+    """Finding T-6's exact shape: one file each way, so the counts agree.
+
+    `data/.gitkeep` was tracked but deleted from disk while an untracked file
+    sat in `supplementary-materials/`. 106 files against 106 tracked — equal —
+    and every gate in place compared counts. A clean clone would have failed
+    `make_manifests.py --check` for a reason nobody would have found quickly.
+    """
+    tracked = {"a.py", "b.py", "data/.gitkeep"}
+    here = {"a.py", "b.py", "supplementary-materials/handover.tex"}
+
+    assert len(tracked) == len(here), "the premise: the counts are equal"
+    assert tracked != here, "and the sets are not"
+    assert tracked - here == {"data/.gitkeep"}
+    assert here - tracked == {"supplementary-materials/handover.tex"}
