@@ -23,6 +23,11 @@ Checks:
 3. **No non-ASCII in code paths or identifiers**, which travel badly across
    filesystems. Prose and docstrings are exempt; this bundle is written in
    English with mathematical symbols and that is deliberate.
+
+**The file set is not this script's to decide.** It comes from
+`scripts/_bundle_files.py`, the one selector the manifest generator also uses,
+so that the number printed below means the same thing here and on the PI's
+machine. It did not, briefly: see finding T-1.
 """
 
 from __future__ import annotations
@@ -30,6 +35,14 @@ from __future__ import annotations
 import re
 import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from _bundle_files import (  # noqa: E402
+    BINARY_SUFFIXES,
+    bundle_files,
+    ignored_but_present,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -44,17 +57,9 @@ FORBIDDEN = re.compile(
     """
 )
 
-SKIP_DIRS = {".git", ".pytest_cache", "__pycache__", ".venv", "venv"}
-BINARY = {".png", ".pdf", ".pyc", ".zip", ".gz"}
-
-
 def source_files() -> list[Path]:
-    out = []
-    for p in sorted(ROOT.rglob("*")):
-        if not p.is_file() or set(p.parts) & SKIP_DIRS or p.suffix in BINARY:
-            continue
-        out.append(p)
-    return out
+    """The bundle's text files: everything it ships, minus what a text gate cannot read."""
+    return [p for p in bundle_files(ROOT) if p.suffix not in BINARY_SUFFIXES]
 
 
 def main() -> int:
@@ -78,8 +83,19 @@ def main() -> int:
             if FORBIDDEN.search(line):
                 failures.append(f"{rel}:{n}: absolute path outside the repository")
 
-        if "__file__" not in text and "Path(" in text and rel.parts[0] == "scripts":
-            failures.append(f"{rel}: builds paths without anchoring to __file__")
+        # Only *entry points* must anchor themselves. A module that receives its
+        # root as an argument is portable by construction, and demanding
+        # `__file__` of it would push a hardcoded root into a library --- the
+        # opposite of what this rule is for. `__main__` is the test for "this
+        # gets run, so it has to know where it is".
+        is_entry_point = '__name__ == "__main__"' in text or "__name__ == '__main__'" in text
+        if (
+            rel.parts[0] == "scripts"
+            and is_entry_point
+            and "__file__" not in text
+            and "Path(" in text
+        ):
+            failures.append(f"{rel}: entry point builds paths without anchoring to __file__")
 
     if failures:
         print(f"FAIL  {len(failures)} portability problem(s):")
@@ -91,9 +107,29 @@ def main() -> int:
         print("      PI's machine -- that, not this script, is the acceptance.")
         return 1
 
-    print(f"PASS  {len(source_files())} files: no absolute paths, no mixed line endings")
+    shipped = bundle_files(ROOT)
+    checked = source_files()
+    binary = len(shipped) - len(checked)
+    print(f"PASS  {len(shipped)} bundle files "
+          f"({len(checked)} content-checked, {binary} binary): "
+          "no absolute paths, no mixed line endings")
+    print(f"      {len(shipped) - 2} manifest entries expected "
+          "(the two manifests cannot hash themselves).")
     print("      This rules out what a machine can see. A clean checkout on the")
     print("      PI's machine remains the acceptance.")
+
+    # A note, never a failure. Local build products are normal; two machines
+    # disagreeing about the bundle's size is not, and this is where that
+    # question gets answered without a round trip.
+    stray = ignored_but_present(ROOT)
+    if stray:
+        print()
+        print(f"NOTE  {len(stray)} file(s) in this working tree are ignored and are")
+        print("      NOT part of the bundle or the fingerprint:")
+        for rel in stray[:12]:
+            print(f"        {rel}")
+        if len(stray) > 12:
+            print(f"        ... and {len(stray) - 12} more")
     return 0
 
 

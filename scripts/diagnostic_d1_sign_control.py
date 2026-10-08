@@ -46,7 +46,12 @@ from functions.harmonics.free_streaming import (  # noqa: E402
     analytic_projection,
     free_stream,
 )
-from functions.plotting.style import INK, SERIES, use_house_style  # noqa: E402
+from functions.plotting.style import (  # noqa: E402
+    DETERMINISTIC_METADATA,
+    INK,
+    SERIES,
+    use_house_style,
+)
 
 K_COM = 1.0
 ELL_MAX = 80
@@ -121,7 +126,10 @@ def main() -> int:
     ax.legend(loc="upper left", bbox_to_anchor=(0.0, -0.22), ncol=1, fontsize=7.2)
     fig.subplots_adjust(bottom=0.40)
     path = OUT / "d1-sign-control-v1.0.0.png"
-    fig.savefig(path)
+    # Deterministic metadata, as every released figure gets. See T-2 and
+    # functions/plotting/style.py: this one writes its own file rather than
+    # going through save_figure, so it has to say so itself.
+    fig.savefig(path, metadata=DETERMINISTIC_METADATA["png"])
     plt.close(fig)
     print(f"wrote {path.relative_to(ROOT)}")
     return 0 if ok else 1

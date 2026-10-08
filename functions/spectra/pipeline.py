@@ -39,6 +39,23 @@ dipole. It is not a free choice and it is not invented here.
 forms of the integrated source is used --- Annals II's visibility, or the
 opacity of (98) that a late integrated Sachs--Wolfe term needs. It has **no
 default**, by design. See `provenance/SOURCE-APPROXIMATIONS-v1.md`.
+
+**The $\\eta$ grid is derived from $k_{\\max}$, not chosen** --- finding
+**T-3**. The line-of-sight integrand carries $j_\\ell(k(\\eta_0-\\eta))$, which
+oscillates with period $\\pi/k$ in $\\eta$. A fixed $\\eta$ grid therefore
+resolves that oscillation at low $k$ and **aliases** it at high $k$, and the
+aliased contribution does not announce itself: it returns a smooth, plausible
+spectrum of entirely the wrong shape. This is the same argument the $k$ grid
+already carried in `scripts/figure_f3_angular_spectrum.py` --- *a logarithmic
+grid aliases the integrand at high k however many points it has* --- which had
+never been applied to $\\eta$. At the shipped `n_eta=1000` the grid gave 3.7
+points per oscillation at $k_{\\max}$ for CDM and **2.3 for $\\Lambda$CDM**, the
+latter below the Nyquist limit of 2 at the band edge; $D_\\ell$ was wrong by up
+to 94% and 575% respectively, and the $\\Lambda$CDM peak-to-plateau ratio read
+37 where it converges to 7.0.
+
+`n_eta` therefore defaults to `None`, meaning *derive it*, and an explicit value
+that under-samples **raises** rather than aliasing quietly.
 """
 
 from __future__ import annotations
@@ -62,7 +79,35 @@ from functions.spectra.sources import (
     source_primary,
 )
 
-__all__ = ["SpectrumRun", "primordial_power", "run"]
+__all__ = [
+    "ETA_POINTS_PER_PERIOD",
+    "SpectrumRun",
+    "primordial_power",
+    "required_n_eta",
+    "run",
+]
+
+#: Samples per $j_\ell$ oscillation the line-of-sight $\eta$ grid must carry at
+#: the largest $k$ on the grid. Twelve, matching `BesselTable`'s sampling of the
+#: same oscillation in $x$: the two grids resolve one function and there is no
+#: reason for them to disagree about how finely. Nyquist is 2; the shipped
+#: v1.0.0-rc grid sat at 2.3 for ΛCDM, which is how finding T-3 happened.
+ETA_POINTS_PER_PERIOD = 12
+
+
+def required_n_eta(
+    k_max: float, eta_span: float, *, points_per_period: int = ETA_POINTS_PER_PERIOD
+) -> int:
+    """How many $\\eta$ samples the line-of-sight integral needs, from $k_{\\max}$.
+
+    $j_\\ell(k(\\eta_0-\\eta))$ has period $\\pi/k$ in $\\eta$, so resolving it at
+    the band edge takes `points_per_period` samples per $\\pi/k_{\\max}$ across
+    the whole span. This is arithmetic, not a tuning knob, which is why it is
+    computed rather than configured.
+    """
+    if k_max <= 0.0 or eta_span <= 0.0:
+        raise ValueError("k_max and eta_span must be positive")
+    return int(np.ceil(points_per_period * k_max * eta_span / np.pi))
 
 
 def primordial_power(
@@ -86,6 +131,21 @@ class SpectrumRun:
     weighting: Weighting
     background: Background
     transfer: np.ndarray  # (n_ell, n_k), what (176) returned
+    n_eta: int                     # the grid actually used, derived unless forced
+    eta_points_per_period: float   # samples per j_l oscillation at k_max
+    damping_at_k_max: float        # exp[-(k_max/k_D)^2]: what the k grid left out
+
+    @property
+    def k_truncation_is_negligible(self) -> bool:
+        """Whether the $k$ grid reaches past the diffusion cut-off.
+
+        $\\exp[-(k_{\\max}/k_D)^2]$ is the weight still sitting on the integrand
+        where the grid stops. Near 1 means the integral was **truncated**, not
+        converged: the grid ended while the source was still contributing. This
+        is reported rather than enforced, because extending the grid is a cost
+        decision and hiding the cost behind a silent pass is how T-3 happened.
+        """
+        return self.damping_at_k_max < 1e-2
 
 
 def run(
@@ -98,16 +158,37 @@ def run(
     amplitude: float = 1.0,
     omega_b_h2: float = 0.0224,
     isw_sign: float = PUBLISHED_ISW_SIGN,
-    n_eta: int = 1500,
+    n_eta: int | None = None,
     tight_coupling_factor: float = 6.0,
 ) -> SpectrumRun:
-    """Background -> C_l. `weighting` is required; see the module docstring."""
+    """Background -> C_l. `weighting` is required; see the module docstring.
+
+    `n_eta=None` derives the grid from `k_com.max()` via `required_n_eta`. An
+    explicit value below that requirement raises: see finding T-3, where a
+    hand-set 1000 aliased the line-of-sight integrand and moved $D_\\ell$ by up
+    to 575%.
+    """
     ells = np.asarray(ells, dtype=int)
     k_com = np.asarray(k_com, dtype=float)
 
     # --- k-independent: recombination, potentials, the background grid -------
     recombination = RecombinationHistory.build(background, omega_b_h2=omega_b_h2)
     eta_star = recombination.eta_star
+
+    # --- T-3: the eta grid is derived from k_max, never assumed --------------
+    eta_span = float(background.eta_0 - recombination.eta[0])
+    k_max = float(k_com.max())
+    needed = required_n_eta(k_max, eta_span)
+    if n_eta is None:
+        n_eta = needed
+    elif n_eta < needed:
+        raise ValueError(
+            f"n_eta={n_eta} aliases the line-of-sight integrand: j_l(k(eta_0-eta)) "
+            f"has period pi/k_max = {np.pi / k_max:.3e} in eta, and this grid gives "
+            f"{np.pi / k_max / (eta_span / n_eta):.1f} samples per oscillation where "
+            f"{ETA_POINTS_PER_PERIOD} are required (n_eta >= {needed}). "
+            "Pass n_eta=None to derive it. See finding T-3."
+        )
 
     eta = np.linspace(recombination.eta[0], background.eta_0, n_eta)
     phi_a, phi_h = potentials(background, eta)
@@ -187,4 +268,7 @@ def run(
     return SpectrumRun(
         spectrum=spectrum, recombination=recombination, eta_star=eta_star,
         weighting=weighting, background=background, transfer=transfer,
+        n_eta=int(n_eta),
+        eta_points_per_period=float(np.pi / k_max / (eta_span / n_eta)),
+        damping_at_k_max=float(np.exp(-((k_max / damping_k) ** 2))),
     )

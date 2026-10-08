@@ -21,3 +21,17 @@ venv/
 *.pdf
 !figures/*.pdf
 !supplementary-materials/*.pdf
+
+# OS and editor metadata. Windows Explorer writes Thumbs.db into any folder of
+# images --- figures/ --- and macOS writes .DS_Store into any folder opened in
+# Finder. Neither is part of the bundle on any machine, and before finding T-1
+# either could enter the release fingerprint just by someone looking at a
+# directory. That is why these are listed rather than assumed absent.
+.DS_Store
+._*
+Thumbs.db
+ehthumbs.db
+desktop.ini
+*~
+*.swp
+*.swo

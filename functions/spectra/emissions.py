@@ -141,13 +141,58 @@ class RayEmission:
         interior = slice(len(self.running) // 10, -len(self.running) // 10)
         return float(np.max(np.abs(self.running[interior] - self.endpoint)) / abs(self.endpoint))
 
+    @property
+    def tau_mode(self) -> np.ndarray:
+        """$\\tau_\\ell(\\chi)$ — the **mode** coefficient, accumulated along the ray.
+
+        (176) returns $\\alpha_\\ell^{-1}\\tau_\\ell$, which is what `running`
+        holds, so the mode coefficient is $\\alpha_\\ell$ times it.
+        """
+        from functions.harmonics.weights import alpha
+
+        return float(alpha(self.ell)) * self.running
+
+    @property
+    def tau_multipole(self) -> np.ndarray:
+        """$\\tau_{A_\\ell}(\\chi)$ — the **multipole** coefficient's magnitude.
+
+        $\\beta_\\ell=O^{A_\\ell}O_{A_\\ell}$ is the contraction of the PSTF basis
+        with itself, Gebbie & Ellis (2000) Eq. (24), so (187)'s
+        $\\langle\\tau_{A_\\ell}\\tau^{A_\\ell}\\rangle=\\beta_\\ell\\langle\\tau_\\ell^2\\rangle$
+        gives $|\\tau_{A_\\ell}|=\\sqrt{\\beta_\\ell}\\,\\tau_\\ell$ along one ray.
+
+        **Both are emitted and neither is called "tau".** *Annals II* p. 366
+        keeps mode and multipole apart because they are not interchangeable —
+        the multipole mean square holds for general geometries where the mode
+        one holds only for almost-Robertson--Walker — and silently handing over
+        one labelled as the other is how a factor leaks into a paper.
+        """
+        from functions.harmonics.weights import beta
+
+        return float(beta(self.ell)) ** 0.5 * self.tau_mode
+
     def to_csv(self, path) -> None:
+        """Written multipole-first, because that is what Paper 1 asked for.
+
+        The mode column and the raw integrand stay beside it so the conversion
+        is auditable rather than trusted, and the header states the relation.
+        """
+        from functions.harmonics.weights import alpha, beta
+
+        a, b = float(alpha(self.ell)), float(beta(self.ell))
         with open(path, "w", encoding="utf-8", newline="\n") as fh:
             fh.write(f"# ell={self.ell} k_com={self.k_com:.12e} "
                      f"endpoint={self.endpoint:.12e} bulk_fraction={self.bulk_fraction:.6e}\n")
-            fh.write("eta,chi,integrand,running\n")
-            for e, c, i, r in zip(self.eta, self.chi, self.integrand, self.running):
-                fh.write(f"{e:.12e},{c:.12e},{i:.12e},{r:.12e}\n")
+            fh.write(f"# alpha_l={a:.12e}  beta_l={b:.12e}\n")
+            fh.write("# running = the integral of (176) accumulated from eta_* outward,\n")
+            fh.write("#           which is alpha_l^-1 tau_l, the normalisation (176) returns\n")
+            fh.write("# tau_l    = alpha_l * running            [MODE coefficient]\n")
+            fh.write("# tau_Al   = sqrt(beta_l) * tau_l         [MULTIPOLE coefficient, (187)]\n")
+            fh.write("# The two are NOT interchangeable; see Annals II p. 366.\n")
+            fh.write("chi,tau_Al,tau_l,integrand,running,eta\n")
+            for c, tA, tl, i, r, e in zip(self.chi, self.tau_multipole, self.tau_mode,
+                                          self.integrand, self.running, self.eta):
+                fh.write(f"{c:.12e},{tA:.12e},{tl:.12e},{i:.12e},{r:.12e},{e:.12e}\n")
 
 
 def line_of_sight_field(

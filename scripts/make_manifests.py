@@ -11,6 +11,12 @@ release fingerprint.
 recorded — frozen reference material under `source/`, and the provenance records
 of findings already raised. A change there is a release-blocking event, not a
 routine update, because it means a recorded finding or a frozen source moved.
+
+**Which files count is not decided here.** It comes from
+`scripts/_bundle_files.py`, shared with the portability gate, and it honours
+`.gitignore`. Before finding T-1 it did not, and a local `pdflatex` run's
+`.aux`/`.log`/`.out` could enter the release fingerprint — making the
+fingerprint a property of somebody's folder rather than of the repository.
 """
 
 from __future__ import annotations
@@ -20,12 +26,15 @@ import hashlib
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from _bundle_files import bundle_files  # noqa: E402
+
 ROOT = Path(__file__).resolve().parents[1]
 
 FILE_MANIFEST = ROOT / "FILE-MANIFEST-SHA256.txt"
 IMMUTABLE_MANIFEST = ROOT / "IMMUTABLE-MANIFEST-SHA256.txt"
 
-EXCLUDE_DIRS = {".git", "__pycache__", ".pytest_cache", ".venv", "venv", ".ipynb_checkpoints"}
 EXCLUDE_FILES = {FILE_MANIFEST.name, IMMUTABLE_MANIFEST.name}
 
 #: Paths frozen once recorded, relative to the repository root. Frozen reference
@@ -38,7 +47,10 @@ IMMUTABLE_PREFIXES = ("source/",)
 #: guard stores the length and hash of what has been written so far and verifies
 #: that those bytes are unchanged: appending is fine, rewriting history is not.
 #: This is the project's append-only discipline, enforced rather than trusted.
-APPEND_ONLY = ("provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md",)
+APPEND_ONLY = (
+    "provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md",
+    "provenance/BUNDLE-DEFECTS-v1.md",
+)
 
 APPEND_GUARD = "provenance/append-guard.txt"
 
@@ -52,17 +64,8 @@ def sha256(path: Path) -> str:
 
 
 def tracked_files() -> list[Path]:
-    out: list[Path] = []
-    for p in sorted(ROOT.rglob("*")):
-        if not p.is_file():
-            continue
-        rel = p.relative_to(ROOT)
-        if set(rel.parts) & EXCLUDE_DIRS:
-            continue
-        if rel.name in EXCLUDE_FILES:
-            continue
-        out.append(p)
-    return out
+    """Every file in the bundle except the two manifests, which cannot hash themselves."""
+    return [p for p in bundle_files(ROOT) if p.name not in EXCLUDE_FILES]
 
 
 def is_immutable(rel: str) -> bool:

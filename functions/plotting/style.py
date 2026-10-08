@@ -94,17 +94,39 @@ def use_house_style() -> None:
     )
 
 
+#: Metadata written into every released figure, per format.
+#:
+#: **`CreationDate: None` is the whole point** (finding T-2). Matplotlib stamps
+#: the wall clock into every PDF it writes, so two runs of the same script on
+#: the same machine produced different bytes, every PDF hash moved on every run,
+#: and `make_manifests.py --check` could never pass after a re-run --- which is
+#: exactly what a reader re-running the pipeline wants it for. A fingerprint
+#: that cannot survive regenerating what it fingerprints is not a fingerprint.
+#:
+#: `Creator` is pinned for the same reason, one variable fewer. What is **not**
+#: claimed is byte-identity across matplotlib versions: a different renderer
+#: genuinely lays the page out differently, and pretending otherwise by
+#: stripping the version would hide a real difference instead of removing a
+#: spurious one.
+DETERMINISTIC_METADATA = {
+    "pdf": {"CreationDate": None, "Creator": "frame-covariant-cmb-reproducibility"},
+    "png": {"Software": "frame-covariant-cmb-reproducibility"},
+}
+
+
 def save_figure(fig, stem: str, version: str = "v1.0.0") -> list[Path]:
     """Write the versioned PDF/PNG pair into figures/ and return the paths.
 
-    Figures are versioned in the filename, per the house layout.
+    Figures are versioned in the filename, per the house layout, and written
+    with deterministic metadata so that regenerating a figure that has not
+    changed leaves its hash alone. See `DETERMINISTIC_METADATA`.
     """
     out = ROOT / "figures"
     out.mkdir(exist_ok=True)
     paths = []
     for ext in ("pdf", "png"):
         p = out / f"{stem}-{version}.{ext}"
-        fig.savefig(p)
+        fig.savefig(p, metadata=DETERMINISTIC_METADATA[ext])
         paths.append(p)
     plt.close(fig)
     return paths

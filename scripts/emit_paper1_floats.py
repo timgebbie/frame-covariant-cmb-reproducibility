@@ -48,6 +48,10 @@ from functions.spectra.emissions import (  # noqa: E402
     lensing_efficiency,
     line_of_sight_field,
 )
+from functions.spectra.pipeline import (  # noqa: E402
+    ETA_POINTS_PER_PERIOD,
+    required_n_eta,
+)
 from functions.spectra.potentials import potentials  # noqa: E402
 from functions.spectra.sources import (  # noqa: E402
     PerturbationHistory,
@@ -85,7 +89,22 @@ def main() -> int:
             fh.write(f"{e:.12e},{c:.12e},{c / distance.chi_star:.12e},{k:.12e}\n")
 
     # --- fig:bulk --------------------------------------------------------
-    eta = np.linspace(recombination.eta[0], model.eta_0, 1500)
+    # **T-3 guard.** The ray carries j_l(k_com (eta_0 - eta)), period pi/k in
+    # eta. F3's spectrum was aliased because its grid was set against a band
+    # edge of k=420; this ray sits at k=60, where the same 1500 points give
+    # 24 samples per oscillation. That is comfortable -- but it was luck, not
+    # design, so it is now checked here and recorded in the parameter file.
+    n_eta = 1500
+    span = float(model.eta_0 - recombination.eta[0])
+    needed = required_n_eta(RAY_K_COM, span)
+    per_period = np.pi / RAY_K_COM / (span / n_eta)
+    if n_eta < needed:
+        raise ValueError(
+            f"the fig:bulk ray is aliased: {per_period:.1f} samples per j_l "
+            f"oscillation at k={RAY_K_COM}, {ETA_POINTS_PER_PERIOD} required "
+            f"(n_eta >= {needed}). See finding T-3."
+        )
+    eta = np.linspace(recombination.eta[0], model.eta_0, n_eta)
     phi_a, phi_h = potentials(model, eta)
     aH = model.conformal_hubble(model.a_of_eta(eta))
     opacity = np.interp(eta, recombination.eta, recombination.opacity)
@@ -135,7 +154,9 @@ def main() -> int:
         fh.write(f"  ray k_com          {RAY_K_COM}\n")
         fh.write(f"  integrated weight  {Weighting.STANDARD_ISW.name}"
                  "  (opacity e^-kappa; see A-2)\n")
-        fh.write(f"  recombination      equilibrium Saha\n\n")
+        fh.write(f"  recombination      equilibrium Saha\n")
+        fh.write(f"  ray eta samples    {n_eta}  ({per_period:.1f} per j_l oscillation\n")
+        fh.write(f"                     at k={RAY_K_COM}; {ETA_POINTS_PER_PERIOD} required, see T-3)\n\n")
         fh.write(f"  bulk fraction      {ray.bulk_fraction:.6e}\n")
         fh.write("    REPORTED, not tolerated. P1-T's acceptance is that the local\n")
         fh.write("    operator does not fall off through the bulk while the running\n")

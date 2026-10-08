@@ -4,7 +4,27 @@ Version: v1.0.0 — First public analytical reproducibility release. Supplementa
 code and materials for: Tim Gebbie, *"Frame covariance of CMB lensing in the exact $1+3$ covariant radiation hierarchy,"*
 arXiv: identifier assigned on submission.
 
-## Key figure: recursion and external hierarchies
+## Key figure: the angular power spectrum by two routes
+
+![F3 — the angular power spectrum of Annals II (186), computed by the mode route and by the covariant route](figures/f3-angular-spectrum-v1.0.0.png)
+
+Eq. (186) computed from Eq. (176), for the standard-CDM model of §8.3.2 and for
+ΛCDM, which *Annals II* does not treat. **Upper panel:** D_ℓ = ℓ(ℓ+1)C_ℓ/2π,
+each normalised to its own ℓ = 2 value, so the comparison is of *shape* and not
+of an amplitude neither model fixes here. **Lower panel:** the fractional
+difference between the mode route of (186) and the covariant route of (187) with
+(188) — analytically identical, so this checks the arithmetic rather than the
+physics. It sits at 10⁻¹⁶, five orders below the 10⁻¹¹ threshold, and it is
+worth having: it caught a factor of four in this bundle's own harmonic weights
+before any figure was drawn.
+
+**This is the almost-FLRW spectrum, and it has no acoustic peaks in it.** That
+is not a defect — *Annals II*'s (186) is the analytic skeleton, and v1.0.0
+reproduces what the paper derives. The peaks arrive at **v1.2.0**, with Peebles
+recombination and the complete source assembly, and the key figure above is
+replaced then. See *Future situation* below.
+
+## Second figure: the Appendix F match
 
 ![F1 — the covariant free-streaming recursion against four external hierarchies](figures/f1-appendix-f-v1.0.0.png)
 
@@ -16,15 +36,12 @@ normalisations and two distinct phase conventions — Wilson writes the recursio
 in the imaginary convention, so his panel tests the phase and not only the
 ℓ-weights.
 
-> **The designated key figure for v1.0.0 is Figure 3, the recovered angular
-> autocorrelation with its residual panel** — the recovery of *Annals II*'s
-> physics, which is what the release is for. Figure 1 leads this release
-> candidate because Figure 3 is not yet built, and because the two answer
-> different questions: Figure 3 is the **recovery**, Figure 1 is the
-> **independence**. Figure 3's comparison target descends from the same
-> antecedent, so it is a self-consistency check however well it agrees; the
-> independent cross-check lives in Figure 1. A reader should not mistake one for
-> the other.
+> **The two figures answer different questions and a reader should not mistake
+> one for the other.** Figure 3 is the **recovery**: its comparison target
+> descends from the same antecedent, so it is a self-consistency check however
+> well it agrees. Figure 1 is the **independence**: its targets were read from
+> four other papers, and that is where this bundle's claim to be a
+> reconstruction rather than a port actually rests.
 
 ## Current situation: v1.0.0
 
@@ -58,8 +75,15 @@ lost. Every released figure plots a **multipole** mean-square: *Annals II* p. 36
 notes that these hold for general geometries while mode mean-squares hold only
 for almost-Robertson–Walker ones.
 
-This is a Boltzmann code written from scratch. The only external code it is
-checked against is **CMBFAST** — nothing else, deliberately, to avoid scope creep.
+This is a Boltzmann code written from scratch. **CMBFAST** is cited for the
+*method* — line-of-sight integration, Seljak & Zaldarriaga, already in *Annals
+II*'s bibliography — and not as a comparison: the Fortran 77 original is
+unmaintained and effectively unrunnable. The comparison is against its two
+maintained descendants, **CAMB and CLASS**, and it is made at v1.2.0, where the
+full linear spectrum exists to compare. Two codes rather than one, because the
+tolerance is then **measured** rather than chosen: their mutual difference is
+the floor, since no agreement can be claimed tighter than two trusted
+independent codes agree with each other.
 
 **Hu & Sugiyama** is the treatment this formulation was developed from and
 checked against, which is why the acceptance spine matches their Eq. (6)
@@ -84,8 +108,8 @@ names Wilson & Silk while keying Wilson.
 ### Legacy treatment from [Annals of Physics 282, 321 (2000)](https://doi.org/10.1006/aphy.2000.6034)
 
 This bundle reconstructs its antecedent rather than porting it, and is built to
-find that paper's remaining errors rather than to agree with it. Four have been
-recorded so far, all in `provenance/`:
+find that paper's remaining errors rather than to agree with it. These are the
+findings that **change what the code computes**:
 
 - **B-1** — *Annals I* prints (−1)^ℓ where its own definition gives i^ℓ.
   Inconsequential for the covariant multipole, which is invariant under the
@@ -96,15 +120,38 @@ recorded so far, all in `provenance/`:
 - **B-3** — the Bessel identity (199) needs [(m/2)!]² in its denominator. It is
   exact where Γ(m/2+1) = 1, so (201) is unaffected; (204) is low by 11.4% and the
   D_ℓ of (205) correspondingly high by 12.8%.
-- **B-4** — Appendix F names Wilson & Silk and keys Wilson. Different papers.
+- **B-5** — (201) omits one factor of the comoving distance in the reduction.
+  This is the target of acceptance criterion 5a, so the criterion is stated
+  against the corrected closed form rather than the printed one.
+- **B-8** — (181) carries +R_*Φ_A where (180) gives −R_*Φ_A. Both forms are
+  implemented; the printed one is kept as a control.
+- **B-10** — (J.5) prints the transfer function with +1/ν where the fit requires
+  −1/ν. Both forms are implemented, for the same reason.
 
-Each is corrected silently in the reconstruction and marked by a succinct
-footnote in the supplement; the full forensics stay in `provenance/`.
+The complete record — ten findings, together with the antecedent's deliberate
+approximations and the one lineage note — is in `provenance/`.
 
-## Future situation: possible extensions
+## Future situation: the route to the full spectrum
 
-**These are possible extensions, not claims made by the current release.**
+**These are planned releases, not claims made by the current one.**
 
+- **v1.1.0 — Peebles recombination.** The effective three-level atom replaces
+  equilibrium Saha. Saha places last scattering correctly but decouples too
+  sharply and too early, which sets the wrong visibility width — and the
+  visibility width is what fixes the damping envelope. Self-contained, and
+  checkable on its own against the standard ionisation history before anything
+  is built on it.
+- **v1.2.0 — the full linear C_ℓ: acoustic peaks, Silk damping, and the
+  complete source assembly** for both CDM and ΛCDM. This is the release where
+  the spectrum stops being the almost-FLRW analytic skeleton and becomes a
+  spectrum with structure in it. Acceptance criterion **5b closes here**,
+  against CAMB and CLASS on a reduced parameter set, with the acoustic sector
+  checked separately against **Hu & Sugiyama**, whose analytic acoustic
+  treatment this formulation was developed from.
+  **At v1.2.0 the key figure of this README becomes the normalised angular
+  spectrum for CDM and ΛCDM, with the peaks** — the present Figure 3 moves to
+  second place, beside the acoustic-mode figures and their Hu & Sugiyama
+  checks.
 - **v1.5.0** — the high-ℓ O(ε²ℓ) effects, **gated on Paper 1**, carrying **both**
   nonlinear corrections: the gravitational coupling to the kinematic quantities,
   δτ̇_NL, and the nonlinear Thomson scattering coupling to the baryon velocity,
@@ -112,9 +159,19 @@ footnote in the supplement; the full forensics stay in `provenance/`.
   that part a recovery and a check rather than a new claim.
 - **v2.0.0** — calibration and data-science release, including Planck data.
   *Calibration* there means calibrating the solver against standard results; it
-  does **not** mean calibrating the amplitude of an effect.
+  does **not** mean calibrating the amplitude of an effect. **No new physics
+  enters at v2.0.0**: everything it calibrates is already in place by v1.5.0.
 - **A fractional-contribution form of the source decomposition**, each term drawn
   as its share of C_ℓ and summing to one by construction.
+
+**Why the peaks come before v1.5.0 and not after it.** v1.5.0 is an O(ε²ℓ)
+*correction* to the high-ℓ spectrum. A correction can only be read where the
+thing it corrects is already right: added to a linear spectrum whose own high-ℓ
+behaviour has never been validated, the correction and the error are the same
+size and cannot be told apart. Criterion 5b is what establishes "already right",
+and it is blocked on recombination. So the order is forced — recombination,
+then peaks, then the external comparison that closes 5b, and only then the
+nonlinear high-ℓ term that v1.5.0 exists to add.
 
 ## Scientific boundary
 
@@ -142,8 +199,14 @@ and no claim appears here that is not in the paper.
 ```text
 config/                  Accepted scientific and release configurations, and the
                          implementation register that the audit tables derive from
+functions/background/    The FLRW background, integrated from the 1+3 energy
+                         constraint rather than transcribed, so (185) and (G.3)
+                         are checks on it instead of its definition
 functions/harmonics/     PSTF weights, the recursion in three normalisations, and
                          the external hierarchies as printed in their own papers
+functions/spectra/       Sources (176)-(179), recombination and visibility, the
+                         acoustic pair (152)/(153), potentials, the transfer
+                         function, and the angular spectrum (186)-(188)
 functions/plotting/      House visual style, shared by every figure
 scripts/                 Active reproduction and verification commands
 tests/                   Compact claim-bearing regression suite
@@ -189,9 +252,13 @@ pytest -q                              # the claim-bearing regression suite
 
 ## Verification status
 
-**Pre-release.** 45 tests pass and 2 skip; the harness runs clean. The acceptance
-criteria for v1.0.0 are recorded in `RELEASE-NOTES-v1.0.0.md`; two of six are
-closed. Verification counts will be reported here at release.
+**Release candidate.** 230 tests pass and 4 skip; the harness runs clean, and
+`python scripts/run_all.py --strict` reports `CLEAN`. The acceptance criteria for
+v1.0.0 are recorded in `RELEASE-NOTES-v1.0.0.md`; **three of six are closed**
+(1, 3 and 4). The four skips are the CAMB/CLASS comparison, which is not
+runnable until those codes are installed at v1.2.0; a skip there cannot pass
+silently, because `tests/test_external_codes.py` fails if the release notes ever
+claim criterion 5b is closed while the codes are absent.
 
 `config/implementation-register.toml` links every published equation the numerics
 implement to its provenance, to the `.py` file and object implementing it, and to
@@ -224,6 +291,13 @@ v1.0.0        first public analytical reproducibility release — the CDM and
               Eq. (186) from Eq. (176), by both the mode route and the covariant
               route of Eqs. (187) and (188)
 v1.0.1        documentation or metadata updates without a scientific change
+v1.1.0        Peebles effective three-level atom replacing equilibrium Saha;
+              no change to v1.0.0's almost-FLRW numbers outside the visibility
+v1.2.0        the full linear C_ell — acoustic peaks, Silk damping and the
+              complete source assembly for CDM and LambdaCDM; acceptance
+              criterion 5b closes here against CAMB and CLASS, with the
+              acoustic sector checked against Hu & Sugiyama. The README's key
+              figure becomes the normalised spectrum with its peaks
 v1.5.0        compatible scientific extension — the high-ell effects, carrying
               BOTH nonlinear corrections (the gravitational coupling to the
               kinematic quantities and the nonlinear Thomson coupling to the
@@ -252,8 +326,9 @@ The development lineage:
 — reserved, and active on publication of v1.0.0. This is the concept DOI: it
 always resolves to the latest version, so it is the one to cite.
 
-**Suggested paper citation:** Gebbie, Tim (2026). *(Paper 1 title to be
-Frame covariance of CMB lensing in the exact 1+3 covariant radiation hierarchy"*. arXiv: identifier assigned on submission.
+**Suggested paper citation:** Gebbie, Tim (2026). *Frame covariance of CMB
+lensing in the exact 1+3 covariant radiation hierarchy*. arXiv: identifier
+assigned on submission.
 
 **Associated antecedent:** Gebbie, T.; Dunsby, P. K. S.; Ellis, G. F. R. (2000).
 *1+3 covariant cosmic microwave background anisotropies II: the

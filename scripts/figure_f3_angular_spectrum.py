@@ -53,10 +53,18 @@ MODELS = (("standard CDM", CDM_MODEL, 1), (r"$\Lambda$CDM", LCDM_MODEL, 2))
 def compute():
     rows = []
     for label, model, slot in MODELS:
+        # n_eta is DERIVED from k_max, never set here. Finding T-3: this script
+        # passed n_eta=1000, which gave 2.3 samples per j_l oscillation at the
+        # band edge for LambdaCDM -- below Nyquist -- and the aliased integrand
+        # returned a smooth, plausible spectrum of the wrong shape.
         run = pipeline.run(
             model, ells=ELLS, k_com=K_COM,
-            weighting=Weighting.STANDARD_ISW, n_eta=1000,
+            weighting=Weighting.STANDARD_ISW, n_eta=None,
         )
+        print(f"  {label}: n_eta={run.n_eta} "
+              f"({run.eta_points_per_period:.1f} samples per oscillation at k_max); "
+              f"damping still {run.damping_at_k_max:.3f} at the k grid edge"
+              f"{'' if run.k_truncation_is_negligible else '  <-- TRUNCATED, not converged'}")
         rows.append({
             "label": label, "slot": slot, "run": run,
             "d_ell": run.spectrum.d_ell(),
