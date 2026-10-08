@@ -28,10 +28,15 @@ sources (177)--(179), and the line-of-sight integral (176).
 
 ## What the figure claims
 
-**The shape.** A Sachs--Wolfe plateau at low $\ell$, an acoustic rise, a first
-peak, and the beginning of damping. Standard CDM is flat to within 30% over
-$2\le\ell\le20$ and peaks near $\ell\simeq200$ at $5.8$ times the plateau, which
-is about right.
+**The shape.** A Sachs--Wolfe plateau at low $\ell$ and a rise beyond it. Over
+$2\le\ell\le20$ --- the range D0 independently adopts from the dropped acoustic
+modulation --- standard CDM is flat to within 30%. $\Lambda$CDM's ratio of the
+largest $D_\ell$ to $D_2$ is $7.15$ and standard CDM's is $60.9$, and the
+difference between them is the $\chi_*$ lever arm: $\Lambda$CDM's larger
+$\chi_*$ maps a given $\ell$ to a smaller $k$, so it climbs more slowly. This
+formulation carries no matter transfer function and (178)'s Doppler term carries
+an explicit factor of $k$, so power keeps rising until diffusion damping bites
+--- which, on this $k$ grid, it never does.
 
 **That the two routes agree.** $3\times10^{-16}$ and $4\times10^{-16}$ for the two
 models. The harmonic normalisation cancels out of (186) exactly once (176) is
@@ -50,12 +55,21 @@ stated rather than discovered later:
    percent in redshift and is enough to exercise every weight in the problem, but
    it decouples too sharply and too early. Peebles' effective three-level atom is
    required before 5b can be met.
-3. **$\Lambda$CDM's peak-to-plateau ratio is about 36**, where it should be nearer
-   six. Standard CDM's $5.8$ is about right, so whatever is wrong is specific to
-   the $\Lambda$ case --- most likely in the late-time potential decay or in the
-   normalisation of the integrated term that carries it. **This is the first
-   thing to check at 5b**, and it is named here rather than left for a reader to
-   notice.
+3. **The $k$ grid is truncated, not converged.** It stops at $k_{\max}=420$
+   where $\exp[-(k/k_D)^2]$ is still $0.89$ for CDM and $0.78$ for
+   $\Lambda$CDM: the integral ends while the source is still contributing
+   nearly its full weight. Measured against a grid four times longer, that
+   costs $0.1\%$ at $\ell=2$, $5\%$ at $\ell=50$, $11\%$ at $\ell=200$ and
+   $24\%$ at $\ell=400$. Reaching the cut-off needs $k_{\max}\gtrsim3100$ and
+   a correspondingly finer $\eta$ grid, which this line-of-sight implementation
+   cannot do in reasonable time --- an architecture problem, named in **T-3**
+   and owned by v1.2.0, not a parameter to be nudged.
+
+An earlier version of this caption read the $\Lambda$CDM ratio as $36$ against
+CDM's $5.8$ and called the first of those wrong. **Both numbers were artefacts**
+of an aliased line-of-sight integrand, finding **T-3**; the one that looked
+right was as wrong as the one that looked wrong. The values above are measured
+on the corrected grid.
 
 ## The weighting used, and why it is not (178)'s
 

@@ -3,19 +3,33 @@
 Print artefacts: matplotlib to versioned PDF/PNG pairs. The web interaction layer
 of the house data-visualisation standard is dropped; everything else applies.
 
-The palette was re-validated against the house surfaces on 2026-10-05 rather than
-inherited: worst adjacent CVD dE 9.1 light and 8.4 dark, worst adjacent
-normal-vision dE 22.9 and 19.8, all above their gates.
+**The series are achromatic**, accepted by the PI on 2026-10-08. Hue is gone, so
+it can no longer carry meaning, and that forces the rule the coloured palette
+only applied to its weak slots: **every series carries a direct label or a
+distinct dash, never its grey alone.** Removing hue costs one channel and buys
+three things --- the figures survive greyscale printing unchanged, colour-vision
+deficiency stops being a separate validation, and a reader cannot be led by a
+colour that was chosen rather than measured.
 
-**Slots 3 and 4 fall below 3:1 contrast on the light surface** (2.74 and 2.11).
-The relief rule binds: they carry visible direct labels, never colour alone.
+Separation is by **lightness and dash together**, and both are needed: lightness
+alone fails on a bad printer or a projector, dash alone fails where lines are
+short or steep. Measured, not asserted --- against the light surface the slots
+sit at 18.3, 8.0, 3.9 and 2.3, and **slot against adjacent slot** at 2.29, 2.07
+and 1.66. Those second numbers are the honest measure of separability and they
+are low: 1.66 between the third and fourth slots is not a difference a reader
+should be asked to resolve. That is why `SERIES_DASH` is mandatory rather than
+decorative.
 
-**Never more than three hues where all pairs must separate at once.** Yellow
-against orange fails the all-pairs floors (normal-vision 13.7 light, CVD 4.8
-dark). Slot 4 is the control slot and lives in diagnostics.
+**Slot 4 is the deliberately-wrong control and is the faintest on purpose.** It
+lives in `diagnostics/` and must never read as a peer of the result it is
+contradicting. Its 2.3:1 is below the 3:1 floor, which is why the direct-label
+rule is absolute rather than advisory.
 
 **A total is not a peer of its components**: parts take slots 1-3, the sum is
 drawn in primary ink and heavier.
+
+The coloured palette is kept below as `SERIES_CHROMATIC`, unused, so that the
+change is a visible decision in the source rather than a deletion.
 
 See captions/FIGURE-PLAN-v1.0.0.md for the binding rules.
 """
@@ -27,19 +41,34 @@ from pathlib import Path
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
-__all__ = ["SERIES", "INK", "use_house_style", "save_figure"]
+__all__ = ["SERIES", "SERIES_DASH", "SERIES_DARK", "INK", "use_house_style", "save_figure"]
 
 ROOT = Path(__file__).resolve().parents[2]
 
 #: Categorical slots, light surface. Assigned in fixed order, never cycled.
+#: Achromatic: separation is by lightness, paired with SERIES_DASH.
 SERIES = {
-    1: "#2a78d6",  # this reconstruction
-    2: "#eb6834",  # the published or external result being matched
-    3: "#1baf7a",  # a third series where one is needed
-    4: "#eda100",  # the deliberately-wrong control — diagnostics only
+    1: "#121212",  # this reconstruction          18.4:1
+    2: "#4f4f4f",  # the external result matched    8.3:1
+    3: "#808080",  # a third series where needed    3.9:1
+    4: "#a8a8a8",  # the deliberately-wrong control 2.5:1 — diagnostics only
 }
 
-SERIES_DARK = {1: "#3987e5", 2: "#d95926", 3: "#199e70", 4: "#c98500"}
+#: Dark surface: the ramp inverts, it does not merely lighten.
+SERIES_DARK = {1: "#f2f2f2", 2: "#bdbdbd", 3: "#8f8f8f", 4: "#6e6e6e"}
+
+#: The second channel, and it is not optional. A grey ramp alone collapses on a
+#: bad printer; these keep the slots apart when the lightness does not.
+SERIES_DASH = {
+    1: (0, ()),                 # solid: the reconstruction, always
+    2: (0, (2.4, 2.4)),         # dashed: the external result
+    3: (0, (5.5, 2.0)),         # long dash
+    4: (0, (1.0, 1.8)),         # dotted: the control, visually subordinate
+}
+
+#: The palette this replaced, kept so the change is legible in the source.
+#: **Unused.** Do not reintroduce it one call site at a time.
+SERIES_CHROMATIC = {1: "#2a78d6", 2: "#eb6834", 3: "#1baf7a", 4: "#eda100"}
 
 INK = {
     "surface": "#fcfcfb",
@@ -50,7 +79,14 @@ INK = {
 }
 
 #: Diverging pair, for a single signed series about zero.
-DIVERGING = {"low": "#2a78d6", "high": "#e34948", "zero": "#f0efec"}
+#:
+#: **Achromatic diverging is genuinely weaker than chromatic, and this says so
+#: rather than pretending otherwise.** Lightness is one-dimensional, so a reader
+#: cannot tell "far below zero" from "far above" by value alone --- both ends
+#: are simply dark. Where sign must be read off the mark itself, encode it with
+#: hatching or an explicit sign annotation, not with this scale. Used for
+#: magnitude about a known-signed baseline, nothing more.
+DIVERGING = {"low": "#2b2b2b", "high": "#9a9a9a", "zero": "#efeeeb"}
 
 
 def use_house_style() -> None:

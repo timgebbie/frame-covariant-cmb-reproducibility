@@ -50,6 +50,7 @@ from functions.plotting.style import (  # noqa: E402
     DETERMINISTIC_METADATA,
     INK,
     SERIES,
+    SERIES_DASH,
     use_house_style,
 )
 
@@ -114,11 +115,13 @@ def main() -> int:
     ell = 5
     j = analytic_projection(K_COM, eta, 0.0, ell)
     ax.semilogy(eta[window], np.abs(good.values[window, ell]) + 1e-20,
-                color=SERIES[1], lw=1.7, label=f"correct recursion, $\\ell={ell}$")
+                color=SERIES[1], ls=SERIES_DASH[1], lw=1.7,
+                label=f"correct recursion, $\\ell={ell}$")
     ax.semilogy(eta[window], np.abs(j[window]) + 1e-20,
                 color=INK["muted"], lw=1.1, ls=(0, (2.2, 2.2)), label=r"$j_\ell$")
     ax.semilogy(eta[window], np.abs(bad.values[window, ell]) + 1e-20,
-                color=SERIES[4], lw=1.7, label="control: relative sign flipped")
+                color=SERIES[4], ls=SERIES_DASH[4], lw=1.7,
+                label="control: relative sign flipped")
     ax.set_xlabel(r"conformal time  $\eta$   [$1/k_{\rm com}$]")
     ax.set_ylabel(r"$|\alpha_\ell^{-1}\tau_\ell|$")
     ax.set_title("D1   relative-sign control — diagnostic, not evidence",

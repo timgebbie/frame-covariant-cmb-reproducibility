@@ -35,7 +35,13 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from functions.background.flrw import CDM_MODEL, LCDM_MODEL  # noqa: E402
-from functions.plotting.style import INK, SERIES, save_figure, use_house_style  # noqa: E402
+from functions.plotting.style import (  # noqa: E402
+    INK,
+    SERIES,
+    SERIES_DASH,
+    save_figure,
+    use_house_style,
+)
 from functions.spectra import pipeline  # noqa: E402
 from functions.spectra.decoupling import Weighting  # noqa: E402
 
@@ -85,9 +91,10 @@ def draw(rows) -> plt.Figure:
 
     for row in rows:
         top.loglog(ELLS, row["d_ell"] / row["d_ell"][0], color=SERIES[row["slot"]],
-                   lw=1.9, solid_capstyle="round", label=row["label"], zorder=3)
+                   ls=SERIES_DASH[row["slot"]], lw=1.9, solid_capstyle="round",
+                   label=row["label"], zorder=3)
         bot.semilogy(ELLS, np.maximum(row["gap"], 1e-18), color=SERIES[row["slot"]],
-                     lw=1.5, zorder=3)
+                     ls=SERIES_DASH[row["slot"]], lw=1.5, zorder=3)
 
     # Log y: the two models differ by a factor of seven at the peak while sharing
     # a plateau at unity, and on a linear axis the CDM curve is a flat line at the

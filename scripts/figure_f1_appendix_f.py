@@ -43,7 +43,13 @@ from functions.harmonics.external import (  # noqa: E402
     integrate_wilson,
 )
 from functions.harmonics.free_streaming import free_stream  # noqa: E402
-from functions.plotting.style import INK, SERIES, save_figure, use_house_style  # noqa: E402
+from functions.plotting.style import (  # noqa: E402
+    INK,
+    SERIES,
+    SERIES_DASH,
+    save_figure,
+    use_house_style,
+)
 
 K_COM = 1.0
 ELL_MAX = 80
@@ -101,9 +107,9 @@ def draw(rows) -> plt.Figure:
 
         # --- row 1: context. the two curves coincide, which is the result ----
         top.plot(eta[w], row["ref"][w, ELL_SHOWN], color=SERIES[1], lw=1.8,
-                 solid_capstyle="round", zorder=3)
+                 ls=SERIES_DASH[1], solid_capstyle="round", zorder=3)
         top.plot(eta[w], row["ext"][w, ELL_SHOWN], color=SERIES[2], lw=1.8,
-                 ls=(0, (2.4, 2.4)), zorder=4)
+                 ls=SERIES_DASH[2], zorder=4)
         top.set_title(f"{LABEL[form]}\n{EQUATION[form]}  ·  {APPENDIX_F[form]}",
                       color=INK["primary"], pad=7)
         if col == 0:
@@ -127,8 +133,8 @@ def draw(rows) -> plt.Figure:
     # one shared legend for the whole figure: the two curves coincide in every
     # panel, so repeating a legend three times would be noise
     handles = [
-        Line2D([], [], color=SERIES[1], lw=1.8, label="this reconstruction"),
-        Line2D([], [], color=SERIES[2], lw=1.8, ls=(0, (2.4, 2.4)), label="external, as printed"),
+        Line2D([], [], color=SERIES[1], lw=1.8, ls=SERIES_DASH[1], label="this reconstruction"),
+        Line2D([], [], color=SERIES[2], lw=1.8, ls=SERIES_DASH[2], label="external, as printed"),
     ]
     fig.legend(handles=handles, loc="upper left", bbox_to_anchor=(0.085, 0.905),
                ncol=2, columnspacing=1.6, handlelength=2.4)
