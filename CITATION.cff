@@ -5,7 +5,7 @@ type: software
 # Tracks the tag that exists, not the one being prepared. GitHub's "Cite this
 # repository" and Zenodo both read this field, so a version here that has not
 # been released asserts a release that cannot be fetched.
-version: "1.0.0-rc"
+version: "1.0.0"
 authors:
   - family-names: Gebbie
     given-names: Tim
