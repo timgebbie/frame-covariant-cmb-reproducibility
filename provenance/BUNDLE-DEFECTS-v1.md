@@ -787,3 +787,61 @@ middle of a successful commit, and would have been read as noise by anyone not
 already looking for this class of defect. Three of the eight findings in this
 file were caught by someone noticing that a number or a message was the wrong
 shape, and none by a gate that was watching for them.
+
+---
+
+## T-9 — two corrections to the same caption silently did nothing
+
+**Raised 2026-10-09, by looking at the figure. Severity: material.** Corrected
+the same day, and the method of correcting it is the entry.
+
+F3's footer carried the pre-T-3 reading — *"ΛCDM's peak-to-plateau ratio near 36
+is well above the six or so it should be, where standard CDM's 5.8 is about
+right"* — printed under a plot showing 7.15 and 60.9. It was **corrected twice**
+and survived both times.
+
+### Why
+
+Both corrections used `str.replace` with a pattern containing a right single
+quote as the literal character `’`, while the source file carries it as the
+escape `’`. No match, no replacement, **no error**. `str.replace` returns
+the string unchanged and says nothing, and the surrounding script printed
+`captions corrected` because it had reached its last line.
+
+The figure was regenerated each time and looked plausible, because the plot was
+right and only the footer was wrong — and a footer is the last thing anyone
+re-reads.
+
+### The correction, and the rule
+
+The footer was replaced **by line number**, with the target lines asserted
+before the edit and the stale text asserted absent after it:
+
+```python
+assert "RELEASE CANDIDATE" in lines[153]
+assert "5.8 is about right" in lines[156]
+lines[153:157] = new
+...
+assert "5.8 is about right" not in txt, "stale footer survived again"
+```
+
+**An edit that cannot fail cannot be trusted.** Every subsequent in-place edit
+in this project asserts that it changed something, and where the old text must
+not survive, asserts that too. This is the same discipline the bundle already
+applies to its own outputs — measure, do not assume — turned on the act of
+editing, which had been exempt.
+
+### Why it belongs in this file
+
+Three of the nine findings here were caught by a person noticing that a number
+or a sentence was the wrong shape. This one was caught the same way, and the
+thing noticing it was a rendered image: the plot and its caption disagreed, and
+only one of them could be right. **Regenerating an artefact and then looking at
+it is a test**, and it is the only one that would have caught this.
+
+A related correction landed in the same pass and is recorded here rather than
+separately. F3's footer, once it finally took, claimed the $k$-grid truncation
+reaches 5% near $\ell\simeq100$. That was the **CDM-only** figure, written while
+the ΛCDM arm of the convergence study was still running. Taking the worse of the
+two models it is $\ell\simeq50$, and the footer now says so. A number quoted
+from a partial run is a number quoted from the wrong population.

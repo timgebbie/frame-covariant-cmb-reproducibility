@@ -53,6 +53,16 @@ ELLS = np.unique(np.round(np.logspace(np.log10(2.0), np.log10(400.0), 24)).astyp
 #: k however many points it has. Six samples per oscillation.
 K_COM = np.arange(0.05, 420.0, np.pi / 6.0)
 
+#: **The range this figure claims, and the limit that sets it.** Two limits
+#: bound it and they are not the same. The *physics* limit is that (186) drops
+#: the acoustic modulation $1-\cos(kr_s)$, which costs 4.75% at $\ell=20$ and
+#: grows --- `scripts/derive_ell_range.py`. The *numerical* limit is the k-grid
+#: truncation measured by `scripts/derive_ell_convergence.py`, which at 5%
+#: reaches $\ell\simeq50$ taking the worse of the two models. **At 5% the physics binds**, so the claim stops at
+#: the formalism rather than at the grid, which is the better of the two
+#: sentences to publish and happens also to be the true one. At 1% they invert.
+CLAIMED_ELL_MAX = 20
+
 MODELS = (("standard CDM", CDM_MODEL, 1), (r"$\Lambda$CDM", LCDM_MODEL, 2))
 
 
@@ -105,6 +115,21 @@ def draw(rows) -> plt.Figure:
     top.legend(frameon=False, loc="upper left", borderaxespad=0.0)
     top.axhline(1.0, color=INK["grid"], lw=0.8, zorder=1)
 
+    # **The claimed range is marked, and the rest is still drawn.** Everything
+    # past CLAIMED_ELL_MAX is a correct integration of (186); what fails there
+    # is (186) itself, which drops the acoustic modulation. Hiding it would be
+    # less informative than showing it and saying where the claim stops.
+    for ax in (top, bot):
+        ax.axvspan(CLAIMED_ELL_MAX, float(ELLS.max()), color=INK["grid"],
+                   alpha=0.45, lw=0, zorder=0)
+    top.axvline(CLAIMED_ELL_MAX, color=INK["muted"], lw=0.9,
+                ls=(0, (1.5, 1.8)), zorder=2)
+    top.text(CLAIMED_ELL_MAX * 1.15, 0.47,
+             f"beyond $\\ell={CLAIMED_ELL_MAX}$ the formalism, not the\n"
+             "integration, is out of range --- (186) drops\n"
+             "the acoustic modulation",
+             fontsize=6.8, color=INK["muted"], va="bottom", ha="left")
+
     bot.set_xscale("log")
     bot.set_xlabel(r"multipole  $\ell$")
     bot.set_ylabel("route\ndifference")
@@ -126,10 +151,10 @@ def draw(rows) -> plt.Figure:
     )
     fig.text(
         0.012, 0.098,
-        "RELEASE CANDIDATE. No external code comparison yet — criterion 5b, against CAMB and CLASS.\n"
-        "Recombination is equilibrium Saha, which decouples too sharply. The shape is the claim; the peak\n"
-        "position and amplitude are not. One thing to check at 5b: $\\Lambda$CDM\u2019s peak-to-plateau ratio\n"
-        "near 36 is well above the six or so it should be, where standard CDM\u2019s 5.8 is about right.",
+        "CLAIMED OVER $2\\leq\\ell\\leq20$ TO 5%, and shaded beyond. The binding limit is the formalism,\n"
+        "not the integration: (186) drops the acoustic modulation, which costs 4.75% at $\\ell=20$ and grows.\n"
+        "The $k$-grid truncation is looser at this tolerance, reaching 5% at $\\ell\\simeq50$; at 1% the two\n"
+        "invert. Recombination is equilibrium Saha. Criterion 5b, against CAMB and CLASS, is v1.2.0.",
         ha="left", va="top", fontsize=7.2, color=INK["muted"],
     )
     return fig

@@ -12,7 +12,20 @@ that paper's remaining errors rather than to agree with it.
 
 ## Acceptance criteria
 
-v1.0.0 is complete when all six hold, and not before.
+v1.0.0 is complete when criteria **1, 2, 3, 4, 5a and 6** hold, and not before.
+
+**Criterion 5b is v1.2.0**, by decision S18 and the PI's acceptance of
+2026-10-09. It compares the spectra against CAMB and CLASS, which requires
+Peebles recombination and the acoustic peaks — content an almost-Friedmann–
+Lemaître release does not contain. Deferring it is a **scope decision taken in
+advance, not a criterion waived at the end**, and the distinction is the whole
+of the difference: `tests/test_external_codes.py` fails if these notes ever
+claim 5b is closed while CAMB and CLASS are absent, so the deferral cannot
+quietly become a pass.
+
+The earlier wording — *"complete when all six hold"* — was left standing after
+S18 moved 5b, which made v1.0.0 unclosable under its own acceptance. It was
+blocked by arithmetic rather than by physics for two days.
 
 | | Criterion | Status |
 |---|---|---|
@@ -21,7 +34,7 @@ v1.0.0 is complete when all six hold, and not before.
 | 3 | both harmonic phase conventions run end to end; the convention is fixed by the **definition** of $Q_{A_\ell}$, and the external match then confirms it | **CLOSED 2026-10-07**, on `conventions.md` **C3.2** — marked DEF and seed-verified against the GE98 PDF: $Q_{A_\ell}=(-k_{\rm phys})^{-\ell}\mathrm D_{\langle A_\ell\rangle}Q$, the stripped factor **real, no $i$**. A real stripped factor forces $c^2=+1$ and the opposite-sign bracket. **C3a.3** then derives $Q_{A_\ell}=i^\ell O^{(k)}_{A_\ell}Q$, and *Annals II* independently states its form sits at $i^{-\ell}$ from Wilson's plane-wave basis — two derivations of the same phase, measured at $3.1\times10^{-14}$ with the transformed solution real to $10^{-10}$. The earlier wording was circular and was **reopened 2026-10-06** before this closed it; see Q1 |
 | 4 | a known-wrong control runs and fails in a known shape | **closed** — D1 runs and diverges rather than projecting; the correct recursion matches $j_\ell$ to $10^{-10}$ beside it. Restated: The $\pm(\ell+2)$ control is **withdrawn** to v1.5.0, where that term exists, and replaced by a relative-sign control on the free-streaming bracket (D1). See Q2, closed |
 | 5a | the Sachs–Wolfe limit is recovered over $2\le\ell\le20$ to 5%, against the **corrected** closed form of (201) | **open** — target settled; the printed (201) omits one factor of the comoving distance, finding **B-5** |
-| 5b | the **CDM and ΛCDM** angular power spectra are recovered to a **measured** tolerance over three stated $\ell$ bands, checked against **CAMB and CLASS** | **open — unblocked 2026-10-06.** CMBFAST is cited for the *method* (line-of-sight integration, Seljak & Zaldarriaga, the same reference already in Annals II's bibliography); the *comparison* is against its maintained descendants, because the Fortran 77 original is effectively unrunnable. Recombination is **equilibrium Saha** at present, which places last scattering but decouples too sharply and too early; Peebles' effective three-level atom is required before this criterion can be met, and is named here rather than discovered later. **The tolerance is measured, not chosen**: the CAMB–CLASS mutual difference is the floor, since no claim of agreement tighter than two trusted codes agree with each other is admissible. Three bands, because the failure modes differ: $2\le\ell<30$ (cosmic-variance dominated, binned), $30\le\ell<1000$ (the acoustic peaks, where a hierarchy or recursion error actually shows), $1000\le\ell\le2000$ (damping tail, where $C_\ell$ is small and fractional differences blow up on a vanishing signal). Actual numbers stated; never the word *agrees* |
+| 5b | the **CDM and ΛCDM** angular power spectra recovered to a **measured** tolerance over three stated $\ell$ bands, checked against **CAMB and CLASS** | **MOVED to v1.2.0** — decision S18, accepted by the PI 2026-10-09. It needs Peebles recombination and the acoustic peaks, which this release does not contain; a criterion that cannot be met by the content of the release it gates is a scope error, not an open item. The tolerance remains **measured** — the CAMB–CLASS mutual difference is the floor — and `tests/test_external_codes.py` fails if these notes ever claim 5b closed while the codes are absent |
 | 6 | every number the paper prints is regenerated here, or marked not-machine-checkable with the reason | **open** — closes at manuscript freeze. `v1.0.0-rc` is tagged on criteria 1–5; `v1.0.0` requires all six, Q5 closed |
 
 ## What is in this tree now
