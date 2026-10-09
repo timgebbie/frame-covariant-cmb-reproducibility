@@ -845,3 +845,57 @@ reaches 5% near $\ell\simeq100$. That was the **CDM-only** figure, written while
 the ΛCDM arm of the convergence study was still running. Taking the worse of the
 two models it is $\ell\simeq50$, and the footer now says so. A number quoted
 from a partial run is a number quoted from the wrong population.
+
+---
+
+## T-10 — the portability gate blocked the operation that fixes it
+
+**Raised 2026-10-09 from the PI's terminal, by the clean-checkout gate's first
+two real runs. Severity: material.** Corrected the same day.
+
+`run_all.py --rerun` aborted whenever the portability gate failed:
+
+```text
+--- portability ---
+FAIL  2 portability problem(s):
+      diagnostics/ell-convergence-v1.0.0.txt: in the working tree but untracked
+      scripts/derive_ell_convergence.py: in the working tree but untracked
+NOT RELEASABLE  --  portability gate failed
+```
+
+and returned **before regenerating anything**. `--rerun` is the development
+route, documented as *"regenerate without the drift gate"*, and its job is to
+rebuild figures, outputs, tables and manifests. So a newly written, not-yet-
+committed file blocked the one operation that would bring the tree back into
+agreement: **regenerate to fix the manifests, but you cannot regenerate until
+the files are committed and the manifests fixed.**
+
+Both of the PI's `--rerun` invocations that day hit this and silently
+regenerated nothing, which is why the following `check_clean_checkout.py` then
+reported seven stale artefacts — figures, outputs and the supplement PDF that
+had never been rebuilt.
+
+This is **T-4's mistake in a different place**: a gate ordered so that it
+blocks its own remedy. There it was the suite testing the previous run's
+artefacts; here it is a gate refusing the regeneration that would satisfy it.
+
+### The correction
+
+The portability gate is **binding on `--strict` and advisory on `--rerun`**. It
+still runs, still prints, and still records a failure in the summary, so the
+development route cannot report `CLEAN` while it fails — but it no longer
+prevents the regeneration.
+
+### The second half, and it is mine
+
+The same clean-checkout run named seven artefacts the PI's tree had never
+rebuilt. The cause was not only T-10: **I shipped `FILE-MANIFEST-SHA256.txt`
+across the bridge**, describing my container's tree, while transferring only
+some of the artefacts it describes.
+
+That is precisely the rule recorded in this file under T-1 — *the manifest is
+generated on the machine that publishes* — written by me, followed for two
+transfers, and then dropped. **A rule in the record is not a rule in the
+hands.** Manifests are no longer transferred at all; they are regenerated on
+the publishing machine as the last step before commit, and the clean-checkout
+gate is what proves it worked.

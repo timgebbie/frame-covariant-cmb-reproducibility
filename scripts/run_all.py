@@ -83,11 +83,23 @@ def main() -> int:
     failures: list[str] = []
 
     pending: dict[str, list[str]] = {"figures": [], "diagnostics": [], "emissions": []}
+    # **The portability gate stops `--strict` and only reports in `--rerun`**
+    # --- finding T-10. It used to abort both. `--rerun` is the route whose job
+    # is to regenerate, so aborting it meant that any new, not-yet-committed
+    # file blocked the very operation that would have brought the tree back
+    # into agreement: regenerate to fix the manifests, but you cannot
+    # regenerate until the manifests are fixed. That is T-4's mistake again in
+    # a different place --- a gate ordered so that it blocks its own remedy.
     label, script = GATE
     if run([sys.executable, script], label) != 0:
-        print("\n" + "=" * 60)
-        print("NOT RELEASABLE  --  portability gate failed")
-        return 1
+        if args.strict:
+            print("\n" + "=" * 60)
+            print("NOT RELEASABLE  --  portability gate failed")
+            return 1
+        failures.append("portability")
+        print("\n      --rerun CONTINUES past this. The gate is advisory on the")
+        print("      development route and binding on the release route, because")
+        print("      regenerating is how most of these get fixed.")
 
     for group, stages in (("figures", STAGES), ("diagnostics", DIAGNOSTICS),
                           ("emissions", EMISSIONS)):
