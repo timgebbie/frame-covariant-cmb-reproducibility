@@ -14,6 +14,7 @@ Theory-to-code traceability for this bundle.
 | `OPEN-QUESTIONS-v1.0.0.md` | specification questions raised before code was written, each with a proposed resolution and a status |
 | `EXTERNAL-CODE-COMPARISON-v1.md` | the canonical CAMB/CLASS comparison: parameter set, bands, and what their mutual difference does and does not license |
 | `ALMOST-EGS-BOUNDS-v1.md` | forward-looking scope note for v2.0.0; a table skeleton with no derived bound in it |
+| `AI-PROVENANCE-v1.md` | the account of AI assistance that Paper 1's disclosure points at: what the model did by section, the six audit findings fixed on 2026-10-09, **two items left open on the PI's recorded decision**, and what the passes did not reach. Received from P1-T |
 | `conventions.md` | **generated** copy of the project's normative conventions sheet — never hand-edited; see `scripts/sync_conventions.py` |
 | `conventions-source.txt` | the source path, SHA-256 and date of that copy, so drift is detectable |
 | `append-guard.txt` | **generated** length-and-hash record of the append-only files; see below |
