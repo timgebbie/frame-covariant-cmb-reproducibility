@@ -51,7 +51,13 @@ def tt(s: str) -> str:
     """\\texttt, with underscores escaped and breakable so long names wrap."""
     if s in ("—", "-", ""):
         return "—"
-    return "\\texttt{" + s.replace("_", "\\_\\allowbreak{}") + "}"
+    # Underscores were already breakable; `/` and `::` were not, so a long
+    # path or a `module::test` name stayed one unbreakable box and pushed the
+    # table off the page however wide the column was. That was 156pt of a
+    # released supplement running past the margin.
+    out = s.replace("_", "\\_\\allowbreak{}")
+    out = out.replace("/", "/\\allowbreak{}").replace("::", "::\\allowbreak{}")
+    return "\\texttt{" + out + "}"
 
 
 def write_csv(name: str, header: list[str], rows: list[list[str]]) -> Path:
@@ -122,7 +128,7 @@ def main() -> int:
         "Equations implemented in the numerics, with their provenance and the code "
         "that implements them. Equation numbers are those of the \\emph{published} "
         "papers. Rows with no code are not yet implemented.",
-        "@{}p{56mm}llp{54mm}p{24mm}p{44mm}@{}",
+        "@{}p{50mm}p{16mm}p{22mm}p{48mm}p{22mm}p{40mm}@{}",
         header, tex_rows, "tab:equations", landscape=True))
 
     # --- parameters ---------------------------------------------------------
@@ -146,7 +152,7 @@ def main() -> int:
         "Every number the numerics use. \\emph{Provenance} distinguishes values "
         "taken from the source paper, standard values that are not, values "
         "derived here, and values stipulated for this release.",
-        "@{}llllp{0.30\\textwidth}@{}",
+        "@{}p{0.10\\textwidth}p{0.22\\textwidth}p{0.12\\textwidth}p{0.26\\textwidth}p{0.26\\textwidth}@{}",
         header, tex_rows, "tab:parameters"))
 
     # --- notation -----------------------------------------------------------
@@ -162,8 +168,42 @@ def main() -> int:
         "Notation, and the names the quantities carry in the code. The "
         "mode/multipole distinction is the one that matters most: "
         "\\emph{Annals II} notes that it is not made in Bardeen-variable treatments.",
-        "@{}llp{0.33\\textwidth}p{0.33\\textwidth}@{}",
+        "@{}p{0.12\\textwidth}p{0.24\\textwidth}p{0.30\\textwidth}p{0.30\\textwidth}@{}",
         header, tex_rows, "tab:notation"))
+
+    # --- translations (Table V) ---------------------------------------------
+    # Rows are couplings, columns are conventions, as the float specification
+    # asks. **Every cell names the sheet line it comes from** and no cell is
+    # blank: where a treatment has no established counterpart the cell says so,
+    # which is the honest content rather than a gap. The sheet's own closing
+    # section records BF and Pitrou as unsettled at the level of hierarchy
+    # coefficients, which is why those columns are mostly "not established".
+    COLS = [("mge99", "MGE99"), ("cl", "CL"), ("th_k", "Th, K/$\\Pi$"),
+            ("th_t", "Th, $\\dot{\\mathcal T}$"), ("bf", "BF"), ("p09", "P09")]
+    header = ["Coupling", "Sheet"] + [h for _k, h in COLS]
+    csv_rows, tex_rows = [], []
+    for t in reg["translations"]:
+        csv_rows.append([t["key"], t["coupling"], t["expression"], t["sheet"],
+                         str(t["kinematic"])] + [t[k] for k, _h in COLS])
+        tex_rows.append([t["coupling"], tt(t["sheet"])] + [t[k] for k, _h in COLS])
+    written.append(write_csv(
+        "translations",
+        ["key", "coupling", "expression", "sheet", "kinematic"] + [k for k, _h in COLS],
+        csv_rows))
+    written.append(write_tex(
+        "translations",
+        "The couplings of this reconstruction written in each external convention. "
+        "Every cell is derived from the line of \\texttt{provenance/conventions.md} "
+        "named in the \\emph{Sheet} column; no cell is blank, and a treatment with no "
+        "established counterpart says so rather than being left to inference. "
+        "\\textbf{The thesis takes two columns and they differ on exactly the "
+        "kinematic rows} --- the $\\dot{\\mathcal T}$ form moves every kinematic term "
+        "to the right-hand side, flipping its overall sign against the K/$\\Pi$ form. "
+        "On the remaining rows the two agree, and the table says \\emph{as Th-K} "
+        "rather than restating them: a difference in wording where there is none in "
+        "substance is how two conventions get conflated while appearing distinct.",
+        "@{}p{24mm}p{13mm}p{34mm}p{30mm}p{21mm}p{30mm}p{28mm}p{28mm}@{}",
+        header, tex_rows, "tab:translations", landscape=True))
 
     # --- conventions --------------------------------------------------------
     header = ["Treatment", "Variable", "Bracket weights", "Phase convention",
@@ -187,7 +227,7 @@ def main() -> int:
         "$c^2=-1$ and nothing else. \\textbf{Where the transformation applied is "
         "``none'' that is a choice, not a derivation} --- which is why "
         "acceptance criterion~3 was reopened; see \\S\\ref{sec:conventions}.",
-        "@{}p{0.11\\textwidth}llp{0.17\\textwidth}p{0.20\\textwidth}p{0.24\\textwidth}@{}",
+        "@{}p{24mm}p{26mm}p{20mm}p{34mm}p{40mm}p{48mm}@{}",
         header, tex_rows, "tab:conventions", landscape=True))
 
     for p in written:

@@ -672,3 +672,48 @@ Eqs.~(63) and (64) where this bundle integrates and cites Eqs.~(49) and (50).
 Ma \& Bertschinger print the hierarchy in two gauges, so both may be correct for
 different displays — and under S11 that is resolved from the source, not agreed
 between streams. **Open, and raised rather than silently reconciled.**
+
+---
+
+## T-7 — the released supplement had text running off the page, and nothing looked
+
+**Raised 2026-10-09 while adding Table V. Severity: material, cosmetic in
+effect.** Corrected the same day.
+
+Compiling the supplement after adding the translations table showed overfull
+boxes of **155.9pt and 81.4pt** — 55mm and 29mm of content past the right
+margin of a document that ships. Both predate Table V; they were found only
+because something new was compiled beside them and its own overrun had to be
+measured.
+
+### Cause, which was not the column widths
+
+Three `longtable` specifications used bare `l` columns, and `l` **cannot wrap**.
+One long cell therefore sets the width of the whole table however narrow the
+other columns are. Narrowing the `p{}` columns by 30mm changed the overrun by
+exactly nothing, which is what pointed at the real cause.
+
+Underneath that, `tt()` made underscores breakable but left `/` and `::`
+unbreakable, so a path like `tests/test\_appendix\_f\_chain.py::test\_...`
+stayed a single rigid box that no column width could contain.
+
+### The correction
+
+Every `l` column in a generated table is now a bounded `p{}`; `tt()` inserts
+`\allowbreak` after `/` and `::` as well as after `_`. Worst overrun falls from
+155.9pt to 31.9pt, and the two large ones are gone.
+
+### What this says about the gates
+
+The bundle checks hashes, file sets, portability, convergence and the register.
+**Nothing compiles the supplement**, so `supplementary-materials/supplement-v1.0.0.pdf`
+is the one released artefact `run_all.py` does not generate — it is built by
+hand and moved by hand under a different name. Every manual step in this project
+has drifted eventually, and this one drifted into print.
+
+Paper 1 has `checks/build_gate.py` for exactly this. The bundle's equivalent is
+the obvious next guard: compile the supplement in `run_all.py`, fail on a LaTeX
+error, report overfull boxes above a stated threshold, and skip cleanly where
+`pdflatex` is absent — the same shape as the git comparison of T-6. **Named
+here rather than built today**, so that it is a decision rather than something
+rediscovered the next time a table is added.

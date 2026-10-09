@@ -105,7 +105,15 @@ printed. A misprint, recorded.}
 
 \textbf{Five} external treatments are read and \textbf{four} are drawn ---
 Hu \& Sugiyama Eq.~(6), Wilson (1983) Eq.~(8), Ma \& Bertschinger Eqs.~(49) and
-(50), and Seljak \& Zaldarriaga Eq.~(3d) --- each transcribed from its own paper.
+(50), and Seljak \& Zaldarriaga Eq.~(3d) --- each transcribed from its own
+paper.\footnote{Ma \& Bertschinger print the same recursion twice. Eqs.~(49) and
+(50) are the \emph{massless neutrino} hierarchy, synchronous and conformal
+Newtonian, and are collisionless; their Eqs.~(63) and (64) are the photon
+hierarchy, carrying the identical recursion plus a Thomson term
+$-an_e\sigma_{\rm T}F_{\gamma\ell}$. Appendix~F's (F.4) is a free-streaming
+recursion, so (49) and (50) are the comparison and (63) and (64) are not.
+Published and arXiv numbering agree for this paper, which is not the case for
+the Annals papers.}
 The fifth is Wilson \& Silk (1981) Eq.~(7), the earliest of them and likewise
 read from its own page: at $K=0$ it \emph{is} Wilson (1983) Eq.~(8), so it is
 credited and not drawn, four panels carrying four independent numerical checks.
@@ -163,6 +171,16 @@ imaginary convention, which settles a standing hypothesis in the negative: no
 author published this recursion in both conventions, so the split is between
 authors and not within one.
 
+\paragraph{One source fixes its own phase, and that matters.} Ma \&
+Bertschinger define their Legendre expansion with an explicit factor
+$(-i)^\ell(2\ell+1)$ and state why: it is ``chosen to simplify the expansion of a
+plane wave'', so that $\exp(-i\mathbf k\cdot\mathbf x)$ has coefficients
+$F_\ell=j_\ell(kr)$. Their coefficients therefore sit at $(-i)^\ell$ from the
+plane wave \emph{by their own definition}, are real, and satisfy the
+opposite-sign real recursion. For this source the phase is read off the paper
+rather than assumed, which is exactly the standing the next paragraph says three
+of the four lack.
+
 \paragraph{What it does not establish, and this release says so.} It does
 \textbf{not} establish that
 $Q_{A_\ell}=(-k_{\rm phys})^{-\ell}\mathrm D_{\langle A_\ell\rangle}Q$ is the
@@ -170,8 +188,9 @@ right reading of \emph{Annals~I}'s definition. Rephasing \emph{both sides} of a
 comparison by $i^\ell$ is a change of variable and cannot fail --- measured at
 $6.2\times10^{-15}$ either way --- so a match constrains the convention only
 where the phase applied to the external source is fixed from outside the
-comparison. For three of the four, no phase is applied, and that is a choice
-rather than a derivation.
+comparison. For two of the four, no phase is applied, and that is a choice
+rather than a derivation; Ma \& Bertschinger and Wilson are the two that are
+fixed from outside the comparison.
 
 \paragraph{The exception, and it is the useful one.} \emph{Annals~II} states, in
 the line following its flat-case mode functions, that the covariant form
@@ -190,23 +209,30 @@ are not, and every released figure plots the invariant quantity.
 
 \input{tables/conventions-v1.0.0.tex}
 
-\paragraph{What this release does not yet carry, and why it is named here.}
+\paragraph{The second table, and what its two thesis columns are for.}
 Table~\ref{tab:conventions} translates between the treatments this bundle is
-\emph{checked against}. A second table --- the couplings of the associated paper
-written in the conventions of Maartens, Gebbie \& Ellis (1999), Challinor
-(2000), the thesis in \textbf{both} of the conventions it uses, Beneke \& Fidler
-(2010) and Pitrou (2009) --- is conventions bookkeeping of a different kind and
-is produced by the conventions gate rather than by a bundle version. It is not
-printed here because it does not yet exist, and an empty box in a released
-document is worse than an acknowledged gap.
+\emph{checked against}. Table~\ref{tab:translations} does something different:
+it writes each coupling of this reconstruction in the conventions of
+Maartens, Gebbie \& Ellis (1999), Challinor (2000), the thesis in \textbf{both}
+of the conventions it uses, Beneke \& Fidler (2010) and Pitrou (2009). Every
+cell is derived from a named line of the normative sheet, and no cell is blank:
+where a treatment has no established counterpart the cell says so.
 
-Its acceptance is stated now so that it cannot be weakened later: every cell
-derived from a line of the normative conventions sheet, no cell blank, and where
-a treatment has no counterpart the cell says so. \textbf{The thesis takes two
-columns and they must differ.} If they come out identical the two conventions
-have been conflated --- which is precisely the error the table exists to
-prevent, and the error that cost this project three analytic passes before the
-sheet was written.
+Two things in it are worth reading rather than skimming. \textbf{The thesis
+takes two columns and they differ on exactly the kinematic rows} --- its
+$\dot{\mathcal T}$ form moves every kinematic term to the right-hand side,
+flipping the overall sign against its K/$\Pi$ form. Elsewhere the two agree and
+the table says so in as many words, because a difference in wording where there
+is none in substance is precisely how two conventions get conflated while
+appearing distinct. And \textbf{the Beneke \& Fidler and Pitrou columns are
+mostly ``not established''}: the sheet records both as unsettled at the level of
+hierarchy coefficients, Beneke \& Fidler working in $(\ell,m)$ tetrad form and
+Pitrou in Poisson gauge, and neither has had a hierarchy coefficient reproduced
+here. That is the honest content of those columns and it is printed rather than
+left to inference.
+
+\input{tables/translations-v1.0.0.tex}
+
 
 \section{Frames and specialisation}
 The solution is carried with a \textbf{generic} $u^a$. The explicit frames appear

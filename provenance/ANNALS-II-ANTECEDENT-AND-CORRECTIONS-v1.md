@@ -1072,3 +1072,58 @@ whether the $-7$ and the coefficient 7 reproduce from the baryon-frame change
 independently, since this bundle's standing method is to derive rather than
 transcribe. Flagged here so that the v1.5.0 stream meets it before writing code
 rather than after.
+
+---
+
+## Ma & Bertschinger resolved from the published paper, 2026-10-08
+
+Raised by P1-T's handover, which cites Ma \& Bertschinger **Eqs. (63) and (64)**
+where this bundle cites **Eqs. (49) and (50)**. Read from
+*Ap. J.* **455**, 7 (1995), supplied by P1-T, with the arXiv preprint
+(astro-ph/9506072v1) beside it.
+
+**Both citations are correct, and they are about different equations.** Ma &
+Bertschinger print the same recursion twice:
+
+| | equations | what they are | collision term |
+|---|---|---|---|
+| **(49)**, **(50)** | massless neutrinos, synchronous and conformal Newtonian | **collisionless free streaming** | none |
+| **(63)**, **(64)** | photons, synchronous and conformal Newtonian | the identical recursion | $-an_e\sigma_{\rm T}F_{\gamma\ell}$ added |
+
+Both carry
+$\dot F_\ell = \frac{k}{2\ell+1}\left[\ell F_{\ell-1}-(\ell+1)F_{\ell+1}\right]$,
+already divided through by $(2\ell+1)$ — which is independent confirmation of
+**B-2**, since that division is what *Annals II*'s (F.4) text specifies and its
+display omits.
+
+**Appendix F's (F.4) is a free-streaming recursion, so (49) and (50) are the
+comparison.** (63) and (64) would import a Thomson damping term that (F.4) does
+not have. The bundle's citation stands and the supplement now says why in a
+footnote, so the distinction cannot be lost again. P1-T's citation is right for
+the photon hierarchy and should stay that way wherever Paper 1 means the photon
+equations.
+
+### Two further data, both from the same reading
+
+**Published and arXiv numbering agree for this paper.** Eqs. (59)–(69) carry
+identical numbers in *Ap. J.* **455**, 7 and in astro-ph/9506072v1. Recorded
+because the Annals papers differ, and not by a constant offset — so "the numbers
+agree here" is a fact about this source and must not be generalised.
+
+**Ma & Bertschinger fix their own phase, and this strengthens criterion 3.**
+Their Eq. (46) expands with an explicit $(-i)^\ell(2\ell+1)$ and the text states
+the reason: the factor is *"chosen to simplify the expansion of a plane wave"*,
+so that $\exp(-i\mathbf k\cdot\mathbf x)$ has coefficients $F_\ell=j_\ell(kr)$.
+Their coefficients therefore sit at $(-i)^\ell$ from the plane wave **by
+definition rather than by assumption**, are real, and satisfy the opposite-sign
+real recursion.
+
+The supplement previously said that for *three* of the four external sources no
+phase is applied, "and that is a choice rather than a derivation". That is now
+**two**: Wilson's phase is specified by *Annals II* itself, and Ma &
+Bertschinger's by Ma & Bertschinger. Criterion 3's evidence base is wider than
+it was, from a reading undertaken for an unrelated reason.
+
+**One corroboration in passing.** Ma & Bertschinger cite "Wilson & Silk (1980,
+1981)" for the inclusion of anisotropic scattering — two papers under that
+authorship, consistent with the resolution of B-4 and B-9.
