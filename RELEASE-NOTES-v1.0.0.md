@@ -87,6 +87,28 @@ Four diagnostics are **not** released as figures, because a control is not
 evidence: the relative-sign control, the round-trip residual as a number, the
 source terms plotted directly, and the no-monopole check.
 
+**Three of the eight ship in v1.0.0: F1, F3 and F4.** F2, F6, F7 and F8 moved to
+v1.1.0 by decision **S-b**, which kept the figures marked *acceptance* and
+deferred the diagnostic, cross-check and schematic ones. **F5 moved too, by
+decision S20, and it is the one that needs a sentence here** because it *is* an
+acceptance figure and so is the exception to S-b's rule.
+
+F5 would have drawn the source decomposition in two frames, to show that the
+split into primary, Doppler and integrated pieces is frame-dependent while their
+total is not. It shares its machinery with F7 — both need the frame
+specialisation made numerical, and `"newtonian"` and `"energy"` are at present
+labels that nothing reads — so the two were always one piece of work.
+
+**The claim F5 would have drawn is not deferred with it.** It is established in
+this release *symbolically and exactly*, which is the stronger form:
+`functions/frames.py` carries the boost at first order with every term tagged by
+its order in $\varepsilon$, and `roundtrip_residual()` returns the zero vector as
+an identity rather than as a small number — $\tilde{\mathcal B}_1=\mathcal
+B_1+\dot v_a$, no shear and no $Hv$, which is criterion 2's stated target in
+S14. What v1.0.0 therefore does not have is a *numerical* demonstration in the
+assembled spectrum; what it has instead is a proof that the residual is zero.
+The numerical decomposition lands at v1.1.0 with F7.
+
 The palette was **re-validated** against the house surfaces rather than inherited
 — worst adjacent CVD $\Delta E$ 9.1 light and 8.4 dark, normal-vision 22.9 and
 19.8 — and the two light-mode slots below 3:1 contrast are confirmed, so the

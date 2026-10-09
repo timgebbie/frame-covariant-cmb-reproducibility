@@ -27,7 +27,15 @@ All notable changes to this bundle are recorded here. The version policy is in
   from the accepted manuscript, which caught a tight-coupling mis-citation.
 - `provenance/SOURCE-APPROXIMATIONS-v1.md` — **deliberate narrow choices of the
   source**, kept separate from defects (decision S15, approximation A-1).
-- `COLD-START.md` — the resume file.
+- `COLD-START.md` — the resume file. **Removed again before release**: it was
+  working scaffolding, not a reader's artefact. It carried a session status
+  block that went stale within days — at removal it reported the wrong
+  acceptance-criteria set, contradicted itself on the findings count in a single
+  cell, named one figure where three had been generated, and listed as "next"
+  two stages that were done — and it opened by telling a reader to read it
+  first. Its durable content was already elsewhere: the run instructions in
+  `README.md`, the rules in `provenance/DECISIONS-v1.0.0.md`, the `k_com`/
+  `k_phys` discipline in the corrections record. Nothing was lost.
 
 ### Changed
 

@@ -24,6 +24,17 @@ import tomllib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+# **`tt()` is imported, not re-written** --- finding T-7, and finding T-1's
+# lesson applied to LaTeX. `\texttt` of a path is one unbreakable box, so a
+# long name sets the width of whatever contains it however narrow the rest is;
+# `tt()` inserts `\allowbreak` after `/`, `_` and `::`. The first version of
+# this file wrote `\texttt{...}` by hand and put 49.9pt past the margin, which
+# `scripts/build_supplement.py` then refused --- a generator reintroducing a
+# defect another generator had already fixed, which is exactly T-11's shape.
+# One implementation, imported wherever it is needed.
+from make_tables import tt  # noqa: E402
 CAPTIONS = ROOT / "captions"
 OUT = ROOT / "supplementary-materials" / "figures-v1.0.0.tex"
 
@@ -93,10 +104,19 @@ def main() -> int:
     outstanding = [f"\\textbf{{{i}}} {d}" for i, d in PLANNED if i not in done]
     if outstanding:
         lines += [
-            "\\noindent\\textit{Outstanding at this release candidate:} "
+            # "Outstanding" read as a loose end. These are deferred by recorded
+            # decisions --- S-b for the diagnostics and cross-checks, S20 for
+            # F5 --- and a reader who can see *that* can go and read why. A
+            # release that calls a judgement an omission understates itself.
+            "\\noindent\\textit{Deferred to v1.1.0, by decisions S-b and S20:} "
             + "; ".join(outstanding)
-            + ". The agreed specification for the full set is "
-            "\\texttt{captions/FIGURE-PLAN-v1.0.0.md}.",
+            + ". Recorded choices, not omissions: the reasoning for each is in "
+            + tt("provenance/DECISIONS-v1.0.0.md")
+            + ". The frame-covariance claim F5 would have drawn is established "
+            "symbolically in this release, as an exact identity, by "
+            + tt("functions/frames.py")
+            + ". The full specification is "
+            + tt("captions/FIGURE-PLAN-v1.0.0.md") + ".",
             "",
         ]
 

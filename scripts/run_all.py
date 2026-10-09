@@ -41,14 +41,27 @@ STAGES: list[tuple[str, str]] = [
     ("F8  coupling schematic", "scripts/figure_f8_schematic.py"),
 ]
 
-#: Diagnostics. A control is not evidence, so these are not released figures.
-#: **Scoped out of v1.0.0 by decision S-b**, accepted by the PI 2026-10-09.
-#: All six are diagnostic, cross-check or schematic in the figure plan; the two
-#: marked *acceptance* there — F4 and F5 — stay in v1.0.0 and are not listed
-#: here. A deferred artefact is still reported as pending, so it cannot be
-#: forgotten; it just does not block the release it was deferred out of.
+#: Deferred to v1.1.0. A control is not evidence, so the diagnostics here are
+#: not released figures; **scoped out of v1.0.0 by decision S-b**, accepted by
+#: the PI 2026-10-09. A deferred artefact is still reported as pending, so it
+#: cannot be forgotten; it just does not block the release it was deferred out
+#: of.
+#:
+#: **F5 is the one entry here that S-b did not put here** — it is marked
+#: *acceptance* in the figure plan, as F3 and F4 are, and acceptance figures
+#: were what S-b kept. It moves by **decision S20**, and the reason is worth
+#: carrying at the call site rather than only in the record: F5 and F7 are one
+#: piece of machinery. Both need the frame specialisation made numerical, and
+#: `"newtonian"` and `"energy"` are today labels on `PerturbationHistory` that
+#: nothing reads. What F5 would show numerically — that the decomposition is
+#: frame-dependent while the total is not — **criterion 2 already establishes
+#: symbolically**, as an exact identity in $\varepsilon$ rather than to a
+#: tolerance: see `functions.frames.roundtrip_residual`. Deferring F5 therefore
+#: removes a picture of the claim and not the claim, and `README.md` and the
+#: release notes say so in those words.
 DEFERRED_TO_V1_1 = frozenset({
     "F2  truncation convergence, both frames",
+    "F5  source decomposition, two frames",
     "F6  impact of the approximations",
     "F7  frame specialisation",
     "F8  coupling schematic",

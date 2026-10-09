@@ -6,12 +6,14 @@ Supplementary code and materials for: Tim Gebbie, *"Frame covariance of CMB
 lensing in the exact $1+3$ covariant radiation hierarchy,"* arXiv: identifier
 assigned on submission.
 
-**The computational supplement is
-[`supplementary-materials/supplement-v1.0.0.pdf`](supplementary-materials/supplement-v1.0.0.pdf)**,
-built from `SUPPLEMENTARY-MATERIAL-v1.0.0.tex`. It carries the scope, the
-theory-to-computation map, the acceptance spine, the conventions and
-translations tables, and the interpretive limits — read it before the code if
-you want to know what this release does and does not claim.
+The supplementary-materials document is included here:
+
+> [supplement-v1.0.0.pdf](supplementary-materials/supplement-v1.0.0.pdf)
+
+Built from `SUPPLEMENTARY-MATERIAL-v1.0.0.tex` by `scripts/build_supplement.py`.
+It carries the scope, the theory-to-computation map, the acceptance spine, the
+conventions and translations tables, and the interpretive limits — read it
+before the code if you want to know what this release does and does not claim.
 
 ## Key figure: the angular power spectrum by two routes
 
@@ -76,6 +78,17 @@ Newtonian frame in which *Annals II* itself solves at p. 365, and the energy
 frame — appear as choices made at the end rather than assumed at the start. That
 is the difference the 1+3 covariant approach buys, and no gauge-fixed treatment
 can exhibit it.
+
+**In v1.0.0 that is established symbolically rather than numerically, and the
+distinction is worth stating plainly.** `functions/frames.py` carries the
+first-order change of threading with every term tagged by its order in ε, so
+that "second order" is a fact sympy checks rather than a judgement; its
+`roundtrip_residual()` returns the zero vector as an **identity**, not as a small
+number — 𝓑̃₁ = 𝓑₁ + v̇_a, no shear and no Hv, which is acceptance criterion 2's
+stated target. What this release does *not* do is compute an assembled spectrum
+in both frames and draw the difference. That is F5 and F7, deferred to v1.1.0 by
+decision **S20**, where `"newtonian"` and `"energy"` stop being labels on a
+history object and become a calculation. The proof is here; the picture follows.
 
 Nomenclature is kept strictly separate, following Appendix F: τ_ℓ are **mode**
 coefficients, τ_{A_ℓ} are **multipole** coefficients. The distinction is not made
@@ -322,19 +335,24 @@ test.
 
 The development lineage:
 
-| Stage | What it established | Bearing on this bundle |
+| Version | Established or changed | Status in v1.0.0 |
 |---|---|---|
-| Correction to astro-ph/9912072 | withdrew the 1999 claim of a new effect | fixes the scientific boundary above |
-| Conventions gate C1 | the normative sign and ℓ-weight sheet | source of `provenance/conventions.md` |
-| Paper 1 | the 1+3 route to lensing from the exact hierarchy | the paper this bundle reproduces |
-| v1.5.0, planned | the restricted case | a recovery and check of v1.0.0, not a new result |
+| *Annals II* (2000) | the almost-Friedmann–Lemaître 1+3 covariant hierarchy, its integral solution (176) and the spectrum (186) | the antecedent this bundle reconstructs; ten findings recorded against it in `provenance/` |
+| Correction to astro-ph/9912072 | withdrew the 1999 claim of a new effect | binding — it fixes the scientific boundary stated above, and no new effect is claimed here |
+| Conventions gate C1 | the normative sign and ℓ-weight sheet | source of the generated `provenance/conventions.md`; drift detectable through `conventions-source.txt` |
+| Paper 1 (2026) | the 1+3 route to CMB lensing from the exact hierarchy | the paper this bundle reproduces; frozen 2026-10-09 |
+| **v1.0.0** | the independent reconstruction: the Appendix F chain against four external hierarchies, both routes to (186), the Sachs–Wolfe limit, and frame covariance established **symbolically** | **current release** |
+| v1.1.0, planned | Peebles recombination; figures F2, F5, F6, F7 and F8 land, F5 and F7 making the frame specialisation numerical | planned — not claimed by this release (decisions S-b, S20) |
+| v1.2.0, planned | the full linear C_ℓ — acoustic peaks, Silk damping and the complete source assembly | planned; acceptance criterion 5b closes here against CAMB and CLASS (decision S18) |
+| v1.5.0, planned | the high-ℓ O(ε²ℓ) effects, carrying both nonlinear corrections, gated on Paper 1 | planned; carries the restricted case as a recovery and check of v1.0.0, not a new result |
+| v2.0.0, planned | calibration and data science, including Planck | planned; no new physics in it, which is what keeps v1.2.0 ahead of it |
 
 ## DOI, citation and license
 
 | Item | Value |
 |---|---|
 | **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMB lensing in the exact 1+3 covariant radiation hierarchy*. arXiv: identifier assigned on submission |
-| **Supplementary PDF** | [`supplementary-materials/supplement-v1.0.0.pdf`](supplementary-materials/supplement-v1.0.0.pdf) |
+| **Supplementary PDF** | [supplement-v1.0.0.pdf](supplementary-materials/supplement-v1.0.0.pdf) |
 | **GitHub repository** | [timgebbie/frame-covariant-cmb-reproducibility](https://github.com/timgebbie/frame-covariant-cmb-reproducibility) |
 | **ZivaHub/Figshare DOI** | [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509) — reserved, active on publication of v1.0.0. The **concept** DOI: it always resolves to the latest version, so it is the one to cite |
 | **Associated antecedent** | Gebbie, T.; Dunsby, P. K. S.; Ellis, G. F. R. (2000). *1+3 covariant cosmic microwave background anisotropies II: the almost-Friedmann–Lemaître model*. Annals of Physics **282**, 321–394. [doi:10.1006/aphy.2000.6034](https://doi.org/10.1006/aphy.2000.6034) |
