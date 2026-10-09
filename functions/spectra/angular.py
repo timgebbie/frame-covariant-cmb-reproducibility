@@ -62,7 +62,22 @@ class AngularSpectrum:
 
     @property
     def max_route_difference(self) -> float:
-        """The two routes are identical analytically; this is the numerical gap."""
+        """The numerical gap between two analytically identical routes.
+
+        **What the two routes do not share is the only thing this measures.**
+        They share the transfer function, the $k$ grid, the $\eta$ grid, the
+        sources and the background; agreement carries no information whatever
+        about any of those. What differs between them is the **harmonic weight
+        algebra alone** --- (186) carries $\beta_\ell^2\alpha_\ell^2/(2\ell+1)^2$
+        while (187) with (188) carries $\beta_\ell$ and
+        $\Delta_\ell(2\ell+1)^{-1}$ --- so this number tests that those weights
+        cancel as the exact rationals say they do, and nothing else.
+
+        Finding **T-3** is the proof that the distinction is not pedantic: the
+        routes agreed to $10^{-16}$ throughout, on an aliased integrand, while
+        the spectrum was wrong by up to 575%. A shared input cannot be checked
+        by a comparison that holds it fixed.
+        """
         scale = np.max(np.abs(self.cl_mode))
         if scale == 0.0:
             return 0.0

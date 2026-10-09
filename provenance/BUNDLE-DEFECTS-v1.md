@@ -717,3 +717,73 @@ error, report overfull boxes above a stated threshold, and skip cleanly where
 `pdflatex` is absent — the same shape as the git comparison of T-6. **Named
 here rather than built today**, so that it is a decision rather than something
 rediscovered the next time a table is added.
+
+---
+
+## T-8 — the generated CSVs were CRLF, git stores LF, and the manifest hashed the wrong one
+
+**Raised 2026-10-09 from a one-line git warning in the PI's terminal. Severity:
+release-blocking.** Corrected the same day.
+
+```text
+warning: in the working copy of 'tables/translations-v1.0.0.csv',
+         CRLF will be replaced by LF the next time Git touches it
+```
+
+### The defect
+
+`csv.writer`'s **default line terminator is `\r\n` on every platform**, not just
+on Windows. `write_csv` opened its file with `newline=""` — which is the correct
+opener for the `csv` module, and is exactly why the default terminator then
+applies unmodified. So all five generated CSVs were CRLF everywhere, including
+in the Linux container.
+
+`.gitattributes` says `* text=auto eol=lf`, so **git stores them as LF**. The
+release fingerprint hashes the working tree. Therefore:
+
+| | SHA-256, first 24 |
+|---|---|
+| working tree (CRLF) | `aab77f543111811778cacb0a` |
+| what a clone receives (LF) | `e3ba5daf66feaf564ed64a58` |
+| `FILE-MANIFEST-SHA256.txt` records | `aab77f543111811778cacb0a` |
+
+**The manifest describes the folder, not the release.** `make_manifests.py
+--check` would fail on a clean checkout, on five files, for a reason that looks
+like corruption and is not.
+
+### Why no gate saw it
+
+`check_portability.py` rejects **mixed** line endings within a file. A file that
+is uniformly CRLF passes, correctly — mixed endings are the defect it was
+written for. Nothing compared the working tree's bytes against the tree git
+would hand out.
+
+This is the third member of a family and the pattern is now unmistakable. **T-1:**
+the fingerprint absorbed files the folder had and the release did not. **T-6:**
+it missed files the release had and the folder did not. **T-8:** it covers the
+right files with the wrong bytes. Every one is the same mistake — treating the
+working directory as the thing being released — and each was invisible to a gate
+that measured something adjacent to the question.
+
+### The correction
+
+`csv.writer(fh, lineterminator="\n")`. All five CSVs are now LF, matching what
+git stores and what a clone receives.
+
+**And the gate that generalises all three is now written rather than described.**
+`scripts/check_clean_checkout.py` extracts `git archive HEAD` into a temporary
+directory — exactly the tracked tree, no `.git`, no untracked files, no build
+products — and runs the portability and manifest gates **inside it**. That is
+the acceptance performed rather than reasoned about, and it is the form
+Coordination asked for: compare the tree, not the folder, and run the acceptance
+from a clean checkout. `git archive` is used in preference to `git clone`
+because a reader unpacking a zip has no repository either, and the gates must
+give them the same answer.
+
+### The lesson
+
+**A warning is a finding.** This one was printed by git, in passing, in the
+middle of a successful commit, and would have been read as noise by anyone not
+already looking for this class of defect. Three of the eight findings in this
+file were caught by someone noticing that a number or a message was the wrong
+shape, and none by a gate that was watching for them.

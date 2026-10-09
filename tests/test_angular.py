@@ -87,3 +87,24 @@ def test_angular_spectrum_reports_both_routes_and_their_gap():
     assert spectrum.max_route_difference < 1e-12
     assert np.all(spectrum.cl_mode > 0.0)
     assert np.allclose(spectrum.d_ell(), d_ell(ells, spectrum.cl_mode))
+
+
+def test_the_route_comparison_states_what_the_two_routes_do_not_share():
+    """Coordination's point, 2026-10-09, made executable.
+
+    Agreement between two routes is evidence only about what differs between
+    them. These two share the transfer function, both grids, the sources and
+    the background; they differ in the harmonic weights alone. The docstring
+    must keep saying so, because the figure's caption is written from it and a
+    reader who takes $10^{-16}$ as evidence about the physics has been misled
+    by us rather than by the number.
+
+    T-3 is the case in point: the routes agreed throughout while the spectrum
+    was wrong by 575%.
+    """
+    from functions.spectra.angular import AngularSpectrum
+
+    doc = AngularSpectrum.max_route_difference.__doc__ or ""
+    assert "do not share" in doc, "the property no longer says what is being compared"
+    assert "harmonic weight" in doc, "the property no longer names the only difference"
+    assert "T-3" in doc, "the property no longer carries the case that proves the point"

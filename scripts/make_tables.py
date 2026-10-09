@@ -62,8 +62,12 @@ def tt(s: str) -> str:
 
 def write_csv(name: str, header: list[str], rows: list[list[str]]) -> Path:
     path = TABLES / f"{name}-v{VERSION}.csv"
+    # `newline=""` is the right opener for csv, but csv.writer's DEFAULT
+    # terminator is CRLF on every platform -- so these files were CRLF while
+    # `.gitattributes` stored them as LF, and the manifest hashed the working
+    # copy rather than the one a clone receives. Finding T-8.
     with path.open("w", encoding="utf-8", newline="") as fh:
-        w = csv.writer(fh)
+        w = csv.writer(fh, lineterminator="\n")
         w.writerow(header)
         w.writerows(rows)
     return path
