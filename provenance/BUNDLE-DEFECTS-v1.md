@@ -952,3 +952,89 @@ inputs, and the check is to build it twice.** That is now a property worth
 testing directly rather than discovering through a manifest failure, and it is
 the obvious next guard: a generator added without it will reintroduce this a
 fourth time.
+
+---
+
+## T-12 — the supplement's margin gate watched one of the two margins
+
+**Raised by Coordination, 2026-10-09, from three defects P1-T found in the
+paper's own `checks/build_gate.py`.** One of those three was an `Overfull
+\hbox` check with nothing watching `\vbox`, and it is how Eq. (30) printed off
+the bottom of page 7 of the manuscript through every clean build until the PI
+saw it by eye. Coordination's question was whether
+`scripts/build_supplement.py` had the same blind spot.
+
+It did.
+
+```python
+def _overfulls(log: str) -> list[float]:
+    return [float(x) for x in re.findall(r"Overfull \\hbox \(([0-9.]+)pt", log)]
+```
+
+`\hbox` only. A table or figure running past the **bottom** margin produced a
+clean build, a PASS, and a released PDF. The gate that exists because T-7 put
+55mm past the right margin could not see the other direction at all.
+
+### What it was measured at
+
+**Zero.** Across the 20-page supplement there are no overfull `\vbox`es and no
+underfull ones either, so the defect never bit — this is a gate repaired before
+it was needed rather than after. That also fixes the threshold without a
+judgement: `MAX_VBOX_OVERFULL_PT = 0.0`, because the document has none and the
+first one is a regression. Contrast `MAX_OVERFULL_PT = 35.0`, which *is* a
+judgement about how far into a side margin is tolerable, and is owned as one.
+
+### Why this one is worth a numbered finding although nothing was wrong
+
+Because it is **the third instance of one pattern**, and the pattern is now
+named. T-3's η grid measured the wrong thing. T-6 counted two sets and called
+equal counts agreement instead of comparing them. T-12 measured one of the two
+directions a box can overflow. In each case the gate reported PASS with the
+defect it existed to catch standing in front of it, and in each case the gate
+looked, to anyone reading it, like it was doing its job.
+
+**The rule: a gate's blind spot is a defect even while the content is clean.**
+It cannot be found by running the gate — a passing gate is exactly what it
+produces — so it is found only by asking what the check does *not* match. That
+question is cheap and this project has now paid for it three times.
+
+The supplement grows at v1.1.0, when F2, F5, F6, F7 and F8 each add a figure
+page. That is precisely when vertical overflow becomes likely, and the gate
+would have been blind to it.
+
+### Two of Coordination's three do not apply here
+
+Stated so the absence is recorded rather than assumed. The **log encoding** is
+already explicit — `read_text(encoding="utf-8", errors="replace")`, with the
+`proc.stdout` fallback decoded the same way — so log length does not depend on
+the platform's default codec. The **`.bib` versus `.bbl`** defect has no
+analogue: this bundle compiles no bibliography.
+
+---
+
+## T-13 — the release archive was built by hand, on the way out
+
+**Recorded 2026-10-09, immediately after v1.0.0 shipped, and deliberately not
+fixed before the tag.** The zip attached to the GitHub release and deposited to
+ZivaHub was assembled by an ad-hoc script written in the session, not by
+anything in `scripts/`. It was verified — extracted, and `check_portability.py`
+and `make_manifests.py --check` run inside it, giving 124 files and four PASSes
+— so the artefact is sound. The *process* is the finding.
+
+**Every manual step in this project has eventually drifted, and this is the
+file a reader downloads.** That is T-7's lesson exactly: the supplement was
+built, moved and renamed by hand until R3 put it under the harness, and in the
+meantime it shipped with 55mm of text past the margin. The archive is now in
+the same position the supplement was in before R3.
+
+It becomes `scripts/make_release_archive.py` at v1.1.0, with the fixed
+timestamp already used here (so the zip is byte-reproducible, the T-11 rule
+applied to the archive), the prefix directory, and the extract-and-gate check
+run automatically rather than by hand.
+
+**Why not before the tag:** adding a script changes the file count, the
+manifests and the clean-checkout number, in a tree that had just passed every
+gate and was minutes from being tagged and deposited. Fixing process debt by
+disturbing a verified release candidate is how a clean release becomes an
+unclean one. The debt is cheaper carried for one version than paid at that
+moment.

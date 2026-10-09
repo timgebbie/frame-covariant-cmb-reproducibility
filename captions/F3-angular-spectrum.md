@@ -86,7 +86,14 @@ and $\tilde v_B=\tilde\tau_1$ is the reading that would have to be revisited.
 
 ## Release status
 
-**Release candidate.** This figure is the designated key figure for v1.0.0 and
-replaces F1 in the README once criterion 5b is met. Until then F1 leads, because
-F1 is the *independence* and F3 is the *recovery*, and a reader should not
-mistake one for the other.
+**Released in v1.0.0, as the README's key figure.** F1 follows it rather than
+leads it — but the distinction that ordering was protecting still holds and is
+worth keeping in front of a reader: **F1 is the *independence* and F3 is the
+*recovery***, and the two answer different questions. F3's comparison target is
+derived from the same antecedent, so F3 cannot establish independence however
+well it agrees; F1 can, because its four hierarchies were each read from their
+own paper.
+
+At **v1.2.0** the key figure becomes the normalised spectrum with its acoustic
+peaks (decision S18), and F3 moves to second place beside the acoustic-mode
+figures and their Hu &amp; Sugiyama checks.

@@ -52,6 +52,14 @@ TARGET = ROOT / "supplementary-materials" / "supplement-v1.0.0.pdf"
 #: margin on this geometry.
 MAX_OVERFULL_PT = 35.0
 
+#: Worst overfull **vbox** tolerated, in points: none. Content running past the
+#: bottom margin is not the same defect as content running into a generous side
+#: margin --- it collides with the footer or leaves the page --- and the
+#: supplement measures **zero** of them across 20 pages, so this is a statement
+#: that the document has none rather than a judgement about how much would be
+#: acceptable. The first one is a regression and should stop the build.
+MAX_VBOX_OVERFULL_PT = 0.0
+
 PASSES = 2
 
 #: Fixed build clock, so the PDF is byte-reproducible --- finding **T-11**.
@@ -69,7 +77,32 @@ SOURCE_DATE_EPOCH = "1791504000"  # 2026-10-09T00:00:00Z
 
 
 def _overfulls(log: str) -> list[float]:
-    return [float(x) for x in re.findall(r"Overfull \\hbox \(([0-9.]+)pt", log)]
+    """Overfull `\\hbox` — content past the **right** margin, in points."""
+    return [float(x) for x in re.findall(r"Overfull \\hbox \(([0-9.]+)pt too wide", log)]
+
+
+def _vbox_overfulls(log: str) -> list[float]:
+    r"""Overfull `\vbox` — content past the **bottom** margin, in points.
+
+    **Finding T-12, raised by Coordination 2026-10-09.** This function did not
+    exist, and `_overfulls` matched `\hbox` only. The gate was therefore blind
+    to vertical overflow for its whole life: a table or figure running off the
+    bottom of a page would have produced a clean build and a released PDF, which
+    is precisely what happened in the *paper's* gate, where Eq. (30) printed off
+    the bottom of page 7 through every passing build until the PI saw it by eye.
+
+    It is **T-3 and T-6's shape a third time** — a check that passes because it
+    is looking at the wrong object. T-3's grid measured the wrong thing, T-6's
+    comparison counted instead of comparing, and this one measured one of the
+    two directions a box can overflow. The pattern is worth naming: each was a
+    gate that reported PASS while the defect it existed to catch sat in front
+    of it.
+
+    Measured over the 20-page supplement at the time of the fix: **none.** The
+    threshold below is therefore not a tolerance anybody guessed at --- the
+    document has zero, so any occurrence is a regression and fails.
+    """
+    return [float(x) for x in re.findall(r"Overfull \\vbox \(([0-9.]+)pt too high", log)]
 
 
 def _errors(log: str) -> list[str]:
@@ -127,25 +160,38 @@ def main() -> int:
         pages = re.search(r"Output written on .*?\((\d+) pages", log)
         over = sorted(_overfulls(log), reverse=True)
         worst = over[0] if over else 0.0
+        vover = sorted(_vbox_overfulls(log), reverse=True)
+        vworst = vover[0] if vover else 0.0
 
         TARGET.parent.mkdir(exist_ok=True)
         shutil.copy2(produced, TARGET)
 
         print(f"built {TARGET.relative_to(ROOT)}"
               f"  —  {pages.group(1) if pages else '?'} pages, 0 errors")
-        print(f"  overfull boxes: {len(over)}, worst {worst:.1f}pt "
+        print(f"  overfull hbox (right margin): {len(over)}, worst {worst:.1f}pt "
               f"(threshold {MAX_OVERFULL_PT:.0f}pt)")
         if over[:3]:
             print("  worst three: " + ", ".join(f"{x:.1f}pt" for x in over[:3]))
+        print(f"  overfull vbox (bottom margin): {len(vover)}, worst {vworst:.1f}pt "
+              f"(threshold {MAX_VBOX_OVERFULL_PT:.0f}pt — T-12)")
 
+        failed = False
         if worst > MAX_OVERFULL_PT:
             print()
-            print(f"FAIL  {worst:.1f}pt of content runs past the margin.")
+            print(f"FAIL  {worst:.1f}pt of content runs past the RIGHT margin.")
             print("      An `l` column cannot wrap, so one long cell sets the width")
             print("      of a whole table however narrow the others are — that was")
             print("      T-7. Bound the column, or make the content breakable.")
-            return 1
-        return 0
+            failed = True
+        if vworst > MAX_VBOX_OVERFULL_PT:
+            print()
+            print(f"FAIL  {vworst:.1f}pt of content runs past the BOTTOM margin,")
+            print(f"      on {len(vover)} page(s). This is finding T-12: the gate")
+            print("      used to match `\\hbox` only and could not see this at all.")
+            print("      A float or table is too tall for the text block — give it")
+            print("      its own page, shorten it, or let it break across pages.")
+            failed = True
+        return 1 if failed else 0
 
 
 if __name__ == "__main__":

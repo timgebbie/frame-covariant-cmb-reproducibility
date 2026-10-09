@@ -274,10 +274,16 @@ pytest -q                              # the claim-bearing regression suite
 
 ## Verification status
 
-**Release candidate.** 230 tests pass and 4 skip; the harness runs clean, and
-`python scripts/run_all.py --strict` reports `CLEAN`. The acceptance criteria for
-v1.0.0 are recorded in `RELEASE-NOTES-v1.0.0.md`; **three of six are closed**
-(1, 3 and 4). The four skips are the CAMB/CLASS comparison, which is not
+**Released as v1.0.0.** The regression suite passes and `python
+scripts/run_all.py --strict` reports `CLEAN` — run `pytest -q` for the current
+counts rather than trusting a number typed here, which is how the previous
+version of this paragraph came to claim a test total that was 36 short and a
+criteria tally that was half the truth.
+
+The acceptance criteria are recorded in `RELEASE-NOTES-v1.0.0.md`; **all six in
+v1.0.0's scope are closed** — 1, 2, 3, 4, 5a and 6 — with **5b moved to v1.2.0**
+by decision S18, where the acoustic peaks exist to compare against and Peebles
+recombination is in place. The four skips are the CAMB/CLASS comparison, which is not
 runnable until those codes are installed at v1.2.0; a skip there cannot pass
 silently, because `tests/test_external_codes.py` fails if the release notes ever
 claim criterion 5b is closed while the codes are absent.
