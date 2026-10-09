@@ -229,6 +229,7 @@ A control is not evidence. These live in `diagnostics/`.
 | **D2** | round-trip residual, covariant → mode → covariant | a number with its tolerance. If it is machine precision it is not a chart |
 | **D3** | the source terms (177)–(179) plotted directly against $k$ | the direct picture of the three printed equations, strictly linear and free of the cross-term question. Nearly free once F5 exists |
 | **D4** | no monopole in the CGI approach | Annals II p. 366 states it; a test, not a picture |
+| **D5** | criterion 5a: the Sachs–Wolfe limit, pipeline against the corrected (201) | a table of numbers with its tolerance, and an explicit statement of what the comparison cannot discriminate |
 
 ## Deferred
 

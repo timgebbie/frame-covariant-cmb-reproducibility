@@ -1,8 +1,17 @@
 # 1+3 covariant CMB anisotropies reproducibility bundle
 
-Version: v1.0.0 — First public analytical reproducibility release. Supplementary
-code and materials for: Tim Gebbie, *"Frame covariance of CMB lensing in the exact $1+3$ covariant radiation hierarchy,"*
-arXiv: identifier assigned on submission.
+Version: v1.0.0 — First public analytical reproducibility release.
+
+Supplementary code and materials for: Tim Gebbie, *"Frame covariance of CMB
+lensing in the exact $1+3$ covariant radiation hierarchy,"* arXiv: identifier
+assigned on submission.
+
+**The computational supplement is
+[`supplementary-materials/supplement-v1.0.0.pdf`](supplementary-materials/supplement-v1.0.0.pdf)**,
+built from `SUPPLEMENTARY-MATERIAL-v1.0.0.tex`. It carries the scope, the
+theory-to-computation map, the acceptance spine, the conventions and
+translations tables, and the interpretive limits — read it before the code if
+you want to know what this release does and does not claim.
 
 ## Key figure: the angular power spectrum by two routes
 
@@ -322,22 +331,17 @@ The development lineage:
 
 ## DOI, citation and license
 
-**ZivaHub/Figshare DOI:** [https://doi.org/10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509)
-— reserved, and active on publication of v1.0.0. This is the concept DOI: it
-always resolves to the latest version, so it is the one to cite.
+| Item | Value |
+|---|---|
+| **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMB lensing in the exact 1+3 covariant radiation hierarchy*. arXiv: identifier assigned on submission |
+| **Supplementary PDF** | [`supplementary-materials/supplement-v1.0.0.pdf`](supplementary-materials/supplement-v1.0.0.pdf) |
+| **GitHub repository** | [timgebbie/frame-covariant-cmb-reproducibility](https://github.com/timgebbie/frame-covariant-cmb-reproducibility) |
+| **ZivaHub/Figshare DOI** | [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509) — reserved, active on publication of v1.0.0. The **concept** DOI: it always resolves to the latest version, so it is the one to cite |
+| **Associated antecedent** | Gebbie, T.; Dunsby, P. K. S.; Ellis, G. F. R. (2000). *1+3 covariant cosmic microwave background anisotropies II: the almost-Friedmann–Lemaître model*. Annals of Physics **282**, 321–394. [doi:10.1006/aphy.2000.6034](https://doi.org/10.1006/aphy.2000.6034) |
+| **Code license** | MIT, see [`LICENSE`](LICENSE) |
+| **Supplement, text, figures and tables** | CC BY 4.0, see [`CONTENT-LICENSE.md`](CONTENT-LICENSE.md) |
 
-**Suggested paper citation:** Gebbie, Tim (2026). *Frame covariance of CMB
-lensing in the exact 1+3 covariant radiation hierarchy*. arXiv: identifier
-assigned on submission.
-
-**Associated antecedent:** Gebbie, T.; Dunsby, P. K. S.; Ellis, G. F. R. (2000).
-*1+3 covariant cosmic microwave background anisotropies II: the
-almost-Friedmann–Lemaître model*. Annals of Physics **282**, 321–394.
-[doi:10.1006/aphy.2000.6034](https://doi.org/10.1006/aphy.2000.6034)
-
-**Code:** MIT License, see `LICENSE`.
-
-**Supplementary materials, text, figures and tables:** CC BY 4.0, see
-`CONTENT-LICENSE.md`.
-
-Citation metadata is in `CITATION.cff`.
+Citation metadata is in [`CITATION.cff`](CITATION.cff). Its `version` field
+tracks the tag that exists, not the one in preparation: GitHub's *Cite this
+repository* and Zenodo both read it, and a version there that has not been
+released asserts a release nobody can fetch.

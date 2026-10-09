@@ -1,0 +1,187 @@
+#!/usr/bin/env python3
+r"""D5 — acceptance criterion 5a: the pipeline against the corrected (201).
+
+    python scripts/diagnostic_d5_sachs_wolfe.py
+
+**What the criterion asks, and what was already there.** Criterion 5a is that
+*the Sachs--Wolfe limit is recovered over $2\le\ell\le20$ to 5%, against the
+**corrected** closed form of (201)*. `functions/spectra/sachs_wolfe.py` already
+carried both closed forms and a quadrature arbiter, and `tests/test_sachs_wolfe.py`
+already checked the reduction against that quadrature. **That is the closed form
+checked against itself.** What was missing is the thing the criterion names: the
+**pipeline's own $C_\ell$**, computed by the same code that draws F3, compared
+against the closed form.
+
+**The corrected form, not the printed one.** Finding **B-5** is that (201) omits
+one factor of the comoting distance from the reduction; `cl_large_scale_reduced`
+carries $\chi^{2-n}$ and `cl_large_scale_printed` does not. Comparing against the
+printed form would be comparing against a known misprint, so the printed form is
+evaluated here too — as a **control**, to show the comparison can tell them
+apart. A test that passes against both is not testing anything.
+
+**Shape, not amplitude.** Neither the pipeline nor (201) fixes the primordial
+amplitude the same way, so both are normalised at $\ell=2$ and the comparison is
+of shape. Amplitudes would measure the normalisation.
+
+**The configuration is the Sachs--Wolfe limit, and it is produced by switching
+sources off rather than by writing a different integrand.** The Doppler and
+integrated terms are removed and the primary term kept, on the standard-CDM
+model of \S8.3.2. Writing a separate Sachs--Wolfe integrator would compare two
+pieces of code rather than reduce one.
+"""
+
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+import numpy as np
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from functions.background.flrw import CDM_MODEL  # noqa: E402
+from functions.spectra.angular import cl_mode_route  # noqa: E402
+from functions.spectra.bessel_table import BesselTable  # noqa: E402
+from functions.spectra.decoupling import RecombinationHistory  # noqa: E402
+from functions.spectra.pipeline import required_n_eta  # noqa: E402
+from functions.spectra.sachs_wolfe import (  # noqa: E402
+    cl_large_scale_printed,
+    cl_large_scale_reduced,
+)
+
+OUT = ROOT / "diagnostics"
+
+#: The criterion's own range and tolerance. Not tuned here.
+ELLS = np.arange(2, 21)
+TOLERANCE = 0.05
+
+#: The k grid. Linear with dk = pi/6, for the reason F3 states: j_l oscillates
+#: with period pi/dEta in k and a log grid aliases it however many points it has.
+K_MAX = 420.0
+DK = np.pi / 6.0
+
+
+def pipeline_sachs_wolfe() -> tuple[np.ndarray, float]:
+    r"""$C_\ell$ from this bundle in the pure Sachs--Wolfe limit.
+
+    The transfer function is $S_*\,j_\ell(k\chi_*)$ with $S_*$ the primary
+    source at last scattering: the Doppler and integrated terms are **switched
+    off**, not reimplemented. $\chi_*$ is the visibility peak, the same one
+    (176) evaluates its primary term at and the same one F3 uses.
+    """
+    model = CDM_MODEL
+    rec = RecombinationHistory.build(model, omega_b_h2=0.0224)
+    chi_star = float(model.eta_0 - rec.eta_star)
+
+    k = np.arange(0.05, K_MAX, DK)
+    # n_eta is irrelevant here --- there is no line-of-sight integral left once
+    # the integrated terms are off --- but the requirement is reported so the
+    # T-3 discipline is visible rather than silently inapplicable.
+    _ = required_n_eta(float(k.max()), float(model.eta_0 - rec.eta[0]))
+
+    table = BesselTable.build(ell_max=int(ELLS.max()), x_max=float(k.max() * chi_star) + 20.0)
+    transfer = np.stack([table(int(l), k * chi_star) for l in ELLS])
+
+    # **The primordial convention must be translated, and this is the whole
+    # subtlety of the comparison.** The pipeline integrates
+    # $\int dk\,k^2\mathcal P(k)|T_\ell|^2$ with $\mathcal P\propto k^{n_s-4}$,
+    # which at $n_s=1$ leaves $\int dk\,k^{-1}j_\ell^2$ and a flat
+    # $\ell(\ell+1)C_\ell$ --- scale invariance by definition. (198) integrates
+    # $\int dk\,Ak^{n-1}k^{-2}j_\ell^2$, which at $n=1$ leaves
+    # $\int dk\,k^{-2}j_\ell^2$ and the $1/[(2\ell+3)(2\ell+1)(2\ell-1)]$ of
+    # (201). **The two differ by one power of $k$.** Comparing them untranslated
+    # compares $1/\ell^2$ against $1/\ell^3$ and reports 835% at $\ell=20$,
+    # which is a convention mismatch wearing the costume of a physics failure.
+    # Through `cl_mode_route`, (198)'s integrand is $\mathcal P=k^{n-5}$.
+    n = 1.0
+    power = k ** (n - 5.0)
+    cl = np.array([cl_mode_route(int(l), k, transfer[i], power)
+                   for i, l in enumerate(ELLS)])
+    return cl, chi_star
+
+
+def main() -> int:
+    lines: list[str] = []
+
+    def say(s: str = "") -> None:
+        print(s)
+        lines.append(s)
+
+    say("D5 — acceptance criterion 5a: the Sachs-Wolfe limit")
+    say("Generated by scripts/diagnostic_d5_sachs_wolfe.py. Do not edit by hand.")
+    say()
+    say("  The PIPELINE's C_l, in the pure Sachs-Wolfe limit, against the")
+    say("  CORRECTED closed form of (201). The printed form is evaluated")
+    say("  beside it as a control: a comparison that cannot tell the two")
+    say("  apart is not testing anything.")
+    say()
+
+    cl, chi_star = pipeline_sachs_wolfe()
+    say(f"  model            standard CDM, flat matter dominated")
+    say(f"  chi_*            {chi_star:.6f} [1/H0]   (visibility peak)")
+    say(f"  k grid           linear, dk = pi/6, k_max = {K_MAX:.0f}")
+    say(f"  range            {ELLS.min()} <= l <= {ELLS.max()}")
+    say(f"  tolerance        {TOLERANCE:.0%}")
+    say()
+
+    corrected = np.array([cl_large_scale_reduced(int(l), d_eta=chi_star) for l in ELLS])
+    printed = np.array([cl_large_scale_printed(int(l)) for l in ELLS])
+
+    # Shape, not amplitude: neither fixes the primordial normalisation the
+    # same way, so both are referenced to l = 2.
+    def shape(x: np.ndarray) -> np.ndarray:
+        return x / x[0]
+
+    s_pipe, s_corr, s_print = shape(cl), shape(corrected), shape(printed)
+    err_corr = np.abs(s_pipe - s_corr) / s_corr
+    err_print = np.abs(s_pipe - s_print) / s_print
+
+    say("     l     pipeline      corrected(201)    err        printed(201)   err")
+    for i, l in enumerate(ELLS):
+        say(f"  {l:4d}  {s_pipe[i]:12.6f}  {s_corr[i]:12.6f}  {err_corr[i]:7.2%}  "
+            f"{s_print[i]:12.6f}  {err_print[i]:7.2%}")
+    say()
+    say(f"  worst against the CORRECTED form : {err_corr.max():.2%}")
+    say(f"  worst against the PRINTED form   : {err_print.max():.2%}")
+    say()
+
+    ok = bool(err_corr.max() <= TOLERANCE)
+    # **Whether the comparison can separate the two closed forms at all.**
+    # `err_print > err_corr` is not that test: the two can differ in the last
+    # bit and satisfy it while being the same curve. The question is whether
+    # the normalised SHAPES differ, and B-5's factor is chi^{2-n}, which is
+    # independent of l and therefore cancels exactly in the normalisation.
+    shape_gap = float(np.max(np.abs(s_corr - s_print) / s_corr))
+    discriminates = shape_gap > 1e-9
+
+    say(f"  normalised shape gap, corrected vs printed: {shape_gap:.3e}")
+    say()
+    say(f"  criterion 5a: {'MET' if ok else 'NOT MET'} at {TOLERANCE:.0%} "
+        f"over {ELLS.min()} <= l <= {ELLS.max()}")
+    say(f"  discriminates corrected from printed: {'yes' if discriminates else 'NO'}")
+    if not discriminates:
+        say()
+        say("  THIS COMPARISON CANNOT BE CITED AS EVIDENCE FOR B-5, and the reason")
+        say("  is structural rather than a matter of precision. The corrected and")
+        say("  printed forms differ by chi^{2-n}, which carries NO l dependence,")
+        say("  so it cancels exactly when the shapes are normalised at l = 2.")
+        say("  The two curves above are the same curve.")
+        say()
+        say("  5a asks only that the Sachs-Wolfe limit is recovered against the")
+        say("  corrected form, and it is. B-5 rests on the ABSOLUTE comparison")
+        say("  against the quadrature arbiter in tests/test_sachs_wolfe.py, where")
+        say("  the chi factor does not cancel. Two separate claims, two separate")
+        say("  pieces of evidence, and this one is not the other.")
+    say()
+    say("  Numbers, never the word *agrees*.")
+
+    OUT.mkdir(exist_ok=True)
+    path = OUT / "d5-sachs-wolfe-v1.0.0.txt"
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
+    print(f"\nwrote {path.relative_to(ROOT)}")
+    return 0 if ok else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

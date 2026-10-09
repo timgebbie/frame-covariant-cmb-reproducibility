@@ -1127,3 +1127,56 @@ it was, from a reading undertaken for an unrelated reason.
 **One corroboration in passing.** Ma & Bertschinger cite "Wilson & Silk (1980,
 1981)" for the inclusion of anisotropic scattering — two papers under that
 authorship, consistent with the resolution of B-4 and B-9.
+
+---
+
+## The two primordial conventions differ by one power of $k$, 2026-10-09
+
+Found while closing acceptance criterion 5a, and recorded because it produced
+an **835% discrepancy that was entirely a convention mismatch**.
+
+This bundle's pipeline integrates
+
+$$C_\ell \propto \int \dd k\, k^2\, \mathcal P(k)\,|T_\ell|^2,
+  \qquad \mathcal P \propto k^{n_s-4},$$
+
+so at $n_s=1$ the integrand is $k^{-1}j_\ell^2$, giving
+$\int\dd k\,k^{-1}j_\ell^2 = 1/[2\ell(\ell+1)]$ and a **flat
+$\ell(\ell+1)C_\ell$** — which is what scale invariance means, and is asserted
+as a test in `functions/spectra/pipeline.py` rather than assumed.
+
+*Annals II*'s (198) integrates
+
+$$C_\ell \propto \int \dd k\, A k^{n-1}\, k^{-2}\, j_\ell^2,$$
+
+so at $n=1$ the integrand is $k^{-2}j_\ell^2$, giving
+$1/[(2\ell+3)(2\ell+1)(2\ell-1)]$ — which is (201).
+
+**One power of $k$ apart.** Compared untranslated, the pipeline falls like
+$1/\ell^2$ and the closed form like $1/\ell^3$, and the comparison reports 835%
+at $\ell=20$: a convention mismatch wearing the costume of a physics failure.
+Through `cl_mode_route`, (198)'s integrand is reproduced by
+$\mathcal P = k^{n-5}$, and criterion 5a then comes in at **0.27%** against a
+5% tolerance.
+
+Neither convention is wrong and neither paper is at fault. What was missing was
+the **translation**, which no line of the conventions sheet carried: §C8 fixes
+the Fourier measure and §C9 translates between external treatments, but nothing
+related *Annals II*'s own primordial normalisation to the one the reconstruction
+uses. It is recorded here and should become a line of the sheet at the next
+conventions pass.
+
+### A second thing, and it is a limit on what 5a can be cited for
+
+The same comparison **cannot be used as evidence for B-5**, and the reason is
+structural rather than a matter of precision. The corrected and printed forms of
+(201) differ by $\chi^{2-n}$, which carries **no $\ell$ dependence**, so it
+cancels exactly when the spectra are normalised at $\ell=2$ to compare shapes.
+Measured, the normalised shape gap between them is zero to machine precision:
+the two curves are the same curve.
+
+So criterion 5a discharges 5a and nothing else. **B-5 rests on the absolute
+comparison** against the quadrature arbiter, where $\chi$ does not cancel, and
+that evidence already exists in `tests/test_sachs_wolfe.py`. D5 states this in
+its own output rather than leaving a reader to work out that a passing
+comparison against both forms cannot distinguish them.

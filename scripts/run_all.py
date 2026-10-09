@@ -48,6 +48,7 @@ DIAGNOSTICS: list[tuple[str, str]] = [
     ("D2  round-trip residual (a number)", "scripts/diagnostic_d2_roundtrip.py"),
     ("D3  source terms against k", "scripts/diagnostic_d3_sources.py"),
     ("D4  no monopole in the CGI approach", "scripts/diagnostic_d4_monopole.py"),
+    ("D5  criterion 5a: the Sachs-Wolfe limit", "scripts/diagnostic_d5_sachs_wolfe.py"),
 ]
 
 
@@ -125,6 +126,13 @@ def main() -> int:
         failures.append("tables")
     if run([sys.executable, "scripts/make_figure_pages.py"], "figure pages"):
         failures.append("figure pages")
+
+    # R3. The supplement is the document this bundle is *for*, and it was the
+    # one released artefact nothing here generated. Built and gated now, which
+    # also retires the hand-typed rename on the way out. Skips cleanly without
+    # a LaTeX toolchain.
+    if run([sys.executable, "scripts/build_supplement.py"], "supplement"):
+        failures.append("supplement")
 
     print("\n--- provenance " + "-" * 46)
     if run([sys.executable, "scripts/sync_conventions.py", "--check"], "conventions copy"):
