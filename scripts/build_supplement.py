@@ -54,6 +54,19 @@ MAX_OVERFULL_PT = 35.0
 
 PASSES = 2
 
+#: Fixed build clock, so the PDF is byte-reproducible --- finding **T-11**.
+#: `pdflatex` stamps `/CreationDate`, `/ModDate` and a random `/ID` into every
+#: file it writes, so each rebuild produced different bytes and `--strict`
+#: could never pass once the harness started building this. That is **T-2 in a
+#: new generator**: matplotlib was fixed and the lesson was not generalised, so
+#: adding a generator reintroduced the defect.
+#:
+#: `SOURCE_DATE_EPOCH` is the reproducible-builds convention and TeX Live
+#: honours it for all three fields; `FORCE_SOURCE_DATE` makes `\today`
+#: deterministic too. The value is a constant rather than the wall clock,
+#: because a build clock that moves is the whole problem.
+SOURCE_DATE_EPOCH = "1791504000"  # 2026-10-09T00:00:00Z
+
 
 def _overfulls(log: str) -> list[float]:
     return [float(x) for x in re.findall(r"Overfull \\hbox \(([0-9.]+)pt", log)]
@@ -85,9 +98,14 @@ def main() -> int:
 
         log = ""
         for i in range(PASSES):
+            import os
+
+            env = dict(os.environ,
+                       SOURCE_DATE_EPOCH=SOURCE_DATE_EPOCH,
+                       FORCE_SOURCE_DATE="1")
             proc = subprocess.run(
                 ["pdflatex", "-interaction=nonstopmode", "-halt-on-error", SOURCE.name],
-                cwd=build, capture_output=True, timeout=600,
+                cwd=build, capture_output=True, timeout=600, env=env,
             )
             log = (build / f"{SOURCE.stem}.log").read_text(
                 encoding="utf-8", errors="replace"

@@ -899,3 +899,56 @@ transfers, and then dropped. **A rule in the record is not a rule in the
 hands.** Manifests are no longer transferred at all; they are regenerated on
 the publishing machine as the last step before commit, and the clean-checkout
 gate is what proves it worked.
+
+---
+
+## T-11 — T-2 came back the moment a new generator was added
+
+**Raised 2026-10-09, by `--strict` failing on manifests immediately after R3
+landed. Severity: release-blocking.** Corrected the same hour.
+
+`pdflatex` stamps `/CreationDate`, `/ModDate` and a random `/ID` into every PDF
+it writes:
+
+```text
+CreationDate = D:20261009140726+02'00'
+ID           = <FD20DE95268126836819A88126F80A31> ...
+```
+
+So two builds of an unchanged source produced different bytes, and the moment
+`run_all.py` started building the supplement — R3, added that morning —
+`--strict` could never pass again.
+
+### This is not a new mistake
+
+**It is T-2, in a different generator.** T-2 was matplotlib stamping the wall
+clock into every released figure; it was found, fixed, and recorded. What was
+*not* done was to state the rule the fix implied: **every generator this harness
+owns must produce the same bytes from the same inputs.** Without that rule
+written down as a rule, adding a generator reintroduced the defect, and the
+entry for T-2 sat three screens above it in this same file.
+
+A finding recorded is not a finding generalised. T-1 and T-6 were the same pair
+twice over, and this is the third instance of the pattern: the specific fix
+landed and the class did not.
+
+### The correction
+
+`SOURCE_DATE_EPOCH` fixed at a constant, with `FORCE_SOURCE_DATE=1` so `\today`
+is deterministic as well. These are the reproducible-builds conventions and TeX
+Live honours them for all three fields. Two builds two seconds apart now give
+`f0a9b3b1dc13b9628d5eca2b` both times.
+
+**The value is a constant, not the current time**, because a build clock that
+moves is the entire problem. What is deliberately *not* claimed is byte-identity
+across TeX Live versions: a different engine lays out the page differently, and
+stripping the version would hide a real difference rather than remove a spurious
+one — the same distinction T-2 drew for matplotlib.
+
+### The rule, stated this time
+
+**Any artefact `run_all.py` generates must be byte-reproducible from the same
+inputs, and the check is to build it twice.** That is now a property worth
+testing directly rather than discovering through a manifest failure, and it is
+the obvious next guard: a generator added without it will reintroduce this a
+fourth time.

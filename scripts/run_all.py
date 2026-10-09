@@ -42,6 +42,20 @@ STAGES: list[tuple[str, str]] = [
 ]
 
 #: Diagnostics. A control is not evidence, so these are not released figures.
+#: **Scoped out of v1.0.0 by decision S-b**, accepted by the PI 2026-10-09.
+#: All six are diagnostic, cross-check or schematic in the figure plan; the two
+#: marked *acceptance* there — F4 and F5 — stay in v1.0.0 and are not listed
+#: here. A deferred artefact is still reported as pending, so it cannot be
+#: forgotten; it just does not block the release it was deferred out of.
+DEFERRED_TO_V1_1 = frozenset({
+    "F2  truncation convergence, both frames",
+    "F6  impact of the approximations",
+    "F7  frame specialisation",
+    "F8  coupling schematic",
+    "D3  source terms against k",
+    "D4  no monopole in the CGI approach",
+})
+
 DIAGNOSTICS: list[tuple[str, str]] = [
     ("D0  criterion 5 ell range, and B-3", "scripts/derive_ell_range.py"),
     ("D1  relative-sign control", "scripts/diagnostic_d1_sign_control.py"),
@@ -114,12 +128,16 @@ def main() -> int:
     for group, stages in (("figures", STAGES), ("diagnostics", DIAGNOSTICS),
                           ("emissions", EMISSIONS)):
         print(f"\n--- {group} " + "-" * max(0, 56 - len(group)))
-        if pending[group]:
-            print(f"{len(pending[group])} of {len(stages)} pending:")
-            for label in pending[group]:
+        blocking = [l for l in pending[group] if l not in DEFERRED_TO_V1_1]
+        deferred = [l for l in pending[group] if l in DEFERRED_TO_V1_1]
+        if blocking:
+            print(f"{len(blocking)} of {len(stages)} pending for THIS release:")
+            for label in blocking:
                 print(f"    PENDING  {label}")
         else:
-            print(f"all {group} generated")
+            print(f"all {group} this release needs are generated")
+        for label in deferred:
+            print(f"    deferred to v1.1.0 (S-b)  {label}")
 
     print("\n--- tables " + "-" * 50)
     if run([sys.executable, "scripts/make_tables.py"], "audit tables"):
@@ -158,7 +176,8 @@ def main() -> int:
     if failures:
         print("NOT CLEAN — " + ", ".join(failures))
         return 1
-    outstanding = pending["figures"] + pending["diagnostics"]
+    outstanding = [l for l in pending["figures"] + pending["diagnostics"]
+                   if l not in DEFERRED_TO_V1_1]
     if outstanding and args.strict:
         print(f"NOT RELEASABLE — {len(outstanding)} pending; see RELEASE-NOTES-v1.0.0.md")
         return 1
