@@ -80,6 +80,7 @@ from functions.background.flrw import Background
 
 __all__ = [
     "Weighting",
+    "Recombination",
     "RecombinationHistory",
     "saha_ionisation",
     "diffusion_scale",
@@ -114,6 +115,49 @@ class Weighting(Enum):
 
     ANNALS_II = "visibility"
     STANDARD_ISW = "opacity"
+
+
+class Recombination(Enum):
+    """Which ionisation history to build the optical depth from.
+
+    `SAHA` is equilibrium only. It places last scattering within a few percent
+    in redshift, which is all v1.0.0 needed, and it has **no freeze-out**: it
+    drives $x_e$ to absurd values (``1e-53`` by $z=200$) where the real universe
+    holds a residual plateau.
+
+    `PEEBLES` is the effective three-level atom of
+    `functions.spectra.peebles` --- v1.1.0's deliverable, and what criterion
+    **5b** is blocked on (decision S18). The difference is not cosmetic:
+
+    Measured through this class at `z_max=2400`, `n_eta=6000`, on a
+    $\\Omega_m=0.315$, $\\Omega_\\Lambda=0.685$, $\\Omega_r=9.2\\times10^{-5}$
+    background:
+
+    | | $z$ of the visibility peak | FWHM in $z$ |
+    |---|---|---|
+    | `SAHA` | $\\simeq1300$ | $\\simeq120$ |
+    | `PEEBLES` | $\\simeq1107$ | $\\simeq167$ |
+    | standard | 1080--1100 | 190--200 |
+
+    Saha puts last scattering roughly 200 in redshift too early and makes the
+    visibility **about 40% too narrow**, and the visibility width is precisely
+    what fixes the Silk damping envelope.
+
+    **The widths above are grid-dependent and are quoted with their settings
+    for that reason.** `tests/test_peebles.py` asserts *bounds* and the
+    *relation* between the two rather than these numbers, because a hand-typed
+    figure in a docstring is a staleness generator — which is the mistake the
+    README's "230 tests pass" made and the reason it is no longer there.
+
+    **`SAHA` remains the default**, deliberately. Flipping it changes every
+    number in every released figure, which is a decision to be taken once with
+    the before-and-after in front of it, not a side effect of adding a module.
+    The roadmap is explicit that Peebles is "checkable on its own against the
+    standard ionisation history **before anything is built on it**".
+    """
+
+    SAHA = "saha"
+    PEEBLES = "peebles"
 
 
 def saha_ionisation(z: np.ndarray, *, omega_b_h2: float = 0.0224) -> np.ndarray:
@@ -171,13 +215,41 @@ class RecombinationHistory:
         omega_b_h2: float = 0.0224,
         n_eta: int = 4000,
         z_max: float = 3000.0,
+        recombination: "Recombination" = None,  # type: ignore[assignment]
+        h: float = 0.674,
     ) -> "RecombinationHistory":
         eta_min = background.eta_at_redshift(z_max)
         eta = np.linspace(eta_min, background.eta_0, n_eta)
         a = background.a_of_eta(eta)
         z = 1.0 / np.clip(a, 1e-12, None) - 1.0
 
-        x_e = saha_ionisation(z, omega_b_h2=omega_b_h2)
+        if recombination is None:
+            recombination = Recombination.SAHA
+
+        if recombination is Recombination.SAHA:
+            x_e = saha_ionisation(z, omega_b_h2=omega_b_h2)
+        else:
+            # **Imported here rather than at module scope, deliberately.**
+            # `peebles` imports `saha_ionisation` from this module for its own
+            # initial condition, so a top-level import would be circular. The
+            # dependency is genuinely one-directional in meaning --- Peebles
+            # starts from Saha, not the other way round --- and the local import
+            # is the honest expression of that rather than a workaround.
+            from functions.spectra.peebles import peebles_ionisation
+
+            z_hi = min(float(np.max(z)), 2000.0)
+            solution = peebles_ionisation(
+                background, z_start=z_hi, z_end=max(float(np.min(z)), 10.0),
+                omega_b_h2=omega_b_h2, h=h,
+            )
+            # Above the integration's start the gas is still in equilibrium by
+            # construction (see `peebles_ionisation`), so Saha is the solution
+            # there and is used rather than extrapolating the ODE backwards.
+            x_e = np.where(
+                z <= z_hi,
+                solution.at(np.clip(z, solution.z.min(), z_hi)),
+                saha_ionisation(z, omega_b_h2=omega_b_h2),
+            )
 
         # kappa' = a n_e sigma_T, in units where the normalisation is absorbed
         # into `thomson_scale`: only the shape and the location of the visibility

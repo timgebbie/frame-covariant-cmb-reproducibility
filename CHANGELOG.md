@@ -3,6 +3,46 @@
 All notable changes to this bundle are recorded here. The version policy is in
 `README.md` under *Version-control policy*.
 
+## [Unreleased] — v1.1.0 in preparation
+
+### Added
+
+- `functions/spectra/peebles.py` — **Peebles recombination**, the effective
+  three-level atom, and v1.1.0's named deliverable. Freeze-out comes out at
+  $2.15\times10^{-4}$ against the standard $\sim2\times10^{-4}$, and it moves the
+  visibility peak from $z\simeq1300$ (Saha) to $z\simeq1107$, against a standard
+  1080–1100, while **widening the function by about 40%**. The width is what
+  fixes the Silk damping envelope, which is why criterion 5b was blocked on this
+  (S18). What is *derived* and what is *imported* is tabulated in the module
+  docstring: the ODE structure and $\beta_B$ by detailed balance are derived, and
+  $\alpha_B$, the atomic constants and the RECFAST fudge factor are imported with
+  their sources. **The fudge is a named parameter, not a buried coefficient**, and
+  `tests/` measures what it is worth.
+- `functions/spectra/decoupling.py` — a `Recombination` enum. **`SAHA` remains
+  the default**: flipping it changes every number in every released figure, which
+  is a decision to be taken once with the before-and-after in view, not a side
+  effect of adding a module.
+- `functions/spectra/frame_transform.py` — the threading change made numerical.
+  $\tilde\Phi_A=0$ and the Weyl invariant $\Phi_A-\Phi_H$ both hold to
+  $1.1\times10^{-16}$.
+- `functions/frames.py` — the curvature half of criterion 2:
+  `weyl_invariance_residual` is identically zero, **with a negative control**
+  showing it fails for any other potential rule, plus the dipole and
+  $\ell\ge2$ statements as callable functions.
+- `scripts/make_release_archive.py` — finding **T-13** closed. It found a real
+  defect on its first run: `dist/` was not gitignored, so a release archive
+  would have entered the fingerprint it was an archive of.
+
+### Fixed
+
+- `functions/spectra/sources.py` — a docstring that asserted a frame invariance
+  the equations cannot have. Finding **T-14**.
+
+### Changed
+
+- **S21**: F5 and F7 move from v1.1.0 to v1.5.0, and F2 joins them — all three
+  wait on the generic-$u^a$ hierarchy, not on figure work.
+
 ## [Unreleased] — v1.0.0 in preparation
 
 ### Added

@@ -1119,3 +1119,36 @@ was deferred.
 pins the measured collapse as a range, so that a fix and a regression are
 distinguishable and the day the generic-$u^a$ source lands the test fails and is
 rewritten into the invariance it should then assert.
+
+### T-13 — closed 2026-10-10
+
+`scripts/make_release_archive.py`. The file set comes from the shared selector
+(T-1), member timestamps are pinned to the same instant `build_supplement.py`
+uses so the two generators cannot disagree about "now" (T-11), and the script
+**extracts what it built and runs the portability and manifest gates inside it**
+before reporting success — R2's discipline applied to the file that leaves.
+
+**It found a defect on its first run, which is the argument for having written
+it.** `dist/` was not in `.gitignore`, so the archive — a zip *of the bundle* —
+landed inside the file set the fingerprint is taken over. Building a release
+would have changed the manifest, which would have invalidated the archive that
+had just been built. That is **T-1 for the third time**, and this time the gates
+T-1 produced caught it before it reached anything. Fixed in `.gitignore`, with
+the reason recorded there rather than as a bare line.
+
+### T-14 — scope extended 2026-10-10: F2 is blocked by the same thing
+
+Recorded here rather than as a new finding, because it is the same defect seen
+from another figure. **F2 cannot be drawn as specified either.** Its
+specification is *"run in both frames"*, checking Annals II footnote 29 on
+p. 365 — that choosing the Newtonian frame "would also remove any problems we
+may have with the introduction of high-$\ell$ truncation as discussed in
+Appendix E". Checking that claim requires running the hierarchy in a threading
+that **has** shear, and the bundle has only the shear-free one.
+
+So **three of the five figures deferred to v1.1.0 — F2, F5 and F7 — wait on the
+generic-$u^a$ hierarchy**, not on figure work. F6 and F8 do not: F6 is ratios of
+approximations within one threading, and F8 is a schematic with no computation.
+A single-frame F2 is buildable and would make Appendix E quantitative, but it
+would not check footnote 29, which is the stated reason the figure exists —
+so it is not built here, and the choice is the PI's rather than this stream's.

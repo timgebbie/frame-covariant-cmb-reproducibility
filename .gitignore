@@ -22,6 +22,16 @@ venv/
 !figures/*.pdf
 !supplementary-materials/*.pdf
 
+# Release archives, written by scripts/make_release_archive.py. **This line is
+# finding T-1 again, caught before it bit rather than after.** The archive is a
+# zip *of the bundle*, written into the bundle; without this it enters the file
+# set the fingerprint is taken over, so building a release would change the
+# manifest, which would invalidate the archive that had just been built. The
+# generator's own gate found it on its first run — it reported the archive as a
+# file the manifest did not know about — which is the portability gate and the
+# manifest check doing precisely what T-1 added them for.
+dist/
+
 # OS and editor metadata. Windows Explorer writes Thumbs.db into any folder of
 # images --- figures/ --- and macOS writes .DS_Store into any folder opened in
 # Finder. Neither is part of the bundle on any machine, and before finding T-1
