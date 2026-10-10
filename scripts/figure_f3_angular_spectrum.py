@@ -77,10 +77,24 @@ def compute():
             model, ells=ELLS, k_com=K_COM,
             weighting=Weighting.STANDARD_ISW, n_eta=None,
         )
+        # **Report the convergence of what this figure plots** --- finding T-16.
+        # This used to print "TRUNCATED, not converged" whenever the k grid
+        # stopped short of the Silk scale, which is every run, beside the key
+        # figure of a released bundle. That is true of the integrand at the
+        # damping scale and false of the spectrum drawn here.
+        claimed = run.cl_truncation_sensitivity(ell_max=CLAIMED_ELL_MAX)
+        computed = run.cl_truncation_sensitivity()
         print(f"  {label}: n_eta={run.n_eta} "
-              f"({run.eta_points_per_period:.1f} samples per oscillation at k_max); "
-              f"damping still {run.damping_at_k_max:.3f} at the k grid edge"
-              f"{'' if run.k_truncation_is_negligible else '  <-- TRUNCATED, not converged'}")
+              f"({run.eta_points_per_period:.1f} samples per oscillation at k_max)")
+        print(f"      k-grid truncation, dropping its top 10%: "
+              f"{claimed:.2e} over the CLAIMED range l<={CLAIMED_ELL_MAX}"
+              f"{'  OK' if claimed < 1e-2 else '  <-- TOO LARGE'}")
+        print(f"                                           "
+              f"{computed:.2e} over everything computed (to l={int(run.spectrum.ell.max())}), "
+              f"which this release does not claim")
+        print(f"      damping {run.damping_at_k_max:.3f} at the grid edge: the grid "
+              f"{'reaches' if run.reaches_diffusion_scale else 'stops short of'} the Silk "
+              f"scale. v1.2.0 needs it; this release does not.")
         rows.append({
             "label": label, "slot": slot, "run": run,
             "d_ell": run.spectrum.d_ell(),

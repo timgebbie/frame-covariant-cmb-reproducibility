@@ -134,18 +134,72 @@ class SpectrumRun:
     n_eta: int                     # the grid actually used, derived unless forced
     eta_points_per_period: float   # samples per j_l oscillation at k_max
     damping_at_k_max: float        # exp[-(k_max/k_D)^2]: what the k grid left out
+    k_com: np.ndarray              # the grid itself, so convergence is testable
+    power: np.ndarray              # P(k) on that grid, for the same reason
 
     @property
-    def k_truncation_is_negligible(self) -> bool:
-        """Whether the $k$ grid reaches past the diffusion cut-off.
+    def reaches_diffusion_scale(self) -> bool:
+        r"""Whether the $k$ grid extends past the Silk damping cut-off.
 
-        $\\exp[-(k_{\\max}/k_D)^2]$ is the weight still sitting on the integrand
-        where the grid stops. Near 1 means the integral was **truncated**, not
-        converged: the grid ended while the source was still contributing. This
-        is reported rather than enforced, because extending the grid is a cost
-        decision and hiding the cost behind a silent pass is how T-3 happened.
+        $\exp[-(k_{\max}/k_D)^2]$ is the weight still sitting on the integrand
+        where the grid stops; small means the grid ran past the cut-off.
+
+        **This is a readiness test for v1.2.0, not a convergence test for this
+        release — finding T-16.** It used to be called
+        `k_truncation_is_negligible` and `figure_f3_angular_spectrum.py` printed
+        "TRUNCATED, not converged" whenever it was false, which was *every run*,
+        beside the key figure of a released bundle. The statement is true of the
+        integrand at the damping scale and false of the spectrum the figure
+        draws: $j_\ell(k\Delta\eta)$ contributes around $k\simeq\ell/\Delta\eta$,
+        so $\ell\le20$ lives near $k\simeq10$ on a grid that runs to 420. The
+        acoustic peaks and Silk damping of v1.2.0 *do* need the cut-off; this
+        release does not, and `cl_truncation_sensitivity` is what tests what
+        this release claims.
+
+        An alarm that fires on every correct run is worse than no alarm --- the
+        lesson of T-4, printed next to the figure a reader looks at first.
         """
         return self.damping_at_k_max < 1e-2
+
+    def cl_truncation_sensitivity(self, *, drop: float = 0.1,
+                                  ell_max: int | None = None) -> float:
+        r"""**The convergence test that matches what this release claims.**
+
+        Recomputes every $C_\ell$ with the top `drop` fraction of the $k$ grid
+        removed and returns the worst relative change. If discarding the last
+        10% of the grid does not move the answer, the integral has converged
+        over the range being plotted --- which is a direct statement about the
+        output, needing no assumption about the integrand's shape.
+
+        Cheap: the transfer function is already computed, so this is a second
+        quadrature over an array that exists, not a second pipeline run.
+        """
+        from functions.spectra.angular import angular_spectrum
+
+        keep = int(round(self.k_com.size * (1.0 - float(drop))))
+        if keep < 8:
+            raise ValueError("too little of the grid left to compare against")
+
+        reduced = angular_spectrum(
+            self.spectrum.ell, self.k_com[:keep],
+            self.transfer[:, :keep], self.power[:keep],
+        )
+        full, cut = self.spectrum.cl_mode, reduced.cl_mode
+
+        # **Measured over the range the release CLAIMS, not every l computed.**
+        # The first version of this method took the maximum over all l, and
+        # `figure_f3_angular_spectrum.py` computes out to l=400 while claiming
+        # only l<=20 and shading the rest. It therefore reported 2.4e-1 and
+        # called a converged spectrum unconverged --- the severity came entirely
+        # from multipoles the figure tells the reader not to trust. Part of
+        # finding T-16.
+        if ell_max is not None:
+            within = np.asarray(self.spectrum.ell) <= int(ell_max)
+            if not within.any():
+                raise ValueError(f"no computed l at or below {ell_max}")
+            full, cut = full[within], cut[within]
+
+        return float(np.max(np.abs(cut - full) / np.maximum(np.abs(full), 1e-300)))
 
 
 def run(
@@ -271,4 +325,5 @@ def run(
         n_eta=int(n_eta),
         eta_points_per_period=float(np.pi / k_max / (eta_span / n_eta)),
         damping_at_k_max=float(np.exp(-((k_max / damping_k) ** 2))),
+        k_com=k_com, power=power,
     )

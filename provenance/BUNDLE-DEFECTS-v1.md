@@ -1152,3 +1152,129 @@ approximations within one threading, and F8 is a schematic with no computation.
 A single-frame F2 is buildable and would make Appendix E quantitative, but it
 would not check footnote 29, which is the stated reason the figure exists —
 so it is not built here, and the choice is the PI's rather than this stream's.
+
+---
+
+## T-15 — the release route cannot pass on a second machine
+
+**Found 2026-10-10, by the PI running `run_all.py --strict` on Windows against
+a manifest whose artefacts were generated in a Linux container.** It reported
+`NOT CLEAN — manifests`. The mismatch:
+
+```
+changed  diagnostics/d1-sign-control-v1.0.0.png
+changed  figures/f1-appendix-f-v1.0.0.pdf      changed  figures/f1-...png
+changed  figures/f3-angular-spectrum-v1.0.0.pdf  changed  figures/f3-...png
+changed  figures/f4-correlation-v1.0.0.pdf     changed  figures/f4-...png
+changed  supplementary-materials/supplement-v1.0.0.pdf
+changed  outputs/f1-appendix-f-residuals.csv
+changed  outputs/f4-correlation.csv
+changed  outputs/line-of-sight-field.csv
+```
+
+**`--strict` regenerates every artefact and then checks its hash.** So it can
+only pass on the machine that produced the committed bytes. That is not a bug in
+the gate; it is the gate asking a question nobody checked was answerable.
+
+### The part that was predicted, and the part that was not
+
+The seven renderings and the supplement were expected. `pdflatex` lays a page out
+differently across TeX Live versions — **T-11's own docstring says so in those
+words**, "what is deliberately *not* claimed is byte-identity across TeX Live
+versions" — and matplotlib output depends equally on its version, on freetype and
+on the installed fonts. A disclaimer written in one finding and a gate written in
+another, neither aware of the other.
+
+**The three CSVs were not predicted, and they are the more interesting half.**
+They are plain text written with `%.12e`. Differing bytes mean the *numbers*
+differ in their last digits between a Linux container and a Windows machine —
+different BLAS, different libm, different scipy build. That is ordinary
+floating-point reality, and it means the defect is not confined to renderings:
+**byte-identity is the wrong criterion for any generated numerical artefact**,
+not merely for pictures.
+
+### What this does and does not threaten
+
+It does **not** threaten any released result. `check_clean_checkout.py` does not
+regenerate; it hashes what the tag contains, which is why v1.0.0 passed on the
+PI's machine at 124 files and why the deposited archive verifies. The
+reproducibility claim the bundle makes — *run this and you get these numbers* —
+is intact at the precision that matters.
+
+What it threatens is the **release route**: `--strict` is documented as the route
+a release candidate must pass, and a second person cannot run it. A gate only one
+machine can satisfy is a gate that will be routed around.
+
+### The fix, and why it is not "loosen the tolerance"
+
+The scientific content of a figure is the data behind it, not its pixels, and the
+content of a CSV is its numbers, not their last bit. So:
+
+* **text artefacts stay binding**, compared as *numbers within a tolerance*
+  rather than as bytes where they are numeric;
+* **renderings become a within-machine drift check** that reports rather than
+  blocks, because a PNG that differs only in font hinting carries no scientific
+  difference;
+* and `--strict` must **say which kind of mismatch it found**, so a byte
+  difference in a PNG is never again indistinguishable from a changed number.
+
+Deferred to v1.2.0 with its own entry rather than patched now: it touches the
+manifest format, the gate and the clean-checkout script together, and the PI's
+tree is mid-release-cycle. **Until it lands, `--rerun` is the route to use on a
+machine that did not generate the artefacts**, and the manifest should be
+rewritten locally rather than shipped between machines.
+
+---
+
+## T-16 — a convergence alarm that reported a proxy instead of the quantity
+
+**Found 2026-10-10 in the same run.** `figure_f3_angular_spectrum.py` printed,
+beside the key figure of a released bundle, on **every** run:
+
+```
+damping still 0.892 at the k grid edge  <-- TRUNCATED, not converged
+```
+
+The predicate was `damping_at_k_max < 1e-2`: whether the $k$ grid runs past the
+Silk damping cut-off. That is a real question with a real answer — the grid does
+stop short — but it is **not the question the message answers**, and a reader
+cannot tell from it whether the released spectrum is trustworthy.
+
+### Two wrong readings, both recorded
+
+**This stream's first diagnosis was wrong.** Reasoning that $j_\ell(k\Delta\eta)$
+contributes near $k\simeq\ell/\Delta\eta$, so $\ell\le20$ lives near $k\simeq10$
+on a grid running to 420, it concluded the alarm was crying wolf. Replacing the
+flag with a direct test — recompute every $C_\ell$ with the top 10% of the grid
+removed — returned **2.4e-1**, and the alarm was vindicated.
+
+**That measurement was also wrong**, for the opposite reason: it maximised over
+every $\ell$ computed, and F3 computes to $\ell=400$ while claiming only
+$\ell\le20$ and **shading the rest of the panel**. The 24% came entirely from
+multipoles the figure tells the reader not to trust.
+
+Measured over the claimed range, dropping the top 10% of the grid:
+
+| | $\ell\le20$ (claimed) | all computed, to $\ell=400$ |
+|---|---|---|
+| standard CDM | **5.0e-3** | 2.4e-1 |
+| $\Lambda$CDM | **8.9e-4** | 4.6e-2 |
+
+So the released spectrum is converged to half a percent over what it claims, and
+badly unconverged where it says so itself.
+
+### The defect, stated properly
+
+Not that the alarm was false — it was true. **It reported a proxy for the
+quantity of interest, without the range or the magnitude, so its severity could
+not be judged.** Severity is the whole content of a convergence warning.
+
+The gate now reports the measured sensitivity **over the claimed range**, the
+same number over everything computed, and the Silk-scale statement separately and
+labelled as what it is: a readiness condition for v1.2.0's acoustic peaks, which
+this release does not need.
+
+**Related to T-12 and T-14 but distinct from both.** T-12 was a check that looked
+at the wrong object; T-14 a docstring asserting a property the code lacked; T-16
+a check that looked at the *right* object and reported it in a form that could
+not be acted on. All three pass or fail honestly and all three mislead.

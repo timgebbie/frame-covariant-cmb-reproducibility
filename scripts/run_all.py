@@ -59,15 +59,26 @@ STAGES: list[tuple[str, str]] = [
 #: tolerance: see `functions.frames.roundtrip_residual`. Deferring F5 therefore
 #: removes a picture of the claim and not the claim, and `README.md` and the
 #: release notes say so in those words.
-DEFERRED_TO_V1_1 = frozenset({
-    "F2  truncation convergence, both frames",
-    "F5  source decomposition, two frames",
-    "F6  impact of the approximations",
-    "F7  frame specialisation",
-    "F8  coupling schematic",
-    "D3  source terms against k",
-    "D4  no monopole in the CGI approach",
-})
+#: Where each deferred artefact actually lands, and on whose decision. **A
+#: single frozenset was wrong once S21 and S23 split the destinations**: the
+#: harness went on printing "deferred to v1.1.0" for F2, F5 and F7 after they
+#: had been moved to v1.2.0, which is the same class of staleness as a status
+#: block nobody updates. The version is data now, so the message cannot drift
+#: from the decision.
+DEFERRED: dict[str, tuple[str, str]] = {
+    # S-b: diagnostic, cross-check and schematic artefacts, not acceptance ones.
+    "F6  impact of the approximations": ("v1.1.0", "S-b"),
+    "F8  coupling schematic": ("v1.1.0", "S-b"),
+    "D3  source terms against k": ("v1.1.0", "S-b"),
+    "D4  no monopole in the CGI approach": ("v1.1.0", "S-b"),
+    # S21 then S23: these three wait on the generic-u^a hierarchy, not on
+    # figure work. Finding T-14 is why, and S23 put that hierarchy in v1.2.0.
+    "F2  truncation convergence, both frames": ("v1.2.0", "S23"),
+    "F5  source decomposition, two frames": ("v1.2.0", "S23"),
+    "F7  frame specialisation": ("v1.2.0", "S23"),
+}
+
+DEFERRED_TO_V1_1 = frozenset(DEFERRED)
 
 DIAGNOSTICS: list[tuple[str, str]] = [
     ("D0  criterion 5 ell range, and B-3", "scripts/derive_ell_range.py"),
@@ -150,7 +161,8 @@ def main() -> int:
         else:
             print(f"all {group} this release needs are generated")
         for label in deferred:
-            print(f"    deferred to v1.1.0 (S-b)  {label}")
+            version, decision = DEFERRED[label]
+            print(f"    deferred to {version} ({decision})  {label}")
 
     print("\n--- tables " + "-" * 50)
     if run([sys.executable, "scripts/make_tables.py"], "audit tables"):
