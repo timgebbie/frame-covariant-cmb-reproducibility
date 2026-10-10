@@ -149,11 +149,19 @@ class Recombination(Enum):
     figure in a docstring is a staleness generator — which is the mistake the
     README's "230 tests pass" made and the reason it is no longer there.
 
-    **`SAHA` remains the default**, deliberately. Flipping it changes every
-    number in every released figure, which is a decision to be taken once with
-    the before-and-after in front of it, not a side effect of adding a module.
-    The roadmap is explicit that Peebles is "checkable on its own against the
-    standard ionisation history **before anything is built on it**".
+    **`PEEBLES` is the default from v1.1.0** --- decision **S22**, taken by the
+    PI on 2026-10-10 with the before-and-after above in view. It was *not* the
+    default on the day the module landed: the roadmap requires Peebles to be
+    "checkable on its own against the standard ionisation history **before
+    anything is built on it**", so it shipped behind this enum, was checked
+    standalone in `tests/test_peebles.py`, and was promoted afterwards. Flipping
+    a default regenerates every released number, and that is a decision, not a
+    side effect of adding a module.
+
+    `SAHA` is kept rather than deleted. It is the v1.0.0 result, so it is what
+    makes the change *measurable* instead of merely asserted, and a known-worse
+    alternative that must change the answer is evidence of the kind this project
+    keeps (decision S12).
     """
 
     SAHA = "saha"
@@ -224,7 +232,7 @@ class RecombinationHistory:
         z = 1.0 / np.clip(a, 1e-12, None) - 1.0
 
         if recombination is None:
-            recombination = Recombination.SAHA
+            recombination = Recombination.PEEBLES
 
         if recombination is Recombination.SAHA:
             x_e = saha_ionisation(z, omega_b_h2=omega_b_h2)

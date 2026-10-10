@@ -65,6 +65,15 @@ anisotropies II: the almost-Friedmann–Lemaître model*, **Annals of Physics 28
 It is written bottom-up. It is not a port of, or a wrapper on, an existing
 Boltzmann code, and it inherits no other code's conventions.
 
+**Derived, not transcribed**, wherever the antecedent prints a result that can be
+obtained instead. The FLRW background is integrated from the 1+3 energy
+constraint, so Eqs. (185) and (G.3) are **checks on this bundle rather than
+sources for it** — three of the ten recorded findings are disagreements between a
+derived quantity and a printed one, and a port would have inherited all three
+silently. The exceptions are stated where they occur: recombination rests on an
+imported atomic-physics fit, and `functions/spectra/peebles.py` tabulates what is
+derived there and what is not.
+
 **The acceptance spine is Appendix F, pp. 379–380, Eqs. (F.1)–(F.4)**, where the
 covariant mode recursion is matched to external treatments written in real
 coefficients. Reproducing that chain is a representation-free test of the
@@ -219,16 +228,11 @@ and no claim appears here that is not in the paper.
 ## Repository structure
 
 ```text
-config/                  Accepted scientific and release configurations, and the
-                         implementation register that the audit tables derive from
-functions/background/    The FLRW background, integrated from the 1+3 energy
-                         constraint rather than transcribed, so (185) and (G.3)
-                         are checks on it instead of its definition
-functions/harmonics/     PSTF weights, the recursion in three normalisations, and
-                         the external hierarchies as printed in their own papers
-functions/spectra/       Sources (176)-(179), recombination and visibility, the
-                         acoustic pair (152)/(153), potentials, the transfer
-                         function, and the angular spectrum (186)-(188)
+config/                  Accepted scientific and release configurations
+functions/background/    The FLRW background, integrated from the 1+3 constraint
+functions/frames.py      The threading shift, symbolically, with orders tracked
+functions/harmonics/     PSTF weights, the recursion, and the external hierarchies
+functions/spectra/       Sources, recombination, the acoustic pair, the spectrum
 functions/plotting/      House visual style, shared by every figure
 scripts/                 Active reproduction and verification commands
 tests/                   Compact claim-bearing regression suite
@@ -238,11 +242,16 @@ figures/                 Versioned PDF/PNG figure pairs
 tables/                  Generated audit tables: equations, parameters, notation
 captions/                Standalone captions, and the figure plan for the set
 diagnostics/             Generated scientific acceptance checks
-source/source-v1/        Frozen target-paper source (pending manuscript freeze)
+source/source-v1/        Frozen target-paper source
 source/source-v2/        Computational conformity and clarification inserts
 provenance/              Theory-to-code traceability and the corrections record
 supplementary-materials/ Compiled computational supplement
 ```
+
+Scientific object versions such as `supplement-v1.0.0.pdf` and output suffixes
+such as `-v1.0.0.png` are retained where they identify a released object. The
+current documentation uses v1.0.0, and the public v1.0.0 tag and its release
+asset remain unchanged by later work on `main`.
 
 ## Installation
 
@@ -352,6 +361,18 @@ The development lineage:
 | v1.2.0, planned | the full linear C_ℓ — acoustic peaks, Silk damping and the complete source assembly | planned; acceptance criterion 5b closes here against CAMB and CLASS (decision S18) |
 | v1.5.0, planned | the high-ℓ O(ε²ℓ) effects, carrying both nonlinear corrections, gated on Paper 1 | planned; carries the restricted case as a recovery and check of v1.0.0, not a new result |
 | v2.0.0, planned | calibration and data science, including Planck | planned; no new physics in it, which is what keeps v1.2.0 ahead of it |
+
+The current release identifier and Git tag are `v1.0.0`. The corresponding
+GitHub Release title is **v1.0.0 — first public analytical reproducibility
+release**, and the release asset is
+`frame-covariant-cmb-reproducibility-v1.0.0.zip`, built and verified by
+`scripts/make_release_archive.py` — which extracts the archive it has just
+written and runs the portability and manifest gates inside it, so the published
+file is checked as a bundle rather than trusted as a file list.
+
+`CITATION.cff` identifies the software version as v1.0.0. Work on `main` ahead
+of the next tag does not alter the frozen public v1.0.0 tag, its release asset
+or its archived DOI.
 
 ## DOI, citation and license
 
