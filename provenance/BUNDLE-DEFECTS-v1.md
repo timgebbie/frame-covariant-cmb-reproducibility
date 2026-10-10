@@ -1038,3 +1038,84 @@ gate and was minutes from being tagged and deposited. Fixing process debt by
 disturbing a verified release candidate is how a clean release becomes an
 unclean one. The debt is cheaper carried for one version than paid at that
 moment.
+
+---
+
+## T-14 — the sources module asserted a frame invariance its equations cannot have
+
+**Found 2026-10-09, opening v1.1.0, by building the thing that would have used
+it.** `functions/spectra/sources.py` carried this, from the first version of the
+module:
+
+> **The three terms are frame-dependent; their sum is not.** $\delta T$,
+> $\Phi_A$, $v_B$ and $\tau_1$ all shift under a change of threading $u^a$, and
+> the split of (176) into primary, Doppler and integrated pieces shifts with
+> them. Only the total is an observable.
+
+Every sentence of that is true as physics. As a statement about **this code** it
+was read — by this stream, when it specified F5 — as licensing an operation it
+does not license: transform those four fields into another threading,
+re-evaluate (177)–(179), and recover the same total.
+
+### What it does instead, measured
+
+With the energy frame reached exactly — $\tilde\Phi_A=0$ and the Weyl invariant
+$\Phi_A-\Phi_H$ both preserved to $1.1\times10^{-16}$, so the transformation
+itself is not in question — the assembled transfer function at $k=0.02$:
+
+| weighting | $\ell=2$ | $\ell=5$ | $\ell=10$ | $\ell=20$ |
+|---|---|---|---|---|
+| visibility | 4.43 | 4.41 | 4.41 | 4.42 |
+| opacity | 0.998 | 0.998 | 0.998 | 0.998 |
+
+as a relative difference. Under the visibility weighting the total moves by a
+factor of **five**. Under the opacity weighting the energy-frame source very
+nearly **vanishes** — it retains about two parts in a thousand.
+
+### Why, and why the second row is the diagnosis rather than a second symptom
+
+**(177)–(179) are Newtonian-threading expressions.** They descend from (106),
+which this record already flags in exactly those words — *"(106) defines the
+mode coefficient in the Newtonian frame"* — through (107), (110) and (111). The
+specialisation is upstream of everything the module computes.
+
+Paper 1 Secs. VI B and VI C say what the other threading looks like. In the
+Newtonian threading $\tilde\sigma_{ab}=0$ and $\tilde A_a=\mathrm D_a\Phi_A$, so
+the whole $O(\ell)$ source is the **acceleration pair**, Eq. (newt-pair). In the
+CDM threading $\tilde A_a=0$ and $\sigma^C_{ab}=\mathrm D_{\langle a}v^C_{b\rangle}$,
+so the whole of it is the **shear pair**, Eq. (cdm-triple). They are two
+reductions of the one operator $K_\perp^a\partial/\partial e^a$, differing in
+which kinematic quantity supplies $K^a$.
+
+So moving to the energy frame sets to zero the coupling that was carrying the
+source, while the coupling that should replace it is **not in these equations at
+all**. The near-total collapse is that deletion. It is not a frame-dependence of
+the sky, and reading it as one would be the serious error here.
+
+### What this changes
+
+**F5 and F7 cannot be drawn from this module, in any frame but one.** That is
+decision **S21**, and it supersedes S20's placement of them at v1.1.0. The
+figures need the generic-$u^a$ source, which is v1.5.0's subject (decision S2)
+and not a figure's worth of work.
+
+**S20's reason was wrong twice over, in opposite directions**, and both are now
+corrected in the record. It said the blocker was $\Phi_H$'s transformation rule;
+that rule was already in Paper 1 Sec. VI A with a source, and is now implemented
+and checked. The actual blocker is one layer deeper and was not identified at
+all: the source equations are themselves frame-specialised. **A deferral can be
+right and still rest on a wrong reason, and this one did.**
+
+### The pattern, again
+
+T-3, T-6 and T-12 were each a check looking at the wrong object. T-14 is its
+sibling: **a docstring asserting a property the code does not have**, which is
+worse, because a comment is read as documentation rather than as a claim needing
+evidence. It survived from the module's first version through a tagged release
+because nothing exercised it — the only artefact that would have was F5, and F5
+was deferred.
+
+`tests/test_frame_transform.py::test_T14_the_transfer_function_is_NOT_frame_invariant_under_177_to_179`
+pins the measured collapse as a range, so that a fix and a regression are
+distinguishable and the day the generic-$u^a$ source lands the test fails and is
+rewritten into the invariance it should then assert.

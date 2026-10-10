@@ -202,3 +202,148 @@ def roundtrip_residual() -> sp.Matrix:
         boosted_acceleration(accel, fc),
     )
     return sp.simplify(sp.expand(after - (before + fc.v_dot)))
+
+
+# ---------------------------------------------------------------------------
+# The rest of the first-order transformation set, and where each piece is from
+# ---------------------------------------------------------------------------
+#
+# Everything above settles the rank-one bracket, which is criterion 2. What
+# follows is what a *numerical* change of threading additionally needs, and it
+# is collected here rather than in the pipeline so that the rules stay in the
+# one module that tracks orders symbolically.
+#
+# **The invariance list is sourced, not assumed.** Paper 1 Sec. VI A records
+# that below its Eq. (35), Gebbie, Dunsby & Ellis (1999) establishes that
+# ``rho``, ``p``, ``pi_ab``, ``E_ab``, ``H_ab`` and the temperature anisotropies
+# ``tau_{A_l}`` for ``l > 1`` are all unchanged under ``u~_a = u_a + v_a``,
+# **only the dipole moving**, ``tau~_a = tau_a - v_a`` (its Eq. (37)).
+#
+# The deflection depends only on ``Phi_A - Phi_H``, whose trace-free
+# screen-projected Hessian is the electric Weyl tensor,
+# ``E_ab = (1/2) D_<a D_b> (Phi_A - Phi_H)`` (GDE99 Eq. (24)). ``E_ab`` vanishes
+# in the background, so by the **Stewart-Walker lemma** it is frame-invariant at
+# first order — and therefore so is ``Phi_A - Phi_H``.
+#
+# That last statement is the one this bundle was missing when decision **S20**
+# deferred F5, and S20's stated reason (ii) was wrong about it: the rule is not
+# entangled with the paper's open items O1 and O2, which concern the
+# *second-order* endpoint argument of Sec. VI D. It is a first-order statement
+# with its own source. See the correction note on S20.
+
+
+def harmonic_potential_shift(v: sp.Symbol, v_prime: sp.Symbol,
+                             conformal_H: sp.Symbol, k: sp.Symbol) -> sp.Expr:
+    r"""The amount **both** potentials shift by, $(v'+\mathcal H v)/k$.
+
+    Derived rather than quoted. $A_a=\mathrm D_a\Phi_A$, and a scalar harmonic
+    carries $\mathrm D_a\to(k/a)$, so the acceleration amplitude is
+    $(k/a)\Phi_A$. Feeding that through $\tilde A_a=A_a+\dot v_a+Hv_a$ with
+    $\dot v=v'/a$ and $\mathcal H=aH$:
+
+    $$\frac{k}{a}\tilde\Phi_A=\frac{k}{a}\Phi_A+\frac{v'}{a}+Hv
+      \;\Longrightarrow\;
+      \tilde\Phi_A=\Phi_A+\frac{v'+\mathcal Hv}{k}.$$
+
+    $\Phi_H$ shifts by the **same** amount, because $\Phi_A-\Phi_H$ is
+    frame-invariant (GDE99 Eq. (24) and Stewart-Walker; see the note above).
+    That is the whole content of the curvature half, and it is why one function
+    serves both.
+    """
+    return (v_prime + conformal_H * v) / k
+
+
+def energy_frame_velocity_equation(
+    phi_a: sp.Symbol, v: sp.Symbol, v_prime: sp.Symbol,
+    conformal_H: sp.Symbol, k: sp.Symbol,
+) -> sp.Expr:
+    r"""The ODE that **defines** the energy frame, as a residual that must vanish.
+
+    The energy frame is $q_a=0$ — equivalently, for pressureless geodesic cold
+    dark matter, the threading in which $\tilde A_a=0$ (decision **S8**: the CDM
+    *frame* is the total-energy frame, and "CDM" is a model name kept lexically
+    apart from it). Paper 1 Sec. VI C states the same specialisation as
+    $\tilde A_a=0$ with $\sigma^C_{ab}=\mathrm D_{\langle a}v^C_{b\rangle}$.
+
+    Setting $\tilde\Phi_A=0$ in `harmonic_potential_shift` gives
+
+    $$v' + \mathcal H v = -k\,\Phi_A ,$$
+
+    which is the Euler equation of a geodesic pressureless fluid — as it must
+    be, since that is what the CDM is. **It is returned as a residual rather
+    than solved**, so that the numerical integrator in
+    `functions.spectra.frame_transform` is demonstrably integrating *this*
+    equation and not a transcription of it.
+    """
+    return v_prime + conformal_H * v + k * phi_a
+
+
+def boosted_dipole(tau_1: sp.Expr, v: sp.Expr) -> sp.Expr:
+    r"""$\tilde\tau_a=\tau_a-v_a$ — GDE99 Eq. (37), the **only** multipole that moves.
+
+    The dipole is where the frame lives. Every $\tau_{A_\ell}$ with $\ell\ge2$
+    is unchanged, which is why `boosted_multipole` exists and returns its
+    argument: an identity worth writing down is worth being able to call.
+    """
+    return tau_1 - v
+
+
+def boosted_multipole(tau_ell: sp.Expr, ell: int) -> sp.Expr:
+    r"""$\tilde\tau_{A_\ell}=\tau_{A_\ell}$ for $\ell\ge2$. Raises for $\ell\le1$.
+
+    A function that returns its argument looks like dead code, and is not: it
+    is the executable form of the claim that **any threading dependence
+    surviving at $\ell\ge2$ is an artefact of the reduction and not physics**
+    (Paper 1 Sec. VI A). A call site that wants to transform a multipole has to
+    come through here and be told no, rather than inventing a rule.
+    """
+    if int(ell) <= 1:
+        raise ValueError(
+            f"ell={ell} is not in the invariant range. The monopole is not a "
+            "free object here and the dipole moves: use boosted_dipole for "
+            "ell=1 (GDE99 Eq. (37))."
+        )
+    return tau_ell
+
+
+def weyl_electric_amplitude(phi_a: sp.Expr, phi_h: sp.Expr, k: sp.Symbol,
+                            a: sp.Symbol) -> sp.Expr:
+    r"""$E_{ab}=\tfrac12\mathrm D_{\langle a}\mathrm D_{b\rangle}(\Phi_A-\Phi_H)$, as an amplitude.
+
+    GDE99 Eq. (24), quoted in Paper 1 Sec. VI A. In a scalar harmonic the
+    trace-free double gradient carries $-(k/a)^2$, so the amplitude is
+    $-\tfrac12(k/a)^2(\Phi_A-\Phi_H)$. The overall constant is irrelevant to
+    the invariance statement and is carried anyway, because a residual that is
+    zero for the wrong reason is not evidence.
+    """
+    return -sp.Rational(1, 2) * (k / a) ** 2 * (phi_a - phi_h)
+
+
+def weyl_invariance_residual() -> sp.Expr:
+    r"""$\tilde E_{ab}-E_{ab}$, which must be **identically** zero. Criterion 2's curvature half.
+
+    The derivation runs forward rather than assuming its conclusion:
+
+    1. the acceleration rule of `boosted_acceleration` fixes $\tilde\Phi_A$,
+       through `harmonic_potential_shift`;
+    2. $\Phi_H$ is given the **same** shift, which is what the invariance of
+       $\Phi_A-\Phi_H$ requires;
+    3. $E_{ab}$ is rebuilt from the shifted pair and differenced against the
+       original.
+
+    Step 2 is the claim; steps 1 and 3 are the check that it is consistent with
+    the acceleration half, which was derived independently. A shift that did
+    **not** apply equally to both would leave a residual proportional to
+    $(v'+\mathcal Hv)$, so this is not a tautology: it fails for any other rule.
+
+    Returned symbolically, for the same reason `roundtrip_residual` is: an
+    identity should be shown to *be* an identity.
+    """
+    k, a, H = sp.symbols("k a mathcalH", positive=True)
+    phi_a, phi_h = sp.symbols("Phi_A Phi_H", real=True)
+    v, v_prime = EPS * sp.Symbol("v", real=True), EPS * sp.Symbol("vprime", real=True)
+
+    shift = harmonic_potential_shift(v, v_prime, H, k)
+    before = weyl_electric_amplitude(phi_a, phi_h, k, a)
+    after = weyl_electric_amplitude(phi_a + shift, phi_h + shift, k, a)
+    return sp.simplify(sp.expand(after - before))

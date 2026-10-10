@@ -131,3 +131,118 @@ def test_a_numerical_evaluation_agrees_with_the_identity():
     subs = {s: random.uniform(-1.0, 1.0) for s in residual.free_symbols}
     values = [float(sp.N(c.subs(subs))) for c in residual]
     assert all(abs(x) < 1e-15 for x in values), values
+
+
+# ---------------------------------------------------------------------------
+# The curvature half: what a numerical change of threading additionally needs
+# ---------------------------------------------------------------------------
+#
+# The tests above settle the rank-one bracket. These settle the pieces F5 and
+# F7 need, and they are held to the same standard: assert the mechanism, and
+# show that the identity *fails* for a wrong rule, so that a passing test is
+# evidence rather than a tautology.
+
+
+def test_the_electric_weyl_tensor_is_invariant_under_the_threading_shift():
+    r"""$\tilde E_{ab}=E_{ab}$ identically — the curvature half of criterion 2.
+
+    $E_{ab}=\frac12\D_{\la a}\D_{b\ra}(\Phi_A-\Phi_H)$ (GDE99 Eq. (24)) vanishes
+    in the background, so Stewart-Walker makes it first-order frame-invariant.
+    The residual is built by shifting both potentials by the amount the
+    *acceleration* rule forces and rebuilding $E_{ab}$ from the result.
+    """
+    from functions.frames import weyl_invariance_residual
+
+    assert weyl_invariance_residual() == 0
+
+
+def test_the_weyl_invariance_fails_for_any_other_potential_rule():
+    r"""The negative control. Without it the test above proves nothing.
+
+    If $\Phi_H$ did not shift, or shifted the other way, the residual is
+    proportional to $(v'+\mathcal Hv)$ and non-zero. So "both potentials shift
+    by the same amount" is **forced** by the invariance rather than chosen to
+    make a residual vanish.
+    """
+    import sympy as sp
+
+    from functions.frames import (
+        EPS,
+        harmonic_potential_shift,
+        weyl_electric_amplitude,
+    )
+
+    k, a, H = sp.symbols("k a mathcalH", positive=True)
+    pa, ph = sp.symbols("Phi_A Phi_H", real=True)
+    v = EPS * sp.Symbol("v", real=True)
+    vp = EPS * sp.Symbol("vprime", real=True)
+
+    shift = harmonic_potential_shift(v, vp, H, k)
+    before = weyl_electric_amplitude(pa, ph, k, a)
+
+    frozen = sp.simplify(weyl_electric_amplitude(pa + shift, ph, k, a) - before)
+    flipped = sp.simplify(weyl_electric_amplitude(pa + shift, ph - shift, k, a) - before)
+
+    assert frozen != 0, "a rule that leaves Phi_H alone must not pass"
+    assert flipped != 0, "a rule that flips the sign must not pass"
+
+    # **And the failure has the shape the derivation predicts**, which is the
+    # part that makes this a control rather than a complaint: the residual is
+    # proportional to $(v'+\mathcal Hv)$ exactly, so it vanishes on that locus
+    # and nowhere else. Substituting the *bare* symbols, because sympy factors
+    # EPS out of the product and `vp` as built here is `EPS*vprime`.
+    bare_v, bare_vp = sp.Symbol("v", real=True), sp.Symbol("vprime", real=True)
+    assert sp.simplify(frozen.subs({bare_vp: -H * bare_v})) == 0
+    assert sp.simplify(flipped.subs({bare_vp: -H * bare_v})) == 0
+
+
+def test_the_energy_frame_condition_is_the_geodesic_euler_equation():
+    r"""$\tilde A_a=0 \Rightarrow v'+\mathcal Hv=-k\Phi_A$.
+
+    The energy frame is **not** imposed as an ODE someone wrote down; it falls
+    out of setting the boosted acceleration to zero. That the result is the
+    Euler equation of a pressureless geodesic fluid is the check: it is what the
+    cold dark matter obeys, and decision S8 is the statement that the CDM frame
+    and the total-energy frame are the same threading for that reason.
+    """
+    import sympy as sp
+
+    from functions.frames import (
+        energy_frame_velocity_equation,
+        harmonic_potential_shift,
+    )
+
+    k, H = sp.symbols("k mathcalH", positive=True)
+    pa, v, vp = sp.symbols("Phi_A v vprime", real=True)
+
+    # the boosted acceleration potential, set to zero
+    boosted = pa + harmonic_potential_shift(v, vp, H, k)
+    condition = sp.simplify(sp.expand(boosted * k))
+
+    assert sp.simplify(condition - energy_frame_velocity_equation(pa, v, vp, H, k)) == 0
+
+
+def test_the_dipole_is_the_only_multipole_the_threading_moves():
+    r"""$\tilde\tau_a=\tau_a-v_a$, and $\tilde\tau_{A_\ell}=\tau_{A_\ell}$ for $\ell\ge2$.
+
+    GDE99 Eq. (37) and the list below its Eq. (35), as Paper 1 Sec. VI A records
+    them. The $\ell\ge2$ half is the standard the whole frame-covariance section
+    has to meet: **any threading dependence surviving at $\ell\ge2$ is an
+    artefact of the reduction, not physics.**
+    """
+    import sympy as sp
+
+    import pytest
+
+    from functions.frames import boosted_dipole, boosted_multipole
+
+    tau, v = sp.symbols("tau v", real=True)
+
+    assert sp.simplify(boosted_dipole(tau, v) - (tau - v)) == 0
+    for ell in (2, 3, 7, 20):
+        assert boosted_multipole(tau, ell) is tau
+
+    # the monopole and dipole must not be silently passed through the l>=2 rule
+    for ell in (0, 1):
+        with pytest.raises(ValueError, match="invariant range"):
+            boosted_multipole(tau, ell)

@@ -29,12 +29,34 @@ $j_\\ell(k\\Delta\\eta_*)$, which is `free_stream`'s result in the $\\alpha$
 normalisation. `tests/test_sources.py` asserts it. A normalisation slip anywhere
 in either half breaks that identity, which is why it is worth having.
 
-**The three terms are frame-dependent; their sum is not.** $\\delta T$, $\\Phi_A$,
-$v_B$ and $\\tau_1$ all shift under a change of threading $u^a$, and the split of
-(176) into primary, Doppler and integrated pieces shifts with them. Only the
-total is an observable. The module therefore returns the three terms separately
-*and* their combination, and never lets a caller plot one alone without saying
-which frame it was computed in.
+**The three terms are frame-dependent; their sum is an observable.** $\\delta T$,
+$\\Phi_A$, $v_B$ and $\\tau_1$ all shift under a change of threading $u^a$, and
+the split of (176) into primary, Doppler and integrated pieces shifts with
+them. The module therefore returns the three terms separately *and* their
+combination, and never lets a caller plot one alone without saying which frame
+it was computed in.
+
+**What that does NOT license, and used to be read as licensing --- finding
+T-14.** It does not mean that transforming those four fields into another
+threading and re-evaluating (177)-(179) returns the same total. It does not:
+measured against the energy frame it moves by a factor of about five, and under
+the opacity weighting the source very nearly collapses altogether.
+
+**These equations are Newtonian-threading expressions.** They descend from
+(106), which the corrections record flags in exactly those words, through
+(107), (110) and (111). Paper 1 Secs. VI B and VI C make the consequence plain:
+the Newtonian threading carries its whole $O(\\ell)$ source in the
+**acceleration** pair and the CDM threading carries its whole source in the
+**shear** pair --- two different expressions for one operator. Setting
+$\\tilde\\Phi_A=0$ therefore deletes the coupling that was carrying the source
+without supplying the one that should replace it, and the collapse is that
+deletion, not a frame-dependence of the sky.
+
+So the sum is an observable, and **this formula computes it in one threading
+only**. `functions.spectra.frame_transform` moves the fields correctly ---
+$\\tilde\\Phi_A=0$ and the Weyl invariant $\\Phi_A-\\Phi_H$ both hold to
+$10^{-16}$ --- and `tests/test_frame_transform.py` pins the defect so that it
+fails loudly the day the generic-$u^a$ source lands. Decision **S21**.
 
 **Finding B-6, closed.** The thesis abstract carries the opposite sign on the
 $aH[\\delta T+3\\Phi_A]$ term of (179). It is **settled in favour of the published
