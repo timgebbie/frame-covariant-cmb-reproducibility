@@ -3,7 +3,7 @@
 All notable changes to this bundle are recorded here. The version policy is in
 `README.md` under *Version-control policy*.
 
-## [Unreleased] — v1.1.0 in preparation
+## [1.1.0] — 2026-10-12
 
 ### Added
 

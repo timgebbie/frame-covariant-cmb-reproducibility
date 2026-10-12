@@ -150,12 +150,21 @@ DETERMINISTIC_METADATA = {
 }
 
 
-def save_figure(fig, stem: str, version: str = "v1.0.0") -> list[Path]:
+def save_figure(fig, stem: str, version: str) -> list[Path]:
     """Write the versioned PDF/PNG pair into figures/ and return the paths.
 
     Figures are versioned in the filename, per the house layout, and written
     with deterministic metadata so that regenerating a figure that has not
     changed leaves its hash alone. See `DETERMINISTIC_METADATA`.
+
+    **`version` is required, and used to default to `"v1.0.0"`.** The suffix
+    marks the release in which an artefact was introduced --- the house
+    convention the exemplar states, where `config-v1.7.7.json` survives into a
+    v2.2.0 release because it still identifies an accepted object. A default
+    quietly handed that provenance to whatever release happened to be first:
+    F6 and F8, written for v1.1.0, were born named `-v1.0.0` and nobody typed
+    it. Every call site now states its own, so a new figure cannot inherit a
+    release it was not part of.
     """
     out = ROOT / "figures"
     out.mkdir(exist_ok=True)

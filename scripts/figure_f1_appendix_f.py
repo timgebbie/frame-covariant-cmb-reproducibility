@@ -175,7 +175,7 @@ def main() -> int:
                 fh.write(f'{row["form"]},{APPENDIX_F[row["form"]]},"{CITATION[row["form"]]}",'
                          f'{row["scale"]:.12f},{ell},{r:.6e}\n')
 
-    paths = save_figure(draw(rows), "f1-appendix-f")
+    paths = save_figure(draw(rows), "f1-appendix-f", "v1.0.0")
     for p in paths:
         print(f"wrote {p.relative_to(ROOT)}")
     for row in rows:

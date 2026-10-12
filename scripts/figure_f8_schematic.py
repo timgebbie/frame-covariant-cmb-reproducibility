@@ -160,7 +160,7 @@ def draw() -> plt.Figure:
 
 
 def main() -> int:
-    for p in save_figure(draw(), "f8-schematic"):
+    for p in save_figure(draw(), "f8-schematic", "v1.1.0"):
         print(f"wrote {p.relative_to(ROOT)}")
     print("  no data: this figure is a structural statement, not a measurement")
     return 0

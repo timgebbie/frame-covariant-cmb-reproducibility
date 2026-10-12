@@ -3,7 +3,7 @@ id = "F6"
 order = 6
 title = "What each approximation is worth"
 script = "scripts/figure_f6_approximations.py"
-artefact = "figures/f6-approximations-v1.0.0.pdf"
+artefact = "figures/f6-approximations-v1.1.0.pdf"
 category = "diagnostic"
 caption = """
 Each series is

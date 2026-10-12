@@ -1,6 +1,6 @@
 # 1+3 covariant CMB anisotropies reproducibility bundle
 
-Version: v1.0.0 — First public analytical reproducibility release.
+Version: v1.1.0 — Peebles recombination, and the frame specialisation made numerical.
 
 Supplementary code and materials for: Tim Gebbie, *"Frame covariance of CMB
 lensing in the exact $1+3$ covariant radiation hierarchy,"* arXiv: identifier
@@ -253,9 +253,11 @@ supplementary-materials/ Compiled computational supplement
 ```
 
 Scientific object versions such as `supplement-v1.0.0.pdf` and output suffixes
-such as `-v1.0.0.png` are retained where they identify a released object. The
-current documentation uses v1.0.0, and the public v1.0.0 tag and its release
-asset remain unchanged by later work on `main`.
+such as `-v1.0.0.png` are retained where they identify a released object — the
+suffix marks the release an artefact was **introduced** in, not the release
+that last regenerated it, so F6 and F8 carry `-v1.1.0` while the figures
+specified at v1.0.0 keep theirs. The current documentation uses v1.1.0, and the
+public v1.0.0 tag and its release asset remain unchanged.
 
 ## Installation
 
@@ -354,29 +356,30 @@ test.
 
 The development lineage:
 
-| Version | Established or changed | Status in v1.0.0 |
+| Version | Established or changed | Status in v1.1.0 |
 |---|---|---|
 | *Annals II* (2000) | the almost-Friedmann–Lemaître 1+3 covariant hierarchy, its integral solution (176) and the spectrum (186) | the antecedent this bundle reconstructs; ten findings recorded against it in `provenance/` |
 | Correction to astro-ph/9912072 | withdrew the 1999 claim of a new effect | binding — it fixes the scientific boundary stated above, and no new effect is claimed here |
 | Conventions gate C1 | the normative sign and ℓ-weight sheet | source of the generated `provenance/conventions.md`; drift detectable through `conventions-source.txt` |
 | Paper 1 (2026) | the 1+3 route to CMB lensing from the exact hierarchy | the paper this bundle reproduces; frozen 2026-10-09 |
-| **v1.0.0** | the independent reconstruction: the Appendix F chain against four external hierarchies, both routes to (186), the Sachs–Wolfe limit, and frame covariance established **symbolically** | **current release** |
-| v1.1.0, planned | Peebles recombination, replacing equilibrium Saha; the frame specialisation made numerical; figures F6 and F8 | planned — not claimed by this release (decision S-b) |
+| v1.0.0 | the independent reconstruction: the Appendix F chain against four external hierarchies, both routes to (186), the Sachs–Wolfe limit, and frame covariance established **symbolically** | superseded by v1.1.0; its tag, release asset and archived DOI are unchanged |
+| **v1.1.0** | Peebles recombination replacing equilibrium Saha and made the default (S22); the frame specialisation made numerical, closing criterion 2's curvature half; figures F6 and F8 | **current release** |
 | v1.2.0, planned | the full linear C_ℓ — acoustic peaks, Silk damping and the complete source assembly — **and the generic-$u^a$ hierarchy**, which unblocks figures F2, F5 and F7 | planned; acceptance criterion 5b closes here against CAMB and CLASS (decisions S18, S23); the release route is made runnable on a second machine here too (finding T-15) |
 | v1.5.0, planned | the high-ℓ O(ε²ℓ) effects, carrying both nonlinear corrections, gated on Paper 1 | planned; carries the restricted case as a recovery and check of v1.0.0, not a new result |
 | v2.0.0, planned | calibration and data science, including Planck | planned; no new physics in it, which is what keeps v1.2.0 ahead of it |
 
-The current release identifier and Git tag are `v1.0.0`. The corresponding
-GitHub Release title is **v1.0.0 — first public analytical reproducibility
-release**, and the release asset is
-`frame-covariant-cmb-reproducibility-v1.0.0.zip`, built and verified by
+The current release identifier and Git tag are `v1.1.0`. The corresponding
+GitHub Release title is **v1.1.0 — Peebles recombination and the numerical
+frame specialisation**, and the release asset is
+`frame-covariant-cmb-reproducibility-v1.1.0.zip`, built and verified by
 `scripts/make_release_archive.py` — which extracts the archive it has just
 written and runs the portability and manifest gates inside it, so the published
 file is checked as a bundle rather than trusted as a file list.
 
-`CITATION.cff` identifies the software version as v1.0.0. Work on `main` ahead
-of the next tag does not alter the frozen public v1.0.0 tag, its release asset
-or its archived DOI.
+`CITATION.cff` identifies the software version as v1.1.0. This does not alter
+the frozen public v1.0.0 tag, its release asset or its archived DOI; the
+concept DOI resolves to the latest version, which is what makes it the one to
+cite.
 
 ## DOI, citation and license
 

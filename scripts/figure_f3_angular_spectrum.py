@@ -177,7 +177,7 @@ def draw(rows) -> plt.Figure:
 def main() -> int:
     rows = compute()
     fig = draw(rows)
-    save_figure(fig, "f3-angular-spectrum")
+    save_figure(fig, "f3-angular-spectrum", "v1.0.0")
 
     out = ROOT / "outputs" / "f3-angular-spectrum.csv"
     with out.open("w", encoding="utf-8", newline="\n") as fh:

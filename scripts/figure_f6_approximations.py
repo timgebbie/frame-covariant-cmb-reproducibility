@@ -168,7 +168,7 @@ def main() -> int:
                 fh.write(f"{tag},{int(l)},{r:.12e}\n")
     print(f"wrote {out.relative_to(ROOT)}")
 
-    for p in save_figure(draw(rows), "f6-approximations"):
+    for p in save_figure(draw(rows), "f6-approximations", "v1.1.0"):
         print(f"wrote {p.relative_to(ROOT)}")
     return 0
 

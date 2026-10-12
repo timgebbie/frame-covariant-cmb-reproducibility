@@ -3,7 +3,7 @@ id = "F8"
 order = 8
 title = "Where each coupling sits in the hierarchy"
 script = "scripts/figure_f8_schematic.py"
-artefact = "figures/f8-schematic-v1.0.0.pdf"
+artefact = "figures/f8-schematic-v1.1.0.pdf"
 category = "schematic"
 caption = """
 The one released figure that computes nothing: a statement about the

@@ -214,7 +214,7 @@ def main() -> int:
                 fh.write(f"{row['label']},{t:.6f},{c:.12e}\n")
     print(f"wrote {out.relative_to(ROOT)}")
 
-    for p in save_figure(draw(rows), "f4-correlation"):
+    for p in save_figure(draw(rows), "f4-correlation", "v1.0.0"):
         print(f"wrote {p.relative_to(ROOT)}")
 
     worst = 0.0
