@@ -260,12 +260,61 @@ general case, \textbf{v1.5.0's restricted case is a recovery and a check} --- it
 must return v1.0.0's numbers, and that requirement is the regression test rather
 than a new result.
 
-Two consequences are visible in the figures. The decomposition of the temperature
-source into primary, Doppler and integrated terms (\S7.1.1, Eqs.~(177)--(179)) is
-frame-dependent while the total is not, so it is drawn in two frames. And
-footnote~29 on p.~365 asserts that the Newtonian choice also removes the
-high-$\ell$ truncation difficulty of Appendix~E; that is a checkable claim, and
-the convergence figure checks it in both frames.
+\paragraph{The covariance claim is established symbolically, and that is the
+stronger form.} Acceptance criterion~2 asks that a change of threading
+$u^a\to\tilde u^a=u^a+v^a$ return the rank-one bracket unchanged up to
+$\dot v_a$. It does, \emph{identically} in exact arithmetic rather than to a
+tolerance, and the cancellation is exhibited rather than quoted:
+
+\begin{itemize}\itemsep2pt
+  \item $\tilde{\mathrm D}_a\ln T=\mathrm D_a\ln T-Hv_a$, the extra term arising
+        because the projector moves with the frame and
+        $\dot{\overline{\ln T}}=-H$ in the background;
+  \item $\tilde A_a=A_a+\dot v_a+v^b\nabla_bu_a$, where $v^b\nabla_bu_a$ is formed
+        \emph{in full} --- $Hv_a$ together with $\sigma_{ab}v^b$ and
+        $\epsilon_{abc}v^b\omega^c$ --- and the latter two leave at
+        $O(\varepsilon^2)$ by series expansion rather than by hand;
+  \item so $\tilde{\mathcal B}_1=\mathcal B_1+\dot v_a$ with \textbf{no shear and
+        no $Hv$}. It is the \emph{same} $H$ twice, which is why the cancellation
+        is structural and not a coincidence of two fitted coefficients.
+\end{itemize}
+
+\paragraph{The curvature half.} The deflection depends only on
+$\Phi_A-\Phi_H$, whose trace-free screen-projected Hessian is the electric Weyl
+tensor, $E_{ab}\simeq\tfrac12\mathrm D_{\langle a}\mathrm D_{b\rangle}
+(\Phi_A-\Phi_H)$. Since $E_{ab}$ vanishes in the background, the
+Stewart--Walker lemma makes it frame-invariant at first order, and therefore so
+is $\Phi_A-\Phi_H$. Both potentials shift by the same
+$(v'+\mathcal Hv)/k_{\rm com}$, and the residual
+$\tilde E_{ab}-E_{ab}$ is identically zero --- \textbf{with a negative control}:
+a rule leaving $\Phi_H$ fixed, or flipping its sign, leaves a residual
+proportional to $(v'+\mathcal Hv)$ and fails. The invariance is therefore forced
+rather than chosen to make a residual vanish. Only the dipole moves,
+$\tilde\tau_a\simeq\tau_a-v_a$; every $\tau_{A_\ell}$ with $\ell\ge2$ is
+unchanged, which is the standard any threading dependence surviving at
+$\ell\ge2$ must meet: it is an artefact of the reduction, not physics.
+
+\paragraph{The energy frame is derived, not stipulated.} Imposing
+$\tilde A_a=0$ gives $v'+\mathcal Hv=-k_{\rm com}\Phi_A$ --- the Euler equation
+of a pressureless geodesic fluid, which is what the cold dark matter obeys. The
+normalisation is corroborated independently: in the baryon-dominated limit
+$R\to\infty$, Eq.~(152) reduces to that same equation, so the photon dipole and
+the frame velocity carry one normalisation.
+
+\paragraph{What this release does \emph{not} do, stated because the earlier draft
+of this section claimed it.} It does not compute an assembled spectrum in two
+frames and draw the difference. Eqs.~(177)--(179) are \textbf{Newtonian-threading
+expressions}: they descend from (106), which the corrections record flags in
+those words, and the Newtonian threading carries its whole $O(\ell)$ source in
+the acceleration pair while the CDM threading carries its whole source in the
+shear pair. Transforming the four input fields and re-evaluating the same
+equations therefore deletes the coupling that was carrying the source without
+supplying the one that replaces it: measured, the transfer function moves by a
+factor of about five, and under the opacity weighting the source collapses to
+two parts in a thousand. That is not a frame dependence of the sky. The figures
+which would draw it, and the convergence figure which would test footnote~29 on
+p.~365 in both threadings, require the generic-$u^a$ hierarchy and are deferred
+with it.
 
 \section{Comparison and its range}
 The $C_\ell$ comparison is Sachs--Wolfe only: (196) descends from (181), in which

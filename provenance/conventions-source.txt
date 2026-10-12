@@ -1,3 +1,7 @@
 source: C:\Users\01404122\Documents\Claude\NonlinearShear\docs\conventions.md
 sha256: e22f5e19b2d2ea70e5805d03474bee3b6196833273708499df644f947e63be70
-generated: 2026-10-07
+bytes: 22248
+generated: 2026-10-12
+normative: the source above. This bundle's copy is that file verbatim,
+  preceded by a generated header; the header is the only difference,
+  which is why this file is larger than its source.

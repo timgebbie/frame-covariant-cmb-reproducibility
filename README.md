@@ -95,9 +95,13 @@ that "second order" is a fact sympy checks rather than a judgement; its
 `roundtrip_residual()` returns the zero vector as an **identity**, not as a small
 number — 𝓑̃₁ = 𝓑₁ + v̇_a, no shear and no Hv, which is acceptance criterion 2's
 stated target. What this release does *not* do is compute an assembled spectrum
-in both frames and draw the difference. That is F5 and F7, deferred to v1.1.0 by
-decision **S20**, where `"newtonian"` and `"energy"` stop being labels on a
-history object and become a calculation. The proof is here; the picture follows.
+in both frames and draw the difference. The frame change itself is now a
+calculation rather than a label — `"newtonian"` and `"energy"` are solved for,
+and the energy-frame condition and the Weyl invariant both hold to
+$10^{-16}$ — but the figures that would *draw* the two-frame decomposition, F5
+and F7, need the generic-$u^a$ hierarchy, and go to **v1.2.0** with it
+(decisions **S21** and **S23**, finding **T-14**). The proof is here; the
+picture follows.
 
 Nomenclature is kept strictly separate, following Appendix F: τ_ℓ are **mode**
 coefficients, τ_{A_ℓ} are **multipole** coefficients. The distinction is not made
@@ -357,8 +361,8 @@ The development lineage:
 | Conventions gate C1 | the normative sign and ℓ-weight sheet | source of the generated `provenance/conventions.md`; drift detectable through `conventions-source.txt` |
 | Paper 1 (2026) | the 1+3 route to CMB lensing from the exact hierarchy | the paper this bundle reproduces; frozen 2026-10-09 |
 | **v1.0.0** | the independent reconstruction: the Appendix F chain against four external hierarchies, both routes to (186), the Sachs–Wolfe limit, and frame covariance established **symbolically** | **current release** |
-| v1.1.0, planned | Peebles recombination; figures F2, F5, F6, F7 and F8 land, F5 and F7 making the frame specialisation numerical | planned — not claimed by this release (decisions S-b, S20) |
-| v1.2.0, planned | the full linear C_ℓ — acoustic peaks, Silk damping and the complete source assembly | planned; acceptance criterion 5b closes here against CAMB and CLASS (decision S18) |
+| v1.1.0, planned | Peebles recombination, replacing equilibrium Saha; the frame specialisation made numerical; figures F6 and F8 | planned — not claimed by this release (decision S-b) |
+| v1.2.0, planned | the full linear C_ℓ — acoustic peaks, Silk damping and the complete source assembly — **and the generic-$u^a$ hierarchy**, which unblocks figures F2, F5 and F7 | planned; acceptance criterion 5b closes here against CAMB and CLASS (decisions S18, S23); the release route is made runnable on a second machine here too (finding T-15) |
 | v1.5.0, planned | the high-ℓ O(ε²ℓ) effects, carrying both nonlinear corrections, gated on Paper 1 | planned; carries the restricted case as a recovery and check of v1.0.0, not a new result |
 | v2.0.0, planned | calibration and data science, including Planck | planned; no new physics in it, which is what keeps v1.2.0 ahead of it |
 

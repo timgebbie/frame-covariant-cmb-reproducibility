@@ -109,14 +109,27 @@ def main() -> int:
     digest = sha256(src)
     when = dt.date.today().isoformat()
     recorded_path = args.record_as or str(src)
+    body = src.read_text(encoding="utf-8")
     TARGET.write_text(
-        HEADER.format(source=recorded_path, digest=digest, when=when)
-        + src.read_text(encoding="utf-8"),
+        HEADER.format(source=recorded_path, digest=digest, when=when) + body,
         encoding="utf-8",
         newline="\n",
     )
+    # **The stamp says which sheet is normative, and what "copy" means here.**
+    # Raised by Coordination 2026-10-10: two sheets of different sizes both
+    # looking authoritative is how this project once had three meanings for
+    # `lambda` two rows apart. The sizes differ only by this file's own header,
+    # so the stamp now records the body length as well as the digest --- a
+    # reader can then check `bytes == size of the source` without running
+    # anything, instead of inferring it from two numbers that disagree.
     STAMP.write_text(
-        f"source: {recorded_path}\nsha256: {digest}\ngenerated: {when}\n",
+        f"source: {recorded_path}\n"
+        f"sha256: {digest}\n"
+        f"bytes: {len(body.encode('utf-8'))}\n"
+        f"generated: {when}\n"
+        f"normative: the source above. This bundle's copy is that file verbatim,\n"
+        f"  preceded by a generated header; the header is the only difference,\n"
+        f"  which is why this file is larger than its source.\n",
         encoding="utf-8",
         newline="\n",
     )

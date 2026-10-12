@@ -71,6 +71,13 @@ __all__ = [
     "roundtrip_residual",
 ]
 
+#: **`k_com`, never a bare `k`.** Conventions row C3.1 declares the sheet's `k`
+#: physical, with `k_phys = k/a`, while Appendix F's is comoving --- so a bare
+#: `k` in code is the exact drift the 2026-10-10 external review found in the
+#: manuscript's Eq. (5). This module broke the rule when it was written on
+#: 2026-10-09 and was corrected on 2026-10-12; the guard is a name, which is the
+#: only kind that survives a reader who does not know the convention.
+#:
 #: The smallness parameter every perturbation carries. Orders are tracked with
 #: it rather than argued about, so "second order" is a fact sympy checks.
 EPS = sp.Symbol("varepsilon", positive=True)
@@ -233,7 +240,7 @@ def roundtrip_residual() -> sp.Matrix:
 
 
 def harmonic_potential_shift(v: sp.Symbol, v_prime: sp.Symbol,
-                             conformal_H: sp.Symbol, k: sp.Symbol) -> sp.Expr:
+                             conformal_H: sp.Symbol, k_com: sp.Symbol) -> sp.Expr:
     r"""The amount **both** potentials shift by, $(v'+\mathcal H v)/k$.
 
     Derived rather than quoted. $A_a=\mathrm D_a\Phi_A$, and a scalar harmonic
@@ -250,12 +257,12 @@ def harmonic_potential_shift(v: sp.Symbol, v_prime: sp.Symbol,
     That is the whole content of the curvature half, and it is why one function
     serves both.
     """
-    return (v_prime + conformal_H * v) / k
+    return (v_prime + conformal_H * v) / k_com
 
 
 def energy_frame_velocity_equation(
     phi_a: sp.Symbol, v: sp.Symbol, v_prime: sp.Symbol,
-    conformal_H: sp.Symbol, k: sp.Symbol,
+    conformal_H: sp.Symbol, k_com: sp.Symbol,
 ) -> sp.Expr:
     r"""The ODE that **defines** the energy frame, as a residual that must vanish.
 
@@ -275,7 +282,7 @@ def energy_frame_velocity_equation(
     `functions.spectra.frame_transform` is demonstrably integrating *this*
     equation and not a transcription of it.
     """
-    return v_prime + conformal_H * v + k * phi_a
+    return v_prime + conformal_H * v + k_com * phi_a
 
 
 def boosted_dipole(tau_1: sp.Expr, v: sp.Expr) -> sp.Expr:
@@ -306,7 +313,7 @@ def boosted_multipole(tau_ell: sp.Expr, ell: int) -> sp.Expr:
     return tau_ell
 
 
-def weyl_electric_amplitude(phi_a: sp.Expr, phi_h: sp.Expr, k: sp.Symbol,
+def weyl_electric_amplitude(phi_a: sp.Expr, phi_h: sp.Expr, k_com: sp.Symbol,
                             a: sp.Symbol) -> sp.Expr:
     r"""$E_{ab}=\tfrac12\mathrm D_{\langle a}\mathrm D_{b\rangle}(\Phi_A-\Phi_H)$, as an amplitude.
 
@@ -316,7 +323,7 @@ def weyl_electric_amplitude(phi_a: sp.Expr, phi_h: sp.Expr, k: sp.Symbol,
     the invariance statement and is carried anyway, because a residual that is
     zero for the wrong reason is not evidence.
     """
-    return -sp.Rational(1, 2) * (k / a) ** 2 * (phi_a - phi_h)
+    return -sp.Rational(1, 2) * (k_com / a) ** 2 * (phi_a - phi_h)
 
 
 def weyl_invariance_residual() -> sp.Expr:
@@ -339,11 +346,11 @@ def weyl_invariance_residual() -> sp.Expr:
     Returned symbolically, for the same reason `roundtrip_residual` is: an
     identity should be shown to *be* an identity.
     """
-    k, a, H = sp.symbols("k a mathcalH", positive=True)
+    k_com, a, H = sp.symbols("k a mathcalH", positive=True)
     phi_a, phi_h = sp.symbols("Phi_A Phi_H", real=True)
     v, v_prime = EPS * sp.Symbol("v", real=True), EPS * sp.Symbol("vprime", real=True)
 
-    shift = harmonic_potential_shift(v, v_prime, H, k)
-    before = weyl_electric_amplitude(phi_a, phi_h, k, a)
-    after = weyl_electric_amplitude(phi_a + shift, phi_h + shift, k, a)
+    shift = harmonic_potential_shift(v, v_prime, H, k_com)
+    before = weyl_electric_amplitude(phi_a, phi_h, k_com, a)
+    after = weyl_electric_amplitude(phi_a + shift, phi_h + shift, k_com, a)
     return sp.simplify(sp.expand(after - before))
