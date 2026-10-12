@@ -22,6 +22,7 @@ fingerprint a property of somebody's folder rather than of the repository.
 from __future__ import annotations
 
 import argparse
+import re
 import hashlib
 import sys
 from pathlib import Path
@@ -34,8 +35,39 @@ ROOT = Path(__file__).resolve().parents[1]
 
 FILE_MANIFEST = ROOT / "FILE-MANIFEST-SHA256.txt"
 IMMUTABLE_MANIFEST = ROOT / "IMMUTABLE-MANIFEST-SHA256.txt"
+PORTABLE_MANIFEST = ROOT / "PORTABLE-MANIFEST-SHA256.txt"
 
-EXCLUDE_FILES = {FILE_MANIFEST.name, IMMUTABLE_MANIFEST.name}
+#: Significant figures kept when canonicalising a generated numeric artefact.
+#:
+#: **Finding T-15.** `--strict` regenerates every artefact and then hashes it, so
+#: it could only ever pass on the machine that produced the bytes. Three CSVs
+#: differed between a Linux container and the PI's Windows machine --- not the
+#: renderings, the *numbers*, in their last digits, because BLAS and libm differ.
+#: Byte-identity is the wrong criterion for a generated numeric artefact.
+#:
+#: Cross-platform float noise is last-digit, around $10^{-15}$ relative, and a
+#: solver amplifies it by a few orders at most. Nine significant figures is far
+#: above that and far below any change worth calling a change. **This is the
+#: first value tried, and the PI's machine is the measurement**: if a run there
+#: fails at nine, the failure reports the real magnitude and this comes down.
+SIGNIFICANT_FIGURES = 9
+
+#: Generated artefacts whose bytes are a *rendering* --- fonts, freetype,
+#: TeX Live version. A mismatch here is drift, reported and not release-blocking,
+#: because a PNG that differs in hinting carries no scientific difference.
+RENDERED_PREFIXES = ("figures/", "supplementary-materials/")
+RENDERED_SUFFIXES = (".png", ".pdf")
+
+#: Generated artefacts that are text but carry computed numbers.
+NUMERIC_PREFIXES = ("outputs/", "tables/", "diagnostics/")
+NUMERIC_SUFFIXES = (".csv", ".txt")
+
+_FLOAT = re.compile(r"[-+]?(?:\d+\.\d*|\.\d+|\d+)(?:[eE][-+]?\d+)?")
+
+# The manifests cannot hash themselves. **Three of them now** --- the portable
+# one added by T-15 is a tracked file like the others, and leaving it out of
+# this set made it appear in its own listing on the first run.
+EXCLUDE_FILES = {FILE_MANIFEST.name, IMMUTABLE_MANIFEST.name, PORTABLE_MANIFEST.name}
 
 #: Paths frozen once recorded, relative to the repository root. Frozen reference
 #: material only: anything here changing at all is a release-blocking event.
@@ -105,6 +137,62 @@ def check_append_guard() -> bool:
     return ok
 
 
+def artefact_class(rel: str) -> str:
+    """`rendered`, `numeric` or `exact`, **derived from the path, never listed**.
+
+    A hand-maintained list of which files are which is one more thing to forget
+    when a file is added --- the mistake T-1 and T-16 are both about. The rule
+    is the location and the extension, so a new output lands in the right class
+    by being put in the right directory.
+    """
+    if rel.endswith(RENDERED_SUFFIXES) and rel.startswith(RENDERED_PREFIXES):
+        return "rendered"
+    if rel.startswith("diagnostics/") and rel.endswith(".png"):
+        return "rendered"
+    if rel.endswith(NUMERIC_SUFFIXES) and rel.startswith(NUMERIC_PREFIXES):
+        return "numeric"
+    return "exact"
+
+
+def _canonicalise(text: str) -> str:
+    """Re-emit every float at `SIGNIFICANT_FIGURES`, leaving everything else alone.
+
+    This is what makes a numeric artefact comparable across machines: the digits
+    that differ between one BLAS and another are below the cut, and anything a
+    reader would call a change survives it.
+    """
+    def round_one(m: re.Match) -> str:
+        token = m.group(0)
+        try:
+            value = float(token)
+        except ValueError:                     # pragma: no cover - regex is tight
+            return token
+        if token.lstrip("+-").isdigit():       # a plain integer is not a measurement
+            return token
+        return f"{value:.{SIGNIFICANT_FIGURES - 1}e}"
+
+    return _FLOAT.sub(round_one, text)
+
+
+def portable_digest(path: Path, rel: str) -> str:
+    """The hash `--strict` binds on: canonicalised for numeric artefacts."""
+    if artefact_class(rel) != "numeric":
+        return sha256(path)
+    text = path.read_text(encoding="utf-8", errors="replace")
+    return hashlib.sha256(_canonicalise(text).encode("utf-8")).hexdigest()
+
+
+def render_portable(paths: list[Path]) -> str:
+    """Everything but the renderings, numeric artefacts canonicalised."""
+    lines = []
+    for p in paths:
+        rel = p.relative_to(ROOT).as_posix()
+        if artefact_class(rel) == "rendered":
+            continue
+        lines.append(f"{portable_digest(p, rel)}  {rel}")
+    return "\n".join(lines) + "\n"
+
+
 def render(paths: list[Path]) -> str:
     lines = []
     for p in paths:
@@ -119,8 +207,6 @@ def main() -> int:
     args = ap.parse_args()
 
     files = tracked_files()
-    full = render(files)
-    frozen = render([p for p in files if is_immutable(p.relative_to(ROOT).as_posix())])
 
     if not args.check:
         write_append_guard()
@@ -128,14 +214,49 @@ def main() -> int:
         files = tracked_files()
         full = render(files)
         frozen = render([p for p in files if is_immutable(p.relative_to(ROOT).as_posix())])
+        portable = render_portable(files)
         FILE_MANIFEST.write_text(full, encoding="utf-8", newline="\n")
         IMMUTABLE_MANIFEST.write_text(frozen, encoding="utf-8", newline="\n")
+        PORTABLE_MANIFEST.write_text(portable, encoding="utf-8", newline="\n")
         print(f"wrote {APPEND_GUARD}      {len(APPEND_ONLY)} append-only files")
         print(f"wrote {FILE_MANIFEST.name}      {len(files)} files")
         print(f"wrote {IMMUTABLE_MANIFEST.name} {len(frozen.splitlines())} files")
+        print(f"wrote {PORTABLE_MANIFEST.name}  "
+              f"{len(portable.splitlines())} files, numeric canonicalised to "
+              f"{SIGNIFICANT_FIGURES} s.f.")
         return 0
 
+    full = render(files)
+    frozen = render([p for p in files if is_immutable(p.relative_to(ROOT).as_posix())])
+    portable = render_portable(files)
+
     failed = not check_append_guard()
+
+    # **The portable manifest is what binds --- finding T-15.** It excludes the
+    # renderings and canonicalises the numbers, so a machine that did not
+    # generate the artefacts can still satisfy it. The byte manifest below is
+    # then a *within-machine* drift check: it is reported, by class, and only
+    # an `exact` mismatch there is release-blocking, which the portable check
+    # has already caught.
+    if not PORTABLE_MANIFEST.exists():
+        print(f"FAIL  {PORTABLE_MANIFEST.name} is missing — run without --check to seed it")
+        failed = True
+    elif PORTABLE_MANIFEST.read_text(encoding="utf-8") != portable:
+        print(f"FAIL  {PORTABLE_MANIFEST.name} does not match the tree")
+        have = dict(reversed(ln.split("  ", 1))
+                    for ln in PORTABLE_MANIFEST.read_text(encoding="utf-8").splitlines() if ln)
+        want = dict(reversed(ln.split("  ", 1)) for ln in portable.splitlines() if ln)
+        for name in sorted(set(have) | set(want)):
+            if have.get(name) != want.get(name):
+                state = ("added" if name not in have
+                         else "removed" if name not in want else "changed")
+                print(f"        {state:8s} {name}   [{artefact_class(name)}]")
+        print("        ^ RELEASE-BLOCKING: this is content, not rendering")
+        failed = True
+    else:
+        print(f"PASS  {PORTABLE_MANIFEST.name}  (binds; "
+              f"numeric to {SIGNIFICANT_FIGURES} s.f., renderings excluded)")
+
     for manifest, expected, label in (
         (FILE_MANIFEST, full, "file"),
         (IMMUTABLE_MANIFEST, frozen, "immutable"),
@@ -146,18 +267,29 @@ def main() -> int:
             continue
         actual = manifest.read_text(encoding="utf-8")
         if actual != expected:
-            print(f"FAIL  {manifest.name} does not match the tree")
             have = dict(reversed(ln.split("  ", 1)) for ln in actual.splitlines() if ln)
             want = dict(reversed(ln.split("  ", 1)) for ln in expected.splitlines() if ln)
-            for name in sorted(set(have) | set(want)):
-                if have.get(name) != want.get(name):
-                    state = (
-                        "added" if name not in have else "removed" if name not in want else "changed"
-                    )
-                    print(f"        {state:8s} {name}")
-                    if label == "immutable":
-                        print("        ^ RELEASE-BLOCKING: a frozen record moved")
-            failed = True
+            moved = [n for n in sorted(set(have) | set(want)) if have.get(n) != want.get(n)]
+            by_class: dict[str, list[str]] = {}
+            for name in moved:
+                by_class.setdefault(artefact_class(name), []).append(name)
+
+            blocking = label == "immutable" or "exact" in by_class
+            print(f"{'FAIL' if blocking else 'DRIFT'}  {manifest.name} "
+                  f"does not match the tree")
+            for klass in ("exact", "numeric", "rendered"):
+                for name in by_class.get(klass, []):
+                    state = ("added" if name not in have
+                             else "removed" if name not in want else "changed")
+                    print(f"        {state:8s} {name}   [{klass}]")
+            if label == "immutable":
+                print("        ^ RELEASE-BLOCKING: a frozen record moved")
+            elif not blocking:
+                print("        ^ not release-blocking: renderings depend on the")
+                print("          matplotlib and TeX Live that drew them, and numbers")
+                print("          on the BLAS that computed them. The portable")
+                print("          manifest above is what this release stands on.")
+            failed = failed or blocking
         else:
             print(f"PASS  {manifest.name}")
     return 1 if failed else 0

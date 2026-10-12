@@ -160,15 +160,45 @@ def test_negation_is_order_sensitive_the_way_git_is():
 # ---------------------------------------------------------------------------
 
 
-def test_the_manifest_covers_every_bundle_file_but_itself():
+def _entries(name: str) -> list[str]:
+    return [ln for ln in (ROOT / name).read_text(encoding="utf-8").splitlines() if ln.strip()]
+
+
+def test_the_manifest_covers_every_bundle_file_but_the_manifests():
     """The arithmetic the gates print, checked rather than trusted.
 
-    `bundle files = manifest entries + 2`, the two being the manifests, which
-    cannot contain their own hashes.
+    `bundle files = manifest entries + 3`. **Three, since finding T-15 added
+    `PORTABLE-MANIFEST-SHA256.txt`** --- it is a tracked file like the other
+    two and cannot contain its own hash either. The count is derived from
+    `EXCLUDE_FILES` rather than typed, so the next manifest does not break this
+    test by existing.
     """
-    manifest = ROOT / "FILE-MANIFEST-SHA256.txt"
-    entries = [ln for ln in manifest.read_text(encoding="utf-8").splitlines() if ln.strip()]
-    assert len(bundle_files(ROOT)) == len(entries) + 2
+    import sys
+
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from make_manifests import EXCLUDE_FILES
+
+    assert len(bundle_files(ROOT)) == len(_entries("FILE-MANIFEST-SHA256.txt")) + len(EXCLUDE_FILES)
+
+
+def test_the_portable_manifest_is_the_byte_manifest_minus_the_renderings():
+    """T-15's shape, asserted so the two cannot drift apart.
+
+    Everything in the portable manifest is in the byte manifest; what is missing
+    is exactly the artefacts whose bytes are a rendering.
+    """
+    import sys
+
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from make_manifests import artefact_class
+
+    byte_names = {ln.split("  ", 1)[1] for ln in _entries("FILE-MANIFEST-SHA256.txt")}
+    portable_names = {ln.split("  ", 1)[1] for ln in _entries("PORTABLE-MANIFEST-SHA256.txt")}
+
+    assert portable_names <= byte_names, "the portable manifest lists a file the other does not"
+    missing = byte_names - portable_names
+    assert missing, "the portable manifest should exclude the renderings"
+    assert all(artefact_class(n) == "rendered" for n in missing), sorted(missing)
 
 
 def test_the_provenance_readme_lists_every_record():

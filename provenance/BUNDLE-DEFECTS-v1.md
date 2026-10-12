@@ -1278,3 +1278,44 @@ this release does not need.
 at the wrong object; T-14 a docstring asserting a property the code lacked; T-16
 a check that looked at the *right* object and reported it in a form that could
 not be acted on. All three pass or fail honestly and all three mislead.
+
+### T-15 — closed 2026-10-12
+
+`PORTABLE-MANIFEST-SHA256.txt`, and `--strict` now binds on it rather than on
+byte-identity.
+
+**The design, and why it is not "loosen the tolerance".** Three classes, derived
+from the path and never from a hand-maintained list — the mistake T-1 and T-16
+are both about:
+
+| class | what it is | how it is compared |
+|---|---|---|
+| `exact` | source, documents, configuration | byte hash, **release-blocking** |
+| `numeric` | generated text carrying computed numbers | every float re-emitted at **9 significant figures**, then hashed; **release-blocking** |
+| `rendered` | PNG, PDF, the supplement | byte hash, **reported as drift, not blocking** |
+
+`FILE-MANIFEST-SHA256.txt` is unchanged and still `sha256sum -c`-able; it has
+become the *within-machine* drift report. The portable manifest is what the
+release stands on, and it excludes the renderings because a PNG differing in
+font hinting carries no scientific difference, while keeping every number that
+does.
+
+**Nine significant figures is a first value, not a measurement**, and that is
+stated where it is defined. Cross-platform noise is last-digit, around
+$10^{-15}$ relative, and a solver amplifies it by a few orders at most; nine is
+far above that and far below any change worth the name. **The PI's machine is
+the measurement**: a Windows run against this Linux-generated manifest either
+passes, which is the evidence, or fails and reports the real magnitude.
+
+**Tested with its control, which is the part that matters.** Perturbing every
+float in `outputs/f4-correlation.csv` by $3\times10^{-16}$ — what another BLAS
+does — leaves the binding gate **passing with exit 0**, the byte manifest
+reporting `DRIFT`, and the release route runnable by a second person. A change
+of $10^{-4}$ **fails with exit 1**. Without the second assertion the first is
+indistinguishable from having switched the gate off, so both are in
+`tests/test_portable_manifest.py`.
+
+**What this does not change.** No released artefact moves, no number moves, and
+`check_clean_checkout.py` inherits the improvement without modification. What
+changes is that the route documented as the one a release candidate must pass
+can now be run by somebody who did not render the figures.

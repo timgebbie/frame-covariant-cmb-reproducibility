@@ -184,6 +184,16 @@ unchanged.
 Item 3 is the $k$-is-physical drift from C3.1, and it is the one correction that
 names a convention this bundle also depends on: C3.1 declares the sheet's $k$
 physical with $k_{\rm phys}=k/a$, while *Annals II* Appendix F's $k$ is comoving.
+
+**The operational form is what the Sec. IV D defect actually turned on**, and it
+is worth restating here rather than leaving as a row to look up. If $k$ is
+physical then it is not constant: $\dot k=-Hk$. And $Q_{A_\ell}$ *is* constant,
+because the $\ell$ factors of $\mathrm D$ in its definition each carry $1/a$
+while the $\ell$ factors of $k^{-1}$ each carry an $a$, and the two cancel rank
+by rank. Those two statements look like bookkeeping and are the whole of it: a
+reduction that treats $k$ as constant, or that forgets the cancellation, puts a
+spurious $a$-dependence into every rank — which is item 4, read as contraction
+weights holding on the harmonics.
 The bundle guards it by **naming** — `k_com` and `k_phys` as distinct symbols and
 never a bare `k`, recorded in the corrections record and enforced by reading
 rather than by a gate.

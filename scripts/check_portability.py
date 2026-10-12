@@ -175,8 +175,8 @@ def main() -> int:
     print(f"PASS  {len(shipped)} bundle files "
           f"({len(checked)} content-checked, {binary} binary): "
           "no absolute paths, no mixed line endings")
-    print(f"      {len(shipped) - 2} manifest entries expected "
-          "(the two manifests cannot hash themselves).")
+    print(f"      {len(shipped) - 3} manifest entries expected "
+          "(the three manifests cannot hash themselves).")
     if git_note:
         print(git_note)
     print("      This rules out what a machine can see. A clean checkout on the")
