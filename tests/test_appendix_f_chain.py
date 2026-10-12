@@ -589,3 +589,53 @@ def test_wilson_silk_1981_is_the_same_equation_as_wilson_1983_at_zero_curvature(
         # Wilson 1983 Eq. (8) adds [1 - l(l+2) K/k^2], which is 1 at K = 0
         curvature_factor = 1.0 - l * (l + 2) * 0.0 / 1.0
         assert curvature_factor == 1.0
+
+
+# ---------------------------------------------------------------------------
+# The evidence behind F1, asserted rather than printed
+# ---------------------------------------------------------------------------
+
+
+def test_the_appendix_f_residuals_are_below_their_stated_ceiling():
+    r"""**F1 carries this bundle's independence claim and nothing checked it.**
+
+    `scripts/figure_f1_appendix_f.py` prints a maximum residual for each of the
+    four external hierarchies, and the caption claims $10^{-13}$–$10^{-14}$. No
+    gate enforced that: the evidence lived in
+    `outputs/f1-appendix-f-residuals.csv`, which the manifest hashed and nothing
+    read.
+
+    The gap surfaced through finding **T-15**. That file cannot be compared by
+    hash across machines — a residual is a difference of nearly equal
+    quantities, so its relative precision is set by the cancellation, and
+    measured Linux-against-Windows it agrees to *less than one significant
+    figure* (2.2e-14 against 5.8e-14). Both are the same claim. So the file left
+    the binding manifest, and this replaced it: **what the bundle actually
+    claims about those numbers is that they are small**, and that is portable.
+
+    The ceiling is measured, not chosen. The largest residual observed is
+    $9.5\times10^{-14}$, on both machines independently; $5\times10^{-13}$ is
+    five times that, and twelve orders below the $O(1)$ quantities being
+    differenced.
+    """
+    import csv
+
+    from pathlib import Path
+
+    ceiling = 5.0e-13
+    path = Path(__file__).resolve().parents[1] / "outputs" / "f1-appendix-f-residuals.csv"
+    rows = list(csv.DictReader(path.open(encoding="utf-8")))
+    assert rows, "the residual record is empty"
+
+    worst = {}
+    for row in rows:
+        form = row["form"]
+        worst[form] = max(worst.get(form, 0.0), abs(float(row["residual"])))
+
+    assert len(worst) >= 4, f"expected four external hierarchies, got {sorted(worst)}"
+    for form, value in sorted(worst.items()):
+        assert value < ceiling, f"{form}: residual {value:.3e} exceeds {ceiling:.0e}"
+
+    # and the scale column must be exactly one: a match obtained by rescaling
+    # would not be a match
+    assert all(abs(float(r["scale"]) - 1.0) < 1e-9 for r in rows)

@@ -69,6 +69,7 @@ def _perturb(text: str, relative: float) -> str:
     ("supplementary-materials/supplement-v1.0.0.pdf", "rendered"),
     ("diagnostics/d1-sign-control-v1.0.0.png", "rendered"),
     ("outputs/f4-correlation.csv", "numeric"),
+    ("outputs/f1-appendix-f-residuals.csv", "bounded"),
     ("diagnostics/d5-sachs-wolfe-v1.0.0.txt", "numeric"),
     ("tables/equations-v1.0.0.csv", "numeric"),
     ("functions/frames.py", "exact"),
@@ -123,6 +124,30 @@ def test_a_real_change_still_fails(tmp_path):
         assert "FAIL  PORTABLE-MANIFEST-SHA256.txt" in result.stdout
     finally:
         PROBE.write_bytes(backup)
+
+
+def test_signed_zero_is_canonicalised():
+    """`-0.0` and `0.0` are the same number and must hash the same.
+
+    One row of `outputs/line-of-sight-field.csv` carried
+    `-0.000000000000e+00` where the other machine wrote it unsigned, and that
+    single character moved the file's hash while every number in it agreed to
+    twelve significant figures.
+    """
+    assert _canonicalise("-0.000000000000e+00") == _canonicalise("0.000000000000e+00")
+
+
+def test_residual_artefacts_are_bounded_not_hashed():
+    """A residual's digits are not reproducible on any machine.
+
+    Measured Linux-against-Windows, `f1-appendix-f-residuals.csv` agrees to less
+    than one significant figure. It is therefore out of the binding manifest and
+    checked by its ceiling instead, in `tests/test_appendix_f_chain.py`.
+    """
+    portable = (ROOT / "PORTABLE-MANIFEST-SHA256.txt").read_text(encoding="utf-8")
+    byte_manifest = (ROOT / "FILE-MANIFEST-SHA256.txt").read_text(encoding="utf-8")
+    assert "f1-appendix-f-residuals.csv" in byte_manifest
+    assert "f1-appendix-f-residuals.csv" not in portable
 
 
 def test_renderings_are_outside_the_binding_manifest():

@@ -58,6 +58,23 @@ SIGNIFICANT_FIGURES = 9
 RENDERED_PREFIXES = ("figures/", "supplementary-materials/")
 RENDERED_SUFFIXES = (".png", ".pdf")
 
+#: **Artefacts whose content is a bound, not a value** --- a `*-residuals.csv`.
+#: Their digits are not reproducible on *any* machine and never were: a residual
+#: is a difference of nearly equal quantities, so its own relative precision is
+#: set by the cancellation rather than by the inputs. Measured between a Linux
+#: container and a Windows machine, `outputs/f1-appendix-f-residuals.csv` agrees
+#: to **less than one significant figure** --- 2.2e-14 against 5.8e-14, a 62%
+#: relative difference --- and both are the same claim: *zero to machine
+#: precision*.
+#:
+#: So no significant-figure rule can make such a file portable, and pretending
+#: otherwise would mean lowering the cut for every other artefact to accommodate
+#: one that can never pass. They leave the binding manifest and are checked by
+#: what the bundle actually claims about them instead: every entry below a
+#: stated ceiling, asserted in `tests/test_appendix_f_chain.py`. That check did
+#: not exist before --- F1 carries this bundle's independence claim and nothing
+#: verified its evidence.
+
 #: Generated artefacts that are text but carry computed numbers.
 NUMERIC_PREFIXES = ("outputs/", "tables/", "diagnostics/")
 NUMERIC_SUFFIXES = (".csv", ".txt")
@@ -149,6 +166,8 @@ def artefact_class(rel: str) -> str:
         return "rendered"
     if rel.startswith("diagnostics/") and rel.endswith(".png"):
         return "rendered"
+    if rel.endswith("-residuals.csv"):
+        return "bounded"
     if rel.endswith(NUMERIC_SUFFIXES) and rel.startswith(NUMERIC_PREFIXES):
         return "numeric"
     return "exact"
@@ -169,6 +188,13 @@ def _canonicalise(text: str) -> str:
             return token
         if token.lstrip("+-").isdigit():       # a plain integer is not a measurement
             return token
+        if value == 0.0:
+            # **Signed zero is not a scientific statement.** One platform wrote
+            # `-0.000000000000e+00` where another wrote `0.000000000000e+00`,
+            # in a single row of `outputs/line-of-sight-field.csv`, and that one
+            # character was enough to move the file's hash while every number in
+            # it agreed to twelve significant figures.
+            value = 0.0
         return f"{value:.{SIGNIFICANT_FIGURES - 1}e}"
 
     return _FLOAT.sub(round_one, text)
@@ -187,7 +213,7 @@ def render_portable(paths: list[Path]) -> str:
     lines = []
     for p in paths:
         rel = p.relative_to(ROOT).as_posix()
-        if artefact_class(rel) == "rendered":
+        if artefact_class(rel) in ("rendered", "bounded"):
             continue
         lines.append(f"{portable_digest(p, rel)}  {rel}")
     return "\n".join(lines) + "\n"

@@ -181,11 +181,13 @@ def test_the_manifest_covers_every_bundle_file_but_the_manifests():
     assert len(bundle_files(ROOT)) == len(_entries("FILE-MANIFEST-SHA256.txt")) + len(EXCLUDE_FILES)
 
 
-def test_the_portable_manifest_is_the_byte_manifest_minus_the_renderings():
+def test_the_portable_manifest_is_the_byte_manifest_minus_the_unhashable():
     """T-15's shape, asserted so the two cannot drift apart.
 
     Everything in the portable manifest is in the byte manifest; what is missing
-    is exactly the artefacts whose bytes are a rendering.
+    is exactly the artefacts whose bytes cannot carry a portable claim — the
+    `rendered` ones, which depend on the fonts and the TeX Live that drew them,
+    and the `bounded` ones, whose digits are cancellation noise on any machine.
     """
     import sys
 
@@ -198,7 +200,7 @@ def test_the_portable_manifest_is_the_byte_manifest_minus_the_renderings():
     assert portable_names <= byte_names, "the portable manifest lists a file the other does not"
     missing = byte_names - portable_names
     assert missing, "the portable manifest should exclude the renderings"
-    assert all(artefact_class(n) == "rendered" for n in missing), sorted(missing)
+    assert all(artefact_class(n) in ("rendered", "bounded") for n in missing), sorted(missing)
 
 
 def test_the_provenance_readme_lists_every_record():

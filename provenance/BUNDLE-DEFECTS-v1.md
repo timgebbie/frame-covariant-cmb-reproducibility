@@ -1319,3 +1319,60 @@ indistinguishable from having switched the gate off, so both are in
 `check_clean_checkout.py` inherits the improvement without modification. What
 changes is that the route documented as the one a release candidate must pass
 can now be run by somebody who did not render the figures.
+
+### T-15 — reopened and closed properly, 2026-10-12
+
+**The first close was premature, and the PI's machine said so.** Nine
+significant figures was offered as a first value with the explicit note that
+the PI's run was the measurement. The run came back: **fourteen of sixteen
+sampled artefacts agreed** across Linux and Windows — and two did not. Both had
+been in the original mismatch list, and they turned out to be *different
+problems*, neither of which a single significance cut can fix.
+
+#### `outputs/line-of-sight-field.csv` — signed zero
+
+Every number in it agrees to about **twelve significant figures**, and the
+headline values in its header — `endpoint`, `running_excursion` — are
+character-for-character identical. Nine should have absorbed that and did not.
+The cause is one row: `-0.000000000000e+00` on one machine, unsigned on the
+other. `f"{-0.0:.8e}"` is `-0.00000000e+00`, so the canonicalisation preserved a
+minus sign in front of zero and moved the hash of a file in which nothing had
+changed. **The sign of zero is not a scientific statement** and is now
+normalised away.
+
+#### `outputs/f1-appendix-f-residuals.csv` — not a digit problem at all
+
+Measured across all 104 rows, the worst relative difference is **62%**:
+$2.2\times10^{-14}$ against $5.8\times10^{-14}$. They agree to **less than one
+significant figure**.
+
+That is not float noise and no cut can absorb it. A residual is a difference of
+nearly equal quantities, so its own relative precision is set by the
+cancellation and not by its inputs; both numbers are the same claim — *zero to
+machine precision* — in two roundoff realisations. Lowering the cut far enough
+to make this file pass would have weakened the gate for every other artefact to
+accommodate one that can never pass it.
+
+**So it leaves the binding manifest, and is checked by what the bundle actually
+claims about it instead.** `artefact_class` gained a fourth value, `bounded`.
+
+#### The gap that found, which is the more serious half
+
+F1 is where this bundle's independence lives — four external hierarchies, each
+read from its own paper. Its evidence is that CSV. **Nothing verified it.** The
+script printed the residuals, the caption claimed $10^{-13}$–$10^{-14}$, the
+manifest hashed the bytes, and no gate ever asked whether the numbers were
+small. A hash is not a check on content; it only notices change.
+
+`tests/test_appendix_f_chain.py` now asserts the ceiling: every residual below
+$5\times10^{-13}$, four hierarchies present, and every `scale` exactly one —
+because a match obtained by rescaling would not be a match. The ceiling is
+measured: the largest observed is $9.5\times10^{-14}$, **independently on both
+machines**, so five times that is a bound with room and still twelve orders
+below the quantities being differenced.
+
+**The pattern, for the fourth time.** T-3, T-6, T-12 and T-16 were each a check
+looking at the wrong object. This is the same family seen from a new side: a
+gate that hashes an artefact looks like it is checking the artefact, and is
+checking only that it has not moved. Asking what a gate does *not* match
+remains the cheapest question this project knows.
