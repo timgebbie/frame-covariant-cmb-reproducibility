@@ -171,7 +171,7 @@ class ScatteringHistory:
     eta: np.ndarray
     kappa_prime: np.ndarray
     visibility: np.ndarray
-    damping_k: float = np.inf
+    damping_k: float | np.ndarray = np.inf
 
     def kappa_double_prime(self) -> np.ndarray:
         return CubicSpline(
@@ -179,11 +179,28 @@ class ScatteringHistory:
             np.asarray(self.kappa_prime, dtype=float),
         ).derivative()(self.eta)
 
-    def diffusion(self, k_com: float) -> float:
-        """exp[-(k/k_D)^2], the factor (178) and (179) share."""
-        if not np.isfinite(self.damping_k):
-            return 1.0
-        return float(np.exp(-((k_com / self.damping_k) ** 2)))
+    def diffusion(self, k_com: float) -> float | np.ndarray:
+        """exp[-(k/k_D)^2], the factor (178) and (179) share.
+
+        `damping_k` may be a **scalar** --- $k_D$ stipulated at one epoch, which
+        is what the release does --- or an **array on `eta`**, the running
+        $k_D(\\eta)$. `functions.spectra.decoupling.diffusion_scale` has
+        returned a callable in $\\eta$ from the start, precisely so that
+        (178) and (179) could "evaluate $e^{-(k/k_D)^2}$ at the epoch they are
+        being integrated over, rather than at a single stipulated value" --- and
+        nothing used it that way. **Figure F6 measures what the difference is
+        worth**, which is the only honest way to keep an approximation: the
+        default is unchanged and the cost is reported rather than assumed small.
+        """
+        damping = np.asarray(self.damping_k, dtype=float)
+        if damping.ndim == 0:
+            if not np.isfinite(float(damping)):
+                return 1.0
+            return float(np.exp(-((k_com / float(damping)) ** 2)))
+        out = np.where(np.isfinite(damping),
+                       np.exp(-((k_com / np.where(damping > 0, damping, np.inf)) ** 2)),
+                       1.0)
+        return np.asarray(out, dtype=float)
 
 
 # ----------------------------------------------------------------------------

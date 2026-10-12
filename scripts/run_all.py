@@ -66,9 +66,9 @@ STAGES: list[tuple[str, str]] = [
 #: block nobody updates. The version is data now, so the message cannot drift
 #: from the decision.
 DEFERRED: dict[str, tuple[str, str]] = {
-    # S-b: diagnostic, cross-check and schematic artefacts, not acceptance ones.
-    "F6  impact of the approximations": ("v1.1.0", "S-b"),
-    "F8  coupling schematic": ("v1.1.0", "S-b"),
+    # S-b: diagnostic and cross-check artefacts, not acceptance ones.
+    # F6 and F8 were here and landed in v1.1.0; they are removed rather
+    # than left with a stale version, which is T-16's lesson about labels.
     "D3  source terms against k": ("v1.1.0", "S-b"),
     "D4  no monopole in the CGI approach": ("v1.1.0", "S-b"),
     # S21 then S23: these three wait on the generic-u^a hierarchy, not on

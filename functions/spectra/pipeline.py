@@ -214,6 +214,8 @@ def run(
     isw_sign: float = PUBLISHED_ISW_SIGN,
     n_eta: int | None = None,
     tight_coupling_factor: float = 6.0,
+    damping_epoch: str = "star",
+    expansion_coupling: bool = False,
 ) -> SpectrumRun:
     """Background -> C_l. `weighting` is required; see the module docstring.
 
@@ -255,7 +257,25 @@ def run(
     opacity = np.interp(eta, recombination.eta, recombination.opacity)
     gravitational_weight = visibility if weighting is Weighting.ANNALS_II else opacity
     k_d = diffusion_scale(recombination, r_of_eta=recombination.kappa_prime * 0.0)
-    damping_k = float(k_d(eta_star))
+    # **The release stipulates k_D at last scattering; the running k_D(eta) is
+    # the fuller statement.** Both are kept and neither is hidden: `"star"` is
+    # the default and is what every released figure uses, `"running"` is what
+    # F6 ratios it against. An approximation whose cost nobody has measured is
+    # a free parameter in disguise.
+    damping_k_star = float(k_d(eta_star))
+    if damping_epoch not in ("star", "running"):
+        raise ValueError("damping_epoch is 'star' (the release) or 'running'")
+    # **`k_d(min(eta, eta_*))`, not `k_d(eta)`.** Diffusion damping accumulates
+    # only while the photons are still scattering. After last scattering
+    # kappa' -> 0, so 1/kappa' in (dif-damp) diverges and k_D(eta) collapses,
+    # which would damp every integrated source to nothing --- an artefact of
+    # evaluating a plasma formula in a universe that has none. Measured before
+    # this clamp was added, the "fuller" variant reported the release's choice
+    # as costing a factor of nine at l=2, and the factor was the artefact.
+    # Frozen after eta_*, the running k_D is the physical statement and the
+    # comparison in F6 is a real one.
+    damping_k = (damping_k_star if damping_epoch == "star"
+                 else np.asarray(k_d(np.minimum(eta, eta_star)), dtype=float))
 
     # one Bessel table serves every (k, eta) pair: j_l depends on k*dEta only
     table = BesselTable.build(
@@ -287,7 +307,7 @@ def run(
         acoustic = solve_acoustic(
             float(k), eta[inside], background=background,
             phi_a=phi_a[inside], phi_h=phi_h[inside],
-            omega_b_h2=omega_b_h2, expansion_coupling=False,
+            omega_b_h2=omega_b_h2, expansion_coupling=expansion_coupling,
         )
         delta_T, tau_1 = freeze(acoustic.delta_T), freeze(acoustic.tau_1)
         history = PerturbationHistory(
@@ -324,6 +344,6 @@ def run(
         weighting=weighting, background=background, transfer=transfer,
         n_eta=int(n_eta),
         eta_points_per_period=float(np.pi / k_max / (eta_span / n_eta)),
-        damping_at_k_max=float(np.exp(-((k_max / damping_k) ** 2))),
+        damping_at_k_max=float(np.exp(-((k_max / damping_k_star) ** 2))),
         k_com=k_com, power=power,
     )

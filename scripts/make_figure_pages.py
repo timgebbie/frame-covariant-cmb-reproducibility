@@ -35,6 +35,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 # defect another generator had already fixed, which is exactly T-11's shape.
 # One implementation, imported wherever it is needed.
 from make_tables import tt  # noqa: E402
+
+# **The deferral table is imported, not restated** --- T-1's lesson, and T-16's.
+# This sentence used to hardcode "Deferred to v1.1.0, by decisions S-b and S20",
+# and went stale the moment S21 and S23 moved F2, F5 and F7 to v1.2.0. A second
+# copy of a fact is a second thing to forget.
+from run_all import DEFERRED  # noqa: E402
 CAPTIONS = ROOT / "captions"
 OUT = ROOT / "supplementary-materials" / "figures-v1.0.0.tex"
 
@@ -101,14 +107,22 @@ def main() -> int:
         ]
 
     done = {fm["id"] for fm, _ in entries}
-    outstanding = [f"\\textbf{{{i}}} {d}" for i, d in PLANNED if i not in done]
+    def _deferral(figure_id: str) -> str:
+        """`v1.2.0 (S23)` for a figure, from run_all's one table."""
+        for label, (version, decision) in DEFERRED.items():
+            if label.split()[0] == figure_id:
+                return f" --- {version}, {decision}"
+        return ""
+
+    outstanding = [f"\\textbf{{{i}}} {d}{_deferral(i)}" for i, d in PLANNED
+                   if i not in done]
     if outstanding:
         lines += [
             # "Outstanding" read as a loose end. These are deferred by recorded
             # decisions --- S-b for the diagnostics and cross-checks, S20 for
             # F5 --- and a reader who can see *that* can go and read why. A
             # release that calls a judgement an omission understates itself.
-            "\\noindent\\textit{Deferred to v1.1.0, by decisions S-b and S20:} "
+            "\\noindent\\textit{Deferred, by recorded decision:} "
             + "; ".join(outstanding)
             + ". Recorded choices, not omissions: the reasoning for each is in "
             + tt("provenance/DECISIONS-v1.0.0.md")
