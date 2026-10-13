@@ -13,6 +13,8 @@ Theory-to-code traceability for this bundle.
 | `DECISIONS-v1.0.0.md` | the numbered decisions `S-n`, each with what was decided, when, and why the alternative was rejected |
 | `OPEN-QUESTIONS-v1.0.0.md` | specification questions raised before code was written, each with a proposed resolution and a status |
 | `EXTERNAL-CODE-COMPARISON-v1.md` | the canonical CAMB/CLASS comparison: parameter set, bands, and what their mutual difference does and does not license |
+| `GENERIC-SOURCE-DERIVATIVES-v1.md` | the generic $\dot{\mathcal B}_A$ relations (102) needs and *Annals II* never wrote — rank 2 closed from Appendix G, the scale-factor rule behind finding **T-23**, ranks 1 and 0 owed. The source for the supplement's derivation section |
+| `COSMOLOGICAL-PARAMETERS-v1.md` | the parameter set's source, column and status — Planck 2018 VI Table 2, with the baseline column the *paper* names rather than one chosen here, and the two constants finding **T-22** found uncited in the hot path |
 | `ALMOST-EGS-BOUNDS-v1.md` | forward-looking scope note for v2.0.0; a table skeleton with no derived bound in it |
 | `AI-PROVENANCE-v1.md` | the account of AI assistance that Paper 1's disclosure points at: what the model did by section, the six audit findings fixed on 2026-10-09, **two items left open on the PI's recorded decision**, and what the passes did not reach. Received from P1-T |
 | `conventions.md` | **generated** copy of the project's normative conventions sheet — never hand-edited; see `scripts/sync_conventions.py` |

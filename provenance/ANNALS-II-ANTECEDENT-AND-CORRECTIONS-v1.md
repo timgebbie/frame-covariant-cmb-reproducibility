@@ -1180,3 +1180,178 @@ comparison** against the quadrature arbiter, where $\chi$ does not cancel, and
 that evidence already exists in `tests/test_sachs_wolfe.py`. D5 states this in
 its own output rather than leaving a reader to work out that a passing
 comparison against both forms cannot distinguish them.
+
+## B-11 — Annals II (90) prints $-C_0\simeq+\tfrac52a\mathcal B_2$; its own defining match gives the opposite sign
+
+**Found 2026-10-13, on the first attempt to implement the integral solution
+covariantly.** It is invisible in the Newtonian frame, which is why four
+releases have not met it.
+
+(89) `find_coef` defines the three coefficients by matching rank by rank:
+
+$$C_0\delta_{\ell0}+C_1\beta_1^{-1}k\,\delta_{\ell1}
++C_2k^2\,5\beta_2^{-1}\!\left(\tfrac2{15}\delta_{\ell2}+\tfrac13\delta_{\ell0}\right)
+= -\left[(a\mathcal B_1+\kappa'v_B)\delta_{\ell1}+a\mathcal B_2\delta_{\ell2}\right]$$
+
+Solved as exact rationals with $\beta_1=1$, $\beta_2=\tfrac23$:
+
+| | from the match | **(90) as printed** | |
+|---|---|---|---|
+| $-C_1$ | $\tfrac1k(a\mathcal B_1+\kappa'v_B)$ | $\tfrac1k(a\mathcal B_1+\kappa'v_B)$ | match |
+| $-C_2$ | $\tfrac1{k^2}a\mathcal B_2$ | $\tfrac1{k^2}a\mathcal B_2$ | match |
+| $-C_0$ | $\mathbf{-\tfrac52a\mathcal B_2}$ | $+\tfrac52a\mathcal B_2$ | **ratio exactly $-1$** |
+
+The $\ell=0$ row of (89) has **no** term on its right-hand side, so it reads
+$C_0=-\tfrac52k^2C_2$, and the $\ell=2$ row gives $k^2C_2=-a\mathcal B_2$.
+Hence $C_0=+\tfrac52a\mathcal B_2$ and $-C_0=-\tfrac52a\mathcal B_2$.
+
+**The $\beta$ convention is corroborated by the two that agree.** $C_1$ and
+$C_2$ come out of the same solve, with the same $\beta_\ell$, and both match the
+printed forms exactly. A wrong convention would have moved all three. It moves
+one.
+
+### Why no release has met it
+
+$C_0\propto\mathcal B_2=\sigma_{ab}$. **Annals II specialises to the Newtonian
+frame before writing its sources** — §7.1.1: *"We therefore choose the Newtonian
+frame in which the shear contribution does not appear"* — so
+$\tilde\sigma_{ab}\approx0$, hence $\tilde C_0\approx\tilde C_2\approx0$, and
+(110) and (111) carry $\tilde C_1$ alone. Every equation this bundle has
+implemented to date descends from those. **A sign on a coefficient that is
+identically zero in the only frame anyone computed in is unreachable**, and it
+becomes reachable at exactly the step the PI asked for: carrying $u^a$ generic
+and letting the frame choice set the coefficients rather than the equations
+presupposing one.
+
+That is the argument for the covariant form stated as a finding rather than as
+a preference. It is not only that the generic solution is more faithful to the
+$1+3$ approach — it is that **the specialised one cannot see its own errors in
+the sector it discards.**
+
+### Status
+
+Corrected here. `functions/spectra/coefficients.py` carries the match itself,
+solved as exact rationals, so the printed relation is a *check* on this bundle
+rather than a source for it — the same discipline `flrw.py` applies to the
+expansion law. The printed form is kept beside it as
+`c0_printed`, since a known-wrong alternative that must change the answer is
+evidence of the kind decision **S12** keeps.
+
+**CONFIRMED against the published version, 2026-10-13**, closing the second
+stage. *Annals of Physics* **282**, 321 (2000), the printed (90), reads
+
+> $-C_0(\eta)\simeq+\tfrac52a\mathcal B_2,\quad
+> -C_1(\eta)\simeq+\tfrac1k(a\mathcal B_1+\kappa'v_B),\quad
+> -C_2(\eta)\simeq+\tfrac1{k^2}a\mathcal B_2$
+
+character for character the accepted manuscript's, and the printed (89) carries
+the same $+\tfrac13\delta_{\ell0}$ on the $C_2$ term that the match was solved
+from. **The sign is wrong in the journal of record, not only in the
+manuscript.** The published text also cites **(G.19)** where the manuscript
+cites its `efe2.1b` label; that is a label resolution and not a finding.
+
+The sentence immediately below it is worth keeping beside the correction:
+*"Note that these are CGI with respect to $u^a$."* The coefficients are
+covariant and the paper says so; it is the **solution** that was specialised
+before the sources were written, and that is what hid the sign.
+
+### B-11 RECLASSIFIED, 2026-10-13, on reading the thesis. **It is not a sign error.**
+
+Kept rather than rewritten. The arithmetic above stands: given (89) **as
+printed**, the $\ell=0$ row forces $-C_0=-\tfrac52a\mathcal B_2$. What the
+arithmetic does not establish is that the $\ell=0$ row is a constraint on $C_0$
+at all, and the thesis shows it may not be.
+
+`CHAPTER-FOUR.TEX`, the same hierarchy one generation earlier, writes the source
+with a term (89) does not have:
+
+$$\mathcal S_B=-\left[\,\mathbf{a\mathcal B_0\delta_{\ell0}}
++(a\mathcal B_1+\kappa'v_B)\delta_{\ell1}+a\mathcal B_2\delta_{\ell2}\right]$$
+
+and says why, in the sentence immediately after: *"It is valid for all
+$\ell\ge0$, with $\tau_0=0$ a solution as required, consistent with the
+definitions we introduced above (**$\mathcal B_0$ cancels the dipole term on the
+right in this case**)."*
+
+That is checkable and it checks. At $\ell=0$ the free-streaming bracket leaves
+$\tfrac13k\tau_1$, so $\tau_0\equiv0$ solves the row exactly when
+$a\mathcal B_0=-\tfrac13k\tau_1$ — and decision **S14**'s definition
+$\mathcal B_0=-\tfrac13\mathcal D^a\tau_a$ gives precisely that in mode form.
+**$\mathcal B_0$ is not an independent source. It is the term that enforces
+$\tau_0=0$**, which is the covariant statement that *there is no monopole in the
+CGI approach* — Annals II p. 366, which `diagnostics/` already records.
+
+So the $\ell=0$ row is plausibly an **identity, not a constraint**, and
+dropping $a\mathcal B_0$ from (89) while keeping the $C_0$ and $C_2$ terms on
+the left is what makes it look like one. If so, the printed $C_0$ comes from
+somewhere this bundle has not found, and the finding is **"a relation whose
+derivation is not shown"** rather than **"a sign that is wrong"**. Those are
+different classifications with different remedies: the first is an **O-item**,
+the second a correction.
+
+**Status: open, and the classification is the open part.** The implementation
+is unaffected either way — `coefficients.py` solves the match it is given and
+carries the printed form beside it, and **no released number moves**, because
+$C_0\propto\mathcal B_2$ is zero in every frame this bundle has computed in.
+What changes is what the bundle may *say*, and it will not say "sign error"
+until the $\ell=0$ row's status is settled.
+
+Raised with the PI, as the author of both documents, 2026-10-13.
+
+
+### B-11 RESOLVED, 2026-10-13. **It is (89)'s sign, and (90) is correct.**
+
+The PI, as the author of both documents, recorded that the $\ell=0$ row *was*
+intended as a constraint, on Stewart--Walker grounds, and asked for it to be
+checked. Checked, it is a constraint, and the defect is one line earlier than
+this finding first placed it.
+
+**(89)'s $\delta_{\ell0}$ entry is $j_0''(0)$**, because the matching is
+$C_0\tau^{(0)}_\ell(0)+C_1\tau^{(0)\prime}_\ell(0)
++C_2\tau^{(0)\prime\prime}_\ell(0)=\mathcal S_B$ and the free-streaming
+solution is the spherical Bessel function. From the ascending series
+$j_0(x)=\sin x/x=1-\tfrac{x^2}6+\dots$,
+
+$$j_0''(0)=-\tfrac13,\qquad j_1'(0)=+\tfrac13,\qquad j_2''(0)=+\tfrac2{15}$$
+
+verified symbolically and against `scipy`. **(89) prints that entry as
+$+\tfrac13$.** With the printed sign the $\ell=0$ row gives
+$-C_0=-\tfrac52a\mathcal B_2$; with $j_0''(0)$'s true sign it gives
+$-C_0=+\tfrac52a\mathcal B_2$ — **exactly (90)**, alongside $C_1$ and $C_2$,
+which never disagreed.
+
+| | $-C_0$ | $-C_1$ | $-C_2$ |
+|---|---|---|---|
+| (89) as printed | $-\tfrac52a\mathcal B_2$ | $\tfrac1k(a\mathcal B_1+\kappa'v_B)$ | $\tfrac1{k^2}a\mathcal B_2$ |
+| (89) with $j_0''(0)=-\tfrac13$ | $\mathbf{+\tfrac52a\mathcal B_2}$ | $\tfrac1k(a\mathcal B_1+\kappa'v_B)$ | $\tfrac1{k^2}a\mathcal B_2$ |
+| **(90) as printed** | $+\tfrac52a\mathcal B_2$ | $\tfrac1k(a\mathcal B_1+\kappa'v_B)$ | $\tfrac1{k^2}a\mathcal B_2$ |
+
+**One character in an intermediate equation, and the result everyone uses is
+right.** Four releases rest on (90) and rest on it correctly. The classification
+is therefore a **typographical defect in (89)** with no numerical consequence
+for anything published — the strongest kind of finding to be able to close,
+because it is also the kind most likely to be dismissed as pedantry when it is
+found and most expensive when it is not.
+
+**Why it had to be found anyway.** This bundle implements (89), the definition,
+rather than (90), the result — the discipline `flrw.py` applies to the expansion
+law. An implementation that transcribes (89) faithfully gets $C_0$ wrong by a
+sign, in a sector no released figure evaluates, and would have carried that into
+the first covariant run. **The defect was invisible to every reader of (90) and
+unavoidable for an implementer of (89)**, which is a fair description of what a
+reproduction bundle is for.
+
+`functions/spectra/coefficients.py` now solves the match with $j_0''(0)=-\tfrac13$
+and reproduces all three of (90). The printed-(89) value is kept beside it as a
+known-wrong alternative that must change the answer (**S12**), and
+`tests/test_coefficients.py` asserts $j_0''(0)$ from the series and from `scipy`
+rather than from itself.
+
+**One thing is not settled and is not claimed.** (89) factors a single
+$5\beta_2^{-1}$ across both its $\delta_{\ell2}$ and $\delta_{\ell0}$ entries,
+while $\tau^{(0)}_\ell$'s normalisation $\alpha_\ell=(2\ell+1)/\beta_\ell$
+differs between the two ranks. That the sign flip alone reproduces (90) exactly
+is strong evidence the sign is the whole defect; pinning the normalisation
+requires $\tau^{(0)}_\ell$'s definition written out, which is the same
+derivation the generic $\dot{\mathcal B}_0$ and $\dot{\mathcal B}_2$ relations
+need. Recorded as an **O-item against this finding**, not as doubt about it.

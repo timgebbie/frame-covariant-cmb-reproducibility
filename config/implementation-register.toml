@@ -961,3 +961,73 @@ th_k = 'identity'
 th_t = 'overall sign flipped with the rest of the kinematic terms --- \textbf{differs from Th-K}'
 bf = 'not established: observer at rest'
 p09 = 'not established'
+
+[[equations]]
+key = "c_b_coefficients_match"
+quantity = "$C_0, C_1, C_2$ from the rank-by-rank match of the integral solution"
+source = "AnnalsII"
+equation = "(89)"
+module = "functions.spectra.coefficients"
+object = "match_coefficients"
+test = "test_all_three_of_90_are_reproduced_by_the_match"
+note = "(89) is the \\emph{definition}; solved here as exact rationals, so (90) is a check on this bundle rather than a source for it. CGI with respect to a generic $u^a$, which is what lets a frame choice set the coefficients"
+
+[[equations]]
+key = "c_b_coefficients_printed"
+quantity = "$-C_0\\simeq+\\tfrac52a\\mathcal{B}_2$, $-C_1\\simeq\\tfrac1k(a\\mathcal{B}_1+\\kappa'v_B)$, $-C_2\\simeq\\tfrac1{k^2}a\\mathcal{B}_2$"
+source = "AnnalsII"
+equation = "(90)"
+module = "functions.spectra.coefficients"
+object = "c0_from_printed_89"
+test = "test_b11_is_a_sign_in_89_not_in_90"
+note = "finding \\textbf{B-11}, resolved: (90) is correct and (89) prints its $\\delta_{\\ell0}$ entry, which is $j_0''(0)=-\\tfrac13$, with the wrong sign. Invisible in the Newtonian frame, where $\\mathcal{B}_2=0$"
+
+[[equations]]
+key = "newtonian_c1"
+quantity = "$-\\tilde C_1 \\approx \\kappa'\\tilde v_B + (\\delta\\tilde T + \\Phi_A)$"
+source = "AnnalsII"
+equation = "(109)"
+module = "functions.spectra.coefficients"
+object = "newtonian_coefficients"
+test = "test_the_newtonian_specialisation_is_equation_109"
+note = "the Newtonian specialisation, recovered from the generic match rather than assumed; $\\tilde v_B = v_B/k$ falls out of it"
+
+[[equations]]
+key = "integral_solution_generic"
+quantity = "the slow-decoupling integral solution carried with a generic $u^a$: two boundary terms and one integrated term"
+source = "AnnalsII"
+equation = "(102)"
+module = "functions.spectra.integral_solution"
+object = "integral_solution"
+test = "test_the_specialisation_recovers_what_the_pipeline_computes"
+note = "the rank-two boundary term $kC_2(\\eta_*)$ against $j_{\\ell\\pm1}$ has never been evaluated by this bundle: it multiplies $C_2$, which the Newtonian frame zeroes"
+
+[[equations]]
+key = "b1_dot_newtonian"
+quantity = "$(a\\tilde{\\mathcal{B}}_1)' \\approx -a^2H\\tilde{\\mathcal{B}}_1 + k(\\Phi_A'-\\Phi_H') - 2Hak\\Phi_A + \\tfrac13k^2\\tilde\\tau_1$"
+source = "AnnalsII"
+equation = "(106)"
+module = "functions.spectra.coefficients"
+object = "newtonian_c1_prime"
+test = "test_t23_splining_the_amplitude_is_wrong_and_the_test_can_tell"
+note = "finding \\textbf{T-23}: mode-expanding a derivative is not differentiating a mode amplitude. The footnote to (105) carries $\\dot{\\mathcal{B}}_1 + 2H\\mathcal{B}_1$; a spline through the stored amplitude misses the second term and is wrong by a median of 100\\%"
+
+[[equations]]
+key = "shear_propagation_generic"
+quantity = "$\\dot\\sigma_{\\langle ab\\rangle}+2H\\sigma_{\\langle ab\\rangle}-\\mathcal{D}_{\\langle a}A_{b\\rangle}+E_{\\langle ab\\rangle}\\simeq\\tfrac12\\pi_{\\langle ab\\rangle}$, and its second derivative"
+source = "AnnalsII"
+equation = "(G.12)"
+module = "functions.spectra.coefficients"
+object = "generic_shear_derivatives"
+test = "test_the_rank_two_control_passes_symbolically"
+note = "$\\dot{\\mathcal{B}}_2$ for a generic $u^a$ --- the relation the covariant integral solution needs and that the Newtonian specialisation turns into a constraint. The second derivative reduces exactly to the printed scalar matter-dominated $(a^2\\sigma)^{\\ddot{}}$ pair"
+
+[[equations]]
+key = "c2_chain"
+quantity = "$C_2$, $C_2'$ and $C_2''$ from $\\mathcal{B}_2=\\sigma_{ab}$"
+source = "AnnalsII"
+equation = "(90)"
+module = "functions.spectra.coefficients"
+object = "c2_derivatives"
+test = "test_no_numerical_derivative_survives_in_the_c2_chain"
+note = "finding \\textbf{T-23}: nothing is splined. $a''$ comes from the same Friedmann relation the shear uses, so the background cannot disagree between them"

@@ -1636,3 +1636,399 @@ thing just past it.
 Two numerical guesses have now been falsified in a row, which is the signal to
 stop guessing. **v1.2.0's "full source assembly" is this, and it is a derivation
 of a page or two rather than a code change.**
+
+---
+
+### CORRECTION, 2026-10-13, hours after the above. **The cause named above is
+wrong, and it is kept with this note rather than rewritten.**
+
+The section above attributes the missing envelope to the delta-function
+treatment of last scattering. That is a real approximation and it is really
+there — but it is **far too small to be the cause**, and this stream reported it
+before measuring it at the level that decides.
+
+Measured properly: what enters $C_\ell$ is
+$\int dk\,k^2\mathcal P|T_\ell|^2$, so the quantity is the **phase-averaged
+mean square** of the projection over $k$, not its value at any one $k$. Taking
+a band of $k$ spanning several $j_\ell$ oscillations,
+
+$$R(\ell)=\frac{\big\langle[\int\mathcal V j_\ell\,d\eta]^2\big\rangle_k}
+{\big\langle j_\ell(k\Delta\eta_*)^2\big\rangle_k}$$
+
+| $\ell$ | 10 | 100 | 200 | 400 | 700 | 1000 | 1500 | 2000 |
+|---|---|---|---|---|---|---|---|---|
+| $R(\ell)$ | 0.992 | 0.993 | 0.975 | 0.954 | 0.901 | **0.841** | 0.740 | **0.639** |
+
+**16% at $\ell=1000$ and 36% at $\ell=2000$.** The spectrum is wrong there by a
+factor of **eleven**. Tens of percent cannot produce that, so the delta surface
+is a defect of the assembly but **not** the one this finding set out to name.
+
+**Two estimates were wrong in the same direction, and both were mine.** The
+Gaussian form $\exp[-(k\sigma)^2]$ predicts 0.19 at $\ell=1000$ where the truth
+is 0.84, and the "fraction of a $j_\ell$ oscillation spanned",
+$f=k\,\mathrm{FWHM}/\pi$, predicts failure from $f\simeq0.7$ onward. Both
+over-estimate the smearing badly, for the same reason: near its turning point
+$x\simeq\ell$, $j_\ell$ does **not** oscillate with period $\pi$ — it varies far
+more slowly, so a surface that looks thick in units of the asymptotic period is
+thin in units of the function's actual variation. **An asymptotic period used
+outside the asymptotic regime is not a scale.**
+
+**No threshold is therefore shipped on $f$.** A guard on a parameter that has
+been shown not to govern the thing would be worse than no guard: it would carry
+the authority of an enforced check and the content of a coincidence. The
+governing quantity is $R(\ell)$, it is measurable directly, and nothing will be
+enforced until what it has to be enforced against is known.
+
+**What survives of the section above**, unchanged: the spectrum is right to
+$\ell\simeq300$ and wrong above $\simeq700$; it is **not** numerics
+($k$-truncation $6\times10^{-10}$ at $\ell\le20$, $n_\eta$ derived, two routes
+exact); it is **not** the $k$ spacing (refining $dk$ from $\pi/6$ to $\pi/24$
+moves $C_\ell$ by $1.7\times10^{-3}$ and then stops); and the two weighting
+repairs are falsified. What is withdrawn is the claim that the thickness is the
+cause. **The cause is being measured by decomposing (176) into its three terms
+rather than inferred from a plausible mechanism** — which is what should have
+happened before it was reported.
+
+**The pattern, named because it has now cost three statements in two days.**
+S21, S23 and this one were each a cause inferred from a description rather than
+read out of a measurement or a source. Here the inference was worse than usual
+because a *number* was attached to it — $\ell\simeq785$ — and a number reads as
+a measurement whether or not anything measured it.
+
+### The decomposition, which is a measurement and not an inference
+
+(176)'s three terms, computed separately and then as transfers at
+$k=\ell/\Delta\eta$ (the $k$ that dominates each $\ell$), $\Lambda$CDM:
+
+| $\ell$ | $T^{\rm primary}$ | $T^{\rm Doppler}$ | $T^{\rm grav}$ | $T^{\rm total}$ | cancellation |
+|---|---|---|---|---|---|
+| 20 | $-1.078$ | $+1.022$ | $-1.9\times10^{-1}$ | $-0.246$ | 4.4× |
+| 100 | $-1.450$ | $+1.356$ | $-1.9\times10^{-2}$ | $-0.113$ | 12.8× |
+| **200** | $-1.356$ | $+1.277$ | $-4.6\times10^{-3}$ | $-0.0838$ | **16.2×** |
+| 500 | $-0.138$ | $+0.202$ | $-1.4\times10^{-3}$ | $+0.0632$ | 3.2× |
+| **1000** | $-0.0717$ | $-0.0070$ | $-4.8\times10^{-4}$ | $-0.0792$ | **0.9×** |
+| 2000 | $-0.0257$ | $-0.0080$ | $-7.2\times10^{-5}$ | $-0.0337$ | 0.8× |
+
+**The primary and Doppler transfers are opposite in sign and nearly equal at low
+$\ell$**: the spectrum there is the residue of a cancellation that reaches **one
+part in sixteen** at $\ell=200$. Above $\ell\simeq500$ the cancellation fails, the
+two terms take the same sign, and the total becomes the primary term alone —
+which carries no envelope. **The growth is not something added at high $\ell$; it
+is something that stops being subtracted.**
+
+The gravitational term is $10^{-2}$–$10^{-5}$ of either and is not involved.
+
+**The hypothesis this points at, stated as a hypothesis.** (177) carries
+$\kappa'v_B$ and (178) carries $(\kappa'v_B)'$ — the boundary term and the bulk
+term of one integration by parts of a visibility-weighted Doppler source.
+Carrying both would double-count, and a double-count that partially undoes
+itself is exactly a near-cancellation that holds while the boundary term
+dominates and breaks when it does not. **This stream has now been wrong about a
+cause three times in two days and will not act on this one before reading (98),
+(102) and the §5 tilde mapping against (176)–(179).** The table above is a
+measurement; the sentence before it is not.
+
+**Why it matters beyond correctness, and before v1.5.0.** A spectrum that is the
+residue of a 16× cancellation is numerically fragile — it is where the $dk$
+bias of $1.7\times10^{-3}$ and every other small error get amplified. v1.5.0's
+$O(\varepsilon^2\ell)$ term would be added on top of that. If the assembly is
+carrying a term twice, removing it does not merely fix the envelope: it removes
+the cancellation, and the quartic then sits on something stable. **That is the
+argument for fixing it before the interface freezes rather than after.**
+
+### The reading, done 2026-10-13 against `sources/annals/cbrII.tex`
+
+**A-2's flagged question is answered, and the answer clears the bundle.**
+
+| read from | says |
+|---|---|
+| (90) `C-B-coef` | $-C_1(\eta)\simeq\frac1k(a\mathcal B_1+\kappa'v_B)$, and **"Note that these are CGI with respect to $u^a$"** |
+| (109) `calc-ng` | $-\tilde C_1(\eta)\approx\kappa'\tilde v_B+(\delta\tilde T+\Phi_A)$ |
+| (98) `slowdec_1` | carries an explicit $\frac1k$ on **both** baryon-velocity terms, weighted by $e^{-\kappa}$ |
+| (111) `slowdecoupling-ng` | the same three brackets as (177)–(179), **with $\kappa'\tilde v_B$ tilded** |
+| (156) `v-2nd` | $v_a^B\approx\tau_a-\frac R{\dot\kappa}[\dot v_a^B+Hv_a^B+A_a]+O(\dot\kappa^{-2})$ |
+| footnote to (152) | $\tilde{\mathcal D}_a\ln T\approx\frac ka\delta\tilde TQ_a$ but $\tilde\tau_a\approx\tilde\tau_1Q_a$ |
+
+**The $k$ factors are mode-decomposition, not notation.** $\mathcal B_1$ and
+$\Phi_A$ are *gradients* and carry $k/a$; $\tau_a$ and $v^B_a$ are *vectors* and
+do not. (90)'s $v_B$ sits beside $a\mathcal B_1$, so it is the gradient-level
+coefficient, and the $\frac1k$ that converts it is the same $\frac1k$ that
+converts $a\mathcal B_1$ into $(\delta\tilde T+\Phi_A)$. At vector level (156)
+gives $v^B_a\approx\tau_a$ at zeroth order in the scattering time, with **no
+$k$**. **So `v_b = tau_1` is correct and the bundle is faithful.**
+
+Tested anyway, because the inference had been wrong three times: setting
+`v_b = tau_1/k` **destroys the acoustic structure entirely** — $D_\ell$ becomes
+monotonically decaying, peaking at $\ell=2$ and reaching $1.7\times10^{-3}$ by
+$\ell=2000$. **Fourth falsified repair.**
+
+**One finding against the paper.** (177) writes $\kappa'v_B$ **untilded** where
+(111), the equation it is transcribed from, writes $\kappa'\tilde v_B$, and
+where (109) and (178)–(179) all keep their tildes. A dropped tilde in (177).
+It changes nothing here — the bundle implements (111)'s form — but it is a
+defect in the printed equation and belongs in the corrections record as a
+**B-finding**, not here.
+
+### What the reading leaves standing, and it is not a code defect
+
+Four repairs are now falsified and the assembly reads as faithful to (176)–(179)
+and to (111). What has **never been tested** is the paper's own stated validity
+condition for the solution being implemented. §5 introduces it as
+
+$$\kappa''\ll1,\qquad(\kappa')^2\ll1$$
+
+— the **slow-decoupling approximation** — and adds *"A further approximation
+would be to take $e^{-\kappa}\gg\kappa'e^{-\kappa}$, so that we need only
+consider the free-streaming like solutions."* Both are conditions on the
+scattering rate against the mode frequency, so **both are $k$-dependent, and
+nothing in this bundle measures where they hold.**
+
+That is a *measurement*, not a mechanism, and it is the next one: **the bundle
+may be reproducing Annals II correctly and reproducing it outside its stated
+range.** T-16's lesson in a new place — the question is not only whether the
+code matches the equation but whether the equation was claimed to apply here.
+
+**Not asserted as the cause.** Three causes have been asserted and withdrawn in
+two days. This one will be measured before it is named.
+
+## T-20 — Annals II's two weightings are each right in one regime, and neither in both
+
+**Found 2026-10-13, reading `int_soln_damping` and re-reading the variant runs.**
+The reading first **cleared** the stated approximations:
+
+- $(\kappa')^2\ll1$, $\kappa''\ll1$ multiply **$C_2$ alone** in the general damped
+  solution's last line — and $\tilde C_2\approx0$ identically in the Newtonian
+  frame, where $\tilde\sigma_{ab}\approx0$. **The approximation is exact here.**
+- the $\int\kappa'e^{-\kappa}[C_1-2C_2]$ line that (102) drops is suppressed
+  relative to the retained $\int e^{-\kappa}C_1'$ as $\kappa'/k$, since $C_1$
+  varies on the mode timescale. **It gets better at high $k$, not worse.**
+
+So neither stated approximation explains a high-$\ell$ failure. What does show
+up is the weighting, and it shows up as a **crossover**:
+
+| | $2\le\ell\le30$ | first peak | $\ell\simeq870$ | $\ell=2000$ |
+|---|---|---|---|---|
+| $\mathcal V$, as (178)–(179) print it | **no plateau**, $D_\ell\propto\ell^2$ | 772 at $\ell\simeq247$ | 121 | **11.1** |
+| $e^{-\kappa}$, (98)'s weighting (A-2, the release) | plateau flat to 30% | 3.17 at $\ell\simeq200$ | **11.5** | 2.31 |
+
+**The visibility weighting has the envelope and no plateau. The opacity
+weighting has the plateau and no envelope.** The $\mathcal V$ variant falls by a
+factor of **seventy** from its peak; the $e^{-\kappa}$ variant rises by a factor
+of four past its own.
+
+**This reframes A-2.** A-2 recorded the opacity substitution as a departure
+chosen to recover the Sachs–Wolfe plateau, with the plateau measured over
+$2\le\ell\le200$ — and it is right about that, as the table confirms. What it
+could not see, and what the $\ell=507$ ceiling of **T-17** guaranteed nobody
+would see, is that the same substitution removes the high-$\ell$ envelope.
+**It is not a choice between a better and a worse weighting. It is a choice
+that cannot be made globally**, and the bundle has been making it globally.
+
+The mechanism is a smearing mismatch and is consistent with everything measured:
+the primary term is a **delta at $\eta_*$** and is never smeared; its
+cancellation partner, the Doppler term, is weighted by $e^{-\kappa}$ and so is
+spread over the whole post-decoupling history. At low $k$ the $j_\ell$
+oscillation is slow and both survive; at high $k$ the spread partner averages
+towards zero while the delta does not, **so the 16:1 cancellation of T-19 stops
+being a cancellation**. Under $\mathcal V$ both partners are narrow, which is
+why that variant keeps its envelope.
+
+**Still not asserted as the whole cause.** Three causes have been named and
+withdrawn; this one is a measured crossover and a mechanism consistent with it,
+and the repair is not obvious — the two assignments that the mechanism suggests
+have both been tried and both fail (T-19's falsified repairs (i) and (ii)).
+What is now established is narrower and firmer: **the weighting cannot be a
+single global choice, and the release's choice is the one that fails at high
+$\ell$.**
+
+## T-21 — the pipeline computes R and then passes zeros to the damping scale
+
+```python
+k_d = diffusion_scale(recombination, r_of_eta=recombination.kappa_prime * 0.0)
+```
+
+`diffusion_scale`'s own docstring carries $R$ in the integrand,
+$[R^2+\tfrac45(1+R)]/(1+R)^2$, and `run` computes
+`r = baryon_photon_ratio(a, omega_b_h2=omega_b_h2)` **two lines earlier**. The
+call site then constructs an array of zeros out of `kappa_prime` and passes
+that, with no comment saying why.
+
+Measured: $R(\eta_*)=0.6125$, and
+
+| | $k_D(\eta_*)$ | $\ell_D=k_D\Delta\eta$ |
+|---|---|---|
+| $R=0$, as called | 557.8 | **1783** |
+| $R$ as the bundle computes it | 621.2 | **1985** |
+
+**11%, and in the wrong direction** — including $R$ makes the damping weaker
+still, against a standard $\ell_D\simeq1300$–1500 that both already overshoot by
+a third. So this is not T-19's cause and fixing it does not help the envelope.
+
+### CORRECTION, 2026-10-13, on the PI supplying Planck 2018 VI
+
+**The paragraph above is wrong about the direction, and the error is this
+stream's.** It compared against "a standard $\ell_D\simeq1300$–1500", which was
+recalled rather than sourced and which conflates the $\ell$ where the damping
+envelope becomes *visible* with $k_D\chi_*$. Planck 2018 VI Table 2 tabulates
+$k_D$ and $\theta_*$ directly, and they give
+
+$$\chi_*=r_*/\theta_*=13873\ \text{Mpc},\qquad \ell_D=k_D\chi_*=\mathbf{1954}$$
+
+Against that number:
+
+| | $\ell_D$ | vs Planck |
+|---|---|---|
+| $R$ passed as zeros, **as the code calls it** | 1783 | $-8.8\%$ |
+| $R$ as the bundle computes it, **the fix** | **1985** | **$+1.6\%$** |
+
+**So the fix lands the number and the defect is the thing costing 9%.** T-21
+goes from "a defect that does not help" to "a defect whose correction brings the
+Silk scale to 1.6% of Planck's". The conformal geometry is corroborated at the
+same time: $\Delta\eta_*=3.1955\,c/H_0$ against Planck's
+$\chi_*=3.1171\,c/H_0$, **+2.5%** at round-number parameters, which is why the
+$\ell=k\Delta\eta$ comparisons throughout this record are meaningful at all.
+
+**The lesson is the one T-16 taught in a different place.** A remembered
+constant is not a measurement, and it reads like one. The comparison that
+mattered took one table and the PI had to supply it. See
+`provenance/COSMOLOGICAL-PARAMETERS-v1.md`.
+
+It is recorded anyway, and as a defect rather than an approximation, because
+**a quantity the code computes and then discards at one call site is not a
+choice — it is a choice nobody made.** A-1 and A-2 are approximations: named,
+reasoned, measured. `kappa_prime * 0.0` is an idiom for "zeros" written in terms
+of an unrelated array, which is what a placeholder looks like when it survives.
+The separate question of why $\ell_D$ overshoots the standard value by a third
+is **open and is not this**.
+
+## T-22 — the bundle is already half-Planck, and nothing says so
+
+**Found 2026-10-13, on the PI's suggestion that the baseline move to current
+best-fit parameters.** The suggestion is right, and the state it lands on is
+sharper than it looks.
+
+```python
+CDM_MODEL  = Background(omega_m=1.0, omega_lambda=0.0, omega_r=0.0, h0=1.0)
+LCDM_MODEL = Background(omega_m=0.3, omega_lambda=0.7, omega_r=0.0, h0=1.0)
+```
+
+against `omega_b_h2: float = 0.0224` appearing as a **bare default in eight
+places** — `acoustic.py` twice, `decoupling.py` twice, `peebles.py`,
+`diagnostic_d5_sachs_wolfe.py`, `emit_handover_fields.py`,
+`test_frame_transform.py` — and `omega_gamma_h2: float = 2.47e-5` beside it.
+**Neither is cited anywhere.** $\Omega_bh^2=0.0224$ is Planck's; $0.3/0.7$ are
+round numbers; $\Omega_r$ is exactly zero.
+
+So the recombination history is computed at a Planck baryon density inside a
+background that is not Planck's and carries no radiation, and **the bundle whose
+discipline is that every weight is cited to a published equation number has two
+uncited empirical constants in its hot path.**
+
+### Three separate problems, and only one of them is the PI's suggestion
+
+1. **Uncitedness**, which is a defect now and independent of any parameter
+   change. A constant with no source cannot be audited, and `tables/parameters`
+   exists precisely to carry this.
+2. **Internal inconsistency.** $\Omega_bh^2$ is only meaningful with an $h$, and
+   the models carry $h_0=1$. $\Omega_b h^2 = 0.0224$ beside $\Omega_m=0.3$ is
+   not one cosmology.
+3. **$\Omega_r=0$ exactly**, while $R=3\rho_M/4\rho_R$ is computed from a photon
+   density that is not zero. Radiation is omitted from the background geometry
+   and retained in the baryon-photon ratio.
+
+### Why this is probably not cosmetic
+
+Two open discrepancies in this record are geometry-sensitive and both point the
+same way: the first acoustic peak comes out at $\ell\simeq200$ against a
+standard 220, and $\ell_D\simeq1783$ against a standard 1300–1500. Every
+$\ell=k\Delta\eta$ depends on the conformal geometry, and $\Omega_r=0$ gets the
+early-time part of it wrong. **Some fraction of what T-19 and T-20 are chasing
+may be the parameter point rather than the assembly**, and that has to be
+separated before either is closed. It does not explain a factor of eleven; it
+may well explain ten per cent of a peak position.
+
+### What is proposed, for v1.2.0 and beside the 5b work
+
+- A **named, stamped** $\Lambda$CDM parameter set, with the release, table and
+  column recorded in `provenance/`, on the `conventions-source.txt` mechanism.
+  *Which* best fit is a real choice — TT+lowE and TT,TE,EE+lowE+lensing differ —
+  so it is named, not "Planck".
+- **The round-number $\Lambda$CDM is kept beside it**, because every released
+  v1.0.0 and v1.1.0 $\Lambda$CDM figure used it and deleting it makes them
+  irreproducible. Decision **S12**'s rule, applied to a cosmology.
+- **`CDM_MODEL` does not change.** It is *Annals II* §8.3.2's own model — flat,
+  matter dominated — and changing it stops reproducing the paper. The faithful
+  model and the realistic one are different objects and the bundle carries both,
+  as it already carries both weightings and both recombinations.
+- $\Omega_r\ne0$ for the stamped set, and the cited constants cited.
+
+**"No empirical data are required" stays true and should be said rather than
+assumed.** A parameter point is not data: nothing here is fitted, no likelihood
+is evaluated, and `CITATION.cff`'s sentence survives. But a bundle that carries
+Planck's $\Omega_bh^2$ silently is one wording away from being wrong about
+itself, which is the kind of thing this record exists for.
+
+**Not yet actioned.** The exact column must come from the paper; web search is
+unavailable in this session, so the values are the PI's to confirm.
+
+## T-23 — mode-expanding a derivative is not differentiating a mode amplitude
+
+**Found 2026-10-13, wiring (102) into the integral solution**, on the first
+attempt to carry $u^a$ generic. It is the failure mode conventions row
+**C3.1a** was written to predict, met in a different place from the one it
+names.
+
+The obvious way to assemble (102) is to build $C_0,C_1,C_2$ on the $\eta$ grid
+and spline them for $C_1'$ and $C_2''$. **That is wrong, and not slightly.**
+*Annals II* mode-expands $\mathcal D_{\langle a}\dot{\mathcal B}_{b\rangle}$
+with the footnote to (105):
+
+$$\mathcal D_{\langle a}\dot{\mathcal B}_{b\rangle}\approx
+-\frac ak\big(\dot{\mathcal B}_1+2H\mathcal B_1\big)
+\mathcal D_{\langle a}\mathcal D_{b\rangle}Q$$
+
+The $2H\mathcal B_1$ comes from the $1/a$ inside $\tilde{\mathcal B}_1\approx
+\frac ka(\delta\tilde T+\Phi_A)$ and is **invisible to a spline through the
+stored amplitude**. Measured against (106), a plain conformal derivative of
+$a\tilde{\mathcal B}_1$ is wrong by a **median of 100%** over
+$\eta_*<\eta<0.8\eta_0$, worst 7.2, with the missing term worth **60% of the
+whole**. Near last scattering the ratio is 0.70.
+
+**This is why *Annals II* derives (106) rather than differentiating (105)**, and
+the reason was not obvious until the derivative was needed generically.
+
+### Consequence for the architecture
+
+`integral_solution` takes `c1_prime` and `c2_second` as **supplied inputs**. It
+does not differentiate, and will not: each $\mathcal B_A$ owes its own
+mode-expanded derivative relation, and that relation is frame-specific because
+the kinematic quantities are. `coefficients.newtonian_c1_prime` implements
+(106)+(107) for the Newtonian frame; **a generic frame owes the same derivation
+for $\mathcal B_0$ and $\mathcal B_2$, and that is the substance of v1.2.0's
+covariant extension** --- not the wiring, which took an afternoon, but the three
+derivative relations, which did not exist.
+
+### The recovery, measured
+
+With $\tilde C_1'$ from (106), (102) specialised to $\tilde\sigma_{ab}=0$
+reproduces what `pipeline.run` has always computed:
+
+| | worst relative difference |
+|---|---|
+| $C_1'$ by spline through the amplitude | **4.7** |
+| $C_1'$ from (106) | **3.0e-2** |
+
+The integrands are **analytically identical** --- expanding
+$-\tilde C_1'=(\kappa'\tilde v_B)'+\tfrac1k(a\tilde{\mathcal B}_1)'$ gives
+$(\kappa'\tilde v_B)'+(\Phi_A'-\Phi_H')-aH(\delta\tilde T+3\Phi_A)+\tfrac13k
+\tilde\tau_1$, which is (178)+(179) term for term, including where (179)'s
+$3\Phi_A$ comes from --- and the boundary terms likewise. The residual 3% is
+not structural: the two routes differ by $1.2\times10^{-3}$ in the boundary
+value at $\eta_*$ (the pipeline interpolates $S_P$ linearly where this splines
+it, across a grid cell over which $S_P$ moves 28%), and **T-19's cancellation
+amplifies sub-0.2% differences in the pieces into 3% in their residue**. The
+largest discrepancies sit at exactly the $\ell$ where the total is smallest.
+
+That amplification is itself the finding restated: a spectrum assembled as a
+small difference of large terms converts every small error into a large one,
+and this is the second independent place it has shown up.
