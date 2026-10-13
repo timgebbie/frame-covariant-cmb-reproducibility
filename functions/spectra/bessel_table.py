@@ -46,14 +46,37 @@ class BesselTable:
         x_max: float,
         *,
         ell_min: int = 0,
+        ells: np.ndarray | None = None,
         points_per_period: int = 12,
     ) -> "BesselTable":
-        """Tabulate j_l(x) for l in [ell_min, ell_max] on [0, x_max]."""
+        r"""Tabulate $j_\ell(x)$ on $[0,x_{\max}]$, for `ells` or for
+        $[\ell_{\min},\ell_{\max}]$.
+
+        **`ells` tabulates only the multipoles asked for** --- finding **T-18**.
+        The contiguous form builds every $\ell$ up to $\ell_{\max}$ whether or
+        not the caller wants it, which is free at $\ell_{\max}=400$ and is not
+        free at 2000: the spectrum is computed on a *logarithmic* $\ell$ grid of
+        about thirty points, so the contiguous build is ~60x the splines, and at
+        the $x_{\max}$ a high-$\ell$ run needs it comes to some 1.5 GB of cubic
+        coefficients, nearly all of them for multipoles nothing will ever ask
+        for. The sparse form is the same table with the unasked rows left out.
+
+        The contiguous path is kept and is unchanged, because the diagnostics
+        and the low-$\ell$ release figures use it and there is no reason to
+        move them.
+        """
         if x_max <= 0:
             raise ValueError("x_max must be positive")
         n = max(int(points_per_period * x_max / pi), 64)
         x = np.linspace(0.0, x_max, n)
-        ell = np.arange(ell_min, ell_max + 1)
+        if ells is None:
+            ell = np.arange(ell_min, ell_max + 1)
+        else:
+            ell = np.unique(np.asarray(ells, dtype=int))
+            if ell.size == 0:
+                raise ValueError("ells is empty")
+            if ell[0] < 0:
+                raise ValueError("ells must be non-negative")
         values = np.empty((ell.size, x.size))
         for i, l in enumerate(ell):
             values[i] = spherical_jn(int(l), x)
@@ -61,10 +84,19 @@ class BesselTable:
         return cls(ell=ell, x=x, values=values, _splines=splines)
 
     def __call__(self, ell: int, x: np.ndarray | float) -> np.ndarray:
-        """j_l at arbitrary x, by interpolation. Zero outside the tabulated range."""
-        idx = int(ell) - int(self.ell[0])
-        if not 0 <= idx < self.ell.size:
-            raise ValueError(f"ell={ell} outside the tabulated range {self.ell[0]}..{self.ell[-1]}")
+        """j_l at arbitrary x, by interpolation. Zero outside the tabulated range.
+
+        **Looked up, not subtracted.** The index used to be
+        `ell - self.ell[0]`, which is correct only while the tabulated set is
+        contiguous; a sparse table built from `ells` would have silently
+        returned a *different* multipole's Bessel function rather than raising.
+        """
+        idx = int(np.searchsorted(self.ell, int(ell)))
+        if idx >= self.ell.size or int(self.ell[idx]) != int(ell):
+            raise ValueError(
+                f"ell={ell} is not tabulated; this table carries "
+                f"{self.ell.size} multipole(s) from {self.ell[0]} to {self.ell[-1]}"
+            )
         out = self._splines[idx](np.asarray(x, dtype=float))
         return np.nan_to_num(out, nan=0.0)
 

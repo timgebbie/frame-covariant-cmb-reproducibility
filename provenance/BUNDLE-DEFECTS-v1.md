@@ -1376,3 +1376,263 @@ looking at the wrong object. This is the same family seen from a new side: a
 gate that hashes an artefact looks like it is checking the artefact, and is
 checking only that it has not moved. Asking what a gate does *not* match
 remains the cheapest question this project knows.
+
+## T-17 — the bundle's $\ell$ ceiling was 507, set by a quantity equal to one
+
+**Found 2026-10-12, while measuring the forward-evaluation cost for the
+`bundle1-v1.5.0` interface question.** Timing `pipeline.run` over a doubled
+$\ell$ grid raised, from the first line of (186)'s prefactor:
+
+```
+OverflowError: (34, 'Numerical result out of range')
+  prefactor = float(beta(ell)) ** 2 * float(alpha(ell)) ** 2 / (2 * ell + 1) ** 2
+```
+
+That prefactor is $\beta_\ell^2\alpha_\ell^2/(2\ell+1)^2$, and it is **exactly
+one for every $\ell$** — the module docstring says so, three times, and it is
+the reason the bundle can claim that an $\alpha_\ell$ or $\beta_\ell$ slip
+cannot hide in the spectrum. It was being evaluated by converting each factor
+to a double and then dividing. $\beta_\ell=(\ell!)^22^\ell/(2\ell)!$ is
+$6.3\times10^{-270}$ at $\ell=900$, so $\beta_\ell^2$ underflows to zero while
+$\alpha_\ell^2=(2\ell+1)^2/\beta_\ell^2$ overflows, and their exact ratio of one
+was unreachable through them.
+
+Bisected, the largest $\ell$ at which the released code could return a $C_\ell$
+was **507**. At $\ell=507$ the prefactor evaluated to `1.0000000000000004`; at
+508 it raised. The covariant route inherited the same ceiling through
+`multipole_mean_square`, whose own coefficient
+$\beta_\ell\alpha_\ell^2=(2\ell+1)^2/\beta_\ell$ stops being a double near
+$\ell\simeq1500$.
+
+### Why 507 is the wrong number to have as a ceiling
+
+The first acoustic peak is at $\ell\simeq220$ and the damping tail runs to
+$\ell\simeq2000$. The ceiling therefore sat **between the second peak and the
+third**, which is nowhere: too high for v1.0.0 to have noticed, since the
+release claims $2\le\ell\le20$ and F3 computes to 400, and too low for anything
+planned.
+
+**v1.5.0 is an $O(\epsilon^2\ell)$ correction to the high-$\ell$ spectrum.
+Its entire content lives above $\ell=507$.** The release that exists to add the
+high-$\ell$ term could not compute the high-$\ell$ spectrum, and nothing said
+so. v1.2.0's acoustic peaks would have met it first.
+
+### The correction
+
+The coefficients are combined in $\mathbb Q$ and converted once, which is what
+`weights.py` already instructs — *multiply by `4 * math.pi` at the point of
+numerical use, never before a comparison*. `_mode_coefficient` and
+`_covariant_coefficient` return `Fraction`s; both are asserted equal to one over
+$2\le\ell\le2000$. `cl_covariant_route` no longer routes through
+`multipole_mean_square`: $\Delta_\ell$'s $\beta_\ell$ cancels the $1/\beta_\ell$
+in the mean square, and cancelling it exactly costs nothing while forming both
+halves in doubles costs the answer. The published route is unchanged — (187)
+then (188), in that order — with the division done before the conversion rather
+than after.
+
+`multipole_mean_square` is the one quantity here that genuinely exceeds the
+double range, and it keeps doing so: the multipole mean square really is that
+large in a normalisation where $\beta_\ell$ is that small. It now raises with
+the reason named and points at the route that stays finite, rather than
+returning `inf` into a spectrum.
+
+**No released number changes.** At $\ell\le507$ the old prefactor was one to
+within a few ulp, so the correction moves released artefacts at the
+$10^{-16}$ level and the portable manifest — which binds at nine significant
+figures — is unmoved.
+
+### The checking defect, which is the half worth keeping
+
+`tests/test_angular.py` **already asserted this identity exactly**, as
+`Fraction`s, at $\ell=1000$:
+
+```python
+assert beta(ell) ** 2 * alpha(ell) ** 2 / Fraction(2 * ell + 1) ** 2 == 1
+```
+
+It passed. It had always passed. It asserts the identity at an $\ell$ where the
+code it is meant to be testing **raises**, because the test evaluates the
+expression in exact arithmetic and the implementation evaluated it in doubles.
+The test proved the mathematics and said nothing whatever about the code.
+
+That is a new member of the family — T-3, T-6, T-12, T-15, T-16 were each a
+check looking at the wrong object, and this one looks at the right object in the
+wrong arithmetic. **An exact assertion about an expression is not a test of an
+implementation that evaluates it differently**, and the gap is invisible exactly
+where it matters, because exact arithmetic is precisely what does not overflow.
+`test_cl_is_computable_above_the_old_ell_ceiling` now calls the functions.
+
+### What it says about the interface freeze
+
+Had `bundle1-v1.5.0` frozen its $\ell$ range before this was found, the frozen
+number would have been an artefact of a double-precision intermediate in a
+quantity equal to one, and P2-B would have inherited it as a physical limit.
+The cheapest moment to find a boundary defect is before the boundary is
+declared, which is the argument for declaring it now and the argument for
+measuring rather than describing the code when answering what it can do.
+
+## T-18 — the Bessel table built every multipole, asked for or not
+
+**Found 2026-10-13, on the first run past T-17's ceiling.** `pipeline.run` built
+its table as
+
+```python
+table = BesselTable.build(ell_max=int(ells.max()), x_max=...)
+```
+
+and `BesselTable.build` tabulates the **contiguous** range
+$[\ell_{\min},\ell_{\max}]$. But `ells` is logarithmic and sparse — the release
+grid is 24 points from 2 to 400, the high-$\ell$ grid 38 points from 2 to 2000 —
+so the table carried about **fifty-three times** the multipoles anybody asked
+for, each with its own cubic spline.
+
+Measured at the $x_{\max}$ a high-$\ell$ run needs ($k_{\max}=1500$,
+$x_{\max}=4878$, 18631 samples):
+
+| | multipoles | values | splines | total |
+|---|---|---|---|---|
+| contiguous $0\ldots2000$ | 2001 | 284 MB | 1138 MB | **1.39 GB** |
+| the 38 actually requested | 38 | 5.4 MB | 21.6 MB | **0.026 GB** |
+
+At $\ell_{\max}=400$ this is 57 MB and nobody notices. **It becomes 1.4 GB at
+exactly the $\ell_{\max}$ T-17 just made reachable**, which is the pattern worth
+naming: removing one ceiling exposes the next, and the next one had never been
+under load because the first one stopped everything short of it.
+
+### The correction, and the bug it would have hidden
+
+`build` takes an optional `ells`, and `pipeline.run` passes the grid it was
+given. The contiguous path is unchanged and still used by the diagnostics and
+the low-$\ell$ figures.
+
+`__call__` had to change with it, and this is the part worth keeping. It read
+
+```python
+idx = int(ell) - int(self.ell[0])
+```
+
+which is correct **only** while the tabulated set is contiguous. Against a
+sparse table that arithmetic lands on a valid index of the **wrong multipole** —
+asking for $j_{400}$ and receiving $j_{37}$ — silently, with no error and a
+plausible-looking spectrum out the far end. It is now a lookup that raises on a
+multipole the table does not carry.
+
+**The defect and its fix were one keystroke apart**, which is the whole argument
+for making the index say what it means rather than exploiting a property of the
+current caller. T-3, T-16 and this are the same shape: an expression that is
+true of the inputs it happens to receive, and silent when it stops being.
+
+## T-19 — there is no last-scattering-thickness damping, and the spectrum needs it first
+
+**Found 2026-10-13, on the first spectrum computed past T-17's ceiling**, which is
+the point: this defect lives entirely above $\ell\simeq700$ and the bundle could
+not reach $\ell=508$.
+
+### What the high-$\ell$ spectrum does
+
+$\Lambda$CDM and standard CDM, $k_{\max}=1500$ (so the grid passes the Silk
+cut-off, $\exp[-(k_{\max}/k_D)^2]=7.3\times10^{-4}$), $n_\eta$ derived at 18551,
+twelve samples per oscillation, $n_s=0.96$, normalised to $\ell=2$:
+
+| $\ell$ | 2 | 10 | 20 | 100 | **200** | 250 | 300 | 570 | **870** | 1300 | 2000 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| $\Lambda$CDM | 1.00 | 0.76 | 0.87 | 2.3 | **3.17** | 3.09 | 3.04 | 7.4 | **11.5** | 5.7 | 2.31 |
+| CDM | 1.00 | — | — | — | — | — | — | — | **25.8** | — | 2.86 |
+
+**What is right.** The Sachs–Wolfe plateau is flat to within 30% over
+$2\le\ell\le30$. The first acoustic peak is at $\ell\simeq200$ against a standard
+220, and the first trough follows at $\ell\simeq250$–300. The peak *spacing* is
+about right.
+
+**What is wrong.** $D_\ell$ **grows** through the acoustic region instead of
+falling: it reaches $11.5\times$ the $\ell=2$ value at $\ell\simeq870$ for
+$\Lambda$CDM and $25.8\times$ for CDM. A real spectrum's peaks decline under the
+damping envelope. **There is no damping tail here at all.**
+
+### It is not numerics, and that is established rather than assumed
+
+| | measured |
+|---|---|
+| $k$-grid truncation, top 10% dropped, $\ell\le20$ | $6.0\times10^{-10}$ |
+| the same over every computed $\ell$ | $1.3\times10^{-6}$ |
+| $\eta$ samples per $j_\ell$ oscillation at $k_{\max}$ | 12.0, derived (T-3) |
+| two-route gap | exactly 0 (T-17) |
+| `reaches_diffusion_scale` | **True** |
+
+So T-3's and T-16's machinery earns its keep here: it says, before any argument
+about the physics, that the quadrature is converged and the error is in the
+**source assembly**.
+
+### The cause
+
+`pipeline.run` assembles the primary term as
+
+```python
+primary_at_star * j_l(k * (eta_0 - eta_star))
+```
+
+— the visibility replaced by a **delta function at $\eta_*$**. Last scattering is
+instantaneous, so the $j_\ell$ oscillations are never averaged across the
+surface's width and nothing suppresses high $\ell$ from that direction. The only
+suppression left is Silk, $\exp[-(k/k_D)^2]$, and $k_D$ is stipulated at
+$\eta_*$.
+
+Measured, the two scales are not interchangeable:
+
+| suppression | scale | $\ell=k\,\Delta\eta$ |
+|---|---|---|
+| Silk, $k_D(\eta_*)$ | 557.8 | **1807** |
+| the visibility's own width, $1/\sigma_\eta$ (FWHM $0.00972$) | 242.3 | **785** |
+
+**The spectrum departs at $\ell\simeq700$.** The thickness scale sits at 785 and
+the Silk scale more than twice as far out, so the one the bundle implements
+cannot do the job of the one it omits.
+
+**And the width was measured at v1.1.0, by the release's own named deliverable.**
+Peebles recombination moved the visibility's FWHM from $\Delta z\simeq120$ to
+$\simeq167$, and `RELEASE-NOTES-v1.1.0.md` says in terms: *"The visibility width
+is what fixes the Silk damping envelope, which is why acceptance criterion 5b was
+blocked on this module."* The assembly then evaluates the primary source at a
+single $\eta$ and throws that width away. **The release computed the right number
+and did not use it.**
+
+### Two repairs tried, both falsified, both the same way
+
+Recorded because a wrong turn costs more when it is not written down.
+
+**(i) Split (178)'s bracket.** A-2 moved the whole Doppler bracket to the
+opacity; probing it showed 74–82% of its line-of-sight weight now sits at
+$\eta>\eta_*$, against a $\tau_1$ frozen at the end of tight coupling. So:
+$(1/3)k\tau_1$ on the visibility, $(\kappa'v_B)'$ on the opacity — following
+A-2's own note that (98) *"prints the two weights separately"*. **Result: worse
+at both ends.** The plateau dips to 0.48 at $\ell=16$ and the high-$\ell$ growth
+reaches $23\times$.
+
+**(ii) Integrate the primary against $\mathcal V$** rather than evaluating it at
+$\eta_*$. **Result: no plateau at all** — $D_\ell$ reaches $273\times$ at
+$\ell=200$, which is $C_\ell\simeq$ constant, A-2's pathology exactly.
+
+Both failures have one shape: **moving a term onto the visibility makes
+$\mathcal V\kappa'\sim\kappa'^2e^{-\kappa}$ dominate**, with
+$\kappa'\simeq1.4\times10^4$ at last scattering. The $\kappa'$ in (177)'s
+$\kappa'v_B$ and the $\kappa'$ inside $\mathcal V=\kappa'e^{-\kappa}$ are not
+independent, and the assembly is double-counting or mis-assigning one of them.
+
+### What is actually blocked, and it is not numerical
+
+A-2 ends: *"The tilde variables of §5 carry factors of $k$ relative to the
+untilded ones of (98), and this stream has not derived that mapping in full ...
+**the reading of $\tilde v_B$ is the thing to check if this is ever
+revisited**."*
+
+It is now revisited, and that sentence has gone from a footnote to the blocker.
+A-2 was established over $2\le\ell\le200$, where neither failure mode is visible;
+T-17 then kept the bundle out of the range where they are. **Two defects hid each
+other**, which is the fourth time in this record that a ceiling has concealed the
+thing just past it.
+
+**The next step is reading, not computing**: (98) and its three brackets, the
+(102) visibility substitution, and the §5 tilde mapping, against (176)–(179).
+Two numerical guesses have now been falsified in a row, which is the signal to
+stop guessing. **v1.2.0's "full source assembly" is this, and it is a derivation
+of a page or two rather than a code change.**

@@ -216,8 +216,18 @@ def run(
     tight_coupling_factor: float = 6.0,
     damping_epoch: str = "star",
     expansion_coupling: bool = False,
+    doppler_weighting: Weighting | None = None,
 ) -> SpectrumRun:
     """Background -> C_l. `weighting` is required; see the module docstring.
+
+    **`doppler_weighting` separates two approximations the code had conflated.**
+    `provenance/SOURCE-APPROXIMATIONS-v1.md` records **A-1** (which weight the
+    *gravitational* source of (179) carries) and **A-2** (which weight the
+    *Doppler* source of (178) carries) as two decisions with two reasons. This
+    function passed one `weighting` to both. `None` keeps that --- so no
+    released number moves --- and an explicit value sets (178)'s weight
+    independently, which is what finding **T-19** needed in order to be
+    measured at all.
 
     `n_eta=None` derives the grid from `k_com.max()` via `required_n_eta`. An
     explicit value below that requirement raises: see finding T-3, where a
@@ -256,6 +266,10 @@ def run(
     visibility = np.interp(eta, recombination.eta, recombination.visibility)
     opacity = np.interp(eta, recombination.eta, recombination.opacity)
     gravitational_weight = visibility if weighting is Weighting.ANNALS_II else opacity
+    # A-1 is the gravitational weight, A-2 the Doppler weight: two approximations,
+    # recorded separately, and until now driven by one knob. See T-19.
+    doppler_choice = weighting if doppler_weighting is None else doppler_weighting
+    doppler_weight = visibility if doppler_choice is Weighting.ANNALS_II else opacity
     k_d = diffusion_scale(recombination, r_of_eta=recombination.kappa_prime * 0.0)
     # **The release stipulates k_D at last scattering; the running k_D(eta) is
     # the fuller statement.** Both are kept and neither is hidden: `"star"` is
@@ -277,9 +291,14 @@ def run(
     damping_k = (damping_k_star if damping_epoch == "star"
                  else np.asarray(k_d(np.minimum(eta, eta_star)), dtype=float))
 
-    # one Bessel table serves every (k, eta) pair: j_l depends on k*dEta only
+    # One Bessel table serves every (k, eta) pair: j_l depends on k*dEta only.
+    # **Only the requested multipoles are tabulated** --- finding T-18. `ells`
+    # is logarithmic and sparse, so building the contiguous 0..ell_max range
+    # spends ~60x the memory and the build time on multipoles nothing asks for,
+    # which is unnoticeable at ell_max=400 and is 1.5 GB at ell_max=2000.
     table = BesselTable.build(
-        ell_max=int(ells.max()), x_max=float(k_com.max() * (background.eta_0 - eta[0])) + 20.0
+        ell_max=int(ells.max()), ells=ells,
+        x_max=float(k_com.max() * (background.eta_0 - eta[0])) + 20.0,
     )
 
     transfer = np.zeros((ells.size, k_com.size))
@@ -323,7 +342,7 @@ def run(
             np.interp(eta_star, eta, source_primary(history, scattering, damping_total=damping))
         )
         integrated = source_doppler(
-            history, scattering, float(k), weight=gravitational_weight
+            history, scattering, float(k), weight=doppler_weight
         ) + source_integrated(
             history, scattering, float(k),
             aH=aH, isw_sign=isw_sign, weight=gravitational_weight,

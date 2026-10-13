@@ -108,3 +108,89 @@ def test_the_route_comparison_states_what_the_two_routes_do_not_share():
     assert "do not share" in doc, "the property no longer says what is being compared"
     assert "harmonic weight" in doc, "the property no longer names the only difference"
     assert "T-3" in doc, "the property no longer carries the case that proves the point"
+
+
+# --------------------------------------------------------------------------
+# Finding T-17: the bundle's ell ceiling was 507, set by a quantity equal to 1.
+# --------------------------------------------------------------------------
+
+
+def test_the_two_routes_agree_as_exact_rationals():
+    r"""**The two-route statement, moved into $\mathbb Q$ where it survives.**
+
+    `max_route_difference` compared the routes in doubles, and so could only
+    make the comparison where $\beta_\ell$ and $\alpha_\ell$ were *separately*
+    representable --- $\ell\le507$. Above that the comparison did not fail, it
+    ceased to exist. Here the two rational coefficients are compared directly,
+    over the whole range v1.2.0's peaks and v1.5.0's $O(\epsilon^2\ell)$ term
+    live in.
+    """
+    from functions.spectra.angular import _covariant_coefficient, _mode_coefficient
+
+    for ell in (2, 3, 20, 220, 507, 508, 900, 1500, 2000):
+        assert _mode_coefficient(ell) == 1, f"(186)'s prefactor is not 1 at ell={ell}"
+        assert _covariant_coefficient(ell) == 1, f"(188)'s is not 1 at ell={ell}"
+        assert _mode_coefficient(ell) == _covariant_coefficient(ell)
+
+
+def test_cl_is_computable_above_the_old_ell_ceiling():
+    r"""**The regression test for T-17.**
+
+    `float(beta(ell))**2 * float(alpha(ell))**2` raised `OverflowError` for every
+    $\ell\ge508$: $\beta_\ell^2$ underflowed to zero, $\alpha_\ell^2$ overflowed,
+    and their exact ratio of one was unreachable through them. The first acoustic
+    peak is at $\ell\simeq220$ and the damping tail runs to $\ell\simeq2000$, so
+    the ceiling sat between the second peak and everything v1.5.0 exists to add,
+    with no diagnostic.
+    """
+    k = np.logspace(-2, 2, 400)
+    power, transfer = k ** (-3.0), np.exp(-k / 50.0) / (1.0 + k**2)
+    for ell in (508, 900, 1500, 2000):
+        mode = cl_mode_route(ell, k, transfer, power)
+        cov = cl_covariant_route(ell, k, transfer, power)
+        assert np.isfinite(mode) and mode > 0.0, f"mode route failed at ell={ell}"
+        assert np.isfinite(cov) and cov > 0.0, f"covariant route failed at ell={ell}"
+        # The weights are combined exactly and the quadrature is shared, so
+        # these are now the same double and not merely close.
+        assert mode == cov, f"the routes differ in the last bit at ell={ell}"
+
+
+def test_multipole_mean_square_names_its_own_ceiling():
+    r"""The one quantity that genuinely overflows must say which it is.
+
+    $\langle\tau_{A_\ell}\tau^{A_\ell}\rangle$ carries
+    $\beta_\ell\alpha_\ell^2=(2\ell+1)^2/\beta_\ell$, which is past the double
+    range by $\ell\simeq1500$. That is the number, not a defect --- so it raises
+    with the reason and points at the route that stays finite, rather than
+    returning `inf` into a spectrum. An `OverflowError` with no message is how
+    T-17 hid.
+    """
+    k = np.logspace(-2, 0, 50)
+    power, transfer = k ** (-3.0), np.exp(-((k * 30.0) ** 2))
+    with pytest.raises(OverflowError, match="T-17"):
+        multipole_mean_square(2000, k, transfer, power)
+    # and it is still the published route wherever it is representable
+    assert np.isfinite(multipole_mean_square(200, k, transfer, power))
+
+
+def test_a_sparse_bessel_table_cannot_return_the_wrong_multipole():
+    r"""Finding **T-18**'s negative control.
+
+    `BesselTable.__call__` indexed by `ell - self.ell[0]`, which is correct only
+    while the table is contiguous. Against a sparse table that arithmetic lands
+    on a valid index of a **different** multipole and returns it silently. The
+    lookup must raise instead.
+    """
+    from functions.spectra.bessel_table import BesselTable
+
+    sparse = BesselTable.build(ell_max=400, ells=np.array([2, 37, 400]), x_max=50.0)
+    assert sparse.ell.tolist() == [2, 37, 400]
+    # the old arithmetic would have mapped ell=3 to index 1, i.e. j_37
+    with pytest.raises(ValueError, match="not tabulated"):
+        sparse(3, np.linspace(0.0, 10.0, 5))
+    # and the tabulated ones are the ones asked for
+    contiguous = BesselTable.build(ell_max=400, x_max=50.0)
+    x = np.linspace(0.0, 40.0, 97)
+    for ell in (2, 37, 400):
+        assert np.allclose(sparse(ell, x), contiguous(ell, x), rtol=0, atol=0)
+    assert sparse.values.shape[0] == 3 and contiguous.values.shape[0] == 401

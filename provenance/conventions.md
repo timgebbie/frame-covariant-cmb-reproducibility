@@ -3,8 +3,8 @@
 Regenerate with:  python scripts/sync_conventions.py --source <path>
 
 Source      : C:\Users\01404122\Documents\Claude\NonlinearShear\docs\conventions.md
-SHA-256     : e22f5e19b2d2ea70e5805d03474bee3b6196833273708499df644f947e63be70
-Generated   : 2026-10-07
+SHA-256     : 0556e2bbbc85d91441c0f03aefaa6243be1cbd1bb4c9fd621cb6aff0a0fcfdc3
+Generated   : 2026-10-13
 
 The normative sheet lives in the project repository and is owned by the
 conventions gate. This bundle carries a generated copy so that the code and the
@@ -135,6 +135,7 @@ names the convention it imported.
 | | Statement | Source | Kind |
 |---|---|---|---|
 | C3.1 | Helmholtz: **`D^a D_a Q = −k_phys² Q`**, `k_phys = k/a`, `Q` time-independent | GE98 **(47)** pub = (48) arXiv; Th **(1.47)** | DEF |
+| C3.1a | **The operational consequence, and it is not in the source equation.** `k` is **physical**, so `k_phys = k/a` and **`k̇_phys = −H k_phys`** — it is *not* constant. Yet **`Q_{A_ℓ}` is time-independent at every rank**, because in C3.2 the `ℓ` factors of `D` each carry `1/a` while the `ℓ` factors of `k_phys^{−1}` each carry an `a`, and they **cancel rank by rank**. **A reduction that forgets either side puts a spurious `a`-dependence into every rank** — and since the hierarchy carries `ȧ/a` terms throughout, that leaks into every `τ̇_ℓ` rather than failing visibly at one | Derived from C3.1 + C3.2. **Not printed in GE98 (47) or (48)** — added 2026-10-12 at P1-B's request, which carries the same statement in the bundle's `provenance/` restatement | **RES, IA.** Definitions are adopted, results are audited: this is a result and is audited, not inherited |
 | C3.2 | **`Q_{A_ℓ} = (−k_phys)^{−ℓ} D_⟨A_ℓ⟩ Q`**. The stripped factor is **`(−k_phys)^ℓ`: real, no `i`.** For a real eigenfunction `Q`, every `Q_{A_ℓ}` is real | GE98 **(48)** pub = (49) arXiv; Th **(1.48)**; restated in GE98 p.23 below (134), and in Th App. D footnote to **(D.44)** as `(−λ)^{−ℓ}D_⟨A_ℓ⟩Q = Q_{A_ℓ}` | DEF. **Seed verified against the PDF, 2026-10-03** |
 | C3.3 | Mode function `G_ℓ[Q] = O^{A_ℓ}Q_{A_ℓ} = (−k_phys)^{−ℓ}O^{A_ℓ}D_⟨A_ℓ⟩Q` | GE98 **(49)** pub = (50) arXiv; (51) arXiv, published number not resolved; Th (1.50) | DEF |
 | C3.4 | Mode expansion `τ_{A_ℓ}(x) = Σ_k τ_ℓ(t,k)(−k_phys)^{−ℓ}D_⟨A_ℓ⟩Q = Σ_k τ_ℓ Q_{A_ℓ}` | GE98 **(53)** pub = (54) arXiv; Th (1.48) ff. | DEF |
