@@ -134,7 +134,7 @@ def test_a_numerical_evaluation_agrees_with_the_identity():
 
 
 # ---------------------------------------------------------------------------
-# The curvature half: what a numerical change of threading additionally needs
+# The curvature half: what a numerical change of frame additionally needs
 # ---------------------------------------------------------------------------
 #
 # The tests above settle the rank-one bracket. These settle the pieces F5 and
@@ -143,7 +143,7 @@ def test_a_numerical_evaluation_agrees_with_the_identity():
 # evidence rather than a tautology.
 
 
-def test_the_electric_weyl_tensor_is_invariant_under_the_threading_shift():
+def test_the_electric_weyl_tensor_is_invariant_under_the_frame_shift():
     r"""$\tilde E_{ab}=E_{ab}$ identically — the curvature half of criterion 2.
 
     $E_{ab}=\frac12\D_{\la a}\D_{b\ra}(\Phi_A-\Phi_H)$ (GDE99 Eq. (24)) vanishes
@@ -196,19 +196,24 @@ def test_the_weyl_invariance_fails_for_any_other_potential_rule():
     assert sp.simplify(flipped.subs({bare_vp: -H * bare_v})) == 0
 
 
-def test_the_energy_frame_condition_is_the_geodesic_euler_equation():
+def test_the_cdm_frame_condition_is_the_geodesic_euler_equation():
     r"""$\tilde A_a=0 \Rightarrow v'+\mathcal Hv=-k\Phi_A$.
 
-    The energy frame is **not** imposed as an ODE someone wrote down; it falls
+    The CDM frame is **not** imposed as an ODE someone wrote down; it falls
     out of setting the boosted acceleration to zero. That the result is the
     Euler equation of a pressureless geodesic fluid is the check: it is what the
-    cold dark matter obeys, and decision S8 is the statement that the CDM frame
-    and the total-energy frame are the same threading for that reason.
+    cold dark matter obeys.
+
+    Decisions **S8a** and **S29**: $A_a=0$ *is* the CDM frame, exactly, because
+    pressureless and collisionless means no non-gravitational force and hence
+    geodesic --- and it is the energy frame of the CDM **component**,
+    $q^C_a=0$, which is **not** the total-energy frame. Finding T-29 is the
+    eight days this bundle spent conflating the two.
     """
     import sympy as sp
 
     from functions.frames import (
-        energy_frame_velocity_equation,
+        cdm_frame_velocity_equation,
         harmonic_potential_shift,
     )
 
@@ -219,15 +224,15 @@ def test_the_energy_frame_condition_is_the_geodesic_euler_equation():
     boosted = pa + harmonic_potential_shift(v, vp, H, k)
     condition = sp.simplify(sp.expand(boosted * k))
 
-    assert sp.simplify(condition - energy_frame_velocity_equation(pa, v, vp, H, k)) == 0
+    assert sp.simplify(condition - cdm_frame_velocity_equation(pa, v, vp, H, k)) == 0
 
 
-def test_the_dipole_is_the_only_multipole_the_threading_moves():
+def test_the_dipole_is_the_only_multipole_the_frame_moves():
     r"""$\tilde\tau_a=\tau_a-v_a$, and $\tilde\tau_{A_\ell}=\tau_{A_\ell}$ for $\ell\ge2$.
 
     GDE99 Eq. (37) and the list below its Eq. (35), as Paper 1 Sec. VI A records
     them. The $\ell\ge2$ half is the standard the whole frame-covariance section
-    has to meet: **any threading dependence surviving at $\ell\ge2$ is an
+    has to meet: **any frame dependence surviving at $\ell\ge2$ is an
     artefact of the reduction, not physics.**
     """
     import sympy as sp

@@ -158,7 +158,7 @@ def test_the_shear_boundary_term_is_not_empty_once_b2_is(setup):
     c = match_coefficients(eta, K, a_b1=K * (setup["dT"] + setup["phi_a"]),
                            a_b2=sigma,
                            kappa_prime_v_b=K * setup["kp"] * setup["t1"],
-                           frame="energy")
+                           frame="cdm")
     sc = ScatteringHistory(eta=eta, kappa_prime=setup["kp"],
                            visibility=setup["vis"], damping_k=setup["k_d"])
     sol = integral_solution(

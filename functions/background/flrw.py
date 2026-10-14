@@ -172,9 +172,9 @@ class Background:
 #
 # **"CDM" names two different things and this codebase keeps them apart.**
 # Here it is a *model*: a cosmology. The *CDM frame* is something else entirely
-# --- a choice of threading u^a, namely the total-energy frame q_a = 0, which is
-# the frame in which the cold dark matter is at rest because CDM is pressureless
-# and carries no energy flux of its own. Frames live in
+# --- a choice of frame u^a, namely A_a = 0, the frame in which the cold dark
+# matter is at rest, because CDM is pressureless and collisionless and so moves
+# on geodesics. That is exact in GR, not a limit. Frames live in
 # `functions.spectra.sources.Frame`, not here, and the LCDM model is computed in
 # the same frame as the CDM model. Changing model is not changing frame.
 #

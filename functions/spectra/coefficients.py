@@ -25,7 +25,7 @@ presupposing one. Annals II specialises before it writes its sources --- \S7.1.1
 not appear"* --- and every equation this bundle implemented before this module
 descends from that specialisation. The Newtonian frame is
 $\tilde\sigma_{ab}\approx0$, hence $\tilde C_0\approx\tilde C_2\approx0$ and
-$\tilde C_1$ alone survives, which is (110). The energy frame is $q_a=0$ and
+$\tilde C_1$ alone survives, which is (110). The CDM frame is $q_a=0$ and
 keeps all three.
 
 **Why the sign of $C_0$ was unreachable until now.** $C_0\propto\mathcal B_2$,
@@ -272,7 +272,7 @@ def newtonian_a_b1_prime(
     input a second frame needs and differencing it out of $\tilde C_1'$ would
     be arithmetic standing in for a derivation. (107) is one line and belongs
     to the Newtonian specialisation; (106) is the evolution equation, and
-    `energy_set` consumes it directly.
+    `cdm_set` consumes it directly.
     """
     k = float(k_com)
     aH = np.asarray(conformal_hubble, dtype=float)
@@ -549,7 +549,7 @@ def newtonian_set(
 __all__ += ["CoefficientSet", "tau_1_prime", "newtonian_set"]
 
 
-def energy_frame_shear(
+def cdm_frame_shear(
     k_com: float,
     *,
     v: np.ndarray,
@@ -560,18 +560,18 @@ def energy_frame_shear(
     rho: np.ndarray,
     pressure: np.ndarray | float = 0.0,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    r"""$\sigma$, $\dot\sigma$, $\ddot\sigma$ in the energy frame, $A_a=0$.
+    r"""$\sigma$, $\dot\sigma$, $\ddot\sigma$ in the CDM frame, $A_a=0$.
 
     The shear sector is **empty in the Newtonian frame and occupied here**, so
     this is what puts anything into (102)'s rank-two terms for the first time.
 
-    `v` is the threading velocity as `frame_transform.energy_frame_shift`
+    `v` is the frame velocity as `frame_transform.cdm_frame_shift`
     returns it: $v=-v^N$ in *Annals II*'s notation, where $\tilde u^a\approx
     u^a+v^a$ and $n_a=u_a+v^N_a$ with $n^a$ the shear-free (Newtonian)
-    threading. That identification is not a choice made here ---
-    `ThreadingShift.temperature_shift` fixes it independently through **(42)**.
+    frame. That identification is not a choice made here ---
+    `FrameShift.temperature_shift` fixes it independently through **(42)**.
     `phi_a`, `phi_h` are the **Newtonian-frame** potentials; $\Phi_A\equiv0$ in
-    the energy frame, which is the frame condition.
+    the CDM frame, which is the frame condition.
 
     Three relations, and the first is **(31)**, not (40) --- see below:
 
@@ -592,11 +592,11 @@ def energy_frame_shear(
 
     **It is (31) and not (40).** *Annals II* gives the general frame
     transformations at (31)--(37), cited to Maartens, Gebbie & Ellis, and then
-    specialises them to the Newtonian threading at (40)--(45). Two of the six
+    specialises them to the Newtonian frame at (40)--(45). Two of the six
     change sign on the way: (40) prints $0\approx\sigma_{ab}-\mathcal
     D_{\langle a}v^N_{b\rangle}$ against (31)'s plus, and (45) prints $\tilde
     q_a\approx q_a+(\rho+p)v^N_a$ against (34)'s minus. Carried through with
-    (40), the energy frame **fails** to close against the field equations by
+    (40), the CDM frame **fails** to close against the field equations by
     exactly $2E_{ab}$, for every convention. Recorded as **B-13**.
 
     The signs below therefore come from (31) with **C4.2** ($r=-1$) and from
@@ -623,15 +623,15 @@ def energy_frame_shear(
     return sigma, sigma_dot, sigma_ddot
 
 
-__all__ += ["energy_frame_shear"]
+__all__ += ["cdm_frame_shear"]
 
 
 # ---------------------------------------------------------------------------
-# The energy frame as a *second* frame (102) can be evaluated in. Everything
+# The CDM frame as a *second* frame (102) can be evaluated in. Everything
 # below exists so that a frame choice **cascades** --- the sources, their
 # derivatives and the rank-two sector all follow from one velocity --- rather
 # than being asserted by a label. Decision S8: the CDM frame is the
-# total-energy frame.
+# CDM frame, which is the energy frame of the CDM component alone.
 # ---------------------------------------------------------------------------
 
 
@@ -671,7 +671,7 @@ def background_fluid(
     return rho, pressure, cH_prime
 
 
-def energy_set(
+def cdm_set(
     eta: np.ndarray,
     k_com: float,
     *,
@@ -694,10 +694,10 @@ def energy_set(
     v_prime: np.ndarray,
     eta_star: float,
 ) -> CoefficientSet:
-    r"""(102)'s full input set in the energy frame, $A_a=0$, $\sigma_{ab}\ne0$.
+    r"""(102)'s full input set in the CDM frame, $A_a=0$, $\sigma_{ab}\ne0$.
 
     **Every argument is a Newtonian-frame quantity** except `v`, `v_prime`,
-    which are the threading shift `frame_transform.energy_frame_shift` returns
+    which are the frame shift `frame_transform.cdm_frame_shift` returns
     ($u^a_{\rm E}=u^a_{\rm N}+v^a$, $v'+\mathcal Hv=-k\Phi_A$). The frame change
     is performed here, on the sources **and on their derivatives**, which is the
     part `to_frame` cannot do: `to_frame` moves five amplitudes, and (102) needs
@@ -712,7 +712,7 @@ def energy_set(
 
     Only the *inputs* to that assembly know which frame they are in:
 
-    | | Newtonian | energy |
+    | | Newtonian | CDM |
     |---|---|---|
     | $aA$ | $k\Phi_A$ | $0$ --- the frame condition |
     | $\delta T$ | $\delta\tilde T$ | $\delta\tilde T-\mathcal Hv/k$ (n-t3) |
@@ -767,7 +767,7 @@ def energy_set(
     # **T-27**: the dipole is carried in the covariant normalisation
     # tau~_1 = v~_B = v_B/k, so (37) tau~_a = tau_a - v_a reads
     # tau~_1 -> tau~_1 - v/k here. The same 1/k the monopole carries in
-    # `ThreadingShift.temperature_shift`, for the same reason.
+    # `FrameShift.temperature_shift`, for the same reason.
     tau_1_E = tau_1 - v / k
     tau_1_prime_E = tau_1_prime_N - vp / k
     # **The two are differently normalised and the names do not say so.**
@@ -781,7 +781,7 @@ def energy_set(
     kappa_prime_v_b_tilde_prime_E = kpp * tau_1_E + kp * tau_1_prime_E   # for (107)
 
     # --- rank two: the sector that is empty in the Newtonian frame -----------
-    sigma, sigma_dot, sigma_ddot = energy_frame_shear(
+    sigma, sigma_dot, sigma_ddot = cdm_frame_shear(
         k, v=v, phi_a=phi_a, phi_h=phi_h, scale_factor=scale_factor,
         conformal_hubble=cH, rho=rho, pressure=pressure)
 
@@ -806,7 +806,7 @@ def energy_set(
     a_b2 = a * sigma
     coefficients = match_coefficients(
         eta, k, a_b1=a_b1_E, a_b2=a_b2,
-        kappa_prime_v_b=kappa_prime_v_b_E, frame="energy")
+        kappa_prime_v_b=kappa_prime_v_b_E, frame="cdm")
     # (90) through `match_coefficients` and the $v$ route must agree.
     if not np.allclose(coefficients.c2, c2, rtol=1e-12, atol=0.0):
         raise ValueError(
@@ -819,7 +819,7 @@ def energy_set(
     if not np.allclose(a_sigma_prime, -k * vp, rtol=1e-9, atol=0.0):
         raise ValueError(
             "Appendix G's sigma-dot and the Euler equation disagree on "
-            "(a sigma)'; the energy frame no longer closes")
+            "(a sigma)'; the CDM frame no longer closes")
 
     # (107), with both halves of the derivative built from published relations
     c1_prime = -(kappa_prime_v_b_tilde_prime_E + a_b1_prime_E / k)
@@ -836,4 +836,4 @@ def energy_set(
     )
 
 
-__all__ += ["background_fluid", "energy_set"]
+__all__ += ["background_fluid", "cdm_set"]

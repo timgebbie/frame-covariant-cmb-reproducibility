@@ -151,7 +151,7 @@ def test_isw_sign_is_a_finding_not_a_free_parameter():
 def test_b6_sign_alternative_is_not_a_no_op():
     """The two readings of (179) give different sources. B-6 has consequences.
 
-    Worth asserting explicitly: if the threading term happened to be negligible
+    Worth asserting explicitly: if the frame term happened to be negligible
     the finding would be moot, and the record should not claim otherwise.
     """
     eta = np.linspace(0.05, 2.0, 600)
@@ -164,7 +164,7 @@ def test_b6_sign_alternative_is_not_a_no_op():
     assert separation > 0.1
 
 
-def test_in_eds_with_constant_potentials_only_the_threading_term_survives():
+def test_in_eds_with_constant_potentials_only_the_frame_term_survives():
     """The discriminator for B-6, stated as a test while the finding is open.
 
     Einstein-de Sitter has Phi' = 0, so (179)'s integrated-Sachs-Wolfe proper

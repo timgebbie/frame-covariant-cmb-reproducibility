@@ -52,7 +52,7 @@ STAGES: list[tuple[str, str]] = [
 #: were what S-b kept. It moves by **decision S20**, and the reason is worth
 #: carrying at the call site rather than only in the record: F5 and F7 are one
 #: piece of machinery. Both need the frame specialisation made numerical, and
-#: `"newtonian"` and `"energy"` are today labels on `PerturbationHistory` that
+#: `"newtonian"` and `"cdm"` are today labels on `PerturbationHistory` that
 #: nothing reads. What F5 would show numerically — that the decomposition is
 #: frame-dependent while the total is not — **criterion 2 already establishes
 #: symbolically**, as an exact identity in $\varepsilon$ rather than to a
@@ -94,9 +94,9 @@ DIAGNOSTICS: list[tuple[str, str]] = [
     # computed from its own table. It runs here so the record cannot fall out
     # of step with the code -- the same reason EMISSIONS exists.
     ("D6  (102) in two frames: the F5 measurement", "scripts/measure_frame_invariance.py"),
-    # D7 measures how far the CDM threading is from the energy frame it is
+    # D7 measures how far the CDM frame is from the CDM frame it is
     # identified with. Finding T-29; the amendment is proposed as S8a.
-    ("D7  the CDM threading against the energy frame",
+    ("D7  the CDM frame against the CDM frame",
      "scripts/diagnostic_d7_frame_identification.py"),
 ]
 

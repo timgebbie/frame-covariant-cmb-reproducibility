@@ -4,7 +4,7 @@
 
 `tau_{A_l}` for `l >= 2` is frame-invariant at first order
 (`frames.py::boosted_multipole`), so the total that (102) returns must be
-the same in the Newtonian and energy frames and the three-way split must
+the same in the Newtonian and CDM frames and the three-way split must
 not. This is the measurement F5 exists to make. It could not be made
 before `coefficients.py`, because (176)--(179) are the Newtonian
 specialisation and transforming them is finding **T-14**.

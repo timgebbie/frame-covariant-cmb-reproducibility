@@ -113,8 +113,8 @@ def test_b11_is_invisible_in_the_newtonian_frame():
 def test_b11_bites_the_moment_the_shear_sector_is_occupied():
     """**The negative control.** Without this, the test above is
     indistinguishable from the finding being vacuous."""
-    matched = _match(a_b2=SIGMA, frame="energy")
-    printed = _match(a_b2=SIGMA, frame="energy", use_printed_c0=True)
+    matched = _match(a_b2=SIGMA, frame="cdm")
+    printed = _match(a_b2=SIGMA, frame="cdm", use_printed_c0=True)
     assert not matched.shear_sector_is_empty
     assert not np.allclose(matched.c0, printed.c0)
     nonzero = matched.c0 != 0.0
@@ -146,7 +146,7 @@ def test_c0_and_c2_are_the_same_source_at_two_ranks():
     r"""Both carry $\mathcal B_2$, which is why the paper says $C_0$ *"also
     contributes to the shear"*. Their ratio is a pure number times $k^2$ and
     carries no history."""
-    c = _match(a_b2=SIGMA, frame="energy")
+    c = _match(a_b2=SIGMA, frame="cdm")
     ratio = c.c0 / c.c2
     assert np.allclose(ratio, ratio[0]), "the ratio must not depend on eta"
     assert np.isclose(ratio[0], 2.5 * K**2)
@@ -251,7 +251,7 @@ def test_no_numerical_derivative_survives_in_the_c2_chain():
         assert forbidden not in body, f"{forbidden} reappeared in the C_2 chain"
 
 
-def _energy_frame_fixture():
+def _cdm_frame_fixture():
     """One configuration, shared by the closure tests and the T-24 sign tests."""
     n = 400
     eta = np.linspace(0.1, 3.0, n)
@@ -262,7 +262,7 @@ def _energy_frame_fixture():
     return dict(n=n, eta=eta, a=a, cH=cH, rho=rho, phi_a=phi_a, v=v, k=60.0)
 
 
-def test_the_energy_frame_closes_three_ways():
+def test_the_cdm_frame_closes_three_ways():
     r"""**The frame machinery against the field equations.**
 
     Three relations, and any two give the third:
@@ -272,17 +272,17 @@ def test_the_energy_frame_closes_three_ways():
        with $\tilde\sigma=0$ in the Newtonian frame and $v=-v^N$. **Not (40)**,
        which contradicts it --- finding **B-13**;
     2. $\dot\sigma=-2H\sigma-E$ --- Appendix G's shear equation with $A_a=0$;
-    3. $v'+\mathcal Hv=-k_{\rm com}\Phi_A$ --- the energy-frame Euler equation,
+    3. $v'+\mathcal Hv=-k_{\rm com}\Phi_A$ --- the CDM-frame Euler equation,
        derived independently in `frames.py` from **(32)**.
 
     It passes --- and the two tests below say what that is and is not worth.
     """
-    from functions.spectra.coefficients import energy_frame_shear
+    from functions.spectra.coefficients import cdm_frame_shear
 
-    f = _energy_frame_fixture()
+    f = _cdm_frame_fixture()
     a, cH, k, v, phi_a = f["a"], f["cH"], f["k"], f["v"], f["phi_a"]
 
-    _, sigma_dot, _ = energy_frame_shear(k, v=v, phi_a=phi_a, scale_factor=a,
+    _, sigma_dot, _ = cdm_frame_shear(k, v=v, phi_a=phi_a, scale_factor=a,
                                          conformal_hubble=cH, rho=f["rho"])
 
     # (3): v' from the Euler equation, not from differentiating v
@@ -292,7 +292,7 @@ def test_the_energy_frame_closes_three_ways():
 
     worst = (np.max(np.abs(from_frame_transformation - sigma_dot))
              / np.max(np.abs(from_frame_transformation)))
-    assert worst < 1e-14, f"the energy frame does not close: {worst:.2e}"
+    assert worst < 1e-14, f"the CDM frame does not close: {worst:.2e}"
 
 
 def test_T24_the_closure_is_an_identity_in_both_conventions():
@@ -309,7 +309,7 @@ def test_T24_the_closure_is_an_identity_in_both_conventions():
     "corroborates the magnitude" is withdrawn, and an identity is why it could
     not catch the sign error that was made inside it.
     """
-    f = _energy_frame_fixture()
+    f = _cdm_frame_fixture()
     a, cH, k, v, phi_a = f["a"], f["cH"], f["k"], f["v"], f["phi_a"]
 
     for lam in (+1.0, -1.0):
@@ -329,7 +329,7 @@ def test_B13_the_printed_n_t1_does_not_close_and_the_general_rule_does():
     r"""**Finding B-13**, pinned to a number: (40) contradicts (31), by $2E_{ab}$.
 
     *Annals II* gives the general frame transformations at (31)--(37), cited to
-    Maartens, Gebbie & Ellis, then specialises them to the Newtonian threading
+    Maartens, Gebbie & Ellis, then specialises them to the Newtonian frame
     at (40)--(45). Two of the six change sign on the way:
 
     | | general | specialised |
@@ -343,10 +343,10 @@ def test_B13_the_printed_n_t1_does_not_close_and_the_general_rule_does():
     trace-free part is $\tilde\sigma_{ab}$, it keeps its plus in both places,
     and (40) does not.
 
-    With (40) the energy frame misses closure by exactly $2E_{ab}$, for every
+    With (40) the CDM frame misses closure by exactly $2E_{ab}$, for every
     convention.
     """
-    f = _energy_frame_fixture()
+    f = _cdm_frame_fixture()
     a, cH, k, v, phi_a = f["a"], f["cH"], f["k"], f["v"], f["phi_a"]
     lam, r = 1.0, -1.0                                    # C3.5 and C4.2
 
@@ -366,7 +366,7 @@ def test_the_two_modules_now_agree_on_E_and_on_sigma():
 
     `frames.py::weyl_electric_amplitude` returns
     $-\tfrac12(k/a)^2(\Phi_A-\Phi_H)$, written for criterion 2 before
-    `coefficients.py` existed. `energy_frame_shear` must give the same thing:
+    `coefficients.py` existed. `cdm_frame_shear` must give the same thing:
     both are $\mathcal D_{\langle a}\mathcal D_{b\rangle}\Phi_A$ under C3.5 and
     C4.2, and for one sitting they disagreed by a sign --- the shape T-24 took
     before (31) settled it.
@@ -375,13 +375,13 @@ def test_the_two_modules_now_agree_on_E_and_on_sigma():
     to the closure, because the closure is an identity and checks nothing.
     """
     from functions.frames import weyl_electric_amplitude
-    from functions.spectra.coefficients import energy_frame_shear
+    from functions.spectra.coefficients import cdm_frame_shear
 
-    f = _energy_frame_fixture()
+    f = _cdm_frame_fixture()
     a, cH, k, v, phi_a = f["a"], f["cH"], f["k"], f["v"], f["phi_a"]
     phi_h = -phi_a
 
-    sigma, sigma_dot, _ = energy_frame_shear(
+    sigma, sigma_dot, _ = cdm_frame_shear(
         k, v=v, phi_a=phi_a, phi_h=phi_h, scale_factor=a,
         conformal_hubble=cH, rho=f["rho"])
 
@@ -397,14 +397,14 @@ def test_the_two_modules_now_agree_on_E_and_on_sigma():
 def test_the_closure_is_not_vacuous():
     r"""**The control.** Without the Euler equation the two routes must *not*
     agree --- they differ by exactly $-(k/a^2)(v'+\mathcal Hv)-E$, which is zero
-    only on the energy-frame solution.
+    only on the CDM-frame solution.
     """
-    from functions.spectra.coefficients import energy_frame_shear
+    from functions.spectra.coefficients import cdm_frame_shear
 
-    f = _energy_frame_fixture()
+    f = _cdm_frame_fixture()
     eta, a, cH, k, v, phi_a = (f["eta"], f["a"], f["cH"], f["k"], f["v"], f["phi_a"])
 
-    _, sigma_dot, _ = energy_frame_shear(k, v=v, phi_a=phi_a, scale_factor=a,
+    _, sigma_dot, _ = cdm_frame_shear(k, v=v, phi_a=phi_a, scale_factor=a,
                                          conformal_hubble=cH, rho=f["rho"])
     v_prime_arbitrary = np.gradient(v, eta, edge_order=2)   # NOT the Euler solution
     from_frame = -(k / a**2) * (v_prime_arbitrary - cH * v)
@@ -418,17 +418,17 @@ def test_the_closure_is_not_vacuous():
 
 
 # ---------------------------------------------------------------------------
-# The energy frame as a second frame: T-25, T-26, and the control that caught
+# The CDM frame as a second frame: T-25, T-26, and the control that caught
 # T-25. See `provenance/BUNDLE-DEFECTS-v1.md`.
 # ---------------------------------------------------------------------------
 
 
 def _two_frame_fixture(k=60.0, n=600):
-    """A consistent Newtonian history plus a threading shift, built by hand.
+    """A consistent Newtonian history plus a frame shift, built by hand.
 
     Synthetic, so the test is fast and so that `v` is **not** the quadrature's
     own output --- only `v_prime` is tied to it, through the Euler equation,
-    which is the one relation `energy_set` relies on.
+    which is the one relation `cdm_set` relies on.
     """
     from functions.spectra.coefficients import background_fluid
 
@@ -437,7 +437,7 @@ def _two_frame_fixture(k=60.0, n=600):
     cH = 2.0 / eta
     # script-H^2 = h0^2/a for EdS, so 4/eta^2 = h0^2 eta_0^2/eta^2 fixes h0.
     # Derived, not fitted: a rescaling factor here would hide exactly the
-    # background inconsistency `energy_set`'s (a sigma)' guard exists to catch.
+    # background inconsistency `cdm_set`'s (a sigma)' guard exists to catch.
     rho, pressure, cH_prime = background_fluid(a, omega_m=1.0, h0=2.0 / eta[-1])
     assert np.allclose(rho, 3.0 * (cH / a) ** 2, rtol=1e-12)
 
@@ -461,7 +461,7 @@ def _two_frame_fixture(k=60.0, n=600):
 
 
 def _build_both(f):
-    from functions.spectra.coefficients import energy_set, newtonian_set
+    from functions.spectra.coefficients import cdm_set, newtonian_set
     common = dict(
         delta_t=f["delta_t"], phi_a=f["phi_a"], phi_a_prime=f["phi_a_prime"],
         phi_h_prime=f["phi_h_prime"], tau_1=f["tau_1"],
@@ -469,7 +469,7 @@ def _build_both(f):
         conformal_hubble=f["cH"], r_baryon=f["r_baryon"],
         r_baryon_prime=f["r_baryon_prime"])
     n = newtonian_set(f["eta"], f["k"], **common)
-    e = energy_set(f["eta"], f["k"], phi_h=f["phi_h"],
+    e = cdm_set(f["eta"], f["k"], phi_h=f["phi_h"],
                    conformal_hubble_prime=f["cH_prime"], scale_factor=f["a"],
                    rho=f["rho"], pressure=f["pressure"], v=f["v"],
                    v_prime=f["v_prime"], eta_star=f["eta_star"], **common)
@@ -479,9 +479,9 @@ def _build_both(f):
 def test_the_frame_shift_of_every_coefficient_is_the_closed_form_one():
     r"""**The control that found T-25.** Five shifts, five closed forms.
 
-    A frame change from the Newtonian threading to the energy one shifts each
+    A frame change from the Newtonian frame to the energy one shifts each
     coefficient of (89) by something that can be written down in one line, and
-    `energy_set` must reproduce all five **exactly** --- not nearly:
+    `cdm_set` must reproduce all five **exactly** --- not nearly:
 
         dC_0  = +5/2 k v            (the shear sector, empty before)
         dC_1  = -( v' - kappa' v )/k
@@ -490,7 +490,7 @@ def test_the_frame_shift_of_every_coefficient_is_the_closed_form_one():
         dC_2''= + v''/k
 
     with $v''=-\mathcal H'v-\mathcal Hv'-k\Phi_A'$ from the Euler equation.
-    The first draft of `energy_set` passed four of these and failed $C_1'$ by a
+    The first draft of `cdm_set` passed four of these and failed $C_1'$ by a
     factor of $k_{\rm com}$ --- finding **T-25**, the two differently
     normalised $\kappa'v_B$ arguments --- and **that is how it was found**. The
     (102) totals it produced were wrong by sixty-fold and looked like physics.
@@ -511,7 +511,7 @@ def test_the_frame_shift_of_every_coefficient_is_the_closed_form_one():
     assert worst(e.c2_second - n.c2_second, vpp / k) < 1e-13
 
 
-def test_the_newtonian_set_is_unmoved_by_the_energy_frame_machinery():
+def test_the_newtonian_set_is_unmoved_by_the_cdm_frame_machinery():
     """The Newtonian shear sector stays empty, which is (110)."""
     f = _two_frame_fixture()
     n, e = _build_both(f)
@@ -535,14 +535,14 @@ def test_T26_the_appendix_G_route_to_C2_second_loses_every_significant_figure():
     must also be *evaluated* in a variable that does not cancel. The test
     asserts both halves --- the first and second $C_2$ derivatives agree where
     nothing cancels, and disagree completely where everything does --- so that
-    the day someone reinstates `c2_derivatives` in `energy_set` it fails.
+    the day someone reinstates `c2_derivatives` in `cdm_set` it fails.
     """
-    from functions.spectra.coefficients import c2_derivatives, energy_frame_shear
+    from functions.spectra.coefficients import c2_derivatives, cdm_frame_shear
 
     f = _two_frame_fixture()
     k, v, vp, cH, cHp = f["k"], f["v"], f["v_prime"], f["cH"], f["cH_prime"]
     vpp = -cHp * v - cH * vp - k * f["phi_a_prime"]
-    sigma, sd, sdd = energy_frame_shear(
+    sigma, sd, sdd = cdm_frame_shear(
         k, v=v, phi_a=f["phi_a"], phi_h=f["phi_h"], scale_factor=f["a"],
         conformal_hubble=cH, rho=f["rho"], pressure=f["pressure"])
     c2, c2p, c2pp = c2_derivatives(

@@ -1,4 +1,4 @@
-r"""Is the (102) transfer function the same in the Newtonian and energy frames?
+r"""Is the (102) transfer function the same in the Newtonian and CDM frames?
 
 **This is the measurement F5 exists to make, and it could not be made before.**
 Finding **T-14** established that the transfer function is *not* frame-invariant
@@ -29,7 +29,7 @@ from functions.spectra.integral_solution import (  # noqa: E402
     integral_solution,
     required_multipoles,
 )
-from functions.spectra.frame_transform import energy_frame_shift  # noqa: E402
+from functions.spectra.frame_transform import cdm_frame_shift  # noqa: E402
 from functions.spectra.two_frame import (  # noqa: E402
     build_environment,
     coefficient_sets,
@@ -41,7 +41,7 @@ K_COM = np.array([1.0, 5.0, 20.0, 60.0, 140.0, 300.0])
 
 
 def both_frames(k: float, env, table: BesselTable, ells: np.ndarray) -> dict:
-    """(102) evaluated in the Newtonian frame and in the energy frame."""
+    """(102) evaluated in the Newtonian frame and in the CDM frame."""
     newtonian, energy = coefficient_sets(float(k), env)
     diffusion = float(np.exp(-((float(k) / env.damping_k) ** 2)))
     common = dict(table=table, weight=env.visibility, diffusion=diffusion,
@@ -50,7 +50,7 @@ def both_frames(k: float, env, table: BesselTable, ells: np.ndarray) -> dict:
     return {name: integral_solution(
                 ells, coefficients=cs.coefficients, c1_prime=cs.c1_prime,
                 c2_second=cs.c2_second, c2_prime_star=cs.c2_prime_star, **common)
-            for name, cs in (("newtonian", newtonian), ("energy", energy))}
+            for name, cs in (("newtonian", newtonian), ("cdm", energy))}
 
 
 def residual_decomposition(k: float, env: dict, table: BesselTable,
@@ -69,7 +69,7 @@ def residual_decomposition(k: float, env: dict, table: BesselTable,
     frame-invariant; reporting the split says where it is not.
     """
     eta, eta_star, background = env.eta, env.eta_star, env.background
-    shift = energy_frame_shift(eta, env.phi_a, k, background=background)
+    shift = cdm_frame_shift(eta, env.phi_a, k, background=background)
     v, vp, cH, cHp = shift.v, shift.v_prime, env.conformal_hubble, env.conformal_hubble_prime
     vpp = -cHp * v - cH * vp - k * env.phi_a_prime
     kp, kpp, V = env.kappa_prime, env.kappa_second, env.visibility
@@ -111,24 +111,24 @@ def main() -> int:
     for k in K_COM:
         r = both_frames(float(k), env, table, ELLS)
         split = residual_decomposition(float(k), env, table, ELLS)
-        n, e = r["newtonian"], r["energy"]
+        n, e = r["newtonian"], r["cdm"]
         for i, ell in enumerate(ELLS):
             denom = max(abs(n.total[i]), abs(e.total[i]))
             rel = abs(n.total[i] - e.total[i]) / denom if denom else 0.0
             worst = max(worst, rel)
             rows.append(dict(
-                k=float(k), ell=int(ell), newtonian=n.total[i], energy=e.total[i],
+                k=float(k), ell=int(ell), newtonian=n.total[i], cdm=e.total[i],
                 rel=rel,
                 shear=abs(e.boundary_shear[i]) / denom if denom else 0.0,
                 grav=split["gravitational"][int(ell)],
                 thom=split["thomson"][int(ell)]))
 
-    head = (f"{'k':>7} {'ell':>5} {'Newtonian':>13} {'energy':>13} "
+    head = (f"{'k':>7} {'ell':>5} {'Newtonian':>13} {'cdm':>13} "
             f"{'rel':>9} {'rank-2':>9} {'grav':>11} {'Thomson':>11}")
     print("(102) in two frames -- is the total frame-invariant?")
     print(head)
     for r in rows:
-        print(f"{r['k']:7.1f} {r['ell']:5d} {r['newtonian']:13.4e} {r['energy']:13.4e} "
+        print(f"{r['k']:7.1f} {r['ell']:5d} {r['newtonian']:13.4e} {r['cdm']:13.4e} "
               f"{r['rel']:9.2e} {r['shear']:9.2e} {r['grav']:11.3e} {r['thom']:11.3e}")
     print(f"\nworst relative difference: {worst:.3e}")
 
@@ -159,7 +159,7 @@ def main() -> int:
         "",
         "`tau_{A_l}` for `l >= 2` is frame-invariant at first order",
         "(`frames.py::boosted_multipole`), so the total that (102) returns must be",
-        "the same in the Newtonian and energy frames and the three-way split must",
+        "the same in the Newtonian and CDM frames and the three-way split must",
         "not. This is the measurement F5 exists to make. It could not be made",
         "before `coefficients.py`, because (176)--(179) are the Newtonian",
         "specialisation and transforming them is finding **T-14**.",
@@ -174,7 +174,7 @@ def main() -> int:
     ]
     for r in rows:
         lines.append(
-            f"| {r['k']:.1f} | {r['ell']} | {r['newtonian']:.4e} | {r['energy']:.4e} "
+            f"| {r['k']:.1f} | {r['ell']} | {r['newtonian']:.4e} | {r['cdm']:.4e} "
             f"| {r['rel']:.2e} | {r['shear']:.1e} | {r['grav']:.3e} | {r['thom']:.3e} |")
     lines += [
         "",

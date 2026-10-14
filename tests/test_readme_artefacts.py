@@ -95,10 +95,24 @@ def test_the_readme_does_not_claim_a_tag_that_does_not_exist():
     `v1.1.0-rc` until the tag lands; this asserts the two statements are not
     both present, so flipping one without the other fails.
     """
-    claims_release = "**Released as v1.1.0.**" in README
-    claims_rc = "**This tree is v1.1.0-rc.**" in README
-    assert claims_release != claims_rc, (
-        "the README must say exactly one of 'Released as v1.1.0' and 'This tree "
-        "is v1.1.0-rc'. Promoting it is a two-line change --- this paragraph and "
-        "the lineage table's last row --- plus the three v1.1.0 rungs in "
-        "scripts/make_release_status.py.")
+    states = [
+        "**Released as v1.1.0; this tree is v1.2.0-dev.**" in README,
+        "**This tree is v1.1.0-rc.**" in README,
+        "**Released as v1.1.0.**" in README,
+    ]
+    assert sum(states) == 1, (
+        "the README must make exactly one claim about where the tree sits "
+        f"relative to v1.1.0; it makes {sum(states)}. Moving between them is "
+        "this paragraph, the lineage table's last rows, and the v1.1.0 rungs in "
+        "scripts/make_release_status.py --- three places, which is why this "
+        "test exists.")
+
+    # And the claim must match the rungs the status file carries.
+    status = (ROOT / "provenance" / "RELEASE-STATUS-v1.md").read_text(encoding="utf-8")
+    if states[0] or states[2]:
+        assert "## v1.1.0 — 3×S" in status, (
+            "the README says v1.1.0 is released and the generated status still "
+            "has its artefacts at a lower rung")
+    if states[1]:
+        assert "## v1.1.0 — 3×R" in status, (
+            "the README says v1.1.0-rc and the status has already shipped it")

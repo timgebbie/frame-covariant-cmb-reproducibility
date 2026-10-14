@@ -1,6 +1,6 @@
 symbol,code,meaning,note
 "$\Phi_A$, $\Phi_H$","phi_a, phi_h",the two gauge-invariant potentials entering (177) and (179),
-$\tilde\delta_T$,delta_T,covariant temperature perturbation,threading-dependent; $\tilde\delta_T+3\Phi_A$ is the combination in dispute (B-6)
+$\tilde\delta_T$,delta_T,covariant temperature perturbation,frame-dependent; $\tilde\delta_T+3\Phi_A$ is the combination in dispute (B-6)
 $\tilde\tau_1$,tau_1,"the dipole, which supplies the Doppler term of (178)",
 $\tilde v_B$,v_b,baryon velocity,
 "$\kappa'$, $\kappa''$",kappa_prime,differential optical depth and its conformal-time derivative,"supplied, never manufactured inside the source terms"
@@ -20,7 +20,7 @@ $k_{\rm phys}$,k_phys,"physical wavenumber, $k_{\rm com}/a$",Appendix F's $k$ is
 $\eta$,eta,"conformal time, $dt = a\,d\eta$",
 $\Delta\eta_*$,d_eta,$\eta_0-\eta_*$,
 $j_\ell$,spherical_jn,spherical Bessel function,the free-streaming solution
-$u^a$,---,the threading 4-velocity,carried generic; frames are specialisations made at the end
+$u^a$,---,the frame 4-velocity,carried generic; frames are specialisations made at the end
 $\sigma_{ab}$,---,shear,$\sigma$ is the shear and nothing else
 $A_a$,---,"acceleration, $\dot u_a$",
 $\Theta_\ell$,---,Hu \& Sugiyama's multipole variable,$\beta$-normalised

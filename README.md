@@ -90,7 +90,7 @@ can exhibit it.
 
 **In v1.0.0 that is established symbolically rather than numerically, and the
 distinction is worth stating plainly.** `functions/frames.py` carries the
-first-order change of threading with every term tagged by its order in ε, so
+first-order change of frame with every term tagged by its order in ε, so
 that "second order" is a fact sympy checks rather than a judgement; its
 `roundtrip_residual()` returns the zero vector as an **identity**, not as a small
 number — 𝓑̃₁ = 𝓑₁ + v̇_a, no shear and no Hv, which is acceptance criterion 2's
@@ -235,7 +235,7 @@ and no claim appears here that is not in the paper.
 ```text
 config/                  Accepted scientific and release configurations
 functions/background/    The FLRW background, integrated from the 1+3 constraint
-functions/frames.py      The threading shift, symbolically, with orders tracked
+functions/frames.py      The frame shift, symbolically, with orders tracked
 functions/harmonics/     PSTF weights, the recursion, and the external hierarchies
 functions/spectra/       Sources, recombination, the acoustic pair, the spectrum
 functions/plotting/      House visual style, shared by every figure
@@ -290,11 +290,21 @@ pytest -q                              # the claim-bearing regression suite
 
 ## Verification status
 
-**This tree is v1.1.0-rc.** Every artefact carries a maturity rung — prototype,
-proof of concept, release candidate, shipped — and a release gates on the rung
-rather than on an opinion that the work is done. v1.1.0 is complete, portable
-and manifested; **shipped** is the rung it reaches when the tag exists, and
-`git tag --list v1.1.0` is the check. That is decision **S27**, and
+**Released as v1.1.0; this tree is v1.2.0-dev.** Every artefact carries a
+maturity rung — prototype, proof of concept, release candidate, shipped — and a
+release gates on the rung rather than on an opinion that the work is done. That
+is decision **S27**, and `provenance/RELEASE-STATUS-v1.md` carries the rung of
+everything in the tree. It is **generated and verified**: each rung names the
+module, object, test or harness entry that earns it, and a claim whose evidence
+is missing fails the run rather than appearing in the file.
+
+**The v1.1.0 tag does not sit at the tip**, and deliberately. v1.1.0 is Peebles
+recombination and the numerical frame specialisation; the work that landed after
+it — the covariant coefficient assembly, the integral solution (102), F5, two
+diagnostics and eight findings — is v1.2.0's, and labelling it v1.1.0 would
+label a tree by a release it has moved past. The tag is placed at the last
+commit whose content was v1.1.0, which is what makes
+`RELEASE-NOTES-v1.1.0.md` true of it. That is decision **S27**, and
 `provenance/RELEASE-STATUS-v1.md` carries the rung of everything in the tree.
 It is **generated and verified**: each rung names the module, object, test or
 harness entry that earns it, and a claim whose evidence is missing fails the
@@ -391,7 +401,7 @@ cannot go stale the way the verification paragraph above once did.
 | **D2** round-trip residual | criterion 2's kinematic half, identically zero in exact arithmetic | `v1.0.0` |
 | **D5** Sachs–Wolfe limit | criterion 5a at 5%, **and the statement that it cannot discriminate B-5** — the two forms differ by a factor with no $\ell$ dependence | `v1.0.0` |
 | **D6** (102) in two frames | the frame-invariance measurement F5 rests on, with the residual split by sector | `v1.2.0` |
-| **D7** CDM threading vs energy frame | **T-29** — *Annals II* §4.1 lists them as two of three distinct choices and this bundle conflates them; the tilt is up to 45% of the threading velocity | `v1.2.0` |
+| **D7** CDM frame vs energy frame | **T-29** — *Annals II* §4.1 lists them as two of three distinct choices and this bundle conflates them; the tilt is up to 45% of the frame velocity | `v1.2.0` |
 | *D3*, *D4* | *deferred to v1.1.0 (S-b)* — cross-checks, not acceptance artefacts | — |
 
 The development lineage:
@@ -403,7 +413,8 @@ The development lineage:
 | Conventions gate C1 | the normative sign and ℓ-weight sheet | source of the generated `provenance/conventions.md`; drift detectable through `conventions-source.txt` |
 | Paper 1 (2026) | the 1+3 route to CMB lensing from the exact hierarchy | the paper this bundle reproduces; frozen 2026-10-09 |
 | v1.0.0 | the independent reconstruction: the Appendix F chain against four external hierarchies, both routes to (186), the Sachs–Wolfe limit, and frame covariance established **symbolically** | superseded by v1.1.0; its tag, release asset and archived DOI are unchanged |
-| **v1.1.0-rc** | Peebles recombination replacing equilibrium Saha and made the default (S22); the frame specialisation made numerical, closing criterion 2's curvature half; figures F6 and F8 | **release candidate** — complete, portable and manifested; awaiting its tag |
+| v1.1.0 | Peebles recombination replacing equilibrium Saha and made the default (S22); the frame specialisation made numerical, closing criterion 2's curvature half; figures F6 and F8 | **released**; its tag sits at the last commit whose content was v1.1.0, not at the tip |
+| **v1.2.0-dev** | the covariant coefficient assembly (89)/(90), the integral solution (102) carried with a generic $u^a$, the generic $\dot{\mathcal B}_A$ relations, the CDM frame as a second frame, F5, D6 and D7 — and findings T-17 through T-29, B-11 through B-14 | **this tree**; criterion 5b is the binding gate |
 | v1.2.0, planned | the full linear C_ℓ — acoustic peaks, Silk damping and the complete source assembly — **and the generic-$u^a$ hierarchy**, which unblocks figures F2, F5 and F7 | planned; acceptance criterion 5b closes here against CAMB and CLASS (decisions S18, S23); the release route is made runnable on a second machine here too (finding T-15) |
 | v1.5.0, planned | the high-ℓ O(ε²ℓ) effects, carrying both nonlinear corrections, gated on Paper 1 | planned; carries the restricted case as a recovery and check of v1.0.0, not a new result |
 | v2.0.0, planned | calibration and data science, including Planck | planned; no new physics in it, which is what keeps v1.2.0 ahead of it |

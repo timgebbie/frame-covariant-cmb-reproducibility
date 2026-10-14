@@ -151,6 +151,36 @@ is the translation, generated from
 \texttt{config/implementation-register.toml} so that it cannot drift from the
 code, with the test that checks each row.
 
+\paragraph{``RW'', ``FL'' and ``FLRW'' are three different claims, and this
+bundle makes the middle one.} The names are used interchangeably often enough
+that it is worth separating them once.
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Robertson--Walker (RW)} is a statement about \emph{geometry}:
+        the spacetime is spatially homogeneous and isotropic. It says nothing
+        about what drives the expansion, and it follows from symmetry alone ---
+        no field equation has been used.
+  \item \textbf{Friedmann--Lema\^{\i}tre (FL)} is that geometry \emph{with its
+        dynamics}: the Einstein equations imposed on it, giving the Friedmann
+        and Raychaudhuri equations and hence $a(\eta)$ for a given matter
+        content. FL is RW \emph{plus} the field equations.
+  \item \textbf{FLRW} is the two together, and is the usual compound name.
+\end{itemize}
+
+\emph{Annals~II} and this bundle say \textbf{almost-Friedmann--Lema\^{\i}tre},
+and the choice is not stylistic. The background here is integrated from the
+$1+3$ energy constraint rather than assumed, so the dynamical half is in use
+from the start: Eqs.~(185) and~(G.3) are \textbf{checks on this bundle rather
+than inputs to it}. A treatment that only assumed almost-RW would have the
+geometry and not the expansion history, and could not perform that check.
+
+The distinction is also what the almost-EGS theorem is about, and
+Sec.~\ref{sec:egs} depends on reading it the right way round. Almost-isotropy of
+the measured radiation bounds the \emph{geometry} --- an almost-RW conclusion.
+Getting from there to almost-FL requires the field equations as a second step.
+Collapsing the two names collapses a two-step argument into an assertion, which
+is precisely the move that paper is written to avoid.
+
 \paragraph{There are exactly two conventions, and they differ by $c^2=-1$.}
 Changing the harmonic normalisation
 $Q_{A_\ell}=\mu^{-\ell}\mathrm D_{\langle A_\ell\rangle}Q$ rescales the mode
@@ -238,22 +268,208 @@ left to inference.
 The solution is carried with a \textbf{generic} $u^a$. The explicit frames appear
 as choices made at the end, not assumed at the start: the Newtonian frame
 $\tilde\sigma_{ab}=0$, which is the specialisation \emph{Annals~II} itself makes
-at p.~365 in order to remove the shear terms, and the \textbf{total-energy frame}
-$q_a=0$. Carrying the generic threading and specialising late is the difference
+at p.~365 in order to remove the shear terms, and the \textbf{CDM frame}
+$\tilde A_a=0$. Carrying the generic frame and specialising late is the difference
 the $1+3$ covariant approach buys; a gauge-fixed treatment fixes the frame before
 the hierarchy is solved and cannot exhibit it.
 
 \paragraph{``CDM'' names two different things, and this supplement keeps them
 apart.} \emph{CDM the model} is a cosmology --- flat, matter dominated, no
 $\Lambda$ --- and it is one of the two models this release delivers a spectrum
-for. \emph{The CDM frame} is a choice of threading $u^a$, and it is the
-total-energy frame $q_a=0$: cold dark matter is pressureless and geodesic and
-carries no energy flux of its own, so the threading in which the CDM is at rest
-is the one in which the total energy flux vanishes. The two are independent. The
+for. \emph{The CDM frame} is a choice of frame $u^a$: the congruence in
+which the cold dark matter is at rest. The two are independent. The
 $\Lambda$CDM \emph{model} is computed in the same \emph{frame}, and a change of
 model is not a change of frame. In the code the models are named
-\texttt{CDM\_MODEL} and \texttt{LCDM\_MODEL} and the frames \texttt{"energy"} and
+\texttt{CDM\_MODEL} and \texttt{LCDM\_MODEL} and the frames \texttt{"cdm"} and
 \texttt{"newtonian"}, so the two cannot be confused at a call site.
+
+\paragraph{The CDM frame is \emph{not} the total-energy frame, and an earlier
+version of this supplement said it was.} The definition used here is exact in
+general relativity and needs no approximation: cold dark matter is
+\textbf{pressureless and collisionless}, so it is acted on by no non-gravitational
+force and its worldlines are \textbf{geodesics}. The CDM frame is therefore the
+frame with $\tilde A_a=0$, which is what \emph{Annals~II}~\S4.1 calls the
+\emph{zero acceleration frame}, listing it as the second of three useful choices
+--- the first being the \textbf{total-energy frame} $q_a=0$ and the third the
+Newtonian frame. They are \textbf{three stipulations, not two}, and the paper
+gives the reason this calculation wants the second: it is ``geodesic right
+through tight-coupling, slow decoupling and into the free-streaming era'',
+whereas the energy frame is recommended there for \emph{two} coupled species and
+this is a three-species problem that crosses decoupling.
+
+The two agree only in the limit of matter domination. Setting $q_a=0$ in a
+mixture gives $\rho_{\!_C}v^a_{\!_C}+\tfrac43\rho_{\!_R}v^a_{\!_R}+\ldots=0$, so
+in the CDM rest frame the total flux is \emph{not} zero --- the baryons and the
+photons are moving --- and the energy frame tilts away by
+$(\rho_b+\tfrac43\rho_{\!_R})/\rho_{\!_C}$. Measured in diagnostic~D7, that is
+\textbf{0.24} at last scattering for this release's background and \textbf{0.49}
+for the stamped Planck column, with the baryons carrying 37\% of it. It is
+largest exactly where the acoustic physics is, and falls afterwards on both
+counts, since $\rho_{\!_R}/\rho_{\!_C}$ decreases and the baryons stop moving
+with the photons once they decouple. Recorded as finding~\textbf{T-29}; the
+amendment is decision~\textbf{S8a}.
+
+\paragraph{The one-line reconciliation, and it is the PI's.} \textbf{The CDM
+frame is the energy frame \emph{of the CDM component}.} For pressureless dust
+$T^{C}_{ab}=\rho_{\!_C}u^{C}_au^{C}_b$, so its flux relative to a frame
+$u^a=u^a_{\!_C}+v^a$ is $q^{C}_a=\rho_{\!_C}v_a$ to first order, and
+$q^{C}_a=0$ gives $v_a=0$ --- the CDM at rest, exactly. So the two conditions
+are the same statement about one species, and the conflation this supplement
+previously carried was the dropped qualifier: ``energy frame'' unqualified means
+the \emph{total}, and the total includes the baryons and the photons, which are
+moving. Saying \emph{of what} settles it.
+
+\paragraph{The frames, and what each one fixes.} \emph{Annals~II}~\S4.1
+enumerates four (its sentence says ``three''); the baryon and radiation rows
+below are frames the paper uses elsewhere and are included because they are
+the ones a reader is most likely to reach for next.
+
+\begin{center}\small
+\begin{tabular}{@{}p{0.21\linewidth}p{0.22\linewidth}p{0.49\linewidth}@{}}
+\toprule
+\textbf{Frame or frame} & \textbf{Defining condition} & \textbf{What it establishes} \\
+\midrule
+CDM \emph{(used here)} & $u^a=u^a_{\!_C}$, equivalently $\tilde A_a=0$ &
+CDM is at rest; its congruence is geodesic in the conserved-dust model, which
+is exact rather than approximate. \emph{Annals~II} calls it the \emph{zero
+acceleration frame}. \\[2pt]
+Total energy & $q^{\rm total}_a=0$ &
+Total momentum density vanishes; \textbf{individual species can still move}.
+Agrees with the CDM frame only to $(\rho_b+\tfrac43\rho_{\!_R})/\rho_{\!_C}$. \\[2pt]
+Baryon & $u^a=u^a_{\!_B}$ &
+Baryons are at rest; pressure and scattering can accelerate them, so this
+frame is \textbf{not} geodesic. \\[2pt]
+Radiation energy & $q^{\gamma}_a=0$ &
+The radiation brightness dipole vanishes; \textbf{higher multipoles can
+remain}. \\[2pt]
+Newtonian \emph{(used here)} & $\sigma_{ab}=0=\omega_a$, where admissible &
+Useful for the scalar almost-FLRW comparison and for the Bardeen link;
+generally accelerated. Admissible only in restricted cases. \\[2pt]
+Constant expansion & $\mathrm D_a\Theta=0$, where admissible &
+Removes the spatial expansion gradient relative to that frame; sometimes
+useful on small scales. Not used here. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent Reading down the second column is the point: \textbf{each row fixes a
+different thing, and no two of them are the same condition}. A frame is chosen
+and then named, not inferred from what it is called.
+
+\paragraph{One of these frames contains observers and the other does not.}
+This is the reason the distinction is worth the space, and it is where the
+$1+3$ covariant account differs from a metric one in substance rather than in
+notation.
+
+The \textbf{CDM frame is a congruence of observers}. It is defined by a property
+of the matter --- pressureless, collisionless, therefore geodesic --- and the
+definition is exact in general relativity, not a first-order statement. We
+observe from inside it: a detector in a bound structure is comoving with the
+matter to the accuracy linear theory works at, and after decoupling the baryons
+have fallen into the same flow as the cold dark matter, so the baryon and CDM
+frames coincide at $\eta_0$ where the measurement is made. \emph{It is
+``us''.}
+
+The \textbf{Newtonian frame is not}. $\tilde\sigma_{ab}=0$ is a condition
+imposed to simplify, not a property any matter has, and \emph{Annals~II}~\S4.1
+says so in terms: the frame ``is only consistent in restricted cases'' and is
+``particularly useful in making comparisons with much of the analytic
+literature''. It is the covariant counterpart of what conformal Newtonian gauge
+does in a metric treatment --- admissible about almost-FLRW, and a device.
+
+\paragraph{Why this costs nothing at first order and will not stay free.}
+$\tau_{A_\ell}$ for $\ell\ge2$ is frame-invariant at first order, so the
+\emph{observable} does not care which frame carried it there, and a
+calculation performed in the Newtonian frame returns what an observer in the CDM
+frame measures. That is the whole licence for the Bardeen-variable route, and it
+is a first-order licence.
+
+At $O(\epsilon^2\ell)$ it lapses. The couplings v1.5.0 adds are products of two
+first-order quantities, and a product of two frame-dependent quantities is not
+frame-invariant just because each factor's leading frame-dependence cancels.
+Then the frame has to be the one the observer is actually in, and that is
+the CDM frame, not a device.
+
+\textbf{This is what figure~F5 is for.} Its third panel is the amount of
+machinery that is frame-dependent --- in the Newtonian frame one rank carries
+everything, in the CDM frame all three are occupied --- and its first two panels
+are the first-order invariance that currently makes that difference harmless.
+The figure shows both at once, which is why it is the right figure to carry into
+v1.5.0: it is a picture of exactly what stops cancelling.
+
+\paragraph{What the external codes use, and why criterion~5b has to check it.}
+Criterion~5b compares this bundle against CAMB and CLASS. That comparison is
+only meaningful if the frame each code evolves in is known, because a quantity
+compared across two frames is not the same quantity. The correspondence below is
+\textbf{recorded as stated and is not yet verified against the codes' own
+documentation or source}; verifying it is a \textbf{precondition of 5b}, not an
+afterthought, and is listed as such in
+\texttt{provenance/RELEASE-STATUS-v1.md}.
+
+\begin{center}\small
+\begin{tabular}{@{}p{0.17\linewidth}p{0.36\linewidth}p{0.39\linewidth}@{}}
+\toprule
+\textbf{Code} & \textbf{Gauge used for evolution} & \textbf{Corresponding $1+3$ frame} \\
+\midrule
+CLASS \emph{(default)} & Synchronous, with CDM velocity divergence $\theta_C=0$ &
+CDM-comoving: $u^a=u^a_{\!_C}$, $A_a=0$; shear generally nonzero. \\[2pt]
+CLASS \emph{(optional)} & Conformal Newtonian / longitudinal, selected with
+\texttt{gauge = newtonian} & Newtonian: scalar shear and vorticity vanish;
+acceleration generally nonzero. \\[2pt]
+CAMB & Covariant equations evaluated in the CDM frame, equivalent to
+CDM-comoving synchronous gauge & CDM-comoving: $v_{\!_C}=0$, $A_a=0$; shear
+generally nonzero. \\[2pt]
+Bolt.jl & Conformal Newtonian gauge, implemented as
+\texttt{BasicNewtonian} & Newtonian: CDM carries an explicitly evolved peculiar
+velocity relative to this frame. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent Two things follow if the table holds. First, \textbf{CAMB and CLASS's
+default both evolve in the frame this bundle uses}, which is the convenient
+case: 5b compares like with like without a frame transformation in between.
+Second, \textbf{CLASS's \texttt{newtonian} option and Bolt.jl evolve in the
+other one}, so a comparison against either is a comparison across frames and
+must either transform or restrict itself to the frame-invariant
+$\ell\ge2$ multipoles. Figure~F5 is the measurement of what that costs: the
+totals agree and the decompositions do not.
+
+That CAMB is described as using covariant equations in the CDM frame is the
+part most worth checking rather than assuming, because if true it makes the
+comparison closer than a gauge-versus-frame translation would suggest, and a
+comparison that is closer than it should be is the kind this bundle has already
+been wrong about once.
+
+\paragraph{For readers coming from the metric approach: a frame is not a gauge.}
+This is the distinction most easily lost in translation, and it is worth stating
+plainly because the two freedoms are often fixed together in a metric-based
+treatment and so look like one freedom.
+
+\begin{itemize}\itemsep2pt
+  \item A \textbf{gauge} is a choice of coordinates --- equivalently a choice of
+        correspondence between the perturbed spacetime and the background. In
+        the $1+3$ covariant approach it is \textbf{already dealt with}: every
+        variable used here vanishes in the background, so by the
+        Stewart--Walker lemma it is gauge-invariant by construction. There is no
+        residual gauge mode to fix and none to worry about.
+  \item A \textbf{frame} is a choice of the timelike congruence $u^a$ along
+        which the fluid and radiation variables are defined. It is a
+        \emph{physical} choice --- which observers --- and it survives after the
+        gauge question has been answered. It is the only freedom left, and it is
+        the one this release exhibits.
+\end{itemize}
+
+So the familiar correspondences are correspondences and not identities.
+Synchronous gauge is usually \emph{completed} by frame along the CDM, and
+conformal Newtonian gauge is usually \emph{completed} by frame along a
+shear-free congruence; in each case the gauge condition fixes coordinates and a
+separate stipulation fixes the observers. A statement that is frame-dependent
+here will appear in a metric treatment as a statement that depends on which
+gauge was chosen, and the two dependences are not the same dependence. That is
+why figure~F5 can show the \emph{total} common to two frames while the
+\emph{decomposition} differs: the split into ranks is frame-dependent and the
+observable is not, and neither fact is about coordinates.
 
 This is also what fixes the status of the next release. Because v1.0.0 is the
 general case, \textbf{v1.5.0's restricted case is a recovery and a check} --- it
@@ -261,7 +477,7 @@ must return v1.0.0's numbers, and that requirement is the regression test rather
 than a new result.
 
 \paragraph{The covariance claim is established symbolically, and that is the
-stronger form.} Acceptance criterion~2 asks that a change of threading
+stronger form.} Acceptance criterion~2 asks that a change of frame
 $u^a\to\tilde u^a=u^a+v^a$ return the rank-one bracket unchanged up to
 $\dot v_a$. It does, \emph{identically} in exact arithmetic rather than to a
 tolerance, and the cancellation is exhibited rather than quoted:
@@ -291,7 +507,7 @@ a rule leaving $\Phi_H$ fixed, or flipping its sign, leaves a residual
 proportional to $(v'+\mathcal Hv)$ and fails. The invariance is therefore forced
 rather than chosen to make a residual vanish. Only the dipole moves,
 $\tilde\tau_a\simeq\tau_a-v_a$; every $\tau_{A_\ell}$ with $\ell\ge2$ is
-unchanged, which is the standard any threading dependence surviving at
+unchanged, which is the standard any frame dependence surviving at
 $\ell\ge2$ must meet: it is an artefact of the reduction, not physics.
 
 \paragraph{The energy frame is derived, not stipulated.} Imposing
@@ -303,17 +519,17 @@ the frame velocity carry one normalisation.
 
 \paragraph{What this release does \emph{not} do, stated because the earlier draft
 of this section claimed it.} It does not compute an assembled spectrum in two
-frames and draw the difference. Eqs.~(177)--(179) are \textbf{Newtonian-threading
+frames and draw the difference. Eqs.~(177)--(179) are \textbf{Newtonian-frame
 expressions}: they descend from (106), which the corrections record flags in
-those words, and the Newtonian threading carries its whole $O(\ell)$ source in
-the acceleration pair while the CDM threading carries its whole source in the
+those words, and the Newtonian frame carries its whole $O(\ell)$ source in
+the acceleration pair while the CDM frame carries its whole source in the
 shear pair. Transforming the four input fields and re-evaluating the same
 equations therefore deletes the coupling that was carrying the source without
 supplying the one that replaces it: measured, the transfer function moves by a
 factor of about five, and under the opacity weighting the source collapses to
 two parts in a thousand. That is not a frame dependence of the sky. The figures
 which would draw it, and the convergence figure which would test footnote~29 on
-p.~365 in both threadings, require the generic-$u^a$ hierarchy and are deferred
+p.~365 in both frames, require the generic-$u^a$ hierarchy and are deferred
 with it.
 
 \section{Comparison and its range}
@@ -403,6 +619,7 @@ Weights are carried as exact rationals rather than floating-point numbers
 wherever a sign or an $\ell$-weight is asserted.
 
 \section{Beyond this release: the almost-EGS bounds}
+\label{sec:egs}
 The Ehlers--Geren--Sachs theorem states that exact CMB isotropy for all
 fundamental observers in an expanding dust universe forces exact
 Friedmann--Lema\^itre--Robertson--Walker geometry. The \emph{almost}-EGS theorem

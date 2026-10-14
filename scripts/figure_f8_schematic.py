@@ -20,17 +20,17 @@ That question has a precise answer, and it is a picture rather than a paragraph:
 * **Thomson scattering**: acts only at $\ell\le2$ — the monopole it cannot
   change, the dipole through $v_B$, the quadrupole through the anisotropic
   stress. Every higher rank is reached only by free streaming.
-* **The acceleration pair**, $O(\varepsilon^2\ell)$ in the Newtonian threading:
+* **The acceleration pair**, $O(\varepsilon^2\ell)$ in the Newtonian frame:
   $\ell\to\ell\pm1$, because $K^a=\mathrm D^a\Phi_A$ carries no direction
   dependence of its own.
-* **The shear triple**, $O(\varepsilon^2\ell)$ in the CDM threading:
+* **The shear triple**, $O(\varepsilon^2\ell)$ in the CDM frame:
   $\ell\to\ell\pm2$ *and* a rank-preserving $\ell\to\ell$, because
   $K^a=\sigma^a{}_be^b$ does depend on direction. The rank-preserving coupling
   exists **only** when $K^a$ does, which is the one structural difference
-  between the two threadings.
+  between the two frames.
 
 The last two are the same operator $K_\perp^a\partial/\partial e^a$ in two
-threadings, and the number of ranks each reaches is set by whether $K^a$ depends
+frames, and the number of ranks each reaches is set by whether $K^a$ depends
 on the photon direction. **That is the whole content of the frame argument, and
 it is visible here before any of it is computed.**
 
@@ -80,11 +80,11 @@ COLUMNS = [
     {"x": 1.25, "slot": 2, "dashed": True,
      "reaches": [(0, 1), (0, -1)], "self_loop": False,
      "head": "arrives later",
-     "label": "acceleration pair\nNewtonian threading\n$\\ell\\pm1$"},
+     "label": "acceleration pair\nNewtonian frame\n$\\ell\\pm1$"},
     {"x": 2.5, "slot": 3, "dashed": True,
      "reaches": [(0, 2), (0, -2)], "self_loop": True,
      "head": "",
-     "label": "shear triple\nCDM threading\n$\\ell\\pm2$, and $\\ell\\to\\ell$"},
+     "label": "shear triple\nCDM frame\n$\\ell\\pm2$, and $\\ell\\to\\ell$"},
 ]
 
 LEFT, RIGHT = -0.45, 2.95
@@ -141,10 +141,10 @@ def draw() -> plt.Figure:
     fig.text(
         0.012, 0.898,
         "Solid: what this release integrates. Dashed: what arrives later, and by "
-        "which threading. The acceleration pair reaches\n$\\ell\\pm1$ because "
+        "which frame. The acceleration pair reaches\n$\\ell\\pm1$ because "
         "$K^a=\\mathrm{D}^a\\Phi_A$ carries no direction dependence; the shear "
         "triple reaches $\\ell\\pm2$ and preserves rank because\n"
-        "$K^a=\\sigma^a_b e^b$ does. They are one operator in two threadings — "
+        "$K^a=\\sigma^a_b e^b$ does. They are one operator in two frames — "
         "the frame argument, before anything is computed.",
         ha="left", va="top", fontsize=7.4, color=INK["secondary"],
     )

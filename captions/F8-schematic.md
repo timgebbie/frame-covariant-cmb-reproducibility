@@ -14,12 +14,12 @@ can drift without any gate noticing.\\\\[2pt]
 \\textbf{Solid:} what this release integrates. Free streaming, (F.1)--(F.4),
 couples rank $\\ell$ to $\\ell\\pm1$ and to nothing else, which is the whole of
 v1.0.0's hierarchy and the reason the Appendix~F chain is the acceptance spine.
-\\textbf{Dashed:} what arrives later, and by which threading. The acceleration
+\\textbf{Dashed:} what arrives later, and by which frame. The acceleration
 pair reaches $\\ell\\pm1$ because $K^a=\\mathrm{D}^a\\Phi_A$ carries no direction
 dependence of its own; the shear triple reaches $\\ell\\pm2$ \\emph{and}
 preserves rank because $K^a=\\sigma^a{}_be^b$ does. The rank-preserving coupling
 exists only when $K^a$ depends on direction, and is the single structural
-difference between the two threadings.\\\\[2pt]
+difference between the two frames.\\\\[2pt]
 Both are the same operator $K_\\perp^a\\partial/\\partial e^a$, and the number of
 ranks each reaches is fixed by that one property. \\textbf{That is the whole
 content of the frame argument, visible before any of it is computed.} Decision

@@ -4,7 +4,7 @@ r"""Frame change at first order, derived rather than transcribed.
 rank --- $\mathcal B_0=-\tfrac13\mathrm D^a\tau_a$,
 $\mathcal B_1=\mathrm D_a\ln T+A_a$, $\mathcal B_2=\sigma_{ab}$ --- and the
 question the criterion asks is what happens to each under a change of the
-threading $u^a\to\tilde u^a=u^a+v^a$.
+frame $u^a\to\tilde u^a=u^a+v^a$.
 
 The target S14 supplies is $\tilde{\mathcal B}_1=\mathcal B_1+\dot v_a$: **no
 shear, and no $Hv$.** Any other result from the generic-$u^a$ construction is a
@@ -96,7 +96,7 @@ def _sym_traceless(name: str) -> sp.Matrix:
 
 @dataclass(frozen=True)
 class FrameChange:
-    r"""A first-order change of threading $u^a\to u^a+v^a$.
+    r"""A first-order change of frame $u^a\to u^a+v^a$.
 
     Everything here is symbolic and carries its order in `EPS`. `H` is the
     background expansion rate $\tfrac13\Theta$ and is **zeroth order** --- it
@@ -216,7 +216,7 @@ def roundtrip_residual() -> sp.Matrix:
 # ---------------------------------------------------------------------------
 #
 # Everything above settles the rank-one bracket, which is criterion 2. What
-# follows is what a *numerical* change of threading additionally needs, and it
+# follows is what a *numerical* change of frame additionally needs, and it
 # is collected here rather than in the pipeline so that the rules stay in the
 # one module that tracks orders symbolically.
 #
@@ -260,15 +260,15 @@ def harmonic_potential_shift(v: sp.Symbol, v_prime: sp.Symbol,
     return (v_prime + conformal_H * v) / k_com
 
 
-def energy_frame_velocity_equation(
+def cdm_frame_velocity_equation(
     phi_a: sp.Symbol, v: sp.Symbol, v_prime: sp.Symbol,
     conformal_H: sp.Symbol, k_com: sp.Symbol,
 ) -> sp.Expr:
-    r"""The ODE that **defines** the energy frame, as a residual that must vanish.
+    r"""The ODE that **defines** the CDM frame, as a residual that must vanish.
 
-    The energy frame is $q_a=0$ — equivalently, for pressureless geodesic cold
-    dark matter, the threading in which $\tilde A_a=0$ (decision **S8**: the CDM
-    *frame* is the total-energy frame, and "CDM" is a model name kept lexically
+    The CDM frame is $q_a=0$ — equivalently, for pressureless geodesic cold
+    dark matter, the frame in which $\tilde A_a=0$ (decision **S8**: the CDM
+    *frame* is the CDM frame $A_a=0$, and "CDM" is a model name kept lexically
     apart from it). Paper 1 Sec. VI C states the same specialisation as
     $\tilde A_a=0$ with $\sigma^C_{ab}=\mathrm D_{\langle a}v^C_{b\rangle}$.
 
@@ -299,7 +299,7 @@ def boosted_multipole(tau_ell: sp.Expr, ell: int) -> sp.Expr:
     r"""$\tilde\tau_{A_\ell}=\tau_{A_\ell}$ for $\ell\ge2$. Raises for $\ell\le1$.
 
     A function that returns its argument looks like dead code, and is not: it
-    is the executable form of the claim that **any threading dependence
+    is the executable form of the claim that **any frame dependence
     surviving at $\ell\ge2$ is an artefact of the reduction and not physics**
     (Paper 1 Sec. VI A). A call site that wants to transform a multipole has to
     come through here and be told no, rather than inventing a rule.

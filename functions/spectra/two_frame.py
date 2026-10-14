@@ -8,14 +8,14 @@ is a module with tests, not a helper someone imports across `scripts/`.
 **The decomposition is by rank, not by the three-way split of \S7.1.1.** That
 split --- primary, Doppler, integrated --- is a *Newtonian-frame* construction:
 it descends from (110) and (111), which exist only after $\tilde\sigma_{ab}=0$
-has removed the shear sector. Decomposing the energy frame that way would be
+has removed the shear sector. Decomposing the CDM frame that way would be
 reporting a Newtonian-frame answer about a frame that is not Newtonian. The rank
 split $C_0,C_1,C_2$ is what (89) actually produces and is defined in any frame,
 which is what makes it the covariant statement --- the PI's call, 2026-10-14.
 
 What the two frames carry:
 
-| | Newtonian | energy |
+| | Newtonian | CDM |
 |---|---|---|
 | rank 0, $C_0$ | $0$ | $-\tfrac52a\mathcal B_2$ |
 | rank 1, $C_1$ | the whole source | shifted by $-(v'-\kappa'v)/k$ |
@@ -42,11 +42,11 @@ from functions.spectra.bessel_table import BesselTable
 from functions.spectra.coefficients import (
     CoefficientSet,
     background_fluid,
-    energy_set,
+    cdm_set,
     newtonian_set,
 )
 from functions.spectra.decoupling import RecombinationHistory, diffusion_scale
-from functions.spectra.frame_transform import energy_frame_shift
+from functions.spectra.frame_transform import cdm_frame_shift
 from functions.spectra.integral_solution import integral_solution
 from functions.spectra.pipeline import required_n_eta
 from functions.spectra.potentials import potential_derivative, potentials
@@ -137,10 +137,10 @@ def build_environment(
 def coefficient_sets(
     k_com: float, env: TwoFrameEnvironment
 ) -> tuple[CoefficientSet, CoefficientSet]:
-    r"""`(newtonian, energy)` at one $k$, from the same acoustic solution.
+    r"""`(newtonian, cdm)` at one $k$, from the same acoustic solution.
 
     **Both frames are built from one integration of the acoustic pair**, which
-    is the point: the frames differ by the threading, not by the dynamics, so a
+    is the point: the frames differ by the frame, not by the dynamics, so a
     difference between them that came from two separate integrations would be a
     difference between two integrations.
     """
@@ -164,13 +164,13 @@ def coefficient_sets(
         r_baryon=env.r_baryon, r_baryon_prime=env.r_baryon_prime)
 
     newtonian = newtonian_set(eta, float(k_com), **shared)
-    shift = energy_frame_shift(eta, env.phi_a, float(k_com), background=bg)
-    energy = energy_set(
+    shift = cdm_frame_shift(eta, env.phi_a, float(k_com), background=bg)
+    cdm = cdm_set(
         eta, float(k_com), phi_h=env.phi_h,
         conformal_hubble_prime=env.conformal_hubble_prime, scale_factor=env.a,
         rho=env.rho, pressure=env.pressure, v=shift.v, v_prime=shift.v_prime,
         eta_star=eta_star, **shared)
-    return newtonian, energy
+    return newtonian, cdm
 
 
 #: Which coefficients each rank keeps. Everything else is zeroed, so the three

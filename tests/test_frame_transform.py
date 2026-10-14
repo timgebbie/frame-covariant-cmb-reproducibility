@@ -1,11 +1,11 @@
-r"""The numerical change of threading: what it establishes, and what it exposed.
+r"""The numerical change of frame: what it establishes, and what it exposed.
 
 `functions.spectra.frame_transform` turns the frame label into a calculation.
-These tests fix the parts that are **exact** — the energy-frame condition and
+These tests fix the parts that are **exact** — the CDM-frame condition and
 the Weyl invariant, both at machine precision — and then pin the negative
 result the machinery was built to find, finding **T-14**: the assembled
 transfer function is *not* invariant under transforming the inputs to
-(177)-(179), because those equations are themselves Newtonian-threading
+(177)-(179), because those equations are themselves Newtonian-frame
 expressions. A test that asserts a known defect is how the defect stays known.
 """
 
@@ -18,7 +18,7 @@ from functions.background.flrw import CDM_MODEL
 from functions.spectra.acoustic import solve_acoustic
 from functions.spectra.bessel_table import BesselTable
 from functions.spectra.decoupling import RecombinationHistory
-from functions.spectra.frame_transform import energy_frame_shift, to_frame
+from functions.spectra.frame_transform import cdm_frame_shift, to_frame
 from functions.spectra.potentials import potentials
 from functions.spectra.sources import (
     PerturbationHistory,
@@ -44,7 +44,7 @@ def _setup(k: float = K_TEST):
     return bg, rec, eta, phi_a, hist
 
 
-def test_the_energy_frame_kills_the_acceleration_to_machine_precision():
+def test_the_cdm_frame_kills_the_acceleration_to_machine_precision():
     r"""$\tilde\Phi_A=0$, which is the **definition** of the frame, not a result.
 
     Worth asserting anyway: it is zero by construction only if the quadrature,
@@ -52,7 +52,7 @@ def test_the_energy_frame_kills_the_acceleration_to_machine_precision():
     shows up here before it shows up anywhere interesting.
     """
     bg, _, eta, phi_a, hist = _setup()
-    shift = energy_frame_shift(eta, phi_a, K_TEST, background=bg)
+    shift = cdm_frame_shift(eta, phi_a, K_TEST, background=bg)
     moved = to_frame(hist, shift)
 
     scale = float(np.max(np.abs(hist.phi_a)))
@@ -67,7 +67,7 @@ def test_the_weyl_invariant_survives_the_numerical_transformation():
     a correct identity can still be implemented with a sign error.
     """
     bg, _, eta, phi_a, hist = _setup()
-    moved = to_frame(hist, energy_frame_shift(eta, phi_a, K_TEST, background=bg))
+    moved = to_frame(hist, cdm_frame_shift(eta, phi_a, K_TEST, background=bg))
 
     before = np.asarray(hist.phi_a) - np.asarray(hist.phi_h)
     after = np.asarray(moved.phi_a) - np.asarray(moved.phi_h)
@@ -77,7 +77,7 @@ def test_the_weyl_invariant_survives_the_numerical_transformation():
 def test_the_initial_condition_is_forgotten_rather_than_propagated():
     r"""The homogeneous mode is $v\propto1/a$, so a wrong start decays.
 
-    `energy_frame_shift` begins on the matter-domination attractor
+    `cdm_frame_shift` begins on the matter-domination attractor
     $v=-k\Phi_A\eta/3$. If that choice were load-bearing the figure would depend
     on it, so this starts from **zero** instead and requires the two to converge
     by late times. It is the same discipline as deriving a grid instead of
@@ -86,7 +86,7 @@ def test_the_initial_condition_is_forgotten_rather_than_propagated():
     bg, _, eta, phi_a, _ = _setup()
     a = np.asarray(bg.a_of_eta(eta), dtype=float)
 
-    attractor = energy_frame_shift(eta, phi_a, K_TEST, background=bg).v
+    attractor = cdm_frame_shift(eta, phi_a, K_TEST, background=bg).v
 
     integrand = a * phi_a
     cumulative = np.concatenate(
@@ -103,11 +103,11 @@ def test_applying_a_shift_twice_is_refused():
     """A history already in the target frame cannot be shifted into it again.
 
     The label used to be decoration, so nothing stopped a caller transforming
-    an energy-frame history into the energy frame and double-counting $v$. It
+    an CDM-frame history into the CDM frame and double-counting $v$. It
     does now.
     """
     bg, _, eta, phi_a, hist = _setup()
-    shift = energy_frame_shift(eta, phi_a, K_TEST, background=bg)
+    shift = cdm_frame_shift(eta, phi_a, K_TEST, background=bg)
     moved = to_frame(hist, shift)
 
     with pytest.raises(ValueError, match="already in"):
@@ -118,16 +118,16 @@ def test_T14_the_transfer_function_is_NOT_frame_invariant_under_177_to_179():
     r"""**Finding T-14, pinned.** The sum is an observable; this calculation is not it.
 
     `sources.py` claimed that because $\delta T$, $\Phi_A$, $v_B$ and $\tau_1$
-    all shift under a change of threading, "only the total is an observable" —
+    all shift under a change of frame, "only the total is an observable" —
     which is true physics, and was being read operationally as *transform the
     four inputs and the total is preserved*. It is not preserved. It moves by a
     factor of order **five**.
 
-    The reason is that (177)-(179) are **Newtonian-threading expressions**, not
+    The reason is that (177)-(179) are **Newtonian-frame expressions**, not
     generic-$u^a$ ones: they descend from (106), which the corrections record
     flags in those words, through (107), (110) and (111). The Newtonian
-    threading carries its $O(\ell)$ source in the **acceleration** pair; the CDM
-    threading carries it in the **shear** pair (Paper 1 Secs. VI B and VI C,
+    frame carries its $O(\ell)$ source in the **acceleration** pair; the CDM
+    frame carries it in the **shear** pair (Paper 1 Secs. VI B and VI C,
     Eqs. (newt-pair) and (cdm-triple)). Setting $\tilde\Phi_A=0$ therefore
     deletes the coupling that carried the source without supplying the one that
     replaces it — and the measured collapse to a fraction of a percent under the
@@ -140,7 +140,7 @@ def test_T14_the_transfer_function_is_NOT_frame_invariant_under_177_to_179():
     bg, rec, eta, phi_a, hist = _setup()
     eta_star = float(eta[int(np.argmax(rec.visibility))])
     aH = bg.aH_of_eta(eta)
-    moved = to_frame(hist, energy_frame_shift(eta, phi_a, K_TEST, background=bg))
+    moved = to_frame(hist, cdm_frame_shift(eta, phi_a, K_TEST, background=bg))
 
     sc = ScatteringHistory(eta=eta, kappa_prime=rec.kappa_prime,
                            visibility=rec.visibility, damping_k=np.inf)
@@ -165,7 +165,7 @@ def test_T14_the_transfer_function_is_NOT_frame_invariant_under_177_to_179():
         #
         # **Re-measured after T-27.** The band was 0.9-1.0 while the dipole's
         # frame shift was -v instead of -v/k. Correcting that moved the three
-        # numbers to 1.0138, 1.0099, 1.0099 -- the energy-frame transfer is
+        # numbers to 1.0138, 1.0099, 1.0099 -- the CDM-frame transfer is
         # about 1% of the Newtonian one with the opposite sign -- and left
         # **the finding itself untouched**, which is the part worth recording.
         # T-14 is the *absence of the shear sector* from (177)-(179), not the
@@ -183,7 +183,7 @@ def test_T14_the_transfer_function_is_NOT_frame_invariant_under_177_to_179():
 def test_T27_the_dipole_carries_the_same_inverse_k_as_the_monopole():
     r"""**Finding T-27.** $\tilde\tau_1$ and $\tilde v_B$ shift by $-v/k$, not $-v$.
 
-    `ThreadingShift` holds two rank-one shifts. `temperature_shift` divides by
+    `FrameShift` holds two rank-one shifts. `temperature_shift` divides by
     $k_{\rm com}$ and `to_frame`'s dipole rule did not, and both cannot be
     right: the monopole's $1/k$ is there because a *scalar* amplitude is
     $1/k_{\rm phys}$ times its gradient's, and $\tilde\tau_1$ is the dipole in
@@ -198,7 +198,7 @@ def test_T27_the_dipole_carries_the_same_inverse_k_as_the_monopole():
     corrected one the ratio is flat in $k$.
     """
     from functions.background.flrw import Background
-    from functions.spectra.frame_transform import energy_frame_shift
+    from functions.spectra.frame_transform import cdm_frame_shift
 
     bg = Background(omega_m=1.0)
     eta = np.linspace(0.05, float(bg.eta_0), 400)
@@ -206,7 +206,7 @@ def test_T27_the_dipole_carries_the_same_inverse_k_as_the_monopole():
 
     ratios = []
     for k in (5.0, 20.0, 60.0, 140.0, 300.0):
-        shift = energy_frame_shift(eta, phi_a, k, background=bg)
+        shift = cdm_frame_shift(eta, phi_a, k, background=bg)
         assert np.allclose(shift.dipole_shift(), -shift.v / k, rtol=0, atol=0)
         ratios.append(np.max(np.abs(shift.dipole_shift())))
 

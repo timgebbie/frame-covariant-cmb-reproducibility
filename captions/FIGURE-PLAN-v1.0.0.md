@@ -30,7 +30,7 @@ The house rules, plus those adopted in this release.
    convention-dependent in exactly the way this bundle exists to avoid.
 2. **Every figure names its frame.** v1.0.0 carries a generic $u^a$ and
    specialises late. Any quantity that is not invariant under a change of
-   threading — the dipole, and the primary/Doppler/ISW split of §7.1.1 — is
+   frame — the dipole, and the primary/Doppler/ISW split of §7.1.1 — is
    labelled with the frame it was computed in.
 3. One axis. Never a dual y-axis. Two measures of different scale are two panels.
 4. Legend present for $\ge 2$ series; $\le 4$ series are also direct-labelled, so
@@ -179,7 +179,7 @@ and three signed cross-spectra, and the figure shows all six.
 
 **Drawn in two frames.** The split is frame-dependent — $\tilde\tau_1$ and $v_B$
 are frame objects, so what counts as Doppler and what counts as ISW redistributes
-under a change of threading, while the total does not. Frames are distinguished
+under a change of frame, while the total does not. Frames are distinguished
 by **line style, solid and dashed, not by hue**, because hue already carries
 source identity. That composite encoding also keeps the figure to three hues.
 

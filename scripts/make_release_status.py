@@ -15,7 +15,7 @@ whose evidence is missing fails the script rather than appearing in the output.
     (S) shipped            in a tagged release, hashed, cited
 
 Promotion is a measurement, not a judgement, and **demotion is normal**: finding
-T-24 demoted the energy-frame closure from C to P and it re-entered at C with a
+T-24 demoted the CDM-frame closure from C to P and it re-entered at C with a
 different test. That is the ladder working.
 
 Run:  python scripts/make_release_status.py
@@ -66,16 +66,16 @@ ARTEFACTS: list[Artefact] = [
              script="scripts/diagnostic_d5_sachs_wolfe.py"),
 
     # ---- v1.1.0, release candidate --------------------------------------
-    Artefact("Peebles recombination, default from this release (S22)", "R", "v1.1.0",
+    Artefact("Peebles recombination, default from this release (S22)", "S", "v1.1.0",
              module="functions.spectra.peebles",
              script="scripts/figure_f6_approximations.py",
              note="freeze-out 2.15e-4 against a standard ~2e-4; visibility peak "
                   "z~1107 against a standard 1080-1100"),
-    Artefact("the threading change made numerical", "R", "v1.1.0",
+    Artefact("the frame change made numerical", "S", "v1.1.0",
              module="functions.spectra.frame_transform",
-             objects=("ThreadingShift", "energy_frame_shift", "to_frame"),
+             objects=("FrameShift", "cdm_frame_shift", "to_frame"),
              tests=("test_T27_the_dipole_carries_the_same_inverse_k_as_the_monopole",)),
-    Artefact("criterion 2's curvature half", "R", "v1.1.0",
+    Artefact("criterion 2's curvature half", "S", "v1.1.0",
              module="functions.frames",
              objects=("weyl_invariance_residual", "weyl_electric_amplitude"),
              script="scripts/diagnostic_d2_roundtrip.py"),
@@ -102,9 +102,9 @@ ARTEFACTS: list[Artefact] = [
                     "test_no_numerical_derivative_survives_in_the_c2_chain"),
              note="rank 2 closed from Appendix G with a control; rank 1 assembled "
                   "from printed equations and still carrying (*)"),
-    Artefact("the energy frame as a second frame", "C", "v1.2.0",
+    Artefact("the CDM frame as a second frame", "C", "v1.2.0",
              module="functions.spectra.coefficients",
-             objects=("energy_frame_shear", "energy_set", "background_fluid"),
+             objects=("cdm_frame_shear", "cdm_set", "background_fluid"),
              tests=("test_the_frame_shift_of_every_coefficient_is_the_closed_form_one",
                     "test_B13_the_printed_n_t1_does_not_close_and_the_general_rule_does",
                     "test_T24_the_closure_is_an_identity_in_both_conventions")),
@@ -142,7 +142,11 @@ ARTEFACTS: list[Artefact] = [
     Artefact("criterion 5b against CAMB and CLASS", "P", "v1.2.0",
              blocks=("reference data must be stamped under reference/ and not vendored",
                      "the tolerance is the two codes' mutual difference (S4b), "
-                     "which has not been measured")),
+                     "which has not been measured",
+                     "the frame each code evolves in must be VERIFIED against its "
+                     "own documentation, not assumed: the supplement's table is "
+                     "recorded as stated. A quantity compared across two frames "
+                     "is not the same quantity")),
 
     # ---- v1.5.0, gated --------------------------------------------------
     Artefact("the quartic contribution and the nonlinear couplings", "P", "v1.5.0",
@@ -154,9 +158,9 @@ ARTEFACTS: list[Artefact] = [
 
 #: What each release is waiting on, beyond its own artefacts.
 GATES: dict[str, tuple[str, ...]] = {
-    "v1.1.0": ("the tag. The tree is v1.1.0-rc: complete, portable and "
-               "manifested, and `git tag --list v1.1.0` is the check "
-               "that moves these three from R to S",),
+    "v1.1.0": ("none. Tagged at the last commit whose content was "
+               "v1.1.0 --- NOT at the tip, which has moved on to "
+               "v1.2.0 and would mislabel the tree",),
     "v1.2.0": ("criterion 5b, which needs CAMB and CLASS reference data",
                "the conventions sheet's lambda (C3.5), which F5 stands on",
                "the supplement's derivation section, written from "
@@ -271,7 +275,7 @@ def render(artefacts: list[Artefact]) -> str:
         "gates are clear. That is a question the tree can answer; *is it done* is",
         "not, which is why S27 exists.",
         "",
-        "**Demotion is normal.** Finding **T-24** moved the energy-frame closure",
+        "**Demotion is normal.** Finding **T-24** moved the CDM-frame closure",
         "from C back to P and it re-entered at C with a different test — one that",
         "asserts the closure holds for *every* convention, so it can never again",
         "be cited as evidence for one. A ladder with no demotions on it is a",

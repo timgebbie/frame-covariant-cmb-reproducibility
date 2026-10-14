@@ -21,15 +21,15 @@ harness entry is missing fails the script instead of appearing here.
 | **S** | both routes to (186), agreeing exactly | `functions.spectra.angular`; `scripts/figure_f3_angular_spectrum.py`; exactly zero since T-17 put the combined coefficients in Q |
 | **S** | the Sachs-Wolfe limit, criterion 5a | `functions.spectra.sachs_wolfe`; `scripts/diagnostic_d5_sachs_wolfe.py` |
 
-## v1.1.0 — 3×R
+## v1.1.0 — 3×S
 
-- **Gate:** the tag. The tree is v1.1.0-rc: complete, portable and manifested, and `git tag --list v1.1.0` is the check that moves these three from R to S
+- **Gate:** none. Tagged at the last commit whose content was v1.1.0 --- NOT at the tip, which has moved on to v1.2.0 and would mislabel the tree
 
 | | artefact | evidence |
 |---|---|---|
-| **R** | Peebles recombination, default from this release (S22) | `functions.spectra.peebles`; `scripts/figure_f6_approximations.py`; freeze-out 2.15e-4 against a standard ~2e-4; visibility peak z~1107 against a standard 1080-1100 |
-| **R** | the threading change made numerical | `functions.spectra.frame_transform`; `test_T27_the_dipole_carries_the_same_inverse_k_as_the_monopole` |
-| **R** | criterion 2's curvature half | `functions.frames`; `scripts/diagnostic_d2_roundtrip.py` |
+| **S** | Peebles recombination, default from this release (S22) | `functions.spectra.peebles`; `scripts/figure_f6_approximations.py`; freeze-out 2.15e-4 against a standard ~2e-4; visibility peak z~1107 against a standard 1080-1100 |
+| **S** | the frame change made numerical | `functions.spectra.frame_transform`; `test_T27_the_dipole_carries_the_same_inverse_k_as_the_monopole` |
+| **S** | criterion 2's curvature half | `functions.frames`; `scripts/diagnostic_d2_roundtrip.py` |
 
 ## v1.2.0 — 2×R, 5×C, 4×P
 
@@ -44,12 +44,12 @@ harness entry is missing fails the script instead of appearing here.
 | **C** | the covariant coefficients C_0, C_1, C_2 from (89) | `functions.spectra.coefficients`; `test_all_three_of_90_are_reproduced_by_the_match`; `test_b11_is_a_sign_in_89_not_in_90`; `test_the_newtonian_specialisation_is_equation_109`; (89) is implemented as the definition so (90) is a check; B-11's delta_l0 sign resolved |
 | **C** | the integral solution (102), carried with a generic u^a | `functions.spectra.integral_solution`; `test_the_shear_boundary_term_is_empty_in_the_newtonian_frame`; `test_the_shear_boundary_term_is_not_empty_once_b2_is`; `test_the_specialisation_recovers_what_the_pipeline_computes` |
 | **C** | the generic source derivatives Annals II never wrote | `functions.spectra.coefficients`; `test_the_rank_two_control_passes_symbolically`; `test_no_numerical_derivative_survives_in_the_c2_chain`; rank 2 closed from Appendix G with a control; rank 1 assembled from printed equations and still carrying (*) |
-| **C** | the energy frame as a second frame | `functions.spectra.coefficients`; `test_the_frame_shift_of_every_coefficient_is_the_closed_form_one`; `test_B13_the_printed_n_t1_does_not_close_and_the_general_rule_does`; `test_T24_the_closure_is_an_identity_in_both_conventions` |
+| **C** | the CDM frame as a second frame | `functions.spectra.coefficients`; `test_the_frame_shift_of_every_coefficient_is_the_closed_form_one`; `test_B13_the_printed_n_t1_does_not_close_and_the_general_rule_does`; `test_T24_the_closure_is_an_identity_in_both_conventions` |
 | **C** | the ell ceiling removed, 507 -> 2000 | `functions.spectra.bessel_table`; `test_unavailable_ell_is_refused`; `test_the_coefficients_are_exact_rationals_not_floats`; findings T-17 and T-18 |
 | **P** | the stamped Planck 2018 parameter set | `functions.background.flrw`; provenance/COSMOLOGICAL-PARAMETERS-v1.md; the paper's own stated baseline column, not one chosen here; **blocked:** recorded but not wired into a model constant, and nothing checks the stamp against the release's round numbers --- the ladder caught this one on its first run |
 | **P** | F2 - truncation convergence, both frames | **blocked:** F5 has landed; these follow it and wait on nothing else |
 | **P** | F7 - frame specialisation | **blocked:** F5 has landed; these follow it and wait on nothing else |
-| **P** | criterion 5b against CAMB and CLASS | **blocked:** reference data must be stamped under reference/ and not vendored; **blocked:** the tolerance is the two codes' mutual difference (S4b), which has not been measured |
+| **P** | criterion 5b against CAMB and CLASS | **blocked:** reference data must be stamped under reference/ and not vendored; **blocked:** the tolerance is the two codes' mutual difference (S4b), which has not been measured; **blocked:** the frame each code evolves in must be VERIFIED against its own documentation, not assumed: the supplement's table is recorded as stated. A quantity compared across two frames is not the same quantity |
 
 ## v1.5.0 — 2×P
 
@@ -67,7 +67,7 @@ A release is ready when every artefact in its scope is at **R** and its
 gates are clear. That is a question the tree can answer; *is it done* is
 not, which is why S27 exists.
 
-**Demotion is normal.** Finding **T-24** moved the energy-frame closure
+**Demotion is normal.** Finding **T-24** moved the CDM-frame closure
 from C back to P and it re-entered at C with a different test — one that
 asserts the closure holds for *every* convention, so it can never again
 be cited as evidence for one. A ladder with no demotions on it is a

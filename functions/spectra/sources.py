@@ -30,7 +30,7 @@ normalisation. `tests/test_sources.py` asserts it. A normalisation slip anywhere
 in either half breaks that identity, which is why it is worth having.
 
 **The three terms are frame-dependent; their sum is an observable.** $\\delta T$,
-$\\Phi_A$, $v_B$ and $\\tau_1$ all shift under a change of threading $u^a$, and
+$\\Phi_A$, $v_B$ and $\\tau_1$ all shift under a change of frame $u^a$, and
 the split of (176) into primary, Doppler and integrated pieces shifts with
 them. The module therefore returns the three terms separately *and* their
 combination, and never lets a caller plot one alone without saying which frame
@@ -38,21 +38,21 @@ it was computed in.
 
 **What that does NOT license, and used to be read as licensing --- finding
 T-14.** It does not mean that transforming those four fields into another
-threading and re-evaluating (177)-(179) returns the same total. It does not:
-measured against the energy frame it moves by a factor of about five, and under
+frame and re-evaluating (177)-(179) returns the same total. It does not:
+measured against the CDM frame it moves by a factor of about five, and under
 the opacity weighting the source very nearly collapses altogether.
 
-**These equations are Newtonian-threading expressions.** They descend from
+**These equations are Newtonian-frame expressions.** They descend from
 (106), which the corrections record flags in exactly those words, through
 (107), (110) and (111). Paper 1 Secs. VI B and VI C make the consequence plain:
-the Newtonian threading carries its whole $O(\\ell)$ source in the
-**acceleration** pair and the CDM threading carries its whole source in the
+the Newtonian frame carries its whole $O(\\ell)$ source in the
+**acceleration** pair and the CDM frame carries its whole source in the
 **shear** pair --- two different expressions for one operator. Setting
 $\\tilde\\Phi_A=0$ therefore deletes the coupling that was carrying the source
 without supplying the one that should replace it, and the collapse is that
 deletion, not a frame-dependence of the sky.
 
-So the sum is an observable, and **this formula computes it in one threading
+So the sum is an observable, and **this formula computes it in one frame
 only**. `functions.spectra.frame_transform` moves the fields correctly ---
 $\\tilde\\Phi_A=0$ and the Weyl invariant $\\Phi_A-\\Phi_H$ both hold to
 $10^{-16}$ --- and `tests/test_frame_transform.py` pins the defect so that it
@@ -109,23 +109,27 @@ __all__ = [
 PUBLISHED_ISW_SIGN = -1.0
 THESIS_ISW_SIGN = +1.0
 
-#: A choice of threading $u^a$, made at the end and never at the start.
+#: A choice of frame $u^a$, made at the end and never at the start.
 #:
 #: * ``"generic"``  --- no specialisation. The default, and what the $1+3$
 #:   approach buys over a gauge-fixed treatment.
 #: * ``"newtonian"`` --- $\\tilde\\sigma_{ab}=0$, the specialisation Annals II
 #:   itself makes at p. 365 to remove the shear terms.
-#: * ``"energy"``    --- the **total-energy frame** $q_a=0$. This is the **CDM
-#:   frame**: cold dark matter is pressureless and geodesic and carries no energy
-#:   flux of its own, so the threading in which the CDM is at rest is the one in
-#:   which the total energy flux vanishes.
+#: * ``"cdm"``    --- the **CDM frame**, $A_a=0$. Cold dark matter is
+#:   pressureless and collisionless, so no non-gravitational force acts on it and
+#:   its worldlines are geodesics: the definition is **exact in general
+#:   relativity**, not a first-order statement. Equivalently it is the energy
+#:   frame of the **CDM component alone**, $q^C_a=0$ --- which is *not* the
+#:   total-energy frame $q_a=0$, because the baryons and the photons are moving
+#:   in it. The two agree only to $(\rho_b+\tfrac43\rho_R)/\rho_C$, measured in
+#:   **D7**. Findings **T-29** and decision **S8a**.
 #:
 #: **"CDM" is not a frame name in this codebase**, because it is already a model
 #: name --- `functions.background.CDM_MODEL`. Model and frame are independent:
 #: the LCDM *model* is computed in the same *frame* as the CDM model, and
 #: changing model is not changing frame. The two are kept lexically apart so a
 #: call site cannot blur them.
-Frame = Literal["generic", "newtonian", "energy"]
+Frame = Literal["generic", "newtonian", "cdm"]
 
 
 @dataclass(frozen=True)
@@ -135,7 +139,7 @@ class PerturbationHistory:
     Every field is a function of conformal time at one comoving wavenumber. The
     frame is carried explicitly rather than assumed, because the split of (176)
     into three terms is frame-dependent even though the sum is not; a history
-    that does not say which threading it was computed in cannot be plotted.
+    that does not say which frame it was computed in cannot be plotted.
     """
 
     eta: np.ndarray
@@ -283,11 +287,11 @@ def source_integrated(
     if isw_sign not in (PUBLISHED_ISW_SIGN, THESIS_ISW_SIGN):
         raise ValueError("isw_sign is a finding, not a free parameter: use -1.0 or +1.0")
     isw = history.derivative("phi_a") - history.derivative("phi_h")
-    threading = np.asarray(aH, dtype=float) * (
+    frame = np.asarray(aH, dtype=float) * (
         np.asarray(history.delta_T, dtype=float)
         + 3.0 * np.asarray(history.phi_a, dtype=float)
     )
-    bracket = isw + isw_sign * threading
+    bracket = isw + isw_sign * frame
     chosen = scattering.visibility if weight is None else np.asarray(weight, dtype=float)
     return np.asarray(chosen, dtype=float) * scattering.diffusion(k_com) * bracket
 

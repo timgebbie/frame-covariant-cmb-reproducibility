@@ -1,4 +1,4 @@
-r"""Changing the threading, numerically — the frame specialisation made real.
+r"""Changing the frame, numerically — the frame specialisation made real.
 
 Until v1.1.0 `PerturbationHistory.frame` was a **label**: the string
 ``"newtonian"`` sat on the dataclass and nothing in the bundle read it. This
@@ -22,7 +22,7 @@ and each carries a source:
 | $\tau_a$ | $-v_a$ | GDE99 Eq. (37) |
 | $\tau_{A_\ell},\ \ell\ge2$ | **invariant** | GDE99, below Eq. (35) |
 
-The last two are the standard Paper 1 Sec. VI A sets: *any threading dependence
+The last two are the standard Paper 1 Sec. VI A sets: *any frame dependence
 surviving at $\ell\ge2$ is an artefact of the reduction and not physics.*
 
 ---
@@ -38,7 +38,7 @@ $$\tau_1' = -\frac{R'}{1+R}\tau_1 - \frac{k}{1+R}\delta T - k\Phi_A
 \;\longrightarrow\;
 \tau_1' + \mathcal H\tau_1 = -k\Phi_A ,$$
 
-which is **exactly** `energy_frame_velocity_equation`. The photon dipole in the
+which is **exactly** `cdm_frame_velocity_equation`. The photon dipole in the
 heavily-loaded limit obeys the geodesic Euler equation, as it must when the
 baryons dominate the inertia and the pair falls freely. So `tau_1` and $v_B$
 carry the same normalisation as $v$, and both shift by $-v$. `tests/` asserts
@@ -46,7 +46,7 @@ the limit rather than leaving it as a remark.
 
 ---
 
-**The energy frame needs no numerical derivative, and that is the point of
+**The CDM frame needs no numerical derivative, and that is the point of
 defining it by $\tilde A_a=0$ rather than by a velocity someone supplies.**
 Imposing it gives $v'+\mathcal Hv=-k\Phi_A$, so the quantity the potentials
 shift by, $(v'+\mathcal Hv)/k$, is $-\Phi_A$ **exactly** — algebraically, with
@@ -67,16 +67,16 @@ import numpy as np
 from functions.background.flrw import Background
 from functions.spectra.sources import Frame, PerturbationHistory
 
-__all__ = ["ThreadingShift", "energy_frame_shift", "to_frame"]
+__all__ = ["FrameShift", "cdm_frame_shift", "to_frame"]
 
 
 @dataclass(frozen=True)
-class ThreadingShift:
-    r"""A first-order change of threading $u^a\to u^a+v^a$ at one wavenumber.
+class FrameShift:
+    r"""A first-order change of frame $u^a\to u^a+v^a$ at one wavenumber.
 
     `v` and `v_prime` are the scalar mode amplitudes of $v_a$ and $v_a'$ on the
     conformal-time grid. Both are carried explicitly: `v_prime` is **not**
-    recovered by differentiating `v`, because for the energy frame it is known
+    recovered by differentiating `v`, because for the CDM frame it is known
     in closed form from the defining condition, and a spline there would be a
     discretisation error inside an exact statement.
     """
@@ -131,17 +131,17 @@ class ThreadingShift:
         return -np.asarray(self.v, dtype=float) / self.k_com
 
 
-def energy_frame_shift(
+def cdm_frame_shift(
     eta: np.ndarray,
     phi_a: np.ndarray,
     k_com: float,
     *,
     background: Background,
-) -> ThreadingShift:
-    r"""The shift from the Newtonian threading to the energy ($q_a=0$) frame.
+) -> FrameShift:
+    r"""The shift from the Newtonian frame to the CDM frame.
 
-    Solves $v'+\mathcal Hv=-k\Phi_A$ — decision **S8**'s total-energy frame,
-    which for pressureless geodesic cold dark matter is the threading in which
+    Solves $v'+\mathcal Hv=-k\Phi_A$ — decision **S8a**'s CDM frame,
+    which for pressureless geodesic cold dark matter is the frame in which
     the CDM is at rest, and Paper 1 Sec. VI C's $\tilde A_a=0$.
 
     **By quadrature, not by an ODE solver.** The integrating factor is $a$
@@ -175,17 +175,17 @@ def energy_frame_shift(
     # **Exact, from the defining condition** --- never from a spline of v.
     v_prime = -aH * v - k_com * phi_a
 
-    return ThreadingShift(
+    return FrameShift(
         eta=eta, v=v, v_prime=v_prime, k_com=float(k_com),
-        conformal_H=aH, target="energy",
+        conformal_H=aH, target="cdm",
     )
 
 
 def to_frame(
     history: PerturbationHistory,
-    shift: ThreadingShift,
+    shift: FrameShift,
 ) -> PerturbationHistory:
-    r"""Apply a threading shift to a history, returning the history in the new frame.
+    r"""Apply a frame shift to a history, returning the history in the new frame.
 
     Every field moves by the rule `functions.frames` derives for it, and the
     frame label moves with them — so a history can no longer *claim* a frame it

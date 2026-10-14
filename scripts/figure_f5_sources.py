@@ -13,7 +13,7 @@ frames while splitting it quite differently.
 **Why rank and not primary/Doppler/integrated.** The three-way split of \S7.1.1
 is a *Newtonian-frame* construction: it descends from (110) and (111), which
 exist only after $\tilde\sigma_{ab}\approx0$ has emptied the shear sector.
-Drawing the energy frame that way would report a Newtonian-frame answer about a
+Drawing the CDM frame that way would report a Newtonian-frame answer about a
 frame that is not Newtonian. The rank split $C_0,C_1,C_2$ is what the
 rank-by-rank match (89) actually produces, and it is defined in every frame.
 *The PI's call, 2026-10-14.*
@@ -25,7 +25,7 @@ rank-by-rank match (89) actually produces, and it is defined in every frame.
   panel, not to zero, and the difference between those two statements is the
   honest part of this figure.
 * **(b)** the decomposition. In the Newtonian frame **one rank carries
-  everything**; in the energy frame **all three are occupied**. Same total,
+  everything**; in the CDM frame **all three are occupied**. Same total,
   different parts: that is the whole claim, and it is one panel.
 * **(c)** why the parts do not add. $C_\ell$ is **quadratic** in the source, so
   the three rank contributions to it do not sum to the total --- the three
@@ -91,10 +91,10 @@ def compute() -> dict:
 
     shape = (ELLS.size, K_COM.size)
     transfer = {frame: {r: np.zeros(shape) for r in (-1, 0, 1, 2)}
-                for frame in ("newtonian", "energy")}
+                for frame in ("newtonian", "cdm")}
 
     for j, k in enumerate(K_COM):
-        sets = dict(zip(("newtonian", "energy"), coefficient_sets(float(k), env)))
+        sets = dict(zip(("newtonian", "cdm"), coefficient_sets(float(k), env)))
         for frame, coefficients in sets.items():
             parts = transfer_by_rank(ELLS, float(k), coefficients, env, table)
             for r, values in parts.items():
@@ -116,24 +116,24 @@ def compute() -> dict:
                   for r in (-1, 0, 1, 2)}
           for frame in transfer}
 
-    cross = {(a, b): np.array([cl_cross(int(l), K_COM, transfer["energy"][a][i],
-                                        transfer["energy"][b][i], power)
+    cross = {(a, b): np.array([cl_cross(int(l), K_COM, transfer["cdm"][a][i],
+                                        transfer["cdm"][b][i], power)
                                for i, l in enumerate(ELLS)])
              for a, b in ((0, 1), (0, 2), (1, 2))}
 
     # **The parts plus the cross terms must be the whole**, and C_l is quadratic
     # so the parts alone are not. Both halves of that are checked here.
-    autos = sum(cl["energy"][r] for r in (0, 1, 2))
+    autos = sum(cl["cdm"][r] for r in (0, 1, 2))
     reconstructed = autos + 2.0 * sum(cross.values())
-    worst = np.max(np.abs(reconstructed - cl["energy"][-1]) / np.abs(cl["energy"][-1]))
+    worst = np.max(np.abs(reconstructed - cl["cdm"][-1]) / np.abs(cl["cdm"][-1]))
     if worst > 1e-10:
         raise ValueError(f"autos + 2*crosses != total ({worst:.2e})")
-    gap = np.max(np.abs(autos - cl["energy"][-1]) / np.abs(cl["energy"][-1]))
+    gap = np.max(np.abs(autos - cl["cdm"][-1]) / np.abs(cl["cdm"][-1]))
     print(f"  autos + 2x crosses reproduce C_l to {worst:.2e}; "
           f"autos alone are off by {gap:.2f} --- C_l is quadratic")
 
-    residual = np.abs(cl["newtonian"][-1] - cl["energy"][-1]) / np.maximum(
-        np.abs(cl["newtonian"][-1]), np.abs(cl["energy"][-1]))
+    residual = np.abs(cl["newtonian"][-1] - cl["cdm"][-1]) / np.maximum(
+        np.abs(cl["newtonian"][-1]), np.abs(cl["cdm"][-1]))
     print(f"  the two frames' C_l agree to a median of {np.median(residual):.2e} "
           f"(worst {np.max(residual):.2e}) over {ELLS.min()} <= l <= {ELLS.max()}")
 
@@ -152,7 +152,7 @@ def draw(data: dict) -> plt.Figure:
 
     # ---- (a) the two totals -------------------------------------------
     for frame, slot, label in (("newtonian", 1, "Newtonian frame"),
-                               ("energy", 2, "energy frame")):
+                               ("cdm", 2, "CDM frame")):
         ax_a.loglog(ELLS, np.abs(d_ell(ELLS, cl[frame][-1])), color=SERIES[slot],
                     ls=SERIES_DASH[slot], lw=1.9, solid_capstyle="round", zorder=3)
         # Labelled where the two curves are **furthest apart**, not at the end,
@@ -180,7 +180,7 @@ def draw(data: dict) -> plt.Figure:
     # ---- (b) the decomposition ----------------------------------------
     for rank in (1, 0, 2):
         slot = RANK_SLOT[rank]
-        energy = np.abs(d_ell(ELLS, cl["energy"][rank]))
+        energy = np.abs(d_ell(ELLS, cl["cdm"][rank]))
         ax_b.loglog(ELLS, np.maximum(energy, 1e-12), color=SERIES[slot],
                     ls=SERIES_DASH[slot], lw=1.9, solid_capstyle="round", zorder=3)
         ax_b.annotate(RANK_LABEL[rank], xy=(ELLS[-1], max(energy[-1], 1e-12)),
@@ -193,10 +193,10 @@ def draw(data: dict) -> plt.Figure:
         r"everything and $C_0\equiv C_2\equiv0$ — that is (110)",
         xy=(0.035, 0.10), xycoords="axes fraction", fontsize=7.0,
         color=INK["secondary"], va="bottom", ha="left")
-    ax_b.set_ylabel(r"$\ell(\ell+1)C_\ell/2\pi$" + "\n(energy frame, by rank)")
+    ax_b.set_ylabel(r"$\ell(\ell+1)C_\ell/2\pi$" + "\n(CDM frame, by rank)")
 
     # ---- (c) the cross terms ------------------------------------------
-    scale = np.abs(d_ell(ELLS, cl["energy"][-1]))
+    scale = np.abs(d_ell(ELLS, cl["cdm"][-1]))
     # Vertical nudges: C^12 and C^02 both sit within a decade of zero on a
     # symlog axis, so their labels land on one another unless staggered.
     nudge = {(0, 1): -15.0, (1, 2): -15.0, (0, 2): 10.0}
@@ -245,7 +245,7 @@ def main() -> int:
     with out.open("w", encoding="utf-8", newline="\n") as fh:
         fh.write("# C_l by rank in two frames, covariant route, standard CDM\n")
         fh.write("frame,rank,ell,cl\n")
-        for frame in ("newtonian", "energy"):
+        for frame in ("newtonian", "cdm"):
             for rank in (-1, 0, 1, 2):
                 tag = "total" if rank == -1 else str(rank)
                 for l, c in zip(ELLS, data["cl"][frame][rank]):

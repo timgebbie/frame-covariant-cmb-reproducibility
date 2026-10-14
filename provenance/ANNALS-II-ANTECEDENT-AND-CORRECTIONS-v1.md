@@ -1521,3 +1521,46 @@ same thing.
 The error was the same one as B-13's: assuming an equation number from its
 position instead of counting it. Counting took four lines of Python and
 reproduces (89), (90) and (102) as anchors.
+
+### B-13, confirmed a third way, and (40) isolated
+
+Reading \S4.1's enumeration for the frame table the PI asked for, its **third
+item prints the shear transformation again**, in prose, and prints it with the
+same sign as (31):
+
+> 3. The *Newtonian frame* [...] the matter shear can be then thought of in
+>    terms of distortion due to the relative velocities **(31)**:
+>    $\sigma_{ab}\approx-\mathcal D_{\langle a}v^N_{b\rangle}$.
+
+So *Annals II* states $\sigma_{ab}=-\mathcal D_{\langle a}v^N_{b\rangle}$ in
+\S4.1 item 3 and $\sigma_{ab}=+\mathcal D_{\langle a}v^N_{b\rangle}$ at (40),
+two pages apart, and **cites (31) for the first**. Three statements in the paper
+now agree with each other and one does not:
+
+| | says | agrees with |
+|---|---|---|
+| **(31)** $\tilde\sigma_{ab}\approx\sigma_{ab}+\mathcal D_{\langle a}v_{b\rangle}$ | $\sigma=-\mathcal D_{\langle a}v^N_{b\rangle}$ | — |
+| **(33)**/(44) $\tilde\Theta\approx\Theta+\mathrm{div}\,v$, the trace of the same derivative | the same sign | (31) |
+| **\S4.1 item 3**, citing (31) | $\sigma_{ab}\approx-\mathcal D_{\langle a}v^N_{b\rangle}$ | (31) |
+| **(40)** $0\approx\sigma_{ab}-\mathcal D_{\langle a}v^N_{b\rangle}$ | $\sigma=+\mathcal D_{\langle a}v^N_{b\rangle}$ | **nothing** |
+
+**(40) is a transcription slip, isolated.** The finding needed no field equation
+and no convention to establish --- the paper contradicts itself in plain prose
+--- and the field-equation closure, which is what actually settled it here, was
+the long way round. Worth recording because the short way was available from the
+start: the enumeration in \S4.1 was read on 2026-10-14 only because the PI asked
+for a table of frames.
+
+### B-14 — \S4.1 says "three particularly useful choices" and lists four
+
+Minor, and recorded only so a reader who counts is not left wondering. The
+sentence reads *"there are three particularly useful choices"* and the
+`enumerate` that follows has **four** items: the energy frame $\tilde q_a=0$;
+the zero acceleration or CDM frame $\tilde A_a=0$; the Newtonian frame
+$\tilde\sigma_{ab}\approx0$; and the **constant expansion frame**
+$\tilde{\mathcal D}_a\tilde\Theta=0$, *"sometimes useful when discussing
+perturbations on small scales"*.
+
+No number anywhere depends on it. The fourth is not used in this bundle and is
+carried into the supplement's frame table for completeness, with the count
+stated as four.
