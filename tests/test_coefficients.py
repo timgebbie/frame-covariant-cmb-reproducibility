@@ -249,3 +249,314 @@ def test_no_numerical_derivative_survives_in_the_c2_chain():
     body = ast.unparse(fn)
     for forbidden in ("np.gradient", "CubicSpline", "np.diff", "* 0.0"):
         assert forbidden not in body, f"{forbidden} reappeared in the C_2 chain"
+
+
+def _energy_frame_fixture():
+    """One configuration, shared by the closure tests and the T-24 sign tests."""
+    n = 400
+    eta = np.linspace(0.1, 3.0, n)
+    a = np.linspace(1e-3, 1.0, n)
+    cH, rho = np.full(n, 1.3), 3.0 * np.ones(n)
+    phi_a = 0.1 / (1.0 + eta**2)
+    v = 0.05 * np.exp(-(((eta - 0.5) / 0.4) ** 2))
+    return dict(n=n, eta=eta, a=a, cH=cH, rho=rho, phi_a=phi_a, v=v, k=60.0)
+
+
+def test_the_energy_frame_closes_three_ways():
+    r"""**The frame machinery against the field equations.**
+
+    Three relations, and any two give the third:
+
+    1. $\sigma=-k_{\rm phys}v$ --- **(31)**, the *general* transformation
+       $\tilde\sigma_{ab}\approx\sigma_{ab}+\mathcal D_{\langle a}v_{b\rangle}$,
+       with $\tilde\sigma=0$ in the Newtonian frame and $v=-v^N$. **Not (40)**,
+       which contradicts it --- finding **B-13**;
+    2. $\dot\sigma=-2H\sigma-E$ --- Appendix G's shear equation with $A_a=0$;
+    3. $v'+\mathcal Hv=-k_{\rm com}\Phi_A$ --- the energy-frame Euler equation,
+       derived independently in `frames.py` from **(32)**.
+
+    It passes --- and the two tests below say what that is and is not worth.
+    """
+    from functions.spectra.coefficients import energy_frame_shear
+
+    f = _energy_frame_fixture()
+    a, cH, k, v, phi_a = f["a"], f["cH"], f["k"], f["v"], f["phi_a"]
+
+    _, sigma_dot, _ = energy_frame_shear(k, v=v, phi_a=phi_a, scale_factor=a,
+                                         conformal_hubble=cH, rho=f["rho"])
+
+    # (3): v' from the Euler equation, not from differentiating v
+    v_prime = -cH * v - k * phi_a
+    # (1): sigma = -k_phys v, so sigma-dot = -(k/a^2)(v' - script-H v)
+    from_frame_transformation = -(k / a**2) * (v_prime - cH * v)
+
+    worst = (np.max(np.abs(from_frame_transformation - sigma_dot))
+             / np.max(np.abs(from_frame_transformation)))
+    assert worst < 1e-14, f"the energy frame does not close: {worst:.2e}"
+
+
+def test_T24_the_closure_is_an_identity_in_both_conventions():
+    r"""**Finding T-24, resolved.** The closure above is evidence for no convention.
+
+    Write a scalar's gradient as $\mathcal D_aX=\lambda k_{\rm phys}XQ_a$ and
+    the raising operator as $\mathcal D_{\langle a}Q_{b\rangle}=rk_{\rm
+    phys}Q_{ab}$. With the general rule **(31)**, the three relations close
+    **for every $\lambda$ and every $r$** --- as they must, being a statement
+    about physical fields and not about a basis.
+
+    The corollary is the whole of T-24: **this closure cannot be cited for
+    C3.5**, the claim in `GENERIC-SOURCE-DERIVATIVES-v1.md` that it
+    "corroborates the magnitude" is withdrawn, and an identity is why it could
+    not catch the sign error that was made inside it.
+    """
+    f = _energy_frame_fixture()
+    a, cH, k, v, phi_a = f["a"], f["cH"], f["k"], f["v"], f["phi_a"]
+
+    for lam in (+1.0, -1.0):
+        for r in (-1.0, +1.0):
+            v_prime = -lam * k * phi_a - cH * v           # (32) with A_a = 0
+            sigma = r * (k / a) * v                       # (31) with sigma~ = 0
+            electric = lam * r * (k / a) ** 2 * phi_a     # D_<a D_b> Phi_A
+            from_transformation = r * (k / a**2) * (v_prime - cH * v)
+            from_appendix_g = -2.0 * (cH / a) * sigma - electric
+            worst = (np.max(np.abs(from_transformation - from_appendix_g))
+                     / np.max(np.abs(from_transformation)))
+            assert worst < 1e-14, (
+                f"lambda={lam:+.0f}, r={r:+.0f} does not close: {worst:.2e}")
+
+
+def test_B13_the_printed_n_t1_does_not_close_and_the_general_rule_does():
+    r"""**Finding B-13**, pinned to a number: (40) contradicts (31), by $2E_{ab}$.
+
+    *Annals II* gives the general frame transformations at (31)--(37), cited to
+    Maartens, Gebbie & Ellis, then specialises them to the Newtonian threading
+    at (40)--(45). Two of the six change sign on the way:
+
+    | | general | specialised |
+    |---|---|---|
+    | shear | **(31)** $\tilde\sigma_{ab}\approx\sigma_{ab}+\mathcal D_{\langle a}v_{b\rangle}$ | **(40)** $0\approx\sigma_{ab}-\mathcal D_{\langle a}v^N_{b\rangle}$ |
+    | energy flux | **(34)** $\tilde q_a\approx q_a-(\rho+p)v_a$ | **(45)** $\tilde q_a\approx q_a+(\rho+p)v^N_a$ |
+
+    (32), (33) and (37) keep their signs in (41), (42), (44) and (43). The
+    sharpest internal contradiction is (33) against (40): $\tilde\Theta\approx
+    \Theta+\mathrm{div}\,v$ is the **trace** of the same derivative whose
+    trace-free part is $\tilde\sigma_{ab}$, it keeps its plus in both places,
+    and (40) does not.
+
+    With (40) the energy frame misses closure by exactly $2E_{ab}$, for every
+    convention.
+    """
+    f = _energy_frame_fixture()
+    a, cH, k, v, phi_a = f["a"], f["cH"], f["k"], f["v"], f["phi_a"]
+    lam, r = 1.0, -1.0                                    # C3.5 and C4.2
+
+    v_prime = -lam * k * phi_a - cH * v
+    electric = lam * r * (k / a) ** 2 * phi_a
+    sigma_printed = -r * (k / a) * v                      # (40) as printed
+    from_transformation = -r * (k / a**2) * (v_prime - cH * v)
+    from_appendix_g = -2.0 * (cH / a) * sigma_printed - electric
+
+    assert np.allclose(from_transformation - from_appendix_g, 2.0 * electric,
+                       rtol=1e-12, atol=0.0), (
+        "the (40) residual is no longer 2 E_ab --- B-13 has changed shape")
+
+
+def test_the_two_modules_now_agree_on_E_and_on_sigma():
+    r"""The two $E_{ab}$ in this repository, reconciled.
+
+    `frames.py::weyl_electric_amplitude` returns
+    $-\tfrac12(k/a)^2(\Phi_A-\Phi_H)$, written for criterion 2 before
+    `coefficients.py` existed. `energy_frame_shear` must give the same thing:
+    both are $\mathcal D_{\langle a}\mathcal D_{b\rangle}\Phi_A$ under C3.5 and
+    C4.2, and for one sitting they disagreed by a sign --- the shape T-24 took
+    before (31) settled it.
+
+    $\sigma=-k_{\rm phys}v$ is checked against (31) directly, with no reference
+    to the closure, because the closure is an identity and checks nothing.
+    """
+    from functions.frames import weyl_electric_amplitude
+    from functions.spectra.coefficients import energy_frame_shear
+
+    f = _energy_frame_fixture()
+    a, cH, k, v, phi_a = f["a"], f["cH"], f["k"], f["v"], f["phi_a"]
+    phi_h = -phi_a
+
+    sigma, sigma_dot, _ = energy_frame_shear(
+        k, v=v, phi_a=phi_a, phi_h=phi_h, scale_factor=a,
+        conformal_hubble=cH, rho=f["rho"])
+
+    assert np.allclose(sigma, -(k / a) * v, rtol=1e-14, atol=0.0)
+
+    electric_used = -2.0 * (cH / a) * sigma - sigma_dot
+    # sympy Rational against a numpy array returns an object array
+    electric_frames = np.asarray(
+        weyl_electric_amplitude(phi_a, phi_h, k, a), dtype=float)
+    assert np.allclose(electric_used, electric_frames, rtol=1e-13, atol=0.0)
+
+
+def test_the_closure_is_not_vacuous():
+    r"""**The control.** Without the Euler equation the two routes must *not*
+    agree --- they differ by exactly $-(k/a^2)(v'+\mathcal Hv)-E$, which is zero
+    only on the energy-frame solution.
+    """
+    from functions.spectra.coefficients import energy_frame_shear
+
+    f = _energy_frame_fixture()
+    eta, a, cH, k, v, phi_a = (f["eta"], f["a"], f["cH"], f["k"], f["v"], f["phi_a"])
+
+    _, sigma_dot, _ = energy_frame_shear(k, v=v, phi_a=phi_a, scale_factor=a,
+                                         conformal_hubble=cH, rho=f["rho"])
+    v_prime_arbitrary = np.gradient(v, eta, edge_order=2)   # NOT the Euler solution
+    from_frame = -(k / a**2) * (v_prime_arbitrary - cH * v)
+
+    gap = np.max(np.abs(from_frame - sigma_dot)) / np.max(np.abs(from_frame))
+    assert gap > 1e-3, "the two routes agree for arbitrary v; the closure is vacuous"
+
+    predicted = -(k / a**2) * (v_prime_arbitrary + cH * v) - (k / a) ** 2 * phi_a
+    residual = np.max(np.abs((from_frame - sigma_dot) - predicted)) / np.max(np.abs(from_frame))
+    assert residual < 1e-14, f"the gap is not the predicted expression: {residual:.2e}"
+
+
+# ---------------------------------------------------------------------------
+# The energy frame as a second frame: T-25, T-26, and the control that caught
+# T-25. See `provenance/BUNDLE-DEFECTS-v1.md`.
+# ---------------------------------------------------------------------------
+
+
+def _two_frame_fixture(k=60.0, n=600):
+    """A consistent Newtonian history plus a threading shift, built by hand.
+
+    Synthetic, so the test is fast and so that `v` is **not** the quadrature's
+    own output --- only `v_prime` is tied to it, through the Euler equation,
+    which is the one relation `energy_set` relies on.
+    """
+    from functions.spectra.coefficients import background_fluid
+
+    eta = np.linspace(0.05, 2.0, n)
+    a = (eta / eta[-1]) ** 2                       # Einstein-de Sitter
+    cH = 2.0 / eta
+    # script-H^2 = h0^2/a for EdS, so 4/eta^2 = h0^2 eta_0^2/eta^2 fixes h0.
+    # Derived, not fitted: a rescaling factor here would hide exactly the
+    # background inconsistency `energy_set`'s (a sigma)' guard exists to catch.
+    rho, pressure, cH_prime = background_fluid(a, omega_m=1.0, h0=2.0 / eta[-1])
+    assert np.allclose(rho, 3.0 * (cH / a) ** 2, rtol=1e-12)
+
+    phi_a = 0.1 / (1.0 + 0.3 * eta**2)
+    phi_a_prime = -0.1 * 0.6 * eta / (1.0 + 0.3 * eta**2) ** 2
+    phi_h, phi_h_prime = -phi_a, -phi_a_prime
+    delta_t = 0.2 * np.cos(0.8 * k * eta) * np.exp(-eta)
+    tau_1 = 0.1 * np.sin(0.8 * k * eta) * np.exp(-eta)
+    kappa_prime = 300.0 * np.exp(-(((eta - 0.35) / 0.08) ** 2))
+    kappa_second = np.gradient(kappa_prime, eta, edge_order=2)
+    r_baryon = 0.6 * a
+    r_baryon_prime = cH * r_baryon                 # R propto a, exactly
+    v = 0.4 * eta * np.exp(-0.2 * eta)
+    v_prime = -cH * v - k * phi_a                  # the Euler equation
+    return dict(eta=eta, k=k, a=a, cH=cH, cH_prime=cH_prime, rho=rho,
+                pressure=pressure, phi_a=phi_a, phi_a_prime=phi_a_prime,
+                phi_h=phi_h, phi_h_prime=phi_h_prime, delta_t=delta_t,
+                tau_1=tau_1, kappa_prime=kappa_prime, kappa_second=kappa_second,
+                r_baryon=r_baryon, r_baryon_prime=r_baryon_prime,
+                v=v, v_prime=v_prime, eta_star=0.35)
+
+
+def _build_both(f):
+    from functions.spectra.coefficients import energy_set, newtonian_set
+    common = dict(
+        delta_t=f["delta_t"], phi_a=f["phi_a"], phi_a_prime=f["phi_a_prime"],
+        phi_h_prime=f["phi_h_prime"], tau_1=f["tau_1"],
+        kappa_prime=f["kappa_prime"], kappa_double_prime=f["kappa_second"],
+        conformal_hubble=f["cH"], r_baryon=f["r_baryon"],
+        r_baryon_prime=f["r_baryon_prime"])
+    n = newtonian_set(f["eta"], f["k"], **common)
+    e = energy_set(f["eta"], f["k"], phi_h=f["phi_h"],
+                   conformal_hubble_prime=f["cH_prime"], scale_factor=f["a"],
+                   rho=f["rho"], pressure=f["pressure"], v=f["v"],
+                   v_prime=f["v_prime"], eta_star=f["eta_star"], **common)
+    return n, e
+
+
+def test_the_frame_shift_of_every_coefficient_is_the_closed_form_one():
+    r"""**The control that found T-25.** Five shifts, five closed forms.
+
+    A frame change from the Newtonian threading to the energy one shifts each
+    coefficient of (89) by something that can be written down in one line, and
+    `energy_set` must reproduce all five **exactly** --- not nearly:
+
+        dC_0  = +5/2 k v            (the shear sector, empty before)
+        dC_1  = -( v' - kappa' v )/k
+        dC_2  = + v/k
+        dC_1' = -( v'' - kappa'' v - kappa' v' )/k
+        dC_2''= + v''/k
+
+    with $v''=-\mathcal H'v-\mathcal Hv'-k\Phi_A'$ from the Euler equation.
+    The first draft of `energy_set` passed four of these and failed $C_1'$ by a
+    factor of $k_{\rm com}$ --- finding **T-25**, the two differently
+    normalised $\kappa'v_B$ arguments --- and **that is how it was found**. The
+    (102) totals it produced were wrong by sixty-fold and looked like physics.
+    """
+    f = _two_frame_fixture()
+    n, e = _build_both(f)
+    k, v, vp = f["k"], f["v"], f["v_prime"]
+    cH, cHp, kp, kpp = f["cH"], f["cH_prime"], f["kappa_prime"], f["kappa_second"]
+    vpp = -cHp * v - cH * vp - k * f["phi_a_prime"]
+
+    def worst(got, want):
+        return np.max(np.abs(got - want)) / np.max(np.abs(want))
+
+    assert worst(e.coefficients.c0 - n.coefficients.c0, 2.5 * k * v) < 1e-13
+    assert worst(e.coefficients.c1 - n.coefficients.c1, -(vp - kp * v) / k) < 1e-13
+    assert worst(e.coefficients.c2 - n.coefficients.c2, v / k) < 1e-13
+    assert worst(e.c1_prime - n.c1_prime, -(vpp - kpp * v - kp * vp) / k) < 1e-13
+    assert worst(e.c2_second - n.c2_second, vpp / k) < 1e-13
+
+
+def test_the_newtonian_set_is_unmoved_by_the_energy_frame_machinery():
+    """The Newtonian shear sector stays empty, which is (110)."""
+    f = _two_frame_fixture()
+    n, e = _build_both(f)
+    assert n.coefficients.shear_sector_is_empty
+    assert not e.coefficients.shear_sector_is_empty
+
+
+def test_T26_the_appendix_G_route_to_C2_second_loses_every_significant_figure():
+    r"""**Finding T-26, pinned: an exact relation evaluated in the wrong variable.**
+
+    $C_2''$ has two routes. Through $v$ it is $v''/k$ --- three closed-form
+    terms. Through Appendix G it is $-(a\sigma)''/k^2$ with $(a\sigma)''=
+    a''\sigma+2a'\sigma'+a\sigma''$ and $\ddot\sigma$ from the Bianchi
+    propagation equation. **They are the same number and only one of them can
+    be computed**: $\ddot\sigma$ runs to $10^{15}$ against a result of order
+    $10^{-3}$, so the second route cancels away about eighteen significant
+    figures and returns noise.
+
+    T-23 established that a derivative must come from a published relation
+    rather than from a spline. T-26 is the other edge: the published relation
+    must also be *evaluated* in a variable that does not cancel. The test
+    asserts both halves --- the first and second $C_2$ derivatives agree where
+    nothing cancels, and disagree completely where everything does --- so that
+    the day someone reinstates `c2_derivatives` in `energy_set` it fails.
+    """
+    from functions.spectra.coefficients import c2_derivatives, energy_frame_shear
+
+    f = _two_frame_fixture()
+    k, v, vp, cH, cHp = f["k"], f["v"], f["v_prime"], f["cH"], f["cH_prime"]
+    vpp = -cHp * v - cH * vp - k * f["phi_a_prime"]
+    sigma, sd, sdd = energy_frame_shear(
+        k, v=v, phi_a=f["phi_a"], phi_h=f["phi_h"], scale_factor=f["a"],
+        conformal_hubble=cH, rho=f["rho"], pressure=f["pressure"])
+    c2, c2p, c2pp = c2_derivatives(
+        k, sigma=sigma, sigma_dot=sd, sigma_ddot=sdd, conformal_hubble=cH,
+        scale_factor=f["a"], rho=f["rho"], pressure=f["pressure"])
+
+    def worst(got, want):
+        return np.max(np.abs(got - want)) / np.max(np.abs(want))
+
+    # where nothing cancels, the two routes are the same number
+    assert worst(c2, v / k) < 1e-13, "C_2 itself must agree to machine precision"
+    assert worst(c2p, vp / k) < 1e-8, "C_2' is well conditioned both ways"
+    # and where everything cancels, the Appendix G route is noise
+    assert worst(c2pp, vpp / k) > 1e-2, (
+        "the sigma-ddot route to C_2'' no longer loses its digits. If the "
+        "grouping has been reformulated so that it is conditioned, this test "
+        "is now wrong and T-26 should be closed rather than pinned.")

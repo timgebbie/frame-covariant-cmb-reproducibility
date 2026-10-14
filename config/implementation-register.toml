@@ -1031,3 +1031,43 @@ module = "functions.spectra.coefficients"
 object = "c2_derivatives"
 test = "test_no_numerical_derivative_survives_in_the_c2_chain"
 note = "finding \\textbf{T-23}: nothing is splined. $a''$ comes from the same Friedmann relation the shear uses, so the background cannot disagree between them"
+
+[[equations]]
+key = "energy_frame_shear"
+quantity = "$\\sigma_{ab}=\\mathcal{D}_{\\langle a}v_{b\\rangle}$ in the energy frame, with $\\dot\\sigma$ and $\\ddot\\sigma$"
+source = "AnnalsII"
+equation = "(31) + (G.12)"
+module = "functions.spectra.coefficients"
+object = "energy_frame_shear"
+test = "test_B13_the_printed_n_t1_does_not_close_and_the_general_rule_does"
+note = "the frame transformation, Appendix G's shear equation with $A_a=0$ and the energy-frame Euler equation close \\emph{identically} --- for every rank-raising sign and every scalar mode-coefficient sign --- so the closure is evidence for neither (\\textbf{T-24}). It uses \\textbf{(31)}, the general transformation, and not its specialisation (40), which contradicts it and misses closure by $2E_{ab}$: \\textbf{B-13}. It is also what puts anything into (102)'s rank-two sector, which is empty in every released figure"
+
+[[equations]]
+key = "energy_frame_coefficient_set"
+quantity = "$C_0,C_1,C_2,C_1',C_2''$ in the energy frame, $A_a=0$"
+source = "ThisWork"
+equation = "(89) + (31)-(37) + (106) + (152)"
+module = "functions.spectra.coefficients"
+object = "energy_set"
+test = "test_the_frame_shift_of_every_coefficient_is_the_closed_form_one"
+note = "the second frame (102) has ever been evaluated in. The assembly $a\\mathcal{B}_1=k\\delta T+aA$ is the same in both frames and only the inputs know which frame they are in; the dynamics enter once, through (106) and (152) in the frame where \\emph{Annals II} derives them. All five coefficient shifts match closed forms to machine precision --- the control that found \\textbf{T-25}"
+
+[[equations]]
+key = "dipole_frame_shift"
+quantity = "$\\tilde\\tau_a=\\tau_a-v_a$, as $\\tilde\\tau_1\\to\\tilde\\tau_1-v/k$"
+source = "AnnalsII"
+equation = "(37)"
+module = "functions.spectra.frame_transform"
+object = "ThreadingShift"
+test = "test_T27_the_dipole_carries_the_same_inverse_k_as_the_monopole"
+note = "finding \\textbf{T-27}: the dipole is carried in the covariant normalisation $\\tilde\\tau_1=\\tilde v_B=v_B/k$, so its frame shift carries the same $1/k_{\\rm com}$ the monopole's does in \\texttt{temperature\\_shift}. Without it a first-order frame change reached 186 times the dipole it corrects at $k=300$"
+
+[[equations]]
+key = "background_fluid"
+quantity = "$(\\rho,p,\\mathcal{H}')$ from the $\\Omega$'s, consistent with $\\dot H=-H^2-(\\rho+3p)/6$"
+source = "AnnalsII"
+equation = "Appendix G"
+module = "functions.spectra.coefficients"
+object = "background_fluid"
+test = "test_the_frame_shift_of_every_coefficient_is_the_closed_form_one"
+note = "three numbers Appendix G needs, derived together from one expression so that they cannot disagree. $\\Omega_k$ is subtracted from $\\rho$ because curvature is not a fluid, and $p$ is then \\emph{defined} by Appendix G's own relation, so \\texttt{c2\\_derivatives} recovers the $\\mathcal{H}'$ this function started from"

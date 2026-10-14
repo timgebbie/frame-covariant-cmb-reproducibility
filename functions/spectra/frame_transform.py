@@ -99,6 +99,37 @@ class ThreadingShift:
         return -(np.asarray(self.conformal_H, dtype=float)
                  * np.asarray(self.v, dtype=float)) / self.k_com
 
+    def dipole_shift(self) -> np.ndarray:
+        r"""$-v/k$ — what $\tilde\tau_1$ and $\tilde v_B$ shift by. **Finding T-27.**
+
+        *Annals II* **(43)** (**n-t4**, cited in this bundle as GDE99 Eq. (37)) is
+        $\tilde\tau_a=\tau_a-v^N_a$, and this bundle wrote that as `tau_1 - v`. It is wrong by $k_{\rm com}$, because `v` is a
+        **velocity** amplitude --- it is the $v$ of $v'+\mathcal Hv=-k\Phi_A$
+        and of $\sigma=-k_{\rm phys}v$ --- while $\tilde\tau_1$ is the dipole in
+        the *covariant normalisation*, $\tilde\tau_1=\tilde v_B=v_B/k$, which is
+        the normalisation (109) needs to read $-\tilde C_1=(\delta\tilde
+        T+\Phi_A)+\kappa'\tilde v_B$.
+
+        **`temperature_shift` had it right and that is how this was found.** The
+        monopole carries exactly the same $1/k$, for exactly the same reason: a
+        scalar amplitude is $1/k_{\rm phys}$ times its gradient's, so
+        $\mathcal D_a\ln T\to\mathcal D_a\ln T-Hv_a$ becomes $\delta T\to\delta
+        T-\mathcal Hv/k$. Two rank-one objects in one dataclass, one divided by
+        $k$ and one not.
+
+        The symptom was visible without any of that reasoning: at $k=300$ the
+        old rule shifted a dipole of $1.1$ by $200$ --- a *first-order* frame
+        change 186 times the quantity it corrects. Divided by $k$ it is $0.6$,
+        and $|v/k|/|\tilde\tau_1|$ stays between $0.2$ and $1.1$ across the
+        whole $k$ range instead of growing like $k$.
+
+        **This is why T-14 must be re-measured**, not merely re-run: T-14
+        concluded the transfer function is not frame-invariant under
+        (177)--(179), and it concluded that from a frame change that was too
+        large by $k_{\rm com}$ --- a factor of 300 at the top of the grid.
+        """
+        return -np.asarray(self.v, dtype=float) / self.k_com
+
 
 def energy_frame_shift(
     eta: np.ndarray,
@@ -179,7 +210,7 @@ def to_frame(
         delta_T=np.asarray(history.delta_T, dtype=float) + shift.temperature_shift(),
         phi_a=np.asarray(history.phi_a, dtype=float) + potential,
         phi_h=np.asarray(history.phi_h, dtype=float) + potential,
-        tau_1=np.asarray(history.tau_1, dtype=float) - np.asarray(shift.v, dtype=float),
-        v_b=np.asarray(history.v_b, dtype=float) - np.asarray(shift.v, dtype=float),
+        tau_1=np.asarray(history.tau_1, dtype=float) + shift.dipole_shift(),
+        v_b=np.asarray(history.v_b, dtype=float) + shift.dipole_shift(),
         frame=shift.target,
     )

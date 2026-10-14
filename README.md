@@ -54,9 +54,9 @@ in the imaginary convention, so his panel tests the phase and not only the
 > four other papers, and that is where this bundle's claim to be a
 > reconstruction rather than a port actually rests.
 
-## Current situation: v1.0.0
+## Current situation: v1.1.0
 
-v1.0.0 is an **independent Python reconstruction, from first 1+3 covariant
+This bundle is an **independent Python reconstruction, from first 1+3 covariant
 principles, of the almost-Friedmann–Lemaître results of** T. Gebbie,
 P. K. S. Dunsby and G. F. R. Ellis, *1+3 covariant cosmic microwave background
 anisotropies II: the almost-Friedmann–Lemaître model*, **Annals of Physics 282,
@@ -170,12 +170,13 @@ approximations and the one lineage note — is in `provenance/`.
 
 **These are planned releases, not claims made by the current one.**
 
-- **v1.1.0 — Peebles recombination.** The effective three-level atom replaces
-  equilibrium Saha. Saha places last scattering correctly but decouples too
-  sharply and too early, which sets the wrong visibility width — and the
-  visibility width is what fixes the damping envelope. Self-contained, and
-  checkable on its own against the standard ionisation history before anything
-  is built on it.
+- **v1.1.0 — Peebles recombination. Landed; awaiting its tag.** The effective
+  three-level atom replaces equilibrium Saha. Saha places last scattering
+  correctly but decouples too sharply and too early, which sets the wrong
+  visibility width — and the visibility width is what fixes the damping
+  envelope. Self-contained, and checked on its own against the standard
+  ionisation history before anything was built on it. It is the default from
+  this release (decision **S22**), with Saha kept as the measurable alternative.
 - **v1.2.0 — the full linear C_ℓ: acoustic peaks, Silk damping, and the
   complete source assembly** for both CDM and ΛCDM. This is the release where
   the spectrum stops being the almost-FLRW analytic skeleton and becomes a
@@ -289,11 +290,17 @@ pytest -q                              # the claim-bearing regression suite
 
 ## Verification status
 
-**Released as v1.0.0.** The regression suite passes and `python
-scripts/run_all.py --strict` reports `CLEAN` — run `pytest -q` for the current
-counts rather than trusting a number typed here, which is how the previous
-version of this paragraph came to claim a test total that was 36 short and a
-criteria tally that was half the truth.
+**v1.0.0 is tagged and archived. v1.1.0 is a release candidate and is not yet
+tagged** — the tree is complete, portable and manifested, and the tag is the one
+step outstanding. The distinction is deliberate and is decision **S27**: an
+artefact's maturity is a rung, not an opinion, and a README that reports a tag
+before it exists is reporting the wrong rung. `provenance/RELEASE-STATUS-v1.md`
+carries the rung of every artefact in the tree and is regenerated, not typed.
+
+The regression suite passes and `python scripts/run_all.py --strict` reports
+`CLEAN` — run `pytest -q` for the current counts rather than trusting a number
+typed here, which is how the previous version of this paragraph came to claim a
+test total that was 36 short and a criteria tally that was half the truth.
 
 The acceptance criteria are recorded in `RELEASE-NOTES-v1.0.0.md`; **all six in
 v1.0.0's scope are closed** — 1, 2, 3, 4, 5a and 6 — with **5b moved to v1.2.0**

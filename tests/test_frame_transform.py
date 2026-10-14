@@ -162,8 +162,54 @@ def test_T14_the_transfer_function_is_NOT_frame_invariant_under_177_to_179():
         relative = abs(energy - newtonian) / abs(newtonian)
         # Not invariance: near-total collapse of the source. Pinned as a range
         # so that either a fix or a regression changes the result.
-        assert 0.9 < relative < 1.0, (
+        #
+        # **Re-measured after T-27.** The band was 0.9-1.0 while the dipole's
+        # frame shift was -v instead of -v/k. Correcting that moved the three
+        # numbers to 1.0138, 1.0099, 1.0099 -- the energy-frame transfer is
+        # about 1% of the Newtonian one with the opposite sign -- and left
+        # **the finding itself untouched**, which is the part worth recording.
+        # T-14 is the *absence of the shear sector* from (177)-(179), not the
+        # size of the dipole shift, so a factor of k_com = 50 in that shift
+        # moves the residual by 6% and does not touch the collapse. A defect
+        # whose cause has been correctly named survives the correction of a
+        # different defect; that is the test of the naming.
+        assert 0.9 < relative < 1.05, (
             f"l={ell}: expected the known T-14 collapse, got {relative:.3e}. "
             "If the generic-u^a source has landed, this test is now wrong and "
             "should assert invariance instead."
         )
+
+
+def test_T27_the_dipole_carries_the_same_inverse_k_as_the_monopole():
+    r"""**Finding T-27.** $\tilde\tau_1$ and $\tilde v_B$ shift by $-v/k$, not $-v$.
+
+    `ThreadingShift` holds two rank-one shifts. `temperature_shift` divides by
+    $k_{\rm com}$ and `to_frame`'s dipole rule did not, and both cannot be
+    right: the monopole's $1/k$ is there because a *scalar* amplitude is
+    $1/k_{\rm phys}$ times its gradient's, and $\tilde\tau_1$ is the dipole in
+    the same covariant normalisation --- it **is** $\tilde v_B=v_B/k$, which is
+    what makes (109) read $-\tilde C_1=(\delta\tilde T+\Phi_A)+\kappa'\tilde
+    v_B$ with the printed $\kappa'v_B$ of (89).
+
+    The test is the symptom rather than the derivation, because the symptom
+    needs no conventions at all: **a first-order frame change may not be large
+    compared with the quantity it changes.** Under the old rule the shift of a
+    dipole of order one grew like $k$ --- 200 against 1.1 at $k=300$. Under the
+    corrected one the ratio is flat in $k$.
+    """
+    from functions.background.flrw import Background
+    from functions.spectra.frame_transform import energy_frame_shift
+
+    bg = Background(omega_m=1.0)
+    eta = np.linspace(0.05, float(bg.eta_0), 400)
+    phi_a = np.ones_like(eta)
+
+    ratios = []
+    for k in (5.0, 20.0, 60.0, 140.0, 300.0):
+        shift = energy_frame_shift(eta, phi_a, k, background=bg)
+        assert np.allclose(shift.dipole_shift(), -shift.v / k, rtol=0, atol=0)
+        ratios.append(np.max(np.abs(shift.dipole_shift())))
+
+    # v itself grows linearly in k; v/k does not move at all.
+    assert max(ratios) / min(ratios) < 1.01, (
+        f"the dipole shift still scales with k: {ratios}")

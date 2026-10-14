@@ -2032,3 +2032,381 @@ largest discrepancies sit at exactly the $\ell$ where the total is smallest.
 That amplification is itself the finding restated: a spectrum assembled as a
 small difference of large terms converts every small error into a large one,
 and this is the second independent place it has shown up.
+
+---
+
+## T-24 — the energy frame closed three ways against the field equations, on the wrong branch
+
+**Found 2026-10-13, building the energy-frame coefficient set for F5.** Nothing
+released was touched: the rank-two sector has never been evaluated. But the
+defect would have **inverted the answer to the question F5 exists to ask**, and
+it survived a check written in the same sitting and described, correctly, as the
+bundle's first comparison of the frame machinery against the Einstein equations.
+
+`energy_frame_shear` took
+
+$$\sigma=+k_{\rm phys}v,\qquad E=+k_{\rm phys}^2\Phi_A .$$
+
+Both signs are wrong. With $v$ as `energy_frame_shift` returns it --- the
+velocity of the energy frame relative to the Newtonian one, which is what
+`ThreadingShift.temperature_shift` independently fixes --- **n-t1** with
+conventions row **C4.2** gives $\sigma=-k_{\rm phys}v$, and **C3.5** ($s_Q=-1$)
+gives $\mathcal D_{\langle a}\mathcal D_{b\rangle}X=-k_{\rm phys}^2X$, hence
+$E=-k_{\rm phys}^2\Phi_A$. `frames.py::weyl_electric_amplitude`, written for
+criterion 2 long before this module existed, returns
+$-\tfrac12(k/a)^2(\Phi_A-\Phi_H)$ --- the same thing, from a third direction.
+
+### Why the closure could not see it
+
+Write $\sigma=c\,k_{\rm phys}v$ and $E=e\,k_{\rm phys}^2\Phi_A$. The residual of
+the three statements
+
+1. $\sigma_{ab}=\mathcal D_{\langle a}v_{b\rangle}$,
+2. $\dot\sigma=-2H\sigma-E$ (Appendix G, $A_a=0$),
+3. $v'+\mathcal Hv=-k\Phi_A$ (the energy-frame Euler equation),
+
+is $k^2(e-c)\Phi_A/a^2$. **It vanishes for every $c=e$.** The closure fixes the
+*product* of the two rank-raising signs and never either one, so $c=e=+1$ closed
+to $10^{-16}$ while disagreeing with the conventions sheet, with `frames.py` and
+with the labelling in `frame_transform.py`. The function's own docstring had said
+the closure fixes $c^2$ and that "the rank-one match against (106) fixes $c$
+itself" --- and then the rank-one match was never run for this branch.
+
+### What it would have cost
+
+The rank-two contribution would have pointed the wrong way against everything
+rank-one. The frame-invariance measurement would have returned a different
+number with the same plausibility, and the figure drawn from it would have been
+an argument for a conclusion produced by a sign.
+
+### The fix
+
+Both signs taken from the sheet. `tests/` now pins them **absolutely** ---
+against `frames.py::weyl_electric_amplitude` and against **n-t1** --- and a
+second test asserts that the three-way closure passes on *both* branches, so
+that the degeneracy is recorded as a property of the check rather than
+rediscovered.
+
+**The lesson is not about a sign.** A check that compares two things it derived
+from the same convention is a consistency check, and this one was described as
+stronger than it was. Closure against the field equations is still worth having;
+it is not worth trusting alone.
+
+---
+
+## T-25 — two arguments whose names differ by `_prime` are not derivatives of each other
+
+**Found 2026-10-13, by the control in
+`tests/test_coefficients.py::test_the_frame_shift_of_every_coefficient_is_the_closed_form_one`.**
+Mine, found before it left the container, and recorded because the trap is still
+in the module and will catch the next person.
+
+`match_coefficients` takes `kappa_prime_v_b`, which is $\kappa'v_B$ as **(89)
+prints it**. `newtonian_c1_prime` takes `kappa_prime_v_b_prime`, which is
+$(\kappa'\tilde v_B)'$ --- the derivative of the quantity **(109)** carries,
+$\tilde v_B=v_B/k$. The two differ by $k_{\rm com}$, and the names say they
+differ by a derivative. The first draft of `energy_set` built the second with
+the $k$ of the first.
+
+| | at $k=60$ |
+|---|---|
+| $\Delta C_1,\Delta C_0,\Delta C_2,\Delta C_2''$ against their closed forms | $<10^{-15}$ |
+| $\Delta C_1'$ against its closed form | **86** |
+| (102) total, Newtonian vs energy | $+14.6$ vs $-973$ |
+
+**The failure was invisible in four of five coefficients and in both frames
+separately.** It showed up only in the *difference* between frames, because that
+is where $C_1'$ stops being large and starts being a small shift of a large
+number. Nothing in the Newtonian frame could have found it.
+
+### The fix, and the trap
+
+The two are now named `kappa_prime_v_b_E` and
+`kappa_prime_v_b_tilde_prime_E` at the call site, with the normalisation in a
+comment. More usefully, `CoefficientSet` now **carries the primitives of (89)**
+--- $a\mathcal B_1$, $a\mathcal B_2$, $v_B$ and their derivatives, in the
+printed normalisation --- so that a caller who needs them, as any
+implementation of (98) or (101) does, does not reconstruct them by
+re-multiplying by $k$ in the right places.
+
+---
+
+## T-26 — an exact relation, evaluated in a variable that cancels
+
+**Found 2026-10-13, by the same control.** T-23 established that a derivative
+must come from a published relation rather than from a spline. T-26 is the other
+edge of that knife: **the published relation must also be evaluated in a
+variable that does not cancel.**
+
+$C_2''$ has two routes. Through the threading velocity it is $v''/k$ --- three
+closed-form terms, since $a\mathcal B_2=a\sigma=-k_{\rm com}v$ exactly. Through
+Appendix G it is $-(a\sigma)''/k^2$ with
+$(a\sigma)''=a''\sigma+2a'\sigma'+a\sigma''$ and $\ddot\sigma$ from the Bianchi
+propagation equation. They are the same number, and only one of them can be
+computed:
+
+| | magnitude |
+|---|---|
+| $\ddot\sigma$ on the grid | $3.6\times10^{15}$ |
+| $C_2''$, the result | $1.7\times10^{-3}$ |
+| digits of cancellation | **about eighteen** |
+
+so the Appendix G route returns noise --- and returned it **silently**, as a
+number of the right order with none of the right digits, because the
+cancellation is almost complete rather than catastrophic in the obvious way.
+
+### What this does and does not say about Appendix G
+
+It says nothing against the relation. $\dot\sigma$ and $\ddot\sigma$ agree with
+the Euler route to $5\times10^{-16}$ and $1.7\times10^{-5}$ respectively, where
+nothing cancels; the **first** derivative $(a\sigma)'=a'\sigma+a^2\dot\sigma$
+agrees with $-k v'$ to machine precision and `energy_set` now **raises** if it
+does not. Only the second derivative is unusable in that grouping.
+
+`energy_set` evaluates $C_2,C_2',C_2''$ through $v$ and keeps Appendix G as the
+check. `tests/` pins the conditioning failure itself, so that reinstating
+`c2_derivatives` in that position fails rather than quietly returning noise.
+
+**Open:** the general fix is to propagate the natural rank-two variable
+$a^2\sigma$, which is what Appendix G's printed second-order relation is
+actually a statement about --- the scale-factor rule of
+`provenance/GENERIC-SOURCE-DERIVATIVES-v1.md`, applied to the *evaluation* and
+not only to the derivation. Not done; not needed while the frame in hand has a
+closed form.
+
+---
+
+## T-27 — the dipole's frame shift was too large by $k_{\rm com}$
+
+**Found 2026-10-13, in a released module.** `frame_transform.to_frame` shifted
+$\tilde\tau_1$ and $\tilde v_B$ by $-v$. It is $-v/k$.
+
+`ThreadingShift` holds two rank-one shifts and **one of them already had it
+right**. `temperature_shift` returns $-\mathcal Hv/k$: the monopole carries the
+$1/k$ because a scalar amplitude is $1/k_{\rm phys}$ times its gradient's, so
+$\mathcal D_a\ln T\to\mathcal D_a\ln T-Hv_a$ becomes $\delta T\to\delta
+T-\mathcal Hv/k$. The dipole is carried in the same covariant normalisation ---
+$\tilde\tau_1=\tilde v_B=v_B/k$, which is exactly what makes **(109)** read
+$-\tilde C_1=(\delta\tilde T+\Phi_A)+\kappa'\tilde v_B$ against the $\kappa'v_B$
+**(89)** prints --- so GDE99 Eq. (37) $\tilde\tau_a=\tau_a-v_a$ reads
+$\tilde\tau_1\to\tilde\tau_1-v/k$ here. Two rank-one objects in one dataclass,
+one divided by $k$ and one not.
+
+### The symptom, which needs no conventions
+
+| $k_{\rm com}$ | $\max|\tilde\tau_1|$ | old shift $\max|v|$ | corrected $\max|v/k|$ | old ratio |
+|---|---|---|---|---|
+| 5 | 0.59 | 3.3 | 0.67 | 5.7 |
+| 20 | 2.12 | 13.3 | 0.67 | 6.3 |
+| 60 | 3.22 | 40.0 | 0.67 | 12.4 |
+| 140 | 2.16 | 93.3 | 0.67 | 43.2 |
+| 300 | 1.08 | 200.0 | 0.67 | **186** |
+
+**A first-order frame change was 186 times the quantity it corrects**, and grew
+without bound with $k$. Corrected, $|v/k|/|\tilde\tau_1|$ stays between 0.2 and
+1.1 across the whole grid. That test is in `tests/` and needs no conventions
+sheet at all.
+
+### What it changes, and what it does not
+
+It changes the frame-invariance measurement by one to two orders of magnitude
+(see `provenance/FRAME-INVARIANCE-MEASUREMENT-v1.md`).
+
+**It does not change T-14.** T-14's numbers move from the pinned 0.9--1.0 band to
+1.0138, 1.0099, 1.0099 --- a 6% shift from a factor of $k_{\rm com}=50$ in the
+dipole shift --- and the collapse is untouched, because T-14 is the **absence of
+the shear sector** from (177)--(179) and not the size of the dipole shift. The
+band has been widened and the re-measurement recorded in the test. A defect whose
+cause has been correctly named survives the correction of a different defect;
+that is the test of the naming, and T-14 passes it.
+
+---
+
+## T-24 — CORRECTED THE SAME DAY. The entry above states the finding backwards.
+
+**The record above is wrong and is kept.** It says `energy_frame_shear` had two
+signs wrong and that the conventions sheet fixes them. The first half is half
+right and the second half is wrong, and the sequence matters more than the
+conclusion, so neither is being edited out.
+
+### What actually happened
+
+I read the frame transformation rule as $\tilde\sigma_{ab}=\sigma_{ab}
++\mathcal D_{\langle a}v_{b\rangle}$. *Annals II* prints it, in **n-t1**, as
+
+$$0\approx\sigma_{ab}-\mathcal D_{\langle a}v^N_{b\rangle}$$
+
+with $n_a=u_a+v^N_a$ and $n^a$ the shear-free threading --- a **minus**, and
+with the tilde on the *Newtonian* frame, not the energy one. I flipped
+$\sigma$'s sign on the strength of the wrong rule, and flipped $E$'s on the
+strength of C3.5, and the two flips cancelled in the closure, which is exactly
+the degeneracy the entry above correctly identifies. **The check I wrote to
+catch a sign error could not catch the sign error I then made in it.**
+
+$\sigma=+k_{\rm phys}v$ was right all along, and is the one part of this that
+needs no convention at all: n-t1 uses the raising sign once and $v=-v^N$ uses it
+again, so whatever C4.2 carries, the shear comes out $+k_{\rm phys}v$. It has
+been reverted.
+
+### What the finding actually is
+
+Write $\mathcal D_aX=\lambda k_{\rm phys}XQ_a$ for a scalar and $\mathcal
+D_{\langle a}Q_{b\rangle}=rk_{\rm phys}Q_{ab}$. Then **n-t2** gives both the
+Euler equation $v'+\mathcal Hv=-\lambda k\Phi_A$ and, through *Annals II*'s own
+definition $\mathcal D_{\langle a}\tilde A_{b\rangle}\approx E_{ab}
+-\tfrac12\pi_{ab}\Rightarrow\tilde A_a\approx\mathcal D_a\Phi_A$, the amplitude
+$E=\lambda rk_{\rm phys}^2\Phi_A$. Substituting both into Appendix G's
+$\dot\sigma+2H\sigma+E\approx0$ leaves
+
+$$\boxed{\;\frac{2\lambda r k^2\Phi_A}{a^2}\;}$$
+
+**which is zero for neither branch.** Three published relations --- n-t1, n-t2
+and the Appendix G shear propagation equation --- do not close under any single
+convention. Verified symbolically.
+
+The bundle's closure passes to $10^{-16}$ because it takes the Euler equation
+from $\lambda=+1$ and $E$ from $\lambda=-1$:
+
+| | $\lambda$ |
+|---|---|
+| Euler equation as `frames.py` derives it, $v'+\mathcal Hv=-k\Phi_A$ | $+1$ |
+| conventions row **C3.5**, $s_Q=-1$, with C4.1 | $+1$ |
+| `frames.py::weyl_electric_amplitude` | $+1$ |
+| *Annals II*'s printed mode expansion, $\Phi_{A|\alpha}=-k\Phi_AY_\alpha$ | $-1$ |
+| `coefficients.py::energy_frame_shear` | $-1$ |
+
+### What has been done, and what has not
+
+`energy_frame_shear` keeps $\lambda=-1$, because that is the branch that closes
+with the Euler equation the bundle already integrates, and the choice is now
+**named in one place** instead of being distributed across three modules. Two
+tests replace the ones the wrong entry added: one asserts that the closure holds
+for *neither* single $\lambda$, and one asserts that
+`weyl_electric_amplitude` and `energy_frame_shear` are exact negatives of each
+other --- pinning the contradiction rather than papering over it.
+
+**Not resolved, and raised.** Which $\lambda$ is right is the conventions
+sheet's to settle, and `provenance/conventions.md` is a generated copy. C3.5 is
+a **stipulation** --- the sheet says in terms that the sign *"is not fixed by
+any source"* --- and this is now the second result that bears on it, after the
+rank-one match against (106). The note in
+`GENERIC-SOURCE-DERIVATIVES-v1.md` saying the closure "corroborates the
+magnitude" is **withdrawn**: it corroborates nothing until $\lambda$ is single
+valued, because it was passing on a mixture.
+
+### The part of the original entry that stands
+
+The degeneracy. A closure of the form $\dot\sigma=-2H\sigma-E$ against a frame
+transformation fixes the *product* of the two rank-raising signs and never
+either one, so it cannot be cited for either. That was right when it was written
+for the wrong reason, and it is what let the wrong fix through.
+
+**And the method lesson, which is the expensive one.** The wrong version of this
+entry was written with a symbolic check, two independent in-repository
+corroborations and a measured consequence. All three were real; the premise ---
+one transformation rule, read from a summary rather than from the printed
+equation --- was not. **Every piece of evidence downstream of an unchecked
+premise corroborates the premise.** The printed n-t1 was forty lines from
+material already read twice in this session.
+
+---
+
+## T-24 — RESOLVED. The closure is an identity; the error was in the antecedent.
+
+Two entries above state T-24, the second correcting the first. **Both are
+superseded**, and both are kept, because the sequence is the finding.
+
+### What it is
+
+Annals II's **(31)**, the general frame transformation
+$\tilde\sigma_{ab}\approx\sigma_{ab}+\mathcal D_{\langle a}v_{b\rangle}$,
+contradicts its own specialisation **(40)**. (31) is right --- see **B-13** in
+`ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md` for the three reasons. With (31):
+
+$$\sigma=-k_{\rm phys}v,\qquad E=-k_{\rm phys}^2\Phi_A,\qquad
+v'+\mathcal Hv=-k\Phi_A$$
+
+all consistent with conventions rows **C3.5** ($s_Q=-1$) and **C4.2**, and with
+`frames.py::weyl_electric_amplitude`, which is Annals II **(24)** and was
+written for criterion 2 before `coefficients.py` existed. **Nothing in the
+bundle's conventions needed changing.**
+
+### What T-24 is now a finding about
+
+The three-way closure --- frame transformation, Appendix G, Euler equation ---
+**holds identically in both convention signs** once (31) replaces (40). That is
+what it should do: it is a statement about physical fields, so a basis cannot
+enter it.
+
+Therefore the closure is **evidence for no convention at all**. The claim in
+`GENERIC-SOURCE-DERIVATIVES-v1.md` that it *"corroborates the magnitude"* of
+C3.5 stays withdrawn, now for the right reason: not because it was passing on a
+mixture, but because an identity corroborates nothing. The rank-one match
+against (106) remains the only thing in this bundle that constrains that sign.
+
+And it explains the whole episode. A check that cannot fail is a check that
+cannot catch a sign error made inside it --- which is exactly what happened,
+twice, in opposite directions, in one day.
+
+### The sequence, which is the part worth keeping
+
+| | what I did | what was wrong |
+|---|---|---|
+| 1 | flipped $\sigma$ and $E$ on the strength of a transformation rule remembered from a summary | nothing, as it turns out --- the right answer, for a reason I could not have defended |
+| 2 | reverted both on the strength of the **printed (40)** | trusted a specialisation over the general rule two pages earlier, which the paper itself derives it from |
+| 3 | read (31)--(37), and (33) against (40) | --- |
+
+Step 2 was *more* careful than step 1 --- it went to the printed source, which
+is the rule. It was still wrong, because it went to the nearest printed source
+rather than the one carrying the citation. **"Check the source" is not a
+procedure until it says which source**, and in a paper that derives a
+specialisation from a general rule, the general rule is the source and the
+specialisation is a derived result that can carry a slip.
+
+The PI's instruction --- *"the physics rules; Annals II is a template not the
+physics"* --- is what resolved it, and it resolved it without any literature
+search: the physics was the field-equation closure, and the arbiter was two
+pages earlier in the same file.
+
+### Pinned
+
+- `test_T24_the_closure_is_an_identity_in_both_conventions` --- the closure
+  holds for all four $(\lambda,r)$ combinations, so it can never again be cited
+  as evidence for one.
+- `test_B13_the_printed_n_t1_does_not_close_and_the_general_rule_does` --- the
+  (40) residual is exactly $2E_{ab}$.
+- `test_the_two_modules_now_agree_on_E_and_on_sigma` --- the two $E_{ab}$ in the
+  repository are now the same number, checked against each other.
+
+---
+
+## T-28 — a new entry point ran only where PYTHONPATH was already set
+
+**Found 2026-10-13, by the PI's first run**, which is the acceptance this
+bundle's portability gate exists to anticipate and did not.
+
+`scripts/measure_frame_invariance.py` was added as **D6** and imports
+`functions.*` with no `sys.path` bootstrap. `python scripts/x.py` puts
+`scripts/` on `sys.path`, not the repository root, so it raises
+`ModuleNotFoundError` on every machine where `PYTHONPATH` is not already set
+--- which is every machine but the one that wrote it. Here it was run as
+`PYTHONPATH=. python3 scripts/...` and passed; on the PI's machine D6 died and
+the run came back `NOT CLEAN`.
+
+This is **T-15 in a new place** --- "the release route cannot pass on a second
+machine" --- and the gate that was built for T-15 watched the adjacent thing:
+it checks that an entry point anchors its *output* paths to `__file__`, which
+this script did, and not that it can *import* at all.
+
+**Fixed, and the gate widened.** `check_portability.py` now fails any
+`scripts/` entry point that contains `from functions.` without `sys.path`, with
+the reason in the message. The guard was checked by removing the bootstrap and
+confirming it fires. The script now runs from outside the repository with no
+environment set, which is the only form of this test worth running.
+
+**The general lesson, which has now cost twice.** A convenience used while
+developing --- `PYTHONPATH=.` here, a mounted project repository for
+`sync_conventions` before it --- silently supplies something the shipped
+artefact must supply itself. The gate can only catch what it is told to look
+for, so every time one of these escapes, the gate gets the new case rather than
+the author getting a resolution.

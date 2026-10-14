@@ -248,21 +248,45 @@ def newtonian_c1_prime(
     `conformal_hubble` is $a'/a$, so $a^2H$ against the stored
     $a\tilde{\mathcal B}_1=k(\delta\tilde T+\Phi_A)$ is that times it.
     """
+    a_b1_prime = newtonian_a_b1_prime(
+        k_com, delta_t=delta_t, phi_a=phi_a, phi_a_prime=phi_a_prime,
+        phi_h_prime=phi_h_prime, tau_1=tau_1, conformal_hubble=conformal_hubble)
+    # (107): -C~_1' = (kappa' v~_B)' + (1/k)(a B~_1)'
+    return -(np.asarray(kappa_prime_v_b_prime, dtype=float)
+             + a_b1_prime / float(k_com))
+
+
+def newtonian_a_b1_prime(
+    k_com: float,
+    *,
+    delta_t: np.ndarray,
+    phi_a: np.ndarray,
+    phi_a_prime: np.ndarray,
+    phi_h_prime: np.ndarray,
+    tau_1: np.ndarray,
+    conformal_hubble: np.ndarray,
+) -> np.ndarray:
+    r"""$(a\tilde{\mathcal B}_1)'$ --- **(106) itself**, before (107) wraps it.
+
+    Split out of `newtonian_c1_prime` unchanged, because it is the *dynamical*
+    input a second frame needs and differencing it out of $\tilde C_1'$ would
+    be arithmetic standing in for a derivation. (107) is one line and belongs
+    to the Newtonian specialisation; (106) is the evolution equation, and
+    `energy_set` consumes it directly.
+    """
     k = float(k_com)
-    a_b1 = k * (np.asarray(delta_t, dtype=float) + np.asarray(phi_a, dtype=float))
     aH = np.asarray(conformal_hubble, dtype=float)
-    a_b1_prime = (
+    a_b1 = k * (np.asarray(delta_t, dtype=float) + np.asarray(phi_a, dtype=float))
+    return (
         -aH * a_b1
         + k * (np.asarray(phi_a_prime, dtype=float)
                - np.asarray(phi_h_prime, dtype=float))
         - 2.0 * aH * k * np.asarray(phi_a, dtype=float)
         + (k**2 / 3.0) * np.asarray(tau_1, dtype=float)
     )
-    # (107): -C~_1' = (kappa' v~_B)' + (1/k)(a B~_1)'
-    return -(np.asarray(kappa_prime_v_b_prime, dtype=float) + a_b1_prime / k)
 
 
-__all__.append("newtonian_c1_prime")
+__all__ += ["newtonian_c1_prime", "newtonian_a_b1_prime"]
 
 
 # ---------------------------------------------------------------------------
@@ -423,6 +447,21 @@ class CoefficientSet:
     c2_second: np.ndarray
     c2_prime_star: float
 
+    # --- the primitives of (89), kept because (101) is printed in them -------
+    # (102) is written in $C_A$; the fuller solution (101) it is approximated
+    # from is written in $a\mathcal B_A$ and $v_B$. Reconstructing those from
+    # the $C_A$ means re-applying the $1/k$ of (90) and the $k$ of (89)'s
+    # $\kappa'v_B$ in the right places --- which is finding **T-25**, made once
+    # already. They are carried instead, in the **printed** normalisation:
+    # $v_B$, not $\tilde v_B=v_B/k$.
+    a_b1: np.ndarray | None = None
+    a_b1_prime: np.ndarray | None = None
+    a_b2: np.ndarray | None = None
+    a_b2_prime: np.ndarray | None = None
+    a_b2_second: np.ndarray | None = None
+    v_b: np.ndarray | None = None
+    v_b_prime: np.ndarray | None = None
+
 
 def tau_1_prime(
     k_com: float,
@@ -492,8 +531,309 @@ def newtonian_set(
         phi_h_prime=phi_h_prime, tau_1=tau1, conformal_hubble=conformal_hubble,
         kappa_prime_v_b_prime=kpvb_prime)
     zero = np.zeros_like(np.asarray(eta, dtype=float))
-    return CoefficientSet(coefficients=coefficients, c1_prime=c1p,
-                          c2_second=zero, c2_prime_star=0.0)
+    k = float(k_com)
+    a_b1 = k * (np.asarray(delta_t, dtype=float) + np.asarray(phi_a, dtype=float))
+    return CoefficientSet(
+        coefficients=coefficients, c1_prime=c1p,
+        c2_second=zero, c2_prime_star=0.0,
+        a_b1=a_b1,
+        a_b1_prime=newtonian_a_b1_prime(
+            k, delta_t=delta_t, phi_a=phi_a, phi_a_prime=phi_a_prime,
+            phi_h_prime=phi_h_prime, tau_1=tau1, conformal_hubble=conformal_hubble),
+        a_b2=zero, a_b2_prime=zero, a_b2_second=zero,
+        # (89) prints kappa' v_B; the bundle carries v~_B = tau~_1 = v_B/k.
+        v_b=k * tau1, v_b_prime=k * t1p,
+    )
 
 
 __all__ += ["CoefficientSet", "tau_1_prime", "newtonian_set"]
+
+
+def energy_frame_shear(
+    k_com: float,
+    *,
+    v: np.ndarray,
+    phi_a: np.ndarray,
+    phi_h: np.ndarray | None = None,
+    scale_factor: np.ndarray,
+    conformal_hubble: np.ndarray,
+    rho: np.ndarray,
+    pressure: np.ndarray | float = 0.0,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    r"""$\sigma$, $\dot\sigma$, $\ddot\sigma$ in the energy frame, $A_a=0$.
+
+    The shear sector is **empty in the Newtonian frame and occupied here**, so
+    this is what puts anything into (102)'s rank-two terms for the first time.
+
+    `v` is the threading velocity as `frame_transform.energy_frame_shift`
+    returns it: $v=-v^N$ in *Annals II*'s notation, where $\tilde u^a\approx
+    u^a+v^a$ and $n_a=u_a+v^N_a$ with $n^a$ the shear-free (Newtonian)
+    threading. That identification is not a choice made here ---
+    `ThreadingShift.temperature_shift` fixes it independently through **(42)**.
+    `phi_a`, `phi_h` are the **Newtonian-frame** potentials; $\Phi_A\equiv0$ in
+    the energy frame, which is the frame condition.
+
+    Three relations, and the first is **(31)**, not (40) --- see below:
+
+        (31)  sigma~_ab ~= sigma_ab + D_<a v_b>        =>  sigma = -k_phys v
+        (G)   sigma-dot + 2H sigma - D_<a A_b> + E ~= pi/2
+        (32)  A~_a ~= A_a + v_a-dot + H v_a            =>  v' + Hv = -k Phi_A
+
+    with $E_{ab}=\mathcal D_{\langle a}\mathcal D_{b\rangle}\Phi_A$, which is
+    how *Annals II* **defines** $\Phi_A$ (from (G) with $\tilde\sigma_{ab}=0$).
+
+    **These close identically.** Writing $\mathcal D_aX=\lambda k_{\rm phys}XQ_a$
+    for a scalar and $\mathcal D_{\langle a}Q_{b\rangle}=rk_{\rm phys}Q_{ab}$,
+    the residual of the three vanishes **for every $\lambda$ and every $r$** ---
+    as it must, since it is a statement about physical fields and not about a
+    basis. Checked symbolically. The corollary matters: **the closure is
+    evidence for neither convention**, so it cannot be cited for C3.5, and that
+    is why it did not catch the error recorded as T-24.
+
+    **It is (31) and not (40).** *Annals II* gives the general frame
+    transformations at (31)--(37), cited to Maartens, Gebbie & Ellis, and then
+    specialises them to the Newtonian threading at (40)--(45). Two of the six
+    change sign on the way: (40) prints $0\approx\sigma_{ab}-\mathcal
+    D_{\langle a}v^N_{b\rangle}$ against (31)'s plus, and (45) prints $\tilde
+    q_a\approx q_a+(\rho+p)v^N_a$ against (34)'s minus. Carried through with
+    (40), the energy frame **fails** to close against the field equations by
+    exactly $2E_{ab}$, for every convention. Recorded as **B-13**.
+
+    The signs below therefore come from (31) with **C4.2** ($r=-1$) and from
+    **C3.5** ($s_Q=-1$, so $\lambda=+1$); $E$ then agrees with
+    `frames.py::weyl_electric_amplitude`, which was written for criterion 2
+    before this module existed. The general $\tfrac12(\Phi_A-\Phi_H)$ form is
+    used, so no anisotropic stress is assumed even though v1.2.0's `potentials`
+    supplies none.
+    """
+    a = np.asarray(scale_factor, dtype=float)
+    k_phys = float(k_com) / a
+    phi_a = np.asarray(phi_a, dtype=float)
+    phi_h = -phi_a if phi_h is None else np.asarray(phi_h, dtype=float)
+
+    # (31) with sigma~ = 0 and v = -v^N, then C4.2's r = -1.  **Not (40)** --- B-13.
+    sigma = -k_phys * np.asarray(v, dtype=float)
+    # E = D_<a D_b> Phi_A with C3.5's lambda = +1 and C4.2's r = -1.
+    electric = -0.5 * k_phys**2 * (phi_a - phi_h)
+
+    sigma_dot, sigma_ddot = generic_shear_derivatives(
+        sigma=sigma, electric_weyl=electric, conformal_hubble=conformal_hubble,
+        scale_factor=a, rho=rho, pressure=pressure,
+    )
+    return sigma, sigma_dot, sigma_ddot
+
+
+__all__ += ["energy_frame_shear"]
+
+
+# ---------------------------------------------------------------------------
+# The energy frame as a *second* frame (102) can be evaluated in. Everything
+# below exists so that a frame choice **cascades** --- the sources, their
+# derivatives and the rank-two sector all follow from one velocity --- rather
+# than being asserted by a label. Decision S8: the CDM frame is the
+# total-energy frame.
+# ---------------------------------------------------------------------------
+
+
+def background_fluid(
+    scale_factor: np.ndarray,
+    *,
+    omega_m: float,
+    omega_lambda: float = 0.0,
+    omega_r: float = 0.0,
+    h0: float = 1.0,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    r"""$(\rho,p,\mathcal H')$ for an FLRW background, from **one** expression.
+
+    Appendix G's propagation equations carry $\rho$, $p$ and (through
+    $\dot H=-H^2-(\rho+3p)/6$) the background acceleration. `Background` carries
+    $\Omega$'s. Three numbers derived separately from those two descriptions can
+    disagree by a sign or a factor and still look plausible, so they are derived
+    here together and only once:
+
+        script-H^2 = h0^2 ( Om_r/a^2 + Om_m/a + Om_k + Om_L a^2 )
+        script-H'  = h0^2 ( -Om_r/a^2 - Om_m/(2a) + Om_L a^2 )      (exact)
+        rho        = 3 script-H^2/a^2 - 3 h0^2 Om_k /a^2            (the fluids alone)
+        p          = ( -6 script-H'/a^2 - rho ) / 3                 (Appendix G)
+
+    $\Omega_k$ is subtracted from $\rho$ because curvature is not a fluid; the
+    $p$ line then **defines** the pressure by Appendix G's own relation, so
+    `c2_derivatives` recomputing $\mathcal H'$ from $(\rho,p)$ returns exactly
+    the $\mathcal H'$ this function started from. `tests/` checks that round
+    trip and checks $\mathcal H'$ against the `Background`'s own $\mathcal H$.
+    """
+    a = np.asarray(scale_factor, dtype=float)
+    omega_k = 1.0 - omega_m - omega_lambda - omega_r
+    cH_sq = h0**2 * (omega_r / a**2 + omega_m / a + omega_k + omega_lambda * a**2)
+    cH_prime = h0**2 * (-omega_r / a**2 - omega_m / (2.0 * a) + omega_lambda * a**2)
+    rho = 3.0 * cH_sq / a**2 - 3.0 * h0**2 * omega_k / a**2
+    pressure = (-6.0 * cH_prime / a**2 - rho) / 3.0
+    return rho, pressure, cH_prime
+
+
+def energy_set(
+    eta: np.ndarray,
+    k_com: float,
+    *,
+    delta_t: np.ndarray,
+    phi_a: np.ndarray,
+    phi_a_prime: np.ndarray,
+    phi_h: np.ndarray,
+    phi_h_prime: np.ndarray,
+    tau_1: np.ndarray,
+    kappa_prime: np.ndarray,
+    kappa_double_prime: np.ndarray,
+    conformal_hubble: np.ndarray,
+    conformal_hubble_prime: np.ndarray,
+    scale_factor: np.ndarray,
+    rho: np.ndarray,
+    pressure: np.ndarray | float,
+    r_baryon: np.ndarray,
+    r_baryon_prime: np.ndarray,
+    v: np.ndarray,
+    v_prime: np.ndarray,
+    eta_star: float,
+) -> CoefficientSet:
+    r"""(102)'s full input set in the energy frame, $A_a=0$, $\sigma_{ab}\ne0$.
+
+    **Every argument is a Newtonian-frame quantity** except `v`, `v_prime`,
+    which are the threading shift `frame_transform.energy_frame_shift` returns
+    ($u^a_{\rm E}=u^a_{\rm N}+v^a$, $v'+\mathcal Hv=-k\Phi_A$). The frame change
+    is performed here, on the sources **and on their derivatives**, which is the
+    part `to_frame` cannot do: `to_frame` moves five amplitudes, and (102) needs
+    $C_1'$ and $C_2''$ as well. Transforming an amplitude and then
+    differentiating it is finding **T-23** in a third place.
+
+    The assembly is the same in both frames, and that is the point:
+
+        a B_1 = k dT + aA ,     (a B_1)' = k dT' + (aA)'
+        -C_1  = (1/k)( a B_1 + kappa' v_B )          (89)
+        -C_2  = (1/k^2) a B_2 ,  B_2 = sigma_ab      (90)
+
+    Only the *inputs* to that assembly know which frame they are in:
+
+    | | Newtonian | energy |
+    |---|---|---|
+    | $aA$ | $k\Phi_A$ | $0$ --- the frame condition |
+    | $\delta T$ | $\delta\tilde T$ | $\delta\tilde T-\mathcal Hv/k$ (n-t3) |
+    | $\tau_1$ | $\tilde\tau_1$ | $\tilde\tau_1-v$ (n-t4) |
+    | $\mathcal B_2$ | $0$ | $-k_{\rm phys}v$ (n-t1) |
+
+    **The dynamics enter once**, through (106) for $(a\tilde{\mathcal B}_1)'$ and
+    (152) for $\tilde\tau_1'$, both in the Newtonian frame where *Annals II*
+    derives them; $\delta\tilde T'$ is read off (106) and then shifted
+    **exactly**, since $\mathcal H'$ is a background quantity and $v'$ is the
+    Euler equation. Nothing here is splined.
+
+    **The generic assembly is not used, and this records why.** The frame-free
+    $\dot{\mathcal B}_1$ relation of
+    `provenance/GENERIC-SOURCE-DERIVATIVES-v1.md` would give a second,
+    independent route to $(a\mathcal B_1^{\rm E})'$ --- and it is still carrying
+    the unresolved $(\star)=-H\mathcal D_{\langle a}\mathcal D_{b\rangle}\ln T$
+    and needs $\Theta$, which no history in this bundle carries. Until $(\star)$
+    is settled under \S2.5's $O(\epsilon\epsilon_H)$ bookkeeping that route
+    cannot be a check, so it is named here and not used.
+    """
+    k = float(k_com)
+    eta = np.asarray(eta, dtype=float)
+    cH = np.asarray(conformal_hubble, dtype=float)
+    cHp = np.asarray(conformal_hubble_prime, dtype=float)
+    v = np.asarray(v, dtype=float)
+    vp = np.asarray(v_prime, dtype=float)
+    phi_a = np.asarray(phi_a, dtype=float)
+    phi_a_prime = np.asarray(phi_a_prime, dtype=float)
+    tau_1 = np.asarray(tau_1, dtype=float)
+    kp = np.asarray(kappa_prime, dtype=float)
+    kpp = np.asarray(kappa_double_prime, dtype=float)
+
+    # --- rank one: the Newtonian dynamics, then the exact shift --------------
+    a_b1_prime_N = newtonian_a_b1_prime(
+        k, delta_t=delta_t, phi_a=phi_a, phi_a_prime=phi_a_prime,
+        phi_h_prime=phi_h_prime, tau_1=tau_1, conformal_hubble=cH)
+    # a B~_1 = k(dT~ + Phi_A)  =>  dT~' = [ (a B~_1)' - k Phi_A' ] / k
+    delta_t_prime_N = a_b1_prime_N / k - phi_a_prime
+
+    # n-t3, differentiated exactly: dT^E = dT~ - script-H v / k
+    delta_t_E = np.asarray(delta_t, dtype=float) - cH * v / k
+    delta_t_prime_E = delta_t_prime_N - (cHp * v + cH * vp) / k
+
+    # A_a = 0 is the frame condition, so a B_1 is the temperature gradient alone
+    a_b1_E = k * delta_t_E
+    a_b1_prime_E = k * delta_t_prime_E
+
+    # --- the Thomson term: n-t4, with (152) for the Newtonian dipole ---------
+    tau_1_prime_N = tau_1_prime(k, tau_1=tau_1, delta_t=delta_t, phi_a=phi_a,
+                                r_baryon=r_baryon, r_baryon_prime=r_baryon_prime)
+    # **T-27**: the dipole is carried in the covariant normalisation
+    # tau~_1 = v~_B = v_B/k, so (37) tau~_a = tau_a - v_a reads
+    # tau~_1 -> tau~_1 - v/k here. The same 1/k the monopole carries in
+    # `ThreadingShift.temperature_shift`, for the same reason.
+    tau_1_E = tau_1 - v / k
+    tau_1_prime_E = tau_1_prime_N - vp / k
+    # **The two are differently normalised and the names do not say so.**
+    # `match_coefficients` takes kappa' v_B, which is k times the kappa' v~_B of
+    # (109); `newtonian_c1_prime` takes the derivative of the *un*-multiplied
+    # one, because (107) reads -C_1' = (kappa' v~_B)' + (a B_1)'/k. Writing the
+    # second with the k of the first is a factor of k_com -- 60 at the first k
+    # this was run at -- and it is what the first draft of this function did.
+    # Recorded as **T-25**; the argument names are now explicit about it.
+    kappa_prime_v_b_E = k * kp * tau_1_E                       # for (89)
+    kappa_prime_v_b_tilde_prime_E = kpp * tau_1_E + kp * tau_1_prime_E   # for (107)
+
+    # --- rank two: the sector that is empty in the Newtonian frame -----------
+    sigma, sigma_dot, sigma_ddot = energy_frame_shear(
+        k, v=v, phi_a=phi_a, phi_h=phi_h, scale_factor=scale_factor,
+        conformal_hubble=cH, rho=rho, pressure=pressure)
+
+    # **Evaluated through $v$, checked through Appendix G --- finding T-26.**
+    # $a\mathcal B_2=a\sigma=-k_{\rm com}v$ exactly ((31) and C4.2 with
+    # $k_{\rm phys}=k/a$), so $-C_2=a\mathcal B_2/k^2$ collapses to $v/k$ and
+    # its derivatives are $v'/k$, $v''/k$ --- both closed-form, $v'$ from the
+    # Euler equation and $v''$ from differentiating it. `c2_derivatives` reaches
+    # the same three numbers through $(a\sigma)''=a''\sigma+2a'\sigma'+a\sigma''$
+    # with $\ddot\sigma$ from Appendix G, and **that route is unusable here**:
+    # $\ddot\sigma\sim10^{15}$ against a result of order $10^{-3}$, so the exact
+    # relation loses about eighteen significant figures to cancellation and
+    # returns noise. T-23 said a derivative must come from a published relation
+    # rather than a spline; T-26 is the other edge of the same knife --- the
+    # published relation must also be *evaluated* in a variable that does not
+    # cancel. Appendix G stays, as the check `tests/` runs on $\ddot\sigma$
+    # itself, where nothing cancels.
+    vpp = -cHp * v - cH * vp - k * phi_a_prime      # d/d(eta) of the Euler equation
+    c2, c2_prime, c2_second = v / k, vp / k, vpp / k
+
+    a = np.asarray(scale_factor, dtype=float)
+    a_b2 = a * sigma
+    coefficients = match_coefficients(
+        eta, k, a_b1=a_b1_E, a_b2=a_b2,
+        kappa_prime_v_b=kappa_prime_v_b_E, frame="energy")
+    # (90) through `match_coefficients` and the $v$ route must agree.
+    if not np.allclose(coefficients.c2, c2, rtol=1e-12, atol=0.0):
+        raise ValueError(
+            "match_coefficients and the v route disagree on C_2: p_2 from (89) "
+            "and the n-t1 reduction have drifted apart")
+    # The **first** derivative is well conditioned both ways, so Appendix G is
+    # still held to account where it can be: (a sigma)' = a'sigma + a^2 sigma-dot
+    # must be -k v'. Only the second derivative cancels (T-26).
+    a_sigma_prime = a * cH * sigma + a**2 * sigma_dot
+    if not np.allclose(a_sigma_prime, -k * vp, rtol=1e-9, atol=0.0):
+        raise ValueError(
+            "Appendix G's sigma-dot and the Euler equation disagree on "
+            "(a sigma)'; the energy frame no longer closes")
+
+    # (107), with both halves of the derivative built from published relations
+    c1_prime = -(kappa_prime_v_b_tilde_prime_E + a_b1_prime_E / k)
+
+    return CoefficientSet(
+        coefficients=coefficients,
+        c1_prime=c1_prime,
+        c2_second=c2_second,
+        c2_prime_star=float(np.interp(float(eta_star), eta, c2_prime)),
+        a_b1=a_b1_E, a_b1_prime=a_b1_prime_E,
+        a_b2=-(k**2) * c2, a_b2_prime=-(k**2) * c2_prime,
+        a_b2_second=-(k**2) * c2_second,
+        v_b=k * tau_1_E, v_b_prime=k * tau_1_prime_E,
+    )
+
+
+__all__ += ["background_fluid", "energy_set"]

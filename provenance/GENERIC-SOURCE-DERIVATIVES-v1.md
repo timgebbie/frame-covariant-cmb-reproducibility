@@ -402,3 +402,85 @@ antecedent rather than gaps in this assembly.
 Nothing here is implemented yet; `functions/spectra/integral_solution.py` takes
 the derivatives as inputs precisely so that this file can be finished before
 anything depends on it.
+
+
+---
+
+## The energy frame, and the first check against the field equations
+
+With $\dot{\mathcal B}_2$ in hand the shear sector becomes computable, and the
+energy frame is where it is occupied. Three statements, and **any two give the
+third**:
+
+1. $\sigma_{ab}=-\mathcal D_{\langle a}v_{b\rangle}$ — the frame
+   transformation, since $\tilde\sigma_{ab}\approx0$ in the Newtonian frame;
+2. $\dot\sigma=-2H\sigma-E$ — Appendix G's shear equation with $A_a=0$, the
+   energy-frame condition;
+3. $v'+\mathcal Hv=-k_{\rm com}\Phi_A$ — the energy-frame Euler equation,
+   derived independently in `frames.py` from $\tilde A_a=0$.
+
+$E_{ab}$ is read off the **other** frame, on Stewart–Walker grounds: it vanishes
+in the background so it is frame-invariant at first order (criterion 2), and
+$\tilde\sigma_{ab}=0$ turns Appendix G's shear equation into
+$\mathcal D_{\langle a}\tilde A_{b\rangle}=E_{ab}-\tfrac12\pi_{ab}$ with
+$\tilde A_a=\mathcal D_a\Phi_A$, giving $E=k_{\rm phys}^2\Phi_A$.
+
+Subtracting (2) from (1) leaves, for **arbitrary** $v$,
+
+$$\frac{k}{a^2}\big(v'+\mathcal Hv\big)+c^2E$$
+
+with $c$ the rank-raising sign. Substituting (3) kills the first term and leaves
+$k^2(c^2-1)\Phi_A/a^2$, **identically zero for $c=\pm1$**. Verified symbolically
+and numerically — the closure holds to $1.0\times10^{-17}$ and the non-closure
+for arbitrary $v$ is exactly the predicted expression to $7\times10^{-18}$.
+
+**Every previous frame check in this bundle compared the frame machinery with
+itself** — the round trip, the Weyl invariance, the dipole rule. This one
+compares it with the **Einstein field equations**, through an $E_{ab}$ borrowed
+from the frame where the shear vanishes. That is a different kind of evidence
+and it is the kind criterion 2 could not supply.
+
+### What it says about C3.5
+
+Conventions row **C3.5** records that the sign of a scalar's mode coefficient
+*"is not fixed by any source"* and **stipulates** $s_Q=-1$. Two independent
+results in this bundle now constrain it:
+
+| | fixes |
+|---|---|
+| the rank-one match against (106)'s $+\tfrac13k^2\tilde\tau_1$ | the **sign** $c$ |
+| the energy-frame three-way closure | $c^2$ only |
+
+So the closure corroborates the magnitude and the rank-one match settles the
+sign. **A stipulation can be replaced by a derivation**, and the conventions
+sheet should say so rather than continuing to describe it as unfixed. Raised
+for the sheet's owner; not changed here, since `provenance/conventions.md` is a
+generated copy and the normative sheet is the project's.
+
+> ### WITHDRAWN the same day --- finding T-24
+>
+> **The closure corroborates nothing, because it was passing on a mixture.**
+> Writing a scalar's gradient as $\mathcal D_aX=\lambda k_{\rm phys}XQ_a$ and
+> the raising operator as $\mathcal D_{\langle a}Q_{b\rangle}=rk_{\rm
+> phys}Q_{ab}$, *Annals II*'s **n-t2** fixes **both** the Euler equation
+> $v'+\mathcal Hv=-\lambda k\Phi_A$ **and** the amplitude $E=\lambda rk_{\rm
+> phys}^2\Phi_A$, through the paper's own definition $\tilde A_a\approx\mathcal
+> D_a\Phi_A$. Carried with one $\lambda$ through n-t1 and Appendix G, the
+> residual is $2\lambda rk^2\Phi_A/a^2$ --- **zero for neither branch**. The
+> $10^{-16}$ reported above was obtained with $\lambda=+1$ in the Euler equation
+> and $\lambda=-1$ in $E$.
+>
+> Two further corrections to the paragraph above. The sentence *"$\tilde
+> \sigma_{ab}\approx0$ in the Newtonian frame"* attached to
+> $\sigma_{ab}=-\mathcal D_{\langle a}v_{b\rangle}$ reads n-t1 with the wrong
+> sign and the tilde on the wrong frame; the printed relation is
+> $0\approx\sigma_{ab}-\mathcal D_{\langle a}v^N_{b\rangle}$ with
+> $n_a=u_a+v^N_a$, giving $\sigma=+k_{\rm phys}v$ for the $v$ this bundle
+> integrates. And the claim that the subtraction leaves $k^2(c^2-1)\Phi_A/a^2$
+> is arithmetic on that wrong rule.
+>
+> **What survives:** the rank-one match against (106) still constrains the sign,
+> and it is now the *only* thing in this bundle that does. The closure's status
+> is downgraded from evidence to an open contradiction, recorded as **T-24** in
+> `provenance/BUNDLE-DEFECTS-v1.md` and raised with the conventions sheet's
+> owner.

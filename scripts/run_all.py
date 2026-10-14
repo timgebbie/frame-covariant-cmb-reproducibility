@@ -87,6 +87,10 @@ DIAGNOSTICS: list[tuple[str, str]] = [
     ("D3  source terms against k", "scripts/diagnostic_d3_sources.py"),
     ("D4  no monopole in the CGI approach", "scripts/diagnostic_d4_monopole.py"),
     ("D5  criterion 5a: the Sachs-Wolfe limit", "scripts/diagnostic_d5_sachs_wolfe.py"),
+    # D6 writes provenance/FRAME-INVARIANCE-MEASUREMENT-v1.md, whose prose is
+    # computed from its own table. It runs here so the record cannot fall out
+    # of step with the code -- the same reason EMISSIONS exists.
+    ("D6  (102) in two frames: the F5 measurement", "scripts/measure_frame_invariance.py"),
 ]
 
 
@@ -178,6 +182,12 @@ def main() -> int:
         failures.append("supplement")
 
     print("\n--- provenance " + "-" * 46)
+    # The release status is **generated and verified**, not typed: every rung it
+    # claims names a module, an object, a test or a harness entry, and the script
+    # fails if one is missing. It caught five of its own claims on its first run.
+    # Decision S27.
+    if run([sys.executable, "scripts/make_release_status.py"], "release status"):
+        failures.append("release status")
     if run([sys.executable, "scripts/sync_conventions.py", "--check"], "conventions copy"):
         failures.append("conventions copy")
 

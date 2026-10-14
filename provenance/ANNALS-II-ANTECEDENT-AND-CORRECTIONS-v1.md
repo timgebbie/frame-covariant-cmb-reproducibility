@@ -1355,3 +1355,169 @@ is strong evidence the sign is the whole defect; pinning the normalisation
 requires $\tau^{(0)}_\ell$'s definition written out, which is the same
 derivation the generic $\dot{\mathcal B}_0$ and $\dot{\mathcal B}_2$ relations
 need. Recorded as an **O-item against this finding**, not as doubt about it.
+
+---
+
+## B-12 — (98), (101) and (102) do not agree on the rank-two sector
+
+**Found 2026-10-13**, reading (98) `int_soln_damping` and (101) `slowdec_1` in
+order to test whether the printed approximation chain explains the measured
+frame non-invariance of (102). It does not explain it, because the three
+equations disagree with each other and with (90) before any approximation is
+applied, in three separate places --- all of them in the rank-two sector, which
+is identically zero in the Newtonian frame and has therefore never been
+evaluated by anyone.
+
+Using (90) --- $-C_0\simeq+\tfrac52a\mathcal B_2$, $-C_2\simeq+\tfrac1{k^2}
+a\mathcal B_2$ --- to put all three in the same variables:
+
+| | (102), the bundle's equation | (101), as printed |
+|---|---|---|
+| rank-two term of the integrand | $C_0=-\tfrac52a\mathcal B_2$ | $-\tfrac56a\mathcal B_2$ |
+| second-derivative term | $C_2''=-\tfrac1{k^2}(a\mathcal B_2)''$ | $-\tfrac53\tfrac1{k^2}(a\mathcal B_2)''$ |
+| rank-two boundary | $+kC_2(\eta_*)$ | $-\tfrac1k(a\mathcal B_2)(\eta_*)\partial_{\eta_0}$ |
+
+The first two differ by factors of **3** and **5/3**. The third differs from
+(98)'s $-C_2(\eta_*)e^{-\kappa}\tau_\ell^{(0)\prime}(\eta_0)$ **in sign**, and
+from (101) by a power of $k_{\rm com}$ unless $\partial_{\eta_0}$ there is read
+as acting on $k\Delta\eta_*$ rather than on $\eta_0$.
+
+**No released number is affected** --- every one of these terms multiplies
+$\mathcal B_2$, and $\tilde{\mathcal B}_2\equiv0$ in the Newtonian frame that
+\S7.1.1 chooses before writing (110). That is also why the discrepancies have
+survived: the only equation anyone has ever evaluated is the one in which they
+all vanish.
+
+**The operational consequence is a refusal, not a correction.** It was tempting
+to report the frame-invariance measurement as an approximation ladder ---
+(98) exact, (101) slow-decoupling, (102) visibility-function --- with the
+residual shrinking along it. Reconstructing (98) and (101) *does* produce
+numbers, and they do not shrink monotonically. They cannot be interpreted,
+because a comparison across three equations that disagree in their rank-two
+normalisations measures the disagreement and not the approximation. The ladder
+is not in `provenance/FRAME-INVARIANCE-MEASUREMENT-v1.md` for that reason, and
+the reason is written there.
+
+**What would resolve it:** redoing the rank-by-rank match of (89) for the
+$\ell=0$ and $\ell=2$ rows with the $\delta_{\ell0}$ sign already corrected
+under **B-11**, and carrying the result through the integration by parts that
+takes (98) to (101). Both are tractable and neither is done. Until then (90) is
+the authority the bundle uses, because it is the one (89) reproduces once B-11
+is applied and the one all three of $C_0$, $C_1$, $C_2$ were checked against.
+
+### B-12 — equation numbers corrected, same day
+
+The entry above cites the general damped integral solution as **(98)** and the
+fuller slow-decoupling solution as **(101)**. They are **(93)** and **(98)**.
+The labels are `int_soln_damping` and `slowdec_1`; the numbers were assumed from
+their position relative to (102) rather than counted.
+
+Counted from the source, with the equation environments walked in order and
+`\nonumber` honoured, the counter reproduces `find_coef` $\to$ (89),
+`C-B-coef` $\to$ (90) and `slowdecoupling` $\to$ (102) --- three independent
+anchors already established by other means --- and then gives:
+
+| label | published |
+|---|---|
+| `int_soln_damping` | **(93)** |
+| `slowdec_1` | **(98)** |
+| `n-t1`\,/\,`n-shear` | **(40)** |
+| `n-t2` | (41) |
+| `n-t3` | (42) |
+| `n-t4` | **(43)** |
+| `n-t5` | (44) |
+| `n-t6` | (45) |
+
+The substance of B-12 is unaffected: the three equations still disagree in the
+rank-two sector by factors of 3 and 5/3 and in the sign of the boundary term.
+Only the names were wrong.
+
+**A second item, raised not fixed.** The bundle cites the frame transformation
+rules as *"GDE99 Eq. (37)"* and *"GDE99 Eq. (24)"* in `functions/frames.py`,
+`functions/spectra/frame_transform.py` and two test files. `GDE99` is not in the
+register's source table, and Eq. (37) for $\tilde\tau_a=\tau_a-v_a$ is (43) in
+the published *Annals II*. If GDE99 is the preprint of *Annals II* then those
+are **arXiv equation numbers in released code**, against the standing rule to
+cite published numbers only. The two docstrings reached in this session now give
+the published number alongside; the remaining occurrences are left as they are,
+because whether GDE99 is the preprint or a separate 1999 paper is the citation
+owner's to say and a blind rewrite across released modules would be worse than
+the inconsistency.
+
+---
+
+## B-13 — Annals II (40) and (45) contradict its own (31) and (34)
+
+**Found 2026-10-13**, on the PI's instruction to settle a sign from the physics
+rather than from the template. It did not need the literature: it needed
+*Annals II* read two pages earlier than the equation being used.
+
+\S4 gives the **general** frame transformations under $\tilde u^a\approx u^a+v^a$,
+carrying a citation to Maartens, Gebbie & Ellis:
+
+| | |
+|---|---|
+| **(31)** | $\tilde\sigma_{ab}\approx\sigma_{ab}+\mathcal D_{\langle a}v_{b\rangle}$ |
+| **(32)** | $\tilde A_a\approx A_a+\dot v_a+Hv_a$ |
+| **(33)** | $\tilde\Theta\approx\Theta+\mathrm{div}\,v$ |
+| **(34)** | $\tilde q_a\approx q_a-(\rho+p)v_a$ |
+| **(35)** | $\tilde\omega_a\approx\omega_a-\tfrac12\mathrm{curl}\,v$ |
+| **(37)** | $\tilde\tau_a\approx\tau_a-v_a$ |
+
+\S4.1 then specialises them to the Newtonian threading $n_a=u_a+v^N_a$, and
+says it does so *"from (31) and (32)"*. **Two of the six change sign on the
+way:**
+
+| | general | specialised |
+|---|---|---|
+| shear | **(31)** $\;+\mathcal D_{\langle a}v_{b\rangle}$ | **(40)** $\;0\approx\sigma_{ab}-\mathcal D_{\langle a}v^N_{b\rangle}$ |
+| energy flux | **(34)** $\;-(\rho+p)v_a$ | **(45)** $\;\tilde q_a\approx q_a+(\rho+p)v^N_a$ |
+
+(41), (42), (43) and (44) agree with (32), (33) and (37).
+
+### Why (31) is the right one, three ways
+
+1. **Internal.** (33), $\tilde\Theta\approx\Theta+\mathrm{div}\,v$, is the
+   **trace** of the same derivative whose trace-free part is (31). It keeps its
+   plus in both the general and the specialised form, at **(44)**. A trace and
+   its trace-free part cannot transform with opposite signs. (40) contradicts
+   (44) inside the same display.
+2. **The field equations.** Carried through Appendix G's shear propagation
+   equation with $A_a=0$ and the Newtonian-frame $E_{ab}=\mathcal D_{\langle
+   a}\mathcal D_{b\rangle}\Phi_A$, (31) closes **identically** --- for every
+   rank-raising sign and every scalar mode-coefficient sign. (40) misses by
+   exactly $2E_{ab}$, for every convention. Verified symbolically and pinned in
+   `tests/test_coefficients.py::test_B13_the_printed_n_t1_does_not_close_and_the_general_rule_does`.
+3. **Citation weight.** (31)--(37) carry a reference. (40)--(45) are a
+   specialisation performed in place.
+
+### What it costs, and what it does not
+
+**No released number moves.** Every use of the shear transformation is in the
+rank-two sector, which is identically zero in the Newtonian frame that \S7.1.1
+chooses before writing (110). The bundle reached this equation only because
+v1.2.0 needed a second frame.
+
+It does change this bundle's energy frame: $\sigma=-k_{\rm phys}v$, not
+$+k_{\rm phys}v$, with $v$ as `energy_frame_shift` returns it. $C_0$, $C_2$,
+$C_2'$ and $C_2''$ change sign with it, and the frame-invariance measurement
+moves --- see `provenance/FRAME-INVARIANCE-MEASUREMENT-v1.md`.
+
+**(45) is not used anywhere in this bundle** and is recorded only because it is
+the same slip in the same display. The energy frame is reached here through
+$A_a=0$ (decision S8), not through $q_a=0$ directly, so nothing depends on it.
+
+### B-12's second item, withdrawn
+
+The addendum to B-12 said the bundle's *"GDE99 Eq. (37)"* citations are arXiv
+numbers and that the published number for $\tilde\tau_a=\tau_a-v_a$ is (43).
+**Both halves are wrong.** Counted from the source, `tau-trans` **is** (37) and
+`E_ab = D_<a D_b> Phi_E` **is** (24) --- the two numbers the bundle cites. GDE99
+numbers the same as the published *Annals II*, the existing citations are
+correct, and there is nothing to fix. (43) is `n-t4`, the Newtonian
+specialisation of (37), which is a different equation that happens to say the
+same thing.
+
+The error was the same one as B-13's: assuming an equation number from its
+position instead of counting it. Counting took four lines of Python and
+reproduces (89), (90) and (102) as anchors.

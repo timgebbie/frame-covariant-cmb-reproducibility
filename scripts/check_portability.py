@@ -156,6 +156,23 @@ def main() -> int:
         ):
             failures.append(f"{rel}: entry point builds paths without anchoring to __file__")
 
+        # **An entry point that imports the package must put the root on the
+        # path itself.** `python scripts/x.py` puts `scripts/` on `sys.path`,
+        # not the repository root, so `import functions...` raises
+        # ModuleNotFoundError on every machine where PYTHONPATH is not already
+        # set --- which is every machine but the one that wrote it. That is the
+        # whole premise of this gate, and it got past the gate once: D6 was
+        # added, ran here under PYTHONPATH, and died on the PI's first run.
+        if (
+            rel.parts[0] == "scripts"
+            and is_entry_point
+            and "from functions." in text
+            and "sys.path" not in text
+        ):
+            failures.append(
+                f"{rel}: entry point imports `functions` without putting ROOT "
+                "on sys.path --- it will only run where PYTHONPATH is already set")
+
     # The published tree and the fingerprinted tree must be the same tree (T-6).
     git_note = check_against_git(failures)
 
