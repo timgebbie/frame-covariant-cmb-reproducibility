@@ -455,3 +455,65 @@ paper. **Wilson & Silk 1981 may be cited for the weights, never for *Annals II*'
 comparison.** *Annals II*'s own name/key mismatch is a defect in *Annals II* and
 is recorded here as B-4; Coordination carries the corresponding documentation
 row in `provenance.md`.
+
+---
+
+## Q5 — does the full $1+3$ treatment predict excess power at low $\ell$?
+
+**Asked by the PI, 2026-10-14**, while reading criterion 5b's first run:
+*"getting excess power at low-$\ell$ would be great if it was from the full
+$1+3$ treatment and frame."* **Parked by the PI the same day**, with the
+measurements below recorded so that it is parked rather than forgotten.
+
+### Three measurements that already bear on it
+
+**1. The sign is wrong for the hypothesis.** The bundle does not show excess
+power at low $\ell$; it shows a **deficit**. $D_\ell$ at $\ell=2$ sits below the
+plateau relative to $\ell=30$ by a factor of 80 on the $\mathcal V$ branch and 8
+on the $e^{-\kappa}$ branch, against CAMB's 1.14. Finding **T-41** attributes a
+factor of ten of that to approximation **A-2** and leaves 4.8 open. Nothing can
+be concluded about a covariant excess while an approximation worth an order of
+magnitude sits on top of the same multipoles.
+
+**2. The frame cannot supply one at this order, and that is measured.**
+Finding **T-31**: (102) builds every multipole from the same three
+$\ell$-independent coefficients $C_0,C_1,C_2$, so a change of frame moves the
+$C_A$ and nothing else and its response is $\ell$-independent up to three
+$j_\ell$ weights. Measured dipole/median ratio **1.00–1.25x**, flat from
+$\ell=1$ to 400. **A frame moves all $\ell$ together; it has no mechanism for a
+low-$\ell$-specific excess.** F7 was built expecting the opposite and reported
+this instead.
+
+**3. The covariant sectors are a small-scale effect, not a large-scale one.**
+The rank-0 and rank-2 sectors are what a gauge-fixed treatment cannot have,
+because $\sigma_{ab}=0$ empties them --- (110). Their share of $C_\ell$ in the
+CDM frame, measured, is **0.54% at $\ell=2$** and **32% at $\ell=600$**: least
+at the quadrupole, growing with $\ell$. **F2's third panel is this**, drawn so
+the negative result is a figure rather than a remark.
+
+### Where an excess could still come from
+
+* **$O(\epsilon^2\ell)$, which is v1.5.0.** The couplings v1.5.0 adds are
+  products of two first-order quantities, and a product of two frame-dependent
+  quantities is not frame-invariant merely because each factor's leading
+  frame-dependence cancels. That is the one place in this programme where the
+  frame stops being a device and becomes a prediction. The supplement already
+  says so; nothing here changes it.
+* **The almost-EGS direction, v2.0.0.** $\sigma_{ab}$, $\omega_{ab}$ and the
+  Weyl quantities bounded *by* the low multipoles, in the covariant variables
+  this bundle computes. That is a bound running from the data to the geometry,
+  not a source of power running the other way, and it should not be confused
+  with one.
+
+### What would have to be true, and the control it needs
+
+A covariant low-$\ell$ excess requires the rank-0/2 share to **rise** toward the
+quadrupole, or a frame response that **depends on $\ell$**. Both are measured
+and both go the other way at this order. If either is revisited, the search
+needs a control that can fail before any number is quoted: **wanting the answer
+is exactly the condition under which T-24 happened**, where a closure that could
+not fail was cited as though it could. A negative result here is publishable and
+should be set up as such.
+
+**Status: parked by the PI. Blocks nothing. Revisit at v1.5.0**, where the
+mechanism that could produce one first exists.

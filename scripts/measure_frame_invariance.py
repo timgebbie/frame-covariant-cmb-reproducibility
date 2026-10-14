@@ -60,7 +60,7 @@ def both_frames(k: float, env, table: BesselTable, ells: np.ndarray) -> dict:
     """(102) evaluated in the Newtonian frame and in the CDM frame."""
     newtonian, energy = coefficient_sets(float(k), env)
     diffusion = float(np.exp(-((float(k) / env.damping_k) ** 2)))
-    common = dict(table=table, weight=env.visibility, diffusion=diffusion,
+    common = dict(table=table, weight=env.weight, diffusion=diffusion,
                   damping_total=diffusion, eta_star=env.eta_star,
                   eta_0=float(env.background.eta_0))
     return {name: integral_solution(

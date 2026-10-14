@@ -97,6 +97,9 @@ class TwoFrameEnvironment:
     kappa_prime: np.ndarray
     kappa_second: np.ndarray
     visibility: np.ndarray
+    #: $e^{-\kappa}$ on the same grid. Carried so that **A-2** is a choice a
+    #: caller can make and measure rather than one baked in --- finding T-41.
+    opacity: np.ndarray
     damping_k: float
     omega_b_h2: float
     #: The $k$ this environment's $\eta$ grid was sized for. **Finding T-34.**
@@ -116,6 +119,29 @@ class TwoFrameEnvironment:
     #: It is not a physics switch to leave lying about: it exists to regenerate
     #: the v1.2.0-dev figures both ways and comes out once the PI has chosen.
     apply_transfer: bool = True
+    #: **Approximation A-2, made explicit --- finding T-41.** (102) prints
+    #: $\mathcal V$ as the weight on its line-of-sight integral; the pipeline
+    #: and every external code carry $e^{-\kappa}$. `"printed"` is $\mathcal V$
+    #: and is the default, because this bundle reproduces; `"opacity"` is
+    #: $e^{-\kappa}$, for a comparison that needs it. Measured, standard CDM,
+    #: $n_s=1$, transfer off, $D_\ell$ renormalised at $\ell=2$: the rise to
+    #: $\ell=30$ is **80.5x** with $\mathcal V$ and **8.17x** with
+    #: $e^{-\kappa}$, against the pipeline's 1.70x and CAMB's 1.14x. The
+    #: printed form confines the integrated sector to last scattering.
+    line_of_sight_weight: str = "printed"
+
+    @property
+    def weight(self) -> np.ndarray:
+        """The line-of-sight weight this environment was built to carry."""
+        if self.line_of_sight_weight == "printed":
+            return self.visibility
+        if self.line_of_sight_weight == "opacity":
+            return self.opacity
+        raise ValueError(
+            f"line_of_sight_weight must be 'printed' (V, as (102) prints it) "
+            f"or 'opacity' (e^-kappa); got {self.line_of_sight_weight!r}. "
+            f"There is no default: approximation A-2 is a choice and finding "
+            f"T-41 measures it at a factor of ten at low ell.")
 
     def transfer_at(self, k_com: float) -> float:
         r"""$T(k)$ of (J.5), corrected (**B-10**), at one comoving mode.
@@ -172,6 +198,7 @@ def build_environment(
     hubble_h: float = 0.5,
     apply_transfer: bool = True,
     quadrupole: float = ANNALS_II_QUADRUPOLE,
+    line_of_sight_weight: str = "printed",
 ) -> TwoFrameEnvironment:
     r"""The $k$-independent half: background, recombination, potentials.
 
@@ -210,6 +237,8 @@ def build_environment(
         kappa_prime=kappa_prime,
         kappa_second=np.gradient(kappa_prime, eta, edge_order=2),
         visibility=np.interp(eta, recombination.eta, recombination.visibility),
+        opacity=np.interp(eta, recombination.eta, recombination.opacity),
+        line_of_sight_weight=str(line_of_sight_weight),
         k_max=float(k_max), transfer_gamma=float(transfer_gamma),
         hubble_h=float(hubble_h), apply_transfer=bool(apply_transfer),
         damping_k=float(k_d(eta_star)), omega_b_h2=omega_b_h2,
@@ -293,7 +322,7 @@ def transfer_by_rank(
     Returned under keys `0`, `1`, `2` and `-1` for the total.
     """
     diffusion = float(np.exp(-((float(k_com) / env.damping_k) ** 2)))
-    common = dict(table=table, weight=env.visibility, diffusion=diffusion,
+    common = dict(table=table, weight=env.weight, diffusion=diffusion,
                   damping_total=diffusion, eta_star=env.eta_star,
                   eta_0=float(env.background.eta_0))
     zero = np.zeros_like(env.eta)

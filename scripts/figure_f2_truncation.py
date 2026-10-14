@@ -242,10 +242,10 @@ def compute() -> dict:
 
 def draw(data: dict) -> plt.Figure:
     use_house_style()
-    fig, (ax_a, ax_b) = plt.subplots(
-        2, 1, figsize=(6.6, 6.5), sharex=True,
-        gridspec_kw={"height_ratios": [1.65, 1.35]})
-    fig.subplots_adjust(top=0.800, bottom=0.10, left=0.155, right=0.925, hspace=0.14)
+    fig, (ax_a, ax_b, ax_c) = plt.subplots(
+        3, 1, figsize=(6.6, 8.2), sharex=True,
+        gridspec_kw={"height_ratios": [1.55, 1.25, 1.10]})
+    fig.subplots_adjust(top=0.845, bottom=0.078, left=0.155, right=0.925, hspace=0.16)
 
     # ---- (a) what truncation discards: it falls off a cliff -------------
     # The three k are an ordered family, so they take the lightness ramp in
@@ -287,7 +287,7 @@ def draw(data: dict) -> plt.Figure:
         ax_b.annotate(label, xy=(0.132, y), xycoords="axes fraction",
                       fontsize=7.4, color=INK["secondary"], va="center", ha="left")
     ax_b.set_ylabel("cost of a shear-destroying\n" r"truncation, in $C_\ell$  [%]")
-    ax_b.set_xlabel(r"$\ell_{\max}$   (upper panel)   /   multipole $\ell$   (lower)")
+    ax_c.set_xlabel(r"$\ell_{\max}$   (upper panel)   /   multipole $\ell$   (lower two)")
 
     cdm = 100.0 * data["cost"]["cdm"]
     lo, hi = (100.0 * v for v in data["plateau"])
@@ -304,8 +304,36 @@ def draw(data: dict) -> plt.Figure:
         f"$k_{{\\max}}={K_COM.max():.0f}$: $e^{{-(k_{{\\max}}/k_D)^2}}="
         f"{data['damping']:.1e}$, and dropping the grid's top 10% moves this "
         f"panel by {data['sensitivity']:.0e}",
-        xy=(1.0, -0.265), xycoords="axes fraction", fontsize=6.4,
+        xy=(1.0, -1.52), xycoords="axes fraction", fontsize=6.4,
         color=INK["muted"], va="top", ha="right")
+
+    # ---- (c) is there a 1+3 excess at low ell? -----------------------------
+    # The rank-0/2 sectors are what a gauge-fixed treatment cannot have, since
+    # sigma_ab = 0 empties them. A covariant excess at low ell would appear
+    # here. It does not. Drawn so the negative result is a figure rather than
+    # a remark, which is what makes it publishable either way.
+    low = ELLS_COST <= 130
+    share = 100.0 * data["cost"]["cdm"][low]
+    ax_c.plot(ELLS_COST[low], share, color=SERIES[1], lw=1.9, marker="o",
+              markersize=3.2, markerfacecolor=INK["surface"],
+              markeredgewidth=1.0, solid_capstyle="round", zorder=3)
+    ax_c.axhline(0.0, color=INK["muted"], lw=0.8, zorder=1)
+    quad = float(100.0 * data["cost"]["cdm"][0])
+    ax_c.annotate(f"the quadrupole: {quad:.2f}%",
+                  xy=(float(ELLS_COST[0]), quad), xytext=(16, 12),
+                  textcoords="offset points", fontsize=7.2, color=INK["primary"],
+                  ha="left", arrowprops=dict(arrowstyle="-", lw=0.8,
+                                             color=INK["muted"]))
+    ax_c.set_ylabel("ranks 0 and 2, which a\n"
+                    "gauge-fixed treatment\n"
+                    "cannot have  [% of $C_\\ell$]")
+    ax_c.set_ylim(bottom=0.0)
+    ax_c.annotate(
+        "a $1+3$ excess at low $\\ell$ would appear here, and does not:\n"
+        "these sectors are smallest at the quadrupole and grow\nwith $\\ell$. "
+        "The frame cannot supply one either — T-31.",
+        xy=(0.035, 0.045), xycoords="axes fraction", fontsize=7.0,
+        color=INK["secondary"], va="bottom", ha="left")
 
     fig.suptitle("F2   Truncation: what it discards, and what it destroys",
                  x=0.012, y=0.968, ha="left", fontsize=10, color=INK["primary"])
@@ -314,11 +342,12 @@ def draw(data: dict) -> plt.Figure:
         "Appendix E: four consecutive vanishing harmonics force "
         "$\\sigma_{ab}=0$ **exactly**, and the paper rejects the argument\nthat "
         "this is second order and so droppable — there are no first-order terms "
-        "in that equation to drop it\nagainst. The two panels are the two "
-        "quantities, and they do not shrink together: the upper falls off a\n"
-        "cliff, the lower rises. Footnote 29 (p. 365) says the Newtonian frame "
-        "removes the problem. It does, by\nhaving no shear to "
-        "lose.".replace("**", ""),
+        "in that equation to drop it\nagainst. The upper two panels are the two "
+        "quantities, and they do not shrink together: the first falls off a\n"
+        "cliff, the second rises. Footnote 29 (p. 365) says the Newtonian "
+        "frame removes the problem. It does, by\nhaving no shear to lose. "
+        "The third asks whether the covariant sectors supply an excess at low "
+        "$\\ell$: they do not.".replace("**", ""),
         ha="left", va="top", fontsize=7.4, color=INK["secondary"],
     )
     return fig

@@ -136,7 +136,7 @@ def compute() -> dict:
             transfer[name][:, j] = integral_solution(
                 ELLS, coefficients=cs.coefficients, c1_prime=cs.c1_prime,
                 c2_second=cs.c2_second, c2_prime_star=cs.c2_prime_star,
-                table=table, weight=env.visibility, diffusion=diffusion,
+                table=table, weight=env.weight, diffusion=diffusion,
                 damping_total=diffusion, eta_star=env.eta_star,
                 eta_0=float(env.background.eta_0)).total
 
@@ -154,7 +154,7 @@ def compute() -> dict:
         t = {name: integral_solution(
                 ELLS, coefficients=cs.coefficients, c1_prime=cs.c1_prime,
                 c2_second=cs.c2_second, c2_prime_star=cs.c2_prime_star,
-                table=table, weight=env.visibility, diffusion=diffusion,
+                table=table, weight=env.weight, diffusion=diffusion,
                 damping_total=diffusion, eta_star=env.eta_star,
                 eta_0=float(env.background.eta_0)).total
              for name, cs in sets.items()}
