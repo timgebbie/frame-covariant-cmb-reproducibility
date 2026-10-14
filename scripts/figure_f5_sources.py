@@ -75,7 +75,13 @@ ELLS = np.unique(np.round(np.logspace(np.log10(2.0), np.log10(400.0), 16)).astyp
 #: **Linear at $dk=\pi/6$, as F3 uses.** A logarithmic grid aliases the
 #: line-of-sight integrand at high $k$ however many points it has, and this
 #: project has made that mistake once already (the S24 sweep).
-K_COM = np.arange(0.05, 420.0, np.pi / 3.0)
+#: **Runs to 1900, not 420 --- finding T-32.** The diffusion scale is
+#: $k_D=871.4$, so a grid stopping at 420 stops where $e^{-(k/k_D)^2}=0.79$,
+#: and the shear sector's $k$-integrand, carrying an extra factor of $k$, peaks
+#: at $k_D/2\simeq436$ --- outside it. Rank 1 does not need that tail and ranks
+#: 0 and 2 do. $e^{-(k_{\max}/k_D)^2}=8.6\times10^{-3}$ here, which is the gate
+#: **T-16** wrote down during v1.0.0 and dated to v1.2.0.
+K_COM = np.arange(0.05, 1900.0, np.pi / 3.0)
 
 RANK_LABEL = {0: r"rank 0   $C_0$", 1: r"rank 1   $C_1$", 2: r"rank 2   $C_2$"}
 RANK_SLOT = {0: 3, 1: 1, 2: 2}

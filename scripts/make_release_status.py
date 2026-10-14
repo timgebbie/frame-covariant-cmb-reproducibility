@@ -134,11 +134,30 @@ ARTEFACTS: list[Artefact] = [
              note="drawn in ranks, which (89) produces and which is defined in "
                   "every frame, rather than the Newtonian three-way split of "
                   "7.1.1 --- the PI's call 2026-10-14. The frame disagreement is "
-                  "its own panel: 42% at l=2, 7% at l=139, 14% at l=400"),
-    Artefact("F2 - truncation convergence, both frames", "P", "v1.2.0",
-             blocks=("F5 has landed; these follow it and wait on nothing else",)),
-    Artefact("F7 - frame specialisation", "P", "v1.2.0",
-             blocks=("F5 has landed; these follow it and wait on nothing else",)),
+                  "its own panel: 42% at l=2, 7% at l=139, 11% at l=400"),
+    Artefact("F2 - truncation convergence, both frames", "R", "v1.2.0",
+             module="functions.spectra.two_frame",
+             objects=("build_environment", "coefficient_sets", "transfer_by_rank"),
+             tests=("test_the_newtonian_frame_leaves_the_shear_sectors_empty_"
+                    "and_the_cdm_frame_does_not",),
+             script="scripts/figure_f2_truncation.py",
+             note="Appendix E made quantitative in both frames. What a "
+                  "truncation discards falls off a per-k cliff at l ~ k dEta; "
+                  "what it destroys has no l_max in it at all, is flat at "
+                  "0.8-0.9% to l~20 and rises to 29% by l=600. Footnote 29 "
+                  "p.365 checked and upheld: identically zero in the Newtonian "
+                  "frame, which has no shear to lose. Its k grid runs to 1900 "
+                  "rather than 420 --- finding T-32"),
+    Artefact("F7 - frame specialisation", "R", "v1.2.0",
+             module="functions.spectra.two_frame",
+             objects=("build_environment", "coefficient_sets"),
+             tests=("test_102_cannot_make_its_frame_response_depend_on_the_multipole",),
+             script="scripts/figure_f7_frames.py",
+             note="reports that its own planned claim is false: the dipole was "
+                  "to stand an order of magnitude apart and lands on each curve "
+                  "instead, worst ratio 1.25x, because (102) builds every l from "
+                  "the same three C_A --- finding T-31. Its environment is built "
+                  "for the k grid rather than the probe modes --- finding T-34"),
     Artefact("criterion 5b against CAMB and CLASS", "P", "v1.2.0",
              blocks=("reference data must be stamped under reference/ and not vendored",
                      "the tolerance is the two codes' mutual difference (S4b), "

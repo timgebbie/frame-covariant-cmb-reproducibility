@@ -396,13 +396,13 @@ cannot go stale the way the verification paragraph above once did.
 | Figure | Evidence for | Version |
 |---|---|---|
 | **F1** Appendix F match | criterion 1 — the free-streaming chain against **four external hierarchies** in four conventions, two normalisations and two phase conventions, residuals $\lesssim10^{-13}$ | `v1.0.0` |
+| **F2** truncation convergence, both frames | **Appendix E made quantitative.** Two quantities that do not shrink together: what a truncation *discards* falls off a per-$k$ cliff at $\ell\simeq k\Delta\eta$; what it *destroys* — the shear, and with it ranks 0 and 2 — has **no $\ell_{\max}$ in it**, is flat at 0.8–0.9% to $\ell\simeq20$ and rises to 29% by $\ell=600$. Footnote 29 (p. 365) is checked and holds: the cost is **identically zero** in the Newtonian frame, which has no shear to lose | `v1.2.0` |
 | **F3** angular spectrum, both routes | criteria 3 and 4 — (186) by the mode route and the covariant route, agreeing **exactly** since T-17 put the combined coefficients in $\mathbb Q$ | `v1.0.0` |
 | **F4** real-space correlation | the round trip $C_\ell\to C(\theta)\to C_\ell$, residual $<10^{-13}$ | `v1.0.0` |
-| **F5** source decomposition, two frames | **the total is common to both frames and the decomposition is not**, split by rank (S28). The frame disagreement is its own panel: 42% at $\ell=2$, 7% near $\ell=139$, 14% at $\ell=400$ | `v1.2.0` |
+| **F5** source decomposition, two frames | **the total is common to both frames and the decomposition is not**, split by rank (S28). The frame disagreement is its own panel: 42% at $\ell=2$, 7% near $\ell=139$, 11% at $\ell=400$ | `v1.2.0` |
 | **F6** what each approximation is worth | A-1, A-2 and the small-scale approximation as **ratios**, over six decades — one is a different calculation, one is free where this release claims, one is worst at large scales | `v1.1.0` |
+| **F7** frame specialisation | the generic $u^a$ carried through and the frame chosen at the end — a figure a gauge-fixed treatment cannot draw. **It reports that its own planned claim is false**: the dipole was expected to stand an order of magnitude apart and lands on each curve instead, worst ratio **1.25×**, because (102) builds every $\ell$ from the same three $C_A$ and has no mechanism for answering differently at different $\ell$ (T-31) | `v1.2.0` |
 | **F8** coupling schematic | a structural statement, not a measurement: which couplings exist at which order | `v1.1.0` |
-| *F2* truncation convergence | *not yet drawn* — follows F5 and waits on nothing else | — |
-| *F7* frame specialisation | *not yet drawn* — follows F5 and waits on nothing else | — |
 
 | Diagnostic | Evidence for | Version |
 |---|---|---|

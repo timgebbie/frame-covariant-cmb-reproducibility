@@ -87,6 +87,32 @@ class TwoFrameEnvironment:
     visibility: np.ndarray
     damping_k: float
     omega_b_h2: float
+    #: The $k$ this environment's $\eta$ grid was sized for. **Finding T-34.**
+    #: `required_n_eta` gives six samples per $j_\ell$ oscillation at this $k$
+    #: and no more, so asking for a larger one aliases the line-of-sight
+    #: integral --- which is T-3, and it returns a smooth, plausible, wrong
+    #: answer rather than an error. `check_k` is what makes it an error.
+    k_max: float = float("inf")
+
+    def check_k(self, k: float) -> None:
+        r"""Raise if `k` is past what this environment's eta grid can resolve.
+
+        `pipeline.run` has carried this guard since T-3. `build_environment` is
+        a second entry point to the same physics and had none: it trusted its
+        caller to pass the right $k_{\max}$, and in `figure_f7_frames.py` the
+        caller passed the probe modes instead of the grid. The check belongs
+        where both callers pass through, which is here.
+        """
+        if float(k) > self.k_max * (1.0 + 1e-9):
+            samples = 6.0 * self.k_max / float(k)
+            raise ValueError(
+                f"this environment's eta grid was built for k_max={self.k_max:.1f} "
+                f"and was asked for k={float(k):.1f}: {samples:.1f} samples per "
+                f"j_l oscillation at that k, against the 6 required_n_eta "
+                f"guarantees. Below 2 it is aliased and the spectrum comes back "
+                f"smooth, plausible and wrong -- findings T-3 and T-34. Build the "
+                f"environment with the k grid's maximum."
+            )
 
 
 def build_environment(
@@ -130,6 +156,7 @@ def build_environment(
         kappa_prime=kappa_prime,
         kappa_second=np.gradient(kappa_prime, eta, edge_order=2),
         visibility=np.interp(eta, recombination.eta, recombination.visibility),
+        k_max=float(k_max),
         damping_k=float(k_d(eta_star)), omega_b_h2=omega_b_h2,
     )
 
@@ -143,7 +170,11 @@ def coefficient_sets(
     is the point: the frames differ by the frame, not by the dynamics, so a
     difference between them that came from two separate integrations would be a
     difference between two integrations.
+
+    Every caller reaches the $\eta$ grid through here, so this is where the grid
+    is checked against the $k$ it is being used at --- finding **T-34**.
     """
+    env.check_k(k_com)
     eta, eta_star, bg = env.eta, env.eta_star, env.background
     inside = eta <= min(float(bg.eta_0), TIGHT_COUPLING_FACTOR * eta_star)
     acoustic = solve_acoustic(

@@ -31,7 +31,7 @@ harness entry is missing fails the script instead of appearing here.
 | **S** | the frame change made numerical | `functions.spectra.frame_transform`; `test_T27_the_dipole_carries_the_same_inverse_k_as_the_monopole` |
 | **S** | criterion 2's curvature half | `functions.frames`; `scripts/diagnostic_d2_roundtrip.py` |
 
-## v1.2.0 — 2×R, 5×C, 4×P
+## v1.2.0 — 4×R, 5×C, 2×P
 
 - **Gate:** criterion 5b, which needs CAMB and CLASS reference data
 - **Gate:** the conventions sheet's lambda (C3.5), which F5 stands on
@@ -40,15 +40,15 @@ harness entry is missing fails the script instead of appearing here.
 | | artefact | evidence |
 |---|---|---|
 | **R** | the frame-invariance measurement, F5's question | `functions.spectra.coefficients`; `scripts/measure_frame_invariance.py`; generated record; its prose is computed from its own table |
-| **R** | F5 - the source decomposition in two frames, by rank | `functions.spectra.two_frame`; `scripts/figure_f5_sources.py`; `test_the_ranks_add_to_the_total_in_the_transfer_but_not_in_cl`; drawn in ranks, which (89) produces and which is defined in every frame, rather than the Newtonian three-way split of 7.1.1 --- the PI's call 2026-10-14. The frame disagreement is its own panel: 42% at l=2, 7% at l=139, 14% at l=400 |
+| **R** | F5 - the source decomposition in two frames, by rank | `functions.spectra.two_frame`; `scripts/figure_f5_sources.py`; `test_the_ranks_add_to_the_total_in_the_transfer_but_not_in_cl`; drawn in ranks, which (89) produces and which is defined in every frame, rather than the Newtonian three-way split of 7.1.1 --- the PI's call 2026-10-14. The frame disagreement is its own panel: 42% at l=2, 7% at l=139, 11% at l=400 |
+| **R** | F2 - truncation convergence, both frames | `functions.spectra.two_frame`; `scripts/figure_f2_truncation.py`; `test_the_newtonian_frame_leaves_the_shear_sectors_empty_and_the_cdm_frame_does_not`; Appendix E made quantitative in both frames. What a truncation discards falls off a per-k cliff at l ~ k dEta; what it destroys has no l_max in it at all, is flat at 0.8-0.9% to l~20 and rises to 29% by l=600. Footnote 29 p.365 checked and upheld: identically zero in the Newtonian frame, which has no shear to lose. Its k grid runs to 1900 rather than 420 --- finding T-32 |
+| **R** | F7 - frame specialisation | `functions.spectra.two_frame`; `scripts/figure_f7_frames.py`; `test_102_cannot_make_its_frame_response_depend_on_the_multipole`; reports that its own planned claim is false: the dipole was to stand an order of magnitude apart and lands on each curve instead, worst ratio 1.25x, because (102) builds every l from the same three C_A --- finding T-31. Its environment is built for the k grid rather than the probe modes --- finding T-34 |
 | **C** | the covariant coefficients C_0, C_1, C_2 from (89) | `functions.spectra.coefficients`; `test_all_three_of_90_are_reproduced_by_the_match`; `test_b11_is_a_sign_in_89_not_in_90`; `test_the_newtonian_specialisation_is_equation_109`; (89) is implemented as the definition so (90) is a check; B-11's delta_l0 sign resolved |
 | **C** | the integral solution (102), carried with a generic u^a | `functions.spectra.integral_solution`; `test_the_shear_boundary_term_is_empty_in_the_newtonian_frame`; `test_the_shear_boundary_term_is_not_empty_once_b2_is`; `test_the_specialisation_recovers_what_the_pipeline_computes` |
 | **C** | the generic source derivatives Annals II never wrote | `functions.spectra.coefficients`; `test_the_rank_two_control_passes_symbolically`; `test_no_numerical_derivative_survives_in_the_c2_chain`; rank 2 closed from Appendix G with a control; rank 1 assembled from printed equations and still carrying (*) |
 | **C** | the CDM frame as a second frame | `functions.spectra.coefficients`; `test_the_frame_shift_of_every_coefficient_is_the_closed_form_one`; `test_B13_the_printed_n_t1_does_not_close_and_the_general_rule_does`; `test_T24_the_closure_is_an_identity_in_both_conventions` |
 | **C** | the ell ceiling removed, 507 -> 2000 | `functions.spectra.bessel_table`; `test_unavailable_ell_is_refused`; `test_the_coefficients_are_exact_rationals_not_floats`; findings T-17 and T-18 |
 | **P** | the stamped Planck 2018 parameter set | `functions.background.flrw`; provenance/COSMOLOGICAL-PARAMETERS-v1.md; the paper's own stated baseline column, not one chosen here; **blocked:** recorded but not wired into a model constant, and nothing checks the stamp against the release's round numbers --- the ladder caught this one on its first run |
-| **P** | F2 - truncation convergence, both frames | **blocked:** F5 has landed; these follow it and wait on nothing else |
-| **P** | F7 - frame specialisation | **blocked:** F5 has landed; these follow it and wait on nothing else |
 | **P** | criterion 5b against CAMB and CLASS | **blocked:** reference data must be stamped under reference/ and not vendored; **blocked:** the tolerance is the two codes' mutual difference (S4b), which has not been measured; **blocked:** the frame each code evolves in must be VERIFIED against its own documentation, not assumed: the supplement's table is recorded as stated. A quantity compared across two frames is not the same quantity |
 
 ## v1.5.0 — 2×P

@@ -2607,3 +2607,355 @@ That is the distinction worth keeping: the controls work, and they only work
 where they can reach. The remedy is not more care --- it is noticing when a
 claim has left the region the controls cover, and converting it to a procedure
 before it is written down.
+
+---
+
+## T-31 — F7's planned claim was false, and the reason is structural
+
+**Found** building F7 for v1.2.0, by measuring before writing the caption.
+**Status:** figure rewritten around the measurement; no released number moves.
+
+`captions/FIGURE-PLAN-v1.0.0.md` specifies F7's lower panel as the difference
+between the two frames "with the **dipole shown separately**, because the dipole
+is where the frame lives and $\ell\ge2$ is where it does not". That is Annals II
+(37), $\tilde\tau_a=\tau_a-v_a$, with $\tau_{A_\ell}$ unchanged for $\ell\ge2$,
+and it is correct about the transformation.
+
+**It is not correct about this calculation.** Measured, the dipole sits on the
+same curve as every other multipole: 9.91% at $k=20$ against a median of 9.92%
+over $\ell=2$–$400$; 3.92% against 3.88% at $k=60$; 4.29% against 3.44% at
+$k=140$. Worst dipole/median ratio **1.25×**, not an order of magnitude.
+
+*(First measured as 1.19x on the grid T-32 and T-34 later corrected. The
+third decimal moved; the finding did not.)*
+
+The cause is in (102), not in the arithmetic. (102) builds **every** multipole
+from the same three $\ell$-independent coefficients $C_0,C_1,C_2$ projected with
+$j_\ell$. A change of frame moves the $C_A$ and nothing else, so the frame
+response it can produce is $\ell$-independent up to the differing $j_\ell$
+weights of three lines. **(102) cannot distinguish "invariant at $\ell\ge2$"
+from "invariant nowhere", because it has no mechanism for answering differently
+at different $\ell$.**
+
+This is the same observation `provenance/FRAME-INVARIANCE-MEASUREMENT-v1.md`
+reports as a residual "living in the $C_A$", followed to its conclusion. The
+dipole's special status is real and is not in this equation: (98) sets
+$\tau_\ell(\eta_*)=0$ and $\tau_0=0$ and solves for the *generated* anisotropy,
+while the observer's own dipole is not generated along the line of sight.
+
+**What was nearly published.** The caption had been drafted from the plan before
+the measurement existed. The figure now reports what it measured, and says so.
+
+---
+
+## T-32 — every v1.2.0 figure was drawn on a k grid that stops at the peak of the shear integrand
+
+**Found** building F2, by sweeping $k_{\max}$ instead of trusting the grid.
+**Status:** corrected; no released artefact moves. **Raised with the PI.**
+
+F2's lower panel was about to publish "40% of $C_\ell$ at $\ell=600$". Before
+writing it, two convergence tests were run and they disagreed:
+
+| test | change | effect on the $\ell=600$ number |
+|---|---|---|
+| **sampling**: $dk=\pi/3 \to \pi/6$ | twice as dense | **0.02%** — the grid is dense enough |
+| **range**: $k_{\max}=420\to700$ | longer | **−9.5 percentage points** |
+
+The range test is the one that mattered, and the reason is written in this
+bundle already. The diffusion scale is $k_D=871.4$, so at the top of the grid
+the damping factor is
+
+$$\exp[-(420/871.4)^2] = \mathbf{0.79},$$
+
+i.e. **the grid stops essentially at the peak of the shear integrand rather than
+past it.** The shear sector carries an extra factor of $k$ in the transfer
+(`shear[i] = k * c2_star * damping_total * combination`), so with $n_s=1$ its
+$k$-integrand goes as $k\,e^{-2(k/k_D)^2}$ and peaks at $k=k_D/2\simeq436$ —
+beyond the grid's edge — while the scalar sector's has long since fallen. **The
+rank-0/2 sectors need a tail that rank 1 does not.**
+
+### This was predicted, by this bundle, during v1.0.0
+
+Finding **T-16** renamed `k_truncation_is_negligible` to
+`k_grid_reaches_damping_scale` and recorded it as *"a readiness test for
+**v1.2.0**, not a convergence test for this release — the acoustic peaks and
+Silk damping of v1.2.0 **do** need the cut-off."* That is exactly what has
+happened. The gate was correct, it was written down, and it bound on schedule.
+
+### What moves and what does not
+
+**Nothing released moves.** F3 sets `CLAIMED_ELL_MAX = 20`, shades every $\ell$
+beyond it, and reports the drop-top-10% sensitivity over the claimed range. The
+v1.0.0/v1.1.0 claim lives near $k\simeq10$ on a grid running to 420, with four
+decades of margin.
+
+**What moves is every v1.2.0 figure drawn so far** — F2, F5 and F7, all on
+`np.arange(0.05, 420.0, ...)`, all plotted to $\ell=400$–600, i.e. twenty to
+thirty times past the range this bundle has established.
+
+### The correction
+
+$k_{\max}$ raised to where the bundle's own gate passes:
+$\exp[-(k/k_D)^2]<10^{-2}$ requires $k_{\max}\gtrsim1870$. Measured convergence
+of the $\ell=600$ cost along the way — 40.5% (420), 31.0% (700), 30.3% (1000),
+29.2% (1400) — with the drop-top-10% sensitivity falling from $6.3\times10^{-3}$
+to $1.1\times10^{-4}$ between 1000 and 1400.
+
+Each affected figure now also **states the $\ell$ range it claims and shades
+beyond it**, the way F3 already does, rather than drawing a curve into a region
+whose convergence nothing has measured.
+
+### The convergence test this bundle already had could not have caught it
+
+`cl_truncation_sensitivity` drops the top 10% of the $k$ grid and recomputes.
+It is the right idea and it is the test T-16 recommended over the damping gate.
+Run alongside the sweep above, it reported:
+
+| $k_{\max}$ | drop-top-10% | the $\ell=600$ answer | still moving by |
+|---|---|---|---|
+| 1000 | $6.3\times10^{-3}$ | 30.34% | — |
+| 1400 | $1.1\times10^{-4}$ | 29.17% | **1.17 pp** |
+| 1900 | $1.1\times10^{-6}$ | 28.69% | **0.48 pp** |
+
+At $k_{\max}=1400$ it read $10^{-4}$ — four orders inside any tolerance anyone
+would set — while the answer was still a percent and a half from converged.
+
+**The reason is that it is an interior test.** Dropping the top 10% of a grid
+that stops too early asks what the grid's own edge contributes; it cannot ask
+what lies beyond the edge, because nothing beyond the edge was ever computed. It
+shares its blind spot exactly with refining $dk$: both vary something *inside*
+the domain, and the mass this integrand hides is *outside* it.
+
+So the damping gate is not a weaker proxy for the sensitivity test, as T-16's
+phrasing implied — **it is the only one of the two that looks outside the
+grid**, and it is a statement about the integrand made before any quadrature. It
+has to be run *with* the sensitivity test, not replaced by it. Both now run in
+`scripts/figure_f2_truncation.py`, and the figure carries both numbers.
+
+### The lesson, and it is not "test convergence"
+
+Convergence was tested. **The wrong parameter was varied.** Refining $dk$ is the
+reflex, it is cheap, and here it returned a clean 0.02% that would have been
+quoted as evidence. A quadrature has two edges and only one of them is the
+spacing; the other is where it stops, and for an integrand whose peak lies
+outside the grid no amount of refinement inside the grid can see it. The guard
+against this is not more care — it is varying the *limit* and the *resolution*
+separately, and knowing which one the physics puts the mass at.
+
+---
+
+## T-33 — "frame" names two different objects in this bundle, and the code uses it for both
+
+**Found** 2026-10-14, from the PI's enumeration. **Status:** recorded; the
+mapping is proposed object by object, **not** applied by substitution.
+
+The PI's table separates what is specified at an event from what is specified
+throughout a region:
+
+| Object | What is specified | Where |
+|---|---|---|
+| Instantaneous observer rest frame | a unit timelike vector $u^a(p)$ | at an event |
+| Local orthonormal frame | a tetrad $e_{\hat\alpha}{}^a(p)$, $e_{\hat0}{}^a=u^a$ | at an event |
+| Observer worldline | a timelike curve with tangent $u^a$ | along one history |
+| **Threading** | a smooth timelike congruence $u^a(x)$ | throughout a region |
+| Adapted orthonormal frame field | a tetrad field following the congruence | throughout that region |
+
+This bundle uses rows one and four and calls both of them "frame". They are not
+the same object and the difference is load-bearing here:
+
+* $\tilde\sigma_{ab}=0$ and $\tilde A_a=0$ are conditions on a **congruence
+  throughout a region**. Neither can be imposed "at the observer", which is why
+  the Newtonian one is admissible only in restricted cases.
+* The **dipole** is a statement about $u^a$ **at reception**. F7's two panels are
+  exactly this pair held apart, and T-31 is what happens when the equation
+  carrying the propagation has no mechanism for telling them apart.
+
+Nothing in this bundle is a tetrad: every quantity is PSTF, built from $u^a$ and
+$h_{ab}$, so rows two and five are named only to be set aside.
+
+**It is a defect of naming, not of calculation.** Every object computed is the
+congruence quantity, correctly. The supplement now carries the table and the
+distinction; the call-site mapping goes to the PI before any identifier moves.
+
+**Why not `sed`.** A blanket rename earlier in this session inverted the meaning
+of diagnostic D7, whose subject is *the CDM threading measured against the CDM
+frame* — the one place in the bundle where both senses appear in a single
+sentence, and therefore precisely the place a substitution cannot see. The rule
+that follows: **a rename that a regular expression can perform is a rename whose
+exceptions nothing will catch.**
+
+---
+
+## T-34 — F7 sized its $\eta$ grid for $k=140$ and then integrated to $k=420$
+
+**Found** 2026-10-14, reading F7 while fixing T-32. **Status:** corrected.
+Unreleased work only.
+
+`scripts/figure_f7_frames.py` opened with
+
+```python
+env = build_environment(float(K_PROBE[-1]))     # 140
+...
+for j, k in enumerate(K_COM):                   # runs to 420
+```
+
+`build_environment` derives the $\eta$ grid from the $k$ it is handed —
+`n = required_n_eta(k_max, span)`, six samples per $j_\ell$ oscillation at
+$k_{\max}$ — because $j_\ell(k(\eta_0-\eta))$ has period $\pi/k$ in $\eta$ and
+the line-of-sight integral has to resolve it. Sized for 140 and used to 420, the
+grid gave **two samples per oscillation at the band edge, below Nyquist.**
+
+That is **T-3** again, in a new script: *"passed n_eta=1000, which gave 2.3
+samples per $j_\ell$ oscillation at the band edge — below Nyquist — and the
+aliased integrand returned a smooth, plausible spectrum of the wrong shape."*
+The same number, 2, in the same place, for the same reason.
+
+**What it touches.** F7's **upper** panel, which integrates over `K_COM`. Not the
+lower panel, and therefore **not finding T-31**: the per-mode frame response is
+evaluated only at `K_PROBE`, i.e. at $k\le140$, which is exactly what the grid
+was sized for. T-31's measurement — worst dipole/median ratio 1.19x — stands as
+measured.
+
+**Fixed** to `build_environment(float(K_COM.max()))`, which is what F2 and F5
+already did. With T-32 raising `K_COM.max()` to 1900 the discrepancy would have
+been 13.6x rather than 3x, so this would have gone from a wrong figure to an
+obviously wrong one — which is luck, not a process.
+
+**The pattern.** T-3 was recorded, understood and written into `pipeline.run`,
+which raises if the $\eta$ grid is too coarse for its $k$ grid. `build_environment`
+is a second entry point to the same physics, written later for the two-frame
+work, and **it has no such guard** — it trusts its caller to pass the right
+$k_{\max}$. A check that lives in one of two parallel entry points protects the
+one it lives in. The guard belongs in `build_environment` as well, and that is
+open.
+
+---
+
+## T-35 — the PI's working tree had drifted 42 files from the harness output
+
+**Found** 2026-10-14, preparing the write list for this session's commit.
+**Status:** corrected by writing every differing file; the procedure is changed.
+
+Each commit batch in this project has been assembled **from what this stream
+remembered changing**: the scripts edited, the records appended, the figures
+whose content was known to move. Everything else the harness regenerates was
+assumed to come back byte-identical and therefore not worth writing.
+
+That assumption is sound — regeneration *is* byte-identical, re-tested here:
+`figure_f1_appendix_f.py` run twice in the same container gives the same SHA-256
+for its PNG and its CSV, which is what `DETERMINISTIC_METADATA` and finding T-2
+are for. **The assumption was applied to the wrong question.** Deterministic
+regeneration means a file that has not changed comes back identical; it says
+nothing about a file that *has* changed and was simply left off the list.
+
+Measured by staging the PI's own `FILE-MANIFEST-SHA256.txt` and diffing it
+against this container's:
+
+| | |
+|---|---|
+| files differing in content | **34** |
+| files present here and absent there | **8** |
+| stale files present there and absent here | **4** — `f6-approximations-v1.0.0.*` and `f8-schematic-v1.0.0.*`, the mislabelled pair that `save_figure`'s version argument fixed |
+
+Among the 34 were `figures/f1-appendix-f-v1.0.0.*`, `f3`, `f4`, `f6` and `f8`,
+and four CSVs in `outputs/` — artefacts this stream had no reason to think had
+moved, and which had moved anyway through changes upstream of them.
+
+### Why nothing caught it
+
+The bundle's drift gate is `make_manifests.py --check`, and it is correct. It
+runs **on whichever tree it is pointed at**: here, where the tree is consistent
+by construction, it passes trivially. The tree that could have failed it is the
+PI's, and nothing in this stream's procedure put the two manifests side by side.
+The check existed, the data existed, and the comparison was never made.
+
+### The procedure, changed
+
+**The write list is now computed, not recalled.** Before any commit batch:
+stage the PI's `FILE-MANIFEST-SHA256.txt`, diff it against this container's, and
+write every entry that differs or is missing — plus the manifests themselves, so
+the tree is self-consistent when it lands. Files present there and absent here
+are reported for deletion rather than left to accumulate.
+
+This is **T-30's rule applied to a second system**: *anything about the state of
+a system this bundle cannot inspect belongs in the tree as a procedure, not as
+an answer.* T-30 was about git on the PI's machine. This is about the PI's
+filesystem, and the answer this time was not an assertion but an omission —
+which is the harder form, because an omission leaves nothing to check.
+
+---
+
+## T-36 — every PNG gains 5 770 bytes on the way to the PI's disk, and the bundle already survives it
+
+**Found** 2026-10-14, hash-verifying the files written for T-35.
+**Status:** measured and explained. **Nothing is broken, and that is the
+finding.** No change made; a documentation change is proposed.
+
+Verifying the 45 files written to the PI's machine, three sampled PNGs failed
+and every text file, CSV and PDF passed. The three failures had **the same
+byte delta**, which is not what corruption looks like:
+
+| file | container | on disk | delta |
+|---|---|---|---|
+| `figures/f2-truncation-v1.2.0.png` | 458 800 | 464 570 | **+5 770** |
+| `figures/f5-sources-v1.2.0.png` | 466 516 | 472 286 | **+5 770** |
+| `figures/f7-frames-v1.2.0.png` | 380 560 | 386 330 | **+5 770** |
+
+All three diverge at byte 35 — immediately after `IHDR`. Walking the chunk
+lists:
+
+```
+container: IHDR tEXt pHYs IDAT*7 IEND
+on disk  : IHDR caBX tEXt pHYs IDAT*7 IEND
+                ^^^^ 5 758 bytes, +12 of chunk framing = 5 770
+```
+
+**`caBX` is a private ancillary PNG chunk inserted by the desktop application
+on the write path.** It is a provenance stamp. It is applied to **PNG only**:
+`f1`, `f8` and `d1-sign-control` show the same +5 770, while every `.pdf`, every
+`.csv` and every `.py` and `.md` round-trips byte-identical. The pixels are
+untouched — `IHDR`, `pHYs` and all seven `IDAT` chunks match exactly.
+
+So **the PNGs in the git repository can never equal what the harness produces**,
+on the PI's machine or anyone's, and that was already true of every PNG this
+project has ever committed. It also explains the five PNGs in `figures/` that
+T-35's diff reported as "content differs" with no change upstream of them: they
+were never stale, they were stamped.
+
+### Why nothing is broken
+
+Because **T-15 already answered this**, two releases ago, for a different reason.
+`make_manifests.py` splits the claim in two:
+
+* **`PORTABLE-MANIFEST-SHA256.txt` binds.** It *excludes the renderings*
+  entirely — `RENDERED_PREFIXES = ("figures/", "supplementary-materials/")`,
+  `RENDERED_SUFFIXES = (".png", ".pdf")` — and canonicalises numerics to nine
+  significant figures. It contains **zero** PNG entries. A mismatch there is
+  release-blocking. **It is untouched by this.**
+* **`FILE-MANIFEST-SHA256.txt` is a within-machine drift check**, reported by
+  class, and only an `exact`-class mismatch blocks a release.
+  `artefact_class` returns **`rendered`** for every one of these files.
+
+The reason T-15 gave was fonts, freetype and TeX Live versions — *"a PNG that
+differs in hinting carries no scientific difference."* A provenance chunk added
+by an application the bundle never heard of is a different cause with exactly
+the same shape, and the rule written for the first case covers the second
+without amendment. **A gate drawn around the right category survives causes
+nobody anticipated.**
+
+### What is actually wrong, and it is a sentence
+
+The PI will see nine `rendered`-class drift lines on every `--check`, for ever,
+with no explanation anywhere in the bundle. An alarm that fires on every correct
+run is the thing T-4 and T-16 are both about, and this is a third instance
+arriving by a route neither of them covered.
+
+**Proposed**, for the PI: one paragraph in the README's verification section and
+one in the supplement saying that `figures/*.png` carry a tool-added provenance
+chunk, that the pixels are identical, that **the PDF is the authoritative
+artefact** of every figure, and that the binding check excludes renderings for
+exactly this reason. No code change. The alternative — canonicalising PNGs by
+stripping ancillary chunks — would make the drift line disappear, and would also
+make the byte manifest stop reporting a real class of change for the sake of
+tidiness. The bundle's own preference, stated at T-16, is to explain an alarm
+rather than silence it.

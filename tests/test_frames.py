@@ -251,3 +251,138 @@ def test_the_dipole_is_the_only_multipole_the_frame_moves():
     for ell in (0, 1):
         with pytest.raises(ValueError, match="invariant range"):
             boosted_multipole(tau, ell)
+
+
+# --------------------------------------------------------------------------
+# The two-frame environment: what the grid it was built for guarantees, and
+# what each frame leaves in the rank-zero and rank-two sectors. These stand
+# behind figures F2 and F7, which are the pictures of them.
+# --------------------------------------------------------------------------
+
+
+def test_an_environment_refuses_a_k_its_eta_grid_cannot_resolve():
+    r"""Finding **T-34**, and **T-3** before it.
+
+    `build_environment` sizes the $\eta$ grid from the $k$ it is given, six
+    samples per $j_\ell$ oscillation at that $k$ and no more. `figure_f7_frames`
+    built one for the probe modes, $k=140$, and then integrated to $k=420$:
+    **two samples per oscillation**, below Nyquist, and the aliased integrand
+    returns a smooth, plausible spectrum of the wrong shape rather than an
+    error. `pipeline.run` has raised on this since T-3; this is the same guard
+    on the second entry point to the same physics.
+    """
+    import pytest
+
+    from functions.spectra.two_frame import build_environment, coefficient_sets
+
+    env = build_environment(140.0)
+    assert env.k_max == 140.0
+    coefficient_sets(140.0, env)                      # at the edge, allowed
+
+    with pytest.raises(ValueError) as excinfo:
+        coefficient_sets(420.0, env)
+    message = str(excinfo.value)
+    # The message has to carry the number, because "too coarse" is not
+    # actionable and "2.0 samples per oscillation" is.
+    assert "2.0 samples" in message
+    assert "T-34" in message
+
+
+def test_the_newtonian_frame_leaves_the_shear_sectors_empty_and_the_cdm_frame_does_not():
+    r"""(110), and the claim footnote 29 on p. 365 makes about truncation.
+
+    The Newtonian frame is $\tilde\sigma_{ab}=0$, so ranks zero and two of (89)
+    have nothing in them: $C_0\equiv C_2\equiv0$. That is why a truncation which
+    kills the shear exactly --- Appendix E --- **costs nothing there**, and the
+    footnote is right to say the frame removes the problem. It removes it by
+    having no shear to lose, which is the content of figure F2's lower panel and
+    the reason the panel is drawn in two frames rather than one.
+
+    Asserting only the Newtonian half would be the weak test: zero is what a
+    sector that was never filled also returns. So the CDM frame is asserted
+    **non**-zero in the same breath.
+    """
+    import numpy as np
+
+    from functions.spectra.bessel_table import BesselTable
+    from functions.spectra.integral_solution import required_multipoles
+    from functions.spectra.two_frame import (
+        build_environment,
+        coefficient_sets,
+        transfer_by_rank,
+    )
+
+    ells = np.array([2, 20, 120])
+    env = build_environment(140.0)
+    needed = required_multipoles(ells)
+    table = BesselTable.build(
+        ell_max=int(needed.max()), ells=needed,
+        x_max=float(140.0 * (env.background.eta_0 - env.eta[0])) + 20.0)
+
+    for k in (20.0, 60.0, 140.0):
+        newtonian, cdm = coefficient_sets(float(k), env)
+        flat = transfer_by_rank(ells, float(k), newtonian, env, table)
+        tilted = transfer_by_rank(ells, float(k), cdm, env, table)
+
+        assert np.allclose(flat[0], 0.0, atol=0.0), f"(110) at k={k}: rank 0"
+        assert np.allclose(flat[2], 0.0, atol=0.0), f"(110) at k={k}: rank 2"
+        # and rank 1 therefore carries the whole of it
+        assert np.allclose(flat[1], flat[-1], rtol=1e-12)
+
+        # The CDM frame has the shear, so it has something to lose.
+        assert np.any(np.abs(tilted[0]) > 0.0)
+        assert np.any(np.abs(tilted[2]) > 0.0)
+        assert not np.allclose(tilted[1], tilted[-1], rtol=1e-6)
+
+
+def test_102_cannot_make_its_frame_response_depend_on_the_multipole():
+    r"""Finding **T-31**, which is what figure F7 reports instead of its plan.
+
+    (37) moves the dipole and leaves $\tau_{A_\ell}$ alone for $\ell\ge2$, so the
+    plan asked F7 to show the dipole standing an order of magnitude apart. It
+    does not, and the reason is structural: **(102) builds every multipole from
+    the same three $\ell$-independent coefficients $C_0,C_1,C_2$**, projected
+    with $j_\ell$. A change of frame moves the $C_A$ and nothing else, so the
+    frame response it can produce is $\ell$-independent up to the differing
+    $j_\ell$ weights of three lines.
+
+    The test is the consequence: the dipole's frame response sits within a small
+    factor of the median over $\ell\ge2$, not orders of magnitude above it. It
+    is written as a ceiling rather than an equality because the three $j_\ell$
+    weights genuinely do differ.
+    """
+    import numpy as np
+
+    from functions.spectra.bessel_table import BesselTable
+    from functions.spectra.integral_solution import (
+        integral_solution,
+        required_multipoles,
+    )
+    from functions.spectra.two_frame import build_environment, coefficient_sets
+
+    ells = np.array([1, 2, 5, 20, 80, 200])
+    env = build_environment(140.0)
+    needed = required_multipoles(ells)
+    table = BesselTable.build(
+        ell_max=int(needed.max()), ells=needed,
+        x_max=float(140.0 * (env.background.eta_0 - env.eta[0])) + 20.0)
+
+    for k in (20.0, 60.0):
+        diffusion = float(np.exp(-((k / env.damping_k) ** 2)))
+        totals = [
+            integral_solution(
+                ells, coefficients=cs.coefficients, c1_prime=cs.c1_prime,
+                c2_second=cs.c2_second, c2_prime_star=cs.c2_prime_star,
+                table=table, weight=env.visibility, diffusion=diffusion,
+                damping_total=diffusion, eta_star=env.eta_star,
+                eta_0=float(env.background.eta_0)).total
+            for cs in coefficient_sets(float(k), env)
+        ]
+        scale = np.maximum(np.abs(totals[0]), np.abs(totals[1]))
+        response = np.abs(totals[1] - totals[0]) / scale
+
+        ratio = response[0] / np.median(response[1:])
+        assert 0.1 < ratio < 3.0, (
+            f"k={k}: the dipole's frame response is {ratio:.2f}x the median "
+            f"over l>=2. The plan expected an order of magnitude; T-31 is the "
+            f"finding that (102) cannot produce one.")

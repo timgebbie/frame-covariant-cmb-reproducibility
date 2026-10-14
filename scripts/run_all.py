@@ -71,14 +71,12 @@ DEFERRED: dict[str, tuple[str, str]] = {
     # than left with a stale version, which is T-16's lesson about labels.
     "D3  source terms against k": ("v1.1.0", "S-b"),
     "D4  no monopole in the CGI approach": ("v1.1.0", "S-b"),
-    # S21 then S23 deferred these three, twice for reasons that turned out
-    # wrong. **F5 landed 2026-10-14** and is removed rather than left with a
-    # stale deferral, as F6 and F8 were. What actually blocked it was the
+    # S21 then S23 deferred F2, F5 and F7, twice for reasons that turned out
+    # wrong. **All three landed 2026-10-14** and are removed rather than left
+    # with a stale deferral, as F6 and F8 were. What actually blocked F5 was the
     # rank-two sign, settled as **B-13**, and the decomposition it is drawn in
     # --- ranks, not the Newtonian three-way split of 7.1.1 --- which was the
-    # PI's call the same day. F2 and F7 follow it and wait on nothing else.
-    "F2  truncation convergence, both frames": ("v1.2.0", "S23"),
-    "F7  frame specialisation": ("v1.2.0", "S23"),
+    # PI's call the same day. F2 and F7 followed it.
 }
 
 DEFERRED_TO_V1_1 = frozenset(DEFERRED)
@@ -94,9 +92,11 @@ DIAGNOSTICS: list[tuple[str, str]] = [
     # computed from its own table. It runs here so the record cannot fall out
     # of step with the code -- the same reason EMISSIONS exists.
     ("D6  (102) in two frames: the F5 measurement", "scripts/measure_frame_invariance.py"),
-    # D7 measures how far the CDM frame is from the CDM frame it is
-    # identified with. Finding T-29; the amendment is proposed as S8a.
-    ("D7  the CDM frame against the CDM frame",
+    # D7 measures how far the CDM frame is from the **total-energy** frame it
+    # was identified with. Finding T-29; the amendment is S8a. Both halves of
+    # this label said "CDM" until 2026-10-14 -- blanket-rename damage, the same
+    # class as the one that inverted D7's own subject line. Finding T-33.
+    ("D7  the CDM frame against the total-energy frame",
      "scripts/diagnostic_d7_frame_identification.py"),
 ]
 

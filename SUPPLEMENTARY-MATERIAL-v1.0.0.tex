@@ -265,6 +265,82 @@ left to inference.
 
 
 \section{Frames and specialisation}
+
+\paragraph{``Frame'' is being asked to do two jobs, and they are different
+objects.} The word is used in this literature for something specified at a
+single event and for something specified throughout a region, and the two are
+not interchangeable. The PI's enumeration, recorded here because the rest of
+this section depends on it:
+
+\begin{center}\small
+\begin{tabular}{@{}p{0.27\linewidth}p{0.45\linewidth}p{0.21\linewidth}@{}}
+\toprule
+\textbf{Object} & \textbf{What is specified} & \textbf{Where} \\
+\midrule
+Instantaneous observer rest frame & A unit timelike vector $u^a(p)$,
+determining a local time direction and an orthogonal rest space &
+At an event $p$ \\[2pt]
+Local orthonormal frame & A tetrad $e_{\hat\alpha}{}^a(p)$, with
+$e_{\hat 0}{}^a=u^a$, also choosing three spatial axes &
+At an event \\[2pt]
+Observer worldline & A timelike curve with tangent $u^a$ &
+Along one observer's history \\[2pt]
+\textbf{Threading} & A smooth timelike congruence, represented by a unit
+tangent field $u^a(x)$ & Throughout a spacetime region \\[2pt]
+Adapted orthonormal frame field & A tetrad field whose timelike leg follows
+the congruence & Throughout that region \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent \textbf{Nothing in this bundle is a tetrad.} No calculation here
+chooses spatial axes: every quantity is a PSTF tensor built from $u^a$ and
+$h_{ab}=g_{ab}+u_au_b$, so rows two and five are named only to be set aside.
+What the bundle actually uses is rows one and four, and it uses both:
+
+\begin{itemize}
+\item the \textbf{receiving observer's frame} --- a $u^a$ at one event,
+reception at $\eta_0$ --- which is what the \emph{measurement} is referred to,
+and in particular what the dipole is a statement about;
+\item the \textbf{CDM threading} and the \textbf{Newtonian threading} --- unit
+tangent fields $u^a(x)$ on the whole region between last scattering and
+reception --- which is what the \emph{propagation} integral is carried along,
+and what $\sigma_{ab}$, $A_a$ and $q_a$ are properties of.
+\end{itemize}
+
+\noindent The general transformations (31)--(37) relate two \emph{threadings};
+the specialisations (40)--(45) stipulate one. $\tilde\sigma_{ab}=0$ and
+$\tilde A_a=0$ are conditions on a congruence throughout a region and are not
+statements about any single observer, which is why neither can be imposed
+``at the observer'' and why the Newtonian one is admissible only in restricted
+cases. Figure~F7's two panels are exactly this pair kept apart: the
+$\ell\ge2$ panel compares two \emph{threadings} carrying the same observable,
+and the dipole panel is where the \emph{receiving observer's frame} enters,
+because the dipole is the one multipole that is a statement about $u^a$ at
+reception rather than about the congruence that brought the radiation there.
+
+\paragraph{The words this bundle uses, and why none of them is retired.}
+\emph{Threading} names the congruence \textbf{as an object}. \emph{Receiving
+observer's frame} names the local $u^a$ \textbf{at reception}. \emph{Frame}
+continues to name a \textbf{choice of observers} and, following
+\emph{Annals~II}~\S4.1's own usage, each named choice --- the energy frame, the
+zero-acceleration (CDM) frame, the Newtonian frame. Every one of those is a
+threading in the first sense: the words sit at different levels and are not
+competing. Decision~\textbf{S29a}.
+
+No identifier is renamed. The code says \texttt{"cdm"} and \texttt{"newtonian"},
+and \emph{Annals~II} prints ``frame'' for exactly these objects, so the code
+agrees with the source it reconstructs. The rule that a word naming two things
+should have one of them renamed is satisfied here by \textbf{naming the two
+objects}, which is what the table above does. And the rename operation is itself
+the hazard: a blanket substitution in this bundle inverted the meaning of
+diagnostic~D7, whose subject is the CDM \emph{threading} measured against the
+\textbf{total-energy} frame --- the one place both senses appear in a single
+sentence, and therefore precisely what a substitution cannot see.
+Finding~\textbf{T-33}. \textbf{A rename a regular expression can perform is a
+rename whose exceptions nothing will catch.}
+
+\paragraph{Specialisation.}
 The solution is carried with a \textbf{generic} $u^a$. The explicit frames appear
 as choices made at the end, not assumed at the start: the Newtonian frame
 $\tilde\sigma_{ab}=0$, which is the specialisation \emph{Annals~II} itself makes
@@ -327,7 +403,7 @@ the ones a reader is most likely to reach for next.
 \begin{center}\small
 \begin{tabular}{@{}p{0.21\linewidth}p{0.22\linewidth}p{0.49\linewidth}@{}}
 \toprule
-\textbf{Frame or frame} & \textbf{Defining condition} & \textbf{What it establishes} \\
+\textbf{Threading} & \textbf{Defining condition} & \textbf{What it establishes} \\
 \midrule
 CDM \emph{(used here)} & $u^a=u^a_{\!_C}$, equivalently $\tilde A_a=0$ &
 CDM is at rest; its congruence is geodesic in the conserved-dust model, which
