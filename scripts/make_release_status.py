@@ -66,16 +66,16 @@ ARTEFACTS: list[Artefact] = [
              script="scripts/diagnostic_d5_sachs_wolfe.py"),
 
     # ---- v1.1.0, release candidate --------------------------------------
-    Artefact("Peebles recombination, default from this release (S22)", "S", "v1.1.0",
+    Artefact("Peebles recombination, default from this release (S22)", "R", "v1.1.0",
              module="functions.spectra.peebles",
              script="scripts/figure_f6_approximations.py",
              note="freeze-out 2.15e-4 against a standard ~2e-4; visibility peak "
                   "z~1107 against a standard 1080-1100"),
-    Artefact("the threading change made numerical", "S", "v1.1.0",
+    Artefact("the threading change made numerical", "R", "v1.1.0",
              module="functions.spectra.frame_transform",
              objects=("ThreadingShift", "energy_frame_shift", "to_frame"),
              tests=("test_T27_the_dipole_carries_the_same_inverse_k_as_the_monopole",)),
-    Artefact("criterion 2's curvature half", "S", "v1.1.0",
+    Artefact("criterion 2's curvature half", "R", "v1.1.0",
              module="functions.frames",
              objects=("weyl_invariance_residual", "weyl_electric_amplitude"),
              script="scripts/diagnostic_d2_roundtrip.py"),
@@ -154,8 +154,9 @@ ARTEFACTS: list[Artefact] = [
 
 #: What each release is waiting on, beyond its own artefacts.
 GATES: dict[str, tuple[str, ...]] = {
-    "v1.1.0": ("tagged on the release commit carrying this file; "
-               "`git tag --list v1.1.0` is the check",),
+    "v1.1.0": ("the tag. The tree is v1.1.0-rc: complete, portable and "
+               "manifested, and `git tag --list v1.1.0` is the check "
+               "that moves these three from R to S",),
     "v1.2.0": ("criterion 5b, which needs CAMB and CLASS reference data",
                "the conventions sheet's lambda (C3.5), which F5 stands on",
                "the supplement's derivation section, written from "

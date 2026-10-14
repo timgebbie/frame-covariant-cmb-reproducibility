@@ -290,9 +290,11 @@ pytest -q                              # the claim-bearing regression suite
 
 ## Verification status
 
-**Released as v1.1.0.** Every artefact carries a maturity rung — prototype,
+**This tree is v1.1.0-rc.** Every artefact carries a maturity rung — prototype,
 proof of concept, release candidate, shipped — and a release gates on the rung
-rather than on an opinion that the work is done. That is decision **S27**, and
+rather than on an opinion that the work is done. v1.1.0 is complete, portable
+and manifested; **shipped** is the rung it reaches when the tag exists, and
+`git tag --list v1.1.0` is the check. That is decision **S27**, and
 `provenance/RELEASE-STATUS-v1.md` carries the rung of everything in the tree.
 It is **generated and verified**: each rung names the module, object, test or
 harness entry that earns it, and a claim whose evidence is missing fails the
@@ -363,6 +365,35 @@ v3.0.0        incompatible model, interface or scientific-scope change
 is a breaking change and belongs at v2.0.0. That rule is itself the regression
 test.
 
+The artefacts, what each one is evidence for, and the version it was last
+regenerated at. A figure's version is the release that last changed its content,
+which is why F1, F3 and F4 still carry `v1.0.0` — **a figure regenerated with no
+change of content does not get a new label**, which is finding T-16's lesson
+about labels that drift from what they name. `tests/test_readme_artefacts.py`
+checks every row against `figures/` and `scripts/run_all.py`, so this table
+cannot go stale the way the verification paragraph above once did.
+
+| Figure | Evidence for | Version |
+|---|---|---|
+| **F1** Appendix F match | criterion 1 — the free-streaming chain against **four external hierarchies** in four conventions, two normalisations and two phase conventions, residuals $\lesssim10^{-13}$ | `v1.0.0` |
+| **F3** angular spectrum, both routes | criteria 3 and 4 — (186) by the mode route and the covariant route, agreeing **exactly** since T-17 put the combined coefficients in $\mathbb Q$ | `v1.0.0` |
+| **F4** real-space correlation | the round trip $C_\ell\to C(\theta)\to C_\ell$, residual $<10^{-13}$ | `v1.0.0` |
+| **F5** source decomposition, two frames | **the total is common to both frames and the decomposition is not**, split by rank (S28). The frame disagreement is its own panel: 42% at $\ell=2$, 7% near $\ell=139$, 14% at $\ell=400$ | `v1.2.0` |
+| **F6** what each approximation is worth | A-1, A-2 and the small-scale approximation as **ratios**, over six decades — one is a different calculation, one is free where this release claims, one is worst at large scales | `v1.1.0` |
+| **F8** coupling schematic | a structural statement, not a measurement: which couplings exist at which order | `v1.1.0` |
+| *F2* truncation convergence | *not yet drawn* — follows F5 and waits on nothing else | — |
+| *F7* frame specialisation | *not yet drawn* — follows F5 and waits on nothing else | — |
+
+| Diagnostic | Evidence for | Version |
+|---|---|---|
+| **D0** $\ell$ range, and B-3 | criterion 5's claimed range, derived rather than chosen: $2\le\ell\le20$ at 5% | `v1.0.0` |
+| **D1** relative-sign control | criterion 4, and criterion 3 in executable form — the $c^2=-1$ branch **diverges**, which is what makes the correct one evidence | `v1.0.0` |
+| **D2** round-trip residual | criterion 2's kinematic half, identically zero in exact arithmetic | `v1.0.0` |
+| **D5** Sachs–Wolfe limit | criterion 5a at 5%, **and the statement that it cannot discriminate B-5** — the two forms differ by a factor with no $\ell$ dependence | `v1.0.0` |
+| **D6** (102) in two frames | the frame-invariance measurement F5 rests on, with the residual split by sector | `v1.2.0` |
+| **D7** CDM threading vs energy frame | **T-29** — *Annals II* §4.1 lists them as two of three distinct choices and this bundle conflates them; the tilt is up to 45% of the threading velocity | `v1.2.0` |
+| *D3*, *D4* | *deferred to v1.1.0 (S-b)* — cross-checks, not acceptance artefacts | — |
+
 The development lineage:
 
 | Version | Established or changed | Status in v1.1.0 |
@@ -372,7 +403,7 @@ The development lineage:
 | Conventions gate C1 | the normative sign and ℓ-weight sheet | source of the generated `provenance/conventions.md`; drift detectable through `conventions-source.txt` |
 | Paper 1 (2026) | the 1+3 route to CMB lensing from the exact hierarchy | the paper this bundle reproduces; frozen 2026-10-09 |
 | v1.0.0 | the independent reconstruction: the Appendix F chain against four external hierarchies, both routes to (186), the Sachs–Wolfe limit, and frame covariance established **symbolically** | superseded by v1.1.0; its tag, release asset and archived DOI are unchanged |
-| **v1.1.0** | Peebles recombination replacing equilibrium Saha and made the default (S22); the frame specialisation made numerical, closing criterion 2's curvature half; figures F6 and F8 | **current release** |
+| **v1.1.0-rc** | Peebles recombination replacing equilibrium Saha and made the default (S22); the frame specialisation made numerical, closing criterion 2's curvature half; figures F6 and F8 | **release candidate** — complete, portable and manifested; awaiting its tag |
 | v1.2.0, planned | the full linear C_ℓ — acoustic peaks, Silk damping and the complete source assembly — **and the generic-$u^a$ hierarchy**, which unblocks figures F2, F5 and F7 | planned; acceptance criterion 5b closes here against CAMB and CLASS (decisions S18, S23); the release route is made runnable on a second machine here too (finding T-15) |
 | v1.5.0, planned | the high-ℓ O(ε²ℓ) effects, carrying both nonlinear corrections, gated on Paper 1 | planned; carries the restricted case as a recovery and check of v1.0.0, not a new result |
 | v2.0.0, planned | calibration and data science, including Planck | planned; no new physics in it, which is what keeps v1.2.0 ahead of it |

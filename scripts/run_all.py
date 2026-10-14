@@ -94,6 +94,10 @@ DIAGNOSTICS: list[tuple[str, str]] = [
     # computed from its own table. It runs here so the record cannot fall out
     # of step with the code -- the same reason EMISSIONS exists.
     ("D6  (102) in two frames: the F5 measurement", "scripts/measure_frame_invariance.py"),
+    # D7 measures how far the CDM threading is from the energy frame it is
+    # identified with. Finding T-29; the amendment is proposed as S8a.
+    ("D7  the CDM threading against the energy frame",
+     "scripts/diagnostic_d7_frame_identification.py"),
 ]
 
 

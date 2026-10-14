@@ -2410,3 +2410,133 @@ developing --- `PYTHONPATH=.` here, a mounted project repository for
 artefact must supply itself. The gate can only catch what it is told to look
 for, so every time one of these escapes, the gate gets the new case rather than
 the author getting a resolution.
+
+---
+
+## T-29 — the bundle's frame label contradicts the paper it reproduces
+
+**Found 2026-10-14**, from the PI's question *"what is the difference between
+the energy frame and the CDM frame, sometimes these are used interchangeably"*
+--- a question, not a bug report, and the honest answer is that this bundle is
+one of the places using them interchangeably.
+
+Decision **S8** says:
+
+> The CDM *frame* is the **total-energy frame** $q_a=0$, the threading in which
+> the cold dark matter is at rest, because CDM is pressureless and geodesic and
+> carries no energy flux of its own.
+
+**Paper 1 v1.1.0 says the opposite**, in terms:
+
+> The *energy frame* is the threading in which the total energy flux vanishes,
+> $q_a=0$; it and the CDM threading [...] are **separate stipulations**, and
+> they agree only to $\approx$ [...]. Setting $q_a=0$ in a mixture gives
+> $\rho_{\!_C}v^a_{\!_C}+\tfrac43\rho_{\!_R}v^a_{\!_R}+\ldots=0$, so the energy
+> frame **tilts away from the CDM one by $O(\rho_{\!_R}/\rho_{\!_C})$** and the
+> two coincide in the limit of matter domination.
+
+S8's reason is the giveaway. *"CDM carries no energy flux of its own"* is true
+and is about **CDM alone**; the frame condition is about the **total**, and in
+the CDM rest frame the total flux is not zero because the baryons and the
+photons are moving. A justification narrower than the claim it supports is how
+this one survived eight days.
+
+### No released number moves, and that is worth being precise about
+
+`energy_frame_shift` integrates $v'+\mathcal Hv=-k\Phi_A$, which descends from
+$\tilde A_a=0$ --- the **geodesic** condition, and geodesic is exactly what
+makes a congruence the CDM's. **The frame this bundle computes is the CDM
+threading**, which is the one Paper 1 uses throughout. The arithmetic has been
+right since the module landed. The label has not.
+
+A label is not a small thing in this project: **S8 itself exists because "CDM"
+named both a model and a frame**, and **S13** exists because `λ` named three
+things two rows apart. This is the third.
+
+### The size of it, measured --- D7
+
+`scripts/diagnostic_d7_frame_identification.py`, run in the harness so the
+numbers cannot go stale:
+
+| at $\eta_*$ | this release (EdS, $h=0.5$) | Planck 2018 VI Table 2 |
+|---|---|---|
+| $\rho_b/\rho_C$ | 0.090 | 0.186 |
+| $\rho_R/\rho_C$ | 0.113 | 0.225 |
+| full tilt parameter $(\rho_b+\tfrac43\rho_R)/\rho_C$ | **0.240** | **0.486** |
+
+and as a fraction of the Newtonian-to-CDM threading velocity the bundle
+integrates, the tilt runs from 8% at $k=5$ to **45% at $k=60$** and back to 17%
+at $k=300$.
+
+**So "they coincide in the limit of matter domination" is a limit this
+calculation is not in**, at the one epoch the calculation is about. It improves
+afterwards on both counts --- $\rho_R/\rho_C$ falls, and after decoupling the
+baryons stop moving with the photons and start moving with the CDM, which
+removes their share entirely.
+
+### A note for P1-T, not a correction
+
+Paper 1 names the smallness parameter as $\rho_R/\rho_C$. With tight coupling
+$v_B=v_\gamma$, the baryons tilt the frame too --- they are not CDM and they
+move with the photons --- so the parameter is
+$(\rho_b+\tfrac43\rho_R)/\rho_C$, and the baryon share of it is **37%** at
+$\eta_*$ in this release's background and 38% in the stamped Planck column.
+Paper 1's bound is the radiation half of the real one. Raised rather than
+edited: Paper 1 is P1-T's.
+
+### Proposed, not done
+
+**S8a** amends S8 to match Paper 1 and renames the frame in code and prose from
+*energy* to *CDM*. S8 is a decision, so the amendment is the PI's. Until it is
+taken, `Frame = "energy"` stays as it is rather than being changed under a
+decision that still says otherwise --- changing a label while the record
+justifying it says the opposite is how a project ends up with two of them.
+
+### T-29, strengthened the same day: *Annals II* enumerates them as distinct
+
+The PI: *"this is also in the early parts of Annals II"*. It is, and it is
+stronger than Paper 1's paragraph, because the antecedent does not merely
+distinguish the two --- it **lists them as separate items**, in §4.1 *Frame
+Transformations and Gauge Fixing*, immediately after the general
+transformations (31)--(37):
+
+> While various choices of $\tilde u^a$ are available in a multi-fluid
+> description of the early universe, there are **three particularly useful
+> choices**.
+>
+> 1. **The energy frame**: $\tilde q_a=0$ [...]
+> 2. **The zero acceleration frame (or CDM frame)**: $\tilde u_a=u^C_a\approx
+>    u_a+v^C_a$. From the CDM velocity equation and (32) we then find
+>    $\dot v^C_a+Hv^C_a+A_a\approx0\Rightarrow\tilde A_a\approx0$. This choice
+>    is particularly useful in multi-species situations, as **this frame will be
+>    geodesic right through tight-coupling, slow decoupling and into the
+>    free-streaming era**.
+> 3. **The Newtonian frame**: $\tilde\sigma_{ab}\approx0$ [...]
+
+**Item 2 is what this bundle computes**, line for line: `energy_frame_shift`
+integrates $v'+\mathcal Hv=-k\Phi_A$, which is $\dot v^C_a+Hv^C_a+A_a\approx0$
+in mode form. It is labelled item 1.
+
+Three things follow.
+
+**The name already exists and it is not "energy".** *Annals II* calls it the
+**zero acceleration frame, or CDM frame**. S8a should use the antecedent's own
+name rather than invent one.
+
+**The bundle's choice is the right one and for the printed reason.** *"Geodesic
+right through tight-coupling, slow decoupling and into the free-streaming
+era"* is exactly the property this calculation needs, and it is a property of
+item 2 and not of item 1. The energy frame is recommended there for *two
+coupled species*; this is a three-species problem crossing decoupling. So the
+code picked correctly and documented it incorrectly.
+
+**S8 contradicts the antecedent as well as the paper.** Three sources now say
+the same thing --- *Annals II* §4.1's list, Paper 1 v1.1.0's paragraph, and
+D7's measurement --- and one decision record says otherwise. That is no longer
+a question of interpretation.
+
+**And the pattern is the one T-24 recorded.** S8 was written from a
+specialisation --- §4.1.2's *The Energy Frame*, where scalar perturbations are
+treated and the two are used together --- rather than from the enumeration two
+pages earlier that keeps them apart. The same shape as reading (40) instead of
+(31): the nearest printed passage, not the one that defines the terms.

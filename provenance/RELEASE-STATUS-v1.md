@@ -21,15 +21,15 @@ harness entry is missing fails the script instead of appearing here.
 | **S** | both routes to (186), agreeing exactly | `functions.spectra.angular`; `scripts/figure_f3_angular_spectrum.py`; exactly zero since T-17 put the combined coefficients in Q |
 | **S** | the Sachs-Wolfe limit, criterion 5a | `functions.spectra.sachs_wolfe`; `scripts/diagnostic_d5_sachs_wolfe.py` |
 
-## v1.1.0 — 3×S
+## v1.1.0 — 3×R
 
-- **Gate:** tagged on the release commit carrying this file; `git tag --list v1.1.0` is the check
+- **Gate:** the tag. The tree is v1.1.0-rc: complete, portable and manifested, and `git tag --list v1.1.0` is the check that moves these three from R to S
 
 | | artefact | evidence |
 |---|---|---|
-| **S** | Peebles recombination, default from this release (S22) | `functions.spectra.peebles`; `scripts/figure_f6_approximations.py`; freeze-out 2.15e-4 against a standard ~2e-4; visibility peak z~1107 against a standard 1080-1100 |
-| **S** | the threading change made numerical | `functions.spectra.frame_transform`; `test_T27_the_dipole_carries_the_same_inverse_k_as_the_monopole` |
-| **S** | criterion 2's curvature half | `functions.frames`; `scripts/diagnostic_d2_roundtrip.py` |
+| **R** | Peebles recombination, default from this release (S22) | `functions.spectra.peebles`; `scripts/figure_f6_approximations.py`; freeze-out 2.15e-4 against a standard ~2e-4; visibility peak z~1107 against a standard 1080-1100 |
+| **R** | the threading change made numerical | `functions.spectra.frame_transform`; `test_T27_the_dipole_carries_the_same_inverse_k_as_the_monopole` |
+| **R** | criterion 2's curvature half | `functions.frames`; `scripts/diagnostic_d2_roundtrip.py` |
 
 ## v1.2.0 — 2×R, 5×C, 4×P
 
