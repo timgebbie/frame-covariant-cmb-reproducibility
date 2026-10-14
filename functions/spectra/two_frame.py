@@ -45,7 +45,11 @@ from functions.spectra.coefficients import (
     cdm_set,
     newtonian_set,
 )
-from functions.spectra.decoupling import RecombinationHistory, diffusion_scale
+from functions.spectra.decoupling import (
+    ANNALS_II_QUADRUPOLE,
+    RecombinationHistory,
+    diffusion_scale,
+)
 from functions.spectra.frame_transform import cdm_frame_shift
 from functions.spectra.integral_solution import integral_solution
 from functions.spectra.pipeline import required_n_eta
@@ -167,6 +171,7 @@ def build_environment(
     transfer_gamma: float = ANNALS_II_GAMMA,
     hubble_h: float = 0.5,
     apply_transfer: bool = True,
+    quadrupole: float = ANNALS_II_QUADRUPOLE,
 ) -> TwoFrameEnvironment:
     r"""The $k$-independent half: background, recombination, potentials.
 
@@ -191,7 +196,8 @@ def build_environment(
     r = baryon_photon_ratio(a, omega_b_h2=omega_b_h2)
 
     kappa_prime = np.interp(eta, recombination.eta, recombination.kappa_prime)
-    k_d = diffusion_scale(recombination, r_of_eta=np.zeros_like(recombination.eta))
+    k_d = diffusion_scale(recombination, r_of_eta=np.zeros_like(recombination.eta),
+                          quadrupole=quadrupole)
 
     return TwoFrameEnvironment(
         background=background, recombination=recombination, eta=eta,

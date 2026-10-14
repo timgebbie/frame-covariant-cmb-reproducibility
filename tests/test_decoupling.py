@@ -131,3 +131,48 @@ def test_a_matter_only_model_also_builds(history):
     cdm = RecombinationHistory.build(CDM_MODEL)
     assert cdm.visibility_norm() == pytest.approx(1.0, rel=5e-2)
     assert cdm.eta_star < cdm.background.eta_0
+
+
+def test_the_quadrupole_coefficient_defaults_to_what_annals_ii_prints():
+    r"""Decision **S31**, finding **T-39**.
+
+    The polarisation back-reaction is structural in CAMB and CLASS and cannot be
+    switched off --- CLASS fails in `perturbations_solve` below
+    `l_max_pol_g = 2`, because $\Pi=\Theta_2+E_0+E_2$ needs $E_2$ --- so the
+    only way to compare like for like is to carry the polarised coefficient on
+    this side, **for criterion 5b and nowhere else**.
+
+    This test is the fence. `4/5` is what *Annals II* prints and what every
+    released number uses; `16/15` is reachable only by asking for it. A default
+    that drifted to the polarised value would silently stop reproducing the
+    paper, which is the one thing this bundle is for.
+    """
+    from functions.background.flrw import PLANCK_MODEL, PLANCK_OMEGA_B_H2
+    from functions.spectra.decoupling import (
+        ANNALS_II_QUADRUPOLE,
+        POLARISED_QUADRUPOLE,
+        RecombinationHistory,
+        diffusion_scale,
+    )
+
+    assert ANNALS_II_QUADRUPOLE == 0.8
+    assert POLARISED_QUADRUPOLE == 16.0 / 15.0
+
+    history = RecombinationHistory.build(PLANCK_MODEL, omega_b_h2=PLANCK_OMEGA_B_H2)
+    zero = np.zeros_like(history.eta)
+
+    printed = float(diffusion_scale(history, r_of_eta=zero)(history.eta_star))
+    polarised = float(diffusion_scale(
+        history, r_of_eta=zero, quadrupole=POLARISED_QUADRUPOLE)(history.eta_star))
+
+    # The default is the printed coefficient, reached without asking.
+    assert printed == float(diffusion_scale(
+        history, r_of_eta=zero, quadrupole=ANNALS_II_QUADRUPOLE)(history.eta_star))
+
+    # Measured 2026-10-14: 619.92 and 536.87, a 13.4% reduction. Pinned loosely
+    # enough to survive a recombination change and tightly enough to catch a
+    # swapped default.
+    assert abs(printed - 619.92) < 1.0
+    assert abs(polarised - 536.87) < 1.0
+    assert polarised < printed
+    assert abs(polarised / printed - 0.866) < 0.005

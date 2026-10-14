@@ -324,10 +324,43 @@ def _thomson_scale(omega_b_h2: float) -> float:
     return n_b0 * sigma_t * hubble_length_cm
 
 
+#: **The quadrupole coefficient of (dif-damp), as *Annals II* prints it.**
+#: This is the default everywhere and stays the default: the bundle reproduces
+#: the paper, and 4/5 is what the paper's page says.
+ANNALS_II_QUADRUPOLE = 0.8
+
+#: **The polarised value, for criterion 5b and nothing else --- S31, T-39.**
+#:
+#: The photon quadrupole's Thomson collision term carries
+#: $\Pi=\Theta_2+E_0+E_2$, so polarisation feeds back into the temperature
+#: hierarchy and makes the diffusion damping stronger. CAMB and CLASS both
+#: include it structurally and **neither can be asked to leave it out** --- CLASS
+#: fails outright in `perturbations_solve` below `l_max_pol_g = 2`, because
+#: $\Pi$ needs $E_2$. So the only way to compare like for like is to carry the
+#: polarised coefficient on this side, for that comparison alone.
+#:
+#: Measured on `PLANCK_MODEL`: $k_D(\eta_*)$ = 619.9 at 4/5, 588.1 at 8/9
+#: (Hu & Sugiyama unpolarised), **536.9 at 16/15** --- 13.4% smaller. In the
+#: damping factor the sources carry, $e^{-(k/k_D)^2}$ goes 0.660 to 0.574 at
+#: $k=400$ and 0.189 to 0.109 at $k=800$.
+#:
+#: **4/5 matches neither standard coefficient** and that is recorded as a
+#: question rather than a finding: it may be a convention in how $R$ and the
+#: factor of 6 are distributed, and the printed page settles it, not a
+#: remembered form. Finding **T-39**.
+POLARISED_QUADRUPOLE = 16.0 / 15.0
+
+
 def diffusion_scale(
-    history: RecombinationHistory, *, r_of_eta: np.ndarray | None = None
+    history: RecombinationHistory,
+    *,
+    r_of_eta: np.ndarray | None = None,
+    quadrupole: float = ANNALS_II_QUADRUPOLE,
 ):
     """k_D(eta) from (dif-damp), by the integral it implies.
+
+    `quadrupole` defaults to what *Annals II* prints. See
+    `POLARISED_QUADRUPOLE` for the one comparison that does not use it.
 
     (dif-damp) prints the damping *rate*
 
@@ -347,7 +380,7 @@ def diffusion_scale(
     integrand = (
         1.0
         / (6.0 * np.clip(history.kappa_prime, 1e-30, None))
-        * (r**2 + 0.8 * (1.0 + r))
+        * (r**2 + float(quadrupole) * (1.0 + r))
         / (1.0 + r) ** 2
     )
     accumulated = np.concatenate(([0.0], cumulative_trapezoid(integrand, eta)))

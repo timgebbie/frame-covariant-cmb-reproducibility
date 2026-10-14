@@ -3189,3 +3189,72 @@ PI:
 (1) and (2) are the same measurement from two directions and could share one
 implementation. **Nothing is changed until the PI picks**, because `--check`'s
 verdict is a released claim about what this bundle guarantees.
+
+---
+
+## T-39 — the polarisation back-reaction cannot be switched off in CAMB or CLASS, and the like-for-like move is on this side
+
+**Asked by the PI**, 2026-10-14: *"can we turn the back-reaction and missing
+polarisation off in CAMB/CLASS? so it is more like for like?"* **Status:**
+tested, measured, and a proposal.
+
+### It cannot, and this was tested rather than assumed
+
+| knob | result |
+|---|---|
+| CLASS `l_max_pol_g = 6` | runs; moves the acoustic band **0.006%** |
+| CLASS `l_max_pol_g = 4` | runs; moves it **0.043%**, the tail 0.345% |
+| CLASS `l_max_pol_g = 2`, `1`, `0` | **fails** in `perturbations_solve` |
+| CAMB `DoLateRadTruncation = False` | runs; moves the band **0.007%** — a numerical knob, not physics |
+| CAMB, a switch for the feedback itself | **there is none** |
+
+The polarisation feedback is **structural in both codes**, not an output option:
+the Thomson collision term carries $\Pi=\Theta_2+E_0+E_2$, so it needs the
+polarisation hierarchy to at least $\ell=2$, and that is exactly where CLASS
+stops being able to run. Truncating the hierarchy from 10 to 4 is not the same
+experiment --- it bounds the *depth*, which is worth 0.04%, not the *feedback*.
+
+### The like-for-like move is on this side, and it is one coefficient
+
+The back-reaction enters this bundle at exactly one place: the coefficient of
+the $(1+R)^{-1}$ term in the diffusion damping, `diffusion_scale`. Measured on
+`PLANCK_MODEL`, with $R=0$ as the bundle's convention has it:
+
+| coefficient | value | $k_D(\eta_*)$ | ratio |
+|---|---|---|---|
+| *Annals II* (dif-damp), as printed | 4/5 | **619.9** | 1.000 |
+| Hu & Sugiyama, no polarisation | 8/9 | 588.1 | 0.949 |
+| with polarisation | 16/15 | **536.9** | **0.866** |
+
+and what that is worth in the damping factor the sources carry:
+
+| $k$ | $e^{-(k/k_D)^2}$ at 4/5 | at 16/15 |
+|---|---|---|
+| 200 | 0.901 | 0.870 |
+| 400 | 0.660 | 0.574 |
+| 800 | 0.189 | 0.109 |
+
+**13.4% in $k_D$**, and tens of percent in $C_\ell$ across the acoustic band and
+the tail. This is one of the dominant terms in criterion 5b's residual, and it
+is now a number rather than a guess.
+
+### The tension, which is real and is the PI's to resolve
+
+Carrying 16/15 would make the comparison like for like. It would also stop
+reproducing what *Annals II* prints, and **this bundle reproduces**. The two
+pull opposite ways and no single default satisfies both.
+
+**Proposed:** 4/5 stays the default, because it is the printed equation; 16/15
+becomes a named option used by criterion 5b and nothing else; and the gap above
+is reported as an itemised residual rather than absorbed. That is the shape of
+`transfer_function` against `transfer_function_printed` for **B-10** --- with
+one difference worth stating plainly: B-10's printed form is *wrong*, and this
+one is not. It is a different physical model, and the paper is entitled to it.
+
+### A question, not a finding
+
+4/5 matches **neither** standard coefficient: not 8/9 unpolarised, not 16/15
+polarised. That may be a convention --- how $R$ and the factor of 6 are
+distributed differs between treatments --- or it may be something to check
+against the printed equation. It is recorded as a question because asserting
+from a remembered form is the **T-24** failure, and the printed page settles it.
