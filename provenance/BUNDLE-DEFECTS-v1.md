@@ -2540,3 +2540,70 @@ specialisation --- §4.1.2's *The Energy Frame*, where scalar perturbations are
 treated and the two are used together --- rather than from the enumeration two
 pages earlier that keeps them apart. The same shape as reading (40) instead of
 (31): the nearest printed passage, not the one that defines the terms.
+
+---
+
+## T-30 — a released file asserted git state that nothing in the repository can see
+
+**Found 2026-10-14**, by the PI running `git tag --list v1.1.0` and getting
+`v1.1.0` back.
+
+Over three messages this stream asserted that the v1.1.0 tag did not exist, then
+that it was not placed, then wrote into `README.md` that *"the tag is placed at
+the last commit whose content was v1.1.0"* --- a **plan written as an
+observation**, in a released file. On the strength of the first assertion the
+README was changed from *Released as v1.1.0* to *v1.1.0-rc* and the three
+v1.1.0 rungs were demoted from S to R, then changed back.
+
+**The tag existed throughout.** It is `c7516b6`, *"v1.1.0: Peebles
+recombination, numerical frame specialisation, F6 and F8"* --- a purpose-made
+release commit, placed by the PI, and placed **better** than the plan would
+have: the plan was "the commit before the next thing landed", which is a
+position inferred from what came after rather than a commit made to be the
+release. `git merge-base --is-ancestor` returns 0, and the release zip built
+from the tag contains **143 files with none of the v1.2.0 work in it** --- no
+`coefficients.py`, no `integral_solution.py`, no F5, no D6, no D7.
+
+### Why no test caught it
+
+**Because no test could.** The container these tests run in has no access to the
+repository the README describes. `tests/test_readme_artefacts.py` was written
+the same day to stop exactly this class of drift, and it checks the README
+against `figures/` and `scripts/run_all.py` --- **the tree**. It has no way to
+reach git, so every statement about tag state was unguarded, and the one
+statement that was false was in that unguarded class.
+
+The README's line 371 had said the tag existed. It was right. This stream read
+it as stale.
+
+### The fix, and it is not a better guess
+
+The README now carries **the commands instead of the answer**:
+
+```
+git tag --list v1.1.0
+git log --oneline -1 v1.1.0
+git merge-base --is-ancestor v1.1.0 HEAD; echo $?
+```
+
+and `test_the_readme_states_the_git_check_rather_than_its_answer` fails if they
+are removed or if the old assertion returns. **A claim no check can reach is
+replaced by the check.** That is the general rule this finding is for, and it
+applies past git: anything about the state of a system this bundle cannot
+inspect --- the PI's machine, an external code's gauge convention, a journal's
+equation numbering --- belongs in the tree as a procedure, not as an answer.
+
+### The pattern, third instance in three days
+
+| | asserted from | the primary source, which was available |
+|---|---|---|
+| **T-24** | a transformation rule remembered from a summary | *Annals II* (31), two pages from material already read twice |
+| **T-29** | S8's reason, which was about CDM alone | *Annals II* \S4.1's enumeration and Paper 1's own paragraph |
+| **T-30** | an inference about what a tag must be | `git tag --list`, one command, on the PI's screen |
+
+T-24 and T-29 were caught by controls this bundle had built. **T-30 was not,
+because the thing it asserted was outside everything the bundle can measure.**
+That is the distinction worth keeping: the controls work, and they only work
+where they can reach. The remedy is not more care --- it is noticing when a
+claim has left the region the controls cover, and converting it to a procedure
+before it is written down.

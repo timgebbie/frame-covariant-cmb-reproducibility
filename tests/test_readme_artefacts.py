@@ -87,6 +87,31 @@ def test_no_drawn_artefact_is_also_listed_as_deferred():
     assert not overlap, f"listed as both drawn and deferred: {sorted(overlap)}"
 
 
+def test_the_readme_states_the_git_check_rather_than_its_answer():
+    r"""**Finding T-30.** Nothing in this repository can see git, so nothing in
+    it may assert git state.
+
+    The README said *"the tag is placed at the last commit whose content was
+    v1.1.0"*. That was a plan written as an observation, and it went into a
+    released file. The container running these tests has no access to the
+    repository the README describes, so no test here could have caught it ---
+    which is the point: **a claim no check can reach should be replaced by the
+    check**. The README now carries the three commands instead of the answer.
+    """
+    for command in ("git tag --list v1.1.0",
+                    "git log --oneline -1 v1.1.0",
+                    "git merge-base --is-ancestor v1.1.0 HEAD"):
+        assert command in README, (
+            f"the README no longer tells the reader to run `{command}`. If the "
+            "tag discussion has moved, move the commands with it --- do not "
+            "replace them with an assertion about where the tag is, which is "
+            "exactly finding T-30.")
+
+    forbidden = "The tag is placed at the last commit whose content was"
+    assert forbidden not in README, (
+        "the README is asserting a tag position again (T-30)")
+
+
 def test_the_readme_does_not_claim_a_tag_that_does_not_exist():
     """**The rung is the claim, and it is the one the PI corrected.**
 

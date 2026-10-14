@@ -170,7 +170,7 @@ approximations and the one lineage note — is in `provenance/`.
 
 **These are planned releases, not claims made by the current one.**
 
-- **v1.1.0 — Peebles recombination. Landed; awaiting its tag.** The effective
+- **v1.1.0 — Peebles recombination. Released.** The effective
   three-level atom replaces equilibrium Saha. Saha places last scattering
   correctly but decouples too sharply and too early, which sets the wrong
   visibility width — and the visibility width is what fixes the damping
@@ -298,13 +298,23 @@ everything in the tree. It is **generated and verified**: each rung names the
 module, object, test or harness entry that earns it, and a claim whose evidence
 is missing fails the run rather than appearing in the file.
 
-**The v1.1.0 tag does not sit at the tip**, and deliberately. v1.1.0 is Peebles
-recombination and the numerical frame specialisation; the work that landed after
-it — the covariant coefficient assembly, the integral solution (102), F5, two
-diagnostics and eight findings — is v1.2.0's, and labelling it v1.1.0 would
-label a tree by a release it has moved past. The tag is placed at the last
-commit whose content was v1.1.0, which is what makes
-`RELEASE-NOTES-v1.1.0.md` true of it. That is decision **S27**, and
+**The v1.1.0 tag does not sit at the tip**, and deliberately: v1.1.0 is Peebles
+recombination and the numerical frame specialisation, while the work that landed
+after it — the covariant coefficient assembly, the integral solution (102), F5,
+two diagnostics and eight findings — is v1.2.0's, and labelling it v1.1.0 would
+label a tree by a release it has moved past.
+
+**This file does not assert where the tag is, and that is a correction.** It
+previously did, on an assumption nobody had checked; the repository is the only
+thing that knows, so the check is written here instead of the answer:
+
+```
+git tag --list v1.1.0                                  # does it exist
+git log --oneline -1 v1.1.0                            # where does it point
+git merge-base --is-ancestor v1.1.0 HEAD; echo $?      # 0 if it is behind the tip
+```
+
+Finding **T-30**. That is decision **S27**, and
 `provenance/RELEASE-STATUS-v1.md` carries the rung of everything in the tree.
 It is **generated and verified**: each rung names the module, object, test or
 harness entry that earns it, and a claim whose evidence is missing fails the
@@ -413,7 +423,7 @@ The development lineage:
 | Conventions gate C1 | the normative sign and ℓ-weight sheet | source of the generated `provenance/conventions.md`; drift detectable through `conventions-source.txt` |
 | Paper 1 (2026) | the 1+3 route to CMB lensing from the exact hierarchy | the paper this bundle reproduces; frozen 2026-10-09 |
 | v1.0.0 | the independent reconstruction: the Appendix F chain against four external hierarchies, both routes to (186), the Sachs–Wolfe limit, and frame covariance established **symbolically** | superseded by v1.1.0; its tag, release asset and archived DOI are unchanged |
-| v1.1.0 | Peebles recombination replacing equilibrium Saha and made the default (S22); the frame specialisation made numerical, closing criterion 2's curvature half; figures F6 and F8 | **released**; its tag sits at the last commit whose content was v1.1.0, not at the tip |
+| v1.1.0 | Peebles recombination replacing equilibrium Saha and made the default (S22); the frame specialisation made numerical, closing criterion 2's curvature half; figures F6 and F8 | **released**; its tag is behind the tip by design, and the commands above are how to confirm that rather than take this row's word for it |
 | **v1.2.0-dev** | the covariant coefficient assembly (89)/(90), the integral solution (102) carried with a generic $u^a$, the generic $\dot{\mathcal B}_A$ relations, the CDM frame as a second frame, F5, D6 and D7 — and findings T-17 through T-29, B-11 through B-14 | **this tree**; criterion 5b is the binding gate |
 | v1.2.0, planned | the full linear C_ℓ — acoustic peaks, Silk damping and the complete source assembly — **and the generic-$u^a$ hierarchy**, which unblocks figures F2, F5 and F7 | planned; acceptance criterion 5b closes here against CAMB and CLASS (decisions S18, S23); the release route is made runnable on a second machine here too (finding T-15) |
 | v1.5.0, planned | the high-ℓ O(ε²ℓ) effects, carrying both nonlinear corrections, gated on Paper 1 | planned; carries the restricted case as a recovery and check of v1.0.0, not a new result |
