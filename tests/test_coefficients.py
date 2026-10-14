@@ -560,3 +560,71 @@ def test_T26_the_appendix_G_route_to_C2_second_loses_every_significant_figure():
         "the sigma-ddot route to C_2'' no longer loses its digits. If the "
         "grouping has been reformulated so that it is conditioned, this test "
         "is now wrong and T-26 should be closed rather than pinned.")
+
+
+# ---------------------------------------------------------------------------
+# The rank decomposition F5 is drawn in. See `functions/spectra/two_frame.py`.
+# ---------------------------------------------------------------------------
+
+
+def test_the_ranks_add_to_the_total_in_the_transfer_but_not_in_cl():
+    r"""**The two halves of F5's bottom panel, as one test.**
+
+    (102) is **linear** in $C_0,C_1,C_2$, so the three rank contributions to the
+    transfer function sum to it exactly. $C_\ell$ is **quadratic** in the
+    source, so the three contributions to $C_\ell$ do *not*: the difference is
+    twice the three cross-spectra, and the test asserts both --- that the
+    reconstruction with the cross terms is exact and that without them it is
+    not. A figure whose parts do not sum to the whole drawn beside them is a
+    figure that needs this test to exist.
+    """
+    from functions.spectra.angular import cl_covariant_route
+    from functions.spectra.bessel_table import BesselTable
+    from functions.spectra.integral_solution import required_multipoles
+    from functions.spectra.two_frame import (
+        build_environment,
+        cl_cross,
+        coefficient_sets,
+        transfer_by_rank,
+    )
+
+    ells = np.array([2, 10, 60], dtype=int)
+    k_com = np.array([5.0, 40.0, 120.0])
+    env = build_environment(float(k_com.max()))
+    needed = required_multipoles(ells)
+    table = BesselTable.build(
+        ell_max=int(needed.max()), ells=needed,
+        x_max=float(k_com.max() * (env.background.eta_0 - env.eta[0])) + 20.0)
+
+    transfer = {r: np.zeros((ells.size, k_com.size)) for r in (-1, 0, 1, 2)}
+    newtonian_rank = {r: np.zeros((ells.size, k_com.size)) for r in (-1, 0, 1, 2)}
+    for j, k in enumerate(k_com):
+        newtonian, energy = coefficient_sets(float(k), env)
+        for r, values in transfer_by_rank(ells, float(k), energy, env, table).items():
+            transfer[r][:, j] = values
+        for r, values in transfer_by_rank(ells, float(k), newtonian, env, table).items():
+            newtonian_rank[r][:, j] = values
+
+    # linear in the C_A: the ranks add
+    summed = sum(transfer[r] for r in (0, 1, 2))
+    assert np.allclose(summed, transfer[-1], rtol=1e-12, atol=0.0)
+
+    # and the Newtonian frame puts everything in rank one --- that is (110)
+    assert np.all(newtonian_rank[0] == 0.0)
+    assert np.all(newtonian_rank[2] == 0.0)
+    assert np.allclose(newtonian_rank[1], newtonian_rank[-1], rtol=1e-12, atol=0.0)
+
+    # quadratic in the source: the ranks do NOT add in C_l
+    power = np.ones_like(k_com)
+    cl = {r: np.array([cl_covariant_route(int(l), k_com, transfer[r][i], power)
+                       for i, l in enumerate(ells)]) for r in (-1, 0, 1, 2)}
+    cross = [np.array([cl_cross(int(l), k_com, transfer[a][i], transfer[b][i], power)
+                       for i, l in enumerate(ells)])
+             for a, b in ((0, 1), (0, 2), (1, 2))]
+    autos = sum(cl[r] for r in (0, 1, 2))
+
+    assert np.allclose(autos + 2.0 * sum(cross), cl[-1], rtol=1e-10, atol=0.0)
+    gap = np.max(np.abs(autos - cl[-1]) / np.abs(cl[-1]))
+    assert gap > 1e-3, (
+        "the auto-spectra alone reproduce C_l, so the cross terms are "
+        "negligible and F5's bottom panel is drawing nothing")

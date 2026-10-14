@@ -290,12 +290,14 @@ pytest -q                              # the claim-bearing regression suite
 
 ## Verification status
 
-**v1.0.0 is tagged and archived. v1.1.0 is a release candidate and is not yet
-tagged** — the tree is complete, portable and manifested, and the tag is the one
-step outstanding. The distinction is deliberate and is decision **S27**: an
-artefact's maturity is a rung, not an opinion, and a README that reports a tag
-before it exists is reporting the wrong rung. `provenance/RELEASE-STATUS-v1.md`
-carries the rung of every artefact in the tree and is regenerated, not typed.
+**Released as v1.1.0.** Every artefact carries a maturity rung — prototype,
+proof of concept, release candidate, shipped — and a release gates on the rung
+rather than on an opinion that the work is done. That is decision **S27**, and
+`provenance/RELEASE-STATUS-v1.md` carries the rung of everything in the tree.
+It is **generated and verified**: each rung names the module, object, test or
+harness entry that earns it, and a claim whose evidence is missing fails the
+run rather than appearing in the file. It caught five of its own claims on its
+first pass.
 
 The regression suite passes and `python scripts/run_all.py --strict` reports
 `CLEAN` — run `pytest -q` for the current counts rather than trusting a number

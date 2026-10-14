@@ -71,10 +71,13 @@ DEFERRED: dict[str, tuple[str, str]] = {
     # than left with a stale version, which is T-16's lesson about labels.
     "D3  source terms against k": ("v1.1.0", "S-b"),
     "D4  no monopole in the CGI approach": ("v1.1.0", "S-b"),
-    # S21 then S23: these three wait on the generic-u^a hierarchy, not on
-    # figure work. Finding T-14 is why, and S23 put that hierarchy in v1.2.0.
+    # S21 then S23 deferred these three, twice for reasons that turned out
+    # wrong. **F5 landed 2026-10-14** and is removed rather than left with a
+    # stale deferral, as F6 and F8 were. What actually blocked it was the
+    # rank-two sign, settled as **B-13**, and the decomposition it is drawn in
+    # --- ranks, not the Newtonian three-way split of 7.1.1 --- which was the
+    # PI's call the same day. F2 and F7 follow it and wait on nothing else.
     "F2  truncation convergence, both frames": ("v1.2.0", "S23"),
-    "F5  source decomposition, two frames": ("v1.2.0", "S23"),
     "F7  frame specialisation": ("v1.2.0", "S23"),
 }
 

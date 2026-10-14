@@ -24,17 +24,15 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from functions.background.flrw import Background  # noqa: E402
-from functions.spectra.acoustic import baryon_photon_ratio, solve_acoustic  # noqa: E402
 from functions.spectra.bessel_table import BesselTable  # noqa: E402
-from functions.spectra.coefficients import background_fluid, energy_set, newtonian_set  # noqa: E402
-from functions.spectra.decoupling import RecombinationHistory, Weighting, diffusion_scale  # noqa: E402
+from functions.spectra.integral_solution import (  # noqa: E402
+    integral_solution,
+    required_multipoles,
+)
 from functions.spectra.frame_transform import energy_frame_shift  # noqa: E402
-from functions.spectra.integral_solution import integral_solution, required_multipoles  # noqa: E402
-from functions.spectra.pipeline import required_n_eta  # noqa: E402
-from functions.spectra.potentials import (  # noqa: E402
-    potential_derivative,
-    potentials,
+from functions.spectra.two_frame import (  # noqa: E402
+    build_environment,
+    coefficient_sets,
 )
 
 OMEGA_B_H2 = 0.0224
@@ -42,92 +40,17 @@ ELLS = np.array([2, 5, 10, 30, 80, 200, 400], dtype=int)
 K_COM = np.array([1.0, 5.0, 20.0, 60.0, 140.0, 300.0])
 
 
-def build(k_max: float, *, omega_m: float = 1.0, n_eta: int | None = None):
-    """Everything both frames share, built once."""
-    background = Background(omega_m=omega_m)
-    recombination = RecombinationHistory.build(background, omega_b_h2=OMEGA_B_H2)
-    eta_star = recombination.eta_star
-    span = float(background.eta_0 - recombination.eta[0])
-    n = required_n_eta(k_max, span) if n_eta is None else n_eta
-    eta = np.linspace(recombination.eta[0], background.eta_0, n)
-
-    phi_a, phi_h = potentials(background, eta)
-    phi_a_prime = potential_derivative(eta, phi_a)
-    phi_h_prime = potential_derivative(eta, phi_h)
-    a = background.a_of_eta(eta)
-    cH = background.conformal_hubble(a)
-    rho, pressure, cH_prime = background_fluid(a, omega_m=omega_m)
-
-    r = baryon_photon_ratio(a, omega_b_h2=OMEGA_B_H2)
-    # R = 3 rho_b/4 rho_gamma propto a, so R' = script-H R exactly -- no spline.
-    r_prime = cH * r
-
-    kappa_prime = np.interp(eta, recombination.eta, recombination.kappa_prime)
-    kappa_second = np.gradient(kappa_prime, eta, edge_order=2)
-    visibility = np.interp(eta, recombination.eta, recombination.visibility)
-    k_d = diffusion_scale(recombination, r_of_eta=np.zeros_like(recombination.eta))
-    damping_k = float(k_d(eta_star))
-
-    return dict(
-        background=background, recombination=recombination, eta=eta, eta_star=eta_star,
-        a=a, cH=cH, cH_prime=cH_prime, rho=rho, pressure=pressure,
-        phi_a=phi_a, phi_h=phi_h, phi_a_prime=phi_a_prime, phi_h_prime=phi_h_prime,
-        r=r, r_prime=r_prime, kappa_prime=kappa_prime, kappa_second=kappa_second,
-        visibility=visibility, damping_k=damping_k,
-    )
-
-
-def both_frames(k: float, env: dict, table: BesselTable, ells: np.ndarray):
+def both_frames(k: float, env, table: BesselTable, ells: np.ndarray) -> dict:
     """(102) evaluated in the Newtonian frame and in the energy frame."""
-    eta, eta_star = env["eta"], env["eta_star"]
-    background = env["background"]
-
-    # the Newtonian-frame acoustic solution, frozen outside tight coupling
-    eta_couple = min(float(background.eta_0), 6.0 * eta_star)
-    inside = eta <= eta_couple
-    acoustic = solve_acoustic(
-        k, eta[inside], background=background,
-        phi_a=env["phi_a"][inside], phi_h=env["phi_h"][inside],
-        omega_b_h2=OMEGA_B_H2, expansion_coupling=False,
-    )
-
-    def freeze(values):
-        out = np.empty_like(eta)
-        out[inside], out[~inside] = values, values[-1]
-        return out
-
-    delta_t, tau_1 = freeze(acoustic.delta_T), freeze(acoustic.tau_1)
-
-    newtonian = newtonian_set(
-        eta, k, delta_t=delta_t, phi_a=env["phi_a"], phi_a_prime=env["phi_a_prime"],
-        phi_h_prime=env["phi_h_prime"], tau_1=tau_1, kappa_prime=env["kappa_prime"],
-        kappa_double_prime=env["kappa_second"], conformal_hubble=env["cH"],
-        r_baryon=env["r"], r_baryon_prime=env["r_prime"],
-    )
-
-    shift = energy_frame_shift(eta, env["phi_a"], k, background=background)
-    energy = energy_set(
-        eta, k, delta_t=delta_t, phi_a=env["phi_a"], phi_a_prime=env["phi_a_prime"],
-        phi_h=env["phi_h"], phi_h_prime=env["phi_h_prime"], tau_1=tau_1,
-        kappa_prime=env["kappa_prime"], kappa_double_prime=env["kappa_second"],
-        conformal_hubble=env["cH"], conformal_hubble_prime=env["cH_prime"],
-        scale_factor=env["a"], rho=env["rho"], pressure=env["pressure"],
-        r_baryon=env["r"], r_baryon_prime=env["r_prime"],
-        v=shift.v, v_prime=shift.v_prime, eta_star=eta_star,
-    )
-
-    diffusion = np.exp(-((k / env["damping_k"]) ** 2))
-    common = dict(
-        table=table, weight=env["visibility"], diffusion=diffusion,
-        damping_total=diffusion, eta_star=eta_star, eta_0=float(background.eta_0),
-    )
-    out = {}
-    for name, cs in (("newtonian", newtonian), ("energy", energy)):
-        out[name] = integral_solution(
-            ells, coefficients=cs.coefficients, c1_prime=cs.c1_prime,
-            c2_second=cs.c2_second, c2_prime_star=cs.c2_prime_star, **common)
-    out["shift"] = shift
-    return out
+    newtonian, energy = coefficient_sets(float(k), env)
+    diffusion = float(np.exp(-((float(k) / env.damping_k) ** 2)))
+    common = dict(table=table, weight=env.visibility, diffusion=diffusion,
+                  damping_total=diffusion, eta_star=env.eta_star,
+                  eta_0=float(env.background.eta_0))
+    return {name: integral_solution(
+                ells, coefficients=cs.coefficients, c1_prime=cs.c1_prime,
+                c2_second=cs.c2_second, c2_prime_star=cs.c2_prime_star, **common)
+            for name, cs in (("newtonian", newtonian), ("energy", energy))}
 
 
 def residual_decomposition(k: float, env: dict, table: BesselTable,
@@ -145,12 +68,12 @@ def residual_decomposition(k: float, env: dict, table: BesselTable,
     $\kappa'$ multiplies. Reporting only the sum would say that (102) is not
     frame-invariant; reporting the split says where it is not.
     """
-    eta, eta_star, background = env["eta"], env["eta_star"], env["background"]
-    shift = energy_frame_shift(eta, env["phi_a"], k, background=background)
-    v, vp, cH, cHp = shift.v, shift.v_prime, env["cH"], env["cH_prime"]
-    vpp = -cHp * v - cH * vp - k * env["phi_a_prime"]
-    kp, kpp, V = env["kappa_prime"], env["kappa_second"], env["visibility"]
-    damping = np.exp(-((k / env["damping_k"]) ** 2))
+    eta, eta_star, background = env.eta, env.eta_star, env.background
+    shift = energy_frame_shift(eta, env.phi_a, k, background=background)
+    v, vp, cH, cHp = shift.v, shift.v_prime, env.conformal_hubble, env.conformal_hubble_prime
+    vpp = -cHp * v - cH * vp - k * env.phi_a_prime
+    kp, kpp, V = env.kappa_prime, env.kappa_second, env.visibility
+    damping = np.exp(-((k / env.damping_k) ** 2))
     x = k * (background.eta_0 - eta)
     x_star = k * (background.eta_0 - eta_star)
     inside = eta >= eta_star
@@ -177,11 +100,11 @@ def residual_decomposition(k: float, env: dict, table: BesselTable,
 
 
 def main() -> int:
-    env = build(float(K_COM.max()))
+    env = build_environment(float(K_COM.max()))
     needed = required_multipoles(ELLS)
     table = BesselTable.build(
         ell_max=int(needed.max()), ells=needed,
-        x_max=float(K_COM.max() * (env["background"].eta_0 - env["eta"][0])) + 20.0,
+        x_max=float(K_COM.max() * (env.background.eta_0 - env.eta[0])) + 20.0,
     )
 
     rows, worst = [], 0.0
