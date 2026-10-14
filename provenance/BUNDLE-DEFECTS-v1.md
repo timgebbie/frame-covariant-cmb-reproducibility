@@ -3433,3 +3433,73 @@ pipeline's `Weighting.STANDARD_ISW`. The experiment is the recovery test run
 comparing the two transfers mode by mode --- which localises the disagreement in
 $k$ before anything is changed. That test should exist whatever the outcome,
 because its absence is the finding.
+
+### T-41, corrected: the routes agree exactly. It is approximation A-2.
+
+**The first diagnosis above was wrong on both counts and the experiment it
+proposed is what proved it.** T-41 said the two-frame path "does not reproduce"
+the pipeline and that the one-mode recovery test was "blind by construction".
+Swept across $k$, the two routes agree to **$10^{-5}$ or better at every mode
+from 0.3 to 300 and every $\ell$ down to 2**:
+
+| $k$ | $\ell=2$ | $\ell=5$ | $\ell=10$ | $\ell=50$ | $\ell=200$ |
+|---|---|---|---|---|---|
+| 0.3 | 2.7e-07 | 3.8e-07 | 5.5e-07 | 5.3e-07 | 5.3e-07 |
+| 10 | 2.7e-06 | 5.7e-06 | 1.4e-05 | 1.5e-05 | 8.1e-06 |
+| 300 | 8.5e-06 | 2.1e-06 | 1.2e-05 | 7.2e-06 | 4.6e-05 |
+
+(102) and (177)--(179) are the same calculation. The one-mode test at $k=60$ was
+concealing nothing, and the accusation that it was blind was made from the
+*shape* of a previous finding --- T-32, where a check had indeed been varied
+along the wrong axis --- rather than from a measurement. **That is pattern
+matching standing in for evidence, which is the T-24 failure wearing a
+methodological hat.** It is recorded rather than quietly replaced because the
+wrong diagnosis was written into this file and pushed.
+
+### What it actually is
+
+**Approximation A-2: the weight carried by the line-of-sight integral.**
+`integral_solution`'s docstring has said so all along --- *"`weight` is
+$\mathcal V$ as (102) prints it, or $e^{-\kappa}$ where a caller departs from
+it --- approximation A-2, and finding T-20"*. The pipeline passes
+$e^{-\kappa}$. **The two-frame path passes $\mathcal V$, faithfully reproducing
+what (102) prints.** Measured, standard CDM, $n_s=1$, transfer off, $D_\ell$
+renormalised at $\ell=2$:
+
+| | rise $\ell=2\to30$ |
+|---|---|
+| two-frame, `weight` $=\mathcal V$, as (102) prints | **80.5×** |
+| two-frame, `weight` $=e^{-\kappa}$ | **8.17×** |
+| pipeline, F3, released | **1.70×** |
+| CAMB | **1.14×** |
+
+So the printed $\mathcal V$ confines the integrated sector to the
+last-scattering surface and removes the late ISW, which is most of $\ell=2$.
+**It costs a factor of ten.** T-20 measured the two weights against each other
+and concluded they are *"each right in one regime and neither in both"*; it did
+not measure them here, at low $\ell$, where the difference is an order of
+magnitude and the regime is exactly where $\mathcal V$ is wrong.
+
+### What is still open, and it is a factor of 4.8
+
+Two-frame with $e^{-\kappa}$ gives 8.17×; the pipeline gives 1.70×. The routes
+agree to $10^{-5}$ mode by mode, so **this residual is not in the integral
+solution** --- it is in what feeds it: the $\eta$ grid, the $k$ grid, $n_s$, or
+`Weighting.STANDARD_ISW` doing something beyond passing $e^{-\kappa}$. **Named
+as open rather than attributed**, because the last attribution in this entry was
+made from a resemblance and was wrong.
+
+### What it blocks, unchanged
+
+F2, F5 and F7 take the $\mathcal V$ branch. Their acoustic content is sound; the
+low-$\ell$ numbers carry a documented approximation worth a factor of ten there,
+and **F5's 47% frame disagreement at $\ell=2$ is a difference between two
+spectra that both take it**. Whether these figures should take the printed
+$\mathcal V$ --- which is what the bundle reproduces --- or $e^{-\kappa}$ ---
+which is what makes them comparable with anything else --- is **S31's question
+in a second place**, and it is the PI's.
+
+`test_the_specialisation_recovers_the_pipeline_at_every_k_not_only_at_sixty`
+now exists for all seven modes. It was worth writing whichever way the answer
+went: an equivalence asserted at one point in a continuous parameter is not an
+equivalence.

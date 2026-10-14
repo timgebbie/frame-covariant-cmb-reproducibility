@@ -291,3 +291,96 @@ def test_102_runs_end_to_end_with_no_derivative_passed_in_by_hand(setup):
     worst = np.max(np.abs(sol.total - ref) / np.abs(ref))
     assert worst < 5e-2, f"end-to-end (102) does not recover the pipeline: {worst:.2e}"
     assert sol.shear_boundary_is_empty
+
+
+# --------------------------------------------------------------------------
+# The recovery, across k. Finding T-41.
+# --------------------------------------------------------------------------
+
+K_SWEEP = (0.3, 1.0, 3.0, 10.0, 30.0, 120.0, 300.0)
+
+
+def _both_routes(k: float):
+    """(102) and the pipeline at one k, from one setup, both weighted e^{-kappa}."""
+    bg = LCDM_MODEL
+    rec = RecombinationHistory.build(bg, omega_b_h2=0.0224)
+    eta = np.linspace(rec.eta[0], bg.eta_0, 4000)
+    phi_a, phi_h = potentials(bg, eta)
+    aH = bg.conformal_hubble(bg.a_of_eta(eta))
+    kp = np.interp(eta, rec.eta, rec.kappa_prime)
+    vis = np.interp(eta, rec.eta, rec.visibility)
+    opa = np.interp(eta, rec.eta, rec.opacity)
+    k_d = float(diffusion_scale(rec, r_of_eta=rec.kappa_prime * 0.0)(rec.eta_star))
+    inside = eta <= 6.0 * rec.eta_star
+    ac = solve_acoustic(k, eta[inside], background=bg, phi_a=phi_a[inside],
+                        phi_h=phi_h[inside], omega_b_h2=0.0224,
+                        expansion_coupling=False)
+
+    def freeze(v):
+        out = np.empty_like(eta)
+        out[inside], out[~inside] = v, v[-1]
+        return out
+
+    dT, t1 = freeze(ac.delta_T), freeze(ac.tau_1)
+    need = required_multipoles(ELLS)
+    table = BesselTable.build(ell_max=int(need.max()), ells=need,
+                              x_max=k * (bg.eta_0 - eta[0]) + 20.0)
+    sc = ScatteringHistory(eta=eta, kappa_prime=kp, visibility=vis, damping_k=k_d)
+    damping = sc.diffusion(k)
+
+    h = PerturbationHistory(eta=eta, delta_T=dT, phi_a=phi_a, phi_h=phi_h,
+                            tau_1=t1, v_b=t1, frame="newtonian")
+    star = float(np.interp(rec.eta_star, eta,
+                           source_primary(h, sc, damping_total=damping)))
+    integrated = (source_doppler(h, sc, k, weight=opa)
+                  + source_integrated(h, sc, k, aH=aH,
+                                      isw_sign=PUBLISHED_ISW_SIGN, weight=opa))
+    x, x_star = k * (bg.eta_0 - eta), k * (bg.eta_0 - rec.eta_star)
+    pipeline = np.array([
+        star * float(table(int(l), np.array([x_star]))[0])
+        + float(np.trapezoid(integrated * table(int(l), x), eta)) for l in ELLS])
+
+    c = newtonian_coefficients(eta, k, delta_t=dT, phi_a=phi_a,
+                               kappa_prime=kp, v_b=t1)
+    c1p = newtonian_c1_prime(
+        eta, k, delta_t=dT, phi_a=phi_a,
+        phi_a_prime=CubicSpline(eta, phi_a).derivative(1)(eta),
+        phi_h_prime=CubicSpline(eta, phi_h).derivative(1)(eta),
+        tau_1=t1, conformal_hubble=aH,
+        kappa_prime_v_b_prime=CubicSpline(eta, kp * t1).derivative(1)(eta))
+    generic = integral_solution(
+        ELLS, coefficients=c, table=table, weight=opa, diffusion=damping,
+        damping_total=damping, eta_star=rec.eta_star, eta_0=bg.eta_0,
+        c1_prime=c1p, eta_floor=float(eta[0])).total
+    return pipeline, generic
+
+
+@pytest.mark.parametrize("k", K_SWEEP)
+def test_the_specialisation_recovers_the_pipeline_at_every_k_not_only_at_sixty(k):
+    r"""**Finding T-41, and the correction of its first diagnosis.**
+
+    `test_the_specialisation_recovers_what_the_pipeline_computes` runs at one
+    mode, `K = 60.0`. When the two-frame path turned out to miss the
+    Sachs--Wolfe plateau by a factor of eighty, the obvious suspicion was that
+    the single mode was hiding it --- $k=60$ is in the acoustic regime, the
+    line-of-sight integrated sector has its weight at low $k$, and $\ell=2$ is
+    built almost entirely from that sector.
+
+    **The suspicion was wrong, and this test is what showed it.** Swept from
+    $k=0.3$ to $k=300$, the two routes agree to $10^{-5}$ or better at every
+    mode and every $\ell$ down to 2. (102) and (177)--(179) are the same
+    calculation, and the one-mode test was not concealing anything.
+
+    What the plateau discrepancy actually is, is **approximation A-2** --- the
+    weight carried by the line-of-sight integral. Both routes here are given
+    $e^{-\kappa}$. The two-frame path gives (102) the $\mathcal V$ that (102)
+    prints, faithfully, and that choice is what costs the plateau.
+
+    The test exists whichever way the answer had gone: an equivalence asserted
+    at one point in a continuous parameter is not an equivalence.
+    """
+    pipeline, generic = _both_routes(k)
+    worst = float(np.max(np.abs(generic - pipeline) / np.abs(pipeline)))
+    assert worst < 1e-3, (
+        f"at k={k} the two routes differ by {worst:.2e}; they are the same "
+        f"calculation and must not")
