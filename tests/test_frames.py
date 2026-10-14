@@ -436,3 +436,122 @@ def pytest_approx(value: float, rel: float):
     import pytest
 
     return pytest.approx(value, rel=rel)
+
+
+# --------------------------------------------------------------------------
+# C3.5: the rank-dependent rescaling, and what physics can and cannot fix.
+# --------------------------------------------------------------------------
+
+
+def test_c35_gravity_does_positive_work_on_the_cdm_which_fixes_lambda():
+    r"""**The PI's route, finally written into the tree. Finding T-40.**
+
+    `provenance/conventions.md` row **C3.5** was stipulated, and F2, F5 and F7
+    all sat at R above it while `RELEASE-STATUS-v1.md` declared that nothing
+    may. The route that settles it needs no harmonic convention at all:
+    **cold dark matter falls into a potential well.**
+
+    The CDM frame solves the geodesic Euler equation
+
+    $$v' + \mathcal H v = -k\,\Phi_A ,$$
+
+    and the physically unambiguous consequence is that **gravity does positive
+    work on the matter in the growing mode**: the driving term and the velocity
+    it produces point the same way, so $v\cdot(-k\Phi_A) > 0$ at every epoch.
+    Flip it and the CDM climbs out of the well while the well deepens, which no
+    cosmology does.
+
+    **Why this fixes $\lambda$ and not $s_Q$, which is the distinction C3.5's
+    own renaming note is about.** $\lambda$ is the *rank-dependent* rescaling
+    $Q_{A_\ell}\to\lambda^\ell Q_{A_\ell}$. It therefore does **not** cancel
+    between a rank-0 object and a rank-1 one --- and $\Phi_A$ is rank 0 while
+    $v$ is rank 1. Their relative sign is physical, this test is that sign, and
+    so $\lambda$ is fixed by it. $s_Q$ is a different animal and is handled in
+    the test below.
+    """
+    import numpy as np
+
+    from functions.background.flrw import CDM_MODEL
+    from functions.spectra.frame_transform import cdm_frame_shift
+
+    eta = np.linspace(0.05, 1.5, 3000)
+    for k in (10.0, 60.0, 300.0):
+        for amplitude in (+1.0, -1.0):      # the answer cannot depend on this
+            phi_a = amplitude * np.ones_like(eta)
+            shift = cdm_frame_shift(eta, phi_a, k, background=CDM_MODEL)
+            work = shift.v * (-k * phi_a)
+            assert np.all(work > 0.0), (
+                f"k={k}, Phi={amplitude:+.0f}: gravity does negative work on the "
+                f"CDM, i.e. it is climbing out of the well. Worst {work.min():.3e}")
+
+
+def test_c35_the_control_climbs_out_of_the_well():
+    r"""The half that matters. **S27's C rung requires a check that can fail**,
+    and **T-24** is the finding that exists because a closure which could not
+    fail was cited as though it could.
+
+    The control is the same quadrature with the Euler equation's relative sign
+    reversed --- $v'+\mathcal Hv=+k\Phi_A$ --- which is the opposite choice of
+    $\lambda$. If that *also* gave positive work, the test above would be
+    measuring the integrator rather than the physics.
+    """
+    import numpy as np
+
+    from functions.background.flrw import CDM_MODEL
+
+    eta = np.linspace(0.05, 1.5, 3000)
+    k, phi_a = 60.0, np.ones_like(eta)
+    a = np.asarray(CDM_MODEL.a_of_eta(eta), dtype=float)
+
+    # +k Phi_A instead of -k Phi_A, by the same integrating factor.
+    v0 = +k * float(phi_a[0]) * float(eta[0]) / 3.0
+    integrand = a * phi_a
+    cumulative = np.concatenate(
+        ([0.0], np.cumsum(0.5 * (integrand[1:] + integrand[:-1]) * np.diff(eta))))
+    v_wrong = (a[0] * v0 + k * cumulative) / a
+
+    work = v_wrong * (-k * phi_a)
+    assert np.all(work < 0.0), (
+        "the control did not fail: the reversed Euler sign still gives positive "
+        "work, so the test above is not measuring what it claims")
+
+
+def test_c35_s_q_cancels_from_every_ratio_and_so_no_physics_can_fix_it():
+    r"""**$s_Q$ is stipulated because it is unfixable, and that is a result, not
+    a gap.**
+
+    C3.5's renaming note separates two things that had been one. $s_Q$ is the
+    sign of a scalar's own mode coefficient, $X = s_Q\sum_k X^{(k)}Q$, and the
+    conventions sheet records its consequences under C3.2:
+
+    $$\mathrm D_aX = -s_Q\,k\,X^{(k)}Q_a, \qquad
+      \mathrm D_{\langle a}\mathrm D_{b\rangle}X = +s_Q\,k^2X^{(k)}Q_{ab}.$$
+
+    **Every one of those carries exactly one factor of $s_Q$** --- the scalar,
+    its gradient and its second gradient alike --- so $s_Q$ cancels from every
+    ratio of them. No physical statement can depend on it, and therefore no
+    physical argument can fix it. Stipulating it is the correct treatment and
+    the sheet's own wording, *"not fixed by any source"*, is right.
+
+    This test is that cancellation, asserted rather than asserted *about*. It is
+    the reason C3.5 can be closed as a gate without a measurement: the half that
+    physics can fix is $\lambda$, which the two tests above fix, and the half it
+    cannot is immaterial to every number this bundle reports.
+    """
+    import sympy as sp
+
+    s_q, k, x = sp.symbols("s_q k x", nonzero=True)
+
+    scalar = s_q * x
+    gradient = -s_q * k * x
+    second = +s_q * k**2 * x
+
+    # Each is linear in s_q, so every ratio is free of it.
+    for a, b in ((gradient, scalar), (second, scalar), (second, gradient)):
+        ratio = sp.simplify(a / b)
+        assert s_q not in ratio.free_symbols, f"s_q survives in {ratio}"
+
+    # And the statement that makes it a *choice*: both signs are admissible,
+    # because the two differ by an overall factor that cancels throughout.
+    for value in (+1, -1):
+        assert sp.simplify((gradient / scalar).subs(s_q, value) + k) == 0

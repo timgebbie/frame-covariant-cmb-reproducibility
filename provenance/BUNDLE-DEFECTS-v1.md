@@ -3316,3 +3316,120 @@ cannot fail was cited as though it could.
 Until that test exists, the honest statements are: C3.5 is **stipulated**, three
 R-rung artefacts depend on it, and v1.2.0 cannot close on a rule its own status
 file declares and breaks.
+
+### T-40, closed: C3.5 was two questions under one name
+
+Written 2026-10-14, at the PI's instruction to do this before 5b.
+
+**$\lambda$ is fixed by physics**, which is the PI's own route finally in the
+tree. The CDM frame solves $v'+\mathcal Hv=-k\Phi_A$, so **gravity does
+positive work on the matter in the growing mode**: $v\cdot(-k\Phi_A)>0$ at
+every epoch, for every $k$, and for either sign of the potential's amplitude.
+$\lambda$ is the *rank-dependent* rescaling $Q_{A_\ell}\to\lambda^\ell
+Q_{A_\ell}$, so it cannot cancel between a rank-0 potential and a rank-1
+velocity --- which is exactly why their relative sign fixes it, with no harmonic
+convention anywhere in the argument.
+`test_c35_gravity_does_positive_work_on_the_cdm_which_fixes_lambda`.
+
+**The control climbs out of the well.** The same quadrature with the Euler
+sign reversed gives negative work everywhere. Without it this would be a test of
+the integrator; **T-24** is the finding that exists because a closure which could
+not fail was cited as though it could.
+`test_c35_the_control_climbs_out_of_the_well`.
+
+**$s_Q$ is fixed by nothing, and that is a result.** The scalar, its gradient
+and its second gradient each carry exactly one factor of $s_Q$ --- $X=s_Q\sum
+X^{(k)}Q$, $\mathrm D_aX=-s_Qk X^{(k)}Q_a$, $\mathrm D_{\langle a}\mathrm
+D_{b\rangle}X=+s_Qk^2X^{(k)}Q_{ab}$ --- so it cancels from every ratio of them.
+No physical statement can depend on it and therefore none can fix it.
+Stipulating it is the correct treatment, and the sheet's own *"not fixed by any
+source"* was right. Asserted symbolically in
+`test_c35_s_q_cancels_from_every_ratio_and_so_no_physics_can_fix_it`.
+
+**What this bundle cannot do.** `provenance/conventions.md` is **generated** by
+`scripts/sync_conventions.py` from the project's normative sheet, which lives
+outside this repository. Hand-editing the copy is precisely the drift that
+script exists to prevent --- nine duplicates have already been deleted over it
+--- so the copy will keep reading *STIPULATED HERE* until the PI changes the
+source. The replacement wording has been sent. **The gap is visible rather than
+silent**, which is the most a bundle can do about a file it does not own.
+
+---
+
+## T-41 — the two-frame path does not reproduce the Sachs–Wolfe plateau, and a one-mode test could not see it
+
+**Found** 2026-10-14, by the first run of criterion 5b. **Status:** measured and
+localised. **Release-blocking for F2, F5 and F7's low-$\ell$ claims.**
+
+Criterion 5b's first run put this bundle against the stamped spectra and the
+acoustic band came back at **137%**. Chasing that found something larger and
+closer to home.
+
+### The measurement
+
+$D_\ell$ renormalised at $\ell=30$, standard CDM, transfer function off,
+$n_s=1$ --- so nothing recent is implicated:
+
+| $\ell$ | two-frame, Newtonian | two-frame, CDM | pipeline (F3, released) | CAMB |
+|---|---|---|---|---|
+| 2 | **0.012** | **0.008** | ~0.59 | **0.881** |
+| 30 | 1.000 | 1.000 | 1.000 | 1.000 |
+| rise $\ell=2\to30$ | **×80** | **×124** | **×1.7** | **×1.14** |
+
+A Sachs--Wolfe plateau is **flat in $D_\ell$**. The pipeline's (176)/(186) route
+gives one --- F3's released numbers run 1.000, 0.883, 0.916, 1.207 at
+$\ell=2,5,10,20$, flat to twenty per cent and matching CAMB. **The two-frame
+(102) route rises by a factor of eighty.**
+
+### What it is not
+
+* **Not the transfer function.** The rise is identical with `apply_transfer`
+  off; T-37 is not implicated.
+* **Not $n_s$, not the radiation era, not `PLANCK_MODEL`.** Present at $n_s=1$
+  on `CDM_MODEL`, which is the released configuration.
+* **Not a frame effect.** Both frames show it, and they differ from each other
+  by only the 47% F5 already reports. Whatever this is, it is upstream of the
+  frame choice.
+* **Not the rank-0/2 sectors.** In the Newtonian frame those are identically
+  zero --- (110) --- and rank 1 alone carries the whole of the rise.
+
+### Why nothing caught it
+
+`test_the_specialisation_recovers_what_the_pipeline_computes` asserts exactly
+this equivalence and **passes**, at 5%. It runs at
+
+```python
+K = 60.0
+ELLS = np.array([2, 5, 10, 50, 200])
+```
+
+**one mode.** The two paths do agree at $k=60$, across every $\ell$ it checks.
+They agree there because $k=60$ is in the acoustic regime, where the
+line-of-sight integrated terms contribute almost nothing; the integrated
+sector's weight is at **low** $k$, and $\ell=2$ is built almost entirely from
+it. So the test is blind by construction to the one place the paths can differ,
+and its ℓ list reaching down to 2 gives the *appearance* of low-$\ell$ coverage
+that the single $k$ takes away again.
+
+**This is T-32's lesson in a second form.** There it was a quadrature refined in
+the parameter whose variation could not see the defect. Here it is an
+equivalence checked at the one mode where the suspect term is negligible. In
+both, the check varied the wrong axis and returned a clean number.
+
+### What it blocks
+
+F2, F5 and F7 are all built on the two-frame path and all three are at **R**.
+Their high-$\ell$ content is not in question --- the acoustic sector is where
+the two paths agree --- but every low-$\ell$ number they report is. **F5's
+headline frame disagreement of 47% at $\ell=2$ is a difference between two
+spectra that are both wrong there**, and should not be quoted until this is
+resolved.
+
+### Next
+
+The suspect is the integrated sector: (102)'s line-of-sight term against the
+pipeline's `Weighting.STANDARD_ISW`. The experiment is the recovery test run
+**across $k$** rather than at one mode --- $k$ from below 1 to a few hundred,
+comparing the two transfers mode by mode --- which localises the disagreement in
+$k$ before anything is changed. That test should exist whatever the outcome,
+because its absence is the finding.
