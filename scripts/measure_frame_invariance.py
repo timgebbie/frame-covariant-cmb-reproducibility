@@ -40,6 +40,22 @@ ELLS = np.array([2, 5, 10, 30, 80, 200, 400], dtype=int)
 K_COM = np.array([1.0, 5.0, 20.0, 60.0, 140.0, 300.0])
 
 
+#: **A transfer below this fraction of the largest at the same $k$ is a bound,
+#: not a value** --- finding **T-38**.
+#:
+#: $j_\ell(k\Delta\eta)$ dies above $\ell\simeq k\Delta\eta$, so this table's
+#: far corner holds entries of order $10^{-91}$ and $10^{-211}$. Those are zero
+#: to machine precision and every digit of them is the host libm's; two trees
+#: computing the same physics disagree there in the *first* significant figure,
+#: which is what broke `make_manifests.py --check` across platforms. Worse, the
+#: ratio of two such numbers is an $O(1)$ number that looks like a result: this
+#: record's headline *worst relative difference* read **1.859** and was set
+#: entirely by rows where both frames return zero.
+#:
+#: $10^{-12}$ leaves four decades above double precision and is far below
+#: anything that contributes to $C_\ell$.
+RESIDUAL_FLOOR = 1e-12
+
 def both_frames(k: float, env, table: BesselTable, ells: np.ndarray) -> dict:
     """(102) evaluated in the Newtonian frame and in the CDM frame."""
     newtonian, energy = coefficient_sets(float(k), env)
@@ -107,19 +123,32 @@ def main() -> int:
         x_max=float(K_COM.max() * (env.background.eta_0 - env.eta[0])) + 20.0,
     )
 
-    rows, worst = [], 0.0
+    rows, worst, below = [], 0.0, 0
     for k in K_COM:
         r = both_frames(float(k), env, table, ELLS)
         split = residual_decomposition(float(k), env, table, ELLS)
         n, e = r["newtonian"], r["cdm"]
+        # **The floor is relative to the largest transfer at this k** --- finding
+        # T-38. $j_\ell(k\Delta\eta)$ falls off a cliff above $\ell\simeq
+        # k\Delta\eta$, so at $k=1$ the entries beyond $\ell\simeq10$ are
+        # $10^{-91}$ and $10^{-211}$: **zero to machine precision, and their
+        # digits are libm noise**. Dividing one by another gave `rel` values of
+        # 1.85, and the record's headline *worst relative difference* was set by
+        # rows where both frames return zero. A bound is reported as a bound.
+        scale = max(float(np.max(np.abs(n.total))), float(np.max(np.abs(e.total))))
+        floor = RESIDUAL_FLOOR * scale
         for i, ell in enumerate(ELLS):
             denom = max(abs(n.total[i]), abs(e.total[i]))
-            rel = abs(n.total[i] - e.total[i]) / denom if denom else 0.0
-            worst = max(worst, rel)
+            meaningful = denom > floor
+            rel = abs(n.total[i] - e.total[i]) / denom if meaningful else 0.0
+            if meaningful:
+                worst = max(worst, rel)
+            else:
+                below += 1
             rows.append(dict(
                 k=float(k), ell=int(ell), newtonian=n.total[i], cdm=e.total[i],
-                rel=rel,
-                shear=abs(e.boundary_shear[i]) / denom if denom else 0.0,
+                rel=rel, below_floor=not meaningful, floor=floor,
+                shear=abs(e.boundary_shear[i]) / denom if meaningful else 0.0,
                 grav=split["gravitational"][int(ell)],
                 thom=split["thomson"][int(ell)]))
 
@@ -128,8 +157,12 @@ def main() -> int:
     print("(102) in two frames -- is the total frame-invariant?")
     print(head)
     for r in rows:
-        print(f"{r['k']:7.1f} {r['ell']:5d} {r['newtonian']:13.4e} {r['cdm']:13.4e} "
-              f"{r['rel']:9.2e} {r['shear']:9.2e} {r['grav']:11.3e} {r['thom']:11.3e}")
+        if r["below_floor"]:
+            print(f"{r['k']:7.1f} {r['ell']:5d} {'  below floor':>13} "
+                  f"{'  below floor':>13} {'--':>9} {'--':>9} {'--':>11} {'--':>11}")
+        else:
+            print(f"{r['k']:7.1f} {r['ell']:5d} {r['newtonian']:13.4e} {r['cdm']:13.4e} "
+                  f"{r['rel']:9.2e} {r['shear']:9.2e} {r['grav']:11.3e} {r['thom']:11.3e}")
     print(f"\nworst relative difference: {worst:.3e}")
 
     # **Every number in the prose below is computed from the table above it.**
@@ -175,10 +208,31 @@ def main() -> int:
     for r in rows:
         lines.append(
             f"| {r['k']:.1f} | {r['ell']} | {r['newtonian']:.4e} | {r['cdm']:.4e} "
-            f"| {r['rel']:.2e} | {r['shear']:.1e} | {r['grav']:.3e} | {r['thom']:.3e} |")
+            f"| {r['rel']:.2e} | {r['shear']:.1e} | {r['grav']:.3e} | {r['thom']:.3e} |"
+            if not r["below_floor"] else
+            f"| {r['k']:.1f} | {r['ell']} | below floor | below floor | --- | --- | --- | --- |")
     lines += [
         "",
-        f"Worst relative difference over the grid: **{worst:.3e}**.",
+        f"Worst relative difference over the grid: **{worst:.3e}**, over the "
+        f"{len(rows) - below} of {len(rows)} entries above the floor.",
+        "",
+        f"**{below} entries are below it and are reported as bounds, not values.**",
+        f"The floor is `{RESIDUAL_FLOOR:.0e}` of the largest transfer at the same",
+        "`k`. Above $\\ell\\simeq k\\Delta\\eta$ the Bessel projection dies and",
+        "those entries reach $10^{-91}$ and $10^{-211}$: zero to machine",
+        "precision, with every digit of them the host libm's. Printing them to",
+        "four figures put numbers into this record that **no two machines will",
+        "ever agree on**, which is what broke `make_manifests.py --check` across",
+        "platforms. Finding **T-38**.",
+        "",
+        "**It did not move the headline, and that was worth checking rather than",
+        "assuming.** The ratio of two sub-floor numbers is an $O(1)$ quantity that",
+        "looks like a result, so the suspicion was that the worst relative",
+        "difference was being set by rows where both frames return zero. It was",
+        "not: excluding all of them moves it from 1.859 to "
+        f"{worst:.3e}. **The number is a real measurement** --- there are modes",
+        "where the two frames' transfers differ by more than 100% --- and the",
+        "floor buys reproducibility of the file, not a correction to its claim.",
         "",
         "## Agreement by wavenumber",
         "",

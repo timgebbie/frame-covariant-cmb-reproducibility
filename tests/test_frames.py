@@ -386,3 +386,53 @@ def test_102_cannot_make_its_frame_response_depend_on_the_multipole():
             f"k={k}: the dipole's frame response is {ratio:.2f}x the median "
             f"over l>=2. The plan expected an order of magnitude; T-31 is the "
             f"finding that (102) cannot produce one.")
+
+
+def test_the_environment_applies_the_transfer_function_per_mode():
+    r"""Finding **T-37**, and a guard for the thing that had no guard.
+
+    Before this, `potentials()` handed $\Phi = D/a$ to **every** mode: there was
+    no $k$ in the driving at all, so the acoustic peak heights carried no
+    radiation-era suppression. `functions/spectra/transfer.py` had held the
+    corrected (J.5) since v1.0.0 and nothing called it.
+
+    **The wiring changed $\Phi$ by a factor of twenty-two at the top of the $k$
+    grid and 386 tests passed unchanged**, which is the reason this test exists:
+    a quantity nothing asserts is a quantity that can be switched off by
+    accident as easily as it was switched on.
+
+    What is asserted is the shape, the limits and the unit conversion --- the
+    last being where a factor would actually hide, since the bundle works in
+    $c/H_0$ and (J.5)'s fit is in Mpc$^{-1}$.
+    """
+    import numpy as np
+
+    from functions.spectra.two_frame import HUBBLE_RADIUS_MPC, build_environment
+
+    env = build_environment(1900.0)
+
+    # T -> 1 on large scales, which is (J.3)'s stated normalisation.
+    assert env.transfer_at(1.0) == pytest_approx(1.0, 3e-3)
+
+    # The conversion: k_com = 1900 at h = 0.5 is 0.317 / Mpc, where T = 0.0455.
+    k_mpc = 1900.0 * env.hubble_h / HUBBLE_RADIUS_MPC
+    assert abs(k_mpc - 0.3169) < 1e-3
+    assert abs(env.transfer_at(1900.0) - 0.0455) < 1e-3
+
+    # Monotone decreasing, and the CDM k^-2 asymptote rather than the printed
+    # +1/nu form, which grows without bound -- finding B-10.
+    probes = np.array([1.0, 20.0, 140.0, 420.0, 1900.0])
+    values = np.array([env.transfer_at(float(k)) for k in probes])
+    assert np.all(np.diff(values) < 0.0)
+    assert values[-1] < 0.1 * values[0]
+
+    # The flag restores the pre-T-37 behaviour exactly, so the change is a
+    # measurement rather than a claim.
+    off = build_environment(1900.0, apply_transfer=False)
+    assert all(off.transfer_at(float(k)) == 1.0 for k in probes)
+
+
+def pytest_approx(value: float, rel: float):
+    import pytest
+
+    return pytest.approx(value, rel=rel)

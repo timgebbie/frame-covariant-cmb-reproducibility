@@ -50,6 +50,10 @@ from functions.spectra.frame_transform import cdm_frame_shift
 from functions.spectra.integral_solution import integral_solution
 from functions.spectra.pipeline import required_n_eta
 from functions.spectra.potentials import potential_derivative, potentials
+from functions.spectra.transfer import (
+    ANNALS_II_GAMMA,
+    transfer_function,
+)
 
 __all__ = [
     "TwoFrameEnvironment",
@@ -62,6 +66,10 @@ __all__ = [
 #: The tight-coupling window, as `pipeline.run` sets it.
 TIGHT_COUPLING_FACTOR = 6.0
 
+
+#: $c/H_0$ in Mpc for $h=1$. The bundle works in units of $c/H_0$, the fit of
+#: (J.5) works in Mpc$^{-1}$, and this is the only place the two meet.
+HUBBLE_RADIUS_MPC = 2997.92458
 
 @dataclass(frozen=True)
 class TwoFrameEnvironment:
@@ -93,6 +101,39 @@ class TwoFrameEnvironment:
     #: integral --- which is T-3, and it returns a smooth, plausible, wrong
     #: answer rather than an error. `check_k` is what makes it an error.
     k_max: float = float("inf")
+    #: Appendix J's shape parameter and the dimensionless $h$, carried so the
+    #: transfer function can be evaluated per mode. Defaults are *Annals II*
+    #: \S8.3.2's standard-CDM model, $\Gamma=0.48$ and $h=0.5$, because that is
+    #: the model `CDM_MODEL` reconstructs. **Finding T-37.**
+    transfer_gamma: float = ANNALS_II_GAMMA
+    hubble_h: float = 0.5
+    #: `False` restores the pre-T-37 behaviour --- $\Phi$ handed to every mode
+    #: with no $k$ in it --- so the change is a measurement rather than a claim.
+    #: It is not a physics switch to leave lying about: it exists to regenerate
+    #: the v1.2.0-dev figures both ways and comes out once the PI has chosen.
+    apply_transfer: bool = True
+
+    def transfer_at(self, k_com: float) -> float:
+        r"""$T(k)$ of (J.5), corrected (**B-10**), at one comoving mode.
+
+        **The unit conversion is the whole of this method and it is where a
+        factor would hide.** `k_com` is in the bundle's units, where $h_0=1$ and
+        lengths are in $c/H_0 = 2997.9/h$ Mpc, while (J.5)'s fit wants
+        Mpc$^{-1}$:
+
+        $$k[\mathrm{Mpc}^{-1}] = k_{com}\,h/2997.9 .$$
+
+        At the top of the $k$ grid, $k_{com}=1900$ with $h=0.5$, that is
+        $0.317\,\mathrm{Mpc}^{-1}$ and $T=0.045$ --- a factor of twenty-two in
+        the potential and five hundred in power. Which is the point: without it
+        every mode is driven by the same $\Phi$ and the acoustic peak *heights*
+        carry no radiation-era suppression at all.
+        """
+        if not self.apply_transfer:
+            return 1.0
+        k_mpc = float(k_com) * self.hubble_h / HUBBLE_RADIUS_MPC
+        return float(transfer_function(
+            np.array([k_mpc]), gamma=self.transfer_gamma, h=self.hubble_h)[0])
 
     def check_k(self, k: float) -> None:
         r"""Raise if `k` is past what this environment's eta grid can resolve.
@@ -121,6 +162,11 @@ def build_environment(
     omega_m: float = 1.0,
     omega_b_h2: float = 0.0224,
     n_eta: int | None = None,
+    omega_lambda: float = 0.0,
+    omega_r: float = 0.0,
+    transfer_gamma: float = ANNALS_II_GAMMA,
+    hubble_h: float = 0.5,
+    apply_transfer: bool = True,
 ) -> TwoFrameEnvironment:
     r"""The $k$-independent half: background, recombination, potentials.
 
@@ -129,7 +175,8 @@ def build_environment(
     $\Omega$'s. $R'=\mathcal HR$ is exact because $R\propto a$, so nothing here
     is splined except the potentials, whose derivative (179) needs anyway.
     """
-    background = Background(omega_m=omega_m)
+    background = Background(omega_m=omega_m, omega_lambda=omega_lambda,
+                            omega_r=omega_r)
     recombination = RecombinationHistory.build(background, omega_b_h2=omega_b_h2)
     eta_star = recombination.eta_star
     span = float(background.eta_0 - recombination.eta[0])
@@ -139,7 +186,8 @@ def build_environment(
     phi_a, phi_h = potentials(background, eta)
     a = background.a_of_eta(eta)
     cH = background.conformal_hubble(a)
-    rho, pressure, cH_prime = background_fluid(a, omega_m=omega_m)
+    rho, pressure, cH_prime = background_fluid(
+        a, omega_m=omega_m, omega_lambda=omega_lambda, omega_r=omega_r)
     r = baryon_photon_ratio(a, omega_b_h2=omega_b_h2)
 
     kappa_prime = np.interp(eta, recombination.eta, recombination.kappa_prime)
@@ -156,7 +204,8 @@ def build_environment(
         kappa_prime=kappa_prime,
         kappa_second=np.gradient(kappa_prime, eta, edge_order=2),
         visibility=np.interp(eta, recombination.eta, recombination.visibility),
-        k_max=float(k_max),
+        k_max=float(k_max), transfer_gamma=float(transfer_gamma),
+        hubble_h=float(hubble_h), apply_transfer=bool(apply_transfer),
         damping_k=float(k_d(eta_star)), omega_b_h2=omega_b_h2,
     )
 
@@ -176,10 +225,21 @@ def coefficient_sets(
     """
     env.check_k(k_com)
     eta, eta_star, bg = env.eta, env.eta_star, env.background
+
+    # **T(k) enters here, before the acoustic integration --- finding T-37.**
+    # Not afterwards, and not folded into the primordial power: Phi *drives* the
+    # oscillation, so a suppression applied to the output would damp the
+    # amplitude while leaving the driving un-suppressed. T is independent of
+    # eta, so scaling Phi and Phi' by the same number is exact rather than an
+    # approximation to a time-dependent transfer.
+    t_k = env.transfer_at(k_com)
+    phi_a, phi_h = env.phi_a * t_k, env.phi_h * t_k
+    phi_a_prime, phi_h_prime = env.phi_a_prime * t_k, env.phi_h_prime * t_k
+
     inside = eta <= min(float(bg.eta_0), TIGHT_COUPLING_FACTOR * eta_star)
     acoustic = solve_acoustic(
         float(k_com), eta[inside], background=bg,
-        phi_a=env.phi_a[inside], phi_h=env.phi_h[inside],
+        phi_a=phi_a[inside], phi_h=phi_h[inside],
         omega_b_h2=env.omega_b_h2, expansion_coupling=False)
 
     def freeze(values: np.ndarray) -> np.ndarray:
@@ -189,15 +249,15 @@ def coefficient_sets(
 
     delta_t, tau_1 = freeze(acoustic.delta_T), freeze(acoustic.tau_1)
     shared = dict(
-        delta_t=delta_t, phi_a=env.phi_a, phi_a_prime=env.phi_a_prime,
-        phi_h_prime=env.phi_h_prime, tau_1=tau_1, kappa_prime=env.kappa_prime,
+        delta_t=delta_t, phi_a=phi_a, phi_a_prime=phi_a_prime,
+        phi_h_prime=phi_h_prime, tau_1=tau_1, kappa_prime=env.kappa_prime,
         kappa_double_prime=env.kappa_second, conformal_hubble=env.conformal_hubble,
         r_baryon=env.r_baryon, r_baryon_prime=env.r_baryon_prime)
 
     newtonian = newtonian_set(eta, float(k_com), **shared)
-    shift = cdm_frame_shift(eta, env.phi_a, float(k_com), background=bg)
+    shift = cdm_frame_shift(eta, phi_a, float(k_com), background=bg)
     cdm = cdm_set(
-        eta, float(k_com), phi_h=env.phi_h,
+        eta, float(k_com), phi_h=phi_h,
         conformal_hubble_prime=env.conformal_hubble_prime, scale_factor=env.a,
         rho=env.rho, pressure=env.pressure, v=shift.v, v_prime=shift.v_prime,
         eta_star=eta_star, **shared)

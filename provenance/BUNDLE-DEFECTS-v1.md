@@ -3038,3 +3038,154 @@ their mutual difference measured per band — **0.125%, 0.370%, 0.223%**, the
 middle one being the gate. The tolerance is a measurement, as S4b requires. What
 is missing is the bundle's side of the comparison, and this is what it is
 missing.
+
+---
+
+## T-38 — the portable manifest canonicalises by rounding to a string, and that cannot express what it means
+
+**Found** 2026-10-14, from the first cross-platform `--check` on the PI's
+machine. **Status:** measured. **The fix changes a released gate, so it is
+raised, not taken.**
+
+`make_manifests.py --check` on the PI's Windows machine, against a tree
+generated in a Linux container:
+
+```
+FAIL  PORTABLE-MANIFEST-SHA256.txt does not match the tree
+        changed  outputs/line-of-sight-field.csv            [numeric]
+        changed  provenance/FRAME-INVARIANCE-MEASUREMENT-v1.md  [exact]
+        ^ RELEASE-BLOCKING
+```
+
+**This is the measurement `SIGNIFICANT_FIGURES = 9` was waiting for** — its own
+comment says *"the first value tried, and the PI's machine is the measurement:
+if a run there fails at nine, the failure reports the real magnitude and this
+comes down."* The magnitude, measured by parsing both trees' numbers and taking
+the worst agreement in each file:
+
+| file | worst agreement | worst pair |
+|---|---|---|
+| `outputs/f2-truncation.csv` | **12.19 s.f.** | — |
+| `outputs/f5-sources.csv` | **10.58 s.f.** | — |
+| `outputs/line-of-sight-field.csv` | **9.69 s.f.** | `-3.586227044579e-03` vs `-3.586227043840e-03` |
+| `provenance/FRAME-INVARIANCE-MEASUREMENT-v1.md` | **1.27 s.f.** | `-2.7373e-91` vs `-2.8941e-91` |
+
+### The first failure is not what it looks like, and lowering the cut will not fix it
+
+`line-of-sight-field.csv` agrees to **9.69** significant figures and the gate is
+set at **9**. It should pass. It fails because the canonicaliser **rounds to a
+9-significant-figure string and hashes that**, and two numbers agreeing to 9.69
+s.f. can still fall either side of a rounding boundary. Round-to-$N$ has
+boundaries everywhere; the probability a pair agreeing to $s$ figures straddles
+one is about $10^{N-s}$, so at $N=9$, $s=9.69$ it is roughly **20% per number**,
+and the file has thousands.
+
+**Lowering $N$ makes it rarer, never absent.** At $N=7$ it is about 0.2% per
+number, which over $10^4$ numbers is still some twenty expected straddles. The
+defect is not the value of $N$; it is that **a hash of a rounded string cannot
+express "agrees to $N$ significant figures"** — hashing is exact equality, and
+the claim is a tolerance.
+
+### The second failure is a bound being printed as a value
+
+`FRAME-INVARIANCE-MEASUREMENT-v1.md` disagrees at **1.27 s.f.**, on numbers of
+order $10^{-91}$. Nothing is wrong: $-2.7\times10^{-91}$ and
+$-2.9\times10^{-91}$ are the same statement, *zero to machine precision*, and no
+significant-figure rule will ever reconcile their digits. D6 prints a residual
+that is a **bound** as though it were a **value**.
+
+This is the case the bundle already wrote down for `*-residuals.csv`: *"their
+digits are not reproducible on any machine and never were... they leave the
+binding manifest and are checked by what the bundle actually claims about them
+instead."* D6's generated record is the same object and was not given the same
+treatment --- and it sits in the `exact` class, which is the strictest one,
+because it is a `.md`. **A generated record of computed numbers is not exact
+text.**
+
+### Proposed, for the PI
+
+1. **The numeric gate compares parsed values, not hashed strings.** Keep the
+   portable manifest as a fingerprint, but make the release-blocking check for
+   `numeric` files *"every value agrees to $N$ significant figures"*, computed by
+   comparison. That is the claim; hashing a rounded string is an approximation to
+   it that fails at the boundaries.
+2. **D6 prints bounds as bounds.** A residual below, say, $10^{-30}$ prints as
+   `< 1e-30` rather than to four digits, and the record moves to the `numeric`
+   class with the other generated artefacts.
+3. **Manifests are seeded where the tree lives.** Writing this container's
+   manifests onto the PI's machine guaranteed a mismatch, because their harness
+   regenerates the artefacts with their own libraries. After taking a batch the
+   PI runs `make_manifests.py` without `--check` to reseed from their own tree,
+   and `--check` thereafter means what it says.
+
+Point 3 is procedure and takes effect immediately. Points 1 and 2 change a
+released check and a released record, so they wait.
+
+### Not a defect
+
+Two files named `figures/f2-truncation-v1.2.0-1.png` and
+`figures/f7-frames-v1.2.0-1.png` appeared in the tree and were committed. They
+are filesystem duplicates --- the `-1` suffix a Windows or sync layer appends on
+a write collision --- not artefacts of anything. They are removed.
+
+### T-38, carried out: part (2) done, and one of its premises was wrong
+
+**The PI's order was (2) then (1), 2026-10-14.** Part (2) --- D6 printing bounds
+as bounds --- is done. `RESIDUAL_FLOOR = 1e-12`, taken relative to the largest
+transfer at the same $k$: above $\ell\simeq k\Delta\eta$ the Bessel projection
+dies, and **13 of the table's 42 entries** sit below it, at magnitudes down to
+$10^{-211}$. They now read `below floor` instead of four digits of libm noise,
+which is what put numbers into a committed record that no two machines will ever
+agree on.
+
+**The premise that part (2) would also fix the record's headline was wrong, and
+checking it is the only reason that is known.** The reasoning had been: the ratio
+of two sub-floor numbers is an $O(1)$ quantity that looks like a result, several
+such rows reported `rel` near 1.85, and the record's *worst relative difference*
+was 1.859 --- so the headline was presumably being set by rows where both frames
+return zero. Excluding **all** of them moves it to **1.853**. It was not. There
+are modes where the two frames' transfers genuinely differ by more than 100%,
+and that number is a measurement. The floor buys reproducibility of the file and
+nothing else, which is still worth having and is less than was claimed for it.
+
+### Part (1): lowering the significant-figure cut cannot work, and here is why
+
+The obvious reading of `SIGNIFICANT_FIGURES = 9`'s own comment --- *"if a run
+there fails at nine, this comes down"* --- is that the cut is too tight. It is
+not. `outputs/line-of-sight-field.csv` agrees to **9.69** significant figures
+against a gate of **9** and fails anyway, because the canonicaliser **rounds to a
+9-figure string and hashes it**. Rounding has boundaries everywhere, and a pair
+agreeing to $s$ figures straddles an $N$-figure boundary with probability about
+$10^{N-s}$:
+
+| cut $N$ | straddle probability per number | expected straddles in that file (~8 800 numbers) |
+|---|---|---|
+| 9 | $2\times10^{-1}$ | ~1 800 |
+| 7 | $2\times10^{-3}$ | ~18 |
+| 6 | $2\times10^{-4}$ | ~2 |
+| 5 | $2\times10^{-5}$ | ~0.2 |
+
+Lowering the cut makes failure rarer, never impossible, and buys that rarity by
+throwing away precision the comparison should be keeping. **No deterministic map
+from the reals to strings can implement a tolerance**: hashing tests exact
+equality of the image, and the claim being made is *agreement to within
+something*.
+
+So part (1) is not a parameter change. The gate has to hold **both** value sets
+to compare them, and a hash holds neither. Three shapes it could take, for the
+PI:
+
+1. **The drift gate moves inside `run_all.py --strict`**, which is the one place
+   that has both: the artefact already in the tree and the one it has just
+   regenerated. It compares values with a stated tolerance before overwriting.
+   The manifests stay as fingerprints and stop being the numeric gate.
+2. **A separate comparison against the release archive**, which the bundle
+   already builds: `check_numeric_agreement.py` takes two trees and reports the
+   worst significant-figure agreement per file. That is the claim, stated
+   directly, and it is what a third party would actually run.
+3. **Keep hashing, report rather than block.** Cheapest, and it weakens the only
+   gate the bundle calls binding. Recorded for completeness; not recommended.
+
+(1) and (2) are the same measurement from two directions and could share one
+implementation. **Nothing is changed until the PI picks**, because `--check`'s
+verdict is a released claim about what this bundle guarantees.
