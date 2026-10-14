@@ -29,7 +29,15 @@
 
 \title{Computational Supplement\\\large Frame covariance of CMB lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{v1.0.0 --- First public analytical reproducibility release\\5 October 2026}
+\date{\textbf{v1.2.0-dev} --- the source decomposition in two frames, Appendix~E
+  made quantitative, and the $k$ grid carried to the damping scale\\
+  Last release: v1.1.0. First public analytical reproducibility release: v1.0.0,
+  5 October 2026\\14 October 2026}
+% The FILE NAME keeps its -v1.0.0 suffix: the house convention is that the
+% suffix marks the release an artefact was INTRODUCED in, which is why
+% config-v1.7.7.json survives into a v2.2.0 release in the exemplar, and why
+% renaming it would break the v1.1.0 release asset's link. The date line above
+% is content, not a label, so it states the release it actually describes.
 
 \begin{document}
 \maketitle
@@ -684,12 +692,37 @@ The release route is
 python scripts/run_all.py --strict
 \end{verbatim}
 which regenerates every output, figure and table, recomputes the SHA-256
-manifests, and fails if any artefact differs from the recorded hash.
-\texttt{FILE-MANIFEST-SHA256.txt} is the release fingerprint;
+manifests, and reports any artefact that differs from the recorded hash.
+
+\textbf{Three manifests, and only one of them binds.}
+\texttt{PORTABLE-MANIFEST-SHA256.txt} is the release fingerprint: it
+\emph{excludes the renderings} --- everything under \texttt{figures/} and
+\texttt{supplementary-materials/}, and every \texttt{.png} and \texttt{.pdf} ---
+and canonicalises numeric output to nine significant figures, so a machine that
+did not generate the artefacts can still satisfy it. A mismatch there is
+release-blocking. \texttt{FILE-MANIFEST-SHA256.txt} is then a
+\emph{within-machine} drift check, reported by artefact class, where only an
+\texttt{exact}-class mismatch blocks.
 \texttt{IMMUTABLE-MANIFEST-SHA256.txt} covers frozen reference material, where
 any change is release-blocking. The corrections record is append-guarded rather
 than frozen, because it must take new findings: appending is permitted and
 rewriting recorded bytes is not.
+
+\paragraph{Why nine PNGs always report as drifted.} Every \texttt{.png} written
+into a working copy through the Claude desktop bridge gains a 5\,770-byte
+\texttt{caBX} provenance chunk, inserted immediately after \texttt{IHDR} by that
+application and not by anything in this bundle. The pixels are bit-identical ---
+\texttt{IHDR}, \texttt{pHYs} and every \texttt{IDAT} chunk match exactly --- and
+the \texttt{.pdf} of the same figure round-trips byte-for-byte, as does every
+\texttt{.csv} and every source file. These nine therefore sit in the
+\texttt{rendered} class, are reported and do not block, which is the rule
+finding~\textbf{T-15} wrote for a different cause with the same shape: fonts,
+freetype and \TeX~Live versions, where \emph{a PNG that differs in hinting
+carries no scientific difference}. \textbf{The PDF is the authoritative artefact
+of every figure in this bundle}; the PNG is a convenience copy. Finding
+\textbf{T-36}. The drift is explained here rather than silenced by
+canonicalising PNGs, because a manifest that stopped reporting a class of change
+for tidiness would stop reporting real ones too.
 
 Weights are carried as exact rationals rather than floating-point numbers
 wherever a sign or an $\ell$-weight is asserted.

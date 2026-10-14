@@ -141,3 +141,73 @@ def test_the_readme_does_not_claim_a_tag_that_does_not_exist():
     if states[1]:
         assert "## v1.1.0 — 3×R" in status, (
             "the README says v1.1.0-rc and the status has already shipped it")
+
+
+# --------------------------------------------------------------------------
+# Version labels, which have now gone stale twice.
+# --------------------------------------------------------------------------
+
+
+def _tree_version_from(text: str, pattern: str) -> str:
+    import re
+
+    m = re.search(pattern, text, re.MULTILINE)
+    assert m, f"no version matched {pattern!r}"
+    return m.group(1)
+
+
+def test_the_readme_and_the_supplement_name_the_same_tree_version():
+    r"""The supplement moves **once**, at v1.2.0, so its date line is the single
+    place a version label has to be flipped at tag time --- and a label flipped
+    by hand is a label that drifts.
+
+    It drifted twice before this test existed. On 2026-10-14 the README header
+    still read ``Version: v1.1.0`` while its own verification section said
+    ``this tree is v1.2.0-dev``, and the supplement's ``\date`` still read
+    ``v1.0.0 --- First public analytical reproducibility release, 5 October
+    2026`` after two releases and a rewritten frames section. Both were caught
+    by the PI reading them, which is finding **T-16**'s lesson arriving by the
+    only route the bundle had left open.
+
+    **The file names are deliberately not checked.** The house convention is
+    that a version suffix marks the release an artefact was *introduced* in ---
+    `config-v1.7.7.json` survives into a v2.2.0 release in the exemplar --- so
+    `SUPPLEMENTARY-MATERIAL-v1.0.0.tex` keeps its name while its content moves.
+    What must agree is what the documents *say*, which is content.
+    """
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    supplement = (ROOT / "SUPPLEMENTARY-MATERIAL-v1.0.0.tex").read_text(encoding="utf-8")
+
+    header = _tree_version_from(readme, r"^Version:\s+\*\*(v[0-9.]+(?:-dev)?)\*\*")
+    status = _tree_version_from(readme, r"this tree is (v[0-9.]+(?:-dev)?)")
+    dated = _tree_version_from(supplement, r"\\date\{\\textbf\{(v[0-9.]+(?:-dev)?)\}")
+
+    assert header == status == dated, (
+        f"version labels disagree: README header {header!r}, README verification "
+        f"status {status!r}, supplement date line {dated!r}. The supplement moves "
+        f"once, at the release, so all three flip together or none do."
+    )
+
+
+def test_the_released_version_is_named_consistently_too():
+    """The last *released* version is one statement, and it is made twice."""
+    import re
+
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    header = re.search(r"\*\*Last release: (v[0-9.]+)\*\*", readme)
+    status = re.search(r"\*\*Released as (v[0-9.]+);", readme)
+    assert header and status, "the README must name its last release in both places"
+    assert header.group(1) == status.group(1), (
+        f"README header says the last release is {header.group(1)}, its verification "
+        f"section says {status.group(1)}")
+
+    # CITATION.cff is the one version statement a machine acts on: GitHub's
+    # "Cite this repository" and Zenodo both read it, so a version there that is
+    # not tagged asserts a release nobody can fetch. It tracks the *released*
+    # version, never the tree's.
+    cff = re.search(r'^version:\s*"([0-9.]+)"',
+                    (ROOT / "CITATION.cff").read_text(encoding="utf-8"), re.MULTILINE)
+    assert cff, "CITATION.cff has no version field"
+    assert f"v{cff.group(1)}" == header.group(1), (
+        f"CITATION.cff says {cff.group(1)}, the README says the last release is "
+        f"{header.group(1)}. Zenodo reads the first of those.")

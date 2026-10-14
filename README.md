@@ -1,6 +1,9 @@
 # 1+3 covariant CMB anisotropies reproducibility bundle
 
-Version: v1.1.0 — Peebles recombination, and the frame specialisation made numerical.
+Version: **v1.2.0-dev** — the source decomposition in two frames (F5), Appendix E
+made quantitative (F2), the frame specialisation drawn (F7), and the $k$ grid
+carried out to the damping scale. **Last release: v1.1.0** — Peebles recombination
+and the frame specialisation made numerical.
 
 Supplementary code and materials for: Tim Gebbie, *"Frame covariance of CMB
 lensing in the exact $1+3$ covariant radiation hierarchy,"* arXiv: identifier
@@ -314,12 +317,20 @@ git log --oneline -1 v1.1.0                            # where does it point
 git merge-base --is-ancestor v1.1.0 HEAD; echo $?      # 0 if it is behind the tip
 ```
 
-Finding **T-30**. That is decision **S27**, and
-`provenance/RELEASE-STATUS-v1.md` carries the rung of everything in the tree.
-It is **generated and verified**: each rung names the module, object, test or
-harness entry that earns it, and a claim whose evidence is missing fails the
-run rather than appearing in the file. It caught five of its own claims on its
-first pass.
+Finding **T-30**.
+
+**Nine PNGs will always report as drifted, and that is not a defect of this
+bundle.** Every `.png` written to a working copy through the Claude desktop
+bridge gains a 5 770-byte `caBX` provenance chunk, inserted after `IHDR` by the
+application rather than by anything here; the pixels are bit-identical and the
+`.pdf` of the same figure round-trips byte-exact. This is why the manifests are
+split. **`PORTABLE-MANIFEST-SHA256.txt` is what binds** — it excludes the
+renderings entirely and canonicalises numerics to nine significant figures, and
+a mismatch there is release-blocking. `FILE-MANIFEST-SHA256.txt` is a
+*within-machine* drift check reported by class, and these nine are class
+`rendered`, which is reported and does not block. **The PDF is the authoritative
+artefact of every figure**; the PNG is a convenience copy. Findings **T-15** and
+**T-36**.
 
 The regression suite passes and `python scripts/run_all.py --strict` reports
 `CLEAN` — run `pytest -q` for the current counts rather than trusting a number
