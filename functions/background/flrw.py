@@ -41,6 +41,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from functools import cached_property
 
+import math
+
 import numpy as np
 from scipy.integrate import quad
 from scipy.interpolate import CubicSpline
@@ -188,3 +190,67 @@ class Background:
 # law and the late-time integrated term and nothing else.
 CDM_MODEL = Background(omega_m=1.0, omega_lambda=0.0, omega_r=0.0, h0=1.0)
 LCDM_MODEL = Background(omega_m=0.3, omega_lambda=0.7, omega_r=0.0, h0=1.0)
+
+
+# ---------------------------------------------------------------------------
+# The comparison model --- criterion 5b only.
+# ---------------------------------------------------------------------------
+
+#: Photon energy density today, as $\Omega_\gamma h^2$, **derived from $T_{CMB}$
+#: and the physical constants rather than quoted.**
+#:
+#: $\rho_\gamma = 4\sigma_{SB}T_0^4/c^3$ against
+#: $\rho_{crit}h^{-2} = 3H_{100}^2/8\pi G$. Deriving it rather than pasting
+#: $2.47\times10^{-5}$ is what makes the agreement with CAMB a *check*: an
+#: independent route to $z_{eq}$ that either lands on theirs or does not.
+#: It lands on 5756.0 against CAMB's 5756.0.
+def _omega_gamma_h2(t_cmb_k: float = 2.7255) -> float:
+    sigma_sb, c, g_newton = 5.670374419e-8, 2.99792458e8, 6.67430e-11
+    mpc_m = 3.0856775814913673e22
+    rho_gamma = 4.0 * sigma_sb * t_cmb_k**4 / c**3
+    h100 = 100.0e3 / mpc_m
+    return float(rho_gamma / (3.0 * h100**2 / (8.0 * math.pi * g_newton)))
+
+
+OMEGA_GAMMA_H2 = _omega_gamma_h2()
+
+#: **The stamped Planck 2018 VI column, with a radiation era, for criterion 5b
+#: and nothing else.**
+#:
+#: `CDM_MODEL` and `LCDM_MODEL` both carry $\Omega_r=0$: *Annals II*'s \S8.3.2
+#: standard CDM is Einstein--de Sitter, and this bundle's $\Lambda$CDM extension
+#: kept the same matter-only background. A matter-only background **has no
+#: equality**, so it has no $z_{eq}$, no radiation-driven decay of the potential
+#: and a sound horizon belonging to a different cosmology from anything CAMB or
+#: CLASS will produce. Comparing acoustic peak positions from such a background
+#: against an external code measures the missing radiation era and reads as a
+#: failure of the reconstruction. That is **finding T-37**.
+#:
+#: This third constant exists so that 5b has a like-for-like cosmology **without
+#: moving a single released number**: `CDM_MODEL` and `LCDM_MODEL` are untouched,
+#: and nothing outside the 5b path refers to this one.
+#:
+#: **Photons only, $N_{eff}=0$,** and that is a deliberate specialisation rather
+#: than an omission. This bundle's hierarchy has one radiation species. Adding
+#: three massless neutrinos to the background would change the expansion without
+#: adding anything to the driving, which is the same error as comparing a
+#: quantity across two frames. The external codes are specialised to match:
+#: CAMB `nnu=0`, CLASS `N_ur=0` with `YHe` given explicitly, because its
+#: BBN interpolation does not cover $N_{eff}=0$. Both then report
+#: $z_{eq}=5756.0$ and a first acoustic peak at $\ell=206$.
+PLANCK_OMEGA_B_H2 = 0.02237
+PLANCK_OMEGA_C_H2 = 0.1200
+PLANCK_H = 0.6736
+PLANCK_N_S = 0.9649
+PLANCK_A_S = 2.1e-9
+PLANCK_Y_HE = 0.245
+
+_PLANCK_OM = (PLANCK_OMEGA_B_H2 + PLANCK_OMEGA_C_H2) / PLANCK_H**2
+_PLANCK_OR = OMEGA_GAMMA_H2 / PLANCK_H**2
+
+PLANCK_MODEL = Background(
+    omega_m=_PLANCK_OM,
+    omega_lambda=1.0 - _PLANCK_OM - _PLANCK_OR,
+    omega_r=_PLANCK_OR,
+    h0=1.0,
+)

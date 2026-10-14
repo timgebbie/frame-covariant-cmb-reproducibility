@@ -31,7 +31,7 @@ harness entry is missing fails the script instead of appearing here.
 | **S** | the frame change made numerical | `functions.spectra.frame_transform`; `test_T27_the_dipole_carries_the_same_inverse_k_as_the_monopole` |
 | **S** | criterion 2's curvature half | `functions.frames`; `scripts/diagnostic_d2_roundtrip.py` |
 
-## v1.2.0 — 4×R, 5×C, 2×P
+## v1.2.0 — 4×R, 6×C, 1×P
 
 - **Gate:** criterion 5b, which needs CAMB and CLASS reference data
 - **Gate:** the conventions sheet's lambda (C3.5), which F5 stands on
@@ -48,8 +48,8 @@ harness entry is missing fails the script instead of appearing here.
 | **C** | the generic source derivatives Annals II never wrote | `functions.spectra.coefficients`; `test_the_rank_two_control_passes_symbolically`; `test_no_numerical_derivative_survives_in_the_c2_chain`; rank 2 closed from Appendix G with a control; rank 1 assembled from printed equations and still carrying (*) |
 | **C** | the CDM frame as a second frame | `functions.spectra.coefficients`; `test_the_frame_shift_of_every_coefficient_is_the_closed_form_one`; `test_B13_the_printed_n_t1_does_not_close_and_the_general_rule_does`; `test_T24_the_closure_is_an_identity_in_both_conventions` |
 | **C** | the ell ceiling removed, 507 -> 2000 | `functions.spectra.bessel_table`; `test_unavailable_ell_is_refused`; `test_the_coefficients_are_exact_rationals_not_floats`; findings T-17 and T-18 |
+| **C** | criterion 5b against CAMB and CLASS | `scripts/make_reference_spectra.py`; `test_camb_and_class_agree_with_each_other_and_that_sets_the_floor`; `test_criterion_5b_is_not_quietly_skipped`; reference half complete: CAMB 2.0.5 and CLASS v3.4.1 specialised to N_eff=0, no reionisation, no lensing, helium explicit; both report z_eq=5756.0 and a first peak at l=206, which PLANCK_MODEL reaches independently by deriving Omega_gamma h^2 from T_CMB. Mutual difference measured per band -- 0.125% / 0.370% / 0.223% -- and the gated middle one is the threshold, per S4b. Stamped in reference/REFERENCE-STAMP-v1.2.0.md; **blocked:** **the potentials have no k in them (T-37)**: Phi = D/a is handed to every mode, so the acoustic driving has no radiation-era suppression. transfer_function exists in functions/spectra/transfer.py and nothing calls it. Wiring it moves F2, F5 and F7, so it is the PI's to see first; **blocked:** the frame each code evolves in must be VERIFIED against its own documentation, not assumed: the supplement's table is recorded as stated. A quantity compared across two frames is not the same quantity |
 | **P** | the stamped Planck 2018 parameter set | `functions.background.flrw`; provenance/COSMOLOGICAL-PARAMETERS-v1.md; the paper's own stated baseline column, not one chosen here; **blocked:** recorded but not wired into a model constant, and nothing checks the stamp against the release's round numbers --- the ladder caught this one on its first run |
-| **P** | criterion 5b against CAMB and CLASS | **blocked:** reference data must be stamped under reference/ and not vendored; **blocked:** the tolerance is the two codes' mutual difference (S4b), which has not been measured; **blocked:** the frame each code evolves in must be VERIFIED against its own documentation, not assumed: the supplement's table is recorded as stated. A quantity compared across two frames is not the same quantity |
 
 ## v1.5.0 — 2×P
 

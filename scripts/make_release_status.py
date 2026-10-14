@@ -158,10 +158,24 @@ ARTEFACTS: list[Artefact] = [
                   "instead, worst ratio 1.25x, because (102) builds every l from "
                   "the same three C_A --- finding T-31. Its environment is built "
                   "for the k grid rather than the probe modes --- finding T-34"),
-    Artefact("criterion 5b against CAMB and CLASS", "P", "v1.2.0",
-             blocks=("reference data must be stamped under reference/ and not vendored",
-                     "the tolerance is the two codes' mutual difference (S4b), "
-                     "which has not been measured",
+    Artefact("criterion 5b against CAMB and CLASS", "C", "v1.2.0",
+             script="scripts/make_reference_spectra.py",
+             tests=("test_camb_and_class_agree_with_each_other_and_that_sets_the_floor",
+                    "test_criterion_5b_is_not_quietly_skipped"),
+             note="reference half complete: CAMB 2.0.5 and CLASS v3.4.1 "
+                  "specialised to N_eff=0, no reionisation, no lensing, helium "
+                  "explicit; both report z_eq=5756.0 and a first peak at l=206, "
+                  "which PLANCK_MODEL reaches independently by deriving "
+                  "Omega_gamma h^2 from T_CMB. Mutual difference measured per "
+                  "band -- 0.125% / 0.370% / 0.223% -- and the gated middle one "
+                  "is the threshold, per S4b. Stamped in "
+                  "reference/REFERENCE-STAMP-v1.2.0.md",
+             blocks=("**the potentials have no k in them (T-37)**: Phi = D/a is "
+                     "handed to every mode, so the acoustic driving has no "
+                     "radiation-era suppression. transfer_function exists in "
+                     "functions/spectra/transfer.py and nothing calls it. "
+                     "Wiring it moves F2, F5 and F7, so it is the PI's to see "
+                     "first",
                      "the frame each code evolves in must be VERIFIED against its "
                      "own documentation, not assumed: the supplement's table is "
                      "recorded as stated. A quantity compared across two frames "

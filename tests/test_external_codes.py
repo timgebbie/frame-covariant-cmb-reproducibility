@@ -30,6 +30,10 @@ CANONICAL = {
     "ns": 0.9649,
     "tau": 0.0,      # no reionisation: this bundle does not model it
     "As": 2.1e-9,
+    # Helium ON and explicit. Finding T-37: CLASS cannot infer it from BBN at
+    # N_eff = 0, and leaving the two codes to disagree about helium would put a
+    # recombination difference into a number meant to measure a reconstruction.
+    "YHe": 0.245,
 }
 
 #: (name, lo, hi_exclusive, is_a_gate)
@@ -115,6 +119,10 @@ def external_spectra():
     pars.set_cosmology(
         H0=CANONICAL["H0"], ombh2=CANONICAL["ombh2"], omch2=CANONICAL["omch2"],
         tau=CANONICAL["tau"], mnu=0.0, num_massive_neutrinos=0,
+        # N_eff = 0. This hierarchy has ONE radiation species; three massless
+        # neutrinos would change the expansion without adding anything to the
+        # driving. Finding T-37, and scripts/make_reference_spectra.py.
+        nnu=0.0, YHe=CANONICAL["YHe"],
     )
     pars.InitPower.set_params(As=CANONICAL["As"], ns=CANONICAL["ns"])
     pars.set_for_lmax(2500, lens_potential_accuracy=0)
@@ -128,7 +136,15 @@ def external_spectra():
         "output": "tCl", "lensing": "no", "l_max_scalars": 2500,
         "omega_b": CANONICAL["ombh2"], "omega_cdm": CANONICAL["omch2"],
         "h": CANONICAL["H0"] / 100.0, "A_s": CANONICAL["As"], "n_s": CANONICAL["ns"],
-        "tau_reio": CANONICAL["tau"], "N_ncdm": 0,
+        "N_ncdm": 0,
+        # **Not `tau_reio: 0`.** CLASS fits z_reio to a target tau and cannot
+        # reach zero: it fails inside thermodynamics_solve. reio_none is the
+        # switch that actually turns reionisation off.
+        "reio_parametrization": "reio_none",
+        # N_ur = 0 to match CAMB's nnu = 0, and YHe explicit because CLASS's
+        # BBN interpolation does not cover N_eff = 0 and fails in
+        # thermodynamics_helium_from_bbn without it.
+        "N_ur": 0.0, "YHe": CANONICAL["YHe"],
     })
     cosmo.compute()
     raw = cosmo.raw_cl(2500)
@@ -162,8 +178,15 @@ def test_camb_and_class_agree_with_each_other_and_that_sets_the_floor(external_s
         floors[name] = _band_difference(s["ell"], s["camb"], s["class"], lo, hi)
         print(f"  {name:22s} {lo:5d} <= l < {hi:5d}   CAMB vs CLASS: {floors[name]:.3%}")
 
-    # they must agree well in the band that tests a reconstruction
+    # They must agree well in the band that tests a reconstruction. Measured
+    # 2026-10-14 on CAMB 2.0.5 and CLASS v3.4.1, specialised as above:
+    # 0.125% / 0.370% / 0.223%. The gated band's floor is criterion 5b's
+    # acceptance threshold, and it is recorded in
+    # reference/REFERENCE-STAMP-v1.2.0.md because it was measured, not chosen.
     assert floors["acoustic peaks"] < 0.05, floors
+    assert floors["acoustic peaks"] > 0.0, (
+        "a floor of exactly zero means the two codes were not independently "
+        "computed; check that both actually ran")
 
 
 @pytest.mark.skip(

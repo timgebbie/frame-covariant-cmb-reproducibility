@@ -485,10 +485,30 @@ v1.5.0: it is a picture of exactly what stops cancelling.
 Criterion~5b compares this bundle against CAMB and CLASS. That comparison is
 only meaningful if the frame each code evolves in is known, because a quantity
 compared across two frames is not the same quantity. The correspondence below is
-\textbf{recorded as stated and is not yet verified against the codes' own
-documentation or source}; verifying it is a \textbf{precondition of 5b}, not an
-afterthought, and is listed as such in
-\texttt{provenance/RELEASE-STATUS-v1.md}.
+\textbf{verified where it could be, and recorded at its real strength where it
+could not}; verifying it is a \textbf{precondition of 5b}, not an afterthought.
+
+\textbf{CLASS is verified from its own source}, at \texttt{classy v3.4.1}.
+\texttt{perturbations.c} carries the comment \emph{``cdm velocity vanishes in
+the synchronous gauge''}, and \texttt{index\_pt\_theta\_cdm} is allocated as an
+evolved variable only when \texttt{gauge == newtonian}: in synchronous gauge
+$\theta_C$ is not evolved because it is zero. The decisive line is CLASS's own
+error message --- \emph{``In the synchronous gauge, it is not self-consistent to
+assume no CDM: the latter is used to define the initial timelike
+hypersurface''} --- which says, in the code's own words, that \textbf{its
+synchronous gauge is realised by the CDM congruence}. That is the CDM threading
+of the table above, $u^a=u^a_{\!_C}$. Both \texttt{gauge = synchronous} and
+\texttt{gauge = newtonian} were run and computed.
+
+\textbf{CAMB is corroborated but not verified to the same standard.} Its Python
+layer exposes \texttt{v\_newtonian\_cdm} and \texttt{v\_newtonian\_baryon} as
+\emph{derived outputs}, notes that \emph{``L=1 dipoles are Newtonian Gauge''},
+and carries an explicit \texttt{frame} argument for sources that are not
+frame-invariant --- which is what a code evolving in one frame and converting on
+output looks like. That is corroboration from an interface, not a reading of the
+evolution equations, and the decisive statement lives in CAMB's own covariant
+formulation paper rather than in anything this bundle inspected. It is recorded
+at that strength and no higher.
 
 \begin{center}\small
 \begin{tabular}{@{}p{0.17\linewidth}p{0.36\linewidth}p{0.39\linewidth}@{}}

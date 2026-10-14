@@ -2959,3 +2959,82 @@ stripping ancillary chunks — would make the drift line disappear, and would al
 make the byte manifest stop reporting a real class of change for the sake of
 tidiness. The bundle's own preference, stated at T-16, is to explain an alarm
 rather than silence it.
+
+---
+
+## T-37 — the potentials have no $k$ in them, and criterion 5b cannot close until they do
+
+**Found** 2026-10-14, building the comparison cosmology for criterion 5b.
+**Status:** the background half is fixed. The driving half is **open**, and
+fixing it would move figures the PI has just accepted. **Raised, not taken.**
+
+### What was fixed
+
+`CDM_MODEL` and `LCDM_MODEL` both carry $\Omega_r = 0$. *Annals II*'s \S8.3.2
+standard CDM is Einstein--de Sitter and this bundle's $\Lambda$CDM extension kept
+the same matter-only background. **A matter-only background has no equality**,
+so no $z_{eq}$, no sound horizon that any external code would recognise, and a
+first acoustic peak in the wrong place for reasons that have nothing to do with
+the reconstruction.
+
+`PLANCK_MODEL` now carries the stamped Planck column with a photon-only
+radiation era, $\Omega_\gamma h^2$ **derived** from $T_{CMB}=2.7255$ K and the
+physical constants rather than quoted. It reaches
+
+$$z_{eq} = \Omega_m/\Omega_r - 1 = \mathbf{5756.0}$$
+
+against CAMB's 5756.0 and CLASS's 5756.0, by an independent route. The released
+models are untouched and nothing outside the 5b path refers to the new one.
+
+### What is not fixed, and it is larger
+
+`functions.spectra.potentials.potentials` returns
+
+$$\Phi_A(\eta) = D(\eta)/a(\eta),$$
+
+normalised at the first grid point. **There is no $k$ in it.** Every mode is
+handed the same potential history, which is correct only for modes that stay
+super-horizon through the whole integration in pure matter domination.
+
+The acoustic peaks are *driven* by the potential. Without its $k$ dependence —
+the radiation-era suppression, Meszaros — the peak **positions** can be right
+while the peak **heights** at high $k$ are wrong by a large factor. Criterion
+5b's gated band is $30 \le \ell < 1000$, which is exactly the peaks.
+
+`functions/spectra/transfer.py` **already contains** `transfer_function` and
+`shape_parameter`, with tests covering the CDM asymptote, the bend, and B-10's
+divergence. **Nothing in `pipeline.py`, `sources.py` or `two_frame.py` calls
+it.** The piece exists and is not connected.
+
+### How large, measured rather than asserted
+
+The $\eta$ grid starts at $z = 3000$ and $z_{eq} = 5756$, so
+
+| | $\rho_r/\rho_m$ |
+|---|---|
+| grid start, $z=3000$ | **0.52** |
+| last scattering, $z_*\simeq1115$ | **0.19** |
+
+Radiation is half of matter where the integration begins and a fifth of it at
+last scattering. $\Phi \propto D/a$ is a matter-era solution being used across a
+range that is not matter-dominated at the accuracy the acoustic band needs.
+
+### Why this is raised rather than taken
+
+Wiring $T(k)$ into the per-mode potentials changes **the driving term**, so
+$C_0$, $C_1$ and $C_2$ change, so **F2, F5 and F7 all move** — three figures
+accepted the same day. That is not a silent fix, and the bundle's own rule is
+that a correction which moves accepted artefacts is the PI's to see first.
+
+**Proposed:** wire `transfer_function` into `coefficient_sets` behind an explicit
+flag, default off; regenerate F2, F5 and F7 both ways; bring both sets of numbers
+and let the PI choose which is v1.2.0's. The flag is removed once chosen, because
+a physics switch left in the tree is a second bundle nobody runs.
+
+**What 5b stands on meanwhile.** The reference half is complete and stamped:
+both codes specialised to $N_{eff}=0$, no reionisation, no lensing, helium
+explicit, both reporting $z_{eq}=5756.0$ and a first peak at $\ell=206$, with
+their mutual difference measured per band — **0.125%, 0.370%, 0.223%**, the
+middle one being the gate. The tolerance is a measurement, as S4b requires. What
+is missing is the bundle's side of the comparison, and this is what it is
+missing.
