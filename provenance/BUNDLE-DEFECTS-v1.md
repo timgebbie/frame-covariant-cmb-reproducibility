@@ -3258,3 +3258,61 @@ polarised. That may be a convention --- how $R$ and the factor of 6 are
 distributed differs between treatments --- or it may be something to check
 against the printed equation. It is recorded as a question because asserting
 from a remembered form is the **T-24** failure, and the printed page settles it.
+
+---
+
+## T-40 — three artefacts sit at R on a convention the tree still calls stipulated
+
+**Found** 2026-10-14, answering *"how far are we from v1.2.0?"* from the tree
+rather than from memory. **Status:** raised. The fix is a test, and it is cheap.
+
+`provenance/RELEASE-STATUS-v1.md` ends with the rule it is built on:
+
+> **Nothing sits at R with an unresolved convention beneath it.** That is the
+> single rule that keeps F5 at P.
+
+**That sentence is now false of the tree it describes.** F5 is at R. So are F2
+and F7, and all three stand on the same place: `provenance/conventions.md` row
+**C3.5**, the sign of a scalar's mode coefficient, which still reads
+
+> **STIPULATED HERE: `s_Q = −1`**, because that is the existing usage.
+
+C3.5 is also still listed as a **gate on v1.2.0** in the same file. So the
+release status simultaneously names the convention as open, declares the rule
+that nothing may sit at R above it, and lists three artefacts at R above it.
+
+### What is actually known, and what is not
+
+**Known.** Finding **T-24** established that the three-way closure is an
+identity in $\lambda$ and $r$ --- it holds for *every* convention --- so it was
+never evidence for this one, and
+`test_T24_the_closure_is_an_identity_in_both_conventions` now says so in a form
+that can never be misread as support again. That was a real result and it
+*removed* a false justification; it did not supply a true one.
+
+**Not known, in the tree.** The PI proposed a route that settles the sign with
+no mode convention at all: *"the physical sign of CDM falling into a well fixes
+$\lambda$"*. It was discussed and accepted in conversation. **It was never
+written down.** There is no test, no row in the conventions sheet marked
+resolved, and no entry in `DECISIONS`. Searching for `s_Q` finds it in
+`coefficients.py`, this file, `GENERIC-SOURCE-DERIVATIVES`, `OPEN-QUESTIONS` and
+the conventions sheet --- stipulated in every one.
+
+This is **T-30's pattern in a new place**: a claim settled in conversation and
+never converted into something the tree can check. The difference is that T-30's
+claim was about git and this one is about physics that the bundle *can* check.
+
+### The fix, which is a test and a negative control
+
+Cold dark matter falls **into** a potential well. That fixes the sign of the
+CDM velocity relative to $\Phi$ with no reference to any harmonic convention,
+which is the whole point of the PI's route. Concretely:
+`cdm_frame_shift(...).v` against `phi_a` for an overdensity has one admissible
+sign, and the opposite stipulation of $s_Q$ must make the CDM climb out of the
+well. **The control is the half that matters** --- S27's C rung requires a check
+that can fail, and T-24 is the finding that exists because a closure which
+cannot fail was cited as though it could.
+
+Until that test exists, the honest statements are: C3.5 is **stipulated**, three
+R-rung artefacts depend on it, and v1.2.0 cannot close on a rule its own status
+file declares and breaks.

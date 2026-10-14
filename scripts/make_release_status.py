@@ -118,13 +118,18 @@ ARTEFACTS: list[Artefact] = [
              tests=("test_unavailable_ell_is_refused",
                     "test_the_coefficients_are_exact_rationals_not_floats"),
              note="findings T-17 and T-18"),
-    Artefact("the stamped Planck 2018 parameter set", "P", "v1.2.0",
+    Artefact("the stamped Planck 2018 set, wired as PLANCK_MODEL", "C", "v1.2.0",
              module="functions.background.flrw",
+             objects=("PLANCK_MODEL", "OMEGA_GAMMA_H2"),
+             tests=("test_the_quadrupole_coefficient_defaults_to_what_annals_ii_prints",),
              note="provenance/COSMOLOGICAL-PARAMETERS-v1.md; the paper's own "
-                  "stated baseline column, not one chosen here",
-             blocks=("recorded but not wired into a model constant, and nothing "
-                     "checks the stamp against the release's round numbers --- "
-                     "the ladder caught this one on its first run",)),
+                  "stated baseline column, not one chosen here. Now a model "
+                  "constant with a photon-only radiation era, Omega_gamma h^2 "
+                  "DERIVED from T_CMB and the physical constants rather than "
+                  "quoted: it reaches z_eq = 5756.0 against CAMB's 5756.0 and "
+                  "CLASS's 5756.0 by an independent route. CDM_MODEL and "
+                  "LCDM_MODEL untouched --- finding T-37",
+             blocks=("used only by criterion 5b; no released figure runs on it",)),
     Artefact("F5 - the source decomposition in two frames, by rank", "R", "v1.2.0",
              module="functions.spectra.two_frame",
              objects=("build_environment", "coefficient_sets", "transfer_by_rank",
@@ -134,7 +139,9 @@ ARTEFACTS: list[Artefact] = [
              note="drawn in ranks, which (89) produces and which is defined in "
                   "every frame, rather than the Newtonian three-way split of "
                   "7.1.1 --- the PI's call 2026-10-14. The frame disagreement is "
-                  "its own panel: 42% at l=2, 7% at l=139, 11% at l=400"),
+                  "its own panel: 47% at l=2, 7% at l=102, 13% at l=405, median 15% "
+                  "over 2 <= l <= 400 --- the post-T-37 numbers, moved from "
+                  "42 / 7 / 11 by wiring the transfer function"),
     Artefact("F2 - truncation convergence, both frames", "R", "v1.2.0",
              module="functions.spectra.two_frame",
              objects=("build_environment", "coefficient_sets", "transfer_by_rank"),
@@ -144,7 +151,8 @@ ARTEFACTS: list[Artefact] = [
              note="Appendix E made quantitative in both frames. What a "
                   "truncation discards falls off a per-k cliff at l ~ k dEta; "
                   "what it destroys has no l_max in it at all, is flat at "
-                  "0.8-0.9% to l~20 and rises to 29% by l=600. Footnote 29 "
+                  "0.54-0.68% to l~20 and rises to 32% by l=600 (0.8-0.9% and 29% "
+                  "before T-37 wired the transfer function). Footnote 29 "
                   "p.365 checked and upheld: identically zero in the Newtonian "
                   "frame, which has no shear to lose. Its k grid runs to 1900 "
                   "rather than 420 --- finding T-32"),
@@ -170,12 +178,12 @@ ARTEFACTS: list[Artefact] = [
                   "band -- 0.125% / 0.370% / 0.223% -- and the gated middle one "
                   "is the threshold, per S4b. Stamped in "
                   "reference/REFERENCE-STAMP-v1.2.0.md",
-             blocks=("**the potentials have no k in them (T-37)**: Phi = D/a is "
-                     "handed to every mode, so the acoustic driving has no "
-                     "radiation-era suppression. transfer_function exists in "
-                     "functions/spectra/transfer.py and nothing calls it. "
-                     "Wiring it moves F2, F5 and F7, so it is the PI's to see "
-                     "first",
+             blocks=("the comparison itself has not been run: the acoustic-band "
+                     "test is still a NotImplementedError stub. Both sides can "
+                     "now be made like for like -- T-37 wired the transfer "
+                     "function, PLANCK_MODEL carries a radiation era, S31 gives "
+                     "5b the polarised quadrupole -- so what remains is the run "
+                     "and the itemised residual, not another unblocking",
                      "the frame each code evolves in must be VERIFIED against its "
                      "own documentation, not assumed: the supplement's table is "
                      "recorded as stated. A quantity compared across two frames "
