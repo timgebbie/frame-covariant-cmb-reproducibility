@@ -555,3 +555,71 @@ def test_c35_s_q_cancels_from_every_ratio_and_so_no_physics_can_fix_it():
     # because the two differ by an overall factor that cancels throughout.
     for value in (+1, -1):
         assert sp.simplify((gradient / scalar).subs(s_q, value) + k) == 0
+
+
+def test_102_must_carry_the_visibility_and_substituting_the_opacity_wrecks_it():
+    r"""**(102) is the form in which the $\mathcal V$ substitution has already
+    been made. Finding T-42.**
+
+    `provenance/SOURCE-APPROXIMATIONS-v1.md`'s approximation **A-2** is about
+    the pipeline's sources (178) and (179), where the weight is a free choice
+    and $e^{-\kappa}$ --- (98)'s form --- is the one this bundle takes. The
+    same record says where that stops being true: *"the visibility substitution
+    enters at (102), described as a slow-decoupling correction."*
+
+    **So (102) carries $\mathcal V$ intrinsically**, and substituting
+    $e^{-\kappa}$ into its bracket is not a weighting choice --- it is using the
+    wrong equation. This stream made that substitution on 2026-10-14, reasoning
+    from A-2's heading without following its last paragraph, and it inverted the
+    physics: the rank-0/2 sectors went from 0.5% of $C_\ell$ to **99.5%**, which
+    is to say the rank-1 sector --- the one (110) says carries *everything* in
+    the Newtonian frame --- carried nothing.
+
+    This test is that signature, so the substitution cannot be made again
+    quietly. The control is the half that matters.
+    """
+    import numpy as np
+
+    from functions.spectra.angular import cl_covariant_route
+    from functions.spectra.bessel_table import BesselTable
+    from functions.spectra.integral_solution import required_multipoles
+    from functions.spectra.pipeline import primordial_power
+    from functions.spectra.two_frame import (
+        build_environment,
+        coefficient_sets,
+        transfer_by_rank,
+    )
+
+    ells = np.array([2, 5, 10, 20])
+    k_com = np.arange(0.05, 60.0, np.pi / 4.0)
+
+    def rank_share(weight_name: str) -> np.ndarray:
+        env = build_environment(float(k_com.max()), apply_transfer=False,
+                                line_of_sight_weight=weight_name)
+        needed = required_multipoles(ells)
+        table = BesselTable.build(
+            ell_max=int(needed.max()), ells=needed,
+            x_max=float(k_com.max() * (env.background.eta_0 - env.eta[0])) + 20.0)
+        total = np.zeros((ells.size, k_com.size))
+        rank1 = np.zeros_like(total)
+        for j, k in enumerate(k_com):
+            _, cdm = coefficient_sets(float(k), env)
+            parts = transfer_by_rank(ells, float(k), cdm, env, table)
+            total[:, j], rank1[:, j] = parts[-1], parts[1]
+        power = primordial_power(k_com, n_s=1.0, amplitude=1.0)
+        whole = np.array([cl_covariant_route(int(l), k_com, total[i], power)
+                          for i, l in enumerate(ells)])
+        one = np.array([cl_covariant_route(int(l), k_com, rank1[i], power)
+                        for i, l in enumerate(ells)])
+        return np.abs(whole - one) / np.abs(whole)
+
+    # The default. Measured 2026-10-14: 0.47% to 0.62% over 2 <= l <= 20, which
+    # is F2's published 0.54% at the quadrupole.
+    assert rank_share("printed").max() < 0.05, (
+        "the rank-0/2 sectors have taken over the spectrum: (102)'s weight has "
+        "been changed away from the visibility it is derived with. See T-42.")
+
+    # The control: substituting e^{-kappa} inverts it. 99.3% to 99.7% measured.
+    assert rank_share("opacity").min() > 0.9, (
+        "the control did not fail, so this test is not exercising (102)'s "
+        "weight at all")

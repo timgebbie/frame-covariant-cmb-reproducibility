@@ -460,7 +460,7 @@ cite.
 | **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMB lensing in the exact 1+3 covariant radiation hierarchy*. arXiv: identifier assigned on submission |
 | **Supplementary PDF** | [supplement-v1.0.0.pdf](supplementary-materials/supplement-v1.0.0.pdf) |
 | **GitHub repository** | [timgebbie/frame-covariant-cmb-reproducibility](https://github.com/timgebbie/frame-covariant-cmb-reproducibility) |
-| **ZivaHub/Figshare DOI** | [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509) — reserved, active on publication of v1.0.0. The **concept** DOI: it always resolves to the latest version, so it is the one to cite |
+| **ZivaHub/Figshare DOI** | [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509) — **live**. The **concept** DOI: it always resolves to the latest version, so it is the one to cite |
 | **Associated antecedent** | Gebbie, T.; Dunsby, P. K. S.; Ellis, G. F. R. (2000). *1+3 covariant cosmic microwave background anisotropies II: the almost-Friedmann–Lemaître model*. Annals of Physics **282**, 321–394. [doi:10.1006/aphy.2000.6034](https://doi.org/10.1006/aphy.2000.6034) |
 | **Code license** | MIT, see [`LICENSE`](LICENSE) |
 | **Supplement, text, figures and tables** | CC BY 4.0, see [`CONTENT-LICENSE.md`](CONTENT-LICENSE.md) |

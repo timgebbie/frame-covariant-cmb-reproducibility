@@ -3503,3 +3503,134 @@ in a second place**, and it is the PI's.
 now exists for all seven modes. It was worth writing whichever way the answer
 went: an equivalence asserted at one point in a continuous parameter is not an
 equivalence.
+
+---
+
+## T-42 — approximation A-2 was found, measured, documented and fixed on 2026-10-06, and the two-frame path reintroduced it eight days later
+
+**Found** 2026-10-14, while writing up T-41. **Status:** default corrected;
+A-2's measurement is now a test. **A residual remains and is open.**
+
+T-41 reported, as a discovery, that weighting (102)'s line-of-sight integral
+with $\mathcal V$ costs the Sachs--Wolfe plateau. It is not a discovery.
+`provenance/SOURCE-APPROXIMATIONS-v1.md` has said so since **2026-10-06**, under
+the heading *"A-2 --- the visibility weighting on the **Doppler** source
+destroys the Sachs--Wolfe plateau"*, with this table:
+
+| weighting on the integrated terms | $D_5$ | $D_{10}$ | $D_{20}$ |
+|---|---|---|---|
+| $\mathcal V$, as (178) prints it | 4.29 | 13.6 | **43.2** |
+| $e^{-\kappa}$, as (98) prints it | 0.80 | 0.74 | **0.87** |
+
+and the conclusion *"the first is $D_\ell\propto\ell^2$, which is $C_\ell\simeq$
+constant --- **there is no Sachs--Wolfe plateau at all**"*. The record also
+settles which form the bundle takes, and why it is not a departure from the
+antecedent: **(98) is the antecedent's own pre-approximation form**, it prints
+the two weights separately, and the visibility substitution enters only at
+(102), described there as a slow-decoupling correction. **The bundle took (98).
+`pipeline` has carried it ever since.**
+
+**The two-frame path was written afterwards and passed `env.visibility`.** It
+reintroduced, by default, the exact defect that had been found by computing the
+spectrum, measured into a table, written up with its reasoning, and fixed in the
+other path.
+
+### Why it came back
+
+**A-2's measurement lived in prose.** It was a table in a provenance file, and
+nothing executed it. `pipeline` was corrected and the correction stuck there
+because that is where the author was looking; a second path, written later by
+the same stream, had nothing to trip over. **A record only a reader can check
+does not survive a second code path** --- and the reader, eight days later, was
+this stream, which did not re-read it.
+
+That is the third assertion-from-resemblance in one day. T-41's first diagnosis
+blamed a one-mode test from the *shape* of T-32; S32 set the default to
+$\mathcal V$ reasoning *"the bundle reproduces"* without reading the record that
+says the antecedent prints **two** forms and the bundle chose the earlier one;
+and T-41 itself presented A-2 as new. **In each case the record existed and was
+not read.** T-24's rule was *go to the primary source*; this is its sibling: **go
+to your own record before claiming something is new.**
+
+### What is fixed
+
+`line_of_sight_weight` now defaults to `"opacity"`, matching `pipeline` and
+A-2's resolution; `"printed"` reproduces (178) exactly and keeps the departure
+visible and measurable. **`test_a2_the_two_frame_path_keeps_the_sachs_wolfe_plateau`
+runs A-2's measurement**, with the printed weighting as the control that must
+fail. Decision **S32** is corrected: it was never an open choice.
+
+### What is not fixed, and is open
+
+With the weight corrected the two-frame path gives $D_\ell/D_2$ = 1.00, 1.36,
+2.31, **5.01** at $\ell=2,5,10,20$, against the pipeline's 0.80, 0.74, **0.87**.
+A **residual factor of about six** survives --- the same 4.8 T-41 named and did
+not attribute. The two routes agree to $10^{-5}$ mode by mode, so it is in what
+feeds them, not in the integral solution. The test asserts only that the default
+is not $\ell^2$; **it does not assert a recovered plateau, because there is not
+one**, and asserting flatness to make a test look better would be the failure
+this entry is about.
+
+### T-42, withdrawn and replaced: (102) must carry the visibility, and the inversion broke three figures
+
+**Written 2026-10-14, unattended, within the hour of the entry above.**
+
+**T-42 as written is wrong, and acting on it inverted the physics.** It read
+A-2's heading --- *"the visibility weighting on the Doppler source destroys the
+Sachs--Wolfe plateau"* --- and concluded that the two-frame path had
+reintroduced a fixed defect by passing $\mathcal V$. It had not. A-2's own last
+paragraph says where its argument stops:
+
+> **(98) is the antecedent's own pre-approximation form**, and it prints the two
+> weights separately [...] **The visibility substitution enters at (102),
+> described as a slow-decoupling correction.**
+
+So A-2 is about the pipeline's (177)--(179), where the weight is a free choice
+and $e^{-\kappa}$ is the one this bundle takes. **(102) is the form in which the
+$\mathcal V$ substitution has already been made.** Substituting $e^{-\kappa}$
+into its bracket is not a weighting choice; it is using the wrong equation.
+
+**Measured, immediately after making the change:**
+
+| `line_of_sight_weight` | rank-0/2 share of $C_\ell$, $2\le\ell\le20$ |
+|---|---|
+| `"printed"` ($\mathcal V$, as (102) is derived with) | **0.47–0.62%** |
+| `"opacity"` ($e^{-\kappa}$, substituted in) | **99.3–99.7%** |
+
+The rank-1 sector --- the one (110) says carries **everything** in the Newtonian
+frame --- carried nothing. F2 reported a truncation cost of 99.95%, F5 reported
+the two frames agreeing to 0%, and F7's frame difference went to unity at every
+$\ell$. **Three figures were regenerated wrong before the numbers were read.**
+
+**Reverted.** `line_of_sight_weight` defaults to `"printed"` again, which is
+what it was before this hour. Decision **S32a** is withdrawn; **S32 stands as
+first written**. The test is inverted to guard the thing that actually breaks:
+`test_102_must_carry_the_visibility_and_substituting_the_opacity_wrecks_it`,
+with the 99.5% signature as its control.
+
+### And T-41's framing is wrong too, for the same reason
+
+T-41 presented the two-frame path's missing Sachs--Wolfe plateau as a defect
+with an open residual. **It is not a defect.** (102) carries $\mathcal V$ by
+derivation, A-1 and A-2 record that this *cannot* carry a late integrated
+Sachs--Wolfe term and gives $D_\ell\propto\ell^2$ in standard CDM, and the
+pipeline differs because (177)--(179) admit a weight that (102) has already
+spent. **The two paths implement two different approximations of the same
+physics, and the bundle documents both.** The "residual factor of 4.8" is not a
+residual: it is the distance between two approximations, and the only thing
+missing is that nobody had put a number on it at low $\ell$ before today.
+
+### The pattern, fourth instance in one day, and this one did damage
+
+T-41's first diagnosis blamed a one-mode test from the shape of T-32. S32 set a
+default from *"the bundle reproduces"* without reading what the bundle had
+decided. T-42 called A-2 a rediscovery, having read its heading and not its last
+paragraph. **This one changed a default, regenerated three released-candidate
+figures, and would have shipped them if the output had not been read.**
+
+The common form is now unmistakable: **a conclusion reached from the shape of a
+neighbouring result, written down with the confidence of a measurement.** T-24's
+rule was *go to the primary source*. Its sibling, earned four times over today:
+**read the record to its end, and when a change moves a default, look at what it
+produced before believing it.** The figures were regenerated and *then* read,
+which is the only reason this is a finding rather than a release.

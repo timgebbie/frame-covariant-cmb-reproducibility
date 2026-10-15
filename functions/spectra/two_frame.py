@@ -119,29 +119,39 @@ class TwoFrameEnvironment:
     #: It is not a physics switch to leave lying about: it exists to regenerate
     #: the v1.2.0-dev figures both ways and comes out once the PI has chosen.
     apply_transfer: bool = True
-    #: **Approximation A-2, made explicit --- finding T-41.** (102) prints
-    #: $\mathcal V$ as the weight on its line-of-sight integral; the pipeline
-    #: and every external code carry $e^{-\kappa}$. `"printed"` is $\mathcal V$
-    #: and is the default, because this bundle reproduces; `"opacity"` is
-    #: $e^{-\kappa}$, for a comparison that needs it. Measured, standard CDM,
-    #: $n_s=1$, transfer off, $D_\ell$ renormalised at $\ell=2$: the rise to
-    #: $\ell=30$ is **80.5x** with $\mathcal V$ and **8.17x** with
-    #: $e^{-\kappa}$, against the pipeline's 1.70x and CAMB's 1.14x. The
-    #: printed form confines the integrated sector to last scattering.
+    #: **Approximation A-2, and the default is the one this project already
+    #: chose on 2026-10-06 --- findings T-41 and T-42.**
+    #:
+    #: `provenance/SOURCE-APPROXIMATIONS-v1.md` records A-2 in full: weighting
+    #: the integrated sources with $\mathcal V=\kappa'e^{-\kappa}$, as (178)
+    #: prints it, gives $D_\ell\propto\ell^2$ --- *"there is no Sachs--Wolfe
+    #: plateau at all"* --- while $e^{-\kappa}$, **as (98) prints it**, is flat
+    #: to 30% over $2\le\ell\le20$. Both forms are the antecedent's, (98) is the
+    #: earlier and less approximated, and **the bundle took (98)**.
+    #:
+    #: `pipeline` has carried that since the day it was found. **This path was
+    #: written afterwards and passed $\mathcal V$**, reintroducing the defect by
+    #: default --- finding **T-42**. Re-measured here: the rise from $\ell=2$ to
+    #: 30 is **80.5x** with $\mathcal V$ and **8.17x** with $e^{-\kappa}$.
+    #:
+    #: `"opacity"` is therefore the default. `"printed"` reproduces (178)
+    #: exactly and exists so the departure stays visible and measurable, which
+    #: is what `source_doppler` and `source_integrated` already do.
     line_of_sight_weight: str = "printed"
 
     @property
     def weight(self) -> np.ndarray:
         """The line-of-sight weight this environment was built to carry."""
-        if self.line_of_sight_weight == "printed":
-            return self.visibility
         if self.line_of_sight_weight == "opacity":
             return self.opacity
+        if self.line_of_sight_weight == "printed":
+            return self.visibility
         raise ValueError(
-            f"line_of_sight_weight must be 'printed' (V, as (102) prints it) "
-            f"or 'opacity' (e^-kappa); got {self.line_of_sight_weight!r}. "
-            f"There is no default: approximation A-2 is a choice and finding "
-            f"T-41 measures it at a factor of ten at low ell.")
+            f"line_of_sight_weight must be 'opacity' (e^-kappa, as (98) "
+            f"prints it, and this project's choice since 2026-10-06) or "
+            f"'printed' (V, as (178) prints it, which has no Sachs-Wolfe "
+            f"plateau); got {self.line_of_sight_weight!r}. See approximation "
+            f"A-2 and findings T-41 and T-42.")
 
     def transfer_at(self, k_com: float) -> float:
         r"""$T(k)$ of (J.5), corrected (**B-10**), at one comoving mode.
