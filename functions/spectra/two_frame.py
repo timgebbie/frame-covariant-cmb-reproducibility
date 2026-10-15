@@ -46,7 +46,7 @@ from functions.spectra.coefficients import (
     newtonian_set,
 )
 from functions.spectra.decoupling import (
-    ANNALS_II_QUADRUPOLE,
+    F2_DEFAULT,
     RecombinationHistory,
     diffusion_scale,
 )
@@ -207,7 +207,7 @@ def build_environment(
     transfer_gamma: float = ANNALS_II_GAMMA,
     hubble_h: float = 0.5,
     apply_transfer: bool = True,
-    quadrupole: float = ANNALS_II_QUADRUPOLE,
+    f_2: float = F2_DEFAULT,
     line_of_sight_weight: str = "printed",
 ) -> TwoFrameEnvironment:
     r"""The $k$-independent half: background, recombination, potentials.
@@ -234,7 +234,7 @@ def build_environment(
 
     kappa_prime = np.interp(eta, recombination.eta, recombination.kappa_prime)
     k_d = diffusion_scale(recombination, r_of_eta=np.zeros_like(recombination.eta),
-                          quadrupole=quadrupole)
+                          f_2=f_2)
 
     return TwoFrameEnvironment(
         background=background, recombination=recombination, eta=eta,

@@ -357,16 +357,23 @@ F2_POLARISED = 3.0 / 4.0
 #: the coupled baryon-photon equations in (\ref{dif-damp-correct})"* --- the
 #: corrected equation, not the tight-coupling one. Changing this default is a
 #: decision, so it is named here rather than written into a call site.
-F2_DEFAULT = F2_TIGHT_COUPLING
-
-#: Kept for callers written before T-43 named the parameter. $\frac45 f_2^{-1}$
-#: at $f_2=1$.
-ANNALS_II_QUADRUPOLE = 0.8
-
-#: $\frac45 f_2^{-1}$ at $f_2=3/4$. Used by criterion 5b --- decision **S31**,
-#: whose reasoning T-43 corrects: this is *Annals II*'s own corrected
-#: coefficient, not a departure from it.
-POLARISED_QUADRUPOLE = 16.0 / 15.0
+#: **The bundle's $f_2$, and it is the corrected one.** *The PI, 2026-10-15:
+#: "f_2 the default should move to the corrected form."*
+#:
+#: (dif-damp-correct) is the form **the paper itself carries downstream**:
+#: \S*The Visibility Function* defines the damping envelope with *"diffusion
+#: damping, which will be derived from the coupled baryon-photon equations in
+#: (\ref{dif-damp-correct})"* --- the corrected equation, cited by label.
+#:
+#: **The two $f_2$ are alternatives, not a composition**, which the printed
+#: sentence alone does not settle but the numbers do: $\frac45(9/10)^{-1}=8/9$
+#: is the standard unpolarised quadrupole coefficient and
+#: $\frac45(3/4)^{-1}=16/15$ the standard polarised one, both measured from the
+#: same baseline by Kaiser and by Hu \& Sugiyama. Composing them would give
+#: $\frac45(27/40)^{-1}=32/27$, which is not a value anyone reports. So
+#: $f_2=3/4$ is the fully corrected figure and carries both effects.
+#: Finding **T-43**, decision **S31a**.
+F2_DEFAULT = F2_POLARISED
 
 
 def quadrupole_from_f2(f_2: float) -> float:
@@ -380,12 +387,14 @@ def diffusion_scale(
     history: RecombinationHistory,
     *,
     r_of_eta: np.ndarray | None = None,
-    quadrupole: float = ANNALS_II_QUADRUPOLE,
+    f_2: float = F2_DEFAULT,
 ):
     """k_D(eta) from (dif-damp), by the integral it implies.
 
-    `quadrupole` defaults to what *Annals II* prints. See
-    `POLARISED_QUADRUPOLE` for the one comparison that does not use it.
+    `f_2` is (dif-damp-correct)'s correction factor; the coefficient is
+    $\\frac45 f_2^{-1}$. It defaults to `F2_POLARISED`, the fully corrected
+    value the paper carries downstream. `F2_TIGHT_COUPLING` reproduces the
+    uncorrected (dif-damp).
 
     (dif-damp) prints the damping *rate*
 
@@ -405,7 +414,7 @@ def diffusion_scale(
     integrand = (
         1.0
         / (6.0 * np.clip(history.kappa_prime, 1e-30, None))
-        * (r**2 + float(quadrupole) * (1.0 + r))
+        * (r**2 + quadrupole_from_f2(f_2) * (1.0 + r))
         / (1.0 + r) ** 2
     )
     accumulated = np.concatenate(([0.0], cumulative_trapezoid(integrand, eta)))

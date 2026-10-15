@@ -289,6 +289,87 @@ left to inference.
 \input{tables/translations-v1.0.0.tex}
 
 
+\section{The generic source derivatives}
+\emph{Decision \textbf{S26}. Written from
+\texttt{provenance/GENERIC-SOURCE-DERIVATIVES-v1.md}, which carries the working
+and the open items.}
+
+\paragraph{What (102) needs, and what the paper never wrote.} (102)'s integrand
+is $C_0-C_1'+C_2''$ and its boundary terms carry $C_2'(\eta_*)$. With (90),
+$$-C_0\simeq+\tfrac52 a\mathcal B_2,\qquad
+  -C_1\simeq\tfrac1k\big(a\mathcal B_1+\kappa'v_B\big),\qquad
+  -C_2\simeq\tfrac1{k^2}a\mathcal B_2,$$
+so the solution needs $(a\mathcal B_1)'$, $(a\mathcal B_2)'$ and
+$(a\mathcal B_2)''$ \textbf{for arbitrary $u^a$}. \emph{Annals~II} prints these
+only after the Newtonian specialisation has removed the shear, which is exactly
+the specialisation this bundle declines to make early. The derivations are
+therefore assembled here, and this section records what is closed, what is
+assembled, and what is open.
+
+\paragraph{The three sources, by rank, with no frame chosen.} From \S4's
+integrated Boltzmann equation
+$\dot\tau+e^a\mathrm D_a\tau+\mathcal B\simeq C[x,e]$,
+$$\mathcal B=-\tfrac13\mathrm D^a\tau_a
+  +\big(\mathrm D_a\ln T+A_a\big)e^a+\sigma_{ab}e^ae^b,$$
+giving $\mathcal B_0=-\tfrac13\mathrm D^a\tau_a$,
+$\mathcal B_1=\mathrm D_a\ln T+A_a$ and $\mathcal B_2=\sigma_{ab}$.
+\textbf{All three vanish in the background}, so all three are gauge-invariant at
+first order by Stewart--Walker --- which is the paper's own \emph{``note that
+these are CGI with respect to $u^a$''}.
+
+\paragraph{The scale-factor rule, and why the footnote to (105) carries
+$2H$.} A rank-$n$ PSTF source's natural variable carries $a^n$: the paper writes
+$(a\tilde{\mathcal B}_1)'$ at (106) and $(a^2\sigma_{ab})^{\textstyle\cdot}$ in
+Appendix~G. So
+$$\dot{\mathcal B}_1+2H\mathcal B_1=\frac1{a^2}\big(a^2\mathcal B_1\big)^{\textstyle\cdot},$$
+and the rank-two object built from a rank-one source,
+$\mathrm D_{\langle a}\dot{\mathcal B}_{b\rangle}$, carries the rank-two power.
+\textbf{It is not a commutator correction bolted on; it is the rank showing up
+in the measure.} That is conventions row \textbf{C3.1a} read in the direction
+nobody had needed, and it is checkable: under C3.1, C3.2 and C4.2 the mode
+functions are time-independent at every rank, so \emph{all} the $H$'s come from
+the $a^n$ and none from the $Q$'s --- which \textbf{predicts (106)'s $2H$ before
+(106) is consulted}. Implementing it the other way, by splining a stored
+amplitude, is wrong by a median of 100\%: finding \textbf{T-23}, and the reason
+\texttt{integral\_solution} takes every derivative as an input rather than
+differentiating one.
+
+\paragraph{Rank 2: closed.} $\dot{\mathcal B}_2$ \emph{is} in the paper
+generically, in Appendix~G, and closes to second order \textbf{with an exact
+symbolic control} that fails when the rank-two term is removed --- so the check
+is one that can fail, which S27's C rung requires and finding \textbf{T-24}
+exists because an earlier one could not.
+
+\paragraph{Rank 1: assembled, and carrying one term more than (105) prints.}
+$\dot{\mathcal B}_1$ is assembled from printed equations. Three of its four
+terms close exactly against (105)/(106) --- $\mathcal B_0$, $\dot\Phi_A$ and
+$-2H\Phi_A$, the last only because both of its contributions are present ---
+and substituting the expansion--potential relation of \S\emph{newtg}
+reproduces every term (105) prints. The generic form then carries \textbf{one
+extra}:
+$$(\star)\qquad -H\,\mathrm D_{\langle a}\tilde{\mathrm D}_{b\rangle}\ln T .$$
+This is the temperature-gradient half of $-H\tilde{\mathcal B}_a$, whose
+acceleration half \emph{does} survive into (105). \textbf{Two readings, and this
+bundle chooses neither.} It may be the small-scale approximation --- \S6 drops
+all terms of $O(\epsilon\epsilon_H)$ and $(\star)$ has that shape --- except
+that so does $-2H\mathrm D_{\langle a}\mathrm D_{b\rangle}\Phi_A$, which is
+kept. Or it may be an omission, in which case (105), (106) and what descends
+from them are short a term of the same order as ones they keep. It is first
+order and it does not obviously vanish, which is enough to make the question
+real; settling it needs \S2.5's $O(\epsilon\epsilon_H)$ bookkeeping read against
+each term of (105), not a judgement about which is negligible. \textbf{Logged as
+open, not filed as a finding against the paper.}
+
+\paragraph{Rank 0: not needed.} $\dot{\mathcal B}_0$ is not required by (102) at
+all --- $C_0$ carries $\mathcal B_2$, not $\mathcal B_0$. An earlier plan said
+otherwise and was wrong.
+
+\paragraph{Status.} \textbf{The derivation is complete for what the integral
+solution needs.} What remains open is $(\star)$ and the dropped
+$a\mathcal B_0\delta_{\ell0}$ row of (89) --- \textbf{both questions about the
+antecedent rather than gaps in this assembly}, and both recorded rather than
+resolved by assumption.
+
 \section{Frames and specialisation}
 
 \paragraph{``Frame'' is being asked to do two jobs, and they are different

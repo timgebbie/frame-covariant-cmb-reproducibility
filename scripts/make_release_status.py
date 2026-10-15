@@ -81,7 +81,7 @@ ARTEFACTS: list[Artefact] = [
              script="scripts/diagnostic_d2_roundtrip.py"),
 
     # ---- v1.2.0, in progress --------------------------------------------
-    Artefact("the covariant coefficients C_0, C_1, C_2 from (89)", "C", "v1.2.0",
+    Artefact("the covariant coefficients C_0, C_1, C_2 from (89)", "R", "v1.2.0",
              module="functions.spectra.coefficients",
              objects=("match_coefficients", "newtonian_coefficients", "newtonian_set"),
              tests=("test_all_three_of_90_are_reproduced_by_the_match",
@@ -89,20 +89,20 @@ ARTEFACTS: list[Artefact] = [
                     "test_the_newtonian_specialisation_is_equation_109"),
              note="(89) is implemented as the definition so (90) is a check; "
                   "B-11's delta_l0 sign resolved"),
-    Artefact("the integral solution (102), carried with a generic u^a", "C", "v1.2.0",
+    Artefact("the integral solution (102), carried with a generic u^a", "R", "v1.2.0",
              module="functions.spectra.integral_solution",
              objects=("integral_solution", "required_multipoles"),
              tests=("test_the_shear_boundary_term_is_empty_in_the_newtonian_frame",
                     "test_the_shear_boundary_term_is_not_empty_once_b2_is",
                     "test_the_specialisation_recovers_what_the_pipeline_computes")),
-    Artefact("the generic source derivatives Annals II never wrote", "C", "v1.2.0",
+    Artefact("the generic source derivatives Annals II never wrote", "R", "v1.2.0",
              module="functions.spectra.coefficients",
              objects=("generic_shear_derivatives", "c2_derivatives"),
              tests=("test_the_rank_two_control_passes_symbolically",
                     "test_no_numerical_derivative_survives_in_the_c2_chain"),
              note="rank 2 closed from Appendix G with a control; rank 1 assembled "
                   "from printed equations and still carrying (*)"),
-    Artefact("the CDM frame as a second frame", "C", "v1.2.0",
+    Artefact("the CDM frame as a second frame", "R", "v1.2.0",
              module="functions.spectra.coefficients",
              objects=("cdm_frame_shear", "cdm_set", "background_fluid"),
              tests=("test_the_frame_shift_of_every_coefficient_is_the_closed_form_one",
@@ -112,7 +112,7 @@ ARTEFACTS: list[Artefact] = [
              module="functions.spectra.coefficients",
              script="scripts/measure_frame_invariance.py",
              note="generated record; its prose is computed from its own table"),
-    Artefact("the ell ceiling removed, 507 -> 2000", "C", "v1.2.0",
+    Artefact("the ell ceiling removed, 507 -> 2000", "R", "v1.2.0",
              module="functions.spectra.bessel_table",
              objects=("BesselTable",),
              tests=("test_unavailable_ell_is_refused",
@@ -121,7 +121,7 @@ ARTEFACTS: list[Artefact] = [
     Artefact("the stamped Planck 2018 set, wired as PLANCK_MODEL", "C", "v1.2.0",
              module="functions.background.flrw",
              objects=("PLANCK_MODEL", "OMEGA_GAMMA_H2"),
-             tests=("test_the_quadrupole_coefficient_defaults_to_what_annals_ii_prints",),
+             tests=("test_the_damping_uses_dif_damp_correct_and_f2_reaches_all_three_coefficients",),
              note="provenance/COSMOLOGICAL-PARAMETERS-v1.md; the paper's own "
                   "stated baseline column, not one chosen here. Now a model "
                   "constant with a photon-only radiation era, Omega_gamma h^2 "
@@ -129,7 +129,8 @@ ARTEFACTS: list[Artefact] = [
                   "quoted: it reaches z_eq = 5756.0 against CAMB's 5756.0 and "
                   "CLASS's 5756.0 by an independent route. CDM_MODEL and "
                   "LCDM_MODEL untouched --- finding T-37",
-             blocks=("used only by criterion 5b; no released figure runs on it",)),
+             blocks=("stays at C until criterion 5b closes: no released figure "
+                     "runs on it, so nothing of this bundle's own exercises it",)),
     Artefact("F5 - the source decomposition in two frames, by rank", "R", "v1.2.0",
              module="functions.spectra.two_frame",
              objects=("build_environment", "coefficient_sets", "transfer_by_rank",
@@ -208,10 +209,7 @@ GATES: dict[str, tuple[str, ...]] = {
     "v1.1.0": ("none. Tagged at the last commit whose content was "
                "v1.1.0 --- NOT at the tip, which has moved on to "
                "v1.2.0 and would mislabel the tree",),
-    "v1.2.0": ("criterion 5b, which needs CAMB and CLASS reference data",
-
-               "the supplement's derivation section, written from "
-               "GENERIC-SOURCE-DERIVATIVES-v1.md (S26)"),
+    "v1.2.0": ("criterion 5b, which needs CAMB and CLASS reference data",),
     "v1.5.0": ("Paper 1 (S2)", "v1.2.0, because a correction can only be read "
                "where the thing it corrects is already right"),
 }

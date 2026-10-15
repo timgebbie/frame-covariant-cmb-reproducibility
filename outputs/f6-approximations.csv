@@ -1,56 +1,56 @@
 # C_l(approximate)/C_l(fuller), standard CDM
 approximation,ell,ratio
-visibility weighting,2,6.157127347726e+04
-visibility weighting,3,1.240844245241e+05
-visibility weighting,4,2.048725695340e+05
-visibility weighting,5,3.010202638461e+05
-visibility weighting,7,5.275479795160e+05
-visibility weighting,10,9.155139810885e+05
-visibility weighting,13,1.319216823996e+06
-visibility weighting,18,1.960677140409e+06
-visibility weighting,24,2.632142378014e+06
-visibility weighting,33,3.433138817074e+06
-visibility weighting,45,4.191946307983e+06
-visibility weighting,62,4.860028033244e+06
-visibility weighting,84,5.329528716968e+06
-visibility weighting,115,5.720578144858e+06
-visibility weighting,157,6.263826650110e+06
-visibility weighting,214,7.365211994986e+06
-visibility weighting,293,9.326166596334e+06
-visibility weighting,400,6.275165286610e+06
-$k_D$ stipulated at $\eta_*$,2,1.000039831758e+00
-$k_D$ stipulated at $\eta_*$,3,1.000085236568e+00
-$k_D$ stipulated at $\eta_*$,4,1.000147571864e+00
-$k_D$ stipulated at $\eta_*$,5,1.000225567961e+00
-$k_D$ stipulated at $\eta_*$,7,1.000424125135e+00
-$k_D$ stipulated at $\eta_*$,10,1.000798125030e+00
-$k_D$ stipulated at $\eta_*$,13,1.001228949901e+00
-$k_D$ stipulated at $\eta_*$,18,1.002003246634e+00
-$k_D$ stipulated at $\eta_*$,24,1.002945659590e+00
-$k_D$ stipulated at $\eta_*$,33,1.004293021828e+00
-$k_D$ stipulated at $\eta_*$,45,1.005929071367e+00
-$k_D$ stipulated at $\eta_*$,62,1.007928774183e+00
-$k_D$ stipulated at $\eta_*$,84,1.010110181253e+00
-$k_D$ stipulated at $\eta_*$,115,1.012813963890e+00
-$k_D$ stipulated at $\eta_*$,157,1.016296430136e+00
-$k_D$ stipulated at $\eta_*$,214,1.019865501739e+00
-$k_D$ stipulated at $\eta_*$,293,1.011128593887e+00
-$k_D$ stipulated at $\eta_*$,400,9.541651497021e-01
-small-scale approximation,2,3.762700361587e+00
-small-scale approximation,3,3.772906676270e+00
-small-scale approximation,4,3.733947969146e+00
-small-scale approximation,5,3.666958190922e+00
-small-scale approximation,7,3.499181309533e+00
-small-scale approximation,10,3.252589213476e+00
-small-scale approximation,13,3.054587160995e+00
-small-scale approximation,18,2.828832829679e+00
-small-scale approximation,24,2.674153244131e+00
-small-scale approximation,33,2.569926167804e+00
-small-scale approximation,45,2.541507358727e+00
-small-scale approximation,62,2.579468944615e+00
-small-scale approximation,84,2.616522900854e+00
-small-scale approximation,115,2.475090775723e+00
-small-scale approximation,157,1.961801594005e+00
-small-scale approximation,214,1.208227573054e+00
-small-scale approximation,293,5.586453867008e-01
-small-scale approximation,400,3.694890570293e-01
+visibility weighting,2,6.146684356607e+04
+visibility weighting,3,1.238989931553e+05
+visibility weighting,4,2.046167147456e+05
+visibility weighting,5,3.007268854197e+05
+visibility weighting,7,5.273540038708e+05
+visibility weighting,10,9.160342167139e+05
+visibility weighting,13,1.321156529479e+06
+visibility weighting,18,1.966249116053e+06
+visibility weighting,24,2.643330731478e+06
+visibility weighting,33,3.453519678252e+06
+visibility weighting,45,4.224136714051e+06
+visibility weighting,62,4.905760039031e+06
+visibility weighting,84,5.387694731450e+06
+visibility weighting,115,5.792388073928e+06
+visibility weighting,157,6.358782625719e+06
+visibility weighting,214,7.521054945593e+06
+visibility weighting,293,9.691859869209e+06
+visibility weighting,400,6.629972333148e+06
+$k_D$ stipulated at $\eta_*$,2,1.000052207181e+00
+$k_D$ stipulated at $\eta_*$,3,1.000111738372e+00
+$k_D$ stipulated at $\eta_*$,4,1.000193542990e+00
+$k_D$ stipulated at $\eta_*$,5,1.000296011989e+00
+$k_D$ stipulated at $\eta_*$,7,1.000556940663e+00
+$k_D$ stipulated at $\eta_*$,10,1.001049536393e+00
+$k_D$ stipulated at $\eta_*$,13,1.001618216941e+00
+$k_D$ stipulated at $\eta_*$,18,1.002642751121e+00
+$k_D$ stipulated at $\eta_*$,24,1.003893824783e+00
+$k_D$ stipulated at $\eta_*$,33,1.005690533847e+00
+$k_D$ stipulated at $\eta_*$,45,1.007881992438e+00
+$k_D$ stipulated at $\eta_*$,62,1.010575682498e+00
+$k_D$ stipulated at $\eta_*$,84,1.013531085232e+00
+$k_D$ stipulated at $\eta_*$,115,1.017219802206e+00
+$k_D$ stipulated at $\eta_*$,157,1.022025021092e+00
+$k_D$ stipulated at $\eta_*$,214,1.027100439713e+00
+$k_D$ stipulated at $\eta_*$,293,1.015356105668e+00
+$k_D$ stipulated at $\eta_*$,400,9.360898030025e-01
+small-scale approximation,2,3.767558328111e+00
+small-scale approximation,3,3.780867104724e+00
+small-scale approximation,4,3.745004072792e+00
+small-scale approximation,5,3.680905792138e+00
+small-scale approximation,7,3.518062598236e+00
+small-scale approximation,10,3.276669503660e+00
+small-scale approximation,13,3.082186810684e+00
+small-scale approximation,18,2.860724735438e+00
+small-scale approximation,24,2.710459351908e+00
+small-scale approximation,33,2.613107061940e+00
+small-scale approximation,45,2.595409915847e+00
+small-scale approximation,62,2.650836350910e+00
+small-scale approximation,84,2.709550115617e+00
+small-scale approximation,115,2.581516341058e+00
+small-scale approximation,157,2.048351150989e+00
+small-scale approximation,214,1.250310460703e+00
+small-scale approximation,293,5.634492678742e-01
+small-scale approximation,400,3.624177679960e-01

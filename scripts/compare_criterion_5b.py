@@ -45,8 +45,8 @@ from functions.background.flrw import (  # noqa: E402
 from functions.spectra.angular import cl_covariant_route, d_ell  # noqa: E402
 from functions.spectra.bessel_table import BesselTable  # noqa: E402
 from functions.spectra.decoupling import (  # noqa: E402
-    ANNALS_II_QUADRUPOLE,
-    POLARISED_QUADRUPOLE,
+    F2_POLARISED,
+    F2_TIGHT_COUPLING,
 )
 from functions.spectra.integral_solution import required_multipoles  # noqa: E402
 from functions.spectra.pipeline import primordial_power  # noqa: E402
@@ -82,7 +82,7 @@ BANDS = [
 FLOOR = {"plateau and late ISW": 0.00125, "acoustic peaks": 0.00370}
 
 
-def bundle_spectrum(quadrupole: float) -> tuple[np.ndarray, dict]:
+def bundle_spectrum(f_2: float) -> tuple[np.ndarray, dict]:
     """$C_\\ell$ in the **CDM frame** --- the frame the observer is in, and the
     one CLASS's synchronous gauge and CAMB both evolve in. Comparing across
     frames would not be comparing the same quantity."""
@@ -91,7 +91,7 @@ def bundle_spectrum(quadrupole: float) -> tuple[np.ndarray, dict]:
         float(K_COM.max()), omega_m=PLANCK_MODEL.omega_m,
         omega_lambda=PLANCK_MODEL.omega_lambda, omega_r=PLANCK_MODEL.omega_r,
         omega_b_h2=PLANCK_OMEGA_B_H2, transfer_gamma=gamma, hubble_h=PLANCK_H,
-        quadrupole=quadrupole)
+        f_2=f_2)
     needed = required_multipoles(ELLS)
     table = BesselTable.build(
         ell_max=int(needed.max()), ells=needed,
@@ -146,10 +146,10 @@ def main() -> int:
     print(f"  ells {ELLS.min()}..{ELLS.max()} ({ELLS.size} points), "
           f"k to {K_COM.max():.0f} ({K_COM.size} modes)")
 
-    cl_pol, meta = bundle_spectrum(POLARISED_QUADRUPOLE)
+    cl_pol, meta = bundle_spectrum(F2_POLARISED)
     print(f"  PLANCK_MODEL: z_* = {meta['z_star']:.1f}, k_D = {meta['k_D']:.1f}, "
           f"Gamma = {meta['gamma']:.5f}, n_eta = {meta['n_eta']}")
-    cl_printed, _ = bundle_spectrum(ANNALS_II_QUADRUPOLE)
+    cl_printed, _ = bundle_spectrum(F2_TIGHT_COUPLING)
 
     ours = shape(ELLS, cl_pol)
     ours_printed = shape(ELLS, cl_printed)
@@ -177,7 +177,7 @@ def main() -> int:
                     for b, lo, hi, _ in BANDS}
     print("\n  itemised, the part this bundle can attribute:")
     for b, lo, hi, _ in BANDS:
-        print(f"    quadrupole 16/15 against the printed 4/5 (S31): "
+        print(f"    (dif-damp-correct) f_2=3/4 against (dif-damp) f_2=1: "
               f"{damping_item[b]:7.1%}  [{b}]")
 
     out = ROOT / "outputs" / "criterion-5b.csv"

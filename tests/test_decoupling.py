@@ -133,46 +133,59 @@ def test_a_matter_only_model_also_builds(history):
     assert cdm.eta_star < cdm.background.eta_0
 
 
-def test_the_quadrupole_coefficient_defaults_to_what_annals_ii_prints():
-    r"""Decision **S31**, finding **T-39**.
+def test_the_damping_uses_dif_damp_correct_and_f2_reaches_all_three_coefficients():
+    r"""**(dif-damp-correct), in *Annals II*'s own parameter. Finding T-43.**
 
-    The polarisation back-reaction is structural in CAMB and CLASS and cannot be
-    switched off --- CLASS fails in `perturbations_solve` below
-    `l_max_pol_g = 2`, because $\Pi=\Theta_2+E_0+E_2$ needs $E_2$ --- so the
-    only way to compare like for like is to carry the polarised coefficient on
-    this side, **for criterion 5b and nowhere else**.
+    The paper prints the tight-coupling rate at (dif-damp) with a coefficient of
+    $4/5$, then corrects it *"to include the effect of anisotropic scattering
+    [...] and polarization"*, following Kaiser, to $\frac45 f_2^{-1}$ --- *"where,
+    first, for the anisotropic effect, $f_2=\frac9{10}$, and second, to
+    compensate for the polarization, $f_2=\frac34$."*
 
-    This test is the fence. `4/5` is what *Annals II* prints and what every
-    released number uses; `16/15` is reachable only by asking for it. A default
-    that drifted to the polarised value would silently stop reproducing the
-    paper, which is the one thing this bundle is for.
+    So all three coefficients this project has argued about are the
+    antecedent's, reached through one parameter it names. **S31 had believed
+    $16/15$ was a departure from the paper; it is (dif-damp-correct) at
+    $f_2=3/4$** --- decision S31a.
+
+    **The default is the corrected form**, which is what the paper itself
+    carries downstream: \S*The Visibility Function* builds the damping envelope
+    from `dif-damp-correct`, cited by label.
     """
-    from functions.background.flrw import PLANCK_MODEL, PLANCK_OMEGA_B_H2
     from functions.spectra.decoupling import (
-        ANNALS_II_QUADRUPOLE,
-        POLARISED_QUADRUPOLE,
+        F2_ANISOTROPIC,
+        F2_DEFAULT,
+        F2_POLARISED,
+        F2_TIGHT_COUPLING,
         RecombinationHistory,
         diffusion_scale,
+        quadrupole_from_f2,
     )
+    from functions.background.flrw import PLANCK_MODEL, PLANCK_OMEGA_B_H2
 
-    assert ANNALS_II_QUADRUPOLE == 0.8
-    assert POLARISED_QUADRUPOLE == 16.0 / 15.0
+    # The paper's three values, as exact rationals where they are exact.
+    assert F2_TIGHT_COUPLING == 1.0
+    assert F2_ANISOTROPIC == 9.0 / 10.0
+    assert F2_POLARISED == 3.0 / 4.0
+    assert quadrupole_from_f2(F2_TIGHT_COUPLING) == 0.8
+    assert abs(quadrupole_from_f2(F2_ANISOTROPIC) - 8.0 / 9.0) < 1e-15
+    assert abs(quadrupole_from_f2(F2_POLARISED) - 16.0 / 15.0) < 1e-15
 
+    # **The default is the corrected one**, per the PI 2026-10-15.
+    assert F2_DEFAULT == F2_POLARISED
+
+    # A positive f_2 is required; the coefficient is a division by it.
+    import pytest
+
+    with pytest.raises(ValueError):
+        quadrupole_from_f2(0.0)
+
+    # And it moves k_D by the amount T-39 measured: 619.92 -> 536.87 on
+    # PLANCK_MODEL, a factor of 0.866.
     history = RecombinationHistory.build(PLANCK_MODEL, omega_b_h2=PLANCK_OMEGA_B_H2)
     zero = np.zeros_like(history.eta)
-
-    printed = float(diffusion_scale(history, r_of_eta=zero)(history.eta_star))
-    polarised = float(diffusion_scale(
-        history, r_of_eta=zero, quadrupole=POLARISED_QUADRUPOLE)(history.eta_star))
-
-    # The default is the printed coefficient, reached without asking.
-    assert printed == float(diffusion_scale(
-        history, r_of_eta=zero, quadrupole=ANNALS_II_QUADRUPOLE)(history.eta_star))
-
-    # Measured 2026-10-14: 619.92 and 536.87, a 13.4% reduction. Pinned loosely
-    # enough to survive a recombination change and tightly enough to catch a
-    # swapped default.
-    assert abs(printed - 619.92) < 1.0
-    assert abs(polarised - 536.87) < 1.0
-    assert polarised < printed
-    assert abs(polarised / printed - 0.866) < 0.005
+    tight = float(diffusion_scale(history, r_of_eta=zero,
+                                  f_2=F2_TIGHT_COUPLING)(history.eta_star))
+    corrected = float(diffusion_scale(history, r_of_eta=zero)(history.eta_star))
+    assert abs(tight - 619.92) < 1.0
+    assert abs(corrected - 536.87) < 1.0
+    assert abs(corrected / tight - 0.866) < 0.005
