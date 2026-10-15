@@ -118,19 +118,22 @@ ARTEFACTS: list[Artefact] = [
              tests=("test_unavailable_ell_is_refused",
                     "test_the_coefficients_are_exact_rationals_not_floats"),
              note="findings T-17 and T-18"),
-    Artefact("the stamped Planck 2018 set, wired as PLANCK_MODEL", "C", "v1.2.0",
+    Artefact("the stamped Planck 2018 set, wired as PLANCK_MODEL", "R", "v1.2.0",
              module="functions.background.flrw",
              objects=("PLANCK_MODEL", "OMEGA_GAMMA_H2"),
-             tests=("test_the_damping_uses_dif_damp_correct_and_f2_reaches_all_three_coefficients",),
+             script="scripts/diagnostic_d8_criterion_5b_gate.py",
+             tests=("test_the_damping_uses_dif_damp_correct_and_f2_reaches_all_three_coefficients",
+                    "test_the_two_routes_agree_on_every_background_the_bundle_ships"),
              note="provenance/COSMOLOGICAL-PARAMETERS-v1.md; the paper's own "
-                  "stated baseline column, not one chosen here. Now a model "
+                  "stated baseline column, not one chosen here. A model "
                   "constant with a photon-only radiation era, Omega_gamma h^2 "
                   "DERIVED from T_CMB and the physical constants rather than "
                   "quoted: it reaches z_eq = 5756.0 against CAMB's 5756.0 and "
                   "CLASS's 5756.0 by an independent route. CDM_MODEL and "
-                  "LCDM_MODEL untouched --- finding T-37",
-             blocks=("stays at C until criterion 5b closes: no released figure "
-                     "runs on it, so nothing of this bundle's own exercises it",)),
+                  "LCDM_MODEL untouched --- finding T-37. PROMOTED C -> R "
+                  "2026-10-15: its blocker was that nothing of this bundle's "
+                  "own exercised it, and D8 now does, on every harness run, as "
+                  "one of the three backgrounds criterion 5b's gate sweeps"),
     Artefact("F5 - the source decomposition in two frames, by rank", "R", "v1.2.0",
              module="functions.spectra.two_frame",
              objects=("build_environment", "coefficient_sets", "transfer_by_rank",
@@ -167,34 +170,48 @@ ARTEFACTS: list[Artefact] = [
                   "instead, worst ratio 1.25x, because (102) builds every l from "
                   "the same three C_A --- finding T-31. Its environment is built "
                   "for the k grid rather than the probe modes --- finding T-34"),
-    Artefact("criterion 5b against CAMB and CLASS", "C", "v1.2.0",
+    Artefact("criterion 5b's gate: (102) against (177)-(179)", "R", "v1.2.0",
+             module="functions.spectra.two_route",
+             objects=("TwoRoute", "two_route_transfer"),
+             script="scripts/diagnostic_d8_criterion_5b_gate.py",
+             tests=("test_the_specialisation_recovers_the_pipeline_at_every_k_not_only_at_sixty",
+                    "test_the_two_routes_agree_on_every_background_the_bundle_ships",
+                    "test_a_gate_that_cannot_fail_is_not_a_gate"),
+             note="decision S4c, the PI's ruling 2026-10-15. Annals II writes "
+                  "its integral solution twice and recovers the second from the "
+                  "first symbolically; nothing evaluates both and compares "
+                  "them. This does, over CDM, LCDM and PLANCK_MODEL, nine "
+                  "modes 0.3 <= k <= 600 and 2 <= l <= 600. Worst 9.5e-06, "
+                  "median 2.7e-08, gate 1e-03 --- a hundredfold margin, sized "
+                  "to catch an algebra defect (T-41's plateau was a factor of "
+                  "eighty) rather than to certify the number it returns. "
+                  "Stated at the transfer level at fixed k with the same "
+                  "weight on both sides, because at C_l the branches differ by "
+                  "A-1 and A-2 legitimately. Findings T-44, T-45 and T-46 are "
+                  "what it cost to make the measurement real",
+             blocks=()),
+    Artefact("criterion 5b's context: this bundle against CAMB and CLASS",
+             "C", "v1.2.0",
              script="scripts/make_reference_spectra.py",
-             # scripts/compare_criterion_5b.py is 5b's other half and is
-             # deliberately out of run_all: it takes ~15 minutes and reads the
-             # stamped reference/ CSVs, so a reader can run it on demand
-             # without camb or classy installed. Named here because a script
-             # that produced a result and is invisible to every gate is the
-             # T-28 and T-35 class -- found by the 2026-10-15 workspace audit.
              tests=("test_camb_and_class_agree_with_each_other_and_that_sets_the_floor",
                     "test_criterion_5b_is_not_quietly_skipped"),
-             note="reference half complete: CAMB 2.0.5 and CLASS v3.4.1 "
-                  "specialised to N_eff=0, no reionisation, no lensing, helium "
-                  "explicit; both report z_eq=5756.0 and a first peak at l=206, "
-                  "which PLANCK_MODEL reaches independently by deriving "
-                  "Omega_gamma h^2 from T_CMB. Mutual difference measured per "
-                  "band -- 0.125% / 0.370% / 0.223% -- and the gated middle one "
-                  "is the threshold, per S4b. Stamped in "
-                  "reference/REFERENCE-STAMP-v1.2.0.md",
-             blocks=("the comparison itself has not been run: the acoustic-band "
-                     "test is still a NotImplementedError stub. Both sides can "
-                     "now be made like for like -- T-37 wired the transfer "
-                     "function, PLANCK_MODEL carries a radiation era, S31 gives "
-                     "5b the polarised quadrupole -- so what remains is the run "
-                     "and the itemised residual, not another unblocking",
-                     "the frame each code evolves in must be VERIFIED against its "
-                     "own documentation, not assumed: the supplement's table is "
-                     "recorded as stated. A quantity compared across two frames "
-                     "is not the same quantity")),
+             note="CAMB 2.0.5 and CLASS v3.4.1 specialised to N_eff=0, no "
+                  "reionisation, no lensing, helium explicit; both report "
+                  "z_eq=5756.0 and a first peak at l=206, which PLANCK_MODEL "
+                  "reaches independently by deriving Omega_gamma h^2 from "
+                  "T_CMB. Mutual difference measured per band -- 0.125% / "
+                  "0.370% / 0.223%. Stamped in "
+                  "reference/REFERENCE-STAMP-v1.2.0.md. Measured against this "
+                  "bundle: 97.8% in the plateau, 137% across the peaks, "
+                  "itemised by approximation in provenance/CRITERION-5B-v1.md",
+             blocks=("stays at C and that is the right rung, not an unfinished "
+                     "one. Under S4c this is CONTEXT and not an acceptance "
+                     "gate: the gate is the artefact above. R means run_all "
+                     "runs it, and scripts/compare_criterion_5b.py takes ~15 "
+                     "minutes and needs camb and classy installed, so it is "
+                     "deliberately out of the harness and runs on demand "
+                     "against the stamped reference/ CSVs",)),
+
 
     # ---- v1.5.0, gated --------------------------------------------------
     Artefact("the quartic contribution and the nonlinear couplings", "P", "v1.5.0",
@@ -209,7 +226,9 @@ GATES: dict[str, tuple[str, ...]] = {
     "v1.1.0": ("none. Tagged at the last commit whose content was "
                "v1.1.0 --- NOT at the tip, which has moved on to "
                "v1.2.0 and would mislabel the tree",),
-    "v1.2.0": ("criterion 5b, which needs CAMB and CLASS reference data",),
+    "v1.2.0": ("none. Criterion 5b closed 2026-10-15 under decision S4c: "
+               "gated on (102) against (177)-(179) at 9.5e-06 against 1e-03, "
+               "with CAMB and CLASS reported alongside as context",),
     "v1.5.0": ("Paper 1 (S2)", "v1.2.0, because a correction can only be read "
                "where the thing it corrects is already right"),
 }

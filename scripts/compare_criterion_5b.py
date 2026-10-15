@@ -1,27 +1,39 @@
 #!/usr/bin/env python3
-r"""Criterion 5b: this bundle against the stamped CAMB and CLASS spectra.
+r"""Criterion 5b's **context**: this bundle against the stamped CAMB and CLASS.
 
     python scripts/compare_criterion_5b.py
 
-**The comparison, not an unblocking.** Everything it needs now exists:
-`PLANCK_MODEL` carries a photon-only radiation era reaching $z_{eq}=5756.0$ by
-an independent route (**T-37**); the transfer function drives the acoustic
-oscillation per mode (**T-37**); the polarised quadrupole $16/15$ makes the
-damping like for like, for this comparison alone (**S31**); CLASS's frame is
-verified from `perturbations.c` and CAMB's corroborated; and the reference
-spectra are stamped under `reference/` with the two codes' mutual difference
-measured per band --- **0.125% / 0.370% / 0.223%**, the middle one being the
-gate's floor (**S4b**).
+**This is not the gate.** Decision **S4c** sets criterion 5b's tolerance against
+the bundle's own pipeline --- (102) against (177)--(179) --- and
+`scripts/diagnostic_d8_criterion_5b_gate.py` measures it, in `run_all.py`, at
+$9.5\times10^{-6}$ worst against a gate of $10^{-3}$. What this script produces
+is the comparison with two full Boltzmann codes, reported alongside, which is a
+different and still necessary thing: it says *how far* a $1+3$ slow-decoupling
+solution stands from CAMB and CLASS, in bands, with the dominant term named.
+
+**Why the external codes are context and not the threshold.** S4b set the
+tolerance as the two codes' mutual difference, 0.370% in the acoustic band. This
+bundle will not meet that and was never going to: (102) carries a slow-decoupling
+expansion, no polarisation hierarchy, no neutrino anisotropic stress and a
+visibility-weighted line of sight. **A criterion that can only be failed is not
+a criterion**, and one met by construction is not one either --- what makes S4c
+sound is that the self-comparison *can* fail, and states what it does not cover.
+
+**Like for like, and that took work.** `PLANCK_MODEL` carries a photon-only
+radiation era reaching $z_{eq}=5756.0$ by an independent route (**T-37**); the
+transfer function drives the acoustic oscillation per mode (**T-37**); the
+polarised quadrupole $16/15$ makes the damping like for like, for this
+comparison alone (**S31**); CLASS's frame is verified from `perturbations.c` and
+CAMB's corroborated; and the reference spectra are stamped under `reference/`
+with the two codes' mutual difference measured per band.
 
 **Shape, never amplitude.** Each spectrum is renormalised at $\ell=30$ before
 anything is compared, because neither side fixes $A_s$ the same way and an
 amplitude comparison would measure a normalisation.
 
 **The answer is expected to be large, and the point is to itemise it rather
-than total it.** This bundle is a reconstruction of *Annals II*'s (102), which
-carries a slow-decoupling expansion, no polarisation hierarchy and no neutrino
-anisotropic stress. A number alone would say only *it differs*; what is useful
-is which approximation each part of the difference belongs to.
+than total it.** A number alone would say only *it differs*; what is useful is
+which approximation each part of the difference belongs to.
 """
 
 from __future__ import annotations
@@ -77,8 +89,11 @@ BANDS = [
     ("acoustic peaks", 30, 1000, True),
 ]
 
-#: Measured in `reference/REFERENCE-STAMP-v1.2.0.md`. No agreement can be
-#: claimed tighter than two trusted independent codes agree with each other.
+#: Measured in `reference/REFERENCE-STAMP-v1.2.0.md`: how closely the two
+#: external codes agree **with each other**. It was criterion 5b's threshold
+#: under S4b and is not one under S4c; it is printed because it is the scale
+#: against which the differences below should be read, and because no agreement
+#: with either code could be claimed tighter than this whatever the gate said.
 FLOOR = {"plateau and late ISW": 0.00125, "acoustic peaks": 0.00370}
 
 
@@ -169,7 +184,7 @@ def main() -> int:
         for name in ("camb", "class"):
             d, at = results[name][b]
             line += f"  vs {name.upper()}: {d:7.1%} (worst at l={at})"
-        print(line + (f"   floor {FLOOR[b]:.3%}" if gate else ""))
+        print(line + (f"   code-code {FLOOR[b]:.3%}" if gate else ""))
 
     # The damping coefficient's own contribution, isolated: S31's 16/15 against
     # what Annals II prints, through the whole pipeline rather than in k_D alone.

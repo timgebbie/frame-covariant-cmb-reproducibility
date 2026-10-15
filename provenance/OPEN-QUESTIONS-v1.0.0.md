@@ -251,7 +251,10 @@ high-$\ell$ effects and is gated on Paper 1.
 and CLASS**, with CMBFAST cited for the *method* — line-of-sight integration,
 Seljak & Zaldarriaga, already in Annals II's own bibliography — because the
 Fortran 77 original is unmaintained and effectively unrunnable. The tolerance is
-**measured, not chosen**: the CAMB–CLASS mutual difference is the floor, since no
+**measured, not chosen** — and under **S4c**, 2026-10-15, measured against the
+bundle's own pipeline rather than against the external codes, which are reported
+alongside as context. The paragraph below records the rule as it stood: the
+CAMB–CLASS mutual difference was the floor, since no
 agreement can be claimed tighter than two trusted independent codes agree with
 each other. Reported in three $\ell$ bands whose failure modes differ: $2\le\ell<30$,
 $30\le\ell<1000$, $1000\le\ell\le2000$. Decisions S4a and S4b.
@@ -517,3 +520,71 @@ should be set up as such.
 
 **Status: parked by the PI. Blocks nothing. Revisit at v1.5.0**, where the
 mechanism that could produce one first exists.
+
+---
+
+## Q7 — the recombination grid sets the primary source, and nothing guards it
+
+**Raised by P1-B 2026-10-15, out of finding T-46. The PI's call. Blocks
+nothing at v1.2.0; it should be answered before v1.5.0 builds on this base.**
+
+### The measurement
+
+The primary term — the one that carries the Sachs–Wolfe plateau and the
+acoustic amplitude — is read at a single point, $\eta_*$, off a source that is
+built from $\kappa'$, the visibility and the opacity. Those three are
+interpolated onto the line-of-sight grid from `RecombinationHistory`'s own,
+which defaults to `n_eta=4000` — spacing $4.9\times10^{-4}$, **coarser than the
+grid it is interpolated onto**. Refining it moves the answer:
+
+| `RecombinationHistory` `n_eta` | 4 000 | 8 000 | 16 000 | 32 000 | 64 000 |
+|---|---|---|---|---|---|
+| primary source at $\eta_*$, EdS, $k=30$ | $-118.321$ | $-118.415$ | $-118.469$ | $-118.499$ | $-119.788$ |
+
+That is **1.2%**, against criterion 5a's measured 0.26% and the same order as
+the acoustic-band differences this bundle reports against CAMB and CLASS.
+`required_n_eta` derives the line-of-sight grid from $k_{\max}$ and raises if it
+is not met; **nothing derives or guards the recombination grid**, and it is the
+one that sets the primary term.
+
+### A second, smaller thing riding on the same mechanism
+
+`pipeline.run` reads that source at $\eta_*$ with `np.interp` — linear — while
+`integral_solution` reads the same quantity with a `CubicSpline`. The two
+differ by $1.1\times10^{-4}$ of the source, and the difference does not fall
+with the line-of-sight grid because it is set by the recombination grid's
+piecewise-linear kinks.
+
+### Why this is raised rather than fixed
+
+Either change moves every generated figure, table and manifest in the release —
+the interpolant at the $10^{-4}$ level, the grid at the $10^{-2}$ level. **Four
+days before a freeze is not when one stream changes the amplitude of every
+number in a bundle on its own authority.** Nothing currently *claimed* is
+falsified by it: every stated tolerance is wider, and criterion 5b's gate is
+unaffected because both routes share the history.
+
+That last clause is also the uncomfortable one. **A comparison that holds an
+input fixed cannot check that input** — finding T-3 — and this is the live
+example: the two-route gate would report $9.5\times10^{-6}$ whatever the
+recombination grid did.
+
+### The three options, with what each costs
+
+1. **Derive it, as `required_n_eta` derives the other one.** The honest fix and
+   the project's own idiom: the resolution becomes arithmetic from the
+   visibility's width rather than a default. Costs a regeneration of the whole
+   tree and a re-measurement of 5a, F2, F5, F6, F7 and the 5b context.
+2. **Raise the default and converge it once**, recording the converged values
+   and the residual. Cheaper, and leaves the guard missing.
+3. **Document and defer to v1.5.0.** Costs nothing now and means v1.5.0's
+   nonlinear corrections are measured against a base with a known 1.2%
+   amplitude uncertainty in its primary term, which is the wrong foundation for
+   a correction whose whole claim is that it *matters*.
+
+**P1-B's recommendation is (1), taken immediately after the v1.2.0 tag rather
+than before it**, so the release that is nearly closed closes on measured
+numbers and the change lands at the head of v1.5.0's work with a full
+regeneration behind it. (3) is the one to avoid, for the reason given.
+
+**Status: open. P1-B will not act on it without the PI.**

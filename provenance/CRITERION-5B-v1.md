@@ -1,7 +1,12 @@
-# Criterion 5b — this bundle against CAMB and CLASS
+# Criterion 5b — the gate, and the external context
 
-**Generated context for `scripts/compare_criterion_5b.py`, run 2026-10-15.**
+**Generated context for `scripts/compare_criterion_5b.py` and
+`scripts/diagnostic_d8_criterion_5b_gate.py`, run 2026-10-15.**
 Every number below is measured; none is typed from memory.
+
+**Read the last section first if you are looking for the criterion.** Under
+decision **S4c** the tolerance is set against this bundle's own pipeline and the
+comparison with CAMB and CLASS, which is most of this document, is context.
 
 ---
 
@@ -46,25 +51,99 @@ approximation each part belongs to.
 4. **The slow-decoupling order**, which F6 measures separately and which is the
    largest single approximation in the chain.
 
-## What this means for the criterion as worded
+## The gate, which is the criterion — decision S4c
+
+*Annals II* writes its integral solution **twice**: (102), carried with a
+generic $u^a$ and specialised afterwards, and the source assembly (177)--(179),
+written in the Newtonian frame from the start. The paper states the relation
+between them and carries it out --- *"Later we will explicitly recover these
+equations in the Newtonian frame"*, and afterwards *"This completes the recovery
+of the standard integral solution results using the 1+3 CGI approach at linear
+order"*. **The recovery is symbolic, and symbolic is the right way to do it.**
+
+What has never been done is to evaluate both forms and compare them. That is
+what this gates on: not whether the antecedent's argument is sound, but whether
+this reconstruction's two implementations of it agree when run --- which is
+v1.2.0's audit half (**S26**), and the only part of the claim that arithmetic
+can settle.
+
+`scripts/diagnostic_d8_criterion_5b_gate.py`, in `run_all.py`:
+
+| | |
+|---|---|
+| backgrounds | CDM (Einstein--de Sitter), $\Lambda$CDM, `PLANCK_MODEL` |
+| modes | nine, $0.3\le k\le600$, each on an $\eta$ grid **derived from $k$** at 48 samples per oscillation |
+| multipoles | $\ell=2,5,10,50,200,600$ --- both bands the criterion states |
+| measure | $\lvert\Delta^{(102)}_\ell-\Delta^{(177)}_\ell\rvert$ over $\max_\ell\lvert\Delta_\ell(k)\rvert$ |
+| **worst** | $\mathbf{9.5\times10^{-6}}$, at Einstein--de Sitter, $k=30$, $\ell=2$ |
+| **median** | $2.7\times10^{-8}$ |
+| **gate** | $10^{-3}$ --- a hundredfold margin |
+
+**At the transfer level at fixed $k$, with the same weight on both sides.** Not
+at $C_\ell$: there the two branches differ by a factor of eighty in the plateau,
+and that difference is approximations **A-1** and **A-2**, the weight the
+line-of-sight integral carries. It is a property of what (102) prints, measured
+separately by F6, and gating it away would be gating away the antecedent's own
+equation.
+
+**The gate can fail.** `test_a_gate_that_cannot_fail_is_not_a_gate` feeds it a
+route wrong by 1% and requires it to say 1%, and feeds it an empty comparison
+and requires it to raise. An algebra defect --- a wrong sign, a dropped term, a
+mis-specialised coefficient --- moves this by $10^{-1}$ or more; T-41's plateau
+was a factor of eighty. The gate catches a regression rather than certifying the
+number it returns, which is **T-15**'s rule.
+
+### What the gate does not establish, stated rather than left to be noticed
+
+Both routes are handed the same background, the same recombination history, the
+same acoustic solution, the same potentials, the same Bessel table and the same
+damping. **A comparison that holds an input fixed cannot check that input** ---
+finding **T-3**, where a coarsened grid returned a plausible spectrum 575% wrong
+while two routes agreed to $10^{-16}$.
+
+This is not a formality here. Setting this gate turned up **T-46**: the
+recombination grid, which both routes share, moves the primary source at
+$\eta_*$ by **1.2%** between `n_eta` 4 000 and 64 000, and the gate would read
+$9.5\times10^{-6}$ throughout. It is raised as **Q7** for the PI. The shared
+inputs are enumerated in `functions/spectra/two_route.py`, and each is checked
+elsewhere against something it did not come from.
+
+### What it cost to make the measurement real
+
+The claim that the two routes *"agree to $10^{-5}$ mode by mode"* had stood in a
+test docstring since T-41 and was about to be written into a release criterion.
+Three findings stood between it and a measurement: **T-44**, a gate that printed
+PASS on a `nan`; **T-45**, a fixed 4 000-point grid and a frozen acoustic tail,
+on which both routes were un-converged *in the same direction* and so agreed two
+hundred times better than they do; and **T-46**, the interpolant at $\eta_*$.
+**The remembered figure turned out to be right.** It was also quoted four times
+before anyone measured it, and that is the part worth keeping.
+
+## Why the external codes are context and not the threshold
 
 **S4b set the tolerance as the two codes' mutual difference. This bundle will
 not meet 0.370% in the acoustic band and was never going to.** (102) is a
 slow-decoupling solution with no polarisation hierarchy, no neutrino
 anisotropic stress and a visibility-weighted line of sight; CAMB and CLASS are
-full Boltzmann codes. A criterion that can only be failed is not a criterion.
+full Boltzmann codes. **A criterion that can only be failed is not a
+criterion** --- and S4b's merit, that a tolerance should be *measured* rather
+than chosen, survives intact in S4c, which measures a different and meetable
+thing.
 
-**Two honest readings, and the choice is the PI's:**
+The PI's ruling, 2026-10-15: *"5b keeps a tolerance set against the bundle's
+own pipeline --- (102) against (177)--(179) --- with CAMB and CLASS reported
+alongside as context, because this is self contained and retains the spirit of
+the entire build."*
 
-- **5b becomes a measurement, not a gate.** It reports the three band
-  differences and the itemisation above, and the release states them. That is
-  what the comparison is actually good for: it says *how far* the 1+3
-  slow-decoupling solution is from a Boltzmann code, in bands, with the
-  dominant term named.
-- **5b keeps a tolerance, set against something it can meet.** The natural
-  candidate is **the bundle's own pipeline** rather than the external codes ---
-  (102) against (177)--(179), which agree to $10^{-5}$ mode by mode --- with
-  CAMB and CLASS reported alongside as context rather than as the gate.
+**Nothing above is withdrawn.** The two codes are still run, still stamped,
+still specialised down to what this bundle contains, and their mutual difference
+is still measured per band --- it remains the scale against which the
+differences in this document should be read, since no agreement with either code
+could be claimed tighter than they agree with each other. What changed is that
+it is no longer the threshold.
 
-**Nothing is decided here.** The measurement exists, is reproducible, and is
-stamped; the criterion's wording is a release decision.
+**One consequence worth naming.** `scripts/compare_criterion_5b.py` takes about
+fifteen minutes and needs `camb` and `classy` installed, so it cannot be in
+`run_all.py` --- which means criterion 5b's artefact could never have reached
+rung **R** under **S27**'s own definition. The gate runs in half a minute on
+code this bundle owns, and is in the harness.

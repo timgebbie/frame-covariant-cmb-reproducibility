@@ -787,9 +787,7 @@ integration, Seljak \& Zaldarriaga, the same reference the antecedent's own
 bibliography carries --- and compares against \textbf{CAMB} and \textbf{CLASS},
 because the Fortran~77 original is unmaintained and effectively unrunnable.
 Saying so is more honest than claiming a comparison against a code nobody can
-run. The tolerance is \emph{measured} rather than chosen: the CAMB--CLASS
-mutual difference is the floor, since no agreement can be claimed tighter than
-two trusted independent codes agree with each other. It is reported in three
+run. It is reported in three
 bands, whose failure modes differ --- $2\le\ell<30$, cosmic-variance dominated
 and meaningful only binned; $30\le\ell<1000$, the acoustic peaks, where a
 hierarchy or recursion error actually shows; and $1000\le\ell\le2000$, the
@@ -806,6 +804,47 @@ is exact where $\Gamma(m/2+1)=1$, so the large-scale result (201) is unaffected;
 the horizon-scale normalisation (204) and the $D_\ell$ of (205) are. A misprint,
 corrected silently and recorded.}
 
+
+\subsection{Criterion 5b's tolerance, and what it is set against}
+The tolerance is \emph{measured} rather than chosen; what it is measured against
+changed once it was run. The original rule took the CAMB--CLASS mutual
+difference as the floor, on the ground that no agreement can be claimed tighter
+than two trusted independent codes agree with each other. That floor is
+$0.370\%$ across the acoustic peaks, and this reconstruction stands at $137\%$
+there. It was never going to meet it: (102) is a slow-decoupling solution with
+no polarisation hierarchy, no neutrino anisotropic stress and a
+visibility-weighted line of sight, set against two full Boltzmann codes.
+\textbf{A criterion that can only be failed is not a criterion.}
+
+What \emph{is} gateable is the thing the antecedent writes twice and recovers
+symbolically but never evaluates. Its integral solution appears as (102),
+carried with a generic $u^a$ and specialised afterwards, and again as the source
+assembly (177)--(179), written in the Newtonian frame from the start. The paper
+states the relation and carries it out on the page; what no one has done is to
+compute both forms and compare them, which is the only part of the claim
+arithmetic can settle. Measured here over three
+backgrounds, nine modes $0.3\le k\le600$ and $2\le\ell\le600$, the two agree to
+$9.5\times10^{-6}$ worst and $2.7\times10^{-8}$ median against a gate of
+$10^{-3}$. The comparison is stated at the transfer level at fixed $k$ with the
+same line-of-sight weight on both sides: at $C_\ell$ the two branches differ by
+a factor of eighty in the plateau, and that difference is the weight the
+line-of-sight integral carries --- a property of what (102) prints, recorded as
+an approximation and measured separately, not a disagreement to be gated away.
+
+The external comparison is still run, still stamped, and reported alongside as
+context. Its value is not a pass mark but an itemisation: how far a $1+3$
+slow-decoupling solution stands from a Boltzmann code, in bands, with the
+dominant term named.
+
+\textbf{What a self-comparison does not establish} is stated here rather than
+left to be inferred, because it is the obvious objection and it is a fair one.
+Both routes are handed the same background, the same recombination history, the
+same acoustic solution, the same potentials and the same damping, and a
+comparison that holds an input fixed cannot check that input. This is not a
+formality: setting the gate turned up an under-resolved recombination grid that
+moves the primary source at $\eta_*$ by $1.2\%$, shared by both routes and
+invisible to the comparison between them. It is recorded, raised, and left for
+the decision it needs rather than changed inside a release.
 
 The external codes of criterion 5b are compared in
 \texttt{provenance/EXTERNAL-CODE-COMPARISON-v1.md}, which records what CAMB and

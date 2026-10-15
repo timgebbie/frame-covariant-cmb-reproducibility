@@ -3705,3 +3705,168 @@ open the page that was already on disk. The four errors before it were
 assertions from resemblance; this one is the same failure in its laziest form
 --- **a question recorded as open while its answer sat unread two directories
 away.** `scratchpad/annals/cbrII.tex` is the antecedent's source. Open it.
+
+---
+
+## T-44 — the new gate printed PASS on a number it never measured
+
+**Found 2026-10-15, by reading its own first output.** Criterion 5b's gate
+(decision **S4c**) reduces a table of fractional differences and compares the
+worst against a threshold. The first version did it with `np.max` over an array
+containing `nan`, got `nan`, and printed:
+
+```
+PASS  criterion 5b's gate: nan < 1.0e-03
+```
+
+`nan >= GATE` is `False` in IEEE 754, so the failure branch was unreachable
+whenever any entry was undefined. **The gate could not fail.** It had been
+written minutes earlier, in a script whose docstring argues that a criterion
+which can only be failed is not a criterion; this is the same sentence read from
+the other end.
+
+### Where the `nan` came from, which is the more useful half
+
+Below its turning point $x\simeq\ell$ the spherical Bessel function is
+exponentially suppressed, so $\Delta_\ell(k)$ at $k(\eta_0-\eta_*)\ll\ell$ is
+numerically zero --- this bundle returns $5\times10^{-61}$ at $\ell=50,k=0.3$
+and exactly $0$ at $\ell=600$. A *pointwise* fractional difference there divides
+zero by zero. Fifty of 162 pairs in the first sweep were in that state.
+
+### What is carried now, and it is not a `nan` filter
+
+The metric is **normalised by the largest $|\Delta_\ell(k)|$ the mode produces**
+rather than pointwise, which removes the undefined entries by making the
+quantity the right one rather than by excluding the wrong ones --- see
+`functions/spectra/two_route.py`. The second reason for that choice is in
+**T-46**. The explicit `np.isfinite` refusal stays anyway: a reduction that can
+return `nan` must not be the thing a release depends on, whether or not anything
+currently feeds it one.
+
+### The lesson
+
+**A gate is not tested by the run that passes.** Three of this bundle's findings
+are now gates that could not fail --- T-4 (ordered so it blocked its own
+remedy), T-30 (asserted state nothing could see), and this one. The cheap
+discipline is to make a gate fail on purpose once before trusting it, and the
+cheaper one is to write the failure branch so that *anything other than a
+measured number under the threshold* takes it.
+
+---
+
+## T-45 — the two-route agreement was measured on a grid that hid it
+
+**Found 2026-10-15, while setting criterion 5b's tolerance.** The claim that
+(102) and (177)--(179) *"agree to $10^{-5}$ mode by mode"* had been in a test
+docstring since T-41 and was about to go into a release criterion. It was taken
+from a comparison with two defects, both in the harness rather than in the
+physics.
+
+**First, a fixed $\eta$ grid.** `_both_routes` built `np.linspace(..., 4000)` at
+every $k$. `required_n_eta` exists in this bundle precisely so that nothing does
+that, and asks for 7 422 points at $k=600$. The consequence is not that the
+answer was slightly coarse: at $k=60$ **both routes are still converging at 4000
+points and are un-converged in the same direction**, so they agreed to
+$1.1\times10^{-7}$ --- two hundred times better than the converged difference.
+Refining to 8 000 made the reported agreement *worse*, and refining again made
+it better: non-monotone, which is the signature of aliasing and not of
+convergence. **The best number this comparison ever produced was its least
+trustworthy.**
+
+**Second, a frozen acoustic tail.** The oscillator was solved on
+$\eta\le6\eta_*$ and held at its last value after. The height of that step is
+whatever the oscillator was doing at the last grid point inside the window, so
+it *moves with the grid*; and the two routes carry the frozen tail through
+different groupings, so it does not cancel between them. It cost a factor of
+three at $k=60$.
+
+### What is carried now
+
+`functions/spectra/two_route.py` derives $n_\eta$ from $k$ at **48 samples per
+oscillation** --- four times the $C_\ell$ route's twelve, because this
+comparison measures *the difference between two quadrature errors*, which does
+not average the way either error alone does --- on a floor of 8 000, and solves
+the acoustic equation over the whole span. One definition, used by both the test
+and `scripts/diagnostic_d8_criterion_5b_gate.py`.
+
+### The claim, now measured
+
+$9.5\times10^{-6}$ worst and $2.7\times10^{-8}$ median, over three backgrounds,
+nine modes from $k=0.3$ to 600 and six multipoles from 2 to 600. **The remembered
+figure was right.** That is worth stating plainly and so is the rest of it: it
+was right by luck, it was quoted four times before it was measured, and the
+measurement needed T-46 as well.
+
+---
+
+## T-46 — the primary source at $\eta_*$ is read by linear interpolation, and the recombination grid is what limits it
+
+**Found 2026-10-15, as the residue of T-45.** With the grid repaired, the two
+routes still differed by $1\times10^{-4}$ to $3\times10^{-3}$, flat in the grid.
+Decomposed by term, the line-of-sight integrals agreed to $10^{-7}$ and
+**the entire difference sat in the one boundary term at $\eta_*$**.
+
+`functions/spectra/pipeline.py` line 342 reads it as
+
+```python
+np.interp(eta_star, eta, source_primary(history, scattering, damping_total=damping))
+```
+
+and `integral_solution` reads the same quantity as `CubicSpline(eta, c_1)(eta_star)`.
+On one grid the two arrays are pointwise identical --- checked:
+$(-c_1^*)\cdot\mathcal D$ and the cubic evaluation of `source_primary` agree to
+all printed digits --- so **the difference is the interpolant and nothing else**.
+It is $1.3\times10^{-2}$ out of a source of 118, a relative
+$1.1\times10^{-4}$.
+
+**Refining $\eta$ sixteen-fold barely moved it** ($1.33\times10^{-2}\to
+1.23\times10^{-2}$), which is what makes the second half of this entry the
+important one.
+
+### The binding grid is the recombination history's, and nothing guards it
+
+$\kappa'$, the visibility and the opacity are `np.interp`-ed onto the
+line-of-sight grid from `RecombinationHistory`'s own, which carries
+`n_eta=4000` by default --- spacing $4.9\times10^{-4}$, **coarser than the
+line-of-sight grid it is interpolated onto**. The result is piecewise-linear
+with kinks at every recombination node, and a cubic spline through it does not
+reproduce a cubic. Refining the *recombination* grid is what removes the
+disagreement: the gap falls $1.33\times10^{-2}\to2.18\times10^{-3}\to0$ for
+`n_eta` 4 000, 8 000, 16 000.
+
+**And the value itself has not converged.** Measured on Einstein--de Sitter at
+$k=30$, the primary source at $\eta_*$ runs
+
+| `RecombinationHistory` `n_eta` | 4 000 | 8 000 | 16 000 | 32 000 | 64 000 |
+|---|---|---|---|---|---|
+| source at $\eta_*$ | $-118.321$ | $-118.415$ | $-118.469$ | $-118.499$ | $-119.788$ |
+
+a **1.2% drift**, which is four times criterion 5a's measured 0.26% and the same
+order as the acoustic-band differences the bundle reports against CAMB and
+CLASS. `required_n_eta` derives the line-of-sight grid from $k_{\max}$ and
+raises; **nothing derives or guards the recombination grid**, and it is the one
+that sets the primary term.
+
+### What this entry does and does not do
+
+**It does not change a number.** The interpolant is left as it is and the
+recombination default is left at 4 000, because moving either moves every
+generated figure, table and manifest in the release, at the $10^{-4}$ level for
+the first and the $10^{-2}$ level for the second. That is the PI's call and it
+is raised as **Q7**, not taken here.
+
+**It does change what criterion 5b's gate compares.** `two_route_transfer`
+matches the interpolants, so the gate measures the assembly algebra --- which is
+what it is for --- and reports the as-shipped difference beside it rather than
+inside it. Both numbers are printed by D8 on every harness run.
+
+### The lesson, and it is T-3's with the subject changed
+
+**T-3 was a coarsened grid returning a smooth, plausible spectrum 575% wrong
+while two routes agreed to $10^{-16}$.** The guard built in answer to it,
+`required_n_eta`, watches the grid T-3 happened to be about. This finding is the
+same failure one grid to the left: the two routes again agree, again share the
+under-resolved input, and again cannot see it --- *a comparison that holds an
+input fixed cannot check that input*. That sentence was written into
+`functions/spectra/two_route.py` as a caution before this was found. It is now
+an example.

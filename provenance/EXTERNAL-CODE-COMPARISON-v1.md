@@ -74,10 +74,15 @@ released figure here plots the multipole mean-square. The round trip of
 criterion 2 and the frame-specialisation figures have no external analogue and
 never will.
 
-**3. It cannot set its own tolerance.** No agreement can be claimed tighter than
-two trusted independent codes agree with each other, so **the CAMB–CLASS mutual
-difference is the floor** and it is *measured*, not quoted from this file.
-Decision S4b.
+**3. It cannot set its own tolerance, and it cannot be one.** No agreement can
+be claimed tighter than two trusted independent codes agree with each other, so
+**the CAMB–CLASS mutual difference is a measured scale** — 0.370% across the
+peaks — not quoted from this file. Decision **S4b** made that scale criterion
+5b's threshold; **S4c withdrew it as the threshold on 2026-10-15** and left it
+as context, because reasons 1 and 2 above say in advance that this bundle will
+differ from both codes by far more than they differ from each other. A criterion
+that can only be failed is not a criterion. What 5b gates on now is (102)
+against (177)–(179) — see `provenance/CRITERION-5B-v1.md`.
 
 ---
 

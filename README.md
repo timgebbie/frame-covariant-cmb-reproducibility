@@ -118,10 +118,23 @@ This is a Boltzmann code written from scratch. **CMBFAST** is cited for the
 II*'s bibliography — and not as a comparison: the Fortran 77 original is
 unmaintained and effectively unrunnable. The comparison is against its two
 maintained descendants, **CAMB and CLASS**, and it is made at v1.2.0, where the
-full linear spectrum exists to compare. Two codes rather than one, because the
-tolerance is then **measured** rather than chosen: their mutual difference is
-the floor, since no agreement can be claimed tighter than two trusted
-independent codes agree with each other.
+full linear spectrum exists to compare. Two codes rather than one, because
+their mutual difference is then a **measured** scale rather than an assumed
+one: no agreement with either could be claimed tighter than they agree with
+each other.
+
+**That scale is context and not the threshold** — decision **S4c**, 2026-10-15.
+It was the threshold, and a slow-decoupling solution with no polarisation
+hierarchy and no neutrino anisotropic stress cannot meet two full Boltzmann
+codes' 0.370%, so the criterion could only be failed. Criterion 5b is gated
+instead on the thing *Annals II* writes twice and recovers symbolically but
+never evaluates: (102), carried with a generic $u^a$ and specialised afterwards,
+against the source assembly (177)–(179) written in the Newtonian frame from the
+start. They agree
+to **9.5×10⁻⁶** worst against a gate of 10⁻³, over three backgrounds and
+$0.3\le k\le600$. The external comparison is still run and still reported —
+97.8% in the plateau, 137% across the peaks, itemised by approximation in
+`provenance/CRITERION-5B-v1.md`.
 
 **Hu & Sugiyama** is the treatment this formulation was developed from and
 checked against, which is why the acceptance spine matches their Eq. (6)

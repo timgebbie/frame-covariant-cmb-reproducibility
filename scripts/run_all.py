@@ -98,6 +98,15 @@ DIAGNOSTICS: list[tuple[str, str]] = [
     # class as the one that inverted D7's own subject line. Finding T-33.
     ("D7  the CDM frame against the total-energy frame",
      "scripts/diagnostic_d7_frame_identification.py"),
+    # D8 is **criterion 5b's gate**, decision S4c. It is in the harness and the
+    # CAMB/CLASS comparison is not, and that is the whole point of moving the
+    # tolerance onto the bundle's own pipeline: a gate that needs two external
+    # codes and fifteen minutes cannot run on every release route, and one that
+    # compares (102) with (177)-(179) over three backgrounds runs in half a
+    # minute. scripts/compare_criterion_5b.py stays out, deliberately, and
+    # reports the external context on demand.
+    ("D8  criterion 5b's gate: (102) against (177)-(179)",
+     "scripts/diagnostic_d8_criterion_5b_gate.py"),
 ]
 
 

@@ -3,6 +3,97 @@
 All notable changes to this bundle are recorded here. The version policy is in
 `README.md` under *Version-control policy*.
 
+## [Unreleased] — v1.2.0 in preparation
+
+v1.2.0 is **the full linear source and the audit of it** (S26): an extension of
+the linear theory in covariant $1+3$, and a check on the antecedent's own
+algebra in the sectors its specialisation discards. Criterion **5b** closes
+here.
+
+### Added
+
+- `functions/spectra/two_route.py` — the audit made executable. *Annals II*
+  writes its integral solution **twice**, as (102) carried with a generic $u^a$
+  and as the source assembly (177)–(179) in the Newtonian frame, and recovers
+  the second from the first symbolically; nothing evaluates both and compares
+  them. This evaluates both from one setup and states, in
+  the module, every input they share — because a comparison that holds an input
+  fixed cannot check that input (**T-3**).
+- `scripts/diagnostic_d8_criterion_5b_gate.py` — **criterion 5b's gate**
+  (decision **S4c**), in `run_all.py`. Three backgrounds, nine modes
+  $0.3\le k\le600$, $2\le\ell\le600$: worst $9.5\times10^{-6}$, median
+  $2.7\times10^{-8}$, gate $10^{-3}$.
+- `functions/spectra/two_frame.py` — (102) evaluated in two frames, which is
+  what F2, F5 and F7 are drawn from, with the transfer function driving the
+  acoustic oscillation per mode (**T-37**).
+- `functions/background/flrw.py` — `PLANCK_MODEL`, the stamped Planck 2018 VI
+  column with a photon-only radiation era, $\Omega_\gamma h^2$ **derived** from
+  $T_{CMB}$ rather than quoted. It reaches $z_{eq}=5756.0$ against CAMB's and
+  CLASS's 5756.0 by an independent route.
+- `scripts/make_reference_spectra.py` and `reference/` — CAMB 2.0.5 and CLASS
+  v3.4.1 stamped, specialised **down** to what this bundle contains:
+  $N_{eff}=0$, no reionisation, no lensing, no tensors, helium explicit.
+- `scripts/make_release_status.py` — decision **S27**'s maturity ladder,
+  generated and **verified**: a rung whose module, object, test or harness entry
+  is missing fails the script rather than appearing in the record. It caught
+  five of its own claims on its first run.
+- Figures **F2**, **F5** and **F7**, each reporting what it measures rather than
+  what it was expected to: F7's planned claim was false (**T-31**), and F2's
+  caption was rewritten from its measured shape.
+
+### Changed
+
+- **S4c** — criterion 5b's tolerance moves onto this bundle's own pipeline, with
+  CAMB and CLASS reported alongside as context. S4b's floor — the two codes'
+  mutual difference, 0.370% across the peaks — is superseded as the threshold
+  and kept as the scale: a slow-decoupling solution with no polarisation
+  hierarchy and no neutrino anisotropic stress cannot meet two full Boltzmann
+  codes, and a criterion that can only be failed is not a criterion.
+- **S29/S29a** — the project's word for a choice of $u^a$ is **frame**;
+  *threading* returns for the velocity field carried through the propagation,
+  and *gauge* is not used.
+- **S31a** — $16/15$ is *Annals II*'s own corrected coefficient, not a departure
+  from it (**T-43**). `F2_DEFAULT` moves to the polarised value and the legacy
+  constants are removed.
+- **S28** — F5 is drawn in the rank decomposition $C_0,C_1,C_2$, which (89)
+  produces and which is defined in every frame, rather than the Newtonian
+  three-way split of §7.1.1.
+- **S23 is falsified by its own premise** and recorded as such: at linear order
+  every $\ell\pm1,\ell\pm2$ coupling is a product of two first-order quantities
+  and is dropped, so there is no first-order generic-$u^a$ hierarchy to build.
+  The $\ell\pm2$ shear couplings are v1.5.0's subject, where **S2** had them.
+
+### Fixed
+
+- **T-17**, **T-18** — an $\ell$ ceiling of 507 set by a quantity equal to one,
+  and the 1.4 GB Bessel table it was hiding.
+- **T-32** — every v1.2.0 figure was drawn on a $k$ grid stopping at the peak of
+  the shear integrand. Raised to 1900; the lesson is to vary the *limit* and the
+  *resolution* separately.
+- **T-34** — F7 sized its $\eta$ grid for $k=140$ and integrated to $k=420$.
+  `check_k` now refuses.
+- **T-37** — the potentials had no $k$ in them, so nothing oscillated.
+- **T-41**, **T-42** — the Sachs–Wolfe plateau on the two-frame path, diagnosed
+  wrongly twice and settled as approximation **A-2**, a documented property of
+  what (102) prints.
+- **T-44** — criterion 5b's gate printed PASS on a `nan`, because
+  `nan >= gate` is `False`. A gate that cannot fail is not a gate.
+- **T-45** — the two-route agreement had been measured on a fixed 4 000-point
+  grid and a frozen acoustic tail, on which both routes were un-converged *in
+  the same direction*. The grid is derived from $k$ now, as everything else in
+  this bundle is.
+
+### Raised, not taken
+
+- **Q7** — the recombination grid sets the primary source at $\eta_*$ and
+  nothing guards it: refining it moves that source by **1.2%**, four times
+  criterion 5a's measured 0.26%. Both routes share it, so criterion 5b's gate
+  cannot see it — **T-3** with the subject changed. Three options costed; P1-B
+  recommends deriving the grid, immediately *after* the v1.2.0 tag. **The PI's
+  call.**
+- **T-38 part (1)** — the portable manifest canonicalises by rounding to a
+  string, which cannot express a tolerance. Three designs recorded.
+
 ## [1.1.0] — 2026-10-12
 
 ### Added

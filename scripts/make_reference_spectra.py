@@ -211,7 +211,7 @@ def main() -> int:
         f"{OMEGA_GAMMA_H2:.6e}$ derived from $T_{{CMB}}=2.7255$ K and the physical",
         "constants, not quoted from either code. It lands on theirs.",
         "",
-        "## The tolerance — a measurement, not a judgement (S4b)",
+        "## The code–code scale — a measurement, not a judgement (S4b, S4c)",
         "",
         "No agreement can be claimed tighter than two trusted independent codes",
         "agree with each other. Shape, each spectrum renormalised at $\\ell=30$:",
@@ -224,7 +224,10 @@ def main() -> int:
                      f"**{floors[name]:.3%}** | {'yes' if gate else 'no'} |")
     lines += [
         "",
-        "The gated band's floor is the acceptance threshold for criterion 5b.",
+        "**Context, not the threshold.** It was criterion 5b's acceptance "
+        "threshold under S4b; **S4c** moved the threshold onto the bundle's "
+        "own pipeline, (102) against (177)--(179), and left these numbers as "
+        "the scale against which any external difference should be read.",
         "It is written here because it was measured, not chosen.",
         "",
     ]
