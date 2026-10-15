@@ -324,31 +324,56 @@ def _thomson_scale(omega_b_h2: float) -> float:
     return n_b0 * sigma_t * hubble_length_cm
 
 
-#: **The quadrupole coefficient of (dif-damp), as *Annals II* prints it.**
-#: This is the default everywhere and stays the default: the bundle reproduces
-#: the paper, and 4/5 is what the paper's page says.
+#: **(dif-damp) and (dif-damp-correct), in *Annals II*'s own parameter.**
+#:
+#: The paper prints the tight-coupling damping rate at **(dif-damp)**,
+#:
+#: $$\gamma \approx k^2\Big(\tfrac{\kappa'^{-1}}{6}\Big)
+#:   \Big[\tfrac{R^2+\frac45(1+R)}{(1+R)^2}\Big],$$
+#:
+#: and then says it *"can be easily corrected to include the effect of
+#: anisotropic scattering (which breaks the tight-coupling approximation) and
+#: polarization... We follow the approach of Kaiser"*, giving
+#: **(dif-damp-correct)**
+#:
+#: $$\gamma^* \approx k^2\Big(\tfrac{\kappa'^{-1}}{6}\Big)
+#:   \Big[\tfrac{R^2+\frac45 f_2^{-1}(1+R)}{(1+R)^2}\Big],$$
+#:
+#: *"where, first, for the anisotropic effect, $f_2=\frac{9}{10}$, and second,
+#: to compensate for the polarization, $f_2=\frac34$."*
+#:
+#: **So the coefficient is $\frac45 f_2^{-1}$ and the paper supplies the
+#: values.** $f_2=1$ is (dif-damp) itself; $f_2=9/10$ gives $8/9$, Hu \&
+#: Sugiyama's unpolarised coefficient; $f_2=3/4$ gives **16/15**, the polarised
+#: one. All three are *Annals II*'s --- finding **T-43**, which corrects S31's
+#: belief that 16/15 was a departure from the paper.
+F2_TIGHT_COUPLING = 1.0
+F2_ANISOTROPIC = 9.0 / 10.0
+F2_POLARISED = 3.0 / 4.0
+
+#: Which $f_2$ the bundle uses by default. **(dif-damp-correct) is the form the
+#: paper itself carries downstream**: \S*The Visibility Function* defines
+#: $\mathcal D(\eta_0,k)$ with *"diffusion damping, which will be derived from
+#: the coupled baryon-photon equations in (\ref{dif-damp-correct})"* --- the
+#: corrected equation, not the tight-coupling one. Changing this default is a
+#: decision, so it is named here rather than written into a call site.
+F2_DEFAULT = F2_TIGHT_COUPLING
+
+#: Kept for callers written before T-43 named the parameter. $\frac45 f_2^{-1}$
+#: at $f_2=1$.
 ANNALS_II_QUADRUPOLE = 0.8
 
-#: **The polarised value, for criterion 5b and nothing else --- S31, T-39.**
-#:
-#: The photon quadrupole's Thomson collision term carries
-#: $\Pi=\Theta_2+E_0+E_2$, so polarisation feeds back into the temperature
-#: hierarchy and makes the diffusion damping stronger. CAMB and CLASS both
-#: include it structurally and **neither can be asked to leave it out** --- CLASS
-#: fails outright in `perturbations_solve` below `l_max_pol_g = 2`, because
-#: $\Pi$ needs $E_2$. So the only way to compare like for like is to carry the
-#: polarised coefficient on this side, for that comparison alone.
-#:
-#: Measured on `PLANCK_MODEL`: $k_D(\eta_*)$ = 619.9 at 4/5, 588.1 at 8/9
-#: (Hu & Sugiyama unpolarised), **536.9 at 16/15** --- 13.4% smaller. In the
-#: damping factor the sources carry, $e^{-(k/k_D)^2}$ goes 0.660 to 0.574 at
-#: $k=400$ and 0.189 to 0.109 at $k=800$.
-#:
-#: **4/5 matches neither standard coefficient** and that is recorded as a
-#: question rather than a finding: it may be a convention in how $R$ and the
-#: factor of 6 are distributed, and the printed page settles it, not a
-#: remembered form. Finding **T-39**.
+#: $\frac45 f_2^{-1}$ at $f_2=3/4$. Used by criterion 5b --- decision **S31**,
+#: whose reasoning T-43 corrects: this is *Annals II*'s own corrected
+#: coefficient, not a departure from it.
 POLARISED_QUADRUPOLE = 16.0 / 15.0
+
+
+def quadrupole_from_f2(f_2: float) -> float:
+    r"""$\frac45 f_2^{-1}$, the coefficient (dif-damp-correct) prints."""
+    if f_2 <= 0.0:
+        raise ValueError(f"f_2 must be positive; got {f_2!r}")
+    return 0.8 / float(f_2)
 
 
 def diffusion_scale(

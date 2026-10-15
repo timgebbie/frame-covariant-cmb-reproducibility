@@ -3634,3 +3634,74 @@ rule was *go to the primary source*. Its sibling, earned four times over today:
 **read the record to its end, and when a change moves a default, look at what it
 produced before believing it.** The figures were regenerated and *then* read,
 which is the only reason this is a finding rather than a release.
+
+---
+
+## T-43 — 16/15 is not a departure from *Annals II*. It is *Annals II*'s own corrected equation.
+
+**Found** 2026-10-15, during a workspace audit, by reading `cbrII.tex` --- which
+had been sitting in this session's scratch directory since 2026-10-06.
+**Status:** corrected. **Decision S31's central premise is withdrawn.**
+
+T-39 recorded a question: *Annals II*'s (dif-damp) prints a quadrupole
+coefficient of **4/5**, which matches neither Hu \& Sugiyama's unpolarised
+**8/9** nor the polarised **16/15**, and the printed page would settle it.
+S31 then adopted 16/15 for criterion 5b and framed it as a **tension**: *"it
+would also stop reproducing what Annals II prints, and this bundle
+reproduces."*
+
+**There is no tension. The paper prints both.** `cbrII.tex` line 2624 gives
+(dif-damp) as the tight-coupling result, and twenty lines later:
+
+> This derivation can be easily corrected to include the effect of anisotropic
+> scattering (which breaks the tight-coupling approximation) and polarization.
+> [...] We follow the approach of Kaiser [...] and include the correction $f_2$
+> to find the modified damping factor:
+> $$\gamma^* \approx k^2\Big(\tfrac{\kappa'^{-1}}{6}\Big)
+>   \Big[\tfrac{R^2+\tfrac45 f_2^{-1}(1+R)}{(1+R)^2}\Big]$$
+> where, first, for the anisotropic effect, $f_2=\tfrac{9}{10}$, and second, to
+> compensate for the polarization, $f_2=\tfrac34$.
+
+So the coefficient is $\tfrac45 f_2^{-1}$ and **the paper supplies the values**:
+
+| $f_2$ | $\tfrac45 f_2^{-1}$ | |
+|---|---|---|
+| 1 | **4/5** | (dif-damp), tight coupling |
+| 9/10 | **8/9** | anisotropic scattering |
+| 3/4 | **16/15** | polarisation |
+
+**All three numbers measured in T-39 are *Annals II*'s**, reached through one
+parameter the paper names. The bundle had implemented 4/5 as a bare constant and
+so could not express the other two without appearing to leave the page.
+
+### And the paper's own downstream use is the corrected one
+
+\S*The Visibility Function* defines the damping envelope as *"now including
+diffusion damping, which will be derived from the coupled baryon-photon
+equations in (\ref{dif-damp-correct})"* --- the **corrected** equation, cited by
+label. The form the paper carries forward is $\gamma^*$, not $\gamma$.
+
+**Whether the two $f_2$ compose is not settled here.** *"first... and second..."*
+can be read as two successive corrections, $f_2=\tfrac{9}{10}\cdot\tfrac34$, or
+as two separate cases. The sentence does not disambiguate and **this entry does
+not guess** --- which is the whole lesson of the four preceding days.
+`F2_DEFAULT` is therefore left at tight coupling, so no released number moves,
+and the choice is named in one place for the PI rather than buried in a call
+site.
+
+### What is carried now
+
+`quadrupole_from_f2(f_2)` returns $\tfrac45 f_2^{-1}$, with
+`F2_TIGHT_COUPLING`, `F2_ANISOTROPIC` and `F2_POLARISED` taking the paper's
+values. `ANNALS_II_QUADRUPOLE` and `POLARISED_QUADRUPOLE` remain as the two
+numbers already in use, now documented as $f_2=1$ and $f_2=3/4$ rather than as a
+printed value and a departure from it.
+
+### The lesson, and it is the fifth in five days
+
+**The source was in this session's scratch directory the whole time.** T-39
+wrote *"the printed page settles it, not a remembered form"* and then did not
+open the page that was already on disk. The four errors before it were
+assertions from resemblance; this one is the same failure in its laziest form
+--- **a question recorded as open while its answer sat unread two directories
+away.** `scratchpad/annals/cbrII.tex` is the antecedent's source. Open it.

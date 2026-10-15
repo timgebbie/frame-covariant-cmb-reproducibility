@@ -168,6 +168,12 @@ ARTEFACTS: list[Artefact] = [
                   "for the k grid rather than the probe modes --- finding T-34"),
     Artefact("criterion 5b against CAMB and CLASS", "C", "v1.2.0",
              script="scripts/make_reference_spectra.py",
+             # scripts/compare_criterion_5b.py is 5b's other half and is
+             # deliberately out of run_all: it takes ~15 minutes and reads the
+             # stamped reference/ CSVs, so a reader can run it on demand
+             # without camb or classy installed. Named here because a script
+             # that produced a result and is invisible to every gate is the
+             # T-28 and T-35 class -- found by the 2026-10-15 workspace audit.
              tests=("test_camb_and_class_agree_with_each_other_and_that_sets_the_floor",
                     "test_criterion_5b_is_not_quietly_skipped"),
              note="reference half complete: CAMB 2.0.5 and CLASS v3.4.1 "
