@@ -1,0 +1,286 @@
+# Grid register — every discretisation in this bundle, and what is known about it.
+#
+# **Why this file exists.** Three findings in eight days were one failure:
+# `n_eta` fixed rather than derived (T-3), the k grid guarded by a comment
+# rather than by code (S24's correction to itself), and the recombination grid
+# setting the primary source with nothing guarding it (T-46/Q7). Fixing a third
+# instance does not stop a fourth. Naming every grid, and failing when the code
+# grows one this file does not list, does.
+#
+# `scripts/make_grid_register.py` walks the AST of `functions/` and `scripts/`
+# for `linspace`, `arange`, `logspace` and `geomspace`, joins against this file,
+# and **fails** on a site that is not registered or a registration whose site has
+# gone. The register in `provenance/GRID-REGISTER-v1.md` is generated from it.
+#
+# `status` is one of:
+#
+#   derived   computed from a physical scale by code that RAISES if the scale
+#             cannot be met. The only status that cannot silently degrade.
+#   measured  a chosen literal whose convergence has been measured, with the
+#             number in `note`.
+#   described a chosen literal governed by a stated rule, with the rule named
+#             and a guard elsewhere that can fail.
+#   index     an exact integer or index array. Not a discretisation: no
+#             resolution to get wrong. Listed so that it is excluded on the
+#             record rather than by nobody looking.
+#   open      a chosen literal whose convergence is NOT established here. This
+#             status is the point of the file. It must carry what is known and
+#             the question or decision that owns it.
+#
+# `key` is `<path>::<name>`, the assignment target, not a line number — line
+# numbers move and a register that drifts is worse than none.
+
+# ---------------------------------------------------------------------------
+# The open one. Q7's row, and the reason Coordination asked for this table.
+# ---------------------------------------------------------------------------
+[[grid]]
+key = "functions/spectra/decoupling.py::eta"
+what = "the recombination history: kappa', visibility and opacity in eta"
+status = "open"
+note = """**1.2% in the primary source at eta_*, measured.** `n_eta=4000`, spacing
+4.9e-04, which is COARSER than the line-of-sight grid it is interpolated onto.
+Refining it 4000 -> 64000 moves the primary source -118.321 -> -119.788. Nothing
+derives or guards it. Criterion 5b's gate CANNOT bound it: both of its routes
+share this history, so a grid shift moves them together and cancels. Finding
+**T-46**, question **Q7**, decision **S33** --- derived immediately after the
+v1.2.0 tag. v1.2.0 ships it as a stated limit."""
+
+# ---------------------------------------------------------------------------
+# Derived, and guarded by code that raises.
+# ---------------------------------------------------------------------------
+[[grid]]
+key = "functions/spectra/pipeline.py::eta"
+what = "the line-of-sight integration grid for C_ell"
+status = "derived"
+note = """`required_n_eta(k_max, span)` at 12 samples per j_ell oscillation, and
+`run` RAISES rather than accepting an n_eta below it --- *"Pass n_eta=None to
+derive it. See finding T-3."* This is the guard T-3 produced, and it is the
+template the other rows are measured against."""
+
+[[grid]]
+key = "functions/spectra/two_route.py::eta"
+what = "the eta grid for criterion 5b's gate, both routes"
+status = "derived"
+note = """`required_n_eta` at **48** samples per oscillation, four times the C_ell
+route's twelve, on a floor of 8000. The higher rate is not caution: this
+comparison measures the DIFFERENCE between two quadrature errors, which does not
+fall the way either does. It was fixed at 4000 and that is finding **T-45** ---
+both routes un-converged in the same direction, agreeing two hundred times
+better than they do. `test_the_eta_grid_is_derived_from_k_and_not_fixed` holds
+it derived."""
+
+[[grid]]
+key = "functions/spectra/two_frame.py::eta"
+what = "the eta grid for the two-frame evaluation of (102): F2, F5, F7"
+status = "derived"
+note = """`required_n_eta(k_max, span)` when `n_eta is None`, which is how every
+figure calls it, and `check_k` RAISES when a caller asks for a mode the grid
+cannot resolve --- the guard finding **T-34** produced after F7 sized its grid
+for k=140 and integrated to k=420. A caller may still pass `n_eta` explicitly;
+nothing in the bundle does."""
+
+[[grid]]
+key = "functions/spectra/bessel_table.py::x"
+what = "the x grid j_ell(x) is tabulated on"
+status = "derived"
+note = """`n = max(int(points_per_period * x_max / pi), 64)` --- computed from
+`x_max`, not accepted from a caller, with a floor. Twelve samples per
+oscillation, the same rate as the eta grid, and deliberately so: the two grids
+resolve one function and there is no reason for them to disagree about how
+finely."""
+
+# ---------------------------------------------------------------------------
+# Chosen, and measured.
+# ---------------------------------------------------------------------------
+[[grid]]
+key = "functions/background/flrw.py::u"
+what = "the panel division of the conformal-time integral eta(a)"
+status = "measured"
+note = """`n_panels=400`. **Converged to 8e-12**, measured 2026-10-15 over
+400 -> 3200 on both LCDM and PLANCK_MODEL: eta_0 moves by 1e-15 and a(eta_0/2)
+by 8e-12. Each panel is an adaptive `quad`, so the panel count sets where the
+adaptive refinement restarts rather than the accuracy. Nothing rests on it."""
+
+[[grid]]
+key = "functions/spectra/peebles.py::z_grid"
+what = "the output sampling of the Peebles ionisation solution x_e(z)"
+status = "measured"
+note = """`n_points=2000`. **Converged to 1.0e-05**, measured 2026-10-15 over
+2000 -> 16000. It is `t_eval` on a `Radau` solve at rtol 1e-8 with
+`max_step=20`, so it sets the OUTPUT sampling and not the integration accuracy.
+It feeds the same interpolation chain as the row above it, which is why it is
+measured rather than assumed."""
+
+[[grid]]
+key = "scripts/figure_f1_appendix_f.py::eta"
+what = "the free-streaming integration grid for F1's four external hierarchies"
+status = "measured"
+note = """`linspace(0, 20, 1200)`. Its own residuals are the measurement: the
+four external recursions match at 1e-13 to 1e-14 at scale exactly 1, which no
+under-resolved grid produces."""
+
+[[grid]]
+key = "scripts/diagnostic_d1_sign_control.py::eta"
+what = "the integration grid for the relative-sign control"
+status = "measured"
+note = """`linspace(0, 20, 1200)`, the same grid as F1 and for the same reason.
+D1's claim is a DIVERGENCE against a 1e-10 match, which is six orders either
+side of anything the grid could contribute."""
+
+# ---------------------------------------------------------------------------
+# Chosen, with a stated rule and a guard that can fail.
+# ---------------------------------------------------------------------------
+[[grid]]
+key = "scripts/figure_f3_angular_spectrum.py::K_COM"
+what = "the k quadrature grid for the released angular spectrum"
+status = "described"
+note = """`arange(0.05, 420.0, pi/6)` --- **linear, and that is the rule, not a
+preference**: a logarithmic k grid aliases the integrand at high k however many
+points it has. The upper limit is guarded by `cl_truncation_sensitivity` against
+**T-16**'s gate rather than by the number 420, which is what makes 420 a
+measured sufficiency instead of a choice."""
+
+[[grid]]
+key = "scripts/figure_f6_approximations.py::K_COM"
+what = "the k quadrature grid for the approximation-impact figure"
+status = "described"
+note = "As F3, and deliberately the same grid: F6 reports RATIOS against the F3 configuration, and a ratio taken across two grids measures the grids."
+
+[[grid]]
+key = "scripts/figure_f2_truncation.py::K_COM"
+what = "the k quadrature grid for the truncation-convergence figure"
+status = "described"
+note = """`arange(0.05, 1900.0, pi/3)`. The limit is 1900 and not 420 because of
+finding **T-32**: every v1.2.0 figure had been drawn on a grid stopping at the
+peak of the shear integrand. The lesson recorded there is the rule here ---
+**vary the limit and the resolution separately**, because one grid number
+conflates them."""
+
+[[grid]]
+key = "scripts/figure_f5_sources.py::K_COM"
+what = "the k quadrature grid for the source-decomposition figure"
+status = "described"
+note = "As F2, raised to 1900 by finding T-32."
+
+[[grid]]
+key = "scripts/figure_f7_frames.py::K_COM"
+what = "the k quadrature grid for the frame-specialisation figure"
+status = "described"
+note = "As F2, raised to 1900 by finding T-32, with `check_k` guarding the probe modes after T-34."
+
+[[grid]]
+key = "scripts/compare_criterion_5b.py::K_COM"
+what = "the k quadrature grid for the CAMB and CLASS comparison"
+status = "described"
+note = """`arange(0.05, 1500.0, pi/3)`. 1500 is chosen against the damping scale
+rather than picked: at k_D=536.9 the envelope e^{-2(k/k_D)^2} is 2e-07 there, so
+the grid runs past the damping scale as **T-32** requires."""
+
+[[grid]]
+key = "scripts/diagnostic_d5_sachs_wolfe.py::k"
+what = "the k quadrature grid for the Sachs-Wolfe limit"
+status = "described"
+note = "Linear at `DK`, the same rule as F3. D5's claim is 0.26% against a 5% criterion, twenty times inside, so the grid is not the binding term."
+
+[[grid]]
+key = "scripts/derive_ell_convergence.py::k"
+what = "the k grid the ell-convergence derivation sweeps"
+status = "described"
+note = "Linear at `DK`. This script's entire output IS a convergence measurement, so its grid is the independent variable rather than an assumption."
+
+[[grid]]
+key = "scripts/emit_handover_fields.py::eta"
+what = "the eta grid for the handover emissions"
+status = "described"
+note = "Taken from `required_n_eta` via the same derivation the pipeline uses; the emissions are evaluated on the pipeline's own grid so that a downstream consumer is not handed a different discretisation from the one the spectrum was computed on."
+
+# ---------------------------------------------------------------------------
+# Exact index arrays. Not discretisations; listed so the exclusion is on record.
+# ---------------------------------------------------------------------------
+[[grid]]
+key = "functions/spectra/bessel_table.py::ell"
+what = "which multipoles the table holds"
+status = "index"
+note = "Consecutive integers. There is no resolution to get wrong."
+
+[[grid]]
+key = "functions/harmonics/external.py::phase"
+what = "the i^ell phase factor"
+status = "index"
+note = "`1j ** arange(ell_max+1)`. Exact powers of i, one per multipole."
+
+[[grid]]
+key = "functions/spectra/kernels.py::nu"
+what = "the FFTLog frequency index"
+status = "index"
+note = "Set by the transform length, not chosen. The FFT's own grid is the k grid of its caller."
+
+[[grid]]
+key = "scripts/figure_f1_appendix_f.py::ell"
+what = "the multipoles F1 compares"
+status = "index"
+note = "Consecutive integers to `ELL_COMPARED`."
+
+[[grid]]
+key = "scripts/diagnostic_d5_sachs_wolfe.py::ELLS"
+what = "the multipoles criterion 5a is stated over"
+status = "index"
+note = "`arange(2, 21)` --- the criterion's own range, derived by `derive_ell_range.py` rather than chosen here."
+
+[[grid]]
+key = "scripts/make_reference_spectra.py::ell"
+what = "the multipoles the stamped CAMB and CLASS spectra are written at"
+status = "index"
+note = "Every integer 2..2000. The external codes return per-multipole values; nothing is interpolated."
+
+[[grid]]
+key = "scripts/compare_criterion_5b.py::ELLS"
+what = "the multipoles the external comparison is evaluated at"
+status = "index"
+note = """Linear across the acoustic band rather than logarithmic, which is a
+PRESENTATION choice with a reason: the peaks sit near 206, 410, 610 and 810, and
+a logarithmic grid samples the first peak twenty times and the third twice. Each
+ell is computed independently, so this selects which points are drawn and
+changes no value."""
+
+[[grid]]
+key = "scripts/figure_f2_truncation.py::ELLS"
+what = "the multipoles F2's tail panel is drawn at"
+status = "index"
+note = "Each ell is evaluated independently of the others, so the selection sets which points appear and no value."
+
+[[grid]]
+key = "scripts/figure_f2_truncation.py::ELLS_COST"
+what = "the multipoles F2's cost panel is drawn at"
+status = "index"
+note = "Sixteen rather than thirty, because the cost panel is the expensive one. Selection only."
+
+[[grid]]
+key = "scripts/figure_f3_angular_spectrum.py::ELLS"
+what = "the multipoles F3 is drawn at"
+status = "index"
+note = "Selection only; each ell is an independent quadrature."
+
+[[grid]]
+key = "scripts/figure_f5_sources.py::ELLS"
+what = "the multipoles F5 is drawn at"
+status = "index"
+note = "Selection only."
+
+[[grid]]
+key = "scripts/figure_f6_approximations.py::ELLS"
+what = "the multipoles F6 is drawn at"
+status = "index"
+note = "Selection only."
+
+[[grid]]
+key = "scripts/figure_f7_frames.py::ELLS"
+what = "the multipoles F7 is drawn at"
+status = "index"
+note = "Selection only, with the dipole prepended so the probe is on the figure."
+
+[[grid]]
+key = "scripts/figure_f4_correlation.py::THETA_DEG"
+what = "the angular abscissa of the correlation function"
+status = "index"
+note = "`linspace(0, 180, 721)` --- a quarter-degree plotting abscissa. C(theta) is evaluated pointwise from the C_ell, so this sets the drawn resolution and no computed value."

@@ -436,7 +436,7 @@ cannot go stale the way the verification paragraph above once did.
 | **D5** Sachs–Wolfe limit | criterion 5a at 5%, **and the statement that it cannot discriminate B-5** — the two forms differ by a factor with no $\ell$ dependence | `v1.0.0` |
 | **D6** (102) in two frames | the frame-invariance measurement F5 rests on, with the residual split by sector | `v1.2.0` |
 | **D7** CDM frame vs energy frame | **T-29** — *Annals II* §4.1 lists them as two of three distinct choices and this bundle conflates them; the tilt is up to 45% of the frame velocity | `v1.2.0` |
-| *D3*, *D4* | *deferred to v1.1.0 (S-b)* — cross-checks, not acceptance artefacts | — |
+| *D3*, *D4* | *deferred to v1.5.0 (S-b)* — cross-checks, not acceptance artefacts. **Retargeted 2026-10-15, finding T-47**: they were deferred *to v1.1.0*, which shipped without them, so the harness announced a deferral to a release in the past. `run_all.py` now fails on a deferral to an already-released version | — |
 
 The development lineage:
 

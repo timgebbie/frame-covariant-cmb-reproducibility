@@ -83,14 +83,18 @@ here.
   the same direction*. The grid is derived from $k$ now, as everything else in
   this bundle is.
 
-### Raised, not taken
+### Shipped as a stated limit
 
-- **Q7** — the recombination grid sets the primary source at $\eta_*$ and
-  nothing guards it: refining it moves that source by **1.2%**, four times
-  criterion 5a's measured 0.26%. Both routes share it, so criterion 5b's gate
-  cannot see it — **T-3** with the subject changed. Three options costed; P1-B
-  recommends deriving the grid, immediately *after* the v1.2.0 tag. **The PI's
-  call.**
+- **T-46 / Q7 / S33** — the recombination grid sets the primary source at
+  $\eta_*$ and nothing derives it: refining it moves that source by **1.2%**,
+  four times criterion 5a's measured 0.26%. Both routes share it, so criterion
+  5b's gate cannot see it — **T-3** with the subject changed. **Measured,
+  declared, and scheduled**: decision **S33** derives the grid immediately after
+  the v1.2.0 tag, with five acceptance conditions, so the release closes on the
+  numbers it was measured with. Every tolerance v1.2.0 states is wider than the
+  bound.
+
+### Raised, not taken
 - **T-38 part (1)** — the portable manifest canonicalises by rounding to a
   string, which cannot express a tolerance. Three designs recorded.
 

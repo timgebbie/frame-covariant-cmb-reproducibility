@@ -20,6 +20,7 @@ has a caption that names its script.
 from __future__ import annotations
 
 import argparse
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -69,8 +70,19 @@ DEFERRED: dict[str, tuple[str, str]] = {
     # S-b: diagnostic and cross-check artefacts, not acceptance ones.
     # F6 and F8 were here and landed in v1.1.0; they are removed rather
     # than left with a stale version, which is T-16's lesson about labels.
-    "D3  source terms against k": ("v1.1.0", "S-b"),
-    "D4  no monopole in the CGI approach": ("v1.1.0", "S-b"),
+    # **RETARGETED to v1.5.0, 2026-10-15 --- finding T-47.** Both were deferred
+    # *to v1.1.0*, and v1.1.0 was tagged on 2026-10-12 without them, so for
+    # three days the harness printed a deferral to a release that had already
+    # happened. The dict below made the message *accurate*; nothing made it
+    # *current*. `_released_versions` now closes that, which is the difference
+    # between fixing an instance and closing a class.
+    #
+    # D4 is worth keeping rather than dropping: the antecedent states flatly
+    # that "there is no monopole temperature anisotropy in the CGI approach
+    # while there is one in the canonical treatment", and a claim the paper
+    # makes in one sentence is exactly what a reproduction bundle should check.
+    "D3  source terms against k": ("v1.5.0", "S-b"),
+    "D4  no monopole in the CGI approach": ("v1.5.0", "S-b"),
     # S21 then S23 deferred F2, F5 and F7, twice for reasons that turned out
     # wrong. **All three landed 2026-10-14** and are removed rather than left
     # with a stale deferral, as F6 and F8 were. What actually blocked F5 was the
@@ -127,6 +139,36 @@ EMISSIONS: list[tuple[str, str]] = [
 GATE = ("portability", "scripts/check_portability.py")
 
 
+
+def _released_versions() -> set[str]:
+    """Versions with a dated `CHANGELOG.md` entry --- that is, already shipped.
+
+    `## [1.1.0] - 2026-10-12` is released; `## [Unreleased] - v1.0.0 in
+    preparation` is not.
+    """
+    text = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+    return {f"v{m}" for m in re.findall(r"^## \[(\d+\.\d+\.\d+)\] — \d", text, re.M)}
+
+
+def check_deferrals() -> list[str]:
+    """**A deferral to a release that has already happened is a stale label.**
+
+    Finding **T-16** is stale labels; the `DEFERRED` dict above exists because
+    of it, and stores the version as data so the message cannot contradict the
+    decision. That made the message accurate and left it able to go out of
+    date: D3 and D4 were deferred *to v1.1.0*, v1.1.0 shipped without them, and
+    the harness went on announcing a deferral to a release in the past ---
+    finding **T-47**, caught by Coordination rather than by a gate.
+
+    This is the gate. It is cheap, it is arithmetic, and it is the difference
+    between fixing the instance and closing the class.
+    """
+    released = _released_versions()
+    return [f"{label!r} is deferred to {version}, which is already released. "
+            "Retarget it or do it."
+            for label, (version, _) in DEFERRED.items() if version in released]
+
+
 def run(cmd: list[str], label: str) -> int:
     print(f"\n--- {label} " + "-" * max(0, 60 - len(label)))
     return subprocess.call(cmd, cwd=ROOT)
@@ -140,6 +182,13 @@ def main() -> int:
     args = ap.parse_args()
 
     failures: list[str] = []
+
+    stale = check_deferrals()
+    if stale:
+        print("\n--- deferrals " + "-" * 47)
+        for line in stale:
+            print(f"    STALE  {line}")
+        failures.append("stale deferrals")
 
     pending: dict[str, list[str]] = {"figures": [], "diagnostics": [], "emissions": []}
     # **The portability gate stops `--strict` and only reports in `--rerun`**
@@ -204,6 +253,11 @@ def main() -> int:
     # Decision S27.
     if run([sys.executable, "scripts/make_release_status.py"], "release status"):
         failures.append("release status")
+    # The grid register. It costs a tenth of a second and it is the gate that
+    # closes T-3's class rather than its third instance --- see T-47's note
+    # above on the difference, which this bundle has now paid for twice.
+    if run([sys.executable, "scripts/make_grid_register.py"], "grid register"):
+        failures.append("grid register")
     if run([sys.executable, "scripts/sync_conventions.py", "--check"], "conventions copy"):
         failures.append("conventions copy")
 

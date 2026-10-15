@@ -523,7 +523,7 @@ mechanism that could produce one first exists.
 
 ---
 
-## Q7 — the recombination grid sets the primary source, and nothing guards it
+## Q7 — the recombination grid sets the primary source, and nothing guards it — **ANSWERED 2026-10-15, decision S33**
 
 **Raised by P1-B 2026-10-15, out of finding T-46. The PI's call. Blocks
 nothing at v1.2.0; it should be answered before v1.5.0 builds on this base.**
@@ -587,4 +587,16 @@ than before it**, so the release that is nearly closed closes on measured
 numbers and the change lands at the head of v1.5.0's work with a full
 regeneration behind it. (3) is the one to avoid, for the reason given.
 
-**Status: open. P1-B will not act on it without the PI.**
+### Answered — the PI, 2026-10-15
+
+*"I agree: my recommendation is to derive the grid, immediately after the
+v1.2.0 tag, not before it. This makes sense and makes the staging worthwhile."*
+
+**Option (1), staged after the tag. Recorded as decision S33**, which carries
+the five acceptance conditions the work has to meet and the one instrument that
+can check it — the CAMB/CLASS comparison, since 5b's gate shares the grid and
+cannot. v1.2.0 ships this as a **stated limit** in the release notes and the
+supplement, in the manner of O1 and O2.
+
+**Status: closed as a question, open as scheduled work. Nothing in v1.2.0
+changes for it.**

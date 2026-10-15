@@ -3870,3 +3870,95 @@ under-resolved input, and again cannot see it --- *a comparison that holds an
 input fixed cannot check that input*. That sentence was written into
 `functions/spectra/two_route.py` as a caution before this was found. It is now
 an example.
+
+
+---
+
+## T-46 — ANSWERED the same day. Decision S33: derive the grid, after the tag.
+
+The entry above closes with *"That is the PI's call and it is raised as **Q7**,
+not taken here."* It was taken, 2026-10-15:
+
+> *"I agree: my recommendation is to derive the grid, immediately after the
+> v1.2.0 tag, not before it. This makes sense and makes the staging
+> worthwhile."*
+
+**Option (1) of the three costed in Q7**, staged after the tag. The reasoning
+and the five acceptance conditions are **S33**; this entry records only what it
+means for the finding.
+
+**Nothing in v1.2.0 changes.** The interpolant stays linear in `pipeline.run`,
+the recombination default stays at 4 000, every generated number stands, and
+v1.2.0 ships the 1.2% as a **stated limit** in the release notes and the
+supplement — the treatment **O1** and **O2** already have. A measured bound
+declared in the release is a different object from one found in it afterwards,
+and the distinction is the whole value of having measured it before the freeze
+rather than after.
+
+**What will check the fix, which is not what checks the bundle.** Criterion 5b's
+gate reads $9.5\times10^{-6}$ before and after, because both routes share the
+recombination history — the thing S4c says in advance that a self-comparison
+cannot do. Internally the instrument is convergence under refinement.
+Externally it is the **CAMB/CLASS comparison**, because a grid change moves
+$z_*$, the visibility width, the damping scale and the peak positions, and
+those survive the shape renormalisation at $\ell=30$ that a uniform amplitude
+change would not. The comparison S4c demoted from gate to context is the only
+thing in this bundle that can watch Q7's fix land, which is worth stating
+plainly: **context is not decoration.**
+
+`tests/test_two_route.py::test_the_interpolant_at_eta_star_is_what_T46_says_it_is`
+is written to **fail** when the interpolant is matched. That is deliberate and
+it is this entry's enforcement: the change cannot land quietly.
+
+---
+
+## T-47 — two deferrals outlived the release they were deferred to, and the fix for that had already been built
+
+**Found by Coordination, 2026-10-15, reading the README.** `D3` and `D4` were
+listed as *"deferred to v1.1.0 (S-b)"*. **v1.1.0 was tagged on 2026-10-12
+without them.** For three days the harness, the README and the release record
+all announced a deferral to a release that had already happened.
+
+### Why this one stings
+
+The `DEFERRED` dict in `scripts/run_all.py` exists **because of this class**.
+Its own comment says so:
+
+> *A single frozenset was wrong once S21 and S23 split the destinations: the
+> harness went on printing "deferred to v1.1.0" for F2, F5 and F7 after they had
+> been moved to v1.2.0 … The version is data now, so the message cannot drift
+> from the decision.*
+
+That fix was correct and it was not enough. Storing the version as data stops
+the message from contradicting the **decision**; nothing stopped the decision
+itself from going out of date. **An accurate label and a current label are
+different properties, and T-16's fix only bought the first.**
+
+### What is carried now
+
+`check_deferrals()` reads the released versions out of `CHANGELOG.md` — a dated
+`## [1.1.0] — 2026-10-12` is released, `## [Unreleased]` is not — and
+**fails the harness** on any deferral whose target has shipped. It reads the
+changelog rather than git tags deliberately: a reader reproducing this from a
+downloaded zip has no `.git`, and a gate that answers differently for them is
+not a gate. That is `_bundle_files`' argument applied again.
+
+`tests/test_grid_register.py::test_the_stale_deferral_gate_can_fail` makes it
+fail on purpose, because **T-44** is the finding that a gate is not tested by
+the run that passes.
+
+D3 and D4 are **retargeted to v1.5.0**, not dropped. D4 in particular is worth
+keeping: the antecedent states flatly that *"there is no monopole temperature
+anisotropy in the CGI approach while there is one in the canonical treatment"*,
+and a claim the paper makes in one sentence is exactly what a reproduction
+bundle should check.
+
+### The lesson, and it is the same one three entries running
+
+**Fixing the instance is not closing the class.** T-16 fixed a stale label and
+left the mechanism that produces stale labels. T-3 fixed one unguarded grid and
+left the rest unregistered, which is T-46 and Q7. Both classes are closed now,
+each by a cheap check that can fail —
+`check_deferrals()` and `scripts/make_grid_register.py` — and neither closure
+cost more than the finding that prompted it. **The expensive thing was finding
+the third instance, not writing the gate.**

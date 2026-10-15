@@ -42,11 +42,66 @@ blocked by arithmetic rather than by physics for two days.
 |---|---|---|
 | 1 | the free-streaming recursion reproduces (F.1)–(F.4), with the external matches of (F.3) and (F.4) checked numerically rather than asserted | **closed** — HS Eq. (6), **Wilson Eq. (8)**, MB Eqs. (49)/(50) and SZ Eq. (3d), each read from its own paper and integrated as printed; all match the bundle to $10^{-13}$–$10^{-14}$ at scale exactly 1. **Five** sources — Wilson \& Silk 1981 Eq. (7) is the earliest, read from its own page, and at $K=0$ is Wilson 1983 Eq. (8) exactly, so it is credited and **not drawn**: four panels, four independent numerical checks. Two normalisations *and* two phase conventions — Wilson is written in the imaginary convention and tests the phase, not only the $\ell$-weights |
 | 2 | a covariant → mode → covariant round trip returns the input to machine precision | **CLOSED 2026-10-09.** The residual is not small, it is **identically zero in exact symbolic arithmetic**: $\tilde{\mathcal B}_1-(\mathcal B_1+\dot v_a)=[0,0,0]$, S14's target met with no shear and no $Hv$. The cancellation is **exhibited rather than asserted** — the gradient half carries $-Hv_a$ through $v_a\dot{\overline{\ln T}}$ in the moving projector, the acceleration half $+Hv_a$ through $\tfrac13\Theta$ in $v^b\nabla_bu_a$, and it is the *same* $H$ twice. $\sigma_{ab}v^b$ and $\epsilon_{abc}v^b\omega^c$ are formed **in full** and leave at $O(\varepsilon^2)$ by series expansion rather than by hand, so "no shear" is a statement about order that sympy checks. `functions/frames.py`, `tests/test_frames.py`, D2 |
-| 3 | both harmonic phase conventions run end to end; the convention is fixed by the **definition** of $Q_{A_\ell}$, and the external match then confirms it | **CLOSED 2026-10-07**, on `conventions.md` **C3.2** — marked DEF and seed-verified against the GE98 PDF: $Q_{A_\ell}=(-k_{\rm phys})^{-\ell}\mathrm D_{\langle A_\ell\rangle}Q$, the stripped factor **real, no $i$**. A real stripped factor forces $c^2=+1$ and the opposite-sign bracket. **C3a.3** then derives $Q_{A_\ell}=i^\ell O^{(k)}_{A_\ell}Q$, and *Annals II* independently states its form sits at $i^{-\ell}$ from Wilson's plane-wave basis — two derivations of the same phase, measured at $3.1\times10^{-14}$ with the transformed solution real to $10^{-10}$. The earlier wording was circular and was **reopened 2026-10-06** before this closed it; see Q1 |
+| 3 | both harmonic phase conventions run end to end; the convention is fixed by the **definition** of $Q_{A_\ell}$, and the external match then confirms it | **CLOSED 2026-10-07**, on `conventions.md` **C3.2** — marked DEF and seed-verified against the GE98 PDF: $Q_{A_\ell}=(-k_{\rm phys})^{-\ell}\mathrm D_{\langle A_\ell\rangle}Q$, the stripped factor **real, no $i$**. A real stripped factor forces $c^2=+1$ and the opposite-sign bracket. **C3a.3** then derives $Q_{A_\ell}=i^\ell O^{(k)}_{A_\ell}Q$, and *Annals II* independently states its form sits at $i^{-\ell}$ from Wilson's plane-wave basis — two derivations of the same phase, measured at $3.1\times10^{-14}$ with the transformed solution real to $10^{-10}$. The earlier wording was circular and was **reopened 2026-10-06** before this closed it; see Q1. **STRENGTHENED 2026-10-15 (S34), not reopened:** the last stipulated freedom underneath this criterion is gone. `conventions.md` **C3.5** had carried two objects under one letter until the 2026-10-06 renaming — $\lambda$, the rank-dependent rescaling $Q_{A_\ell}\to\lambda^\ell Q_{A_\ell}$, and $s_Q$, the sign of a scalar's mode coefficient. $\lambda$ is now **derived**: it does not cancel between a rank-0 object and a rank-1 one, and cold dark matter falling into a potential well requires $v\cdot(-k\Phi_A)>0$ in the growing mode, with a control that reverses the Euler sign and fails. $s_Q$ is **proved immaterial** — the scalar, its gradient and its second gradient each carry exactly one factor, so it cancels from every ratio and no reported number can depend on it. Criterion 3 no longer rests on an adopted convention plus a footnote; this changes no number and reopens nothing |
 | 4 | a known-wrong control runs and fails in a known shape | **closed** — D1 runs and diverges rather than projecting; the correct recursion matches $j_\ell$ to $10^{-10}$ beside it. Restated: The $\pm(\ell+2)$ control is **withdrawn** to v1.5.0, where that term exists, and replaced by a relative-sign control on the free-streaming bracket (D1). See Q2, closed |
 | 5a | the Sachs–Wolfe limit is recovered over $2\le\ell\le20$ to 5%, against the **corrected** closed form of (201) | **CLOSED 2026-10-09** at **0.27%**, twenty times inside tolerance. D5 compares the **pipeline's own** $C_\ell$ — the same code that draws F3, with the Doppler and integrated terms switched off rather than reimplemented — against `cl_large_scale_reduced`. The comparison required translating one power of $k$ between *Annals II*'s primordial convention and this bundle's; untranslated it reports 835%, and the translation is recorded in `provenance/`. **D5 also states what it cannot do**: the corrected and printed forms differ by $\chi^{2-n}$, which is $\ell$-independent and cancels in the shape normalisation, so 5a is not evidence for B-5 — that rests on the absolute quadrature comparison |
 | 5b | the **CDM and ΛCDM** angular power spectra recovered to a **measured** tolerance, set against the bundle's own pipeline — (102) against (177)–(179) — with **CAMB and CLASS** reported alongside as context | **MOVED to v1.2.0** — decision S18, accepted by the PI 2026-10-09; **CLOSED there 2026-10-15** under decision **S4c**. The tolerance is still **measured**, and what it is measured against changed: S4b set it at the CAMB–CLASS mutual difference, 0.370% across the peaks, which a slow-decoupling solution with no polarisation hierarchy and no neutrino anisotropic stress cannot meet and was never going to — a criterion that can only be failed is not one. S4c gates instead on the thing *Annals II* writes twice and recovers symbolically but never evaluates: (102) carried generically against (177)–(179) assembled, **$9.5\times10^{-6}$ worst against $10^{-3}$** over CDM, ΛCDM and `PLANCK_MODEL`, $0.3\le k\le600$, $2\le\ell\le600$, by `scripts/diagnostic_d8_criterion_5b_gate.py` in `run_all.py`. The external comparison is still run, still stamped, and reported as context — 97.8% in the plateau, 137% across the peaks, itemised by approximation in `provenance/CRITERION-5B-v1.md`. `tests/test_external_codes.py` still fails if these notes claim 5b closed while the reference data is absent |
 | 6 | every number the paper prints is regenerated here, or marked not-machine-checkable with the reason | **CLOSED 2026-10-09 on the manuscript freeze**, recorded with SHA-256 checksums for the `.tex`, `.bbl`, `.bib`, `.pdf`, the four figures and the arXiv tarball, so "is the file on disk still the frozen version?" is answerable by `sha256sum -c` rather than by recollection. The division of labour is worth stating exactly, because the criterion spans two repositories: **this bundle** regenerates every number in its own supplement through `python scripts/run_all.py --strict`, and the **paper's** figure-caption numbers — the $71\%$ within $\|z\|<b$, the efficiency ratio $2-\chi_s/\chi_*$ — are recomputed and asserted by the paper's own figure scripts on every run, which is a different artefact and is named as such in `provenance/AI-PROVENANCE-v1.md`. What is *not* machine-checked is marked there too: **O1** and **O2** ship as stated limits on the PI's recorded decision, neither being a known error |
+
+### What v1.2.0 ships as a stated limit
+
+In the manner of **O1** and **O2** — measured, declared, and scheduled, rather
+than discovered afterwards.
+
+**The recombination grid sets the primary source at $\eta_*$, and nothing
+derives it.** `required_n_eta` derives the line-of-sight grid from $k_{\max}$
+and raises; `RecombinationHistory` carries a fixed `n_eta=4000`, whose spacing
+is **coarser than the grid it is interpolated onto**. Refining it moves the
+primary source — the term carrying the Sachs–Wolfe plateau and the acoustic
+amplitude — by **1.2%** between `n_eta` 4 000 and 64 000. Finding **T-46**.
+
+**Two numbers, and they must be read together.**
+
+| | |
+|---|---|
+| criterion 5b's gate, measured | $9.5\times10^{-6}$ against a gate of $10^{-3}$ |
+| the grid dependence of the primary source | $1.2\times10^{-2}$ |
+
+The second is **twelve times 5b's gate and about thirteen hundred times 5b's
+worst measured residual**. They are not two estimates of one quantity and the
+smaller one is not the accuracy of the spectrum.
+
+**Criterion 5b does not bound this, and cannot.** Both of its routes are handed
+the same recombination history, so a grid shift moves them together and cancels
+in the comparison between them. That is this project's own rule — *state what
+two agreeing routes do not share* — applied to the number 5b reports. $9.5\times
+10^{-6}$ is the agreement between two assemblies of the same source; it is not
+a statement about how accurately that source is computed, and nothing in this
+release should be read as claiming it is.
+
+**What does bound it**, and what will measure the fix, is convergence under
+refinement internally and the **CAMB and CLASS comparison** externally: a
+recombination-grid change moves $z_*$, the visibility width, the damping scale
+and the peak positions, and those survive the shape renormalisation at $\ell=30$
+that a uniform amplitude change would not. The comparison decision **S4c**
+demoted from gate to context is the only instrument in this bundle that can see
+Q7's fix land.
+
+Every tolerance this release states is wider than the $1.2\%$, and no number in
+it is falsified by the finding. It is a bound found while setting a gate,
+measured before the freeze rather than after it, and declared.
+
+**Decision S33** takes it: the grid is derived, with five stated acceptance
+conditions, **immediately after the v1.2.0 tag**. Before the tag would mean a
+release measured on one tree and shipped on another.
+
+**And the class is closed, not the instance.** Q7 is the third of its kind in
+eight days — $n_\eta$ derived from $k_{\max}$ after T-3, the $k$ grid guarded by
+a comment rather than by code, and now the recombination grid.
+`provenance/GRID-REGISTER-v1.md` lists every grid and discretisation in the
+bundle, each marked **derived-and-guarded** or **chosen-and-described**, and
+`tests/test_grid_register.py` fails if the code grows one that the register does
+not name. That is what stops a fourth.
 
 ### Release mechanics
 
