@@ -50,7 +50,7 @@ def preamble(text: str) -> str:
 
 def test_the_supplement_is_referenced_before_the_first_section(preamble: str):
     """Below the title, not buried under *DOI, citation and license*."""
-    assert "supplementary-materials/supplement-v1.0.0.pdf" in preamble, (
+    assert "supplementary-materials/supplement-v1.2.0.pdf" in preamble, (
         "the computational supplement is not referenced above the first section"
     )
 

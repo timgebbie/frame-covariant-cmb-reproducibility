@@ -66,7 +66,7 @@ def _perturb(text: str, relative: float) -> str:
 @pytest.mark.parametrize("rel,expected", [
     ("figures/f3-angular-spectrum-v1.0.0.png", "rendered"),
     ("figures/f6-approximations-v1.1.0.pdf", "rendered"),
-    ("supplementary-materials/supplement-v1.0.0.pdf", "rendered"),
+    ("supplementary-materials/supplement-v1.2.0.pdf", "rendered"),
     ("diagnostics/d1-sign-control-v1.0.0.png", "rendered"),
     ("outputs/f4-correlation.csv", "numeric"),
     ("outputs/f1-appendix-f-residuals.csv", "bounded"),
@@ -161,7 +161,7 @@ def test_renderings_are_outside_the_binding_manifest():
 
     assert "f3-angular-spectrum-v1.0.0.png" in byte_manifest
     assert "f3-angular-spectrum-v1.0.0.png" not in portable
-    assert "supplement-v1.0.0.pdf" in byte_manifest
-    assert "supplement-v1.0.0.pdf" not in portable
+    assert "supplement-v1.2.0.pdf" in byte_manifest
+    assert "supplement-v1.2.0.pdf" not in portable
     # and the content half is still there
     assert "functions/frames.py" in portable

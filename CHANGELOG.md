@@ -3,7 +3,7 @@
 All notable changes to this bundle are recorded here. The version policy is in
 `README.md` under *Version-control policy*.
 
-## [Unreleased] — v1.2.0 in preparation
+## [1.2.0] — 2026-10-16
 
 v1.2.0 is **the full linear source and the audit of it** (S26): an extension of
 the linear theory in covariant $1+3$, and a check on the antecedent's own

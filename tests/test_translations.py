@@ -176,7 +176,7 @@ def test_the_supplement_prints_the_table_rather_than_describing_it():
     correct while the table did not exist and becomes a false statement the
     moment it does.
     """
-    tex = (ROOT / "SUPPLEMENTARY-MATERIAL-v1.0.0.tex").read_text(encoding="utf-8")
+    tex = (ROOT / "SUPPLEMENTARY-MATERIAL-v1.2.0.tex").read_text(encoding="utf-8")
     assert "tables/translations-v1.0.0.tex" in tex, (
         "the supplement does not input the translations table"
     )

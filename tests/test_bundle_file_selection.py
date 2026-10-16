@@ -226,7 +226,7 @@ def test_the_released_figures_are_in_the_bundle():
     for rel in (
         "figures/f1-appendix-f-v1.0.0.pdf",
         "figures/f3-angular-spectrum-v1.0.0.pdf",
-        "supplementary-materials/supplement-v1.0.0.pdf",
+        "supplementary-materials/supplement-v1.2.0.pdf",
     ):
         assert rel in selected, f"{rel} fell out of the fingerprint"
 

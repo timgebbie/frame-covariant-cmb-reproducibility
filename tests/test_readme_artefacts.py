@@ -113,34 +113,43 @@ def test_the_readme_states_the_git_check_rather_than_its_answer():
 
 
 def test_the_readme_does_not_claim_a_tag_that_does_not_exist():
-    """**The rung is the claim, and it is the one the PI corrected.**
+    r"""**The rung is the claim, and the claim must name a tag that exists.**
 
-    A README saying *released as v1.1.0* while no `v1.1.0` tag exists reports
-    the wrong rung, which is the thing decision **S27** is for. The tree says
-    `v1.1.0-rc` until the tag lands; this asserts the two statements are not
-    both present, so flipping one without the other fails.
+    A README saying *released as vX* while no `vX` tag exists reports the wrong
+    rung, which is what decision **S27** is for.
+
+    **This test was version-locked and went stale at the first release after it
+    was written.** It matched three literal sentences about v1.1.0, so the
+    v1.2.0 bump --- which correctly rewrote that sentence --- made it match
+    *none* of them and the test failed for being out of date rather than for
+    finding anything. That is the **T-16** class inside the very file that
+    exists to catch T-16, and it cost a failed `--strict` on the release run.
+    It is written version-agnostically now: it reads the versions out of the
+    README and checks them against each other and against the generated status,
+    so it has nothing left to go stale about.
     """
-    states = [
-        "**Released as v1.1.0; this tree is v1.2.0-dev.**" in README,
-        "**This tree is v1.1.0-rc.**" in README,
-        "**Released as v1.1.0.**" in README,
-    ]
-    assert sum(states) == 1, (
-        "the README must make exactly one claim about where the tree sits "
-        f"relative to v1.1.0; it makes {sum(states)}. Moving between them is "
-        "this paragraph, the lineage table's last rows, and the v1.1.0 rungs in "
-        "scripts/make_release_status.py --- three places, which is why this "
-        "test exists.")
+    import re
 
-    # And the claim must match the rungs the status file carries.
+    claim = re.search(
+        r"\*\*Released as (v[0-9.]+); this tree is (v[0-9.]+(?:-dev)?)\.\*\*", README)
+    assert claim, (
+        "the README must state, once, which version is released and where this "
+        "tree sits relative to it, as '**Released as vX; this tree is vY.**'")
+    released, tree = claim.group(1), claim.group(2)
+
+    header = re.search(r"\*\*Last release: (v[0-9.]+)\*\*", README)
+    assert header and header.group(1) == released, (
+        f"the README header says the last release is "
+        f"{header.group(1) if header else None!r} and its verification section "
+        f"says {released!r}")
+
+    # The generated status must have shipped what the README calls released.
     status = (ROOT / "provenance" / "RELEASE-STATUS-v1.md").read_text(encoding="utf-8")
-    if states[0] or states[2]:
-        assert "## v1.1.0 — 3×S" in status, (
-            "the README says v1.1.0 is released and the generated status still "
-            "has its artefacts at a lower rung")
-    if states[1]:
-        assert "## v1.1.0 — 3×R" in status, (
-            "the README says v1.1.0-rc and the status has already shipped it")
+    shipped = re.search(rf"^## {re.escape(released)} — .*?(\d+)×S", status, re.MULTILINE)
+    assert shipped, (
+        f"the README says {released} is released, and the generated status "
+        f"carries no shipped artefacts for it. One of the two is wrong, and the "
+        f"status is the generated one.")
 
 
 # --------------------------------------------------------------------------
@@ -169,18 +178,26 @@ def test_the_readme_and_the_supplement_name_the_same_tree_version():
     by the PI reading them, which is finding **T-16**'s lesson arriving by the
     only route the bundle had left open.
 
-    **The file names are deliberately not checked.** The house convention is
-    that a version suffix marks the release an artefact was *introduced* in ---
-    `config-v1.7.7.json` survives into a v2.2.0 release in the exemplar --- so
-    `SUPPLEMENTARY-MATERIAL-v1.0.0.tex` keeps its name while its content moves.
-    What must agree is what the documents *say*, which is content.
+    **The file names are deliberately not checked here, and the convention
+    they follow changed at v1.2.0.** It used to be stated as *a version suffix
+    marks the release an artefact was introduced in*, generalising from
+    `config-v1.7.7.json`, which does survive into a v2.2.0 release in the
+    exemplar. **That generalisation was wrong for supplements.** The exemplar
+    carries `SUPPLEMENTARY-MATERIAL-v2.0.0.tex`, `-v2.1.0.tex` and `-v2.2.0.tex`
+    side by side, one per release, exactly as it carries one release-notes file
+    per release. Decision **S36** adopts that: each release freezes its own
+    supplement and the previous ones are kept rather than rewritten. What must
+    agree is what the *current* document says, which is content.
     """
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    supplement = (ROOT / "SUPPLEMENTARY-MATERIAL-v1.0.0.tex").read_text(encoding="utf-8")
+    supplement = (ROOT / "SUPPLEMENTARY-MATERIAL-v1.2.0.tex").read_text(encoding="utf-8")
 
-    header = _tree_version_from(readme, r"^Version:\s+\*\*(v[0-9.]+(?:-dev)?)\*\*")
-    status = _tree_version_from(readme, r"this tree is (v[0-9.]+(?:-dev)?)")
-    dated = _tree_version_from(supplement, r"\\date\{\\textbf\{(v[0-9.]+(?:-dev)?)\}")
+    header = _tree_version_from(
+        readme, r"^Version:\s+\*\*(v\d+\.\d+\.\d+(?:-dev)?)\*\*")
+    status = _tree_version_from(
+        readme, r"this tree is (v\d+\.\d+\.\d+(?:-dev)?)")
+    dated = _tree_version_from(
+        supplement, r"\\date\{\\textbf\{(v\d+\.\d+\.\d+(?:-dev)?)\}")
 
     assert header == status == dated, (
         f"version labels disagree: README header {header!r}, README verification "

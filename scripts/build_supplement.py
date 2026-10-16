@@ -43,8 +43,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
-SOURCE = ROOT / "SUPPLEMENTARY-MATERIAL-v1.0.0.tex"
-TARGET = ROOT / "supplementary-materials" / "supplement-v1.0.0.pdf"
+SOURCE = ROOT / "SUPPLEMENTARY-MATERIAL-v1.2.0.tex"
+TARGET = ROOT / "supplementary-materials" / "supplement-v1.2.0.pdf"
 
 #: Worst overfull box tolerated, in points. Proposed by P1-B and accepted by
 #: the PI on 2026-10-09. Not a standard: a threshold nobody chose is a

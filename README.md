@@ -1,10 +1,11 @@
 # 1+3 covariant CMB anisotropies reproducibility bundle
 
-Version: **v1.2.0-dev** — the full linear spectrum with the acoustic peaks and
+Version: **v1.2.0** — the full linear spectrum with the acoustic peaks and
 the Silk damping tail (F9), in both frames; the integral solution (102) carried
 with a generic 4-velocity and specialised back; acceptance criterion 5b closed.
-**Last release: v1.1.0** — Peebles recombination and the frame specialisation
-made numerical.
+**Last release: v1.2.0** — tagged 2026-10-16; the tree and the release
+coincide. Previously v1.1.0, Peebles recombination and the frame
+specialisation made numerical.
 
 Supplementary code and materials for: Tim Gebbie, *"Frame covariance of CMB
 lensing in the exact $1+3$ covariant radiation hierarchy,"* arXiv: identifier
@@ -12,9 +13,9 @@ assigned on submission.
 
 The supplementary-materials document is included here:
 
-> [supplement-v1.0.0.pdf](supplementary-materials/supplement-v1.0.0.pdf)
+> [supplement-v1.2.0.pdf](supplementary-materials/supplement-v1.2.0.pdf)
 
-Built from `SUPPLEMENTARY-MATERIAL-v1.0.0.tex` by `scripts/build_supplement.py`.
+Built from `SUPPLEMENTARY-MATERIAL-v1.2.0.tex` by `scripts/build_supplement.py`.
 It carries the scope, the theory-to-computation map, the acceptance spine, the
 conventions and translations tables, and the interpretive limits — read it
 before the code if you want to know what this release does and does not claim.
@@ -78,7 +79,7 @@ convention and so tests the phase, not only the $\ell$-weights. This is the
 bundle's strongest single piece of evidence and it has held unchanged across
 all three releases.
 
-## Current situation: v1.2.0-dev
+## Current situation: v1.2.0
 
 This bundle is an **independent Python reconstruction, from first 1+3 covariant
 principles, of the almost-Friedmann–Lemaître results of** T. Gebbie,
@@ -102,9 +103,9 @@ derived there and what is not.
 
 | | what it established | its figure |
 |---|---|---|
-| **v1.2.0** | the spectrum **with structure in it**: the full linear $C_\ell$ — acoustic peaks, Silk damping, the complete source assembly, and (102) carried with a generic $u^a$ and specialised back. Criterion 5b closes | **F9**, immediately below |
-| **v1.1.0** | the recombination that **makes peaks possible**: Peebles' effective three-level atom replacing equilibrium Saha and made the default (**S22**). The visibility peak moves $z\simeq1300\to1107$ against a standard 1080–1100, and the function widens by about 40% — and the width is what sets the Silk damping envelope | **F6**, *what each approximation is worth* |
-| **v1.0.0** | the reconstruction is **faithful**: the free-streaming chain of Appendix F reproduced against **four external hierarchies**, in four conventions and two normalisations, at $10^{-13}$–$10^{-14}$ — and the almost-Friedmann–Lemaître spectrum by two independent routes | **F1**, below |
+| **v1.2.0** | the spectrum **with structure in it**: the full linear C_ℓ — acoustic peaks, Silk damping, the complete source assembly, and (102) carried with a generic $u^a$ and specialised back. Criterion 5b closes | **F9**, immediately below |
+| **v1.1.0** | the recombination that **makes peaks possible**: Peebles' effective three-level atom replacing equilibrium Saha and made the default (**S22**). The visibility peak moves z ≃ 1300 → 1107 against a standard 1080–1100, and the function widens by about 40% — and the width is what sets the Silk damping envelope | **F6**, *what each approximation is worth* |
+| **v1.0.0** | the reconstruction is **faithful**: the free-streaming chain of Appendix F reproduced against **four external hierarchies**, in four conventions and two normalisations, at 10⁻¹³–10⁻¹⁴ — and the almost-Friedmann–Lemaître spectrum by two independent routes | **F1**, below |
 
 ### Release status: where v1.2.0 stands
 
@@ -144,16 +145,16 @@ re-run the script anywhere to replace it.*
 
 | stage | seconds | share | why |
 |---|---:|---:|---|
-| background | 0.05 | 0.0% | adaptive quadrature per panel; independent of $k$ and $\ell$ |
+| background | 0.05 | 0.0% | adaptive quadrature per panel; independent of k and ℓ |
 | recombination history | 0.31 | 0.1% | one stiff Radau solve, then the visibility and opacity |
-| environment and transfer function | 0.44 | 0.1% | the $\eta$ grid, the potentials, the Bond–Efstathiou shape |
-| Bessel table | 6.85 | 1.5% | $j_\ell(x)$ tabulated **once** and reused by every mode |
-| **per-mode loop** | **452.47** | **98.3%** | the acoustic solve and the line-of-sight projection, once per $k$ |
-| &nbsp;&nbsp;*of which* coefficients | *239.22* | *52.0%* | solving (152)/(153) and assembling $C_0,C_1,C_2$ |
-| &nbsp;&nbsp;*of which* projection | *213.24* | *46.3%* | $\int\mathrm d\eta$ against $j_\ell$ for every $\ell$ |
-| primordial power | 0.00 | 0.0% | $P(k)\sim k^{n_s-4}$, one array |
-| $k$ quadrature to $C_\ell$ | 0.01 | 0.0% | one integral per multipole against the stored transfer |
-| $C_\ell\to C(\theta)$ | 0.01 | 0.0% | Legendre sum at 721 angles |
+| environment and transfer function | 0.44 | 0.1% | the η grid, the potentials, the Bond–Efstathiou shape |
+| Bessel table | 6.85 | 1.5% | j_ℓ(x) tabulated **once** and reused by every mode |
+| **per-mode loop** | **452.47** | **98.3%** | the acoustic solve and the line-of-sight projection, once per k |
+| &nbsp;&nbsp;*of which* coefficients | *239.22* | *52.0%* | solving (152)/(153) and assembling C₀, C₁, C₂ |
+| &nbsp;&nbsp;*of which* projection | *213.24* | *46.3%* | ∫dη against j_ℓ for every ℓ |
+| primordial power | 0.00 | 0.0% | P(k) ~ k^(n_s−4), one array |
+| k quadrature to C_ℓ | 0.01 | 0.0% | one integral per multipole against the stored transfer |
+| C_ℓ → C(θ) | 0.01 | 0.0% | Legendre sum at 721 angles |
 | **TOTAL** | **460.13** | **100%** | **316 ms per mode, over 1433 modes** |
 
 **This shows that the cost is in one place, and that the place is not where a
@@ -189,7 +190,7 @@ reader must know to read the rest honestly.
 | **S1** | the deliverable is **the CDM and ΛCDM angular power spectra** in the almost-Friedmann–Lemaître formulation — (186) from (176), by both routes | it is what "done" means; F9 is that deliverable |
 | **S15** | **reproduce the antecedent's approximations rather than correct them** | reproducing a paper means reproducing its narrowing choices. They are recorded as **A-n**, kept apart from defects (**B-n**), and F6 is the one place their cost is a number rather than an adjective |
 | **S19** | the release sequence is fixed, and **nothing goes public before Paper 1 is submitted** | otherwise `provenance/` announces fourteen corrections to a published paper *ahead of* the paper that makes them quietly. **Paper 1 is submitted and frozen**, so this gate is satisfied |
-| **S26** | v1.2.0 is an extension **and an audit**, and the audit half is in scope | a bundle that only reproduces cannot say whether what it reproduces is right. It is why the generic $\dot{\mathcal B}_A$ relations and criterion 5b's gate exist at all |
+| **S26** | v1.2.0 is an extension **and an audit**, and the audit half is in scope | a bundle that only reproduces cannot say whether what it reproduces is right. It is why the generic Ḃ_A relations and criterion 5b's gate exist at all |
 | **S27** | every artefact carries a **maturity rung**, and the rung is **verified, not declared** | a claim whose module, object, test or harness entry is missing fails `scripts/make_release_status.py` instead of appearing in the record |
 | **S30** | **run-time optimisation is deferred** to a dedicated assessment for v2.0.0 | the benchmark below measures the cost; it does not license tuning it now, and no decision in this release may be taken on speed |
 | **S4c** | criterion 5b is gated on the bundle's **own pipeline**, with CAMB and CLASS as **context** | a criterion that can only be failed is not a criterion |
@@ -341,6 +342,31 @@ approximations and the one lineage note — is in `provenance/`.
   One **stated limit** ships with the release: the recombination grid sets the
   primary source and nothing derives it, worth 1.2% — question **Q7**, taken as
   decision **S33**, derived immediately after the tag.
+- **v1.3.0 — the structural audit, then the acoustic modes.** Two halves, in
+  that order (decision **S37**). *First*, an audit of the code for
+  **modularity, readability and cleanness**, with the modularity **shown**
+  rather than asserted. The argument for doing it before v1.5.0 rather than
+  after: v1.5.0 adds nonlinear couplings to this code, and adding to a
+  structure nobody has audited is how a structure stops being auditable.
+  *Second*, **where the acoustic modes are and how they are implemented**,
+  against *Annals II*'s own 1+3 covariant acoustic equations. **The method is
+  F1's, pointed at the second sector** (decision **S35a**): criterion 1 sets
+  the free-streaming recursion of Appendix F against four external hierarchies
+  read from their own papers — Hu & Sugiyama Eq. (6) among them — and matches
+  at 10⁻¹³. The acoustic sector has had no equivalent. Hu & Sugiyama carry the
+  analytic acoustic treatment this formulation was developed from, and setting
+  the two against each other term by term is the same instrument.
+  **An analytic comparator is the right one here and a Boltzmann code is not**:
+  CAMB and CLASS return a spectrum and cannot say *which term* differs, because
+  they do not carry the antecedent's terms. Hu & Sugiyama's approximations are
+  individually switchable, so a disagreement can be attributed to one of them.
+  This half opens on **Q8**, already measured: the second and third acoustic
+  peaks are effectively absent — ours/CAMB falls to 0.14 at ℓ=720 against 2.76
+  — the band average hides a sign change, and the damping scale alone does not
+  account for it. **The question is where, if anywhere, we went wrong**, and
+  nothing presumes the error is ours: F7 is this bundle's precedent for a
+  figure that reports its own planned claim false.
+
 - **v1.5.0** — the high-ℓ O(ε²ℓ) effects, **gated on Paper 1**, carrying **both**
   nonlinear corrections: the gravitational coupling to the kinematic quantities,
   δτ̇_NL, and the nonlinear Thomson scattering coupling to the baryon velocity,
@@ -360,10 +386,31 @@ approximations and the one lineage note — is in `provenance/`.
   high-ℓ envelope was right (**S25**) — which it now is.
 - **v2.0.0** — calibration and data-science release, including Planck data.
   *Calibration* there means calibrating the solver against standard results; it
-  does **not** mean calibrating the amplitude of an effect. **No new physics
-  enters at v2.0.0**: everything it calibrates is already in place by v1.5.0.
-- **A fractional-contribution form of the source decomposition**, each term drawn
-  as its share of C_ℓ and summing to one by construction.
+  does **not** mean calibrating the amplitude of an effect. **No new physics**
+  enters at v2.0.0.
+  **It may also be a fork into a second language** — `CovariantCMBR.jl` —
+  for two independent reasons (decision **S38**). *The record*: this bundle
+  carries the development and science history, and the Julia implementation
+  would be a **clean replicant** — the settled result, without the record of
+  how it was settled. *The speed*: **S30** defers run-time optimisation to
+  v2.0.0, and the benchmark above already says where it lives — **98.3% of one
+  spectrum is the per-mode loop**, 316 ms per mode, each mode independent of
+  every other. That is embarrassingly parallel, and it is a measurement a port
+  should be designed against rather than discover.
+  **Paper 2 and its bundle inherit the whole chain** — Annals I and II, the
+  correction, Paper 1, the linear recovery here, the acoustic modes at v1.3.0,
+  the high-ℓ work at v1.5.0 — and take the learning *without* the testing that
+  is necessary here. That distinction is exact rather than casual: the 424
+  tests in this tree are the cost of being **the antecedent**, the bundle that
+  must show the antecedent's equations produce what the paper says and locate
+  every place they do not. A replicant inherits a settled result and owes
+  something narrower — **reproduce the numbers**, not re-derive the record.
+  Which makes the relationship recursive: this bundle reconstructs *Annals II*
+  to find its remaining errors, and a replicant would stand in exactly that
+  relation to this bundle. **Whether someone can rebuild from this record in
+  another language and get the same numbers is the strongest acceptance
+  criterion a reproducibility bundle can have, and it is the one this project
+  has not yet faced.**
 
 **Why the peaks come before v1.5.0 and not after it.** v1.5.0 is an O(ε²ℓ)
 *correction* to the high-ℓ spectrum. A correction can only be read where the
@@ -418,7 +465,7 @@ provenance/              Theory-to-code traceability and the corrections record
 supplementary-materials/ Compiled computational supplement
 ```
 
-Scientific object versions such as `supplement-v1.0.0.pdf` and output suffixes
+Scientific object versions such as `supplement-v1.2.0.pdf` and output suffixes
 such as `-v1.0.0.png` are retained where they identify a released object — the
 suffix marks the release an artefact was **introduced** in, not the release
 that last regenerated it, so F6 and F8 carry `-v1.1.0` while the figures
@@ -455,7 +502,7 @@ pytest -q                              # the claim-bearing regression suite
 
 ## Verification status
 
-**Released as v1.1.0; this tree is v1.2.0-dev.** Every artefact carries a
+**Released as v1.2.0; this tree is v1.2.0.** Every artefact carries a
 maturity rung — prototype, proof of concept, release candidate, shipped — and a
 release gates on the rung rather than on an opinion that the work is done. That
 is decision **S27**, and `provenance/RELEASE-STATUS-v1.md` carries the rung of
@@ -585,7 +632,7 @@ cannot go stale the way the verification paragraph above once did.
 | **F6** what each approximation is worth | A-1, A-2 and the small-scale approximation as **ratios**, over six decades — one is a different calculation, one is free where this release claims, one is worst at large scales | `v1.1.0` |
 | **F7** frame specialisation | the generic $u^a$ carried through and the frame chosen at the end — a figure a gauge-fixed treatment cannot draw. **It reports that its own planned claim is false**: the dipole was expected to stand an order of magnitude apart and lands on each curve instead, worst ratio **1.25×**, because (102) builds every $\ell$ from the same three $C_A$ and has no mechanism for answering differently at different $\ell$ (T-31) | `v1.2.0` |
 | **F8** coupling schematic | a structural statement, not a measurement: which couplings exist at which order | `v1.1.0` |
-| **F9** angular spectrum with the acoustic peaks | **the release's deliverable** — $D_\ell$ for CDM, $\Lambda$CDM and the Planck set, shape-normalised at $\ell=30$, with the peaks and the damping tail, against CAMB and CLASS as context (S4c) | `v1.2.0` |
+| **F9** angular spectrum with the acoustic peaks | **the release's deliverable** — D_ℓ for CDM, ΛCDM and the Planck set, shape-normalised at ℓ=30, with the peaks and the damping tail, against CAMB and CLASS as context (S4c) | `v1.2.0` |
 
 | Diagnostic | Evidence for | Version |
 |---|---|---|
@@ -607,7 +654,8 @@ The development lineage:
 | Paper 1 (2026) | the 1+3 route to CMB lensing from the exact hierarchy | the paper this bundle reproduces; frozen 2026-10-09 |
 | v1.0.0 | the independent reconstruction: the Appendix F chain against four external hierarchies, both routes to (186), the Sachs–Wolfe limit, and frame covariance established **symbolically** | superseded by v1.1.0; its tag, release asset and archived DOI are unchanged |
 | v1.1.0 | Peebles recombination replacing equilibrium Saha and made the default (S22); the frame specialisation made numerical, closing criterion 2's curvature half; figures F6 and F8 | **released**; superseded by v1.2.0. Its tag is behind the tip by design, and the commands above are how to confirm that rather than take this row's word for it |
-| **v1.2.0** | the covariant coefficient assembly (89)/(90); the integral solution (102) carried with a generic $u^a$ and **specialised back**; the generic $\dot{\mathcal B}_A$ relations; the CDM frame as a second frame; the full linear $C_\ell$ with acoustic peaks and Silk damping; `PLANCK_MODEL` with a derived radiation era; figures F2, F5 and F7, diagnostics D6, D7 and **D8**; and findings T-17 to T-48, B-11 to B-14 | **this tree.** Criterion 5b is **closed** — gated on (102) against (177)–(179) at $9.5\times10^{-6}$ against $10^{-3}$ (decision **S4c**), with CAMB and CLASS recorded alongside as context. No outstanding gate. One **stated limit** ships with it: the recombination grid, **Q7**/**S33**, derived immediately after the tag |
+| **v1.2.0** | the covariant coefficient assembly (89)/(90); the integral solution (102) carried with a generic u^a and **specialised back**; the generic Ḃ_A relations; the CDM frame as a second frame; the full linear C_ℓ with acoustic peaks and Silk damping; `PLANCK_MODEL` with a derived radiation era; figures F2, F5 and F7, diagnostics D6, D7 and **D8**; and findings T-17 to T-48, B-11 to B-14 | **this tree.** Criterion 5b is **closed** — gated on (102) against (177)–(179) at $9.5\times10^{-6}$ against $10^{-3}$ (decision **S4c**), with CAMB and CLASS recorded alongside as context. No outstanding gate. One **stated limit** ships with it: the recombination grid, **Q7**/**S33**, derived immediately after the tag |
+| v1.3.0, planned | the structural audit — modularity, readability, cleanness — and then **where the acoustic modes are**, against *Annals II*'s own 1+3 acoustic equations | planned (**S37**); opens on **Q8**, the missing second and third peaks, already measured |
 | v1.5.0, planned | the high-ℓ O(ε²ℓ) effects, carrying both nonlinear corrections, gated on Paper 1 | planned; carries the restricted case as a recovery and check of v1.0.0, not a new result |
 | v2.0.0, planned | calibration and data science, including Planck | planned; no new physics in it, which is what keeps v1.2.0 ahead of it |
 
@@ -629,7 +677,7 @@ cite.
 | Item | Value |
 |---|---|
 | **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMB lensing in the exact 1+3 covariant radiation hierarchy*. arXiv: identifier assigned on submission |
-| **Supplementary PDF** | [supplement-v1.0.0.pdf](supplementary-materials/supplement-v1.0.0.pdf) |
+| **Supplementary PDF** | [supplement-v1.2.0.pdf](supplementary-materials/supplement-v1.2.0.pdf) |
 | **GitHub repository** | [timgebbie/frame-covariant-cmb-reproducibility](https://github.com/timgebbie/frame-covariant-cmb-reproducibility) |
 | **ZivaHub/Figshare DOI** | [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509) — **live**. The **concept** DOI: it always resolves to the latest version, so it is the one to cite |
 | **Associated antecedent** | Gebbie, T.; Dunsby, P. K. S.; Ellis, G. F. R. (2000). *1+3 covariant cosmic microwave background anisotropies II: the almost-Friedmann–Lemaître model*. Annals of Physics **282**, 321–394. [doi:10.1006/aphy.2000.6034](https://doi.org/10.1006/aphy.2000.6034) |

@@ -81,7 +81,7 @@ ARTEFACTS: list[Artefact] = [
              script="scripts/diagnostic_d2_roundtrip.py"),
 
     # ---- v1.2.0, in progress --------------------------------------------
-    Artefact("the covariant coefficients C_0, C_1, C_2 from (89)", "R", "v1.2.0",
+    Artefact("the covariant coefficients C_0, C_1, C_2 from (89)", "S", "v1.2.0",
              module="functions.spectra.coefficients",
              objects=("match_coefficients", "newtonian_coefficients", "newtonian_set"),
              tests=("test_all_three_of_90_are_reproduced_by_the_match",
@@ -89,36 +89,36 @@ ARTEFACTS: list[Artefact] = [
                     "test_the_newtonian_specialisation_is_equation_109"),
              note="(89) is implemented as the definition so (90) is a check; "
                   "B-11's delta_l0 sign resolved"),
-    Artefact("the integral solution (102), carried with a generic u^a", "R", "v1.2.0",
+    Artefact("the integral solution (102), carried with a generic u^a", "S", "v1.2.0",
              module="functions.spectra.integral_solution",
              objects=("integral_solution", "required_multipoles"),
              tests=("test_the_shear_boundary_term_is_empty_in_the_newtonian_frame",
                     "test_the_shear_boundary_term_is_not_empty_once_b2_is",
                     "test_the_specialisation_recovers_what_the_pipeline_computes")),
-    Artefact("the generic source derivatives Annals II never wrote", "R", "v1.2.0",
+    Artefact("the generic source derivatives Annals II never wrote", "S", "v1.2.0",
              module="functions.spectra.coefficients",
              objects=("generic_shear_derivatives", "c2_derivatives"),
              tests=("test_the_rank_two_control_passes_symbolically",
                     "test_no_numerical_derivative_survives_in_the_c2_chain"),
              note="rank 2 closed from Appendix G with a control; rank 1 assembled "
                   "from printed equations and still carrying (*)"),
-    Artefact("the CDM frame as a second frame", "R", "v1.2.0",
+    Artefact("the CDM frame as a second frame", "S", "v1.2.0",
              module="functions.spectra.coefficients",
              objects=("cdm_frame_shear", "cdm_set", "background_fluid"),
              tests=("test_the_frame_shift_of_every_coefficient_is_the_closed_form_one",
                     "test_B13_the_printed_n_t1_does_not_close_and_the_general_rule_does",
                     "test_T24_the_closure_is_an_identity_in_both_conventions")),
-    Artefact("the frame-invariance measurement, F5's question", "R", "v1.2.0",
+    Artefact("the frame-invariance measurement, F5's question", "S", "v1.2.0",
              module="functions.spectra.coefficients",
              script="scripts/measure_frame_invariance.py",
              note="generated record; its prose is computed from its own table"),
-    Artefact("the ell ceiling removed, 507 -> 2000", "R", "v1.2.0",
+    Artefact("the ell ceiling removed, 507 -> 2000", "S", "v1.2.0",
              module="functions.spectra.bessel_table",
              objects=("BesselTable",),
              tests=("test_unavailable_ell_is_refused",
                     "test_the_coefficients_are_exact_rationals_not_floats"),
              note="findings T-17 and T-18"),
-    Artefact("the stamped Planck 2018 set, wired as PLANCK_MODEL", "R", "v1.2.0",
+    Artefact("the stamped Planck 2018 set, wired as PLANCK_MODEL", "S", "v1.2.0",
              module="functions.background.flrw",
              objects=("PLANCK_MODEL", "OMEGA_GAMMA_H2"),
              script="scripts/diagnostic_d8_criterion_5b_gate.py",
@@ -134,7 +134,7 @@ ARTEFACTS: list[Artefact] = [
                   "2026-10-15: its blocker was that nothing of this bundle's "
                   "own exercised it, and D8 now does, on every harness run, as "
                   "one of the three backgrounds criterion 5b's gate sweeps"),
-    Artefact("F5 - the source decomposition in two frames, by rank", "R", "v1.2.0",
+    Artefact("F5 - the source decomposition in two frames, by rank", "S", "v1.2.0",
              module="functions.spectra.two_frame",
              objects=("build_environment", "coefficient_sets", "transfer_by_rank",
                       "cl_cross"),
@@ -146,7 +146,7 @@ ARTEFACTS: list[Artefact] = [
                   "its own panel: 47% at l=2, 7% at l=102, 13% at l=405, median 15% "
                   "over 2 <= l <= 400 --- the post-T-37 numbers, moved from "
                   "42 / 7 / 11 by wiring the transfer function"),
-    Artefact("F2 - truncation convergence, both frames", "R", "v1.2.0",
+    Artefact("F2 - truncation convergence, both frames", "S", "v1.2.0",
              module="functions.spectra.two_frame",
              objects=("build_environment", "coefficient_sets", "transfer_by_rank"),
              tests=("test_the_newtonian_frame_leaves_the_shear_sectors_empty_"
@@ -160,7 +160,7 @@ ARTEFACTS: list[Artefact] = [
                   "p.365 checked and upheld: identically zero in the Newtonian "
                   "frame, which has no shear to lose. Its k grid runs to 1900 "
                   "rather than 420 --- finding T-32"),
-    Artefact("F7 - frame specialisation", "R", "v1.2.0",
+    Artefact("F7 - frame specialisation", "S", "v1.2.0",
              module="functions.spectra.two_frame",
              objects=("build_environment", "coefficient_sets"),
              tests=("test_102_cannot_make_its_frame_response_depend_on_the_multipole",),
@@ -171,7 +171,7 @@ ARTEFACTS: list[Artefact] = [
                   "the same three C_A --- finding T-31. Its environment is built "
                   "for the k grid rather than the probe modes --- finding T-34"),
     Artefact("F9 - the angular spectrum with the acoustic peaks, both frames",
-             "R", "v1.2.0",
+             "S", "v1.2.0",
              module="functions.spectra.two_frame",
              objects=("build_environment", "coefficient_sets", "transfer_by_rank"),
              script="scripts/figure_f9_acoustic_spectrum.py",
@@ -187,7 +187,7 @@ ARTEFACTS: list[Artefact] = [
                   "its output CSV is committed; run_all redraws from that CSV "
                   "in seconds, which is the architecture the PI set for the "
                   "external comparison applied to a figure"),
-    Artefact("criterion 5b's gate: (102) against (177)-(179)", "R", "v1.2.0",
+    Artefact("criterion 5b's gate: (102) against (177)-(179)", "S", "v1.2.0",
              module="functions.spectra.two_route",
              objects=("TwoRoute", "two_route_transfer"),
              script="scripts/diagnostic_d8_criterion_5b_gate.py",
@@ -250,6 +250,13 @@ GATES: dict[str, tuple[str, ...]] = {
                "where the thing it corrects is already right"),
 }
 
+#: **The R -> S promotion is part of the release act, not a follow-up.**
+#: S27 defines S as "in a tagged release, hashed, cited", so the release
+#: commit declares it and the tag points at that commit. Leaving it until
+#: after the tag puts the tagged tree one rung below the release it is.
+#: `tests/test_readme_artefacts.py` catches the gap: a README saying
+#: "Released as vX" while the status still reads R fails, which is how
+#: this step was found missing from the v1.2.0 sequence.
 RUNG_NAMES = {"P": "prototype", "C": "proof of concept",
               "R": "release candidate", "S": "shipped"}
 

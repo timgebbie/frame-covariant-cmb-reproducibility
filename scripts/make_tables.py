@@ -10,7 +10,7 @@ Writes, into tables/:
     notation-v1.0.0.{csv,tex}     symbols, and their names in the code
     conventions-v1.0.0.{csv,tex}  the convention-translation table
 
-The LaTeX tables are included by SUPPLEMENTARY-MATERIAL-v1.0.0.tex. **They are
+The LaTeX tables are included by SUPPLEMENTARY-MATERIAL-v1.2.0.tex. **They are
 generated, never hand-written**, so the supplement cannot drift from the code;
 and `tests/test_register.py` resolves every module and object named in the
 register, so a rename breaks the build rather than quietly falsifying a table.

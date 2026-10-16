@@ -3,7 +3,7 @@
 
     python scripts/make_figure_pages.py
 
-Writes `supplementary-materials/figures-v1.0.0.tex`, which the supplement
+Writes `supplementary-materials/figures-v1.2.0.tex`, which the supplement
 includes. One float per figure that actually exists, carrying the figure and its
 caption.
 
@@ -42,7 +42,7 @@ from make_tables import tt  # noqa: E402
 # copy of a fact is a second thing to forget.
 from run_all import DEFERRED  # noqa: E402
 CAPTIONS = ROOT / "captions"
-OUT = ROOT / "supplementary-materials" / "figures-v1.0.0.tex"
+OUT = ROOT / "supplementary-materials" / "figures-v1.2.0.tex"
 
 #: The agreed set, in order. See captions/FIGURE-PLAN-v1.0.0.md.
 PLANNED = [

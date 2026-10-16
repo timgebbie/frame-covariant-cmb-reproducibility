@@ -15,11 +15,18 @@ This is the flip, done once, from one argument. The test then checks the result
 rather than catching a mistake nobody had a tool to avoid.
 
 **What it touches, and nothing else.** The six label sites, plus `CITATION.cff`
-and the changelog heading. It does **not** rename a file: the house convention
-is that a version suffix marks the release an artefact was *introduced* in, so
-`SUPPLEMENTARY-MATERIAL-v1.0.0.tex` keeps its name while its content moves ---
-and `provenance/BUNDLE-DEFECTS-v1.md` is append-only and refers to that name, so
-a rename would strand a reference in a file nothing may rewrite.
+and the changelog heading. It does **not** create the next release's supplement:
+under decision **S36** each release freezes its own `SUPPLEMENTARY-MATERIAL-vX.tex`
+and the previous ones are kept, so starting the next one is a deliberate act at
+the start of a release rather than a side effect of ending this one.
+
+**What it does not own: the prose beside a label.** It flips the version
+*token* at each site, not the sentence next to it. On the v1.2.0 bump the
+header duly read `Last release: **v1.2.0**` followed by *"Peebles
+recombination and the frame specialisation made numerical"* --- v1.1.0's
+descriptor under v1.2.0's number, which is the **T-16** class in the first
+two lines a reader sees. The script cannot write that sentence; the release
+checklist must. Read the header after bumping.
 
 **Run it on a clean tree, immediately before tagging.** Everything it writes is
 a claim that the release exists; `CITATION.cff` in particular is read by Zenodo
@@ -50,7 +57,7 @@ def _edits(target: str, previous: str, today: str) -> list[tuple[str, str, str]]
          f"**Last release: v{target}**"),
         ("README.md", rf"\*\*Released as v{re.escape(previous)};",
          f"**Released as v{target};"),
-        ("SUPPLEMENTARY-MATERIAL-v1.0.0.tex",
+        ("SUPPLEMENTARY-MATERIAL-v1.2.0.tex",
          rf"\\date\{{\\textbf\{{{re.escape(dev)}\}}", rf"\\date{{\\textbf{{v{target}}}"),
         ("CITATION.cff", rf'^version: "{re.escape(previous)}"', f'version: "{target}"'),
         ("CITATION.cff", r"^date-released: .*$", f"date-released: {today}"),
@@ -112,7 +119,9 @@ def main() -> int:
     for name, text in bodies.items():
         (ROOT / name).write_text(text, encoding="utf-8", newline="\n")
         planned.append((ROOT / name, text))
-    print(f"\nwrote {len(bodies)} files. Now: run_all.py --strict, commit, tag.")
+    print(f"\nwrote {len(bodies)} files.")
+    print("  NEXT, and it is part of the same release act: promote this\n        release's artefacts R -> S in scripts/make_release_status.py.\n        S27 defines S as 'in a tagged release', so the release commit\n        declares it and the tag points at that commit.")
+    print("  THEN: run_all.py --strict, commit, tag.")
     return 0
 
 
