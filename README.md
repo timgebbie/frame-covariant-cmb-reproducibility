@@ -1,9 +1,10 @@
 # 1+3 covariant CMB anisotropies reproducibility bundle
 
-Version: **v1.2.0-dev** — the source decomposition in two frames (F5), Appendix E
-made quantitative (F2), the frame specialisation drawn (F7), and the $k$ grid
-carried out to the damping scale. **Last release: v1.1.0** — Peebles recombination
-and the frame specialisation made numerical.
+Version: **v1.2.0-dev** — the full linear spectrum with the acoustic peaks and
+the Silk damping tail (F9), in both frames; the integral solution (102) carried
+with a generic 4-velocity and specialised back; acceptance criterion 5b closed.
+**Last release: v1.1.0** — Peebles recombination and the frame specialisation
+made numerical.
 
 Supplementary code and materials for: Tim Gebbie, *"Frame covariance of CMB
 lensing in the exact $1+3$ covariant radiation hierarchy,"* arXiv: identifier
@@ -18,46 +19,66 @@ It carries the scope, the theory-to-computation map, the acceptance spine, the
 conventions and translations tables, and the interpretive limits — read it
 before the code if you want to know what this release does and does not claim.
 
-## Key figure: the angular power spectrum by two routes
+## Key figure: the angular spectrum with the acoustic peaks
+
+![F9 — the normalised angular spectrum for CDM, ΛCDM and the Planck 2018 set, with the acoustic peaks, against CAMB and CLASS as context](figures/f9-acoustic-spectrum-v1.2.0.png)
+
+**This is the release where the spectrum stops being the almost-Friedmann–
+Lemaître analytic skeleton.** **Panel (a)** is the deliverable: shape, $D_\ell$
+renormalised at $\ell=30$, for the three backgrounds this bundle ships — CDM (Einstein–de Sitter), ΛCDM, and the
+stamped Planck 2018 set with a derived photon-only radiation era. The peaks and
+the damping tail come from *Annals II*'s own equations: the integral
+solution (102) with the Bond–Efstathiou transfer function driving the
+oscillation per mode, and the diffusion scale from **(dif-damp-correct)** at
+$f_2=3/4$ — the antecedent's own corrected coefficient, not a departure from it
+(**T-43**).
+
+**CAMB and CLASS are drawn dashed, and they are context rather than a target**
+(**S4c**). Criterion 5b is gated on this bundle's own pipeline, (102) against
+(177)–(179), which agree to $9.5\times10^{-6}$ against a gate of $10^{-3}$.
+The distance to the external codes is large, expected, and **itemised rather
+than totalled**: 97.8% across the plateau, 137% across the peaks, of which the
+damping coefficient alone is 17.2%, the rest attributable to the
+slow-decoupling order and the visibility weight (102) carries. The first peak
+sits at $\ell\simeq170$ here against 198 in both codes, consistent with
+$z_*=1114.5$ against 1088.5. The itemisation is in
+`provenance/CRITERION-5B-v1.md`; the derivations are in the supplement.
+
+**Panel (b) draws the same spectra in both frames, and it is the panel a
+gauge-fixed treatment cannot produce.** Both come from *one* solve: (102) is
+carried with a generic $u^a$ and the frame is chosen at the end, so the
+Newtonian and CDM curves are two projections of the same coefficients rather
+than two calculations. **This shows that** the frame is a choice made at the
+end of the derivation and not an assumption built into its start — which is the
+claim the $1+3$ covariant approach exists to make, drawn here rather than
+asserted.
+
+## Second figure: the angular power spectrum by two routes
 
 ![F3 — the angular power spectrum of Annals II (186), computed by the mode route and by the covariant route](figures/f3-angular-spectrum-v1.0.0.png)
 
-Eq. (186) computed from Eq. (176), for the standard-CDM model of §8.3.2 and for
-ΛCDM, which *Annals II* does not treat. **Upper panel:** D_ℓ = ℓ(ℓ+1)C_ℓ/2π,
-each normalised to its own ℓ = 2 value, so the comparison is of *shape* and not
-of an amplitude neither model fixes here. **Lower panel:** the fractional
-difference between the mode route of (186) and the covariant route of (187) with
-(188) — analytically identical, so this checks the arithmetic rather than the
-physics. It sits at 10⁻¹⁶, five orders below the 10⁻¹¹ threshold, and it is
-worth having: it caught a factor of four in this bundle's own harmonic weights
-before any figure was drawn.
+Eq. (186) computed from Eq. (176) by the **mode route** and the **covariant
+route**, agreeing exactly because they are one calculation written twice. This
+is the almost-Friedmann–Lemaître skeleton: no transfer function, no acoustic
+modulation, claimed only over $2\le\ell\le20$ — a range **derived** rather than
+chosen (`scripts/derive_ell_range.py`). Read beside F9 it is the progression in
+one glance.
 
-**This is the almost-FLRW spectrum, and it has no acoustic peaks in it.** That
-is not a defect — *Annals II*'s (186) is the analytic skeleton, and v1.0.0
-reproduces what the paper derives. The peaks arrive at **v1.2.0**, with Peebles
-recombination and the complete source assembly, and the key figure above is
-replaced then. See *Future situation* below.
-
-## Second figure: the Appendix F match
+## Third figure: the Appendix F match
 
 ![F1 — the covariant free-streaming recursion against four external hierarchies](figures/f1-appendix-f-v1.0.0.png)
 
-The covariant free-streaming recursion of *Annals II* Appendix F against Hu &
-Sugiyama Eq. (6), Wilson Eq. (8), Ma & Bertschinger Eqs. (49)/(50) and Seljak &
-Zaldarriaga Eq. (3d), each read from its own paper. Residuals of 10⁻¹³–10⁻¹⁴
-against a 10⁻¹¹ threshold, at overall scale exactly 1. Two distinct
-normalisations and two distinct phase conventions — Wilson writes the recursion
-in the imaginary convention, so his panel tests the phase and not only the
-ℓ-weights.
+The covariant free-streaming recursion of *Annals II* Appendix F against **Hu &
+Sugiyama** Eq. (6), **Wilson** Eq. (8), **Ma & Bertschinger** Eqs. (49)/(50) and
+**Seljak & Zaldarriaga** Eq. (3d), each read from its own paper and integrated
+as printed. Residuals of $10^{-13}$–$10^{-14}$ against a $10^{-11}$
+threshold, at overall scale exactly 1. Four independent checks in **two
+normalisations and two phase conventions** — Wilson is written in the imaginary
+convention and so tests the phase, not only the $\ell$-weights. This is the
+bundle's strongest single piece of evidence and it has held unchanged across
+all three releases.
 
-> **The two figures answer different questions and a reader should not mistake
-> one for the other.** Figure 3 is the **recovery**: its comparison target
-> descends from the same antecedent, so it is a self-consistency check however
-> well it agrees. Figure 1 is the **independence**: its targets were read from
-> four other papers, and that is where this bundle's claim to be a
-> reconstruction rather than a port actually rests.
-
-## Current situation: v1.1.0
+## Current situation: v1.2.0-dev
 
 This bundle is an **independent Python reconstruction, from first 1+3 covariant
 principles, of the almost-Friedmann–Lemaître results of** T. Gebbie,
@@ -71,11 +92,121 @@ Boltzmann code, and it inherits no other code's conventions.
 **Derived, not transcribed**, wherever the antecedent prints a result that can be
 obtained instead. The FLRW background is integrated from the 1+3 energy
 constraint, so Eqs. (185) and (G.3) are **checks on this bundle rather than
-sources for it** — three of the ten recorded findings are disagreements between a
+sources for it** — three of the fourteen recorded findings are disagreements between a
 derived quantity and a printed one, and a port would have inherited all three
 silently. The exceptions are stated where they occur: recombination rests on an
 imported atomic-physics fit, and `functions/spectra/peebles.py` tabulates what is
 derived there and what is not.
+
+**Three releases, latest first**, each with the figure that carries it.
+
+| | what it established | its figure |
+|---|---|---|
+| **v1.2.0** | the spectrum **with structure in it**: the full linear $C_\ell$ — acoustic peaks, Silk damping, the complete source assembly, and (102) carried with a generic $u^a$ and specialised back. Criterion 5b closes | **F9**, immediately below |
+| **v1.1.0** | the recombination that **makes peaks possible**: Peebles' effective three-level atom replacing equilibrium Saha and made the default (**S22**). The visibility peak moves $z\simeq1300\to1107$ against a standard 1080–1100, and the function widens by about 40% — and the width is what sets the Silk damping envelope | **F6**, *what each approximation is worth* |
+| **v1.0.0** | the reconstruction is **faithful**: the free-streaming chain of Appendix F reproduced against **four external hierarchies**, in four conventions and two normalisations, at $10^{-13}$–$10^{-14}$ — and the almost-Friedmann–Lemaître spectrum by two independent routes | **F1**, below |
+
+### Release status: where v1.2.0 stands
+
+**A milestone gate, so the state is stated rather than implied.** Every number
+below is generated by the harness; this table says *where*, so that reading it
+and reading the tree cannot disagree.
+
+| | state | recorded in |
+|---|---|---|
+| acceptance criteria | **6 of 6 closed** — 5b gated by **S4c** on (102) against (177)–(179) | `RELEASE-NOTES-v1.2.0.md` |
+| artefact maturity (**S27**) | shipped / release-candidate / proof-of-concept / prototype, each rung **verified rather than declared** | `provenance/RELEASE-STATUS-v1.md` |
+| outstanding release gate | **none** | same |
+| stated limit shipped with it | the recombination grid, **1.2%**, which 5b cannot bound | **Q7**, **S33** |
+| discretisations | **all** registered; the generator fails on one it does not name | `provenance/GRID-REGISTER-v1.md` |
+| external comparison | recorded, reproducible without CAMB or CLASS, **outside** the bundled testing | `tables/criterion-5b-v1.2.0.tex` |
+| findings against the antecedent | **B-1 … B-14** | `provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md` |
+| findings against this bundle | **T-1 … T-48** | `provenance/BUNDLE-DEFECTS-v1.md` |
+| decisions | **S1 … S35**, with the withdrawn ones struck rather than deleted | `provenance/DECISIONS-v1.0.0.md` |
+
+**This shows that** the release closes on evidence that regenerates, not on a
+claim typed once: the only way to change a number above is to change the code
+that produces it and re-run the harness, which is the property the whole
+`provenance/` tree exists to buy.
+
+### Compute cost: what one spectrum takes
+
+**Measured, not estimated** — `scripts/benchmark_single_run.py`, one angular
+correlation function from all the physics at a fixed parameter set, excluding
+the tests, the figures and the manifests. Those measure what it costs to
+*check* the bundle, which is a different question from what it costs to *run*
+it.
+
+*Snapshot: CPython 3.13 on Linux x86_64, numpy 2.5, 2026-10-15; 39 multipoles
+to $\ell=990$, 1433 modes to $k=1500$, `PLANCK_MODEL`. A benchmark is a
+property of a machine, so this is dated and labelled rather than asserted;
+re-run the script anywhere to replace it.*
+
+| stage | seconds | share | why |
+|---|---:|---:|---|
+| background | 0.05 | 0.0% | adaptive quadrature per panel; independent of $k$ and $\ell$ |
+| recombination history | 0.31 | 0.1% | one stiff Radau solve, then the visibility and opacity |
+| environment and transfer function | 0.44 | 0.1% | the $\eta$ grid, the potentials, the Bond–Efstathiou shape |
+| Bessel table | 6.85 | 1.5% | $j_\ell(x)$ tabulated **once** and reused by every mode |
+| **per-mode loop** | **452.47** | **98.3%** | the acoustic solve and the line-of-sight projection, once per $k$ |
+| &nbsp;&nbsp;*of which* coefficients | *239.22* | *52.0%* | solving (152)/(153) and assembling $C_0,C_1,C_2$ |
+| &nbsp;&nbsp;*of which* projection | *213.24* | *46.3%* | $\int\mathrm d\eta$ against $j_\ell$ for every $\ell$ |
+| primordial power | 0.00 | 0.0% | $P(k)\sim k^{n_s-4}$, one array |
+| $k$ quadrature to $C_\ell$ | 0.01 | 0.0% | one integral per multipole against the stored transfer |
+| $C_\ell\to C(\theta)$ | 0.01 | 0.0% | Legendre sum at 721 angles |
+| **TOTAL** | **460.13** | **100%** | **316 ms per mode, over 1433 modes** |
+
+**This shows that the cost is in one place, and that the place is not where a
+reader would guess.** Recombination — the physics that took a release to get
+right — is 0.1%. The deliverable the reader actually asked for, $C(\theta)$, is
+0.01 seconds. **Everything is the per-mode loop**, split almost evenly between
+solving the oscillator and projecting it along the line of sight, and it is
+linear in the number of modes because each mode is independent.
+
+**What it means for v1.5.0.** It is the measurement decision **S24** was argued
+on, now broken down: $A_s$ and $n_s$ enter *only* the last two rows, which cost
+$0.01$ s against the $452$ s above them. A sampler that re-runs the whole chain
+per proposal pays four hundred times for something it could store — which is
+why the v1.5.0 interface must expose $T_\ell(k)$ and its grid as a first-class
+product rather than only $C_\ell(\theta)$. **This table is the argument, not an
+illustration of it.**
+
+**What it does not license.** Decision **S30** defers run-time optimisation to a
+dedicated assessment for v2.0.0, and nothing here overrides that: the loop is
+embarrassingly parallel and obviously so, and that is precisely why tuning it
+now — before the handover this benchmark exists to measure against — would be
+optimising ahead of the requirement.
+
+### Governance: the contracts this release is bound by
+
+**The README is a summary; `provenance/DECISIONS-v1.0.0.md` is the contract.**
+Where the two differ, the record governs. These are the decisions that constrain
+what may be built, released or claimed — not all thirty-five, but the ones a
+reader must know to read the rest honestly.
+
+| | the contract | why it binds |
+|---|---|---|
+| **S1** | the deliverable is **the CDM and ΛCDM angular power spectra** in the almost-Friedmann–Lemaître formulation — (186) from (176), by both routes | it is what "done" means; F9 is that deliverable |
+| **S15** | **reproduce the antecedent's approximations rather than correct them** | reproducing a paper means reproducing its narrowing choices. They are recorded as **A-n**, kept apart from defects (**B-n**), and F6 is the one place their cost is a number rather than an adjective |
+| **S19** | the release sequence is fixed, and **nothing goes public before Paper 1 is submitted** | otherwise `provenance/` announces fourteen corrections to a published paper *ahead of* the paper that makes them quietly. **Paper 1 is submitted and frozen**, so this gate is satisfied |
+| **S26** | v1.2.0 is an extension **and an audit**, and the audit half is in scope | a bundle that only reproduces cannot say whether what it reproduces is right. It is why the generic $\dot{\mathcal B}_A$ relations and criterion 5b's gate exist at all |
+| **S27** | every artefact carries a **maturity rung**, and the rung is **verified, not declared** | a claim whose module, object, test or harness entry is missing fails `scripts/make_release_status.py` instead of appearing in the record |
+| **S30** | **run-time optimisation is deferred** to a dedicated assessment for v2.0.0 | the benchmark below measures the cost; it does not license tuning it now, and no decision in this release may be taken on speed |
+| **S4c** | criterion 5b is gated on the bundle's **own pipeline**, with CAMB and CLASS as **context** | a criterion that can only be failed is not a criterion |
+| **S33** | the recombination grid is derived **immediately after this tag**, not before | the release closes on the numbers it was measured with |
+
+**This shows that** the governance is not advisory: six of the eight above are
+enforced by something that fails — the harness, a test, or a generator — rather
+than by a reader remembering them.
+
+**What is still open, and none of it blocks the tag.** The recombination grid
+(**Q7**/**S33**, derived immediately after this tag); the numeric manifest gate,
+which canonicalises by rounding to a string and so cannot express a tolerance
+(**T-38** part 1, three designs recorded, the PI's choice); the Hu & Sugiyama
+acoustic cross-check, deferred with its reason to v1.5.0 (**S35**); and a
+parked physics question about whether the full $1+3$ treatment predicts excess
+power at low $\ell$ (**Q5**), which F2's third panel measures and which goes
+the other way at this order.
 
 **The acceptance spine is Appendix F, pp. 379–380, Eqs. (F.1)–(F.4)**, where the
 covariant mode recursion is matched to external treatments written in real
@@ -91,37 +222,29 @@ frame — appear as choices made at the end rather than assumed at the start. Th
 is the difference the 1+3 covariant approach buys, and no gauge-fixed treatment
 can exhibit it.
 
-**In v1.0.0 that is established symbolically rather than numerically, and the
-distinction is worth stating plainly.** `functions/frames.py` carries the
-first-order change of frame with every term tagged by its order in ε, so
-that "second order" is a fact sympy checks rather than a judgement; its
-`roundtrip_residual()` returns the zero vector as an **identity**, not as a small
-number — 𝓑̃₁ = 𝓑₁ + v̇_a, no shear and no Hv, which is acceptance criterion 2's
-stated target. What this release does *not* do is compute an assembled spectrum
-in both frames and draw the difference. The frame change itself is now a
-calculation rather than a label — `"newtonian"` and `"energy"` are solved for,
-and the energy-frame condition and the Weyl invariant both hold to
-$10^{-16}$ — but the figures that would *draw* the two-frame decomposition, F5
-and F7, need the generic-$u^a$ hierarchy, and go to **v1.2.0** with it
-(decisions **S21** and **S23**, finding **T-14**). The proof is here; the
-picture follows.
+**At v1.2.0 that is established numerically as well as symbolically, and the
+distinction is worth stating plainly because it was the honest caveat for two
+releases.** `functions/frames.py` carries the first-order change of frame with
+every term tagged by its order in ε, so that "second order" is a fact sympy
+checks rather than a judgement; its `roundtrip_residual()` returns the zero
+vector as an **identity**, not as a small number — 𝓑̃₁ = 𝓑₁ + v̇_a, no shear and
+no Hv, which is acceptance criterion 2's stated target. What v1.0.0 could *not*
+do was compute an assembled spectrum in two frames and draw the difference.
+**It is drawn now**: F5 decomposes the source by rank in both frames, F7
+specialises (102) at the end rather than the start, and D6 measures the residual
+sector by sector. The two frames' $C_\ell$ differ by a median of 15% over
+$2\le\ell\le400$ — which is a *result*, not a defect, because $C_\ell$ is
+quadratic in frame-dependent pieces while the invariance (102) satisfies is
+about the total at fixed $k$.
 
-Nomenclature is kept strictly separate, following Appendix F: τ_ℓ are **mode**
-coefficients, τ_{A_ℓ} are **multipole** coefficients. The distinction is not made
-in Bardeen-variable treatments, and conflating them in code is how a sign is
-lost. Every released figure plots a **multipole** mean-square: *Annals II* p. 366
-notes that these hold for general geometries while mode mean-squares hold only
-for almost-Robertson–Walker ones.
-
-This is a Boltzmann code written from scratch. **CMBFAST** is cited for the
-*method* — line-of-sight integration, Seljak & Zaldarriaga, already in *Annals
-II*'s bibliography — and not as a comparison: the Fortran 77 original is
-unmaintained and effectively unrunnable. The comparison is against its two
-maintained descendants, **CAMB and CLASS**, and it is made at v1.2.0, where the
-full linear spectrum exists to compare. Two codes rather than one, because
-their mutual difference is then a **measured** scale rather than an assumed
-one: no agreement with either could be claimed tighter than they agree with
-each other.
+**The second frame is the CDM frame, and the label was wrong for a week.**
+*Annals II* §4.1 lists **three** choices — the energy frame $\tilde q_a=0$, the
+zero-acceleration or CDM frame $\tilde A_a=0$, and the Newtonian frame. This
+bundle integrates $v'+\mathcal Hv=-k\Phi_A$, which is the geodesic condition,
+so what it computes is the **CDM frame** throughout; it was labelled the energy
+frame. No released number moved — finding **T-29**, amendment **S8a**, with D7
+measuring the tilt between the two at up to 45% of the frame velocity, worst
+exactly where the acoustic physics is.
 
 **That scale is context and not the threshold** — decision **S4c**, 2026-10-15.
 It was the threshold, and a slow-decoupling solution with no polarisation
@@ -179,7 +302,7 @@ findings that **change what the code computes**:
 - **B-10** — (J.5) prints the transfer function with +1/ν where the fit requires
   −1/ν. Both forms are implemented, for the same reason.
 
-The complete record — ten findings, together with the antecedent's deliberate
+The complete record — fourteen findings, together with the antecedent's deliberate
 approximations and the one lineage note — is in `provenance/`.
 
 ## Future situation: the route to the full spectrum
@@ -194,21 +317,47 @@ approximations and the one lineage note — is in `provenance/`.
   ionisation history before anything was built on it. It is the default from
   this release (decision **S22**), with Saha kept as the measurable alternative.
 - **v1.2.0 — the full linear C_ℓ: acoustic peaks, Silk damping, and the
-  complete source assembly** for both CDM and ΛCDM. This is the release where
-  the spectrum stops being the almost-FLRW analytic skeleton and becomes a
-  spectrum with structure in it. Acceptance criterion **5b closes here**,
-  against CAMB and CLASS on a reduced parameter set, with the acoustic sector
-  checked separately against **Hu & Sugiyama**, whose analytic acoustic
-  treatment this formulation was developed from.
-  **At v1.2.0 the key figure of this README becomes the normalised angular
-  spectrum for CDM and ΛCDM, with the peaks** — the present Figure 3 moves to
-  second place, beside the acoustic-mode figures and their Hu & Sugiyama
-  checks.
+  complete source assembly. RELEASED.** The spectrum stops being the almost-FLRW
+  analytic skeleton and becomes a spectrum with structure in it; **F9** is that
+  figure and it now leads this README, with the former Figure 3 kept beside it
+  as the before. Acceptance criterion **5b closed here** — and *what it is
+  gated against changed*, which this bullet states rather than quietly drops.
+  The plan was to gate on CAMB and CLASS on a reduced parameter set. Measured,
+  that comparison is 137% across the peaks against a code–code floor of 0.370%:
+  a slow-decoupling solution with no polarisation hierarchy and no neutrino
+  anisotropic stress cannot meet two full Boltzmann codes, and **a criterion
+  that can only be failed is not a criterion**. Decision **S4c** gates instead
+  on this bundle's own pipeline, (102) against (177)–(179), at
+  9.5×10⁻⁶ against 10⁻³, with CAMB and CLASS run on the reduced set exactly as
+  planned, stamped, and **reported alongside as context**.
+  **The acoustic sector is not checked against Hu & Sugiyama here, and that is
+  deferred rather than done** — decision **S35**. The sector is already measured
+  against two full Boltzmann codes; adding a third, *analytic* comparator with
+  approximations of its own would not strengthen it, and inventing an external
+  check under freeze pressure is how finding **T-24** happened. What *is*
+  checked against Hu & Sugiyama is the free-streaming chain, their Eq. (6), in
+  **F1** — which is the part of their treatment this formulation was developed
+  from, and it holds at 10⁻¹³.
+  One **stated limit** ships with the release: the recombination grid sets the
+  primary source and nothing derives it, worth 1.2% — question **Q7**, taken as
+  decision **S33**, derived immediately after the tag.
 - **v1.5.0** — the high-ℓ O(ε²ℓ) effects, **gated on Paper 1**, carrying **both**
   nonlinear corrections: the gravitational coupling to the kinematic quantities,
   δτ̇_NL, and the nonlinear Thomson scattering coupling to the baryon velocity,
   δĊ_NL. Also the restricted case, which must recover v1.0.0's numbers, making
-  that part a recovery and a check rather than a new claim.
+  that part a recovery and a check rather than a new claim. **It is where the
+  shear, acceleration and vorticity couplings belong** — each is a product of
+  two first-order quantities and is dropped at linear order, which is why
+  decision **S23**, having moved them into v1.2.0, is recorded as falsified by
+  its own premise.
+  **Four things v1.2.0 hands it, in order.** (i) The recombination grid, derived
+  rather than fixed — **S33**, the first work after this tag, because a
+  nonlinear correction measured against a base with a 1.2% uncertainty in the
+  term it modifies is measured against the wrong thing. (ii) The Hu & Sugiyama
+  acoustic cross-check, deferred with its reason — **S35**. (iii) The numeric
+  manifest gate, **T-38** part (1). (iv) The factorised interface of **S24**,
+  accepted as option (a) and deliberately not frozen until the forward model's
+  high-ℓ envelope was right (**S25**) — which it now is.
 - **v2.0.0** — calibration and data-science release, including Planck data.
   *Calibration* there means calibrating the solver against standard results; it
   does **not** mean calibrating the amplitude of an effect. **No new physics
@@ -350,13 +499,22 @@ The regression suite passes and `python scripts/run_all.py --strict` reports
 typed here, which is how the previous version of this paragraph came to claim a
 test total that was 36 short and a criteria tally that was half the truth.
 
-The acceptance criteria are recorded in `RELEASE-NOTES-v1.0.0.md`; **all six in
-v1.0.0's scope are closed** — 1, 2, 3, 4, 5a and 6 — with **5b moved to v1.2.0**
-by decision S18, where the acoustic peaks exist to compare against and Peebles
-recombination is in place. The four skips are the CAMB/CLASS comparison, which is not
-runnable until those codes are installed at v1.2.0; a skip there cannot pass
-silently, because `tests/test_external_codes.py` fails if the release notes ever
-claim criterion 5b is closed while the codes are absent.
+The acceptance criteria are recorded in `RELEASE-NOTES-v1.0.0.md` and this
+release's in `RELEASE-NOTES-v1.2.0.md`; **all six are closed.** 1, 2, 3, 4, 5a
+and 6 closed in v1.0.0's scope; **5b closed here**, moved to v1.2.0 by decision
+**S18** and gated by decision **S4c** on this bundle's own pipeline — (102)
+against (177)–(179) at $9.5\times10^{-6}$ against $10^{-3}$, measured by
+`scripts/diagnostic_d8_criterion_5b_gate.py` on every harness run.
+
+**The CAMB and CLASS comparison is recorded in the bundle and deliberately
+outside the bundled testing**, which is why the suite still reports skips there:
+`reference/` carries the stamped spectra, `scripts/make_reference_spectra.py`
+regenerates them from the codes, `scripts/compare_criterion_5b.py` reproduces
+the measurement from the stamps **with neither code installed**, and
+`tables/criterion-5b-v1.2.0.tex` is the result the supplement carries. A skip
+cannot pass silently: `tests/test_external_codes.py` fails if that recorded
+result or the means to reproduce it ever goes missing, and fails if either
+script is ever added to the harness.
 
 `config/implementation-register.toml` links every published equation the numerics
 implement to its provenance, to the `.py` file and object implementing it, and to
@@ -427,6 +585,7 @@ cannot go stale the way the verification paragraph above once did.
 | **F6** what each approximation is worth | A-1, A-2 and the small-scale approximation as **ratios**, over six decades — one is a different calculation, one is free where this release claims, one is worst at large scales | `v1.1.0` |
 | **F7** frame specialisation | the generic $u^a$ carried through and the frame chosen at the end — a figure a gauge-fixed treatment cannot draw. **It reports that its own planned claim is false**: the dipole was expected to stand an order of magnitude apart and lands on each curve instead, worst ratio **1.25×**, because (102) builds every $\ell$ from the same three $C_A$ and has no mechanism for answering differently at different $\ell$ (T-31) | `v1.2.0` |
 | **F8** coupling schematic | a structural statement, not a measurement: which couplings exist at which order | `v1.1.0` |
+| **F9** angular spectrum with the acoustic peaks | **the release's deliverable** — $D_\ell$ for CDM, $\Lambda$CDM and the Planck set, shape-normalised at $\ell=30$, with the peaks and the damping tail, against CAMB and CLASS as context (S4c) | `v1.2.0` |
 
 | Diagnostic | Evidence for | Version |
 |---|---|---|
@@ -440,16 +599,15 @@ cannot go stale the way the verification paragraph above once did.
 
 The development lineage:
 
-| Version | Established or changed | Status in v1.1.0 |
+| Version | Established or changed | Status in v1.2.0 |
 |---|---|---|
-| *Annals II* (2000) | the almost-Friedmann–Lemaître 1+3 covariant hierarchy, its integral solution (176) and the spectrum (186) | the antecedent this bundle reconstructs; ten findings recorded against it in `provenance/` |
+| *Annals II* (2000) | the almost-Friedmann–Lemaître 1+3 covariant hierarchy, its integral solution (176) and the spectrum (186) | the antecedent this bundle reconstructs; **fourteen** findings recorded against it in `provenance/`, B-1 to B-14 |
 | Correction to astro-ph/9912072 | withdrew the 1999 claim of a new effect | binding — it fixes the scientific boundary stated above, and no new effect is claimed here |
 | Conventions gate C1 | the normative sign and ℓ-weight sheet | source of the generated `provenance/conventions.md`; drift detectable through `conventions-source.txt` |
 | Paper 1 (2026) | the 1+3 route to CMB lensing from the exact hierarchy | the paper this bundle reproduces; frozen 2026-10-09 |
 | v1.0.0 | the independent reconstruction: the Appendix F chain against four external hierarchies, both routes to (186), the Sachs–Wolfe limit, and frame covariance established **symbolically** | superseded by v1.1.0; its tag, release asset and archived DOI are unchanged |
-| v1.1.0 | Peebles recombination replacing equilibrium Saha and made the default (S22); the frame specialisation made numerical, closing criterion 2's curvature half; figures F6 and F8 | **released**; its tag is behind the tip by design, and the commands above are how to confirm that rather than take this row's word for it |
-| **v1.2.0-dev** | the covariant coefficient assembly (89)/(90), the integral solution (102) carried with a generic $u^a$, the generic $\dot{\mathcal B}_A$ relations, the CDM frame as a second frame, F5, D6 and D7 — and findings T-17 through T-29, B-11 through B-14 | **this tree**; criterion 5b is the binding gate |
-| v1.2.0, planned | the full linear C_ℓ — acoustic peaks, Silk damping and the complete source assembly — **and the generic-$u^a$ hierarchy**, which unblocks figures F2, F5 and F7 | planned; acceptance criterion 5b closes here against CAMB and CLASS (decisions S18, S23); the release route is made runnable on a second machine here too (finding T-15) |
+| v1.1.0 | Peebles recombination replacing equilibrium Saha and made the default (S22); the frame specialisation made numerical, closing criterion 2's curvature half; figures F6 and F8 | **released**; superseded by v1.2.0. Its tag is behind the tip by design, and the commands above are how to confirm that rather than take this row's word for it |
+| **v1.2.0** | the covariant coefficient assembly (89)/(90); the integral solution (102) carried with a generic $u^a$ and **specialised back**; the generic $\dot{\mathcal B}_A$ relations; the CDM frame as a second frame; the full linear $C_\ell$ with acoustic peaks and Silk damping; `PLANCK_MODEL` with a derived radiation era; figures F2, F5 and F7, diagnostics D6, D7 and **D8**; and findings T-17 to T-48, B-11 to B-14 | **this tree.** Criterion 5b is **closed** — gated on (102) against (177)–(179) at $9.5\times10^{-6}$ against $10^{-3}$ (decision **S4c**), with CAMB and CLASS recorded alongside as context. No outstanding gate. One **stated limit** ships with it: the recombination grid, **Q7**/**S33**, derived immediately after the tag |
 | v1.5.0, planned | the high-ℓ O(ε²ℓ) effects, carrying both nonlinear corrections, gated on Paper 1 | planned; carries the restricted case as a recovery and check of v1.0.0, not a new result |
 | v2.0.0, planned | calibration and data science, including Planck | planned; no new physics in it, which is what keeps v1.2.0 ahead of it |
 

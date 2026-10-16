@@ -6,6 +6,9 @@ type: software
 # repository" and Zenodo both read this field, so a version here that has not
 # been released asserts a release that cannot be fetched.
 version: "1.1.0"
+# Stamped by scripts/bump_release.py together with the version above, so the
+# two cannot disagree about which release this file describes.
+date-released: 2026-10-12
 authors:
   - family-names: Gebbie
     given-names: Tim

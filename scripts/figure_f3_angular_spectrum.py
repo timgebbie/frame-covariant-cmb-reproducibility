@@ -94,7 +94,8 @@ def compute():
               f"which this release does not claim")
         print(f"      damping {run.damping_at_k_max:.3f} at the grid edge: the grid "
               f"{'reaches' if run.reaches_diffusion_scale else 'stops short of'} the Silk "
-              f"scale. v1.2.0 needs it; this release does not.")
+              f"scale. The CLAIMED range l<={CLAIMED_ELL_MAX} does not "
+              f"need it; F2's k grid, which does, runs to 1900 (T-32).")
         rows.append({
             "label": label, "slot": slot, "run": run,
             "d_ell": run.spectrum.d_ell(),

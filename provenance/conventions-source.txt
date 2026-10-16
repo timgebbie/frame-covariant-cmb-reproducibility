@@ -1,7 +1,7 @@
 source: C:\Users\01404122\Documents\Claude\NonlinearShear\docs\conventions.md
-sha256: e22f5e19b2d2ea70e5805d03474bee3b6196833273708499df644f947e63be70
-bytes: 22248
-generated: 2026-10-12
+sha256: 037bfd9c14085c5741002f50335741659420504aae28738a2c0b72e2e7abfc3a
+bytes: 23826
+generated: 2026-10-15
 normative: the source above. This bundle's copy is that file verbatim,
   preceded by a generated header; the header is the only difference,
   which is why this file is larger than its source.

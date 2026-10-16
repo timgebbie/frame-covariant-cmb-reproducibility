@@ -40,6 +40,15 @@ STAGES: list[tuple[str, str]] = [
     ("F6  impact of the approximations", "scripts/figure_f6_approximations.py"),
     ("F7  frame specialisation", "scripts/figure_f7_frames.py"),
     ("F8  coupling schematic", "scripts/figure_f8_schematic.py"),
+    # **F9 is split, and the split is the point.** The computation is 45 minutes
+    # --- 1433 modes in two frames --- and lands in outputs/f9-acoustic-spectrum.csv,
+    # which is committed. The harness redraws the figure from that CSV in
+    # seconds, so it verifies that the recorded data still produces the shipped
+    # picture without re-deriving it. The same architecture the PI set for the
+    # CAMB and CLASS comparison: recorded in the bundle, reproducible on
+    # demand, not run by default.
+    ("F9  angular spectrum with the acoustic peaks",
+     "scripts/figure_f9_acoustic_spectrum.py --replot"),
 ]
 
 #: Deferred to v1.1.0. A control is not evidence, so the diagnostics here are
@@ -212,10 +221,14 @@ def main() -> int:
     for group, stages in (("figures", STAGES), ("diagnostics", DIAGNOSTICS),
                           ("emissions", EMISSIONS)):
         for label, script in stages:
-            if not (ROOT / script).exists():
+            # `split()[0]`: a stage may carry arguments (F9 is wired as
+            # `... --replot`), and the file that must exist is the script,
+            # not the command line. Without this F9 reported PENDING while
+            # sitting in the tree --- a gate lying in the safe direction.
+            if not (ROOT / script.split()[0]).exists():
                 pending[group].append(label)
                 continue
-            if run([sys.executable, script], label):
+            if run([sys.executable, *script.split()], label):
                 failures.append(label)
 
     for group, stages in (("figures", STAGES), ("diagnostics", DIAGNOSTICS),

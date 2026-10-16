@@ -940,6 +940,91 @@ for tidiness would stop reporting real ones too.
 Weights are carried as exact rationals rather than floating-point numbers
 wherever a sign or an $\ell$-weight is asserted.
 
+\section{What each release established, and what it taught}
+A reproducibility bundle is not only a result; it is a record of how the result
+was arrived at, including the parts that were wrong on the way. This section is
+that record, one release at a time. Each entry states what was \emph{achieved},
+and then --- separately, because they are different things --- what was
+\emph{learned}, meaning a lesson that changed how the next release was built.
+
+\subsection*{v1.0.0 --- the reconstruction, and whether it is faithful}
+\textbf{Achieved.} The free-streaming chain of Appendix~F reproduced against
+\emph{four} external hierarchies --- Hu \& Sugiyama Eq.~(6), Wilson Eq.~(8),
+Ma \& Bertschinger Eqs.~(49)/(50), Seljak \& Zaldarriaga Eq.~(3d) --- each read
+from its own paper and integrated as printed, at residuals of
+$10^{-13}$--$10^{-14}$ against a $10^{-11}$ threshold, in two normalisations
+and two phase conventions. The almost-Friedmann--Lemaitre spectrum (186)
+computed from (176) by the mode route and the covariant route, agreeing
+exactly. The Sachs--Wolfe limit recovered at $0.26\%$ against a $5\%$
+criterion. \textbf{This shows that} the reconstruction is faithful to the
+antecedent's own equations, independently of any Boltzmann code, and that the
+harmonic phase convention is fixed by the \emph{definition} of $Q_{A_\ell}$
+rather than adopted.
+
+\textbf{Learned, and it set the pattern for everything after.} A coarsened
+$\eta$ grid returned a smooth, plausible spectrum that was $575\%$ wrong while
+the two routes agreed to $10^{-16}$ --- finding \textbf{T-3}. \textbf{Two
+agreeing routes agree about what they share.} That sentence is the single most
+load-bearing lesson in this bundle; it produced \texttt{required\_n\_eta}, it is
+why criterion~5b's gate states its shared inputs explicitly, and it is why the
+grid register exists.
+
+\subsection*{v1.1.0 --- the recombination that makes peaks possible}
+\textbf{Achieved.} Peebles' effective three-level atom replacing equilibrium
+Saha, and made the default only after being checked standalone against the
+standard ionisation history. Freeze-out at $2.15\times10^{-4}$ against a
+standard $\sim2\times10^{-4}$; the visibility peak moves $z\simeq1300\to1107$
+against a standard $1080$--$1100$, and the function \emph{widens by about
+40\%}. The frame change made numerical rather than symbolic. \textbf{This shows
+that} the width, not the position, is what the spectrum needs: the width sets
+the Silk damping envelope, which is why the acoustic peaks could not be
+attempted before this release.
+
+\textbf{Learned.} \texttt{SAHA} was kept rather than deleted. A known-worse
+alternative that \emph{must} change the answer is evidence; deleting it would
+have left the improvement asserted rather than measured. The same principle
+appears as the negative control in every criterion that claims one.
+
+\subsection*{v1.2.0 --- the spectrum with structure, and the audit of it}
+\textbf{Achieved.} The full linear $C_\ell$: acoustic peaks, a Silk damping
+tail, the complete source assembly, and the integral solution~(102) carried
+with a generic $u^a$ and specialised back. Criterion~5b closed at
+$9.5\times10^{-6}$ against a gate of $10^{-3}$. \textbf{This shows that}
+\emph{Annals~II}'s two writings of its own integral solution --- (102)
+specialised, and (177)--(179) assembled --- are the same calculation when
+evaluated, which the paper recovers symbolically and which nobody had ever
+computed.
+
+\textbf{Learned, three times over, and they are the same lesson in three
+places.} \emph{First}, the tolerance this criterion was written against could
+only ever be failed: a slow-decoupling solution with no polarisation hierarchy
+cannot meet two full Boltzmann codes, and a criterion that can only be failed
+is not a criterion (\textbf{S4c}). \emph{Second}, the figure
+$10^{-5}$ that had stood in the record for the two routes' agreement was never
+measured --- it came from a fixed grid on which both routes were
+\emph{un-converged in the same direction} (\textbf{T-45}). \emph{Third}, the
+gate written to catch all of this printed \texttt{PASS} on a \texttt{nan},
+because \texttt{nan >= gate} is \texttt{False} (\textbf{T-44}). \textbf{A gate
+is not tested by the run that passes it.}
+
+\subsection*{The arc, in one sentence each}
+\begin{itemize}\itemsep2pt
+  \item \textbf{v1.0.0} asked \emph{is the reconstruction faithful?} and
+        answered it against four external treatments.
+  \item \textbf{v1.1.0} asked \emph{what does the spectrum need that it does
+        not have?} and answered: the visibility width.
+  \item \textbf{v1.2.0} asked \emph{is the antecedent's own algebra
+        self-consistent when evaluated?} and answered yes, at $10^{-5}$,
+        while finding that the question had been answered three times before
+        without being measured.
+\end{itemize}
+
+\textbf{What the arc did not do, and says so.} No release has bounded the
+accuracy of the \emph{source} as distinct from the consistency of its
+assembly. The recombination grid moves the primary term by $1.2\%$ and both
+routes of criterion~5b share it, so the criterion cannot see it. That is
+recorded as a stated limit of v1.2.0 and derived immediately after the tag.
+
 \section{Beyond this release: the almost-EGS bounds}
 \label{sec:egs}
 The Ehlers--Geren--Sachs theorem states that exact CMB isotropy for all

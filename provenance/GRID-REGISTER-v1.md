@@ -20,8 +20,8 @@ being possible.
 | **open** | 1 | a chosen literal whose convergence is **not** established. This status is the point of the register. |
 | **derived** | 4 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
 | **measured** | 4 | a chosen literal whose convergence has been measured, with the number stated. |
-| **described** | 9 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
-| **index** | 14 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
+| **described** | 11 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
+| **index** | 17 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
 
 ## open — 1
 
@@ -117,7 +117,13 @@ side of anything the grid could contribute.
 four external recursions match at 1e-13 to 1e-14 at scale exactly 1, which no
 under-resolved grid produces.
 
-## described — 9
+## described — 11
+
+### `K_COM` — the k grid the cost benchmark is measured on
+
+`scripts/benchmark_single_run.py:64`, `np.arange`
+
+The release grid, matching F9 exactly. A benchmark run on a grid nobody ships measures a calculation nobody performs.
 
 ### `K_COM` — the k quadrature grid for the CAMB and CLASS comparison
 
@@ -183,7 +189,19 @@ As F3, and deliberately the same grid: F6 reports RATIOS against the F3 configur
 
 As F2, raised to 1900 by finding T-32, with `check_k` guarding the probe modes after T-34.
 
-## index — 14
+### `K_COM` — the k quadrature grid for the release's deliverable figure
+
+`scripts/figure_f9_acoustic_spectrum.py:84`, `np.arange`
+
+`arange(0.05, 1500.0, pi/3)`, the same grid and the same rule as
+`compare_criterion_5b.py` --- linear, because a logarithmic k grid aliases the
+integrand at high k however many points it has, and to 1500 because at
+k_D=536.9 the envelope there is 2e-07, so the grid runs past the damping scale
+as **T-32** requires. Deliberately identical to the comparison's grid: F9 and
+the 5b table describe the same spectrum, and two grids would make them two
+spectra.
+
+## index — 17
 
 ### `phase` — the i^ell phase factor
 
@@ -202,6 +220,18 @@ Consecutive integers. There is no resolution to get wrong.
 `functions/spectra/kernels.py:119`, `np.arange`
 
 Set by the transform length, not chosen. The FFT's own grid is the k grid of its caller.
+
+### `ELLS` — the multipoles the cost benchmark projects onto
+
+`scripts/benchmark_single_run.py:63`, `np.arange`
+
+The release selection, matching F9. The per-mode projection cost scales with how many multipoles are asked for, so this is the number the 98.3% share is a share of.
+
+### `THETA_DEG` — the angular abscissa the benchmark transforms onto
+
+`scripts/benchmark_single_run.py:65`, `np.linspace`
+
+`linspace(0, 180, 721)`, a quarter-degree abscissa matching F4. It is in the benchmark because C(theta) is the deliverable a reader asks for; it costs 0.01 s, which is the point.
 
 ### `ELLS` — the multipoles the external comparison is evaluated at
 
@@ -266,6 +296,18 @@ Selection only.
 `scripts/figure_f7_frames.py:96`, `np.logspace`
 
 Selection only, with the dipole prepended so the probe is on the figure.
+
+### `ELLS` — the multipoles F9 is drawn at
+
+`scripts/figure_f9_acoustic_spectrum.py:78`, `np.arange`
+
+Linear at 30 across the acoustic band. Each ell is an independent
+quadrature, so this selects which points are drawn and changes no value ---
+**but it does limit what may be READ OFF the figure.** A peak read off a
+30-wide grid can only land on a multiple of 30, which reported the first peak
+as 150 against CAMB's 210. `first_peak` therefore interpolates a parabola
+through the maximum and its neighbours and reports 162 against 206. *An index
+grid still constrains a claim, and this is the row that says so.*
 
 ### `ell` — the multipoles the stamped CAMB and CLASS spectra are written at
 

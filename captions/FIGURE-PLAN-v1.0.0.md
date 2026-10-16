@@ -239,3 +239,33 @@ A control is not evidence. These live in `diagnostics/`.
 - **Possible extensions, not claims of this release** — the fractional-contribution
   form of F5, each term as a share of $C_\ell$ summing to one by construction,
   which is scale-free and makes the plateau and the damping tail equally legible.
+
+---
+
+## F9 — the angular spectrum with the acoustic peaks, both frames
+
+**Added at v1.2.0, against a promise made at v1.0.0.** The roadmap has said
+since the first release that *"at v1.2.0 the key figure of this README becomes
+the normalised angular spectrum for CDM and ΛCDM, with the peaks — the present
+Figure 3 moves to second place"*. Until this figure existed that was a sentence,
+not an artefact, and the release would have shipped claiming a key figure it did
+not have.
+
+**Planned:** two panels. (a) the shape $D_\ell/D_{30}$ for the three backgrounds
+the bundle ships, with CAMB and CLASS drawn as context rather than as a target
+(**S4c**). (b) the same spectra in **both frames**, from one solve, which is the
+statement (102)-carried-generically exists to make.
+
+**Outcome:** as planned, with two things the plan did not anticipate and which
+are recorded here rather than silently absorbed.
+
+1. **The first peak had to be interpolated.** The $\ell$ grid steps by 30 across
+   the acoustic band, so a peak read off the grid can only land on a multiple of
+   30 — it reported 150 against CAMB's 210, an apparent 60-wide disagreement
+   that is mostly sampling. A parabola through the maximum and its neighbours
+   gives $\ell\simeq162$ against $206$, which is what the curves say.
+2. **The frame gap is larger than F5's.** F5 reports a 15% median over
+   $2\le\ell\le400$; this reports up to 40%, because it runs to $\ell\simeq990$
+   with the transfer function and the damping tail, where the two frames diverge
+   most. They are different configurations and the numbers are not
+   interchangeable — each figure quotes its own.

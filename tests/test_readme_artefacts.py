@@ -211,3 +211,42 @@ def test_the_released_version_is_named_consistently_too():
     assert f"v{cff.group(1)}" == header.group(1), (
         f"CITATION.cff says {cff.group(1)}, the README says the last release is "
         f"{header.group(1)}. Zenodo reads the first of those.")
+
+
+#: The decisions a reader must know to read the README honestly. Adding one
+#: here is the deliberate act; the test then refuses a README that drops it.
+#: **Not all thirty-five** --- a README that recited the whole contract would be
+#: the contract, and nobody would read either.
+BINDING_DECISIONS = ("S1", "S4c", "S15", "S19", "S26", "S27", "S30", "S33")
+
+
+def test_the_readme_summarises_every_binding_decision():
+    r"""**The README is a gateway to the contracts, and a gateway that omits one
+    is worse than no gateway** --- it reads as complete.
+
+    The PI, 2026-10-15: *"The README should conform in summary to the key
+    features and requirements of the more expansive and binding governance
+    contracts within the project bundle itself ... We need to get this right
+    before we engage in v1.5.0 because this is where mistakes will start to
+    really cost us."*
+
+    When this was first written, four of the eight were absent: **S15**
+    (reproduce the approximations rather than correct them), **S19** (nothing
+    public before Paper 1 is submitted), **S26** (the audit half is in scope)
+    and **S30** (optimisation deferred). S19 is the one that mattered --- it
+    governs whether the repository may be made public at all, and the README
+    that a reader would check for exactly that said nothing about it.
+    """
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    decisions = (ROOT / "provenance" / "DECISIONS-v1.0.0.md").read_text(encoding="utf-8")
+
+    missing = [d for d in BINDING_DECISIONS if f"**{d}**" not in readme]
+    assert not missing, (
+        f"the README does not summarise {', '.join(missing)}. Each is a "
+        "contract that constrains what may be built, released or claimed, and "
+        "a reader who only has the README would not know it applies.")
+
+    undefined = [d for d in BINDING_DECISIONS if f"| **{d}** |" not in decisions]
+    assert not undefined, (
+        f"{', '.join(undefined)} is named as binding here but has no row in "
+        "DECISIONS. The summary must not outlive its contract.")

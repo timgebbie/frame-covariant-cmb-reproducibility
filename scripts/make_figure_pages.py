@@ -54,6 +54,11 @@ PLANNED = [
     ("F6", "impact of the approximations"),
     ("F7", "frame specialisation"),
     ("F8", "coupling schematic"),
+    # Added at v1.2.0. The roadmap had promised since v1.0.0 that "at
+    # v1.2.0 the key figure becomes the normalised angular spectrum for
+    # CDM and LambdaCDM, with the peaks"; F9 is that figure, and until it
+    # existed the promise was a sentence rather than an artefact.
+    ("F9", "angular spectrum with the acoustic peaks, both frames"),
 ]
 
 

@@ -185,7 +185,15 @@ def main() -> int:
             ]
 
     out = ROOT / "provenance" / "GRID-REGISTER-v1.md"
-    out.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    # `newline="\n"` is not optional and not cosmetic. Without it Python's text
+    # mode writes CRLF on Windows, so the same checkout generates a different
+    # file on the PI's machine than on this one --- which is exactly the
+    # cross-platform property `PORTABLE-MANIFEST` exists to guarantee, and
+    # exactly what finding **T-15** is about. Every other generator in this
+    # bundle passes it. This one did not, and finding **T-48** is the result:
+    # the script written to close a defect class shipped an instance of
+    # another one.
+    out.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
     print(f"  " + ", ".join(f"{counts[s]}x{s}" for s in STATUS_ORDER if counts[s]))
     print(f"wrote {out.relative_to(ROOT)}")
     return 0

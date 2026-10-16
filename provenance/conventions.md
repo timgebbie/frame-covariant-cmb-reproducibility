@@ -3,8 +3,8 @@
 Regenerate with:  python scripts/sync_conventions.py --source <path>
 
 Source      : C:\Users\01404122\Documents\Claude\NonlinearShear\docs\conventions.md
-SHA-256     : e22f5e19b2d2ea70e5805d03474bee3b6196833273708499df644f947e63be70
-Generated   : 2026-10-12
+SHA-256     : 037bfd9c14085c5741002f50335741659420504aae28738a2c0b72e2e7abfc3a
+Generated   : 2026-10-15
 
 The normative sheet lives in the project repository and is owned by the
 conventions gate. This bundle carries a generated copy so that the code and the
@@ -135,10 +135,11 @@ names the convention it imported.
 | | Statement | Source | Kind |
 |---|---|---|---|
 | C3.1 | Helmholtz: **`D^a D_a Q = −k_phys² Q`**, `k_phys = k/a`, `Q` time-independent | GE98 **(47)** pub = (48) arXiv; Th **(1.47)** | DEF |
+| C3.1a | **The operational consequence, and it is not in the source equation.** `k` is **physical**, so `k_phys = k/a` and **`k̇_phys = −H k_phys`** — it is *not* constant. Yet **`Q_{A_ℓ}` is time-independent at every rank**, because in C3.2 the `ℓ` factors of `D` each carry `1/a` while the `ℓ` factors of `k_phys^{−1}` each carry an `a`, and they **cancel rank by rank**. **A reduction that forgets either side puts a spurious `a`-dependence into every rank** — and since the hierarchy carries `ȧ/a` terms throughout, that leaks into every `τ̇_ℓ` rather than failing visibly at one | Derived from C3.1 + C3.2. **Not printed in GE98 (47) or (48)** — added 2026-10-12 at P1-B's request, which carries the same statement in the bundle's `provenance/` restatement | **RES, IA.** Definitions are adopted, results are audited: this is a result and is audited, not inherited |
 | C3.2 | **`Q_{A_ℓ} = (−k_phys)^{−ℓ} D_⟨A_ℓ⟩ Q`**. The stripped factor is **`(−k_phys)^ℓ`: real, no `i`.** For a real eigenfunction `Q`, every `Q_{A_ℓ}` is real | GE98 **(48)** pub = (49) arXiv; Th **(1.48)**; restated in GE98 p.23 below (134), and in Th App. D footnote to **(D.44)** as `(−λ)^{−ℓ}D_⟨A_ℓ⟩Q = Q_{A_ℓ}` | DEF. **Seed verified against the PDF, 2026-10-03** |
 | C3.3 | Mode function `G_ℓ[Q] = O^{A_ℓ}Q_{A_ℓ} = (−k_phys)^{−ℓ}O^{A_ℓ}D_⟨A_ℓ⟩Q` | GE98 **(49)** pub = (50) arXiv; (51) arXiv, published number not resolved; Th (1.50) | DEF |
 | C3.4 | Mode expansion `τ_{A_ℓ}(x) = Σ_k τ_ℓ(t,k)(−k_phys)^{−ℓ}D_⟨A_ℓ⟩Q = Σ_k τ_ℓ Q_{A_ℓ}` | GE98 **(53)** pub = (54) arXiv; Th (1.48) ff. | DEF |
-| C3.5 | **The sign of a scalar's mode coefficient, `X = s_Q Σ_k X(k) Q`, is not fixed by any source.** *(Renamed from `λ` 2026-10-06 — see the warning below C3.6.)* GE98 never expands a scalar field. The thesis and both manuscripts write gradients as `D_a X = +(k/a) X(k) Q_a`, which under C3.2 means **`s_Q = −1`**. **STIPULATED HERE: s_Q = −1**, because that is the existing usage, and it must be stated wherever a mode coefficient is | Th App. D **(D.44)**: `(D_a ln ρ_M)^k = +(k/a)Δ(k)Q_a`. Consequence under C3.2 by IA: `D_aX = −s_Q k X(k) Q_a`, `D_⟨aD_b⟩X = +s_Q k² X(k) Q_ab` | STIPULATED HERE |
+| C3.5 | **The sign of a scalar's mode coefficient, `X = s_Q Σ_k X(k) Q`, cannot be fixed by any physical argument, and that is a DERIVED RESULT rather than an open item.** Under C3.2 the sheet's own consequences are `D_aX = −s_Q k X(k) Q_a` and `D_⟨aD_b⟩X = +s_Q k² X(k) Q_ab` — **the scalar, its gradient and its second gradient each carry exactly one factor of `s_Q`, so it cancels from every ratio of them** and no number any treatment reports can depend on it. **STIPULATED: `s_Q = −1`**, matching the thesis and both manuscripts, and stated wherever a mode coefficient is. · **Separately, `λ` — the rank-dependent rescaling `Q_{A_ℓ} → λ^ℓ Q_{A_ℓ}`, which this row carried before the 2026-10-06 renaming — IS FIXED BY PHYSICS and is no longer stipulated: `λ` does not cancel between a rank-0 object and a rank-1 one, and cold dark matter falling into a potential well requires `v·(−kΦ_A) > 0` in the growing mode.** Tested with a control that reverses the Euler sign and fails. | Th App. D **(D.44)**; `tests/test_frames.py::test_c35_gravity_does_positive_work_on_the_cdm_which_fixes_lambda`, `…_the_control_climbs_out_of_the_well`, `…_s_q_cancels_from_every_ratio_and_so_no_physics_can_fix_it` | **DERIVED** (`λ`) / **STIPULATED, provably unfixable** (`s_Q`) |
 | C3.6 | The radial eigenfunction has real stripped factor too: `O^{A_ℓ}_{(χ)}D_⟨A_ℓ⟩Q = (−k_phys)^ℓ O^{A_ℓ}_{(χ)}O^{(k)}_{A_ℓ}R_ℓ` | GE98 **(72)**, first relation | RES. The **second** relation of (72), `O^{A_ℓ}Q_{A_ℓ} = (−k_phys)^ℓ Q_ℓ`, has a factor `(−k)^ℓ` too many under C3.2 and (62), (67). Apparent misprint, low consequence (results note, G3) |
 
 ### C3a — Plane waves, and the phase they carry

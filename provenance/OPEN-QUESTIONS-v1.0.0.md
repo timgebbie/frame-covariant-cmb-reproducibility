@@ -600,3 +600,77 @@ supplement, in the manner of O1 and O2.
 
 **Status: closed as a question, open as scheduled work. Nothing in v1.2.0
 changes for it.**
+
+---
+
+## Q8 — the second and third acoustic peaks are missing, and one band number hides it
+
+**Raised by P1-B 2026-10-15, on the PI's question "any thoughts on the
+difference between ours and CAMB?". Measured from `outputs/f9-acoustic-spectrum.csv`,
+which is committed. Nothing here blocks the v1.2.0 tag.**
+
+### What the data says, in three regimes rather than one
+
+Shape, $D_\ell$ renormalised at $\ell=30$, `PLANCK_MODEL` against CAMB:
+
+| $\ell$ | 2 | 22 | 60 | 150 | 210 | 300 | 420 | 630 | 720 | 990 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| ours / CAMB | **0.02** | 0.77 | **2.30** | 1.71 | 1.28 | 1.33 | **0.50** | 0.13 | **0.14** | 0.08 |
+
+**Three regimes with three different signs, and they are not one defect.**
+
+1. **$\ell<30$: we are a factor of fifty low.** This is understood and recorded:
+   approximations **A-1** and **A-2**, the weight the line-of-sight integral
+   carries. (102) prints $\mathcal V=\kappa'e^{-\kappa}$ and the plateau is what
+   that costs — findings **T-41** and **T-42**, a factor of eighty measured
+   there and $0.02$ here.
+2. **$60\le\ell\le300$: we are up to $2.3\times$ high, with the first peak at
+   $\ell\simeq162$ against $206$.** Part is the acoustic scale ($z_*=1114.5$
+   here against CAMB's $1088.5$ — Peebles against HyRec). Part is an artefact
+   of the comparison itself: see below.
+3. **$\ell>390$: we collapse, and this one is not in the record.** CAMB's
+   second and third peaks reach $1.78$ and $2.76$; ours reach $0.88$ and
+   $0.40$. **We have essentially no second or third acoustic peak.**
+
+### Two things this exposes about the comparison, not only about the physics
+
+**The band average hides a sign change.** `compare_criterion_5b.py` reports the
+acoustic band as a single worst-case $137\%$ over $30\le\ell<1000$. That band
+contains a region where we are $130\%$ **high** and a region where we are
+$90\%$ **low**, and a worst-case magnitude cannot distinguish them. *A single
+number per band was the right first instrument and is now the wrong one.*
+**Proposed:** split the acoustic band at the first peak, and report the signed
+ratio's range rather than only $\max|{\rm diff}|$.
+
+**The normalisation anchor sits on broken ground.** Everything is renormalised
+at $\ell=30$ — but $\ell=30$ is on the steep rising part of *our* plateau, which
+regime 1 says is wrong by a factor of fifty at $\ell=2$ and still $0.77$ at
+$\ell=22$. **Anchoring a shape comparison at a point where one of the shapes is
+known to be wrong propagates that error into every other band**, and some of
+regime 2's excess is likely to be exactly that rather than physics. Renormalising
+at the first peak instead would separate the two.
+
+### What is NOT claimed here
+
+**No mechanism is asserted for regime 3.** The obvious candidates — the
+slow-decoupling order, which F6 already measures as the largest single
+approximation in the chain; the visibility width; a loss of acoustic coherence
+at high $k$ — are candidates and nothing more. **T-41's first diagnosis was
+exactly this kind of reasoning and it was wrong**, and the lesson recorded there
+is that the plausible cause and the actual cause were different. The damping
+scale has been checked and is *not* sufficient on its own: at $\ell=720$,
+$k\simeq225$ against $k_D=536.9$ gives an envelope of $0.70$, nowhere near the
+factor of seven observed.
+
+### Status
+
+**Open. For v1.5.0**, where the acoustic sector is being touched anyway and
+where **S35** already places the Hu \& Sugiyama analytic cross-check — which is
+the instrument most likely to discriminate between these candidates, since it
+is an *analytic* acoustic treatment whose approximations are individually
+switchable. That is now a second, independent argument for S35's placement.
+
+**What v1.2.0 claims is unaffected.** Criterion 5b is gated on the bundle's own
+pipeline (**S4c**); the external comparison is context and is reported as a
+measured distance, not as agreement. This question sharpens what that distance
+is made of — which is the itemisation's stated purpose.

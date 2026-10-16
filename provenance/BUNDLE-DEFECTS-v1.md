@@ -3962,3 +3962,46 @@ each by a cheap check that can fail —
 `check_deferrals()` and `scripts/make_grid_register.py` — and neither closure
 cost more than the finding that prompted it. **The expensive thing was finding
 the third instance, not writing the gate.**
+
+---
+
+## T-48 — the script written to close a defect class shipped an instance of another one
+
+**Found on the PI's machine, 2026-10-15, by `git add`.** `scripts/`
+`make_grid_register.py` wrote its output with `Path.write_text(...)` and no
+`newline="\n"`. On Linux that is LF; on Windows, Python's text mode translates
+to **CRLF**. The PI's run produced:
+
+```
+warning: in the working copy of 'provenance/GRID-REGISTER-v1.md',
+         CRLF will be replaced by LF the next time Git touches it
+```
+
+**Every other generator in this bundle passes `newline="\n"`** ---
+`make_manifests.py` on all three manifests and the append guard,
+`make_release_status.py`, `sync_conventions.py`. This one did not, so the same
+checkout generated a different file on the PI's machine than on the one that
+wrote it.
+
+### Why it matters beyond a git warning
+
+`PORTABLE-MANIFEST-SHA256.txt` exists to assert that **the same checkout
+produces the same fingerprint on every machine**. A generated file whose line
+endings depend on the platform breaks that directly, and it would have been
+found as a mysterious portable-manifest mismatch on a third machine rather than
+as a one-line omission.
+
+### The part worth keeping
+
+`make_grid_register.py` was written **in this session, to close the class of
+unguarded discretisations** after T-3, S24's correction to itself, and T-46.
+It shipped carrying an instance of the platform-portability class that
+**T-15** already exists for. Closing one class does not inoculate the code that
+closes it, and new code is exactly where the house conventions are least likely
+to be applied --- there is no old version of it to copy from.
+
+**The check that would have caught it does not exist and is not built here.**
+A grep for `write_text(` without `newline=` across `scripts/` would be two
+lines, and it is noted as worth doing rather than done, because adding a third
+gate in the same session that added two is how a harness becomes something
+people stop reading. Recorded for v1.5.0.

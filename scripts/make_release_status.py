@@ -170,6 +170,23 @@ ARTEFACTS: list[Artefact] = [
                   "instead, worst ratio 1.25x, because (102) builds every l from "
                   "the same three C_A --- finding T-31. Its environment is built "
                   "for the k grid rather than the probe modes --- finding T-34"),
+    Artefact("F9 - the angular spectrum with the acoustic peaks, both frames",
+             "R", "v1.2.0",
+             module="functions.spectra.two_frame",
+             objects=("build_environment", "coefficient_sets", "transfer_by_rank"),
+             script="scripts/figure_f9_acoustic_spectrum.py",
+             tests=("test_the_two_routes_agree_on_every_background_the_bundle_ships",),
+             note="**the release's deliverable** (S1): D_l renormalised at "
+                  "l=30 for CDM, LCDM and PLANCK_MODEL, with the peaks and the "
+                  "damping tail, and the same spectra in BOTH frames from one "
+                  "solve. First peak l~162 by parabolic interpolation against "
+                  "CAMB's 206 -- interpolated because the ell grid steps by 30 "
+                  "and reading the peak off it would assert a precision the "
+                  "sampling does not have. CAMB and CLASS drawn as context, "
+                  "never as a target (S4c). The computation is 45 minutes and "
+                  "its output CSV is committed; run_all redraws from that CSV "
+                  "in seconds, which is the architecture the PI set for the "
+                  "external comparison applied to a figure"),
     Artefact("criterion 5b's gate: (102) against (177)-(179)", "R", "v1.2.0",
              module="functions.spectra.two_route",
              objects=("TwoRoute", "two_route_transfer"),
@@ -240,7 +257,13 @@ RUNG_NAMES = {"P": "prototype", "C": "proof of concept",
 def _run_all_scripts() -> set[str]:
     """The scripts `run_all.py` actually runs, read out of it rather than assumed."""
     text = (ROOT / "scripts" / "run_all.py").read_text(encoding="utf-8")
-    return set(re.findall(r'"(scripts/[A-Za-z0-9_]+\.py)"', text))
+    # `[^"]*` because a stage may carry arguments --- F9 is wired as
+    # `... --replot`, its expensive half deliberately outside the harness. The
+    # pattern used to require the closing quote immediately after `.py`, which
+    # silently reported a wired script as unwired and so **failed a rung for a
+    # punctuation reason**. A gate that fails on syntax rather than substance
+    # teaches people to dismiss it.
+    return set(re.findall(r'"(scripts/[A-Za-z0-9_]+\.py)[^"]*"', text))
 
 
 def _test_names() -> set[str]:

@@ -284,3 +284,50 @@ key = "scripts/figure_f4_correlation.py::THETA_DEG"
 what = "the angular abscissa of the correlation function"
 status = "index"
 note = "`linspace(0, 180, 721)` --- a quarter-degree plotting abscissa. C(theta) is evaluated pointwise from the C_ell, so this sets the drawn resolution and no computed value."
+
+# ---------------------------------------------------------------------------
+# Added at v1.2.0 with F9 and the benchmark. **The register caught these on its
+# first run after the scripts landed**, which is the whole argument for it:
+# two new files, five new grids, and none of them would have been looked at.
+# ---------------------------------------------------------------------------
+[[grid]]
+key = "scripts/figure_f9_acoustic_spectrum.py::K_COM"
+what = "the k quadrature grid for the release's deliverable figure"
+status = "described"
+note = """`arange(0.05, 1500.0, pi/3)`, the same grid and the same rule as
+`compare_criterion_5b.py` --- linear, because a logarithmic k grid aliases the
+integrand at high k however many points it has, and to 1500 because at
+k_D=536.9 the envelope there is 2e-07, so the grid runs past the damping scale
+as **T-32** requires. Deliberately identical to the comparison's grid: F9 and
+the 5b table describe the same spectrum, and two grids would make them two
+spectra."""
+
+[[grid]]
+key = "scripts/figure_f9_acoustic_spectrum.py::ELLS"
+what = "the multipoles F9 is drawn at"
+status = "index"
+note = """Linear at 30 across the acoustic band. Each ell is an independent
+quadrature, so this selects which points are drawn and changes no value ---
+**but it does limit what may be READ OFF the figure.** A peak read off a
+30-wide grid can only land on a multiple of 30, which reported the first peak
+as 150 against CAMB's 210. `first_peak` therefore interpolates a parabola
+through the maximum and its neighbours and reports 162 against 206. *An index
+grid still constrains a claim, and this is the row that says so.*"""
+
+[[grid]]
+key = "scripts/benchmark_single_run.py::K_COM"
+what = "the k grid the cost benchmark is measured on"
+status = "described"
+note = "The release grid, matching F9 exactly. A benchmark run on a grid nobody ships measures a calculation nobody performs."
+
+[[grid]]
+key = "scripts/benchmark_single_run.py::ELLS"
+what = "the multipoles the cost benchmark projects onto"
+status = "index"
+note = "The release selection, matching F9. The per-mode projection cost scales with how many multipoles are asked for, so this is the number the 98.3% share is a share of."
+
+[[grid]]
+key = "scripts/benchmark_single_run.py::THETA_DEG"
+what = "the angular abscissa the benchmark transforms onto"
+status = "index"
+note = "`linspace(0, 180, 721)`, a quarter-degree abscissa matching F4. It is in the benchmark because C(theta) is the deliverable a reader asks for; it costs 0.01 s, which is the point."
