@@ -603,7 +603,37 @@ changes for it.**
 
 ---
 
-## Q8 — the second and third acoustic peaks are missing, and one band number hides it
+## Q8 — ANSWERED 2026-10-16. Finding T-51: the acoustic start, not the damping
+
+**The question was answered the day after it was raised, by the PI asking the
+opposite question.** *"Did the visibility function over damp away our acoustic
+peaks?"* — no, and the visibility never touches them: (177) is a boundary term
+at $\eta_*$, never integrated against $\mathcal V$, and $k_D$ carries Silk
+diffusion alone. Chasing why not found the cause.
+
+**The peaks are not missing. They are in the wrong place.** Our oscillation
+period in $\ell$ is **589.7** against CAMB's **285.5**, and a damping envelope
+multiplies — it cannot change a period. The acoustic ODE is handed a grid
+starting at `RecombinationHistory.build`'s `z_max = 3000.0`, which discards
+**50.8%** of the sound horizon $r_s(\eta_*)=\int_0^{\eta_*}c_s\,d\eta$ and so
+doubles the peak spacing. Starting at $z=2\times10^5$ reproduces CAMB's 285.5
+to **1.6%**.
+
+**The $0.14$ at $\ell=720$ below was our trough being compared with CAMB's
+peak.** Regimes 2 and 3 of the three below are one defect, not two, and it is
+not the one either of them names. Regime 1 is unaffected and stands.
+
+**Criterion 5b could not see it**, because both of its routes take the same
+`solve_acoustic` call on the same truncated grid — **S4c** exactly, and the
+clearest demonstration yet that the external comparison earns its keep as
+context. Finding **T-51**; the fix lands in v1.3.0 under **S37**.
+
+*The original question is kept below in full, because a question answered by
+being reframed is worth more intact than deleted.*
+
+---
+
+## Q8 (as raised) — the second and third acoustic peaks are missing, and one band number hides it
 
 **Raised by P1-B 2026-10-15, on the PI's question "any thoughts on the
 difference between ours and CAMB?". Measured from `outputs/f9-acoustic-spectrum.csv`,
@@ -674,3 +704,30 @@ switchable. That is now a second, independent argument for S35's placement.
 pipeline (**S4c**); the external comparison is context and is reported as a
 measured distance, not as agreement. This question sharpens what that distance
 is made of — which is the itemisation's stated purpose.
+
+## Q9 — the register audits discretisations; nothing audits physical ranges
+
+**Raised by P1-B 2026-10-16, on finding T-51.**
+
+`config/grid-register.toml` names every `linspace`, `logspace`, `arange` and
+`geomspace` in the bundle — 41 of 41 — and the generator fails on one it does
+not know. **It would never have caught T-51.** `z_max = 3000.0` is not a
+resolution: it is the *extent* of a physical range, and the grid it defines was
+perfectly well resolved. A 2.0–3.0× error in the acoustic scale survived
+thirty-seven registered grids because nothing in the bundle audits the question
+*how far does this integration reach, and is that far enough*.
+
+Other instances of the same shape, named now rather than found later:
+`tight_coupling_factor = 6.0` (how far past $\eta_*$ the tight-coupling window
+runs), `z_end` and `z_start` in `peebles_ionisation`, `x_max` in the Bessel
+table, and the $\ell$ and $k$ band edges. Some are guarded; **none is
+registered**, and the guards that exist were each written after a finding.
+
+**What a range register would have to state** is different from a grid's:
+not *samples per feature* but *what lies outside, and what it is worth*. For
+`z_max` the answer was **half the sound horizon**.
+
+**Not proposed as work for v1.3.0.** The grid register took a day and closed a
+class that had already bitten three times; this one has bitten once, and the
+instance is fixed. Raised so that the next range defect is found by looking
+rather than by a comparison nobody expected to disagree.

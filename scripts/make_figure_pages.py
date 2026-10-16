@@ -3,9 +3,10 @@
 
     python scripts/make_figure_pages.py
 
-Writes `supplementary-materials/figures-v1.2.0.tex`, which the supplement
-includes. One float per figure that actually exists, carrying the figure and its
-caption.
+Writes the supplement's generated figure include, `figures-vX.Y.Z.tex`, named
+for whichever release the tree is on --- `scripts/_versions.py` decides, and
+this file does not spell it. One float per figure that actually exists,
+carrying the figure and its caption.
 
 **A caption file is the single source.** Each `captions/*.md` opens with a TOML
 front-matter block delimited by `+++`, holding the LaTeX caption and the paths;
@@ -41,8 +42,14 @@ from make_tables import tt  # noqa: E402
 # and went stale the moment S21 and S23 moved F2, F5 and F7 to v1.2.0. A second
 # copy of a fact is a second thing to forget.
 from run_all import DEFERRED  # noqa: E402
+
+# **The output name is derived, not typed** --- finding T-50. A `figures-vX.tex`
+# left behind when the build moved to the next release line is v1.2.0 content
+# under a v1.0.0 name, which is T-16 in a generated artefact, and it shipped.
+from _versions import supplement_figures  # noqa: E402
+
 CAPTIONS = ROOT / "captions"
-OUT = ROOT / "supplementary-materials" / "figures-v1.2.0.tex"
+OUT = supplement_figures(ROOT)
 
 #: The agreed set, in order. See captions/FIGURE-PLAN-v1.0.0.md.
 PLANNED = [

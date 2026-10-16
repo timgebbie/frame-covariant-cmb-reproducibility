@@ -36,7 +36,12 @@ from dataclasses import dataclass, replace
 import numpy as np
 
 from functions.background.flrw import Background
-from functions.spectra.acoustic import baryon_photon_ratio, solve_acoustic
+from functions.spectra.acoustic import (
+    acoustic_start_eta,
+    required_acoustic_points,
+    sound_horizon_from_zero,
+    baryon_photon_ratio, solve_acoustic,
+)
 from functions.spectra.angular import cl_covariant_route
 from functions.spectra.bessel_table import BesselTable
 from functions.spectra.coefficients import (
@@ -53,7 +58,11 @@ from functions.spectra.decoupling import (
 from functions.spectra.frame_transform import cdm_frame_shift
 from functions.spectra.integral_solution import integral_solution
 from functions.spectra.pipeline import required_n_eta
-from functions.spectra.potentials import potential_derivative, potentials
+from functions.spectra.potentials import (
+    matter_domination_eta,
+    potential_derivative,
+    potentials,
+)
 from functions.spectra.transfer import (
     ANNALS_II_GAMMA,
     transfer_function,
@@ -138,6 +147,20 @@ class TwoFrameEnvironment:
     #: exactly and exists so the departure stays visible and measurable, which
     #: is what `source_doppler` and `source_integrated` already do.
     line_of_sight_weight: str = "printed"
+    #: **Finding T-51, decision S40.** `"derived"` starts each mode where
+    #: $k\,r_s(\eta)\le\varepsilon$; `"z_max"` starts every mode at the first
+    #: point of the recombination grid, which is what this route did until
+    #: 2026-10-16 and what discarded 51--64% of the sound horizon. **The defect
+    #: had one instance per route** --- here, in `pipeline.run` and in
+    #: `two_route` --- and all three began in the same place, which is why no
+    #: comparison among them could see it. T-3's lesson, in triplicate.
+    acoustic_start: str = "derived"
+    #: The tabulated $r_s(\eta)$ from the big bang, and the single reference
+    #: $\Phi_A$ is normalised at. `None` only on an environment built before
+    #: these existed, which nothing now does.
+    eta_rs: np.ndarray | None = None
+    r_s_table: np.ndarray | None = None
+    md_reference: float = 0.0
 
     @property
     def weight(self) -> np.ndarray:
@@ -209,6 +232,7 @@ def build_environment(
     apply_transfer: bool = True,
     f_2: float = F2_DEFAULT,
     line_of_sight_weight: str = "printed",
+    acoustic_start: str = "derived",
 ) -> TwoFrameEnvironment:
     r"""The $k$-independent half: background, recombination, potentials.
 
@@ -225,7 +249,19 @@ def build_environment(
     n = required_n_eta(k_max, span) if n_eta is None else n_eta
     eta = np.linspace(recombination.eta[0], background.eta_0, n)
 
-    phi_a, phi_h = potentials(background, eta)
+    # **T-51/S40.** r_s from the big bang, and the one reference Phi_A is
+    # normalised at, so that every mode shares a Phi_A(0,k) however early it
+    # starts. Equality for a background with radiation; for Omega_r = 0 there
+    # is no equality and the r_s table's own floor serves.
+    eta_rs, r_s_table = sound_horizon_from_zero(
+        background, float(eta_star), omega_b_h2=omega_b_h2)
+    md_reference = matter_domination_eta(background) or float(recombination.eta[0])
+    derived = str(acoustic_start) == "derived"
+    if str(acoustic_start) not in ("derived", "z_max"):
+        raise ValueError("acoustic_start is 'derived' (S40) or 'z_max' (the control)")
+
+    phi_a, phi_h = (potentials(background, eta, constant_below=md_reference)
+                    if derived else potentials(background, eta))
     a = background.a_of_eta(eta)
     cH = background.conformal_hubble(a)
     rho, pressure, cH_prime = background_fluid(
@@ -249,6 +285,8 @@ def build_environment(
         visibility=np.interp(eta, recombination.eta, recombination.visibility),
         opacity=np.interp(eta, recombination.eta, recombination.opacity),
         line_of_sight_weight=str(line_of_sight_weight),
+        acoustic_start=str(acoustic_start), eta_rs=eta_rs,
+        r_s_table=r_s_table, md_reference=float(md_reference),
         k_max=float(k_max), transfer_gamma=float(transfer_gamma),
         hubble_h=float(hubble_h), apply_transfer=bool(apply_transfer),
         damping_k=float(k_d(eta_star)), omega_b_h2=omega_b_h2,
@@ -281,18 +319,38 @@ def coefficient_sets(
     phi_a, phi_h = env.phi_a * t_k, env.phi_h * t_k
     phi_a_prime, phi_h_prime = env.phi_a_prime * t_k, env.phi_h_prime * t_k
 
-    inside = eta <= min(float(bg.eta_0), TIGHT_COUPLING_FACTOR * eta_star)
-    acoustic = solve_acoustic(
-        float(k_com), eta[inside], background=bg,
-        phi_a=phi_a[inside], phi_h=phi_h[inside],
-        omega_b_h2=env.omega_b_h2, expansion_coupling=False)
+    eta_couple = min(float(bg.eta_0), TIGHT_COUPLING_FACTOR * eta_star)
+    inside = eta <= eta_couple
 
-    def freeze(values: np.ndarray) -> np.ndarray:
-        out = np.empty_like(eta)
-        out[inside], out[~inside] = values, values[-1]
-        return out
+    if env.acoustic_start == "derived":
+        # **T-51/S40: the start is k's, not z_max's, and so is the grid.**
+        # T(k) still multiplies Phi *before* the integration (finding T-37) ---
+        # it is independent of eta, so scaling the mode's own potentials by the
+        # same number is exact.
+        start = acoustic_start_eta(float(k_com), env.eta_rs, env.r_s_table)
+        mode_eta = np.linspace(
+            start, eta_couple, required_acoustic_points(float(k_com), eta_couple - start))
+        mode_a, mode_h = potentials(bg, mode_eta, constant_below=env.md_reference)
+        acoustic = solve_acoustic(
+            float(k_com), mode_eta, background=bg,
+            phi_a=mode_a * t_k, phi_h=mode_h * t_k,
+            omega_b_h2=env.omega_b_h2, expansion_coupling=False)
+        # `np.interp` holds the end value past `eta_couple`, which **is** the
+        # freeze the tight-coupling window calls for.
+        delta_t = np.interp(eta, mode_eta, acoustic.delta_T)
+        tau_1 = np.interp(eta, mode_eta, acoustic.tau_1)
+    else:
+        acoustic = solve_acoustic(
+            float(k_com), eta[inside], background=bg,
+            phi_a=phi_a[inside], phi_h=phi_h[inside],
+            omega_b_h2=env.omega_b_h2, expansion_coupling=False)
 
-    delta_t, tau_1 = freeze(acoustic.delta_T), freeze(acoustic.tau_1)
+        def freeze(values: np.ndarray) -> np.ndarray:
+            out = np.empty_like(eta)
+            out[inside], out[~inside] = values, values[-1]
+            return out
+
+        delta_t, tau_1 = freeze(acoustic.delta_T), freeze(acoustic.tau_1)
     shared = dict(
         delta_t=delta_t, phi_a=phi_a, phi_a_prime=phi_a_prime,
         phi_h_prime=phi_h_prime, tau_1=tau_1, kappa_prime=env.kappa_prime,

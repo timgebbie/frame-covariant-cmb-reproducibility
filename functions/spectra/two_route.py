@@ -54,13 +54,18 @@ import numpy as np
 from scipy.interpolate import CubicSpline
 
 from functions.background.flrw import LCDM_MODEL, Background
-from functions.spectra.acoustic import solve_acoustic
+from functions.spectra.acoustic import (
+    acoustic_start_eta,
+    required_acoustic_points,
+    solve_acoustic,
+    sound_horizon_from_zero,
+)
 from functions.spectra.bessel_table import BesselTable
 from functions.spectra.coefficients import newtonian_c1_prime, newtonian_coefficients
 from functions.spectra.decoupling import RecombinationHistory, diffusion_scale
 from functions.spectra.integral_solution import integral_solution, required_multipoles
 from functions.spectra.pipeline import required_n_eta
-from functions.spectra.potentials import potentials
+from functions.spectra.potentials import matter_domination_eta, potentials
 from functions.spectra.sources import (
     PUBLISHED_ISW_SIGN,
     PerturbationHistory,
@@ -207,16 +212,32 @@ def two_route_transfer(
                 required_n_eta(float(k), float(bg.eta_0 - rec.eta[0]),
                                points_per_period=points_per_period))
     eta = np.linspace(rec.eta[0], bg.eta_0, n_eta)
-    phi_a, phi_h = potentials(bg, eta)
+    # **T-51/S40, the third instance.** This gate's two routes share one
+    # acoustic solution by construction --- that is what makes it a test of the
+    # *assembly algebra* --- so a start at `rec.eta[0]` moved both together and
+    # cancelled exactly. Criterion 5b sat at 9.5e-06 while half the sound
+    # horizon was missing from both sides of it. **S4c says a self-comparison
+    # cannot see a shared antecedent; this is the sharpest instance of it the
+    # bundle has.** The start is derived here too, so the gate measures the
+    # algebra on the physics the bundle actually computes.
+    eta_rs, r_s_table = sound_horizon_from_zero(
+        bg, float(rec.eta_star), omega_b_h2=omega_b_h2)
+    md_reference = matter_domination_eta(bg) or float(rec.eta[0])
+    phi_a, phi_h = potentials(bg, eta, constant_below=md_reference)
     aH = bg.conformal_hubble(bg.a_of_eta(eta))
     kp = np.interp(eta, rec.eta, rec.kappa_prime)
     vis = np.interp(eta, rec.eta, rec.visibility)
     opa = np.interp(eta, rec.eta, rec.opacity)
     k_d = float(diffusion_scale(rec, r_of_eta=rec.kappa_prime * 0.0)(rec.eta_star))
 
-    ac = solve_acoustic(k, eta, background=bg, phi_a=phi_a, phi_h=phi_h,
+    start = acoustic_start_eta(float(k), eta_rs, r_s_table)
+    mode_eta = np.linspace(
+        start, float(eta[-1]), max(int(n_eta), required_acoustic_points(float(k), float(eta[-1]) - start)))
+    mode_a, mode_h = potentials(bg, mode_eta, constant_below=md_reference)
+    ac = solve_acoustic(k, mode_eta, background=bg, phi_a=mode_a, phi_h=mode_h,
                         omega_b_h2=omega_b_h2, expansion_coupling=False)
-    delta_t, tau_1 = ac.delta_T, ac.tau_1
+    delta_t = np.interp(eta, mode_eta, ac.delta_T)
+    tau_1 = np.interp(eta, mode_eta, ac.tau_1)
 
     needed = required_multipoles(ells)
     table = BesselTable.build(ell_max=int(needed.max()), ells=needed,

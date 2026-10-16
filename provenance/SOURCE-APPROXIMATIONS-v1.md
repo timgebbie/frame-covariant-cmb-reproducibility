@@ -129,3 +129,65 @@ reading of $\tilde v_B$ is the thing to check if this is ever revisited.
 explicit `weight`, defaulting to the visibility so that (178) and (179) can still
 be reproduced exactly as printed. `functions.spectra.pipeline` passes the
 weighting the caller selected, for both.
+
+## A-3 — the driving potential is matter-dominated, so there is no radiation driving
+
+**Status: this bundle uses *Annals II*'s own potentials. Named 2026-10-16, on
+fixing finding T-51; it is the residual that fix leaves behind.**
+
+**What the antecedent supplies.** Appendix G's scalar-perturbation section opens
+*"the almost-Friedmann-Lemaître Einstein field equations **for matter
+domination** reduce to..."* and closes with
+
+> a $\Phi_A(k,0) = D/a\,(a\Phi_A(k,0)) = (D/a)\,\Phi_A(k,t)$ where $D$ is the
+> linear growth factor. The flat dust case is recovered using $D=a$.
+
+That is exactly `functions.spectra.potentials.potentials`. **There is no
+radiation-era potential in the paper**, and under **S15** this bundle
+reproduces rather than supplies one.
+
+**What it costs, and it is not the acoustic scale.** Fixing T-51 — starting each
+mode where $k\,r_s(\eta)\le\varepsilon$ rather than at $z=3000$ — recovers the
+*period*: the peak spacing lands within **0.5%** of the antecedent's own
+$\Delta\ell=\pi r_\theta/r_s$ on all three backgrounds, and within **0.7%** of
+CAMB and CLASS for Planck parameters. What it does not recover is the *phase
+offset*. Measured 2026-10-16, `PLANCK_MODEL` against CAMB:
+
+| | first three maxima | spacing |
+|---|---|---|
+| CAMB / CLASS | 206, 492, 729 | 286, 237 |
+| this bundle, derived start | — , 552, 836 | **284** |
+| $j\,\ell_A$ with $\ell_A=\pi r_\theta/r_s=272$ | 272, 544, 816 | 272 |
+
+**Our peaks sit at the idealised $j\ell_A$; CAMB's are shifted down.** That
+shift is the radiation driving: a mode entering the sound horizon before
+equality is driven by a *decaying* potential, which both boosts its amplitude
+and moves its phase. With $\Phi_A$ constant there is no such term, so the
+oscillation is the undriven $\cos(k r_s)$ and its extrema fall where the
+formula puts them.
+
+**And the real universe is only marginally matter-dominated where this
+happens.** For `PLANCK_MODEL`, $a_{\rm eq}=1.737\times10^{-4}$ against
+$a_*=8.963\times10^{-4}$:
+
+    rho_M / rho_R at last scattering = 5.16
+
+A matter-domination reference at $\rho_M/\rho_R=9$ lands at $\eta=1.46\,\eta_*$
+— **after** last scattering — so there is no epoch before recombination at
+which the approximation holds in that strong a sense.
+`potentials.matter_domination_eta` therefore defaults to equality itself, and
+the residual marginality is this entry.
+
+**Why it is an approximation and not a defect.** `CDM_MODEL` and `LCDM_MODEL`
+carry $\Omega_r=0$: for them Appendix G is **exact**, nothing here is an
+approximation at all, and the derived start reproduces the paper's formula to
+0.5% and 0.1%. The approximation exists only for a background with radiation,
+which *Annals II* does not treat.
+
+**What would close it, and where it goes.** Hu \& Sugiyama's tight-coupling
+treatment supplies exactly this term analytically, and **Appendix C**'s
+scattering-strength expansion — $\tau_{(n)}\approx v^ae_a-t_c[\mathcal
+B+\dot\tau_{(n-1)}+e^a\mathrm{D}_a\tau_{(n-1)}]$, carried to second order and
+written covariantly — is the frame-covariant object to set against it. That is
+**S35a**'s comparison, and A-3 is now the specific quantity it has to measure
+rather than an open question about the whole acoustic sector.

@@ -65,11 +65,19 @@ from dataclasses import dataclass
 import numpy as np
 
 from functions.background.flrw import Background
-from functions.spectra.acoustic import baryon_photon_ratio, solve_acoustic
+from scipy.interpolate import CubicSpline
+
+from functions.spectra.acoustic import (
+    acoustic_start_eta,
+    baryon_photon_ratio,
+    required_acoustic_points,
+    solve_acoustic,
+    sound_horizon_from_zero,
+)
 from functions.spectra.angular import AngularSpectrum, angular_spectrum
 from functions.spectra.bessel_table import BesselTable
 from functions.spectra.decoupling import RecombinationHistory, Weighting, diffusion_scale
-from functions.spectra.potentials import potentials
+from functions.spectra.potentials import matter_domination_eta, potentials
 from functions.spectra.sources import (
     PUBLISHED_ISW_SIGN,
     PerturbationHistory,
@@ -217,6 +225,7 @@ def run(
     damping_epoch: str = "star",
     expansion_coupling: bool = False,
     doppler_weighting: Weighting | None = None,
+    acoustic_start: str = "derived",
 ) -> SpectrumRun:
     """Background -> C_l. `weighting` is required; see the module docstring.
 
@@ -233,6 +242,24 @@ def run(
     explicit value below that requirement raises: see finding T-3, where a
     hand-set 1000 aliased the line-of-sight integrand and moved $D_\\ell$ by up
     to 575%.
+
+    **`acoustic_start` is finding T-51, and `"derived"` is the correction.**
+    Until 2026-10-16 every mode was integrated from the first point of the
+    recombination grid --- `RecombinationHistory.build`'s ``z_max = 3000.0`` ---
+    which discards **51% to 64%** of the sound horizon
+    $r_s=\\int_0^{\\eta_*}c_s\\,d\\eta$. The accumulated phase $k\\,r_s$ was
+    therefore halved and the acoustic peak spacing came out **2.0 to 3.0 times**
+    the antecedent's own printed $\\Delta\\ell=\\pi r_\\theta/r_s$. With
+    ``"derived"`` each mode starts where $k\\,r_s(\\eta)\\le\\varepsilon$, which
+    is what (180)'s $\\delta T(0,k)\\simeq-\\tfrac23\\Phi_A(0,k)$, $\\tau_1=0$
+    means by *at the big bang*, and the spacing lands within **0.5%** of the
+    formula on all three backgrounds.
+
+    ``"z_max"`` keeps the old behaviour **exactly**, including the potentials'
+    old normalisation, so T-51 stays executable rather than only recorded ---
+    the same discipline `sachs_wolfe_at_last_scattering_printed` keeps for B-8
+    and `expansion_coupling` keeps for (154). It is a control, not an option:
+    nothing should ship on it.
     """
     ells = np.asarray(ells, dtype=int)
     k_com = np.asarray(k_com, dtype=float)
@@ -256,8 +283,30 @@ def run(
             "Pass n_eta=None to derive it. See finding T-3."
         )
 
+    if acoustic_start not in ("derived", "z_max"):
+        raise ValueError("acoustic_start is 'derived' (the correction, T-51) "
+                         "or 'z_max' (the control that reproduces it)")
+    derived_start = acoustic_start == "derived"
+
+    # **One reference for Phi_A, shared by every mode** --- see `potentials`.
+    # Equality for a background with radiation; for Omega_r = 0 there is no
+    # equality and the recombination grid's own start serves.
+    #
+    # **Not the r_s table's floor, and finding T-52 is why.** That floor is
+    # 1e-9, and `growth_factor` started there integrates an explicit ODE with
+    # aH ~ 2e9 and a source ~ 1e18: for Einstein--de Sitter, where D = a
+    # exactly and Phi_A must be 1.0 everywhere, it returns **1.58e-06**. Every
+    # amplitude would have been rescaled by six orders of magnitude, silently,
+    # and the only thing that caught it was the deliberately-failing control
+    # half of T-42's test. A reference must be somewhere the integration it
+    # starts is well posed, and 1e-9 is not.
+    eta_rs, r_s_table = sound_horizon_from_zero(
+        background, float(recombination.eta_star), omega_b_h2=omega_b_h2)
+    md_reference = matter_domination_eta(background) or float(recombination.eta[0])
+
     eta = np.linspace(recombination.eta[0], background.eta_0, n_eta)
-    phi_a, phi_h = potentials(background, eta)
+    phi_a, phi_h = (potentials(background, eta, constant_below=md_reference)
+                    if derived_start else potentials(background, eta))
     a = background.a_of_eta(eta)
     aH = background.conformal_hubble(a)
     r = baryon_photon_ratio(a, omega_b_h2=omega_b_h2)
@@ -322,13 +371,43 @@ def run(
         out[~inside] = values[-1]
         return out
 
+    # **The potentials are splined once, not re-integrated per mode.** Each
+    # mode now has its own grid, and `potentials` runs a growth integration on
+    # an internal 8192-point grid; doing that 1433 times would spend the whole
+    # run on a quantity that does not depend on k at all. The shape is a
+    # function of eta alone, so it is built once over the widest span any mode
+    # will ask for and evaluated per mode.
+    if derived_start:
+        earliest = acoustic_start_eta(float(k_com.max()), eta_rs, r_s_table)
+        master = np.logspace(np.log10(earliest), np.log10(eta_couple), 16_384)
+        master_a, master_h = potentials(
+            background, master, constant_below=md_reference)
+        phi_a_of, phi_h_of = CubicSpline(master, master_a), CubicSpline(master, master_h)
+
     for i, k in enumerate(k_com):
-        acoustic = solve_acoustic(
-            float(k), eta[inside], background=background,
-            phi_a=phi_a[inside], phi_h=phi_h[inside],
-            omega_b_h2=omega_b_h2, expansion_coupling=expansion_coupling,
-        )
-        delta_T, tau_1 = freeze(acoustic.delta_T), freeze(acoustic.tau_1)
+        if derived_start:
+            # T-51. The start is k's, not z_max's; the grid is k's too.
+            start = acoustic_start_eta(float(k), eta_rs, r_s_table)
+            mode_eta = np.linspace(
+                start, eta_couple, required_acoustic_points(float(k), eta_couple - start))
+            acoustic = solve_acoustic(
+                float(k), mode_eta, background=background,
+                phi_a=phi_a_of(mode_eta), phi_h=phi_h_of(mode_eta),
+                omega_b_h2=omega_b_h2, expansion_coupling=expansion_coupling,
+            )
+            # Onto the common grid. `np.interp` holds the end value beyond
+            # `eta_couple`, which **is** the freeze the tight-coupling window
+            # calls for --- the same clamp, arrived at by the same reasoning,
+            # not a coincidence worth leaving unremarked.
+            delta_T = np.interp(eta, mode_eta, acoustic.delta_T)
+            tau_1 = np.interp(eta, mode_eta, acoustic.tau_1)
+        else:
+            acoustic = solve_acoustic(
+                float(k), eta[inside], background=background,
+                phi_a=phi_a[inside], phi_h=phi_h[inside],
+                omega_b_h2=omega_b_h2, expansion_coupling=expansion_coupling,
+            )
+            delta_T, tau_1 = freeze(acoustic.delta_T), freeze(acoustic.tau_1)
         history = PerturbationHistory(
             eta=eta, delta_T=delta_T, phi_a=phi_a, phi_h=phi_h,
             tau_1=tau_1, v_b=tau_1, frame="newtonian",

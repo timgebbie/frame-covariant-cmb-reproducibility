@@ -111,12 +111,46 @@ def verify(archive: Path, version: str) -> bool:
         return ok
 
 
+def released_version() -> str:
+    """The released version, read from `CITATION.cff` rather than hard-coded.
+
+    **The reading itself now lives in `scripts/_versions.py`**, which is the one
+    module allowed to say what version this tree is. This wrapper is kept for
+    the docstring below, which is the record of why the question is asked here
+    at all.
+
+    **It was hard-coded to `1.0.0`**, so a bare
+    `python scripts/make_release_archive.py` quietly built a v1.0.0-named
+    archive out of a v1.2.0 tree --- and the operator looked in `dist/` for a
+    file that was never going to be there. That is the **T-16** class once
+    more: a version frozen into code at the moment it was written, going stale
+    at the next release and failing silently rather than loudly.
+
+    `CITATION.cff` is the right source and is already treated as such
+    elsewhere: `tests/test_readme_artefacts.py` calls it *the one version
+    statement a machine acts on*, since GitHub's "Cite this repository" and
+    Zenodo both read it, and `scripts/bump_release.py` keeps it current as part
+    of the release act. An archive named from it cannot disagree with the
+    release it is an archive of.
+    """
+    from _versions import released_version as _read
+
+    try:
+        return _read(ROOT)
+    except RuntimeError as exc:
+        raise SystemExit(str(exc)) from exc
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--version", default="1.0.0",
-                        help="version string for the archive name and prefix")
+    parser.add_argument("--version", default=None,
+                        help="version string for the archive name and prefix; "
+                             "read from CITATION.cff when omitted")
     parser.add_argument("--out", default=None, help="output path for the zip")
     args = parser.parse_args()
+    if args.version is None:
+        args.version = released_version()
+        print(f"version {args.version}, from CITATION.cff")
 
     destination = Path(args.out) if args.out else (
         ROOT / "dist" / f"{REPOSITORY}-v{args.version}.zip"

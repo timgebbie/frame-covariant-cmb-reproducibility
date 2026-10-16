@@ -45,15 +45,39 @@ from scipy.interpolate import CubicSpline
 from functions.background.flrw import Background
 
 __all__ = [
+    "ACOUSTIC_START_EPSILON",
+    "RS_SAMPLES",
     "baryon_photon_ratio",
     "sound_speed_squared",
     "sound_horizon",
+    "sound_horizon_from_zero",
+    "acoustic_start_eta",
+    "required_acoustic_points",
+    "ACOUSTIC_POINTS_PER_PERIOD",
     "AcousticSolution",
     "solve_acoustic",
     "sachs_wolfe_at_last_scattering",
     "sachs_wolfe_at_last_scattering_printed",
     "ADIABATIC_MONOPOLE",
 ]
+
+#: Samples used to accumulate $r_s$ from the big bang. **Logarithmic, and that
+#: is not a style choice**: $c_s\to1/\sqrt3$ as $\eta\to0$ while the span to
+#: $\eta_*$ covers five decades, so a uniform grid spends every sample where
+#: the integrand is flat and none where it turns over. Registered `measured`
+#: with its convergence in `config/grid-register.toml`.
+RS_SAMPLES = 400_000
+
+#: The $\varepsilon$ in $k\,r_s(\eta_{\rm start})\le\varepsilon$.
+#:
+#: **Not a tolerance on an answer --- a statement of when an initial condition
+#: is the right one.** (180) sets $\delta T(0,k)\simeq-\tfrac23\Phi_A(0,k)$ with
+#: $\tau_1=0$ *at the big bang*, and that is the adiabatic growing mode only
+#: while the mode is outside the sound horizon. Starting at finite $k\,r_s$
+#: imposes a phase instead of inheriting one. 0.1 radians is one part in sixty
+#: of a full oscillation; finding **T-51** measures what the bundle did
+#: instead, which reached **10.7** at $k=600$.
+ACOUSTIC_START_EPSILON = 0.1
 
 #: The adiabatic initial condition §7.1.2 uses:
 #: dT(0,k) ~ (1/3) Delta(0,k) ~ -(2/3) Phi_A(0,k), flat adiabatic CDM.
@@ -78,9 +102,118 @@ def sound_speed_squared(r: np.ndarray | float) -> np.ndarray:
 
 
 def sound_horizon(eta: np.ndarray, r: np.ndarray) -> np.ndarray:
-    """r_s(eta) = Int_0^eta c_s d(eta'), the argument of cos(k r_s) in (180)."""
+    r"""$\int_{\eta_0}^{\eta}c_s\,d\eta'$ **on the grid it is handed**.
+
+    **The docstring used to say $\int_0^\eta$ and that was a lie whenever
+    `eta[0] > 0`** --- which, in `pipeline.run`, it always was: the grid began
+    at `RecombinationHistory.build`'s `z_max = 3000.0`, so this returned
+    between 36% and 49% of the sound horizon and (180)'s $\cos(k r_s)$ carried
+    a halved phase. That is finding **T-51**, and *this function was its twin*:
+    the closed-form route inherited the same truncation independently of the
+    ODE route, so the two agreed and criterion 5b saw nothing. **T-3**'s lesson
+    --- two agreeing routes agree about what they share.
+
+    Use `sound_horizon_from_zero` when the quantity wanted is $r_s$ proper.
+    This one remains for accumulating over a given interval, which is a real
+    and different question, and now says so.
+    """
     c_s = np.sqrt(sound_speed_squared(r))
     return np.concatenate(([0.0], cumulative_trapezoid(c_s, np.asarray(eta, dtype=float))))
+
+
+def sound_horizon_from_zero(
+    background: Background, eta_max: float, *, omega_b_h2: float = 0.0224,
+    samples: int = RS_SAMPLES,
+) -> tuple[np.ndarray, np.ndarray]:
+    r"""$(\eta, r_s(\eta))$ accumulated **from the big bang**, to `eta_max`.
+
+    $r_s(\eta)=\int_0^\eta c_s\,d\eta'$ --- the quantity (180) means by
+    $\cos(k r_s)$ and the one *Annals II* means by *"the sound-horizon near
+    decoupling"* in its own acoustic-peak formula $\ell_j\simeq|r_\theta/r_s|j\pi$.
+
+    Logarithmic in $\eta$: see `RS_SAMPLES`. The lower limit $10^{-9}$ is not a
+    cutoff anyone has to converge --- $c_s\le1/\sqrt3$ bounds what lies below it
+    at under $6\times10^{-10}$ against $r_s\simeq0.036$ --- and it is measured
+    rather than argued in the grid register.
+    """
+    eta = np.logspace(-9.0, np.log10(float(eta_max)), int(samples))
+    c_s = np.sqrt(sound_speed_squared(
+        baryon_photon_ratio(background.a_of_eta(eta), omega_b_h2=omega_b_h2)))
+    accumulated = np.concatenate(
+        ([0.0], np.cumsum(0.5 * (c_s[1:] + c_s[:-1]) * np.diff(eta))))
+    return eta, accumulated
+
+
+def acoustic_start_eta(
+    k_com: float, eta: np.ndarray, r_s: np.ndarray, *,
+    epsilon: float = ACOUSTIC_START_EPSILON,
+) -> float:
+    r"""The $\eta$ at which mode `k_com` may be started: $k\,r_s(\eta)\le\varepsilon$.
+
+    **Derived from $k$, the way `required_n_eta` is derived from $k_{\max}$**,
+    and for the same reason: a single global start cannot serve a band spanning
+    a factor of two thousand in $k$. At $k=600$ the condition wants
+    $\eta\simeq0.015\,\eta_{\rm eq}$, and at $k=10$ it is satisfied almost
+    anywhere --- one number cannot be right for both, so no number is chosen.
+
+    Raises rather than clamping. A start the tabulated $r_s$ cannot reach is a
+    mode this background cannot legitimately carry, and silently beginning it
+    late is precisely finding **T-51**.
+    """
+    if k_com <= 0.0:
+        raise ValueError("k_com must be positive")
+    target = epsilon / float(k_com)
+    r_s = np.asarray(r_s, dtype=float)
+    if target <= r_s[0]:
+        raise ValueError(
+            f"k={k_com:g} needs r_s(eta_start) <= {target:.3e}, below the first "
+            f"tabulated value {r_s[0]:.3e}. Extend the r_s table downward; do "
+            "not start the mode late --- that is finding T-51.")
+    if target > r_s[-1]:
+        # **The mode never enters the sound horizon**: k r_s <= epsilon all the
+        # way to eta_max, so it is frozen at its adiabatic initial condition
+        # throughout and any early start is the right one. Returning the first
+        # tabulated eta is not a clamp standing in for a failure --- it is the
+        # answer. The large-angle modes that dominate the Sachs--Wolfe plateau
+        # are exactly these, and raising here would refuse the easiest half of
+        # the band for being easy.
+        return float(np.asarray(eta, dtype=float)[0])
+    return float(np.interp(target, r_s, np.asarray(eta, dtype=float)))
+
+
+#: Samples per acoustic oscillation on a mode's own integration grid. The ODE
+#: is stepped adaptively by DOP853; this sets the **output** grid, which is
+#: then interpolated onto the common line-of-sight grid, so it is a
+#: reconstruction rate rather than an accuracy knob. Twice the line-of-sight
+#: rate, because this grid is resampled once more before it is used.
+ACOUSTIC_POINTS_PER_PERIOD = 24
+
+#: Floor on a mode's grid, for the super-horizon modes whose period is longer
+#: than the integration itself and whose point count would otherwise round to
+#: nothing. `solve_acoustic` separately refuses a window under 50 points.
+ACOUSTIC_POINTS_FLOOR = 512
+
+
+def required_acoustic_points(
+    k_com: float, eta_span: float, *,
+    points_per_period: int = ACOUSTIC_POINTS_PER_PERIOD,
+) -> int:
+    r"""How many output samples a mode's acoustic grid needs, **derived from $k$**.
+
+    $\delta T$ oscillates as $\cos(k r_s)$, with period $2\pi/(k c_s)$ in
+    $\eta$. That period is shortest where $c_s$ is largest, and
+    $c_s^2=1/(3(1+R))\le1/3$, so the period is **at least**
+    $2\pi\sqrt3/k$ --- a bound rather than an estimate, which is what lets this
+    be arithmetic instead of a tuning knob. Same construction as
+    `required_n_eta`, same reason: once the start is derived per mode
+    (**T-51**), the span is per mode too, and one fixed point count cannot
+    serve a band spanning a factor of two thousand in $k$.
+    """
+    if k_com <= 0.0 or eta_span <= 0.0:
+        raise ValueError("k_com and eta_span must be positive")
+    shortest_period = 2.0 * np.pi * np.sqrt(3.0) / float(k_com)
+    return max(int(np.ceil(points_per_period * float(eta_span) / shortest_period)),
+               ACOUSTIC_POINTS_FLOOR)
 
 
 @dataclass(frozen=True)

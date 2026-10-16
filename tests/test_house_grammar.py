@@ -50,8 +50,17 @@ def preamble(text: str) -> str:
 
 def test_the_supplement_is_referenced_before_the_first_section(preamble: str):
     """Below the title, not buried under *DOI, citation and license*."""
-    assert "supplementary-materials/supplement-v1.2.0.pdf" in preamble, (
-        "the computational supplement is not referenced above the first section"
+    import sys
+
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from _versions import supplement_pdf
+
+    link = supplement_pdf(ROOT).relative_to(ROOT).as_posix()
+    assert link in preamble, (
+        f"the computational supplement is not referenced above the first "
+        f"section as {link}. The README links the rendering that exists in "
+        "this tree, and under S36 that is the live one --- `bump_release.py "
+        "--open` moves the link when the release line opens."
     )
 
 

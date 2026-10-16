@@ -4005,3 +4005,396 @@ A grep for `write_text(` without `newline=` across `scripts/` would be two
 lines, and it is noted as worth doing rather than done, because adding a third
 gate in the same session that added two is how a harness becomes something
 people stop reading. Recorded for v1.5.0.
+
+---
+
+## T-49 — the release archive was named from a version frozen into the code
+
+**Found by the PI, 2026-10-16, looking in `dist/` for a file that was never
+going to be there.** `scripts/make_release_archive.py` declared
+
+```python
+parser.add_argument("--version", default="1.0.0", ...)
+```
+
+so `python scripts/make_release_archive.py` with no argument built a
+**v1.0.0-named archive out of a v1.2.0 tree**. The archive itself was sound ---
+it passed every gate it was given, because those gates check the *contents*
+against the manifests and the contents were correct. Only the **name** was a
+release behind.
+
+### Why it is worse than a wrong filename
+
+The archive prints a sha256 and says *"publish this digest with the release; it
+is what attests the deposited copy is the same object."* A file named
+`-v1.0.0.zip` carrying v1.2.0 content, with a digest published beside it, is an
+attestation pointing at the wrong release. Nothing in the gates could catch it:
+every one of them verifies the content, and the content was right.
+
+### The class, for the fourth time
+
+**T-16** is stale labels. **T-47** was a deferral to a release that had already
+happened. **T-48** was a generated file whose line endings depended on the
+platform. This is a *version* frozen into code at the moment it was written,
+going stale at the next release and failing **silently** --- the operator
+simply does not find the file, and there is nothing to read that says why.
+
+### What is carried now
+
+The default is `None` and resolves from `CITATION.cff`, which
+`scripts/bump_release.py` keeps current as part of the release act and which
+`tests/test_readme_artefacts.py` already calls *the one version statement a
+machine acts on*, since GitHub's "Cite this repository" and Zenodo both read
+it. **An archive named from the same field the release is declared in cannot
+disagree with the release it is an archive of.**
+
+### The lesson, and it is a general one
+
+**A hard-coded default is a label.** `n_eta=4000` was one (T-3, T-46),
+`"v1.1.0"` in a deferral dict was one (T-47), and `"1.0.0"` here is one. Each
+was correct on the day it was typed. The bundle now has three mechanisms that
+derive rather than declare --- `required_n_eta`, `check_deferrals`,
+`released_version` --- and the pattern is the same every time: **find the one
+place the fact already lives, and read it.**
+
+## T-50 — three files the bundle cannot read or rebuild passed every gate and shipped
+
+**Found by P1-B, 2026-10-16, counting the released archive against the tree it
+was cut from.** The PI's `scripts/make_release_archive.py --version 1.2.0` run
+reported **198 files**, sha256
+`71c204e61486e766486c7fe2c756ece5bf3787b3aa29041eb61ee5a89d9a8e14`, with
+portability and all three manifests PASS *inside the extracted archive*. This
+tree held **195**. The three extra files were:
+
+| file | what it actually is |
+|---|---|
+| `SUPPLEMENTARY-MATERIAL-v1.0.0.tex` | **UTF-16LE with a BOM and CRLF**, 51,622 bytes for ~25.8 kB of text. No LaTeX in the bundle compiles it; no `grep` in the bundle reads it. |
+| `supplementary-materials/figures-v1.0.0.tex` | **byte-identical** to `figures-v1.2.0.tex`, sha256 `4295dcb3…`. v1.2.0 content under a v1.0.0 name. |
+| `supplementary-materials/supplement-v1.0.0.pdf` | 37 pages, built the same morning, left behind when the build was repointed at the v1.2.0 source. |
+
+The first came from restoring the frozen v1.0.0 supplement to satisfy **S36**.
+In Windows PowerShell 5.1 a bare `>` redirection and `Out-File` without
+`-Encoding` both write **UTF-16LE**, so `git show v1.0.0:… > …` produces a file
+twice the size and readable by nothing. The other two came from the opposite
+end of the same operation: the build was repointed from
+`SUPPLEMENTARY-MATERIAL-v1.0.0.tex` to `-v1.2.0.tex`, and the outputs it had
+already written under the old name were never removed.
+
+### Why every gate passed, and this is the part that is a defect in a gate
+
+`scripts/check_portability.py` finds mixed line endings by counting `b"\r\n"`
+against `b"\n"`. **In UTF-16LE a CRLF is `0D 00 0A 00`** --- the two bytes are
+never adjacent, so the CRLF count is **zero** and the file presents as
+uniformly LF. Its remaining checks are `.py`-only, so nothing else looked at a
+`.tex` at all. *A byte-level gate that assumes one byte per character cannot
+see a wide encoding.* The manifests hash bytes and so were content with
+whatever the bytes were; `check_against_git` compared the tracked set to the
+disk set and they agreed, because all three files were committed.
+
+### What it did and did not cost
+
+**The release reproduces.** `scripts/build_supplement.py` named its source as a
+single pinned path, not a glob, so nothing in `run_all.py` ever opened the
+UTF-16 file, and `figures-v1.0.0.tex` and `supplement-v1.0.0.pdf` are read by
+nothing. The three files are inert. What shipped is a `supplement-v1.0.0.pdf`
+that is **not** the v1.0.0 supplement and a `figures-v1.0.0.tex` that is
+**not** v1.0.0's figure section --- the **T-16** class, in a frozen artefact,
+under a name a reader comparing releases would trust.
+
+**The tag is not moved and no patch release is cut.** Coordination's rule ---
+*"do not retag anything already released; a moved tag is the git equivalent of
+editing a frozen directory"* --- and the published digest both forbid the
+first. The second would cost a full `--strict` run, a new archive and a new DOI
+to remove three files nobody executes. Decision **S39** records the reasoning;
+the v1.2.0 release notes carry the contents note; the files come out at v1.3.0.
+
+### The root cause, which is neither encoding nor cleanup
+
+**The live supplement's name was a string literal in nine files.**
+`build_supplement.py` (twice), `make_figure_pages.py` (twice),
+`bump_release.py`, `test_translations.py`, `test_readme_artefacts.py`,
+`test_house_grammar.py`, `test_bundle_file_selection.py` and
+`test_portable_manifest.py` (three times) --- and four more sites in
+`README.md`. **Opening a release line was therefore a dozen hand edits**, which
+is exactly the shape of defect `bump_release.py` was built to remove from the
+*closing* end. It had no `--open`. The end with the tool did not drift; the end
+without one did, on its first use.
+
+Counting the hardcoded sites was not possible by eye: the gate written below
+found **five that this analysis had missed**, in tests nobody had thought of as
+naming the supplement.
+
+### What is carried now
+
+* **`scripts/_versions.py`** --- the one module that says what version this
+  tree is. `CITATION.cff` states the *released* version, `README.md`'s header
+  states the *tree* version, and all three supplement filenames are derived.
+  Nine literals became zero.
+* **`scripts/check_release_hygiene.py`**, a release-blocking gate beside
+  portability in `run_all.py`: every text file decodes as **UTF-8 with no NUL
+  byte**; the supplement's generated artefacts name **only** the source the
+  build is pointed at; and no `.py` file but `_versions.py` spells a supplement
+  filename as a string literal. It walks the AST, so a docstring that *mentions*
+  a file is prose and a literal the code acts on is the defect.
+* **`scripts/bump_release.py --open X.Y.Z`** --- the symmetric half. It flips
+  the three tree labels and the README's two supplement links, opens the
+  changelog section, copies the supplement forward with its `\date` and its own
+  `\input` repointed, and **removes the previous release's build outputs**.
+* **`tests/test_release_hygiene.py`** --- four negative controls that rebuild
+  each shipped file and assert the gate refuses it. **T-24**'s discipline: a
+  check written after the defect, against a tree already clean, is a check
+  written to pass.
+
+### Two lessons, and the second is the larger one
+
+**A gate must survive its own subject matter.** The first draft of the new gate
+`ast.parse`d every `.py` file, and on the UTF-16 control it died with
+*`SyntaxError: source code string cannot contain null bytes`* and printed
+**nothing at all** --- a gate that crashes on the defect it exists to name
+reports less than no gate. It now continues past a file `check_encoding` has
+already reported.
+
+**A tool for one end of an operation is a hazard at the other.**
+`bump_release.py` exists because *"a label flipped by hand is a label that
+drifts"*. Having it for closing a release made closing reliable and left
+opening one entirely manual --- and made it feel safe, because the version
+labels were now somebody's job. The defect did not appear in spite of the tool;
+it appeared **in the half the tool did not cover**. When a script is written
+for a procedure, ask what the inverse procedure is and whether anyone owns it.
+
+## T-51 — the acoustic oscillation starts at z = 3000, which discards half the sound horizon
+
+**Found 2026-10-16, on the PI's question: "did the visibility function over damp
+away our acoustic peaks?"** The answer is no --- the visibility never touches
+them --- and chasing why not found the thing that does.
+
+### The peaks are not damped. They are in the wrong place.
+
+Extrema of $D_\ell$, parabolically interpolated off the released F9 grid:
+
+| | first maximum | peak spacing |
+|---|---|---|
+| CAMB | $\ell=206.1$ | 285.5, then 237.6 |
+| CLASS | $\ell=206.2$ | 285.5, then 237.6 |
+| **this bundle** | $\ell=161.8$ | **589.7** |
+
+**A damping envelope multiplies; it cannot change a period.** Ours is 2.1--2.5
+times too long, so this was never an amplitude problem. **Q8** read
+ours/CAMB $=0.14$ at $\ell=720$ as missing second and third peaks; what it was
+measuring is our *trough* at $\ell=549$ sitting on CAMB's second *maximum* at
+$\ell=492$. Two curves out of phase, compared bin by bin.
+
+### Where the phase goes
+
+$\ell_{\text{peak}}$ spacing is $\pi(\eta_0-\eta_*)/r_s(\eta_*)$, and
+$r_s(\eta_*)=\int_0^{\eta_*}c_s\,d\eta$ runs from the big bang.
+`functions.spectra.pipeline.run` hands `solve_acoustic` the grid
+`eta[inside]`, which begins at `recombination.eta[0]` --- and that is
+$\eta$ at `RecombinationHistory.build`'s **`z_max = 3000.0`**. For
+`PLANCK_MODEL`:
+
+| | $\eta_{\text{start}}$ | $r_s$ | fraction of the full horizon |
+|---|---|---|---|
+| $\int_0^{\eta_*}$ | 0 | 0.036135 | 1.000 |
+| as shipped, from $z=3000$ | 0.033332 | 0.017789 | **0.492** |
+
+**50.8% of the sound horizon is missing**, so the accumulated phase $k\,r_s$ is
+halved and the peak spacing doubles. Predicted $\Delta\ell=552.6$ against the
+measured 589.7; with the full horizon, 272.0 against CAMB's 285.5.
+
+### Confirmed by construction, not by arithmetic alone
+
+Starting the integration earlier and changing nothing else, the measured period
+in $k$ tracks $2\pi/r_s(\eta_{\text{start}}\to\eta_*)$ at every start:
+
+| `z_max` | $\eta_{\text{start}}$ | fraction | $\Delta\ell$ implied |
+|---|---|---|---|
+| 3 000 | 0.033332 | 0.492 | 571 |
+| 20 000 | 0.006345 | 0.899 | 319 |
+| 200 000 | 0.000672 | 0.989 | **281** |
+
+**At $z_{\max}=2\times10^5$ the bundle reproduces CAMB's 285.5 to 1.6%.**
+
+### Why nothing in the bundle could see it, and this is S4c vindicated
+
+Criterion **5b** compares (102) against (177)--(179) at
+$9.5\times10^{-6}$ --- and **both routes take their acoustic solution from the
+same `solve_acoustic` call on the same truncated grid.** A self-comparison
+cannot see a shared antecedent, which is exactly what **S4c** says and why it
+demoted the external comparison from gate to context. *Context is not
+decoration*: the CAMB/CLASS comparison is the only instrument in the bundle
+that could detect a missing half of the sound horizon, and it is the one that
+did. **T-3**'s lesson in its sharpest form yet --- two agreeing routes agree
+about what they share.
+
+`functions.spectra.acoustic.sound_horizon` carries the same truncation
+independently: it returns `concatenate(([0.0], cumulative_trapezoid(c_s, eta)))`,
+the integral from `eta[0]` rather than from 0, so the closed-form route (180)
+inherits it whenever it is handed a grid that does not start at the big bang.
+**Two implementations, one wrong assumption, no disagreement to notice.**
+
+### The class, and it is the third instance
+
+`z_max = 3000.0` is a **chosen literal standing where a derivation belongs** ---
+**T-3**'s `n_eta=4000`, **T-46**'s recombination grid, and now the acoustic
+start. The grid register classifies discretisations and would not have caught
+this: $z_{\max}$ is not a *resolution*, it is a **physical range**, and nothing
+in the bundle audits those. That is a gap in the register's own premise and is
+raised as its own question rather than patched here.
+
+### What the fix is, and why it is not simply a bigger number
+
+Lowering $\eta_{\text{start}}$ alone is not enough. `solve_acoustic` starts from
+`(ADIABATIC_MONOPOLE * phi_a[0], 0.0)` --- $\tau_1=0$, which is the adiabatic
+growing mode only while the mode is **outside the sound horizon**. At
+$z=2\times10^5$ and $k=900$, $k\eta_{\text{start}}=0.60$: not small, so that
+start imposes a phase of its own, and it is why the first maximum sits at
+$\ell=161.8$ rather than at the $\ell\simeq414$ a pure truncation would give.
+
+**The start must be derived per mode from $k$**, as `required_n_eta` is derived
+from $k_{\max}$: integrate each mode from the $\eta$ at which
+$k\eta\le\varepsilon$ for a stated $\varepsilon$, and **raise** if the
+background cannot reach it. A single global $z_{\max}$ cannot serve a band
+spanning a factor of 2000 in $k$.
+
+**No number is changed here.** This lands in v1.3.0 under **S37**'s second half,
+with **S33**'s derived recombination grid beneath it, and the released v1.2.0
+figures stand as measured --- **S39**: a release is corrected by a new release.
+
+
+## T-51 — FIXED the same day. The acoustic start is derived per mode from $k$.
+
+**Fixed 2026-10-16, hours after being recorded.** `pipeline.run` takes
+`acoustic_start`, defaulting to **`"derived"`**: each mode is integrated from
+the $\eta$ at which $k\,r_s(\eta)\le0.1$, which is what (180)'s
+$\delta T(0,k)\simeq-\tfrac23\Phi_A(0,k)$, $\tau_1=0$ means by *at the big
+bang*. `"z_max"` reproduces the old behaviour exactly and is **kept as a
+control**, the way `expansion_coupling=False` keeps (154) and
+`sachs_wolfe_at_last_scattering_printed` keeps B-8: a defect that leaves no
+executable trace is a defect that gets made again.
+
+### What it recovers
+
+Peak spacing against the antecedent's own $\Delta\ell=\pi r_\theta/r_s$,
+measured on the transfer function at $\eta_*$:
+
+| | `z_max` | **derived** | the paper's formula |
+|---|---|---|---|
+| CDM (Einstein--de Sitter) | 568.7 (×2.95) | **191.7** (×0.995) | 192.7 |
+| $\Lambda$CDM | 491.4 (×2.85) | **172.5** (×0.999) | 172.7 |
+| `PLANCK_MODEL` | 574.0 (×2.11) | **271.7** (×0.998) | 272.2 |
+
+**Einstein--de Sitter is the one that settles it.** $\Omega_r=0$ makes Appendix
+G *exact* for it --- there is no radiation era to approximate --- so the 0.5%
+there is the whole error, and it is ours no longer.
+
+The $C_\ell$ peak spacing for Planck parameters comes out at **284** against
+CAMB's and CLASS's **285.5**, from 589.7 before.
+
+### Four things the fix needed that the diagnosis did not predict
+
+1. **`potentials` normalised at `eta[0]`.** *"which is taken to be deep in
+   matter domination"* --- an assumption about the caller's grid, baked into a
+   library. Harmless while every grid began at the same place; **fatal** the
+   moment the start became per mode, because every mode would have carried its
+   own $\Phi_A(0,k)$. `constant_below` now sets the normalisation from one
+   reference, computed on `potentials`' own internal grid, and the result is
+   grid-independent to twelve figures. Tested.
+2. **`matter_domination_eta` cannot use a comfortable margin.**
+   $\rho_M/\rho_R=5.16$ at last scattering for Planck parameters, and a
+   reference at 9 lands *after* recombination. The default is equality, and the
+   marginality is approximation **A-3**.
+3. **The per-mode grid needed deriving too.** `required_acoustic_points(k,
+   span)` at 24 samples per oscillation, from the bound $c_s\le1/\sqrt3$. The
+   start being per mode makes the *span* per mode; a fixed point count cannot
+   serve a band spanning 2000× in $k$. Same construction as `required_n_eta`,
+   same reason.
+4. **`potentials` could not be called per mode.** It runs a growth integration
+   on an 8192-point internal grid, and $\Phi$ does not depend on $k$ at all;
+   1433 of them would have been the whole run. Splined once over the widest
+   span any mode asks for.
+
+### What it does not recover, and that is the interesting half
+
+The *phase offset*. Our maxima sit at $j\,\ell_A$ with
+$\ell_A=\pi r_\theta/r_s=272$ --- 272, 544, 816 against measured 552 and 836 ---
+where CAMB's are at 206, 492, 729, shifted **down**. That shift is the
+radiation driving, and *Annals II*'s matter-dominated Appendix G has no term
+for it. Recorded as approximation **A-3** rather than chased: it is the
+antecedent's scope, not a defect, and **S15** says reproduce.
+
+**So the acoustic sector now splits cleanly into a scale and a driving**, and
+only the second is open. That is a far better position for **S35a**'s Hu \&
+Sugiyama comparison than Q8 was: it has a specific term to measure rather than
+a spectrum-wide discrepancy to explain, and **Appendix C**'s scattering-strength
+expansion is the frame-covariant object to set against it.
+
+### The record's own lesson
+
+`tests/test_acoustic_scale.py` was written *"to fail when the defect is
+repaired"*, and **it did not fail**. It measures what a start at $z=3000$
+discards, which is arithmetic about the recombination grid and is unchanged by
+a fix to where the pipeline begins integrating. **A test written to fail on
+repair must assert on the repaired object**, not on the quantity that motivated
+the repair. It now carries
+`test_the_derived_start_reproduces_the_antecedents_peak_spacing`, which does.
+
+## T-52 — the correction for T-51 nearly rescaled every Einstein–de Sitter amplitude by $10^{-6}$
+
+**Found 2026-10-16, within the hour, by a test whose job is to fail.**
+
+Fixing **T-51** required `potentials` to normalise $\Phi_A$ at one reference
+rather than at the caller's first grid point. For a background with radiation
+that reference is matter–radiation equality. For $\Omega_r=0$ there is no
+equality, and the first attempt used the $r_s$ table's own floor, $10^{-9}$ —
+on the reasoning that it was *"a quantity the grid register already carries
+rather than a new literal"*.
+
+**It is a quantity that exists for a different purpose.** $10^{-9}$ is the
+lower limit of an $r_s$ integral whose integrand is bounded by $1/\sqrt3$, so
+nothing below it can matter. `growth_factor` started there integrates an
+**explicit** ODE whose friction is $aH=2/\eta=2\times10^{9}$ and whose source
+is $\propto1/a\sim10^{18}$:
+
+| `constant_below` | $\Phi_A$ for Einstein–de Sitter |
+|---|---|
+| $10^{-9}$ | **1.58e-06** |
+| $10^{-6}$ | 0.655 |
+| $\eta(z=3000)$ | **1.000000000000000** |
+
+$D=a$ exactly in Einstein–de Sitter, so $\Phi\propto D/a$ is **identically
+one**. The first row is wrong by six orders of magnitude, and it is *smooth,
+constant and plausible* — the same failure mode as **T-3**'s aliased grid,
+which also returned a clean wrong answer rather than an error.
+
+### What would have shipped, and what stopped it
+
+Every Einstein–de Sitter amplitude would have been rescaled by $1.6\times
+10^{-6}$. **Nothing in the physics suite would have seen it**: F9 renormalises
+at $\ell=30$, criterion 5b compares two routes that would both have carried the
+factor, the frame comparison is a ratio, and F2's truncation tails are
+fractions. A uniform rescaling is invisible to every instrument built to be
+insensitive to normalisation — which is most of them, deliberately.
+
+What caught it was the **control half** of T-42's test,
+`test_102_must_carry_the_visibility_and_substituting_the_opacity_wrecks_it`:
+the assertion that substituting $e^{-\kappa}$ into (102) *must* wreck the rank
+decomposition. It stopped wrecking it, at three of four multipoles. **A test
+that only ever passes cannot report anything**; this one is half control by
+construction, and the control is what fired. Finding **T-24** is where that
+discipline came from, and this is the first time it has paid for itself on a
+defect it was not written for.
+
+### What is carried now
+
+`tests/test_frames.py::test_phi_is_exactly_one_in_einstein_de_sitter_whatever_the_reference`
+pins the identity directly, at three references, so the next reference that is
+too early fails *there* rather than four tests away in a control nobody expects
+to be load-bearing.
+
+**The lesson is about reuse, not about ODEs.** The $10^{-9}$ was chosen
+*because* it was already registered and justified — and it was justified **for
+an integral with a bounded integrand**, not for an initial-value problem. A
+constant imported from where it is safe into where it is not is still a
+hard-coded literal; it has merely borrowed someone else's argument for being
+one.

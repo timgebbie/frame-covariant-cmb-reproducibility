@@ -118,6 +118,22 @@ ARTEFACTS: list[Artefact] = [
              tests=("test_unavailable_ell_is_refused",
                     "test_the_coefficients_are_exact_rationals_not_floats"),
              note="findings T-17 and T-18"),
+    Artefact("D9 - the acoustic scale against the antecedent's own formula",
+             "R", "v1.3.0",
+             module="functions.spectra.acoustic",
+             objects=("sound_speed_squared", "sound_horizon"),
+             script="scripts/diagnostic_d9_acoustic_scale.py",
+             tests=("test_the_peak_spacing_disagrees_with_the_antecedents_own_formula",
+                    "test_the_initial_condition_is_imposed_rather_than_adiabatic"),
+             note="**Annals II prints this check and the bundle never ran it**: "
+                  "l_j = |r_theta/r_s| j pi, with both sides computable here "
+                  "and no external code needed. It disagrees by a factor of "
+                  "2.0-2.8 --- finding T-51, which is Q8's answer. R rather "
+                  "than S because the number it reports is a DEFECT: the "
+                  "instrument is sound and what it measures is not yet fixed. "
+                  "Its tests assert the broken value and are written to FAIL "
+                  "when T-51 is repaired, so the record cannot go out of date "
+                  "quietly --- S33 clause (d) applied to a second finding"),
     Artefact("the stamped Planck 2018 set, wired as PLANCK_MODEL", "S", "v1.2.0",
              module="functions.background.flrw",
              objects=("PLANCK_MODEL", "OMEGA_GAMMA_H2"),

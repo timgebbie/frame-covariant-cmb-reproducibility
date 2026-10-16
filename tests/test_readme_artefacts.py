@@ -98,14 +98,21 @@ def test_the_readme_states_the_git_check_rather_than_its_answer():
     which is the point: **a claim no check can reach should be replaced by the
     check**. The README now carries the three commands instead of the answer.
     """
-    for command in ("git tag --list v1.1.0",
-                    "git log --oneline -1 v1.1.0",
-                    "git merge-base --is-ancestor v1.1.0 HEAD"):
+    released = re.search(r"\*\*Last release: (v[\d.]+)\*\*", README)
+    assert released, "the README header does not name a last release"
+    tag = released.group(1)
+
+    for command in (f"git tag --list {tag}",
+                    f"git log --oneline -1 {tag}",
+                    f"git merge-base --is-ancestor {tag} HEAD"):
         assert command in README, (
             f"the README no longer tells the reader to run `{command}`. If the "
             "tag discussion has moved, move the commands with it --- do not "
             "replace them with an assertion about where the tag is, which is "
-            "exactly finding T-30.")
+            "exactly finding T-30. **The tag here is read from the header**, "
+            "not carried as a literal: this assertion named v1.1.0 for two "
+            "releases after v1.1.0 stopped being the one a reader should "
+            "check, which is T-16 in the file written to catch T-16.")
 
     forbidden = "The tag is placed at the last commit whose content was"
     assert forbidden not in README, (
@@ -189,8 +196,13 @@ def test_the_readme_and_the_supplement_name_the_same_tree_version():
     supplement and the previous ones are kept rather than rewritten. What must
     agree is what the *current* document says, which is content.
     """
+    import sys
+
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from _versions import supplement_source
+
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    supplement = (ROOT / "SUPPLEMENTARY-MATERIAL-v1.2.0.tex").read_text(encoding="utf-8")
+    supplement = supplement_source(ROOT).read_text(encoding="utf-8")
 
     header = _tree_version_from(
         readme, r"^Version:\s+\*\*(v\d+\.\d+\.\d+(?:-dev)?)\*\*")

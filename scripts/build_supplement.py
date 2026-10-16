@@ -43,8 +43,17 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
-SOURCE = ROOT / "SUPPLEMENTARY-MATERIAL-v1.2.0.tex"
-TARGET = ROOT / "supplementary-materials" / "supplement-v1.2.0.pdf"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from _versions import supplement_pdf, supplement_source  # noqa: E402
+
+#: **Derived, never typed.** This file named the source and the rendering
+#: literally, and `scripts/make_figure_pages.py` named the third artefact the
+#: same way, so repointing the build at a new release line was five hand edits
+#: in five files. On 2026-10-16 two of them were missed and the stale outputs
+#: went into the released archive --- finding **T-50**.
+SOURCE = supplement_source(ROOT)
+TARGET = supplement_pdf(ROOT)
 
 #: Worst overfull box tolerated, in points. Proposed by P1-B and accepted by
 #: the PI on 2026-10-09. Not a standard: a threshold nobody chose is a

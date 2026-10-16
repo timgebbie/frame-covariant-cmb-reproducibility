@@ -3,6 +3,98 @@
 All notable changes to this bundle are recorded here. The version policy is in
 `README.md` under *Version-control policy*.
 
+## [Unreleased] — v1.3.0 in preparation
+
+### Added
+
+- `scripts/_versions.py` — the one module that says what version this tree is.
+  `CITATION.cff` states the **released** version, `README.md`'s header states
+  the **tree** version, and all three supplement filenames derive from them.
+  Nine string literals naming the live supplement became zero.
+- `scripts/check_release_hygiene.py` — release-blocking gate beside
+  portability. Every text file must decode as **UTF-8 with no NUL byte**; the
+  supplement's generated artefacts must name **only** the source the build is
+  pointed at; and no script but `_versions.py` may spell a supplement filename
+  as a string literal. Finding **T-50**.
+- `scripts/bump_release.py --open X.Y.Z` — the symmetric half of `--to`. Flips
+  the three tree labels and the README's supplement links, opens the changelog
+  section, copies the supplement forward with its `\date` and its own `\input`
+  repointed, and removes the previous release's build outputs (**S36**).
+- `tests/test_release_hygiene.py` — four negative controls that rebuild each
+  file that shipped in the v1.2.0 archive and assert the gate refuses it.
+
+- `scripts/diagnostic_d9_acoustic_scale.py` — **D9**, the acoustic scale
+  against *Annals II*'s own printed formula ℓ_j = |r_θ/r_s| jπ. Both sides are
+  computable in this bundle with no external code, and nothing compared them
+  until now. It disagrees by a factor of **2.0–2.8**. Finding **T-51**.
+- `tests/test_acoustic_scale.py` — eight tests pinning T-51's measured values,
+  **written to fail when the defect is repaired** so the record cannot go out
+  of date quietly (**S33** clause (d) applied to a second finding).
+- `run_all.py` `DEFERRED` carries T-51's fix targeted at **v1.3.0**, so
+  `check_deferrals` refuses a v1.3.0 release that still has it. The T-47
+  mechanism used for a *defect* deferral rather than an artefact one.
+
+### Changed
+
+- **The acoustic start is derived per mode from k** — `pipeline.run` takes
+  `acoustic_start`, defaulting to `"derived"`: each mode is integrated from the
+  η at which k·r_s(η) ≤ 0.1, which is what (180)'s δT(0,k) = −⅔Φ_A(0,k),
+  τ₁ = 0 means by *at the big bang*. Peak spacing against *Annals II*'s own
+  Δℓ = π r_θ/r_s: **0.995 (EdS), 0.999 (ΛCDM), 0.998 (Planck)**, from 2.95,
+  2.85 and 2.11. The C_ℓ spacing for Planck parameters is **284** against
+  CAMB's and CLASS's **285.5**, from 589.7. Decision **S40**, finding **T-51**.
+  `acoustic_start="z_max"` reproduces the old behaviour exactly and is kept as
+  an executable control.
+- `potentials` takes `constant_below`, so Φ_A's normalisation comes from one
+  reference rather than from the caller's first grid point — grid-independent
+  to twelve figures, and the precondition for a per-mode start.
+- `acoustic.sound_horizon`'s docstring claimed ∫₀^η and returned ∫_{η₀}^η. It
+  now says so, and `sound_horizon_from_zero` is the quantity (180) means.
+- New derived quantities: `acoustic_start_eta`, `required_acoustic_points`,
+  `matter_domination_eta`. Four new grids registered (41 of 41).
+
+### Found
+
+
+- **T-51 — the acoustic oscillation starts at z = 3000 and discards half the
+  sound horizon.** The PI asked whether the visibility over-damped the acoustic
+  peaks; it does not touch them — (177) is a boundary term at η\*, never
+  integrated against 𝒱, and k_D carries Silk diffusion alone. The peaks are not
+  damped, they are **in the wrong place**: our period is 589.7 in ℓ against
+  CAMB's and CLASS's 285.5, and a damping envelope cannot change a period.
+  `pipeline.run` hands `solve_acoustic` a grid starting at
+  `RecombinationHistory.build`'s `z_max = 3000.0`, which discards 51–64 % of
+  r_s(η\*) = ∫₀^η\* c_s dη. Confirmed by construction: starting at z = 2×10⁵
+  reproduces CAMB's spacing to 1.6 %. **Q8 is answered** — its ours/CAMB = 0.14
+  at ℓ = 720 was our trough compared with CAMB's second peak.
+- Criterion 5b could not see it: both its routes take the same
+  `solve_acoustic` call on the same truncated grid, and
+  `acoustic.sound_horizon` carries the identical truncation independently.
+  **S4c vindicated concretely** — the external comparison, demoted from gate to
+  context, is the only instrument in the bundle that could detect it.
+
+### Fixed
+
+- Three files entered the v1.2.0 release archive that nothing in the bundle can
+  read or rebuild: a **UTF-16LE** `SUPPLEMENTARY-MATERIAL-v1.0.0.tex`, a
+  `figures-v1.0.0.tex` byte-identical to its v1.2.0 successor, and a
+  `supplement-v1.0.0.pdf` left behind when the build was repointed. All three
+  are inert — the harness opens none of them and the archive reproduces — and
+  **the v1.2.0 tag is not moved** (**S39**). Removed here. Finding **T-50**.
+- `README.md`'s version-suffix paragraph stated one convention where two
+  operate, and named v1.1.0 as the current documentation two releases on.
+  Figures and tables carry the release they were *introduced* in; the
+  supplement carries the release it *belongs to* (**S36**).
+
+### Decisions
+
+- **S36a** — S36 binds from v1.2.0 forward. No v1.0.0 supplement was ever
+  frozen, so there is none to restore; the v1.0.0 document of record is the
+  release asset at that tag and its archived DOI.
+- **S39** — a released tag is never moved, and a patch release is not cut for
+  content nothing reproduces against. A release is corrected by a new release,
+  never by rewriting an old one.
+
 ## [1.2.0] — 2026-10-16
 
 v1.2.0 is **the full linear source and the audit of it** (S26): an extension of

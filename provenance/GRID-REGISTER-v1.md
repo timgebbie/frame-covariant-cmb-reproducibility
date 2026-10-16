@@ -18,10 +18,10 @@ being possible.
 | status | count | means |
 |---|---|---|
 | **open** | 1 | a chosen literal whose convergence is **not** established. This status is the point of the register. |
-| **derived** | 4 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
-| **measured** | 4 | a chosen literal whose convergence has been measured, with the number stated. |
+| **derived** | 7 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
+| **measured** | 6 | a chosen literal whose convergence has been measured, with the number stated. |
 | **described** | 11 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
-| **index** | 17 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
+| **index** | 18 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
 
 ## open — 1
 
@@ -37,7 +37,7 @@ share this history, so a grid shift moves them together and cancels. Finding
 **T-46**, question **Q7**, decision **S33** --- derived immediately after the
 v1.2.0 tag. v1.2.0 ships it as a stated limit.
 
-## derived — 4
+## derived — 7
 
 ### `x` — the x grid j_ell(x) is tabulated on
 
@@ -51,16 +51,29 @@ finely.
 
 ### `eta` — the line-of-sight integration grid for C_ell
 
-`functions/spectra/pipeline.py:259`, `np.linspace`
+`functions/spectra/pipeline.py:307`, `np.linspace`
 
 `required_n_eta(k_max, span)` at 12 samples per j_ell oscillation, and
 `run` RAISES rather than accepting an n_eta below it --- *"Pass n_eta=None to
 derive it. See finding T-3."* This is the guard T-3 produced, and it is the
 template the other rows are measured against.
 
+### `mode_eta` — one acoustic mode's own integration grid, from its derived start
+
+`functions/spectra/pipeline.py:391`, `np.linspace`
+
+`required_acoustic_points(k, eta_couple - start)` at 24 samples per
+acoustic oscillation, on a floor of 512. Arithmetic, not a knob: delta_T goes
+as cos(k r_s) with period 2 pi/(k c_s) in eta, and c_s^2 = 1/(3(1+R)) <= 1/3
+BOUNDS that period below by 2 pi sqrt(3)/k --- so the rate is computed from k
+the way `required_n_eta` is computed from k_max. The span is per mode because
+the START is per mode: `acoustic_start_eta(k)` returns the eta at which
+k r_s(eta) <= 0.1, finding **T-51**. One fixed point count cannot serve a band
+spanning a factor of two thousand in k, which is why no number is chosen.
+
 ### `eta` — the eta grid for the two-frame evaluation of (102): F2, F5, F7
 
-`functions/spectra/two_frame.py:226`, `np.linspace`
+`functions/spectra/two_frame.py:250`, `np.linspace`
 
 `required_n_eta(k_max, span)` when `n_eta is None`, which is how every
 figure calls it, and `check_k` RAISES when a caller asks for a mode the grid
@@ -68,9 +81,22 @@ cannot resolve --- the guard finding **T-34** produced after F7 sized its grid
 for k=140 and integrated to k=420. A caller may still pass `n_eta` explicitly;
 nothing in the bundle does.
 
+### `mode_eta` — one acoustic mode's integration grid on the (102) generic-u^a route
+
+`functions/spectra/two_frame.py:331`, `np.linspace`
+
+The same construction as `pipeline.py::mode_eta` and in the same
+release, because **T-51 had one instance per route**: `pipeline.run`,
+`two_frame.coefficient_sets` and `two_route.two_route_transfer` each began
+every mode at the recombination grid's first point, and all three therefore
+agreed. Criterion 5b compares the first and third of those; F2, F5, F7, F9, D6
+and D7 all take the second. T-3's lesson in triplicate --- two agreeing routes
+agree about what they share, and three is not better. `required_acoustic_points`
+and `acoustic_start_eta` are shared, so the three cannot drift apart again.
+
 ### `eta` — the eta grid for criterion 5b's gate, both routes
 
-`functions/spectra/two_route.py:209`, `np.linspace`
+`functions/spectra/two_route.py:214`, `np.linspace`
 
 `required_n_eta` at **48** samples per oscillation, four times the C_ell
 route's twelve, on a floor of 8000. The higher rate is not caution: this
@@ -80,7 +106,22 @@ both routes un-converged in the same direction, agreeing two hundred times
 better than they do. `test_the_eta_grid_is_derived_from_k_and_not_fixed` holds
 it derived.
 
-## measured — 4
+### `mode_eta` — one acoustic mode's integration grid inside criterion 5b's gate
+
+`functions/spectra/two_route.py:234`, `np.linspace`
+
+`required_acoustic_points`, floored at the gate's own `n_eta` so that
+the mode grid is never coarser than the line-of-sight grid it is interpolated
+onto --- finding **T-46**'s lesson, which was that the binding grid is the
+coarser of the two and nobody had checked which. **This gate could not see
+T-51**: both its routes share one acoustic solution by construction, so a
+truncated start moved them together and cancelled, and 5b sat at 9.5e-06 with
+half the sound horizon missing from both sides. Measured after the fix:
+8.240e-06. The number barely moved, which is the correct behaviour for a gate
+that tests assembly algebra --- and is exactly why **S4c** says it cannot
+stand in for an external comparison.
+
+## measured — 6
 
 ### `u` — the panel division of the conformal-time integral eta(a)
 
@@ -91,6 +132,23 @@ it derived.
 by 8e-12. Each panel is an adaptive `quad`, so the panel count sets where the
 adaptive refinement restarts rather than the accuracy. Nothing rests on it.
 
+### `eta` — the samples r_s(eta) = Int_0^eta c_s deta is accumulated on
+
+`functions/spectra/acoustic.py:139`, `np.logspace`
+
+**Logarithmic, and that is not a style choice.** c_s -> 1/sqrt(3) as
+eta -> 0 while the span to eta_* covers five decades, so a uniform grid spends
+every sample where the integrand is flat and none where it turns over.
+`RS_SAMPLES = 400000` over [1e-9, eta_*]. Convergence measured 2026-10-16:
+r_s(eta_*) for PLANCK_MODEL is 0.036135 at 1e5, 4e5 AND 1.6e6 samples, and
+the missing fraction D9 reports is 0.5077 at all three --- identical to every
+printed figure, which is what a ratio of two accumulations on one grid should
+do, since a common quadrature error cancels. The lower limit 1e-9 is converged
+too, and measured rather than argued: r_s = 0.036134482 at 1e-7, 0.036134539 at
+1e-9, 0.036134540 at 1e-11, so 1e-9 is right to nine figures and the missing
+fraction is 0.507688 at all three. c_s is bounded by 1/sqrt(3), so no cutoff
+this low can matter against the 51-64% that finding **T-51** is about.
+
 ### `z_grid` — the output sampling of the Peebles ionisation solution x_e(z)
 
 `functions/spectra/peebles.py:251`, `np.linspace`
@@ -100,6 +158,19 @@ adaptive refinement restarts rather than the accuracy. Nothing rests on it.
 `max_step=20`, so it sets the OUTPUT sampling and not the integration accuracy.
 It feeds the same interpolation chain as the row above it, which is why it is
 measured rather than assumed.
+
+### `internal` — the growth factor's own grid, so Phi_A does not depend on the caller's
+
+`functions/spectra/potentials.py:171`, `np.logspace`
+
+`GROWTH_SAMPLES = 8192`, logarithmic from the matter-domination
+reference. **The point of it is independence, not resolution.** The legacy
+branch normalises Phi at `eta[0]`, so two callers asking for the same
+Phi_A(eta) on two different grids got two different answers --- harmless while
+every grid began at the same place, fatal the moment the acoustic start became
+per mode (**T-51**). Measured 2026-10-16: Phi_A(eta_*) = 0.829216181690 for
+PLANCK_MODEL at 4096, 8192 and 16384 samples, and the same twelve figures from
+input grids starting at 1e-5, 3e-4 and 2e-2.
 
 ### `eta` — the integration grid for the relative-sign control
 
@@ -201,7 +272,7 @@ as **T-32** requires. Deliberately identical to the comparison's grid: F9 and
 the 5b table describe the same spectrum, and two grids would make them two
 spectra.
 
-## index — 17
+## index — 18
 
 ### `phase` — the i^ell phase factor
 
@@ -220,6 +291,19 @@ Consecutive integers. There is no resolution to get wrong.
 `functions/spectra/kernels.py:119`, `np.arange`
 
 Set by the transform length, not chosen. The FFT's own grid is the k grid of its caller.
+
+### `master` — the grid Phi_A and Phi_H are splined on, shared by every mode
+
+`functions/spectra/pipeline.py:382`, `np.logspace`
+
+16384 logarithmic samples from the earliest acoustic start to
+eta_couple. **It carries no physical scale of its own**: it resamples a
+quantity that does not depend on k at all, so that `potentials` runs its growth
+integration ONCE rather than 1433 times. Phi_A is smooth and nearly constant
+over it. Convergence is `potentials`' own, measured at its `GROWTH_SAMPLES`
+row, not this spline's: Phi_A(eta_*) for PLANCK_MODEL agrees to twelve figures
+between 4096 and 16384 internal samples, and to twelve figures across input
+grids spanning three decades in their lower limit.
 
 ### `ELLS` — the multipoles the cost benchmark projects onto
 

@@ -66,7 +66,10 @@ def _perturb(text: str, relative: float) -> str:
 @pytest.mark.parametrize("rel,expected", [
     ("figures/f3-angular-spectrum-v1.0.0.png", "rendered"),
     ("figures/f6-approximations-v1.1.0.pdf", "rendered"),
-    ("supplementary-materials/supplement-v1.2.0.pdf", "rendered"),
+    # A *specimen* path, deliberately unversioned: this row tests the
+    # classifier, not the tree, and a real version here would be a label with
+    # nothing behind it --- which is the T-50 class the hygiene gate refuses.
+    ("supplementary-materials/supplement.pdf", "rendered"),
     ("diagnostics/d1-sign-control-v1.0.0.png", "rendered"),
     ("outputs/f4-correlation.csv", "numeric"),
     ("outputs/f1-appendix-f-residuals.csv", "bounded"),
@@ -159,9 +162,15 @@ def test_renderings_are_outside_the_binding_manifest():
     portable = (ROOT / "PORTABLE-MANIFEST-SHA256.txt").read_text(encoding="utf-8")
     byte_manifest = (ROOT / "FILE-MANIFEST-SHA256.txt").read_text(encoding="utf-8")
 
+    import sys
+
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from _versions import supplement_pdf
+
+    rendering = supplement_pdf(ROOT).name
     assert "f3-angular-spectrum-v1.0.0.png" in byte_manifest
     assert "f3-angular-spectrum-v1.0.0.png" not in portable
-    assert "supplement-v1.2.0.pdf" in byte_manifest
-    assert "supplement-v1.2.0.pdf" not in portable
+    assert rendering in byte_manifest
+    assert rendering not in portable
     # and the content half is still there
     assert "functions/frames.py" in portable

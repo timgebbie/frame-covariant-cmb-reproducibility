@@ -92,6 +92,12 @@ DEFERRED: dict[str, tuple[str, str]] = {
     # makes in one sentence is exactly what a reproduction bundle should check.
     "D3  source terms against k": ("v1.5.0", "S-b"),
     "D4  no monopole in the CGI approach": ("v1.5.0", "S-b"),
+    # **T-51 was here and is DISCHARGED**, fixed 2026-10-16 within hours
+    # of being registered. It is removed rather than left with a stale
+    # target --- which is the same rule F6 and F8 were removed under, and
+    # the one T-47 exists to enforce. The mechanism worked: a defect
+    # promised to a release was carried as data, and `check_deferrals`
+    # would have refused v1.3.0 had it not been done.
     # S21 then S23 deferred F2, F5 and F7, twice for reasons that turned out
     # wrong. **All three landed 2026-10-14** and are removed rather than left
     # with a stale deferral, as F6 and F8 were. What actually blocked F5 was the
@@ -128,6 +134,14 @@ DIAGNOSTICS: list[tuple[str, str]] = [
     # reports the external context on demand.
     ("D8  criterion 5b's gate: (102) against (177)-(179)",
      "scripts/diagnostic_d8_criterion_5b_gate.py"),
+    # D9 is the check **the antecedent prints and this bundle never ran**:
+    # l_j = |r_theta/r_s| j pi, with both sides computable here and no external
+    # code needed. It disagrees by a factor of 2.0--2.8 --- finding T-51 ---
+    # and it reports rather than fails, because the fix is v1.3.0's and the
+    # deferral above is what refuses to let it be forgotten. **A diagnostic
+    # that fails every development run is a diagnostic people stop reading.**
+    ("D9  the acoustic scale against the paper's own formula",
+     "scripts/diagnostic_d9_acoustic_scale.py"),
 ]
 
 
@@ -142,10 +156,16 @@ EMISSIONS: list[tuple[str, str]] = [
 ]
 
 
-#: The portability gate. It runs first and its failure is release-blocking:
-#: nothing ships from this bundle that has only ever run where it was
-#: written. Adopted from Coordination's audit, 2026-10-06.
-GATE = ("portability", "scripts/check_portability.py")
+#: The gates. They run first and their failure is release-blocking: nothing
+#: ships from this bundle that has only ever run where it was written, and
+#: nothing ships that the bundle itself cannot read or regenerate. Portability
+#: was adopted from Coordination's audit, 2026-10-06; release hygiene after
+#: finding **T-50**, where three files the bundle could not read or rebuild
+#: passed every gate in it and entered the released archive.
+GATES = [
+    ("portability", "scripts/check_portability.py"),
+    ("release hygiene", "scripts/check_release_hygiene.py"),
+]
 
 
 
@@ -207,13 +227,14 @@ def main() -> int:
     # into agreement: regenerate to fix the manifests, but you cannot
     # regenerate until the manifests are fixed. That is T-4's mistake again in
     # a different place --- a gate ordered so that it blocks its own remedy.
-    label, script = GATE
-    if run([sys.executable, script], label) != 0:
+    for label, script in GATES:
+        if run([sys.executable, script], label) == 0:
+            continue
         if args.strict:
             print("\n" + "=" * 60)
-            print("NOT RELEASABLE  --  portability gate failed")
+            print(f"NOT RELEASABLE  --  {label} gate failed")
             return 1
-        failures.append("portability")
+        failures.append(label)
         print("\n      --rerun CONTINUES past this. The gate is advisory on the")
         print("      development route and binding on the release route, because")
         print("      regenerating is how most of these get fixed.")

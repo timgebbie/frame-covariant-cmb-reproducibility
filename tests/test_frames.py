@@ -623,3 +623,44 @@ def test_102_must_carry_the_visibility_and_substituting_the_opacity_wrecks_it():
     assert rank_share("opacity").min() > 0.9, (
         "the control did not fail, so this test is not exercising (102)'s "
         "weight at all")
+
+
+def test_phi_is_exactly_one_in_einstein_de_sitter_whatever_the_reference():
+    r"""**Finding T-52.** $D=a$ exactly in Einstein--de Sitter, so $\Phi\propto
+    D/a$ is **1.0 everywhere** --- an identity, not a tolerance.
+
+    `potentials`' `constant_below` sets where `growth_factor` starts, and
+    `growth_factor` integrates an explicit ODE whose friction is $aH=2/\eta$
+    and whose source is $\propto1/a$. Started at $\eta=10^{-9}$ those are
+    $2\times10^9$ and $10^{18}$, and it returns $1.58\times10^{-6}$ for a
+    quantity that is identically one.
+
+    **Every Einstein--de Sitter amplitude in the bundle would have been
+    rescaled by six orders of magnitude**, silently, when the acoustic start
+    was derived per mode (**S40**). Nothing in the physics tests would have
+    seen it: they compare shapes, ratios and two routes that would both have
+    carried the same factor. What caught it was the *control* half of T-42's
+    test --- the assertion whose job is to fail --- which stopped firing.
+
+    This pins the identity directly, so the next reference that is too early
+    fails here rather than four tests away.
+    """
+    import numpy as np
+
+    from functions.background.flrw import CDM_MODEL
+    from functions.spectra.decoupling import RecombinationHistory
+    from functions.spectra.potentials import potentials
+
+    recombination = RecombinationHistory.build(CDM_MODEL, n_eta=4000)
+    eta = np.linspace(float(recombination.eta[0]), float(CDM_MODEL.eta_0), 2000)
+
+    for reference in (None, float(recombination.eta[0]), 2.0 * float(recombination.eta[0])):
+        phi_a, phi_h = potentials(CDM_MODEL, eta, constant_below=reference)
+        assert np.allclose(phi_a, 1.0, rtol=0.0, atol=1e-10), (
+            f"Phi_A is not identically 1 in Einstein-de Sitter with "
+            f"constant_below={reference!r}: it ranges "
+            f"{phi_a.min():.6g} to {phi_a.max():.6g}. D = a there, so this is "
+            "an identity. See finding T-52 --- a reference early enough to "
+            "break the growth integration returns a smooth, plausible, wrong "
+            "answer.")
+        assert np.allclose(phi_h, -phi_a), "Phi_H = -Phi_A at this order"

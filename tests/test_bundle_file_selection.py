@@ -222,11 +222,13 @@ def test_the_provenance_readme_lists_every_record():
 
 def test_the_released_figures_are_in_the_bundle():
     """Guards the negation on the real `.gitignore`, not only the synthetic one."""
+    from _versions import supplement_pdf
+
     selected = {p.relative_to(ROOT).as_posix() for p in bundle_files(ROOT)}
     for rel in (
         "figures/f1-appendix-f-v1.0.0.pdf",
         "figures/f3-angular-spectrum-v1.0.0.pdf",
-        "supplementary-materials/supplement-v1.2.0.pdf",
+        supplement_pdf(ROOT).relative_to(ROOT).as_posix(),
     ):
         assert rel in selected, f"{rel} fell out of the fingerprint"
 
