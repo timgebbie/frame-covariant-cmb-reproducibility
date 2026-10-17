@@ -123,7 +123,7 @@ stand in for an external comparison.
 
 ### `k_com` — the k grid D4 integrates C_ell by rank on
 
-`scripts/diagnostic_d4_monopole.py:95`, `np.linspace`
+`scripts/diagnostic_d4_monopole.py:102`, `np.linspace`
 
 `required_k_points(K_MAX, r_theta)` at 3 samples per j_ell^2
 oscillation --- finding **T-56**, and the reason this row exists rather than a

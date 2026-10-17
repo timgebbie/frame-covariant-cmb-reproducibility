@@ -1,0 +1,214 @@
+% ---------------------------------------------------------------------------
+% The CDM-frame division of the integral solution, term by term.
+%
+% SELF-CONTAINED BY DESIGN. This file inputs nothing and defines nothing; it
+% can be moved into Paper 1 by moving one file. Decision S42's pattern.
+%
+% This is the bundle's contribution to Paper 1's work-list item 3 --- *"The
+% CDM-frame division has not been computed term by term"* --- and it is
+% offered for checking by the Paper 1 stream, not as a settled result. Every
+% step whose content is a sign or an ell-weight is flagged as such.
+% ---------------------------------------------------------------------------
+\section{The CDM-frame division of the integral solution, term by term}
+\label{sec:frame-division}
+
+Paper~1's Sec.~III\,C records that \emph{``the CDM-frame division has not been
+computed term by term''}. This appendix computes it for the integral solution
+(102), finds that it does not close, and localises the failure to a single
+coefficient at a single power of $k$. \textbf{It is offered for checking rather
+than as a settled result}: the three transformation laws it rests on are
+transcriptions, and under the rule that a claim whose content is a sign or an
+$\ell$-weight is settled in the index algebra or not settled, the index algebra
+has not been done here.
+
+\subsection{What has to hold}
+
+Let $n^a$ be the shear-free (Newtonian) frame and $u^a=n^a+v^a$ the
+zero-acceleration (CDM) frame, with $v_an^a=0$ and $v^a$ first order. A
+first-order change of frame is a boost, and a boost changes the observed
+brightness by $\tau\to\tau-v_ae^a$: \textbf{a pure dipole}. In PSTF multipoles,
+\begin{equation}
+  \tau^{(u)}_{A_1}=\tau^{(n)}_{A_1}-v_{A_1},
+  \qquad
+  \tau^{(u)}_{A_\ell}=\tau^{(n)}_{A_\ell}\quad\text{for all }\ell\ge2 .
+  \label{eq:boost-is-a-dipole}
+\end{equation}
+\eqref{eq:boost-is-a-dipole} is not an approximation to be checked against a
+tolerance. \textbf{It is what makes $C_\ell$ an observable at all}, and the
+almost-EGS argument of \emph{Annals~II}'s Appendix~E rests on it. So the
+division below has only one admissible outcome: the shift must cancel
+identically for $\ell\ge2$.
+
+\subsection{The three shifts}
+
+The coefficients are fixed by (90),
+\begin{equation}
+  -C_0\simeq\tfrac52\,a\mathcal B_2,\qquad
+  -C_1\simeq\tfrac1k\big(a\mathcal B_1+\kappa'v_B\big),\qquad
+  -C_2\simeq\tfrac1{k^2}\,a\mathcal B_2 ,
+  \label{eq:C-from-B}
+\end{equation}
+with $a\mathcal B_1=k\,\delta T+aA$ and $v_B=k\tilde\tau_1$. The frame
+carries four entries, each from the antecedent:
+
+\begin{center}
+\begin{tabular}{lll}
+\hline
+ & Newtonian $n^a$ & CDM $u^a$ \\
+\hline
+$aA$ & $k\Phi_A$ & $0$ \quad(the frame condition $A_a=0$) \\
+$\delta T$ & $\delta\tilde T$ & $\delta\tilde T-\mathcal Hv/k$ \quad(n-t3) \\
+$\tilde\tau_1$ & $\tilde\tau_1$ & $\tilde\tau_1-v/k$ \quad(n-t4) \\
+$a\mathcal B_2$ & $0$ & $-kv$ \quad(n-t1, $a\sigma=-kv$ exactly) \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent
+Write $\Delta X\equiv X^{(u)}-X^{(n)}$. Then
+$\Delta(a\mathcal B_1)=-\mathcal Hv-k\Phi_A$, and the Euler equation
+$v'+\mathcal Hv=-k\Phi_A$ --- which \emph{is} the frame condition $A_a=0$ ---
+collapses it to $v'$. The other two follow directly:
+\begin{equation}
+  \boxed{\;
+  \Delta C_0=+\tfrac52\,k\,v,\qquad
+  \Delta C_1=-\tfrac1k\big(v'-\kappa'v\big),\qquad
+  \Delta C_2=+\tfrac{v}{k}\;}
+  \label{eq:three-shifts}
+\end{equation}
+
+\textbf{This shows that} the three coefficients pick up the frame velocity at
+three different powers of $k$: $C_0$ at $k^{+1}$, $C_1$ at $k^{-1}$, $C_2$ at
+$k^{-1}$. That spread is not a choice --- it is \eqref{eq:C-from-B}, where
+$C_0$ and $C_2$ are \emph{the same} $a\mathcal B_2$ divided by $k^0$ and $k^2$.
+
+\subsection{The shift of (102), term by term}
+
+(102) reads
+\begin{equation}
+  \frac{\beta_\ell\tau_\ell(\eta_0)}{2\ell+1}\simeq
+  \big[C_2'(\eta_*)-C_1(\eta_*)\big]\mathcal D\,j_\ell(x_*)
+  +kC_2(\eta_*)\mathcal D\,j_\ell'(x_*)
+  +\int_{\eta_*}^{\eta_0}\!\!d\eta\;\mathcal V e^{-(k/k_D)^2}
+   \big[C_0-C_1'+C_2''\big]j_\ell(x).
+  \label{eq:102-here}
+\end{equation}
+Applying \eqref{eq:three-shifts} to each bracket:
+\begin{align}
+  \Delta\big[C_2'-C_1\big]_{\eta_*} &= \tfrac1k\big(2v'-\kappa'v\big)\Big|_{\eta_*},
+  \label{eq:shift-scalar}\\[2pt]
+  \Delta\big[kC_2\big]_{\eta_*} &= v(\eta_*),
+  \label{eq:shift-shear}\\[2pt]
+  \Delta\big[C_0-C_1'+C_2''\big] &= \tfrac52kv
+    +\tfrac1k\big(2v''-(\kappa'v)'\big).
+  \label{eq:shift-integrand}
+\end{align}
+
+\textbf{The first term of \eqref{eq:shift-integrand} has no partner.} Count
+powers of $k$ against the rate at which $v$ evolves. $v$ obeys
+$v'=-\mathcal Hv-k\Phi_A$, so on sub-horizon scales $v$ changes on the Hubble
+rate, not on $k$: $v'\sim\mathcal Hv$ and $v''\sim\mathcal H^2v$. Then
+\begin{equation}
+  \frac{\tfrac52kv}{\tfrac1k\,2v''}\;\sim\;\frac54\left(\frac{k}{\mathcal H}\right)^{2},
+  \label{eq:no-partner}
+\end{equation}
+and the two boundary shifts \eqref{eq:shift-scalar}--\eqref{eq:shift-shear} are
+$O(\mathcal Hv/k)$ and $O(v)$, smaller still. \textbf{Nothing in (102) is the
+same size as $\tfrac52kv$}, so the shift cannot cancel, and
+\eqref{eq:boost-is-a-dipole} fails for every $\ell\ge2$ by a factor that grows
+as $(k/\mathcal H)^2$.
+
+\subsection{Measured}
+
+Computed in both frames from one environment, one acoustic solution and one
+$k$ grid --- the only difference being which frame (110) specialises to ---
+against the Newtonian total's own scale over $\ell\in\{2,5,10,50,200\}$:
+
+\begin{center}
+\begin{tabular}{lrrr}
+\hline
+background & $k$ & as assembled & with $C_0$ dropped \\
+\hline
+CDM (Einstein--de Sitter) & 20  & $53.5$   & $0.032$ \\
+                          & 300 & $1719$   & $0.035$ \\
+$\Lambda$CDM              & 20  & $62.8$   & $0.105$ \\
+                          & 300 & $6868$   & $0.154$ \\
+\texttt{PLANCK\_MODEL}    & 20  & $72.2$   & $0.111$ \\
+                          & 300 & $3687$   & $0.058$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent
+Three to four orders of magnitude, to a residual of $1$--$15\%$, and the $k$
+dependence is the $(k/\mathcal H)^2$ of \eqref{eq:no-partner}. The rank
+decomposition says the same from the other side: $C_0$ carries $98.6\%$ of
+$C_\ell$ in the CDM frame and is identically zero in the Newtonian one.
+
+\subsection{Why \emph{Annals~II} never meets this}
+
+(102) is derived for a general $u^a$ --- the text says so explicitly after
+(90), \emph{``Note that these are CGI with respect to $u^a$''} --- and then
+evaluated once, in the Newtonian frame, where \emph{``the vanishing shear
+condition $\tilde\sigma_{ab}\approx0$ implies that $\tilde C_0(\eta)\approx0$
+and $\tilde C_2(\eta)\approx0$''}. \textbf{Both members of the pair vanish
+together}, so the imbalance between them cannot be seen. Nothing the antecedent
+publishes is affected. What is missing is a stated condition on a formula it
+labels frame-general, and it is missing because the paper had no reason to
+carry (102) anywhere the condition fails.
+
+\subsection{Three repairs tested and rejected}
+
+Recorded because a rejected hypothesis that leaves no trace is formed again.
+
+\paragraph{The dropped lines of (93).} (102) is (93) with its last two
+integrals removed, \emph{``we can effectively drop the last two lines''}; both
+carry $C_1$ and $C_2$, so they are the obvious counterweight. Restoring
+$\int(\kappa'e^{-\kappa})[C_1-2C_2]j_\ell$ and
+$\int((\kappa')^2-\kappa'')e^{-\kappa}C_2j_\ell$ moves the disagreement from
+$72.2$ to $71.6$ at $k=20$ and from $3686.9$ to $3686.8$ at $k=300$. They are
+not the counterweight.
+
+\paragraph{Undoing the integration by parts.} (93) comes from the kernel
+$A_\ell=C_0\tau^{(0)}_\ell+C_1\partial_{\eta'}\tau^{(0)}_\ell
++C_2\partial^2_{\eta'}\tau^{(0)}_\ell$, where the two derivatives act on the
+\emph{kernel} and bring down $k$, not on the coefficient where they bring down
+$\mathcal H$. That suggests the by-parts step is what strands $C_0$.
+\textbf{The numerical test of this was invalid} --- the implementation failed
+its own control, reproducing the by-parts form in the Newtonian frame only to
+within factors of $10^{-3}$ to $2.5$ --- because (102) does not differentiate
+the weight $\mathcal V$ that (93) carries inside the integral, so the two forms
+are not related by an exact by-parts once a weight is present. \textbf{The idea
+is not refuted; it is untested}, and it is the first thing Paper~1 should try.
+
+\paragraph{Reading the $\ell=0$ line of (89) as mis-sourced.} $a\mathcal
+B_0\delta_{\ell0}$ appears in the full hierarchy, is commented out of the
+equation the integral solution solves, and is restored in the open-case
+extension --- which looks like a dropped source. It is not. The ansatz must
+produce no monopole, $\tau_0=0$, and differentiating $\int A_0\,d\eta'=0$ gives
+exactly (89)'s $\ell=0$ line with \textbf{zero} on the right. $C_0$ is
+correctly derived.
+
+\subsection{What Paper 1 should check, and in what order}
+
+\begin{enumerate}
+\item \textbf{The four entries of the frame table}, by index algebra. $a\sigma=-kv$
+  (n-t1), $\delta T\to\delta T-\mathcal Hv/k$ (n-t3) and
+  $\tilde\tau_1\to\tilde\tau_1-v/k$ (n-t4) are transcriptions in this bundle.
+  They carry the signs that \eqref{eq:three-shifts} is built from, and a sign
+  is settled in the index algebra or it is not settled.
+\item \textbf{\eqref{eq:boost-is-a-dipole} at second order.} The division here
+  is first order. The $1$--$15\%$ residual left after $C_0$ is removed is the
+  honest size of what is not yet accounted for, and whether it is
+  $O(\varepsilon^2)$ or an artefact of the grids is open.
+\item \textbf{The by-parts step}, as above --- the one untested repair.
+\item \textbf{Whether $C_0$ belongs in the integrand}, which is this bundle's
+  question~Q14 and which the measurement answers empirically and the algebra
+  does not.
+\end{enumerate}
+
+\textbf{What this appendix establishes} is narrower than any of those and does
+not depend on them: \emph{whatever the resolution, the CDM-frame division of
+(102) does not close, the failure is in $C_0$ alone, and its size is
+$(k/\mathcal H)^2$.} That is one coefficient and one power of $k$, where
+Paper~1's Sec.~III\,C had an open gap.

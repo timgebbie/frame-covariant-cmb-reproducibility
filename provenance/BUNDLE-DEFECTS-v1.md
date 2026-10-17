@@ -4970,3 +4970,197 @@ before:
 
 **The first three were defaults nobody named. The fourth is Paper 1's subject.**
 That is the right place for a reproduction bundle's investigation to end up.
+
+
+---
+
+## T-60 — the frame gap is $C_0$, the coefficient of a multipole that does not exist
+
+**Found 2026-10-17**, resolving **T-59**. The PI asked whether the CDM-frame
+result is "pure Doppler because of the frame". It is not Doppler, and it is not
+a cancellation failure. It is **one coefficient, carrying two powers of $k$ it
+should not have, projected onto every multipole.**
+
+### The mechanism, in six lines of `match_coefficients`
+
+```python
+c0 = p0 * a_b2
+c1 = p1 / k    * (a_b1 + kappa_prime_v_b)
+c2 = p2 / k**2 * a_b2
+```
+
+$C_0$ and $C_2$ are **the same array**, $a\mathcal B_2$, divided by different
+powers of $k$. In the CDM frame $a\mathcal B_2=a\sigma=-k v$ exactly (n-t1,
+and the bundle asserts it), so
+
+$$C_0=-p_0\,k\,v,\qquad C_2=-p_2\,\frac{v}{k},
+\qquad \frac{C_0}{C_2}=\frac{p_0}{p_2}k^2 .$$
+
+Measured, at $\eta_*$, on all three backgrounds and at every $k$ from 1 to 300:
+$C_0/(k^2C_2)=\mathbf{2.5000}$ — a pure rational, exactly $p_0/p_2$ from (89),
+because nothing else is in it. In the Newtonian frame $\mathcal B_2=0$, so
+$C_0\equiv0$ and the term cannot appear at all.
+
+`integral_solution` then adds $C_0$ to the bracket at **every** multipole:
+
+```python
+bracket = coefficients.c0 - c1_prime + c2_second
+integrated[i] = trapezoid((weight * diffusion * bracket * j_l)[inside], ...)
+```
+
+### Measured: it is the entire gap
+
+Dropping $C_0$ from the CDM frame and comparing with the **Newtonian total**,
+relative to the Newtonian scale:
+
+| background | $k$ | CDM total / N | CDM **minus $C_0$** vs N |
+|---|---|---|---|
+| CDM (Einstein–de Sitter) | 20 | 53.5 | **0.032** |
+| | 300 | 1719 | **0.035** |
+| $\Lambda$CDM | 20 | 62.8 | **0.105** |
+| | 300 | 6868 | **0.154** |
+| `PLANCK_MODEL` | 20 | 72.2 | **0.111** |
+| | 300 | 3687 | **0.058** |
+
+**Three to four orders of magnitude, to a residual of 1–15%**, which is the
+honest size of the frame-covariance statement once the artefact is out of it.
+D4 measured the same thing from the other side: rank zero is **98.6%** of
+$C_\ell$ in the CDM frame and **identically zero** in the Newtonian one.
+
+### Why this is a rank error and not an arithmetic one
+
+$C_0$ is the coefficient of the $\delta_{\ell0}$ entry of (89). *Annals II*
+p. 366 states flatly that **"there is no monopole temperature anisotropy in the
+CGI approach while there is one in the canonical treatment"**, and
+`integral_solution` refuses $\ell<1$ for the independent reason that (102)'s
+rank-two term needs $j_{\ell-1}$. **There is no $\ell=0$ for $C_0$ to be the
+coefficient of**, and it is nevertheless summed into the source at every
+$\ell\ge2$, where its $k^2$ makes it dominant.
+
+**Finding B-11 is already about this coefficient** — (89) prints the wrong sign
+on its $\delta_{\ell0}$ entry, and `use_printed_c0` exists as the control. The
+sign was questioned; the *placement* was not.
+
+### D4 answers the question it was written for
+
+D4 — *"no monopole in the CGI approach"* — was registered in v1.0.0 against
+that one sentence, deferred to v1.1.0, retargeted to v1.5.0 under T-47, and
+written on 2026-10-17 only because T-57 forced it. **It is the diagnostic for
+exactly this**, and the sentence it was written to check is the sentence that
+resolves the release's largest discrepancy. Three deferrals of the instrument
+pointed at the answer.
+
+### What this does NOT fix, and a correction to T-59
+
+With $C_0$ removed both frames agree, and **both fall** through the acoustic
+band — $D_\ell$ going $1.00$ at $\ell=30$ to $0.24$ at $\ell=270$ where CAMB
+rises by about six.
+
+**T-59's write-up inferred the opposite and was wrong.** It argued that because
+one frame rose and the other fell through the same band on the same $T(k)$ and
+the same acoustic solution, the missing acoustic amplitude "is T-59's, not
+A-3's". The rise was $C_0$. With the artefact removed there is no rise in
+either frame, so the inference is withdrawn: **the falling envelope is A-3**,
+the absent radiation driving, and nothing in the frame sector will supply it.
+
+That moves **Hu & Sugiyama from the end of the queue to the critical path**. It
+was scheduled last on the grounds that it could not see T-56 through T-59.
+It cannot — and T-56 through T-60 are now closed, which leaves the driving as
+the only thing between this bundle and the peak heights.
+
+
+---
+
+## T-61 — $C_0$ is one half of a cancelling pair, and (102) carries only that half
+
+**Found 2026-10-17**, answering **Q14** from the manuscript source rather than
+from another measurement. **T-60** established that $C_0$ is the whole frame
+gap; this says what $C_0$ *is*.
+
+### (89), as the manuscript prints it
+
+```
+C_0 d_{l0} + C_1 b_1^-1 k d_{l1}
+           + C_2 k^2 5 b_2^-1 ( (2/15) d_{l2} + (1/3) d_{l0} )
+  = - [ (a B_1 + kappa' v_B) d_{l1} + a B_2 d_{l2} ]
+```
+
+**The right-hand side has no $\delta_{\ell0}$ entry.** The source is non-zero
+at $\ell=1$ and $\ell=2$ only. So the $\ell=0$ component of (89) reads
+
+$$C_0+\tfrac{5}{3\beta_2}k^2C_2=0,$$
+
+and that is the *entire definition* of $C_0$: **it is the term that cancels
+$C_2$'s own $\delta_{\ell0}$ leakage.** $C_2$'s coefficient multiplies both
+$\delta_{\ell2}$ and $\delta_{\ell0}$; $C_0$ exists to make the $\ell=0$ line
+come out to zero, which is what *"there is no monopole temperature anisotropy
+in the CGI approach"* means **as an equation**.
+
+$C_0$ and $C_2$ are therefore **one degree of freedom, not two**, and
+$C_0=-\tfrac{5}{3\beta_2}k^2C_2$ is where T-60's measured
+$C_0/(k^2C_2)=2.5000$ comes from — it is $5/(3\beta_2)$, a pure rational, and
+nothing in the dynamics can change it.
+
+### What (102) does with the pair
+
+(102) --- the manuscript's `slowdecoupling` --- carries
+
+$$\int d\eta\;\mathcal V\,e^{-(k/k_D)^2}\big\{C_0-C_1'+C_2''\big\}j_\ell .$$
+
+**$C_0$ appears undifferentiated and $C_2$ appears as $C_2''$.** The
+cancellation that *defines* $C_0$ is against $k^2C_2$, not against $C_2''$, so
+the integrand takes one member of a cancelling pair and pairs it with the
+second derivative of the other. For a slowly varying $C_2$, $C_2''\ll k^2C_2$,
+so what is left is $C_0$ alone, larger than its intended partner by
+$\sim(k/\partial_\eta)^2$.
+
+**In the Newtonian frame the question cannot arise**, and the manuscript says
+why in one sentence: *"the vanishing shear condition $\tilde\sigma_{ab}\approx0$
+implies that $\tilde C_0(\eta)\approx0$ and $\tilde C_2(\eta)\approx0$"*. Both
+halves vanish together. *Annals II* derives (102) for a general $u^a$ and then
+**only ever evaluates it where both members of the pair are zero.**
+
+### So the defect is not in the bundle and not in the paper
+
+It is in the **extension**. Evaluating (102) in a frame with shear is new work
+--- it is what Paper 1 is for --- and it has found the boundary of (102)'s
+validity: *(102) is a specialisation whose dropped terms and whose
+undifferentiated $C_0$ are both safe only where $C_0\approx C_2\approx0$.*
+
+Measured: dropping $C_0$ from the CDM frame recovers the Newtonian answer to
+**1–15%** from **53–6868×**, on all three backgrounds (T-60's table).
+
+### A hypothesis tested and refuted, kept because it was tested
+
+(102) is the manuscript's (93) with its last two lines dropped --- *"we can
+effectively drop the last two lines of (93) except for the initial baryon
+velocity contribution"*. Those lines are
+
+$$\int(\kappa'e^{-\kappa})\big[C_1-2C_2\big]j_\ell
+\quad\text{and}\quad
+\int\big((\kappa')^2-\kappa''\big)e^{-\kappa}\,C_2\,j_\ell .$$
+
+Both carry $C_1$ and $C_2$, so the obvious hypothesis was that **they are the
+counterweight** and that restoring them would close the frame gap.
+**They are not.** Restored, on `PLANCK_MODEL` against the Newtonian total:
+
+| $k$ | (102) as shipped | + line 3 | + lines 3 and 4 |
+|---|---|---|---|
+| 1 | 0.128 | 0.196 | 1.725 |
+| 20 | 72.17 | 71.49 | 71.61 |
+| 140 | 1473.3 | 1474.5 | 1474.7 |
+| 300 | 3686.9 | 3686.8 | 3686.8 |
+
+Unmoved at every $k$ above 1, and *worse* at $k=1$. The frame gap is not the
+dropped lines; it is the surviving $C_0$. **Recorded because a refuted
+hypothesis that leaves no trace gets formed again** --- it is the same argument
+`acoustic_start='z_max'` and `use_printed_c0` are kept under.
+
+### What this does and does not license
+
+It does **not** license deleting $C_0$ from `match_coefficients`: $C_0$ is
+correct there, it is (89)'s own solution, and **B-11** is a live question about
+its sign. What it licenses is a question about `integral_solution`'s
+**integrand**, which is **Q14**, now answered in favour of reading (1) with a
+mechanism rather than an assertion. The change belongs behind a named control,
+the way every other departure in this bundle does.

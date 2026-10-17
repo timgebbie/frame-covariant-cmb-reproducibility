@@ -1040,3 +1040,40 @@ is what this question needs.
 **It is worth 5b's published number**, so it is the PI's call: the two
 constructions differ by $6\times10^{-3}$ of the row's scale, and criterion 5b
 currently reports $8\times10^{-6}$ under one of them.
+
+
+---
+
+## Q14 — should $C_0$ enter the line-of-sight integrand at all?
+
+**Opened 2026-10-17** by **T-60**, which measured that it is three to four
+orders of magnitude of the CDM frame's spectrum and the whole of the frame gap.
+
+$C_0$ is the coefficient of (89)'s $\delta_{\ell0}$ entry. The covariant
+hierarchy has no $\ell=0$: *Annals II* p. 366 says so in one sentence, and
+`integral_solution` refuses $\ell<1$ independently. `integral_solution`
+nonetheless sums $C_0$ into the source bracket at every $\ell\ge2$, where
+$C_0=p_0a\mathcal B_2$ against $C_2=p_2a\mathcal B_2/k^2$ makes it larger by
+$2.5k^2$.
+
+**Three readings, and this bundle has not established which is right.**
+
+1. **$C_0$ belongs only at $\ell=0$ and contributes nothing.** Then the
+   Newtonian frame is right by construction ($C_0\equiv0$ there) and the CDM
+   frame is right once it is dropped — which is what the measurement shows, to
+   1–15%. The attraction of this reading is that it needs no new physics and
+   it is what the quoted sentence says.
+2. **$C_0$ belongs in the integrand and (102) is transcribed correctly**, in
+   which case the frames genuinely disagree by three orders of magnitude and
+   the almost-EGS argument of Appendix E is in trouble, because a
+   frame-dependent $C_\ell$ is not an observable.
+3. **$C_0$ belongs but with (89)'s printed sign**, which is **B-11** — already
+   recorded, already controlled by `use_printed_c0`, and **about the sign of
+   this same coefficient**. B-11 questioned the sign and nobody questioned the
+   placement.
+
+**This is a question about the antecedent, not about the code**, and it needs
+(89) and (90) read against each other on the page rather than another
+measurement here. It is the first thing to settle in the frame sector and it
+gates **S44** — which frame F9 draws is not answerable while one of them is
+carrying a term that may not exist.
