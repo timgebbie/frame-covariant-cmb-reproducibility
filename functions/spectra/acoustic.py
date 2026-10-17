@@ -59,7 +59,31 @@ __all__ = [
     "sachs_wolfe_at_last_scattering",
     "sachs_wolfe_at_last_scattering_printed",
     "ADIABATIC_MONOPOLE",
+    "TIGHT_COUPLING_FACTOR",
 ]
+
+#: Where the tight-coupling oscillator stops and its last value is held: the
+#: integration runs to $\min(\eta_0,\;\texttt{TIGHT\_COUPLING\_FACTOR}\,\eta_*)$.
+#:
+#: **Finding T-58, and it lives here because it was living in three places.**
+#: `pipeline.run` took it as a parameter defaulting to 6.0, `two_frame` kept a
+#: module constant commented *"as `pipeline.run` sets it"*, and
+#: `two_route.two_route_transfer` integrated the oscillator all the way to
+#: $\eta_0$ --- so **the route criterion 5b gates was the one that did not
+#: have the window at all**, and kept the photon--baryon fluid ringing for
+#: seven times the span over which it is a fluid.
+#:
+#: 5b could not see it: both its columns are built from one acoustic solve, so
+#: they share the window whatever it is. **T-3's rule, on a third quantity.**
+#: Measured on `PLANCK_MODEL`, `two_frame` against `two_route`'s (177)--(179)
+#: column, normalised by the row's own scale as `TwoRoute.relative` is: the
+#: mismatched window alone costs $1.5\times10^{-1}$ at $k=3$ and
+#: $1.6\times10^{0}$ at $k=10$, against 5b's own $5\times10^{-8}$.
+#:
+#: Six is not derived and is not claimed to be. It is the one number here that
+#: is a modelling choice --- where tight coupling ends --- and it is now a
+#: single modelling choice rather than three.
+TIGHT_COUPLING_FACTOR = 6.0
 
 #: Samples used to accumulate $r_s$ from the big bang. **Logarithmic, and that
 #: is not a style choice**: $c_s\to1/\sqrt3$ as $\eta\to0$ while the span to

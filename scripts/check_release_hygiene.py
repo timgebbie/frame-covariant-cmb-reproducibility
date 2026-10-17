@@ -25,7 +25,7 @@ uniformly LF. *A byte-level gate that assumes one byte per character cannot see
 a wide encoding at all.* The rest of that script's checks are `.py`-only, so
 nothing else looked.
 
-Two checks here, and the first of them closes that hole:
+Four checks here, and the first of them closes that hole:
 
 1. **Every text file decodes as UTF-8 and contains no NUL byte.** This catches
    UTF-16 and UTF-32 with or without a BOM, and any binary that arrives under a
@@ -40,6 +40,13 @@ Two checks here, and the first of them closes that hole:
    were written literally into five files, which is why repointing the build
    left two of them behind. `scripts/_versions.py` derives all three from the
    README header; this refuses a string literal that goes around it.
+4. **Every released caller of `build_environment` names its line-of-sight
+   weight.** Added for **T-57**, where a field's documentation said one default
+   and the code said the other, and eight figures and diagnostics ran for
+   eleven days under the weighting approximation **A-2** says this bundle
+   departs from. *The other three checks compare a file to a rule; this one
+   compares a decision to its implementation*, which is the class of defect
+   that had no instrument at all.
 
 **What this deliberately does not check, and why.** An earlier draft also
 refused any two bundle files that are byte-identical under different version
@@ -187,11 +194,69 @@ def check_no_hardcoded_names(failures: list[str]) -> int:
     return scanned
 
 
+def check_weight_is_stated(failures: list[str]) -> int:
+    r"""Every released caller of `build_environment` names its line-of-sight weight.
+
+    **Finding T-57.** Approximation **A-1** records the governance rule in
+    words --- *"Both weightings implemented; the caller states which"* --- and
+    for eleven days no caller stated it. `TwoFrameEnvironment`'s own field
+    documentation said *"`"opacity"` is therefore the default"* while the line
+    under it read ``= "printed"``, so all eight released callers silently took
+    $\mathcal V=\kappa'e^{-\kappa}$: the weighting **A-2** says this bundle
+    departs from, and under which the rank-one Doppler sector is 100.5% of the
+    transfer at every $2\le\ell\le100$ and there is no Sachs--Wolfe plateau.
+
+    **The gap was between prose and a default, so no gate could see it.** The
+    manifests hash content, `check_portability` reads bytes, the regression
+    suite compares a route against itself, and criterion 5b holds the weight
+    *fixed on both sides* and therefore cannot see which one it fixed. Nothing
+    in the bundle compared a decision to its implementation, because a decision
+    recorded only in English is not comparable to anything.
+
+    This is the smallest instrument that would have caught it: make the
+    argument appear at the call site, where a reader of F9 can see which
+    approximation F9 ran under without opening `two_frame.py`. It is the same
+    move as `Weighting` having no default in `pipeline.run` and `weight` having
+    none in `integral_solution`, applied to the one entry point that was
+    written after those and did not inherit the habit.
+    """
+    stated = 0
+    for path in sorted(bundle_files(ROOT)):
+        rel = path.relative_to(ROOT).as_posix()
+        if path.suffix != ".py" or not rel.startswith("scripts/"):
+            continue
+        try:
+            tree = ast.parse(path.read_text(encoding="utf-8"), filename=rel)
+        except (UnicodeDecodeError, SyntaxError, ValueError):
+            continue        # already reported by `check_encoding`
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.Call):
+                continue
+            func = node.func
+            name = (func.id if isinstance(func, ast.Name)
+                    else func.attr if isinstance(func, ast.Attribute) else None)
+            if name != "build_environment":
+                continue
+            if any(kw.arg == "line_of_sight_weight" for kw in node.keywords):
+                stated += 1
+                continue
+            failures.append(
+                f"{rel}:{node.lineno}: calls build_environment without naming "
+                "line_of_sight_weight, so it takes the default and the figure "
+                "does not say which approximation it ran under. A-1 requires "
+                "the caller to state it; T-57 is what happened when nothing "
+                "enforced that. Pass line_of_sight_weight='opacity' (e^-kappa, "
+                "as (98) prints it and A-2 adopts) or ='printed' (V, as (178) "
+                "prints it) deliberately.")
+    return stated
+
+
 def main() -> int:
     failures: list[str] = []
     checked = check_encoding(failures)
     note = check_supplement_set(failures)
     scanned = check_no_hardcoded_names(failures)
+    stated = check_weight_is_stated(failures)
 
     if failures:
         print(f"FAIL  {len(failures)} release-hygiene problem(s):")
@@ -206,6 +271,8 @@ def main() -> int:
     print(f"PASS  {checked} text files are UTF-8 with no NUL bytes; "
           f"{scanned} scripts name no supplement directly")
     print(note)
+    print(f"      {stated} released callers of build_environment name their "
+          f"line-of-sight weight (A-1, T-57).")
     return 0
 
 

@@ -69,7 +69,7 @@ PLANCK = {"omega_b_h2": 0.02237, "omega_c_h2": 0.1200, "z_star": 1089.92}
 
 
 def report() -> list[str]:
-    env = build_environment(float(max(K_COM)))
+    env = build_environment(float(max(K_COM)), line_of_sight_weight="opacity")
     eta, eta_star, bg, a = env.eta, env.eta_star, env.background, env.a
 
     omega_m = H0**2

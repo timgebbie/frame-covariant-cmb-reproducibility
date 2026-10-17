@@ -22,6 +22,14 @@ that stops reproducing the paper. That nearly happened here: see A-1.
 **Status: faithful to the source. Both weightings implemented; the caller states
 which.** Raised by Coordination, 2026-10-06, correcting this stream.
 
+> **Amended 2026-10-17, finding T-57.** *"The caller states which"* was a rule
+> in English and nothing enforced it. For eleven days **no** released caller
+> named the weight, and the default they silently took was
+> $\mathcal V$ — the one A-2 below says this bundle departs from.
+> `scripts/check_release_hygiene.py` now walks the AST of every released script
+> and refuses a release in which any caller of `build_environment` omits the
+> argument. The rule is unchanged; it is now executable.
+
 Equations (178) and (179) weight the integrated sources with the visibility
 function $\mathcal V=\kappa'e^{-\kappa}$ (§5.2) rather than with the opacity
 $e^{-\kappa}$.
@@ -83,6 +91,16 @@ designed to catch.
 
 **Status: this bundle uses (98)'s weighting for the integrated terms. Found
 2026-10-06 by computing the spectrum; it is not visible in the equations.**
+
+> **Amended 2026-10-17, finding T-57.** That status was true of `pipeline` and
+> `two_route` and **false of `two_frame`**, which was written afterwards,
+> defaulted to $\mathcal V$, and is the path behind F2, F5, F7, F9, D6, D7 and
+> `compare_criterion_5b`. Re-measured through that path on `PLANCK_MODEL`: the
+> rank-one Doppler sector is $1.005$ of $C_\ell$ under $\mathcal V$ and
+> $0.0014$ under $e^{-\kappa}$, at every $2\le\ell\le100$ — an independent
+> reproduction of the table below, through a different route, eleven days
+> later. **A decision recorded for the bundle was in force in two of its three
+> routes.** `diagnostic_d4_monopole.py` now measures it on every harness run.
 
 A-1 records that *Annals II* weights the integrated sources with the visibility
 $\mathcal V=\kappa'e^{-\kappa}$ by deliberate choice, and that this cannot carry
@@ -191,3 +209,90 @@ B+\dot\tau_{(n-1)}+e^a\mathrm{D}_a\tau_{(n-1)}]$, carried to second order and
 written covariantly — is the frame-covariant object to set against it. That is
 **S35a**'s comparison, and A-3 is now the specific quantity it has to measure
 rather than an open question about the whole acoustic sector.
+
+## A-4 — the shear coupling is dropped from the oscillator by §5.5's ordering, and the bundle never said so
+
+**Status: this bundle reproduces the antecedent. Named 2026-10-16, on the PI's
+question "why in the CDM threading do we not quote the shear coupling?" — and
+the answer to that question is §5.5.**
+
+### The term, and where it goes
+
+The radiation quadrupole is *entirely* the matter shear. §7.1's near-tight-coupling
+set prints
+
+    tau_ab  ~=  -kappa'^-1 [ sigma_ab + D_<a v_b>^B ]           (L0081)
+
+— *"so the quadrupole is given entirely by the shear of the matter"* — and the
+dipole equation carries its divergence, $+\tfrac25\mathrm{D}^c\tau_{ac}$ (L002).
+Carried through the substitution, the momentum flux equation reads
+
+    -tau-dot_a ~= u-dot_a + (1/(1+R)) D_a ln T + (R-dot/(1+R)) tau_a
+                  - (2/5) (kappa'^-1/(1+R)) D^b D_<a u^m_b>
+
+and the paper then states: *"the last term has been written in terms of the
+matter shear. We can now consider the situation where $\dot\kappa^{-1}$ becomes
+sufficiently small (but non-zero) so that the last term can be ignored. **This
+is possible as the matter shear is already at least first order.**"* What
+survives is **(mom-flux)**, cited there against Hu \& Sugiyama (B2b), and
+(mom-flux) is what (152)/(153) are — which is what
+`functions.spectra.acoustic.solve_acoustic` integrates.
+
+### Why it is an ordering and not an omission — §5.5, *Linearisations, Approximations and Scales*
+
+**§5.5** sets out four linearisation schemes, and the dropped term is a product
+across two of them:
+
+| | scheme | the factor it orders |
+|---|---|---|
+| **§5.5.1** | *Almost-Friedmann–Lemaître Linearisation*: drop $\mathcal O(\epsilon^2)$ | $\sigma_{ab}$, $A_a$, $\mathrm D_a\Theta$ are **$\mathcal O(\epsilon)$** |
+| **§5.5.3** | *Expansion in Thompson Scattering Time*, $t_c=(\sigma_Tn_e)^{-1}$, *"terms up to $\mathcal O(t_c^3)$"* | $\dot\kappa^{-1}\sim t_c$ is **first order** |
+
+So the shear coupling is $\mathcal O(t_c\,\epsilon)$ — a **cross term between two
+independent smallness parameters** — and both §5.5.2's *Matter Dominated Linearisation*
+($\mathcal O(\epsilon v,\eta\epsilon,\dots)$ dropped) and §5.5.4's *Small and Large Scales* ($\mathcal O(\epsilon\epsilon_H,v\epsilon,\dots)$ dropped) discard exactly
+that shape. **The paper's one-line justification is §5.5 applied, not an
+appeal to smallness in general.**
+
+### What is wrong here, which is the bundle and not the paper
+
+**Nothing in this bundle records that a term was dropped.** `acoustic.py`
+implements the pair and recovers (154) from it; `expansion_coupling=False`
+makes the *small-scale* approximation measurable, which is §5.5.4, *Small and Large Scales*. The
+$\mathcal O(t_c\epsilon)$ shear coupling has no such switch, no entry here, and
+**no trace in the code at all** — a reader of `solve_acoustic` cannot tell that
+(mom-flux) is a post-drop form. A-1, A-2 and A-3 each name a choice the bundle
+makes about a *weight* or a *driving*; this is the only place a **dynamical
+term** is discarded, and it was the only one unnamed.
+
+It is easy to miss for a specific reason: **its effect is in the bundle, under
+another name.** The quadrupole's consequence — diffusion damping — is
+reinstated analytically as $e^{-(k/k_D)^2}$, and `quadrupole_from_f2` carries
+$\tfrac45f_2^{-1}$ with the paper's $f_2=\tfrac9{10}$ and $\tfrac34$ (**S31a**).
+So the term is dropped from the *dynamics* and restored as an *envelope*, and
+the record discussed the envelope's coefficient at length while never saying
+what the envelope stands in for. **A term whose effect is modelled elsewhere is
+the hardest kind to notice missing.**
+
+### Why it matters here and not only in principle
+
+$\mathcal O(t_c\epsilon)$ is dropped because $\sigma_{ab}$ is $\mathcal O(\epsilon)$.
+**This project is the one that stops assuming that.** **S2**'s $\mathcal
+O(\varepsilon^2\ell)$ work at v1.5.0 keeps exactly the cross terms §5.5 discards,
+and the shear is the quantity it keeps them in — the repository is called
+`NonlinearShear` for that reason. So the shear coupling is not a curiosity of
+the linear bundle: **it is the first term v1.5.0 has to put back**, and the
+place to put it back is (L002)'s $\tfrac25\mathrm D^c\tau_{ac}$ with (L0081)
+for $\tau_{ab}$.
+
+Two further consequences worth having on the record now:
+
+* §5.5.3 bounds the scattering-strength expansion at $\mathcal O(t_c^3)$, which
+  is what licenses **Appendix C**'s $\tau_{(2)}$ and says where it stops. The
+  second-order velocity expansion has the paper's own ceiling.
+* $\sigma_{ab}$ is already computed in this bundle — `cdm_frame_shear` returns
+  $\sigma$, $\dot\sigma$, $\ddot\sigma$ for the CDM frame's rank-two sector, and
+  `cdm_set` holds Appendix G's $\dot\sigma$ against the Euler equation at
+  $10^{-9}$. **The quantity the oscillator would need is present and verified;
+  it simply never enters the dynamics.** Putting it back is a smaller step than
+  it looks.

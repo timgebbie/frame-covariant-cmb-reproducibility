@@ -55,6 +55,7 @@ from scipy.interpolate import CubicSpline
 
 from functions.background.flrw import LCDM_MODEL, Background
 from functions.spectra.acoustic import (
+    TIGHT_COUPLING_FACTOR,
     acoustic_start_eta,
     required_acoustic_points,
     solve_acoustic,
@@ -64,7 +65,10 @@ from functions.spectra.bessel_table import BesselTable
 from functions.spectra.coefficients import newtonian_c1_prime, newtonian_coefficients
 from functions.spectra.decoupling import RecombinationHistory, diffusion_scale
 from functions.spectra.integral_solution import integral_solution, required_multipoles
-from functions.spectra.pipeline import required_n_eta
+from functions.spectra.pipeline import (
+    N_ETA_FLOOR as PIPELINE_N_ETA_FLOOR,
+    required_n_eta,
+)
 from functions.spectra.potentials import matter_domination_eta, potentials
 from functions.spectra.sources import (
     PUBLISHED_ISW_SIGN,
@@ -77,25 +81,11 @@ from functions.spectra.sources import (
 
 __all__ = ["TwoRoute", "two_route_transfer"]
 
-#: Floor on the $\eta$ grid. The grid itself is **derived from $k$** by
-#: `required_n_eta`, never fixed.
-#:
-#: It was fixed, at this value, and that was wrong --- finding **T-45**. Both
-#: routes integrate $j_\ell(k(\eta_0-\eta))$ over the same grid, so the
-#: temptation is to call the grid a shared input that cancels. It does not
-#: cancel: the two routes group the integrand differently, (102) carrying $C_A$
-#: with boundary terms $c_1'$ and $c_2''$ where (177)--(179) carries a primary
-#: term plus one line-of-sight integral, and under-resolved oscillations alias
-#: the two groupings differently. At $k=600$ on 4000 points the difference ran
-#: $2.2\times10^{-4}$, and *refining* to 8000 made it $9.6\times10^{-4}$ ---
-#: non-monotone, which is the signature of aliasing rather than of convergence,
-#: and within a factor of 1.04 of the gate. `required_n_eta` asks for 7300 points
-#: at that mode.
-#:
-#: **This is finding T-3 committed by the script that cites T-3**: a coarse grid
-#: returning a plausible number. The grid is arithmetic from $k$ here as it is
-#: everywhere else in this bundle.
-N_ETA_FLOOR = 8000
+#: Floor on the $\eta$ grid. **Re-exported, not defined here** --- finding
+#: **T-58**: `two_frame` never had this floor and that was most of what was
+#: left of **Q12**. `functions.spectra.pipeline` now owns it, beside the
+#: `required_n_eta` whose rate it floors, and carries T-45's measurement.
+N_ETA_FLOOR = PIPELINE_N_ETA_FLOOR
 
 #: Samples per oscillation, and **four times what the $C_\ell$ route uses**.
 #:
@@ -222,7 +212,7 @@ def two_route_transfer(
     # algebra on the physics the bundle actually computes.
     eta_rs, r_s_table = sound_horizon_from_zero(
         bg, float(rec.eta_star), omega_b_h2=omega_b_h2)
-    md_reference = matter_domination_eta(bg) or float(rec.eta[0])
+    md_reference = float(rec.eta[0])
     phi_a, phi_h = potentials(bg, eta, constant_below=md_reference)
     aH = bg.conformal_hubble(bg.a_of_eta(eta))
     kp = np.interp(eta, rec.eta, rec.kappa_prime)
@@ -230,9 +220,19 @@ def two_route_transfer(
     opa = np.interp(eta, rec.eta, rec.opacity)
     k_d = float(diffusion_scale(rec, r_of_eta=rec.kappa_prime * 0.0)(rec.eta_star))
 
+    # **T-58.** This read `float(eta[-1])` --- $\eta_0$ --- until 2026-10-17,
+    # so the gate's acoustic solve kept the photon-baryon fluid oscillating for
+    # 7.6x the span over which it is a fluid, while `pipeline.run` and
+    # `two_frame` both stopped at `TIGHT_COUPLING_FACTOR * eta_star` and held
+    # the last value. **The route that gates criterion 5b was the one route
+    # without a tight-coupling window.** 5b could not see it because both its
+    # columns are built from this one solve and shared it; measured against
+    # `two_frame`, the mismatch alone cost 1.5e-01 at k=3 and 1.6e+00 at k=10,
+    # against 5b's own 5e-08.
+    eta_couple = min(float(bg.eta_0), TIGHT_COUPLING_FACTOR * float(rec.eta_star))
     start = acoustic_start_eta(float(k), eta_rs, r_s_table)
     mode_eta = np.linspace(
-        start, float(eta[-1]), max(int(n_eta), required_acoustic_points(float(k), float(eta[-1]) - start)))
+        start, eta_couple, max(int(n_eta), required_acoustic_points(float(k), eta_couple - start)))
     mode_a, mode_h = potentials(bg, mode_eta, constant_below=md_reference)
     ac = solve_acoustic(k, mode_eta, background=bg, phi_a=mode_a, phi_h=mode_h,
                         omega_b_h2=omega_b_h2, expansion_coupling=False)

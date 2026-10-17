@@ -89,8 +89,11 @@ from functions.spectra.sources import (
 
 __all__ = [
     "ETA_POINTS_PER_PERIOD",
+    "K_POINTS_PER_PERIOD",
+    "N_ETA_FLOOR",
     "SpectrumRun",
     "primordial_power",
+    "required_k_points",
     "required_n_eta",
     "run",
 ]
@@ -103,6 +106,30 @@ __all__ = [
 ETA_POINTS_PER_PERIOD = 12
 
 
+#: Floor on the $\eta$ grid, under the rate `required_n_eta` derives from $k$.
+#:
+#: **Finding T-45 put it in `two_route`; finding T-58 moved it here.** The rate
+#: is arithmetic from $k$ and the floor is not: it exists because the
+#: *recombination* structure, not the $j_\ell$ oscillation, sets the sampling
+#: the integrand actually needs near $\eta_*$, and nothing in this bundle yet
+#: derives that. T-45 measured the consequence of going without it --- at
+#: $k=600$ the two routes differed by $2.2\times10^{-4}$ on 4000 points and
+#: $9.6\times10^{-4}$ on 8000, *non-monotone*, which is aliasing rather than
+#: convergence.
+#:
+#: **`two_frame` never had it**, and that is most of what was left of **Q12**
+#: once the window and the lower limit were settled: with its grid taken from
+#: `k_max` alone it sat at $2.4\times10^{-1}$ against `two_route`'s
+#: (177)--(179) column at $k=10$, and at $5.9\times10^{-3}$ once the floor was
+#: applied --- a factor of forty from one number neither route was deriving.
+#:
+#: It is a **stand-in for S33**, which derives the recombination grid and
+#: $\eta_*$ from the visibility rather than fixing either, and it should be
+#: deleted the day S33 lands. Until then it is one hand-set number in one
+#: place, which is the most that can honestly be said for it.
+N_ETA_FLOOR = 8000
+
+
 def required_n_eta(
     k_max: float, eta_span: float, *, points_per_period: int = ETA_POINTS_PER_PERIOD
 ) -> int:
@@ -112,6 +139,77 @@ def required_n_eta(
     the band edge takes `points_per_period` samples per $\\pi/k_{\\max}$ across
     the whole span. This is arithmetic, not a tuning knob, which is why it is
     computed rather than configured.
+    """
+    if k_max <= 0.0 or eta_span <= 0.0:
+        raise ValueError("k_max and eta_span must be positive")
+    return int(np.ceil(points_per_period * k_max * eta_span / np.pi))
+
+
+#: Samples per $j_\ell^2$ oscillation the **$k$** grid must carry. Three, and
+#: **not** the twelve above, because the two grids integrate the same kernel
+#: against different companions and the arithmetic says so rather than taste.
+#:
+#: The $\eta$ grid integrates $j_\ell$ against a source that itself oscillates,
+#: so phase error accumulates along the line of sight and T-3 happened at 2.3.
+#: The $k$ grid integrates $j_\ell^{\,2}$ --- sign-definite, against a smooth
+#: $k^2\mathcal P(k)$ --- so the trapezoid converges far faster. Measured
+#: against the closed form in `required_k_points`, on `PLANCK_MODEL`:
+#:
+#:     samples per period   1.92     3.84     7.67
+#:     worst error, l<=400  0.4%     0.4%     0.4%
+#:     worst error, l<=200  0.1%     0.1%     0.1%
+#:
+#: Flat from Nyquist upward: the residual at $\ell\ge600$ is the $k_{\max}$
+#: truncation of **T-32**, not $dk$. Three is Nyquist plus half, which buys
+#: nothing measurable and costs 50% --- it is there because the margin is what
+#: separates a derived grid from a grid that was measured once and got lucky.
+K_POINTS_PER_PERIOD = 3
+
+
+def required_k_points(
+    k_max: float, eta_span: float, *, points_per_period: int = K_POINTS_PER_PERIOD
+) -> int:
+    r"""How many $k$ samples $C_\ell=\int dk\,k^2\mathcal P|T_\ell|^2$ needs.
+
+    **Finding T-56, and it is `required_n_eta` read along the other axis.**
+    One kernel, $j_\ell(k\,\Delta\eta)$, is sampled on two grids: at fixed $k$
+    across $\eta$, which is the function above, and at fixed $\Delta\eta$
+    across $k$, which is this one. In $k$ the period of $j_\ell$ is
+    $2\pi/\Delta\eta$ and the spectrum integrates its **square**, so the
+    period that must be resolved is $\pi/\Delta\eta$ and
+
+    $$dk\;\le\;\frac{\pi}{\texttt{points\_per\_period}\;\Delta\eta},
+      \qquad n_k\;\ge\;\frac{\texttt{points\_per\_period}\,k_{\max}\Delta\eta}
+      {\pi},$$
+
+    which is the formula above with $\Delta\eta$ in place of the $\eta$ span.
+    **The bundle derived one of the two and set the other by hand.** F9 shipped
+    `np.arange(0.05, 1500.0, np.pi/3)` with a comment arguing, correctly, that
+    a *logarithmic* grid aliases --- and then chose the linear spacing without
+    asking what it had to resolve. On $\Lambda$CDM and `PLANCK_MODEL`, where
+    $\Delta\eta\simeq3.13$, that is **0.94--0.96 samples per oscillation**:
+    below one. On Einstein--de Sitter, $\Delta\eta\simeq1.94$, it is 1.55 and
+    the figure looked plausible, which is why it survived.
+
+    **The acceptance is a closed form, not a convergence study.** For a pure
+    Sachs--Wolfe transfer $T_\ell=j_\ell(k\Delta\eta)$ at $n_s=1$, where
+    $\mathcal P\propto k^{-3}$,
+
+    $$\int_0^\infty\!dk\;k^2\mathcal P(k)\,j_\ell^2(k\Delta\eta)
+      \;=\;\int_0^\infty\!\frac{dk}{k}\,j_\ell^2(k\Delta\eta)
+      \;=\;\frac{1}{2\ell(\ell+1)},$$
+
+    independent of $\Delta\eta$. So the quadrature can be checked against an
+    exact number at every $\ell$ with no physics in the comparison at all, and
+    `tests/test_k_grid.py` does, including on F9's shipped grid, where the
+    error reaches **22.5%** at $\ell=2$ and is non-monotonic in $\ell$ --- a
+    spurious $\pm5\%$ ripple that moves peaks and moves them differently in
+    each route, because each route's $T_\ell(k)$ aliases differently.
+
+    `eta_span` is the **largest** $\Delta\eta=\eta_0-\eta$ the integrand
+    reaches, so $\eta_0-\eta_*$ is the floor and $\eta_0-\eta_{\text{start}}$
+    is the conservative choice; passing the smaller under-resolves the early
+    part of the line-of-sight integral.
     """
     if k_max <= 0.0 or eta_span <= 0.0:
         raise ValueError("k_max and eta_span must be positive")
@@ -289,20 +387,36 @@ def run(
     derived_start = acoustic_start == "derived"
 
     # **One reference for Phi_A, shared by every mode** --- see `potentials`.
-    # Equality for a background with radiation; for Omega_r = 0 there is no
-    # equality and the recombination grid's own start serves.
+    # The recombination grid's own first point, for **every** background.
     #
-    # **Not the r_s table's floor, and finding T-52 is why.** That floor is
-    # 1e-9, and `growth_factor` started there integrates an explicit ODE with
-    # aH ~ 2e9 and a source ~ 1e18: for Einstein--de Sitter, where D = a
-    # exactly and Phi_A must be 1.0 everywhere, it returns **1.58e-06**. Every
-    # amplitude would have been rescaled by six orders of magnitude, silently,
-    # and the only thing that caught it was the deliberately-failing control
-    # half of T-42's test. A reference must be somewhere the integration it
-    # starts is well posed, and 1e-9 is not.
+    # **It was matter-radiation equality for a background with radiation, and
+    # that was wrong twice over --- finding T-55.** Wrong physically, because
+    # `growth_factor` starts from D = a, the matter-domination growing mode,
+    # and at equality the universe is half radiation, so the integration opens
+    # on a transient. Wrong numerically, because `coefficients.cdm_set` holds
+    # Appendix G's sigma-dot against the Euler equation at rtol=1e-9 over every
+    # eta including those first points, and the transient sits exactly there:
+    # it passed on Linux and **failed on the PI's Windows machine**, from
+    # nothing but DOP853 choosing different steps.
+    #
+    # And unnecessary. `constant_below` exists so that a mode starting at 1e-4
+    # and the common grid starting at 0.033 share one Phi_A(0,k); any fixed eta
+    # does that, and Phi is held CONSTANT below it either way --- which is the
+    # antecedent's own result, Phi_E time-independent for K=0 dust (Appendix G).
+    # Taking the grid's first point makes the common-grid potentials
+    # bit-identical to the pre-T-51 ones on every background, so **no released
+    # number moves for this reason**, only for T-51's.
+    #
+    # `matter_domination_eta` remains, as the diagnostic that measures A-3's
+    # marginality --- rho_M/rho_R = 5.16 at last scattering for Planck
+    # parameters --- and is no longer an input to anything computed.
+    md_reference = float(recombination.eta[0])
+
+    # r_s from the big bang: what `acoustic_start_eta` reads to place each
+    # mode's start, and the quantity the antecedent's own peak-spacing formula
+    # is written in. T-51.
     eta_rs, r_s_table = sound_horizon_from_zero(
         background, float(recombination.eta_star), omega_b_h2=omega_b_h2)
-    md_reference = matter_domination_eta(background) or float(recombination.eta[0])
 
     eta = np.linspace(recombination.eta[0], background.eta_0, n_eta)
     phi_a, phi_h = (potentials(background, eta, constant_below=md_reference)

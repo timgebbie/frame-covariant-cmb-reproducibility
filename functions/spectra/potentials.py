@@ -74,14 +74,6 @@ def growth_factor(background: Background, eta: np.ndarray) -> np.ndarray:
     return solution.y[0]
 
 
-#: Samples on `potentials`' internal growth grid. Logarithmic, because it spans
-#: from the acoustic start to today --- up to nine decades. `index` in the grid
-#: register: it carries no physical scale of its own, it resamples a quantity
-#: whose scale is set elsewhere, and the convergence stated there is that
-#: $\Phi_A(\eta_*)$ agrees to nine figures between 4096 and 16384.
-GROWTH_SAMPLES = 8192
-
-
 def matter_domination_eta(background: Background, *, ratio: float = 1.0) -> float:
     r"""The $\eta$ at which $\rho_M/\rho_R=$ `ratio`, or 0 when there is no radiation.
 
@@ -156,27 +148,54 @@ def potentials(
         phi_a = amplitude * phi / phi[0]
         return phi_a, -phi_a
 
-    # **Computed on its own grid, so the answer does not depend on the caller's.**
-    # The legacy branch above normalises at `eta[0]`, which means two callers
-    # asking for the same $\Phi_A(\eta)$ on two different grids get two
-    # different answers --- harmless while every grid began at the same place
-    # and fatal the moment the acoustic start became per-mode. Below,
-    # `constant_below` is the only thing that sets the normalisation, so every
-    # mode in a run shares one $\Phi_A(0,k)$ however early it starts.
     reference = float(constant_below)
     if not reference > 0.0:
         raise ValueError("constant_below must be positive; the growth factor "
                          "divides by a(eta) and a(0) = 0")
-    top = float(max(eta.max(), reference * (1.0 + 1e-9)))
-    internal = np.logspace(np.log10(reference), np.log10(top), GROWTH_SAMPLES)
-    ratio = growth_factor(background, internal) / background.a_of_eta(internal)
-    shape = CubicSpline(internal, ratio / float(ratio[0]))
 
-    phi_a = amplitude * np.where(eta < reference, 1.0,
-                                 shape(np.clip(eta, reference, top)))
+    # **Solved on the requested points themselves, anchored at the reference.**
+    # No spline, and that is not a style preference. An earlier version
+    # integrated the growth factor on its own logarithmic grid and splined the
+    # result onto `eta`; the answer agreed to twelve figures and the
+    # *derivative* did not, and `coefficients.cdm_set` holds Appendix G's
+    # $\dot\sigma$ against the Euler equation at `rtol=1e-9`:
+    #
+    #     (a sigma)' = a' sigma + a^2 sigma-dot  ==  -k v'
+    #
+    # That is an **identity given the field equations**, so it holds for the
+    # true $\Phi_A$ and not for a spline of it --- the two sides pick up
+    # different interpolation errors and the frame stops closing. The guard
+    # refused the regeneration, which is exactly what a guard is for, and
+    # loosening it to accommodate a spline would have traded a check for a
+    # convenience.
+    #
+    # Prepending the reference costs one extra point and makes the result
+    # **grid-independent**: every caller anchors at the same eta, so a mode
+    # starting at 1e-4 and the common grid starting at 0.036 carry one
+    # Phi_A(0,k) between them --- which is what finding T-51's fix needs.
+    above = eta >= reference
+    if not above.any():
+        phi_a = np.full_like(eta, amplitude)
+        return phi_a, -phi_a
+
+    requested = eta[above]
+    prepend = float(requested[0]) > reference
+    grid = np.concatenate(([reference], requested)) if prepend else requested
+    if grid.size < 2:
+        grid = np.array([reference, float(background.eta_0)])
+        prepend = True
+
+    ratio = growth_factor(background, grid) / background.a_of_eta(grid)
+    shape = ratio / float(ratio[0])
+
+    phi_a = np.empty_like(eta)
+    phi_a[~above] = amplitude
+    phi_a[above] = amplitude * (shape[1:1 + requested.size] if prepend
+                                else shape[:requested.size])
     return phi_a, -phi_a
 
 
 def potential_derivative(eta: np.ndarray, phi: np.ndarray) -> np.ndarray:
     """d(Phi)/d(eta) by spline --- the quantity (179)'s ISW proper is built from."""
-    return CubicSpline(np.asarray(eta, dtype=float), np.asarray(phi, dtype=float)).derivative()(eta)
+    return CubicSpline(np.asarray(eta, dtype=float),
+                       np.asarray(phi, dtype=float)).derivative()(eta)

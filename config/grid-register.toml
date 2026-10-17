@@ -120,19 +120,6 @@ between 4096 and 16384 internal samples, and to twelve figures across input
 grids spanning three decades in their lower limit."""
 
 [[grid]]
-key = "functions/spectra/potentials.py::internal"
-what = "the growth factor's own grid, so Phi_A does not depend on the caller's"
-status = "measured"
-note = """`GROWTH_SAMPLES = 8192`, logarithmic from the matter-domination
-reference. **The point of it is independence, not resolution.** The legacy
-branch normalises Phi at `eta[0]`, so two callers asking for the same
-Phi_A(eta) on two different grids got two different answers --- harmless while
-every grid began at the same place, fatal the moment the acoustic start became
-per mode (**T-51**). Measured 2026-10-16: Phi_A(eta_*) = 0.829216181690 for
-PLANCK_MODEL at 4096, 8192 and 16384 samples, and the same twelve figures from
-input grids starting at 1e-5, 3e-4 and 2e-2."""
-
-[[grid]]
 key = "functions/spectra/pipeline.py::eta"
 what = "the line-of-sight integration grid for C_ell"
 status = "derived"
@@ -375,18 +362,6 @@ note = "`linspace(0, 180, 721)` --- a quarter-degree plotting abscissa. C(theta)
 # two new files, five new grids, and none of them would have been looked at.
 # ---------------------------------------------------------------------------
 [[grid]]
-key = "scripts/figure_f9_acoustic_spectrum.py::K_COM"
-what = "the k quadrature grid for the release's deliverable figure"
-status = "described"
-note = """`arange(0.05, 1500.0, pi/3)`, the same grid and the same rule as
-`compare_criterion_5b.py` --- linear, because a logarithmic k grid aliases the
-integrand at high k however many points it has, and to 1500 because at
-k_D=536.9 the envelope there is 2e-07, so the grid runs past the damping scale
-as **T-32** requires. Deliberately identical to the comparison's grid: F9 and
-the 5b table describe the same spectrum, and two grids would make them two
-spectra."""
-
-[[grid]]
 key = "scripts/figure_f9_acoustic_spectrum.py::ELLS"
 what = "the multipoles F9 is drawn at"
 status = "index"
@@ -415,3 +390,25 @@ key = "scripts/benchmark_single_run.py::THETA_DEG"
 what = "the angular abscissa the benchmark transforms onto"
 status = "index"
 note = "`linspace(0, 180, 721)`, a quarter-degree abscissa matching F4. It is in the benchmark because C(theta) is the deliverable a reader asks for; it costs 0.01 s, which is the point."
+
+[[grid]]
+key = "scripts/diagnostic_d4_monopole.py::k_com"
+what = "the k grid D4 integrates C_ell by rank on"
+status = "derived"
+note = """`required_k_points(K_MAX, r_theta)` at 3 samples per j_ell^2
+oscillation --- finding **T-56**, and the reason this row exists rather than a
+hand-set dk. D4 measures which RANK carries C_ell, and an aliased k integral
+mixes ranks by mixing scales, so a diagnostic about the rank decomposition is
+the last place a grid may be chosen by eye."""
+
+[[grid]]
+key = "scripts/figure_f9_acoustic_spectrum.py::k_com"
+what = "the k grid the released angular spectrum is integrated on"
+status = "derived"
+note = """`required_k_points(1500, r_theta)`, per background because r_theta is.
+**Was `np.arange(0.05, 1500.0, np.pi/3)` until 2026-10-17** --- 0.96 samples
+per j_ell^2 oscillation on PLANCK_MODEL and 0.94 on LambdaCDM, BELOW Nyquist,
+for a measured quadrature error of up to 22.5% against the closed form
+Int dk j_l^2/k = 1/(2 l (l+1)). Finding **T-56**: the eta grid was derived from
+the oscillation it resolves and the k grid never was, though it is the same
+kernel read along the other axis."""

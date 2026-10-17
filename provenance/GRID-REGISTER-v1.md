@@ -18,9 +18,9 @@ being possible.
 | status | count | means |
 |---|---|---|
 | **open** | 1 | a chosen literal whose convergence is **not** established. This status is the point of the register. |
-| **derived** | 7 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
-| **measured** | 6 | a chosen literal whose convergence has been measured, with the number stated. |
-| **described** | 11 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
+| **derived** | 9 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
+| **measured** | 5 | a chosen literal whose convergence has been measured, with the number stated. |
+| **described** | 10 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
 | **index** | 18 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
 
 ## open — 1
@@ -37,7 +37,7 @@ share this history, so a grid shift moves them together and cancels. Finding
 **T-46**, question **Q7**, decision **S33** --- derived immediately after the
 v1.2.0 tag. v1.2.0 ships it as a stated limit.
 
-## derived — 7
+## derived — 9
 
 ### `x` — the x grid j_ell(x) is tabulated on
 
@@ -51,7 +51,7 @@ finely.
 
 ### `eta` — the line-of-sight integration grid for C_ell
 
-`functions/spectra/pipeline.py:307`, `np.linspace`
+`functions/spectra/pipeline.py:421`, `np.linspace`
 
 `required_n_eta(k_max, span)` at 12 samples per j_ell oscillation, and
 `run` RAISES rather than accepting an n_eta below it --- *"Pass n_eta=None to
@@ -60,7 +60,7 @@ template the other rows are measured against.
 
 ### `mode_eta` — one acoustic mode's own integration grid, from its derived start
 
-`functions/spectra/pipeline.py:391`, `np.linspace`
+`functions/spectra/pipeline.py:505`, `np.linspace`
 
 `required_acoustic_points(k, eta_couple - start)` at 24 samples per
 acoustic oscillation, on a floor of 512. Arithmetic, not a knob: delta_T goes
@@ -73,7 +73,7 @@ spanning a factor of two thousand in k, which is why no number is chosen.
 
 ### `eta` — the eta grid for the two-frame evaluation of (102): F2, F5, F7
 
-`functions/spectra/two_frame.py:250`, `np.linspace`
+`functions/spectra/two_frame.py:281`, `np.linspace`
 
 `required_n_eta(k_max, span)` when `n_eta is None`, which is how every
 figure calls it, and `check_k` RAISES when a caller asks for a mode the grid
@@ -83,7 +83,7 @@ nothing in the bundle does.
 
 ### `mode_eta` — one acoustic mode's integration grid on the (102) generic-u^a route
 
-`functions/spectra/two_frame.py:331`, `np.linspace`
+`functions/spectra/two_frame.py:362`, `np.linspace`
 
 The same construction as `pipeline.py::mode_eta` and in the same
 release, because **T-51 had one instance per route**: `pipeline.run`,
@@ -96,7 +96,7 @@ and `acoustic_start_eta` are shared, so the three cannot drift apart again.
 
 ### `eta` — the eta grid for criterion 5b's gate, both routes
 
-`functions/spectra/two_route.py:214`, `np.linspace`
+`functions/spectra/two_route.py:204`, `np.linspace`
 
 `required_n_eta` at **48** samples per oscillation, four times the C_ell
 route's twelve, on a floor of 8000. The higher rate is not caution: this
@@ -121,7 +121,29 @@ half the sound horizon missing from both sides. Measured after the fix:
 that tests assembly algebra --- and is exactly why **S4c** says it cannot
 stand in for an external comparison.
 
-## measured — 6
+### `k_com` — the k grid D4 integrates C_ell by rank on
+
+`scripts/diagnostic_d4_monopole.py:95`, `np.linspace`
+
+`required_k_points(K_MAX, r_theta)` at 3 samples per j_ell^2
+oscillation --- finding **T-56**, and the reason this row exists rather than a
+hand-set dk. D4 measures which RANK carries C_ell, and an aliased k integral
+mixes ranks by mixing scales, so a diagnostic about the rank decomposition is
+the last place a grid may be chosen by eye.
+
+### `k_com` — the k grid the released angular spectrum is integrated on
+
+`scripts/figure_f9_acoustic_spectrum.py:126`, `np.linspace`
+
+`required_k_points(1500, r_theta)`, per background because r_theta is.
+**Was `np.arange(0.05, 1500.0, np.pi/3)` until 2026-10-17** --- 0.96 samples
+per j_ell^2 oscillation on PLANCK_MODEL and 0.94 on LambdaCDM, BELOW Nyquist,
+for a measured quadrature error of up to 22.5% against the closed form
+Int dk j_l^2/k = 1/(2 l (l+1)). Finding **T-56**: the eta grid was derived from
+the oscillation it resolves and the k grid never was, though it is the same
+kernel read along the other axis.
+
+## measured — 5
 
 ### `u` — the panel division of the conformal-time integral eta(a)
 
@@ -134,7 +156,7 @@ adaptive refinement restarts rather than the accuracy. Nothing rests on it.
 
 ### `eta` — the samples r_s(eta) = Int_0^eta c_s deta is accumulated on
 
-`functions/spectra/acoustic.py:139`, `np.logspace`
+`functions/spectra/acoustic.py:163`, `np.logspace`
 
 **Logarithmic, and that is not a style choice.** c_s -> 1/sqrt(3) as
 eta -> 0 while the span to eta_* covers five decades, so a uniform grid spends
@@ -159,19 +181,6 @@ this low can matter against the 51-64% that finding **T-51** is about.
 It feeds the same interpolation chain as the row above it, which is why it is
 measured rather than assumed.
 
-### `internal` — the growth factor's own grid, so Phi_A does not depend on the caller's
-
-`functions/spectra/potentials.py:171`, `np.logspace`
-
-`GROWTH_SAMPLES = 8192`, logarithmic from the matter-domination
-reference. **The point of it is independence, not resolution.** The legacy
-branch normalises Phi at `eta[0]`, so two callers asking for the same
-Phi_A(eta) on two different grids got two different answers --- harmless while
-every grid began at the same place, fatal the moment the acoustic start became
-per mode (**T-51**). Measured 2026-10-16: Phi_A(eta_*) = 0.829216181690 for
-PLANCK_MODEL at 4096, 8192 and 16384 samples, and the same twelve figures from
-input grids starting at 1e-5, 3e-4 and 2e-2.
-
 ### `eta` — the integration grid for the relative-sign control
 
 `scripts/diagnostic_d1_sign_control.py:66`, `np.linspace`
@@ -188,7 +197,7 @@ side of anything the grid could contribute.
 four external recursions match at 1e-13 to 1e-14 at scale exactly 1, which no
 under-resolved grid produces.
 
-## described — 11
+## described — 10
 
 ### `K_COM` — the k grid the cost benchmark is measured on
 
@@ -260,18 +269,6 @@ As F3, and deliberately the same grid: F6 reports RATIOS against the F3 configur
 
 As F2, raised to 1900 by finding T-32, with `check_k` guarding the probe modes after T-34.
 
-### `K_COM` — the k quadrature grid for the release's deliverable figure
-
-`scripts/figure_f9_acoustic_spectrum.py:84`, `np.arange`
-
-`arange(0.05, 1500.0, pi/3)`, the same grid and the same rule as
-`compare_criterion_5b.py` --- linear, because a logarithmic k grid aliases the
-integrand at high k however many points it has, and to 1500 because at
-k_D=536.9 the envelope there is 2e-07, so the grid runs past the damping scale
-as **T-32** requires. Deliberately identical to the comparison's grid: F9 and
-the 5b table describe the same spectrum, and two grids would make them two
-spectra.
-
 ## index — 18
 
 ### `phase` — the i^ell phase factor
@@ -294,7 +291,7 @@ Set by the transform length, not chosen. The FFT's own grid is the k grid of its
 
 ### `master` — the grid Phi_A and Phi_H are splined on, shared by every mode
 
-`functions/spectra/pipeline.py:382`, `np.logspace`
+`functions/spectra/pipeline.py:496`, `np.logspace`
 
 16384 logarithmic samples from the earliest acoustic start to
 eta_couple. **It carries no physical scale of its own**: it resamples a
@@ -383,7 +380,7 @@ Selection only, with the dipole prepended so the probe is on the figure.
 
 ### `ELLS` — the multipoles F9 is drawn at
 
-`scripts/figure_f9_acoustic_spectrum.py:78`, `np.arange`
+`scripts/figure_f9_acoustic_spectrum.py:81`, `np.arange`
 
 Linear at 30 across the acoustic band. Each ell is an independent
 quadrature, so this selects which points are drawn and changes no value ---

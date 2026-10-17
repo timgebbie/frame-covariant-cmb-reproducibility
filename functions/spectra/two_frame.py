@@ -37,6 +37,7 @@ import numpy as np
 
 from functions.background.flrw import Background
 from functions.spectra.acoustic import (
+    TIGHT_COUPLING_FACTOR as ACOUSTIC_TIGHT_COUPLING_FACTOR,
     acoustic_start_eta,
     required_acoustic_points,
     sound_horizon_from_zero,
@@ -57,7 +58,7 @@ from functions.spectra.decoupling import (
 )
 from functions.spectra.frame_transform import cdm_frame_shift
 from functions.spectra.integral_solution import integral_solution
-from functions.spectra.pipeline import required_n_eta
+from functions.spectra.pipeline import N_ETA_FLOOR, required_n_eta
 from functions.spectra.potentials import (
     matter_domination_eta,
     potential_derivative,
@@ -76,8 +77,10 @@ __all__ = [
     "transfer_by_rank",
 ]
 
-#: The tight-coupling window, as `pipeline.run` sets it.
-TIGHT_COUPLING_FACTOR = 6.0
+#: The tight-coupling window. **Re-exported, not defined here** --- finding
+#: **T-58**: it was defined in three places with three values, and
+#: `functions.spectra.acoustic` is now the one that has it.
+TIGHT_COUPLING_FACTOR = ACOUSTIC_TIGHT_COUPLING_FACTOR
 
 
 #: $c/H_0$ in Mpc for $h=1$. The bundle works in units of $c/H_0$, the fit of
@@ -146,7 +149,26 @@ class TwoFrameEnvironment:
     #: `"opacity"` is therefore the default. `"printed"` reproduces (178)
     #: exactly and exists so the departure stays visible and measurable, which
     #: is what `source_doppler` and `source_integrated` already do.
-    line_of_sight_weight: str = "printed"
+    #:
+    #: **Finding T-57, 2026-10-17. The paragraph above was written and the
+    #: default below was not changed.** For eleven days this field read
+    #: `"printed"` while its own documentation said `"opacity"` --- so every
+    #: caller that did not name the weight took $\mathcal V$, and none of the
+    #: eight named it. F2, F5, F7, F9, D6, D7, `compare_criterion_5b` and the
+    #: benchmark all ran under the weighting A-2 says the bundle departs from.
+    #: Measured on `PLANCK_MODEL` before the change: the rank-one (Doppler)
+    #: sector is **100.5% of the transfer at every $2\le\ell\le100$**, against
+    #: **0.1%** under $e^{-\kappa}$, and $D_2/D_{30}$ moves from 0.0082 to
+    #: 0.0895 on the switch alone.
+    #:
+    #: **A docstring is not an executable decision.** T-41/T-42 were recorded,
+    #: the reasoning was written out in full, and the one-line change was
+    #: missed; nothing in the bundle could see the gap because no gate compared
+    #: a default against the prose above it. `check_release_hygiene.py` now
+    #: requires every released caller to name this argument, which is the
+    #: enforcement A-1 asked for in words --- *"the caller states which"* ---
+    #: and never had.
+    line_of_sight_weight: str = "opacity"
     #: **Finding T-51, decision S40.** `"derived"` starts each mode where
     #: $k\,r_s(\eta)\le\varepsilon$; `"z_max"` starts every mode at the first
     #: point of the recombination grid, which is what this route did until
@@ -231,7 +253,7 @@ def build_environment(
     hubble_h: float = 0.5,
     apply_transfer: bool = True,
     f_2: float = F2_DEFAULT,
-    line_of_sight_weight: str = "printed",
+    line_of_sight_weight: str = "opacity",
     acoustic_start: str = "derived",
 ) -> TwoFrameEnvironment:
     r"""The $k$-independent half: background, recombination, potentials.
@@ -246,7 +268,16 @@ def build_environment(
     recombination = RecombinationHistory.build(background, omega_b_h2=omega_b_h2)
     eta_star = recombination.eta_star
     span = float(background.eta_0 - recombination.eta[0])
-    n = required_n_eta(k_max, span) if n_eta is None else n_eta
+    # **The floor is applied here too --- finding T-58.** `required_n_eta` is
+    # the rate the $j_\ell$ oscillation demands at $k_{\max}$; `N_ETA_FLOOR` is
+    # what the *recombination* structure demands near $\eta_*$, which no
+    # function in this bundle yet derives (S33). `two_route` has carried the
+    # floor since T-45 and this path did not, so an environment built at a
+    # modest $k_{\max}$ was under-resolved where the visibility lives rather
+    # than where the Bessel function oscillates. Measured against `two_route`'s
+    # (177)--(179) column at $k=10$: **2.4e-01 without the floor, 5.9e-03 with
+    # it** --- a factor of forty, from a grid that looked derived.
+    n = max(N_ETA_FLOOR, required_n_eta(k_max, span)) if n_eta is None else n_eta
     eta = np.linspace(recombination.eta[0], background.eta_0, n)
 
     # **T-51/S40.** r_s from the big bang, and the one reference Phi_A is
@@ -255,7 +286,7 @@ def build_environment(
     # is no equality and the r_s table's own floor serves.
     eta_rs, r_s_table = sound_horizon_from_zero(
         background, float(eta_star), omega_b_h2=omega_b_h2)
-    md_reference = matter_domination_eta(background) or float(recombination.eta[0])
+    md_reference = float(recombination.eta[0])
     derived = str(acoustic_start) == "derived"
     if str(acoustic_start) not in ("derived", "z_max"):
         raise ValueError("acoustic_start is 'derived' (S40) or 'z_max' (the control)")
@@ -390,8 +421,24 @@ def transfer_by_rank(
     Returned under keys `0`, `1`, `2` and `-1` for the total.
     """
     diffusion = float(np.exp(-((float(k_com) / env.damping_k) ** 2)))
+    # **`eta_floor` is stated here, not defaulted --- finding T-58.**
+    # `integral_solution`'s default is (102)'s printed lower limit $\eta_*$,
+    # and its docstring says the argument exists *"so the pipeline's
+    # long-standing choice of integrating from the start of the recombination
+    # history can be measured against the printed one rather than inherited"*.
+    # `pipeline.run` and `two_route` both supply it; **this path did not, and
+    # so inherited the printed limit by omission** --- T-57's class exactly, a
+    # second instance, in the same file, found the same day.
+    #
+    # The recombination start is the physical limit: the visibility is peaked
+    # *at* $\eta_*$ and half its support lies below, so a lower limit of
+    # $\eta_*$ discards half the peak. Measured against `two_route`'s
+    # (177)--(179) column with the window already matched, the omission alone
+    # cost **2.2e-01 at k=1** --- the modes that build the Sachs-Wolfe
+    # plateau --- and 8.1e-01 at k=10.
     common = dict(table=table, weight=env.weight, diffusion=diffusion,
                   damping_total=diffusion, eta_star=env.eta_star,
+                  eta_floor=float(env.eta[0]),
                   eta_0=float(env.background.eta_0))
     zero = np.zeros_like(env.eta)
 

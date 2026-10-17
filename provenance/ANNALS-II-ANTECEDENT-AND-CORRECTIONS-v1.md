@@ -1564,3 +1564,35 @@ perturbations on small scales"*.
 No number anywhere depends on it. The fourth is not used in this bundle and is
 carried into the supplement's frame table for completeness, with the count
 stated as four.
+
+## B-15 — Appendix C's $\tau_{(2)}$ prints a term with two free indices
+
+**Found 2026-10-17, re-deriving the scattering-strength expansion under S42.**
+Appendix C's second-order result reads, in its $t_c^2$ bracket,
+
+> $\dot{\mathcal B}+e^a\ddot v_a+e^ae^b(\mathrm D_av_b)^{\textstyle\cdot}
+> +e^c\mathrm D_c\mathcal B+e^ce^d\mathrm D_c\dot v_b
+> +e^ce^ae^b\mathrm D_c\mathrm D_av_b$
+
+The fifth term, $e^ce^d\mathrm D_c\dot v_b$, leaves **both $d$ and $b$ free** in
+an expression that is a scalar. It is $e^ce^d\mathrm D_c\dot v_d$ — the time
+derivative taken first and the directional gradient outside.
+
+**It is a transcription slip and nothing turns on it.** The correct form is
+forced three ways over: the recursion gives $\mathcal D^2V$ with
+$\mathcal D=\partial_t+e^a\mathrm D_a$, whose four words are
+$\partial_t^2$, $\partial_t(e\mathrm D)$, $(e\mathrm D)\partial_t$ and
+$(e\mathrm D)^2$; the bracket's own term count is $2^2+2^1=6$ and the other
+five are unambiguous; and the two $e$'s in that term must contract with
+something, which only $\dot v_d$ offers.
+
+**Recorded because a reader re-deriving the appendix stops on it**, which is
+precisely what this bundle is for. `functions/spectra/scattering_expansion.py`
+carries the printed bracket as `PRINTED_TAU_2` with the index repaired and says
+so at the definition; `tests/test_scattering_expansion.py` compares the derived
+closed form against it term for term.
+
+**Not a correction to any computed number.** The bundle's tight-coupling
+implementation is (152)/(153), which descends from (mom-flux) at *first* order;
+$\tau_{(2)}$ enters nothing that v1.2.0 released. It becomes load-bearing only
+under **S42**, where the expansion is carried past first order on purpose.

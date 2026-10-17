@@ -116,7 +116,7 @@ def residual_decomposition(k: float, env: dict, table: BesselTable,
 
 
 def main() -> int:
-    env = build_environment(float(K_COM.max()))
+    env = build_environment(float(K_COM.max()), line_of_sight_weight="opacity")
     needed = required_multipoles(ELLS)
     table = BesselTable.build(
         ell_max=int(needed.max()), ells=needed,

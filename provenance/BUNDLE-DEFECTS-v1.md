@@ -4398,3 +4398,575 @@ an integral with a bounded integrand**, not for an initial-value problem. A
 constant imported from where it is safe into where it is not is still a
 hard-coded literal; it has merely borrowed someone else's argument for being
 one.
+
+## T-53 — a search window fitted to a result reported its own edge as a measurement
+
+**Found 2026-10-16, on the first regeneration after T-51's fix.** F9 printed
+
+    CDM (Einstein-de Sitter)   first peak l=90.0
+
+`90.0` is exactly the first $\ell$ on the grid at or above 80, carries no
+interpolation, and is not a peak.
+
+`first_peak(ell, s)` searched a fixed band, $80\le\ell\le400$, took `argmax`
+within it, and guarded the parabolic interpolation with
+
+```python
+i = int(np.argmax(y))
+if i == 0 or i == x.size - 1:
+    return float(x[i])
+```
+
+That guard is correct as arithmetic — a parabola needs two neighbours — and
+**wrong as a report**: an extremum at the edge of a search window is evidence
+that the window is in the wrong place, and returning the edge converts that
+evidence into a number. With the acoustic start corrected (**T-51**,
+**S40**) the Einstein--de Sitter curve stopped having an interior maximum in
+$80\le\ell\le400$ at all, and the absence was reported as a measurement.
+
+### Why the window was there, and why that is the finding
+
+**80--400 was chosen when the peak sat near 170.** It is not a physical band:
+nothing says the first acoustic peak lies in it, and the moment the physics
+moved the window became a filter on the answer rather than a search for it.
+
+*A search window fitted to a result is a window that hides the result
+changing.* It is the same shape as **T-3**'s `n_eta=4000` and **T-49**'s
+`"1.0.0"` default — a literal that was right on the day it was typed — but it
+fails in a worse direction than either, because it does not go silent. It
+returns a plausible number of the right order, next to five other numbers that
+are real.
+
+### What is carried now
+
+There is **no window**. `first_peak` scans for the first *interior* local
+maximum above $\ell=30$ --- the normalisation anchor, below which "first peak"
+has no meaning --- and returns **`nan`** when the curve has none. The caller
+prints *"NONE above l=30 — the curve has no interior maximum"*, and `draw`
+annotates the absence on the figure instead of ruling a line at `nan`, which
+would have drawn nothing while the caption went on claiming a peak.
+
+**`nan` is the right return and the earlier `float(x[i])` was not**, for the
+reason finding **T-44** gives: that gate printed `PASS` on a `nan` because
+`nan >= gate` is `False`. The lesson there was to refuse non-finite values
+explicitly. The lesson here is its converse --- **when the honest answer is
+"there isn't one", return something that cannot be mistaken for a measurement**,
+and make every caller say so out loud.
+
+## T-54 — the harness printed CLEAN over a two-day-old spectrum, and no gate could see it
+
+**Found 2026-10-17, auditing the PI's regeneration.** `run_all.py --rerun`
+finished with
+
+```
+wrote PORTABLE-MANIFEST-SHA256.txt  177 files, numeric canonicalised to 9 s.f.
+441 passed, 3 skipped
+============================================================
+CLEAN
+```
+
+and `outputs/f9-acoustic-spectrum.csv` was stamped **2026-10-15 18:23**, two
+days and three findings earlier. Its extrema still read `max@162, min@549,
+max@752`, peak spacing **589.7** — the pre-**T-51** acoustic scale, against the
+corrected 284. Every other artefact had regenerated correctly within a
+twelve-minute window: F2, F3, D5, D6 and D8 all carry 2026-10-16 14:08–14:20.
+
+### Why no gate caught it, and this is the part worth keeping
+
+F9 is wired into `run_all` as `"scripts/figure_f9_acoustic_spectrum.py --replot"`,
+and deliberately: a full recompute is 1433 modes × 3 backgrounds × 2 frames and
+cannot run on every harness pass. **That cache is sound. What it allowed was
+invisible.**
+
+1. `--replot` reads the CSV and redraws. **It does not rewrite the CSV.**
+2. So the CSV still matches its recorded hash.
+3. So `make_manifests.py --check` passes.
+4. So `run_all --rerun` prints **CLEAN**.
+
+**A content hash cannot detect a file that was never regenerated.** It answers
+*"is this file what it was?"* — and that is exactly the wrong question for a
+cached artefact, where the right one is *"was this file made by this code?"*
+The manifest machinery is not weak here; it is being asked something it does
+not claim to answer. **T-1** built one selector so two gates could not disagree
+about what the bundle is; this is the complementary gap — one artefact the
+gates agree about and neither can date.
+
+It is also the third time a *caching* convenience has cost a regeneration in
+two days: the first F9 run of 2026-10-16 recomputed for 35 minutes and produced
+byte-identical output because `two_frame` was unfixed (**T-51**), and the PI's
+run here skipped the recompute entirely. Both cost about an hour. The cache is
+still right; it simply had no way to say when it was wrong.
+
+### What is carried now
+
+The CSV carries a `# sources:` line — a sha256 over **every `functions.*`
+module actually imported**, resolved from `sys.modules` rather than listed, plus
+the script itself. `--replot` recomputes it and **refuses** on a mismatch:
+
+```
+FAIL  the cached CSV was produced by different code
+      (stamped nothing, this tree a73e8d9dc8115b17).
+      --replot cannot redraw numbers it did not compute.
+```
+
+**Deliberately conservative.** A docstring change invalidates the cache,
+because bytes cannot say whether a change was semantic. The cost of a false
+invalidation is one rerun; the cost of a false validation is shipping a stale
+spectrum under a CLEAN banner, which is what happened.
+
+### The class, and where else it lives
+
+**Any artefact whose regeneration is cached is an artefact whose staleness a
+content hash cannot see.** F9 is the only `--replot` stage today. The same
+shape applies to anything the harness skips rather than recomputes — and
+`scripts/compare_criterion_5b.py` is already outside the harness by **S4c**, so
+`provenance/CRITERION-5B-v1.md` carries 2026-10-15 09:55 and
+`outputs/criterion-5b.csv` 2026-10-14 18:36. **Those are stale by the same
+mechanism and by deliberate design**, which makes the design's cost explicit
+for the first time: the README quotes that file's 97.8% and 137% in three
+places, and nothing in the bundle dates them. Raised as a question rather than
+patched here, because S4c's reason for keeping the comparison out of the
+harness has not changed.
+
+## T-55 — the potential reference was put at equality, and the frame-closure guard failed on one platform
+
+**Found 2026-10-17 on the PI's Windows machine**, during the F9 recompute that
+**T-54** had just unblocked. CDM and $\Lambda$CDM completed; `PLANCK_MODEL`
+stopped at
+
+```
+ValueError: Appendix G's sigma-dot and the Euler equation disagree on
+(a sigma)'; the CDM frame no longer closes
+```
+
+**The source files were identical on both machines** — staged and diffed, byte
+for byte — and the same configuration passed at every $k$ from 0.05 to 1499 in
+this container. A physics guard that passes on Linux and fails on Windows is
+reporting something about the calculation, not about the platform.
+
+### What was wrong
+
+**T-51**'s fix needed one $\Phi_A$ reference shared by every mode, so that a
+mode starting at $\eta=10^{-4}$ and the common grid starting at $0.033$ carry
+one $\Phi_A(0,k)$ between them. For a background with radiation I set that
+reference to **matter–radiation equality**, reasoning that it was where the
+antecedent's matter-dominated Appendix G becomes applicable.
+
+For `PLANCK_MODEL` that is $\eta_{\rm eq}=1.949\times10^{-2}$, **below** the
+recombination grid's first point at $0.0333$. So `growth_factor` began its
+integration *at equality* — from $D=a$, $D'=a'$, which is the **matter**
+growing mode, in a universe that is half radiation there. The integration opens
+on a transient.
+
+`coefficients.cdm_set` holds Appendix G against the Euler equation,
+
+    (a sigma)' = a' sigma + a^2 sigma-dot  ==  -k v',
+
+at `rtol=1e-9`, **over every $\eta$ including those first points** — and the
+transient sits exactly there. The residual straddles $10^{-9}$, and DOP853
+choosing different step sequences on two platforms decides which side.
+
+### Why equality was unnecessary as well as wrong
+
+`constant_below` has one job: fix the normalisation so it does not depend on
+the caller's grid. **Any** fixed $\eta$ does that, and $\Phi_A$ is held
+*constant* below it either way — which is not a modelling choice but the
+antecedent's own result, $\Phi_E$ time-independent for $K=0$ dust. Equality
+bought nothing and cost the integration its initial condition.
+
+The reference is now **the recombination grid's first point, for every
+background**. The common-grid potentials come out **bit-identical** to the
+pre-T-51 ones — measured, `max|new/legacy - 1| = 0.000e+00` on CDM,
+$\Lambda$CDM and `PLANCK_MODEL` — so **no released number moves for this
+reason**, only for T-51's. The guard passes at $k=0.05$ through $1499$ on all
+three.
+
+`matter_domination_eta` stays, and is no longer an input to anything computed:
+it is the diagnostic that measures **A-3**'s marginality, $\rho_M/\rho_R=5.16$
+at last scattering.
+
+### The lesson, which is about where a guard looks
+
+This is the **third** time in two days that choosing a reference *earlier*
+broke something: **T-52**, the $r_s$ table's $10^{-9}$ floor returning
+$1.58\times10^{-6}$ for a quantity identically one; this, equality opening on a
+transient; and in both cases the quantity itself looked fine while a derived
+one did not. **An initial-value problem has a domain of validity and a grid
+does not**, so a reference chosen for a grid's convenience will keep landing
+outside it.
+
+What caught it is worth naming too. The guard checks an **identity**, not a
+tolerance — $(a\sigma)'=-kv'$ holds exactly given the field equations — and it
+checks it *pointwise over the whole grid* rather than at the one $\eta$ the
+answer is read at. A guard that had looked only at $\eta_*$ would have passed
+on both platforms and shipped the transient. **Finding T-24's rule, inverted:
+a check that can only fail where nobody reads the answer is the one worth
+keeping.**
+
+
+---
+
+## T-56 — the $k$ grid was set by hand, and samples the projection kernel below Nyquist
+
+**Found 2026-10-17**, while separating the quadrature from the physics in **Q11**.
+
+`required_n_eta` derives the line-of-sight $\eta$ grid from the oscillation it
+has to resolve: $j_\ell(k(\eta_0-\eta))$ has period $\pi/k$ in $\eta$, so the
+grid carries twelve samples per period at $k_{\max}$. **Nothing derived the $k$
+grid.** F9 ships
+
+```python
+K_COM = np.arange(0.05, 1500.0, np.pi / 3.0)
+```
+
+under a comment that correctly rejects a logarithmic grid — *"a logarithmic $k$
+grid aliases the integrand at high $k$ however many points it has"* — and then
+chooses the linear spacing without asking what it must resolve.
+
+### The arithmetic it skipped
+
+$C_\ell=\int dk\,k^2\mathcal P(k)|T_\ell(k)|^2$ carries $j_\ell(k\,\Delta\eta)$
+**squared**, whose period in $k$ is $\pi/\Delta\eta$. So
+
+$$dk\;\le\;\frac{\pi}{\texttt{points\_per\_period}\;\Delta\eta},$$
+
+which is `required_n_eta`'s formula with $\Delta\eta$ in place of the $\eta$
+span. **One kernel, two axes; the bundle derived one of them.**
+
+| background | $\Delta\eta$ | $\pi/\Delta\eta$ | samples per period at $dk=\pi/3$ |
+|---|---|---|---|
+| CDM (Einstein–de Sitter) | 1.9404 | 1.619 | **1.55** |
+| $\Lambda$CDM | 3.1956 | 0.983 | **0.94** |
+| `PLANCK_MODEL` | 3.1289 | 1.004 | **0.96** |
+
+Below one sample per oscillation on both $\Lambda$CDM-like backgrounds.
+
+### Measured against a closed form, not a convergence study
+
+For a pure Sachs–Wolfe transfer at $n_s=1$ the spectrum integral collapses to
+an exact number at every multipole, independent of $\Delta\eta$:
+
+$$\int_0^\infty\frac{dk}{k}\,j_\ell^2(k\,\Delta\eta)=\frac{1}{2\ell(\ell+1)}.$$
+
+Computed / exact on `PLANCK_MODEL`:
+
+| grid | $n_k$ | per period | $\ell=2$ | $\ell=30$ | $\ell=200$ | $\ell=400$ |
+|---|---|---|---|---|---|---|
+| F9, $dk=\pi/3$ | 1433 | 0.96 | **1.211** | **0.950** | 1.017 | 0.985 |
+| $\Lambda$CDM, same grid | 1433 | 0.94 | **1.225** | 1.054 | 1.018 | 0.978 |
+| derived, $dk=\pi/12$ | 5730 | 3.84 | 1.000 | 1.000 | 0.999 | 0.996 |
+
+**The error is non-monotonic in $\ell$** — high at 2, low at 30, high again at
+100 — so it does not cancel out of a spectrum normalised at $\ell=30$; it is a
+few-percent ripple whose sign turns over on a scale of tens in $\ell$. *That
+moves a peak*, and because each route's $T_\ell(k)$ aliases against the grid
+differently, it moves it by a different amount in each route. The two routes
+disagreeing about where the first peak sat — pipeline 119/365/573 against
+two_frame 105/410/655 — is partly this.
+
+### Why no gate saw it
+
+**T-16** and **T-32** gate $k_{\max}$ against the Silk damping scale, and F2
+reports $\exp[-(k_{\max}/k_D)^2]$ on every run. Both are about *where the grid
+stops*. Nothing was about *how finely it steps*, because the quantity that sets
+the step is $\Delta\eta$ — a property of the projection, not of the physics the
+$k$ grid was being chosen for.
+
+**Fixed**: `required_k_points` in `functions/spectra/pipeline.py`, beside
+`required_n_eta` and sharing its arithmetic, with
+`K_POINTS_PER_PERIOD = 3` derived from the table above rather than copied from
+the $\eta$ grid's twelve — the two grids integrate the same kernel against
+different companions, and the $k$ integral's sign-definite $j_\ell^2$ against a
+smooth $k^2\mathcal P$ converges far faster. `tests/test_k_grid.py` asserts the
+closed form and keeps F9's shipped grid as a **failing control**.
+
+---
+
+## T-57 — a field's documentation said one default and the code said the other, for eleven days
+
+**Found 2026-10-17.** The dominant cause of **Q11**, and the most expensive
+single line in the bundle so far.
+
+`TwoFrameEnvironment.line_of_sight_weight` carried twenty lines of correct
+reasoning, citing **A-2**, findings **T-41** and **T-42**, and re-measuring the
+cost ($D_\ell$ rises $80.5\times$ from $\ell=2$ to 30 under $\mathcal V$ and
+$8.17\times$ under $e^{-\kappa}$), and ending:
+
+> `"opacity"` is therefore the default.
+
+The line underneath it read:
+
+```python
+line_of_sight_weight: str = "printed"
+```
+
+### What that cost
+
+**Approximation A-1** states the governance rule in words: *"Both weightings
+implemented; **the caller states which**."* No caller did. All eight released
+entry points took the default:
+
+`figure_f2_truncation`, `figure_f5_sources`, `figure_f7_frames`,
+`figure_f9_acoustic_spectrum`, `measure_frame_invariance` (D6),
+`diagnostic_d7_frame_identification`, `compare_criterion_5b`,
+`benchmark_single_run`.
+
+So every one of them ran under $\mathcal V=\kappa'e^{-\kappa}$ — the weighting
+**A-2** records that *"this bundle departs from"* — including the comparison
+that produces `CRITERION-5B-v1.md`'s external-agreement numbers.
+
+Measured on `PLANCK_MODEL`, CDM frame, one switch and nothing else (**D4**):
+
+| | rank 0, monopole | rank 1, dipole | $D_2/D_{30}$ |
+|---|---|---|---|
+| $e^{-\kappa}$, A-2's choice | **0.986** | 0.0014 | 0.0926 |
+| $\mathcal V$, as (178) prints it | **0.00002** | **1.0058** | 0.0083 |
+
+**Under $\mathcal V$ the dipole is the entire transfer function at every
+multipole from 2 to 100 and the monopole is two parts in a hundred thousand.**
+(178) already carries $\kappa'\tilde v_B'+\kappa''\tilde v_B$; weighting it
+again by $\mathcal V$ puts in a second factor of $\kappa'\simeq1.4\times10^4$.
+
+### Why it produced exactly the symptoms Q11 recorded
+
+Q11 predicted the mechanism and named the wrong cause. It reasoned: *"If the
+$\cos$-bearing monopole never enters the projected transfer, the spectrum
+inherits the rank-one dipole's $\sin$, and a half-period offset is exactly what
+one would see"*, and attributed the missing monopole to (110)'s structure —
+$c_0\equiv0$ in the Newtonian frame. **The prediction was right and the
+attribution was wrong.** The monopole was not absent by construction; it was
+present and outweighed a thousand to one. Hence, all at once:
+
+* peaks at $(n+\tfrac12)\ell_A$ — the dipole's $\sin(k r_s)$ against the
+  monopole's $\cos$;
+* no Sachs–Wolfe plateau — $D_\ell\propto\ell^2$, which is $C_\ell$ constant;
+* $C_2$ fed from $k\gg\ell/r_\theta$ — half of it from beyond $k=11$ where
+  $\ell/r_\theta=0.64$ — because the Doppler term carries one more power of
+  $k$ than the monopole.
+
+### Why no gate saw it, and this is the part worth keeping
+
+Criterion **5b** holds the weight **fixed on both sides** — `two_route`'s
+docstring says so: *"the same line-of-sight weight, $e^{-\kappa}$, on both
+sides"* — so it cannot see *which* weight it fixed. The manifests hash content.
+`check_portability` reads bytes. The regression suite compares a route against
+itself. **Every instrument in the bundle compares a file to a rule; this was a
+decision disagreeing with its own implementation, three lines apart.**
+
+**T-3's lesson in a new place**: two agreeing routes agree about what they
+share, and here what they shared was a default argument neither named.
+
+**Fixed 2026-10-17.** The default now matches its own docstring; all eight
+callers state the weight explicitly; and `check_release_hygiene.py` gained a
+fourth check that walks the AST of every released script and refuses a release
+in which any caller of `build_environment` omits it. **D4**, deferred three
+times, was written and now runs both weights every time — the departure A-2
+records is only measurable while the thing departed from stays executable.
+
+### What is not yet explained
+
+Switching the weight moves $D_2/D_{30}$ from 0.0083 to 0.0926 against CAMB's
+0.881. **An order of magnitude recovered and an order of magnitude still
+missing**, and the plateau still rises rather than being flat. A-2's own table,
+measured through `pipeline`, reports $e^{-\kappa}$ as *"flat to within 30% over
+$2\le\ell\le20$"* — which `two_frame` does not reproduce. Two implementations
+of (102), and with weights matched, BBKS off, identical backgrounds, identical
+damping scale and `expansion_coupling=False` on both, they agree to 1–2% at
+$k=1$ in the CDM frame and diverge by 20–800$\times$ with sign flips from
+$k=3$ upward. That is the next thread and it is open.
+
+
+### Postscript to T-56 — the register had it, and nothing escalated
+
+`config/grid-register.toml` carried this grid all along, with its status given
+honestly as **`described`**:
+
+> `arange(0.05, 1500.0, pi/3)`, the same grid and the same rule as [...]
+
+The register's own ladder distinguishes `derived` from `described`, and the
+entry said plainly that this one was not derived. **What was missing was a rule
+that a released deliverable's quadrature grid must be `derived`.** The
+instrument existed, recorded the right thing, and had no consequence attached
+to it — which is a different failure from not measuring, and a cheaper one to
+fix. The entry is now `derived`; the register prints
+`1xopen, 9xderived, 5xmeasured, 10xdescribed, 18xindex`, and the open question
+of which of the remaining `described` grids feed a released number is worth one
+pass before the tag.
+
+
+---
+
+## T-58 — three shared choices, three different values, and the gate could see none of them
+
+**Found 2026-10-17**, closing **Q12**. The bundle carries (102) with a generic
+$u^a$ in two implementations. Criterion **5b** gates one of them. **Every
+released figure uses the other.**
+
+With the line-of-sight weight already matched by **T-57**, the two differed by
+$1.5\times10^{-1}$ to $1.6\times10^{0}$ of the row's own scale — five orders of
+magnitude past 5b's $10^{-7}$–$10^{-6}$. Three causes, and each is the same
+shape: *a choice one route made explicitly and the other inherited.*
+
+| | `two_route` (gated) | `two_frame` (released) | `pipeline.run` |
+|---|---|---|---|
+| tight-coupling window | $\eta_0$ **← outlier** | $6\eta_*$ | $6\eta_*$ |
+| (102)'s lower limit | $\eta[0]$ | $\eta_*$ **← outlier** | $\eta[0]$ |
+| $\eta$-grid floor | 8000 | none **← outlier** | — |
+
+### Each one, measured
+
+**The window.** `two_route` integrated the acoustic oscillator to $\eta_0$,
+keeping the photon–baryon fluid ringing for **7.6×** the span over which it is
+a fluid, while the other two stopped at $6\eta_*$ and held the last value.
+Cost at $k=3$: $1.5\times10^{-1}$. At $k=10$: $1.6\times10^{0}$.
+
+**The lower limit.** `integral_solution`'s default is (102)'s printed $\eta_*$,
+and its own docstring says `eta_floor` exists *"so the pipeline's long-standing
+choice of integrating from the start of the recombination history can be
+measured against the printed one rather than inherited."* `pipeline.run` and
+`two_route` supply it; `transfer_by_rank` did not, **and so inherited the
+printed limit by omission**. The visibility is peaked *at* $\eta_*$ with half
+its support below, so that limit discards half the peak. Cost at $k=1$ — the
+modes that build the Sachs–Wolfe plateau — $2.2\times10^{-1}$.
+
+**The grid floor.** `N_ETA_FLOOR = 8000` existed in `two_route` because
+**T-45** measured what going without it costs. `two_frame` sized its grid from
+$k_{\max}$ alone, which resolves the $j_\ell$ oscillation and *not* the
+recombination structure near $\eta_*$. Cost at $k=10$: $2.4\times10^{-1}$
+without, $5.9\times10^{-3}$ with — **a factor of forty from a grid that looked
+derived.**
+
+### Fixed, and the remedy is structural
+
+`TIGHT_COUPLING_FACTOR` and `N_ETA_FLOOR` now live in one module each
+(`acoustic.py` and `pipeline.py`) and everything else re-exports;
+`transfer_by_rank` states `eta_floor`; `build_environment` applies the floor.
+`tests/test_two_frame_is_gated.py` compares the released route against the
+gated one with a **control** that puts the printed lower limit back and
+requires the gate to catch it, and asserts each of the three constants has
+exactly one home.
+
+Measured after, against (177)–(179), normalised by the row's scale:
+
+| $k$ | 0.3 | 1 | 3 | 10 | 30 | 100 | 300 |
+|---|---|---|---|---|---|---|---|
+| before | — | 2.3e-01 | 1.5e-01 | 1.6e+00 | 1.2e+00 | 1.2e+00 | 1.2e+00 |
+| after | 3.4e-04 | 9.4e-04 | 5.7e-04 | 5.9e-03 | 5.6e-03 | 3.5e-04 | 1.4e-03 |
+
+**Two to three orders of magnitude**, and 5b's own number is unharmed: the
+window change moves it within $10^{-7}$–$10^{-6}$, where it already was.
+
+### What remains, and it is named
+
+The residual is **one documented convention**. `two_frame` forms
+$(\kappa'\tilde v_B)'$ by the product rule with $\tilde\tau_1'$ **analytic from
+(152)**, which is exactly what `sources.py` argues for under finding **T-23**:
+*"mode-expanding a derivative is not differentiating a mode amplitude"*.
+`two_route` splines the product. Substituting one for the other closes the gap
+to $7.6\times10^{-7}$ at $k=1$ and $1.8\times10^{-5}$ at $k=10$ — so the
+residual is that convention and nothing else.
+
+**The ungated route is arguably the more correct one**, and changing
+`two_route` to match would move criterion 5b's published number. That is the
+PI's call and is raised rather than taken.
+
+### The lesson, which is the same one three times
+
+T-3 says two agreeing routes agree about what they share. **5b's two columns
+are built from one setup on purpose** — *"two setups with one rule cannot
+drift"* — so every choice that setup makes is shared, cancels, and is invisible
+to the comparison *by construction*. The instrument was sound and pointed at
+the wrong pair.
+
+Within one day the same shape appeared four times: the weight (**T-57**), the
+window, the lower limit and the grid floor. In each, a parameter had a default
+that encoded a choice, and a caller that never named it. **`check_release_hygiene.py`
+now refuses an unstated weight; the other three are held by having one home
+each.** The general rule — *a default that encodes an approximation must be
+named at every call site* — is worth a decision of its own, and is proposed as
+**S43** rather than asserted here.
+
+
+---
+
+## T-59 — the two frames disagree by 100%, and only one of them has a Sachs–Wolfe plateau
+
+**Found 2026-10-17**, immediately after **T-57** removed the weight that was
+masking it. This is the remaining order of magnitude in **Q11**, and it is not
+a further defect in the quadrature or the assembly: *it is the frame.*
+
+D4, one environment, one acoustic solution, one $k$ grid, differing **only** in
+which frame (110) specialises to:
+
+| $\ell$ | 2 | 4 | 7 | 11 | 16 | 22 | 30 | 45 | 60 | 100 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| $D_\ell/D_{30}$, Newtonian | **1.294** | 1.082 | 0.978 | 0.891 | 0.885 | 0.927 | 1.000 | 1.132 | 1.226 | 1.216 |
+| $D_\ell/D_{30}$, CDM | **0.093** | 0.173 | 0.290 | 0.437 | 0.608 | 0.792 | 1.000 | 1.282 | 1.442 | 1.457 |
+| CAMB | 0.881 | | | | | | 1.000 | | | |
+
+**The Newtonian frame is flat to within 30% over $2\le\ell\le30$**, which is
+exactly what `SOURCE-APPROXIMATIONS-v1.md`'s A-2 table says $e^{-\kappa}$
+gives, and what a Sachs–Wolfe plateau *is*. The CDM frame rises by a factor of
+eleven over the same range.
+
+### The part that looked like a paradox and is not
+
+In the Newtonian frame the **rank-zero share is identically zero** — (110) puts
+the whole source in rank one — and *the plateau is there anyway*. Q11's
+original write-up read $c_0\equiv0$ as "the $\cos$-bearing monopole never
+enters the projected transfer" and inferred the half-period shift from it. The
+inference was wrong: the monopole combination sits **inside $c_1$**, as
+`newtonian_set`'s `a_b1 = k * (delta_t + phi_a)`. Rank one in the Newtonian
+frame is not the Doppler sector; it is everything.
+
+In the CDM frame rank zero carries 99% and the plateau is absent. Two
+statements of one operator, and only one of them reproduces the limit.
+
+### Corroborated twice over, by numbers that moved the same day
+
+* **F2**: the cost of $\sigma\to0$ in the CDM frame is **99.93–100%**, where it
+  read 0.27–26% before T-57. The CDM frame's source *is* the shear, as Paper 1
+  §VI C says — and that only became visible once the dipole stopped carrying
+  everything.
+* **F5**: the two frames' $C_\ell$ now agree to a median of $9.99\times10^{-1}$
+  — that is, not at all. It read $1.63\times10^{-1}$ before.
+* **D6**: worst relative difference $1.316$, from $1.069$.
+
+**This is finding T-14 and decision S21, measured.** `sources.py` already said
+it in words: *"it does not [return the same total]: measured against the CDM
+frame it moves by a factor of about five, **and under the opacity weighting the
+source very nearly collapses altogether**."* The opacity weighting is now the
+release's weighting, so the collapse is no longer hypothetical.
+
+### What this means for the release, stated plainly
+
+**F9 draws the CDM frame.** `curves[label] = frames[label]["cdm"]`. So the key
+figure of a frame-covariance release is drawn in the frame that does not
+reproduce the Sachs–Wolfe limit, and the frame that does is drawn beside it as
+the comparison.
+
+**Which frame F9 should draw is the PI's call**, because it is Paper 1's claim
+and not a numerical one, and it is raised as **S44** rather than taken. What is
+*not* a judgement call: the Newtonian frame is the one with an analytic
+arbiter behind it — **D5**, 0.26% against the corrected (201) over
+$2\le\ell\le20$, through `pipeline.run`, which is a Newtonian-frame assembly,
+and `tests/test_sachs_wolfe.py`'s absolute comparison behind that.
+
+### The sequence this closes
+
+Q11 asked why the spectrum's peaks were in the wrong place when the source's
+phase was right. Four findings answered it, and each was hidden by the one
+before:
+
+1. **T-57**, the weight — made the dipole 100.5% of the transfer, which put the
+   peaks at $(n+\tfrac12)\ell_A$ and flattened $C_\ell$.
+2. **T-56**, the $k$ grid — 0.96 samples per $j_\ell^2$ oscillation, a
+   non-monotone 22% that moved peaks differently in each route.
+3. **T-58**, three shared choices — window, lower limit, grid floor, which put
+   the released route five orders of magnitude outside the gate it was never
+   compared to.
+4. **T-59**, the frame — the last order of magnitude, and the only one of the
+   four that is a question about the physics rather than about a default.
+
+**The first three were defaults nobody named. The fourth is Paper 1's subject.**
+That is the right place for a reproduction bundle's investigation to end up.

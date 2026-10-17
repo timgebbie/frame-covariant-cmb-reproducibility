@@ -685,7 +685,8 @@ cannot go stale the way the verification paragraph above once did.
 | **D7** CDM frame vs energy frame | **T-29** — *Annals II* §4.1 lists them as two of three distinct choices and this bundle conflates them; the tilt is up to 45% of the frame velocity | `v1.2.0` |
 | **D8** criterion 5b's gate | (102) against (177)–(179) on this bundle's own pipeline, **S4c** — 9.544e-06 worst against 10⁻³, over three backgrounds, nine modes and six multipoles | `v1.2.0` |
 | **D9** the acoustic scale | the antecedent's own ℓ_j = \|r_θ/r_s\| jπ, **both sides computable here and never compared** — it disagrees by 2.0–2.8×. Finding **T-51** | `v1.3.0` |
-| *D3*, *D4* | *deferred to v1.5.0 (S-b)* — cross-checks, not acceptance artefacts. **Retargeted 2026-10-15, finding T-47**: they were deferred *to v1.1.0*, which shipped without them, so the harness announced a deferral to a release in the past. `run_all.py` now fails on a deferral to an already-released version | — |
+| **D4** the monopole, and which rank carries C_ℓ | the antecedent's *"there is no monopole temperature anisotropy in the CGI approach"*, made executable — and the instrument that found **T-57**: under the weight every released caller was silently taking, the rank-0 monopole sector is 0.002% of C_ℓ and the rank-1 dipole is 100.5% of it. Runs both weights every time | `v1.3.0` |
+| *D3* | *deferred to v1.5.0 (S-b)* — a cross-check, not an acceptance artefact. **Retargeted 2026-10-15, finding T-47**: it was deferred *to v1.1.0*, which shipped without it, so the harness announced a deferral to a release in the past. `run_all.py` now fails on a deferral to an already-released version. **D4 was here and was discharged 2026-10-17**: it had been deferred three times on the reasoning that its stated question was a one-line claim with little room for error, and it turned out to be the only instrument pointed at a different question entirely | — |
 
 The development lineage:
 

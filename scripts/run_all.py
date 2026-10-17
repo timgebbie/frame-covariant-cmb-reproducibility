@@ -86,12 +86,21 @@ DEFERRED: dict[str, tuple[str, str]] = {
     # *current*. `_released_versions` now closes that, which is the difference
     # between fixing an instance and closing a class.
     #
-    # D4 is worth keeping rather than dropping: the antecedent states flatly
-    # that "there is no monopole temperature anisotropy in the CGI approach
-    # while there is one in the canonical treatment", and a claim the paper
-    # makes in one sentence is exactly what a reproduction bundle should check.
+    # **D4 was here and is DISCHARGED**, written 2026-10-17. It had been
+    # deferred three times --- to v1.1.0, then to v1.5.0 under T-47 --- on the
+    # reasoning that the antecedent's "there is no monopole temperature
+    # anisotropy in the CGI approach" is a one-line claim with little room for
+    # error. **The deferral is what cost us eleven days.** D4 measures which
+    # rank carries C_l, and under the weight every released caller was silently
+    # taking, the rank-0 monopole sector was 0.002% of the spectrum and the
+    # rank-1 dipole was 100.5% of it. Finding **T-57** is what D4 would have
+    # reported the first time it ran.
+    #
+    # The lesson is not "defer less". It is that a diagnostic deferred because
+    # its STATED question looks safe can be the only instrument pointed at a
+    # different question entirely, and nothing in the deferral records what
+    # else it would have measured.
     "D3  source terms against k": ("v1.5.0", "S-b"),
-    "D4  no monopole in the CGI approach": ("v1.5.0", "S-b"),
     # **T-51 was here and is DISCHARGED**, fixed 2026-10-16 within hours
     # of being registered. It is removed rather than left with a stale
     # target --- which is the same rule F6 and F8 were removed under, and
