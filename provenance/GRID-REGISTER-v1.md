@@ -19,7 +19,7 @@ being possible.
 |---|---|---|
 | **open** | 1 | a chosen literal whose convergence is **not** established. This status is the point of the register. |
 | **derived** | 9 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
-| **measured** | 5 | a chosen literal whose convergence has been measured, with the number stated. |
+| **measured** | 6 | a chosen literal whose convergence has been measured, with the number stated. |
 | **described** | 10 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
 | **index** | 18 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
 
@@ -143,7 +143,7 @@ Int dk j_l^2/k = 1/(2 l (l+1)). Finding **T-56**: the eta grid was derived from
 the oscillation it resolves and the k grid never was, though it is the same
 kernel read along the other axis.
 
-## measured — 5
+## measured — 6
 
 ### `u` — the panel division of the conformal-time integral eta(a)
 
@@ -180,6 +180,19 @@ this low can matter against the 51-64% that finding **T-51** is about.
 `max_step=20`, so it sets the OUTPUT sampling and not the integration accuracy.
 It feeds the same interpolation chain as the row above it, which is why it is
 measured rather than assumed.
+
+### `grid` — the acoustic grid D10 scopes A-3 on, and measures the inadequacy of
+
+`scripts/diagnostic_d10_radiation_driving.py:104`, `np.linspace`
+
+`required_acoustic_points(k, couple - start)` --- the SAME grid the
+released oscillator runs on, deliberately, because D10's subject is whether
+that grid can carry the radiation era. **It cannot**: measured, it puts 3
+points below equality at k=10 and 26 at k=600, out of 512. A splice on three
+points is a step in Phi-prime, and the first draft of D10 read a sign flip in
+delta_T(eta_*) off a 0.13% change in Phi because of it. The row is `measured`
+rather than `derived` for that reason --- the number that matters here is not
+the rate but the count below eta_eq, and D10 prints it in every row.
 
 ### `eta` — the integration grid for the relative-sign control
 

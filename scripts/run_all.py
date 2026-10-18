@@ -151,6 +151,16 @@ DIAGNOSTICS: list[tuple[str, str]] = [
     # that fails every development run is a diagnostic people stop reading.**
     ("D9  the acoustic scale against the paper's own formula",
      "scripts/diagnostic_d9_acoustic_scale.py"),
+    # **D10 scopes A-3 and deliberately does not measure it.** The released
+    # driving freezes Phi below the recombination grid's first point, while
+    # every mode has started far earlier since T-51, so the oscillator crosses
+    # the radiation era on a potential that does not decay. D10 reports which
+    # modes have a radiation era to see and how much Phi the frozen form omits
+    # --- 0.13% at k=10 and 105% at k=600 on PLANCK_MODEL --- and stops there,
+    # because the acoustic grid carries 3 to 26 points below equality and a
+    # splice on three points is a step in Phi-prime, not physics. Finding T-64.
+    ("D10 what A-3 costs: the potential that does not decay",
+     "scripts/diagnostic_d10_radiation_driving.py"),
 ]
 
 

@@ -5164,3 +5164,166 @@ its sign. What it licenses is a question about `integral_solution`'s
 **integrand**, which is **Q14**, now answered in favour of reading (1) with a
 mechanism rather than an assertion. The change belongs behind a named control,
 the way every other departure in this bundle does.
+
+
+---
+
+## T-62 — the Sachs–Wolfe limit separates the frame defect from A-3, on one scalar
+
+**Found 2026-10-18**, on a check proposed by the Paper 1 stream: on large
+scales, adiabatic, matter-dominated, the covariant calculation must give
+$\Delta T/T\to\tfrac13\Phi_A(0,k)$ in **either** threading. One scalar, one
+limit, two backgrounds.
+
+The quantity is $a\mathcal B_1/k$ at $\eta_*$: in the Newtonian frame that is
+$(\delta\tilde T+\Phi_A)$, and in the CDM frame, where $A_a=0$, it is
+$\delta T^{E}$ alone. The target is exact --- `sachs_wolfe_at_last_scattering`
+reduces to $\tfrac13\Phi_A(0,k)$ at $kr_s\to0$ for any $R_*$, the $3R_*$ and
+the $-R_*$ cancelling.
+
+| background | $\Phi_A(\eta_*)/\Phi_A(0)$ | Newtonian | ratio | CDM $\delta T^E$ | ratio |
+|---|---|---|---|---|---|
+| CDM (Einstein–de Sitter) | $1.000000$ | $3.33331\times10^{-1}$ | $\mathbf{1.0000}$ | $2.18\times10^{-7}$ | $\mathbf{0.0000}$ |
+| `PLANCK_MODEL` | $0.933264$ | $1.99860\times10^{-1}$ | $\mathbf{0.5996}$ | $-1.71542\times10^{-1}$ | $-0.5146$ |
+
+**Two failures, and they had been reading as one.**
+
+### The CDM threading's $\mathcal B_1$ is identically empty, and that is algebra
+
+In Einstein–de Sitter $\mathcal H=2/\eta$ and $\Phi$ is exactly constant, so the
+Euler equation $v'+\mathcal Hv=-k\Phi_A$ --- which **is** the frame condition
+$\tilde A_a=0$ --- integrates by the factor $a\propto\eta^2$ to $v=-k\Phi\eta/3$,
+hence $\mathcal Hv/k=-\tfrac23\Phi$. With (180)'s $\delta T=-\tfrac23\Phi_A$,
+
+$$\delta T^{E}=\delta T-\frac{\mathcal Hv}{k}
+=-\tfrac23\Phi+\tfrac23\Phi=0\qquad\textbf{identically.}$$
+
+Measured $2.18\times10^{-7}$, which is the grid. **So in the CDM threading there
+is no gravitational redshift left in $\mathcal B_1$ at all**: the whole of it
+has moved into the shear sector, which is what Paper 1's Eq. (B) requires ---
+$-\sigma_{ab}e^ae^b$ carries what $-A_ae^a$ carried --- and is why this frame
+cannot be checked on $\mathcal B_1$ alone.
+
+### And it re-enters at the wrong weight
+
+Fitted $d\ln|C|/d\ln k$ at $\eta_*$ over $k=0.1\ldots30$, `PLANCK_MODEL`:
+
+| | $C_1$ Newtonian | $C_0$ CDM | $C_2$ CDM |
+|---|---|---|---|
+| slope | $+0.97$ | $+2.00$ | $\mathbf{-0.00}$ |
+
+$C_2=v/k$ is **exactly $k$-independent** --- the $k$ in $v$ cancels the $1/k$,
+leaving $-\Phi\eta/3$ --- while the Newtonian $C_1$ goes as $k^{+1}$. The
+gravitational content therefore sits at $k^0$ in one threading and $k^{+1}$ in
+the other, so at small $k$ the CDM frame carries a finite $C_2$ where the
+Newtonian $C_1$ vanishes. **Partial restoration at a different weight**, which
+is a plateau deficit rather than a total loss, and which is what T-59 measured
+from the far end.
+
+### PLANCK's Newtonian $0.5996$ is **not** the frame. It is A-3.
+
+$\Phi_A$ falls from $1.000000$ to $0.933264$ between $\eta[0]$ and $\eta_*$ ---
+$6.7\%$. But $\delta T+\Phi_A$ is a **small residue of two numbers near $0.73$
+and $0.93$**, so a $6.7\%$ drift in $\Phi$ becomes a $40\%$ deficit in the
+Sachs–Wolfe amplitude. Einstein–de Sitter, where $\Phi$ is constant to sixteen
+digits, returns $1.0000$ on the same code path.
+
+**This is the separation the plateau question needed.** The frame question owns
+the CDM column; **A-3 owns the difference between the two rows of the Newtonian
+column**, and nothing in the frame sector will touch it. It also makes
+Einstein–de Sitter the right background to measure A-3 on, because there the
+Newtonian answer is known to be $1.0000$ and any departure is the driving
+alone.
+
+### Credit, and a note on how this was found
+
+The check is the Paper 1 stream's, proposed in one sentence and needing no new
+machinery. It is sharper than the $C_\ell$-level comparisons this bundle had
+been running because it is a **single scalar at a known limit**, where those
+are integrals over everything. *A quantity with one right answer beats a
+tolerance on a quantity with none*, and three of the measurements this stream
+made on 2026-10-17 would have been shortened by running this first.
+
+
+---
+
+## T-63 — the frame residual does not converge, so it is a defect and not a grid
+
+**Measured 2026-10-18**, on a criterion the Paper 1 stream supplied: GDE99 (37)
+makes $\tau_{A_\ell}$ **unchanged** under a first-order boost for every
+$\ell>1$, so the two threadings must give *numerically identical* multipoles at
+$\ell\ge2$ --- not agreement within a tolerance. **T-60**'s $1$--$15\%$
+residual after $C_0$ is dropped therefore cannot be $O(\varepsilon^2)$: the
+theorem is exact at the order this bundle solves.
+
+Refining the $\eta$ grid fourfold, $C_0$ dropped, against the Newtonian scale:
+
+| background | $n_\eta$ | $k$ | $|E_1{+}E_2-N|/|N|$ | rank-1 | rank-2 |
+|---|---|---|---|---|---|
+| CDM (EdS) | 8000 | 1 | $5.4870\times10^{-2}$ | $2.20\times10^{-2}$ | $3.29\times10^{-2}$ |
+| | 32000 | 1 | $5.4708\times10^{-2}$ | $2.18\times10^{-2}$ | $3.29\times10^{-2}$ |
+| | 8000 | 140 | $1.0631\times10^{-2}$ | | |
+| | 32000 | 140 | $1.0655\times10^{-2}$ | | |
+| `PLANCK_MODEL` | 8000 | 20 | $1.1059\times10^{-1}$ | $3.94\times10^{-2}$ | $7.12\times10^{-2}$ |
+| | 32000 | 20 | $1.1056\times10^{-1}$ | $3.94\times10^{-2}$ | $7.11\times10^{-2}$ |
+
+**Four times the resolution moves it by under $0.3\%$ of itself**, and at
+$k=140$ it moves the wrong way. Not a grid artefact.
+
+**And it localises to both ranks.** rank-1 and rank-2 carry the same order at
+every $k$ on both backgrounds, which by the stream's own argument names
+**both** $\mathcal B_1$ and $\mathcal B_2$ as entry points --- consistent with
+a mis-assigned $\kappa'$, which sits in the Thomson term in $C_1$ while the
+velocity it multiplies also drives the shear sector.
+
+---
+
+## T-64 — a diagnostic that splices two solutions measures its own kink
+
+**Found 2026-10-18**, on the first run of **D10**, and recorded because it is
+the **fifth** sampling artefact this week and the cheapest one to repeat.
+
+D10 was to drive the oscillator twice --- once with the released frozen
+$\Phi$, once with the closed-form radiation solution spliced in below equality
+--- and report the ratio. On `PLANCK_MODEL` at $k=10$:
+
+```
+max |Phi_corrected / Phi_released - 1|  =  1.266e-03
+delta_T(eta_*)   released  -7.505929e-01
+                 corrected +1.189578e+00
+```
+
+**A sign flip on a $0.13\%$ input.** The oscillator is driven by $\Phi$ *and
+its derivative*; the acoustic grid carries **three points** below
+$\eta_{\rm eq}$ at that $k$; and a splice across three points is a step in
+$\Phi'$. The response is to the kink.
+
+**An earlier draft was worse and the control caught it in one run.** It spliced
+at the grid reference rather than at equality --- which on `PLANCK_MODEL` is
+*after* equality, $\eta[0]=0.0333$ against $\eta_{\rm eq}=0.0195$ --- and
+applied the radiation solution on `CDM_MODEL`, which has $\Omega_r=0$ and no
+radiation era at all. The control moved by factors of **7 to 10** where A-3 is
+identically zero. It now reads $1.0000$ at every $k$, **by construction rather
+than by a branch**: `matter_domination_eta` returns 0 at $\Omega_r=0$, so
+nothing lies below the splice and the decay factor is $\Phi_{\rm rad}(0)=1$.
+
+**What D10 does instead.** It reports the scoping and stops: which modes have a
+radiation era to see, what fraction of their span lies in it, how far $\Phi$
+has fallen by equality, and **how many grid points lie below it**. Driving
+through a resolved radiation era is A-3's *fix*, needing a grid derived for
+that era rather than for the acoustic one, and is not its measurement.
+
+### The lesson, and it is the week's
+
+Five artefacts in four days --- the $k$ grid below Nyquist (**T-56**), a
+pointwise ratio reading distance-to-zero as error (**Q12**), an envelope read
+off a window that contained no extremum, a seam read off a function's own
+slope, and now a splice read as physics. Every one was a **measurement of the
+sampling**, and every one looked like a result.
+
+What separated them was not care. It was whether a *control with a known
+answer* was in the same run. The two that were caught immediately --- the
+$\Omega_r=0$ control here, and T-62's Einstein--de Sitter $1.0000$ --- had one.
+The three that cost hours did not. **A tolerance on a quantity with no right
+answer cannot fail usefully**, and that is now the standing argument for
+building the control first.

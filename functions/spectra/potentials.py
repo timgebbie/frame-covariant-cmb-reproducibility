@@ -41,7 +41,84 @@ from scipy.interpolate import CubicSpline
 
 from functions.background.flrw import Background
 
-__all__ = ["growth_factor", "potentials", "potential_derivative"]
+__all__ = [
+    "growth_factor",
+    "potentials",
+    "potential_derivative",
+    "radiation_era_potential",
+]
+
+
+def radiation_era_potential(
+    k_com: float, eta: np.ndarray, *, amplitude: float = 1.0
+) -> np.ndarray:
+    r"""$\Phi$ through radiation domination, in closed form. **Approximation A-3.**
+
+    **Derived, not transcribed.** In a flat radiation-dominated era the
+    potential obeys the standard evolution equation with $c_s^2=\tfrac13$,
+
+    $$\Phi''+3\mathcal H(1+c_s^2)\Phi'+c_s^2k^2\Phi=0 ,$$
+
+    and $a\propto\eta$ there makes $\mathcal H=1/\eta$, so
+
+    $$\Phi''+\frac4\eta\Phi'+\frac{k^2}{3}\Phi=0 .$$
+
+    With $x\equiv k\eta/\sqrt3$ this is the $\ell=1$ spherical Bessel equation
+    in disguise, and the solution regular at the origin is
+
+    $$\Phi(\eta)=3\,\Phi_i\,\frac{\sin x-x\cos x}{x^3}
+                =3\,\Phi_i\,\frac{j_1(x)}{x}.$$
+
+    Two limits fix it and both are asserted in `tests/test_radiation_potential.py`:
+    $\Phi\to\Phi_i$ as $x\to0$, because $\sin x-x\cos x\to x^3/3$; and
+    $\Phi\simeq-3\Phi_i\cos x/x^2$ for $x\gg1$, **decaying as $x^{-2}$ while
+    oscillating**.
+
+    **That decay is the whole of A-3.** `potentials` returns the
+    matter-dominated $\Phi\propto D/a$, which is *constant* in Einstein--de
+    Sitter and has no radiation era in it at all, so a mode that enters the
+    horizon before equality is driven here by a potential that does not decay.
+    In the real universe it does, and because it decays on the same timescale
+    the mode oscillates, it drives the oscillator **resonantly** --- which is
+    the amplification Hu \& Sugiyama compute analytically and which is missing
+    from every peak height this bundle produces.
+
+    **This function is diagnostic, not yet wired into the released pipeline.**
+    It is what `scripts/diagnostic_d10_radiation_driving.py` measures the gap
+    with. Changing what drives `solve_acoustic` is the fix, and under this
+    bundle's standing rule the measurement comes first and the matter-only
+    branch is kept as a control afterwards.
+
+    `amplitude` is $\Phi_i$, the super-horizon value; the released
+    normalisation convention (``Phi = 1`` deep in matter domination) does
+    **not** apply here, because the whole point is the ratio between the two
+    eras.
+    """
+    k = float(k_com)
+    if k <= 0.0:
+        raise ValueError("k_com must be positive")
+    eta = np.asarray(eta, dtype=float)
+    if np.any(eta < 0.0):
+        raise ValueError("eta must be non-negative")
+    x = k * eta / np.sqrt(3.0)
+    out = np.empty_like(x)
+    # **The crossover is derived, not picked.** $\sin x-x\cos x$ is a
+    # cancelling difference of two $O(x)$ terms whose value is $x^3/3$, so its
+    # relative error is $\sim3\varepsilon/x^2$: at $x=10^{-3}$ the closed form
+    # has already lost nine digits ($3\times10^{-10}$), and the first draft of
+    # this function crossed over there and left a seam of $2\times10^{-9}$.
+    # At $x=0.1$ the closed form is good to $3\times10^{-14}$ and the series
+    # carried to $x^6$ has a first omitted term of $x^8/1330560$, so the two
+    # branches meet at $1.8\times10^{-14}$ --- measured.
+    # The two branches then meet where **both** are well conditioned, which is
+    # the only place a crossover may be put.
+    small = x < 0.1
+    xs2 = x[small] ** 2
+    out[small] = amplitude * (1.0 - xs2 / 10.0 + xs2**2 / 280.0
+                              - xs2**3 / 15120.0)
+    xs = x[~small]
+    out[~small] = 3.0 * amplitude * (np.sin(xs) - xs * np.cos(xs)) / xs**3
+    return out
 
 
 def growth_factor(background: Background, eta: np.ndarray) -> np.ndarray:

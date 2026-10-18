@@ -412,3 +412,16 @@ for a measured quadrature error of up to 22.5% against the closed form
 Int dk j_l^2/k = 1/(2 l (l+1)). Finding **T-56**: the eta grid was derived from
 the oscillation it resolves and the k grid never was, though it is the same
 kernel read along the other axis."""
+
+[[grid]]
+key = "scripts/diagnostic_d10_radiation_driving.py::grid"
+what = "the acoustic grid D10 scopes A-3 on, and measures the inadequacy of"
+status = "measured"
+note = """`required_acoustic_points(k, couple - start)` --- the SAME grid the
+released oscillator runs on, deliberately, because D10's subject is whether
+that grid can carry the radiation era. **It cannot**: measured, it puts 3
+points below equality at k=10 and 26 at k=600, out of 512. A splice on three
+points is a step in Phi-prime, and the first draft of D10 read a sign flip in
+delta_T(eta_*) off a 0.13% change in Phi because of it. The row is `measured`
+rather than `derived` for that reason --- the number that matters here is not
+the rate but the count below eta_eq, and D10 prints it in every row."""
