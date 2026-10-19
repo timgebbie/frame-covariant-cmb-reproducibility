@@ -145,26 +145,25 @@ def spectrum(background, omega_b_h2: float,
 
 
 def shape(ell: np.ndarray, cl: np.ndarray) -> np.ndarray:
-    r"""$C_\ell/C_{30}$ --- **the plotted quantity, the PI's call 2026-10-19.**
+    r"""$D_\ell/D_{30}$ --- **the plotted quantity. Reverted 2026-10-19.**
 
-    This used to be $D_\ell/D_{30}$ with $D_\ell=\ell(\ell+1)C_\ell/2\pi$. The
-    change is to $C_\ell$ on log-log, and it is not cosmetic:
+    This was briefly $C_\ell/C_{30}$ on log--log. The PI's call, having seen
+    both: **linear--log works better and is more recognisable**, and that is
+    the right criterion for a figure whose job is to be read. $D_\ell$ on a
+    linear axis against $\log\ell$ is what a CMB spectrum is plotted in, the
+    acoustic peaks are what the eye should find first, and a reader should not
+    have to re-learn the axes to see them.
 
-    * $D_\ell$'s $\ell^2$ **manufactures a rise** that flatters a spectrum with
-      no acoustic structure. $C_\ell$ shows the spectrum the transfer function
-      actually produces, so a monotonic curve reads as monotonic.
-    * The damping tail is a power law times $e^{-2(k/k_D)^2}$. On log-log it is
-      a straight line with a knee, so $k_D$ becomes something the reader can
-      **place by eye** rather than something the caption asserts.
-    * A ratio normalised at $\ell=30$ stays positive, so a plain log axis is
-      honest here; `symlog` would put a free threshold parameter underneath a
-      figure whose entire claim is the shape.
+    The log--log experiment is not wasted: it is what made the *absence* of
+    structure legible while the spectrum had none, and it is how the damping
+    tail was read. Now that there is structure, the standard axes win.
 
-    `shape_d` keeps the $D_\ell$ form, because the acoustic peak positions and
-    $\ell_A$ are $D_\ell$ statements and `first_peak` must stay on that footing
-    --- the first maximum of $C_\ell$ is not the first acoustic peak.
+    **$D_{30}$ is exact, not interpolated.** `ELLS` contains 30 explicitly
+    (`np.arange(30, 1001, 30)` starts there), so `np.interp(30.0, ell, d)`
+    returns the grid value. `d_ell` is $\ell(\ell+1)C_\ell/2\pi$ --- checked.
     """
-    return cl / np.interp(30.0, ell, cl)
+    d = d_ell(ell, cl)
+    return d / np.interp(30.0, ell, d)
 
 
 def shape_d(ell: np.ndarray, cl: np.ndarray) -> np.ndarray:
@@ -302,7 +301,7 @@ def draw(curves, peaks, frames, gaps) -> int:
         xy=(0.985, 0.30), xycoords="axes fraction", ha="right", va="top",
         fontsize=7.2, color=INK["secondary"])
     ax.set_title("(a) the spectrum, CDM frame", fontsize=9, loc="left")
-    ax.set_ylabel(r"$C_\ell/C_{30}$  (shape, renormalised at $\ell=30$)")
+    ax.set_ylabel(r"$D_\ell/D_{30}$  (shape, renormalised at $\ell=30$)")
 
     # (b) the same spectra in BOTH frames. (102) is carried with a generic u^a
     # and specialised at the end, so both frames come from one solve --- the
@@ -336,10 +335,13 @@ def draw(curves, peaks, frames, gaps) -> int:
     # under a figure whose whole claim is the shape.
     for ax in axes:
         ax.set_xscale("log")
-        ax.set_yscale("log")
         ax.set_xlabel(r"multipole $\ell$")
-        ax.legend(fontsize=6.6, frameon=False, loc="upper left",
-                  handlelength=2.6, borderaxespad=0.4)
+        # **Legend moved, PI 2026-10-19: it was covering the spectrum.**
+        # Lower left is the empty corner once the acoustic peaks are
+        # present -- the curve rises away from it -- and two columns keep
+        # it short enough not to climb back into the first peak.
+        ax.legend(fontsize=6.4, frameon=False, loc="lower left", ncol=2,
+                  handlelength=2.2, borderaxespad=0.4, columnspacing=1.1)
     fig.tight_layout()
     for path in save_figure(fig, "f9-acoustic-spectrum", VERSION):
         print(f"wrote {path.relative_to(ROOT)}")
