@@ -6161,3 +6161,79 @@ across *questions*, and it needs its own line:
 This bundle's residual register (the Replacement's item 4) should carry that
 column: not only each quantity's stage and normalisation, but **its size
 against its neighbours**, so a void test is visible before it is run.
+
+---
+
+## T-77 — the two defects were masking each other
+
+**2026-10-19, late. The strongest result of the day, and the reason thirteen
+single-candidate ablations all came back null.**
+
+### Are the two coefficient sets a boost apart?
+
+Every test before this asked what (102) *does* with the two sets. None asked
+whether the sets are related by the boost at all. Against the theory ---
+$\Delta C_2=s=v/k$, $\Delta C_1=-\dot s+\kappa's$, $\Delta C_0=0$ --- measured
+relative to each row's own scale:
+
+| background | $k$ | $C_2$ | $C_1$ | $C_1$ without $\kappa's$ | $C_0$ |
+|---|---:|---:|---:|---:|---:|
+| EdS | 10 | $3.3\times10^{-16}$ | $6.1\times10^{-16}$ | $1.698$ | $\mathbf{1.000}$ |
+| EdS | 300 | $3.3\times10^{-16}$ | $3.3\times10^{-16}$ | $0.999$ | $\mathbf{1.000}$ |
+| PLANCK | 10 | $3.0\times10^{-16}$ | $5.3\times10^{-16}$ | $1.755$ | $\mathbf{1.000}$ |
+| PLANCK | 300 | $3.0\times10^{-16}$ | $3.4\times10^{-16}$ | $0.915$ | $\mathbf{1.000}$ |
+
+**$C_1$ and $C_2$ are exactly a boost apart.** P1-T's $+\kappa's$ term is
+confirmed independently: without it the $C_1$ residual is $O(1)$, with it
+machine zero. **$C_0$ is not a boost apart, by 100% of its own scale**, at
+every $k$ on both backgrounds --- because the code's $C_0\propto a\mathcal B_2$
+alone, which is zero in one frame and not the other.
+
+### Neither fix alone; both together
+
+| background | $k$ | released | split only | $\mathcal B_0$ only | **split + $\mathcal B_0$** |
+|---|---:|---:|---:|---:|---:|
+| EdS | 60 | 1.5642 | 0.8772 | 1.5203 | **0.0593** |
+| EdS | 300 | 1.0362 | 0.9925 | 1.0672 | **0.0710** |
+| PLANCK | 60 | 1.6705 | 0.9204 | 1.8779 | **0.2315--0.4008** |
+| PLANCK | 300 | 0.9961 | 1.0050 | 1.0145 | **0.0606--0.3648** |
+
+**A factor of 5 to 25 at $k\ge60$, and neither fix alone gets near it.**
+$\mathcal B_0$ alone barely moves the gap; the split alone halves it. **They
+mask each other**, which is exactly why thirteen single-candidate ablations ---
+including both of these --- came back null, and why T-74's elimination table
+was reasoning from a method that could not see a pair.
+
+> **A one-at-a-time ablation cannot find two defects that compensate.** That
+> is not a new failure mode in this project, it is **T-3's** --- *two agreeing
+> routes agree about what they share* --- turned around: two *disagreeing*
+> candidates can each look innocent alone. The elimination tables of T-73 and
+> T-74 are sound as measurements and were over-read as exclusions.
+
+### What is still open, stated plainly
+
+$k=10$ goes the **wrong way**: EdS $0.278\to0.980$, PLANCK $0.598\to1.743$.
+Unexplained. Those are modes near or outside the sound horizon at $\eta_*$,
+where $a\mathcal B_0\propto k\tau_1$ is small, so either the $\mathcal B_0$
+normalisation used here is wrong at low $k$ or a third term matters there.
+
+And $0.06$--$0.40$ is **not** $0$. The acceptance criterion is a theorem ---
+identical multipoles at every $\ell\ge2$ --- so this is a large improvement and
+not an arrival.
+
+### P1-T's item 4, answered
+
+The post-split residual against $\ell$, EdS $k=60$: $0.877$, $0.895$, $0.883$,
+$0.896$, $0.896$, $0.892$, $0.900$, $0.896$, $0.894$, $0.896$, $0.894$,
+$0.896$, $0.894$ over $\ell=2\ldots200$. PLANCK $k=60$: $0.912$--$0.928$.
+**Flat.** By P1-T's own criterion the residue is still the constructor, not the
+rank-2 slot, and the rank-2 condition should stay untouched until a background
+with $C_2''\not\ll C_1'$ exists.
+
+### P1-T's control objection, accepted
+
+*"The Newtonian column must not move" is correct for rearrangements of (102)
+and wrong for anything touching $v^B_a$, because $\tilde v^B_a=v^B_a-v_a$.*
+Accepted. T-74's *"Thomson term $\kappa'\tilde v_B$ zeroed"* row was judged
+against a control that cannot respond to it, and is withdrawn from the
+elimination list on that ground as well as T-77's.
