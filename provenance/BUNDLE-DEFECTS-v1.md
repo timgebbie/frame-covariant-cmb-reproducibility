@@ -6002,3 +6002,162 @@ one, and immune to every slot, boundary and weight the equation has.
 > **So the defect is upstream of (102), in how the CDM coefficient set is
 > built --- not in how (102) consumes it.** That is where the next work goes,
 > and it narrows the search from an equation to a constructor.
+
+---
+
+## T-75 — the Thomson term rides the by-parts it should never have entered
+
+**2026-10-19. P2-T's D2, which P1-B wrongly discharged, is the dominant lever
+on both open symptoms at once.**
+
+### The decomposition that should have been run three rounds earlier
+
+(102) term by term, EdS, $\ell=10$, $\mathcal V$ weight:
+
+| $k$ | term | Newtonian | CDM | CDM/Newt |
+|---:|---|---:|---:|---:|
+| 10 | boundary scalar | $-1.009\times10^{-1}$ | $2.014\times10^{-2}$ | $-0.1995$ |
+| 10 | boundary shear | $0$ | $-8.710\times10^{-3}$ | --- |
+| 10 | **integrated** | $\mathbf{3.477\times10^{1}}$ | $-9.904\times10^{0}$ | $-0.2849$ |
+| 10 | total | $3.467\times10^{1}$ | $-9.893\times10^{0}$ | $-0.2854$ |
+
+**The bulk is 344$\times$ the boundary in the Newtonian frame**, and
+CDM/Newtonian is $-0.2849$ for the bulk against $-0.2854$ for the total. The
+bulk *is* the frame gap and it *is* what buries the peaks: **T-68 and T-73 are
+one defect.**
+
+### What makes it 344x
+
+$\tilde C_1$ carries both halves, $-\tilde C_1=(\delta\tilde T+\Phi_A)
++\kappa'\tilde v_B$, and (102) by-parts **all** of it. Under $\mathcal V$ the
+Thomson half contributes $\mathcal V\kappa''\tilde v_B\sim\kappa'\kappa''
+e^{-\kappa}$. That is P1-T \S5.2's *"~$10^8$ and they nearly cancel"* and it is
+**A-2's own arithmetic**: *"the Doppler source reaches $\sim10^6$ against a
+primary source of order unity. It swamps everything."*
+
+> **A-2 described this mechanism correctly in 2026-10-06 and attributed it to
+> the weight.** It is not the weight. It is by-parting a term whose own
+> $\kappa'$ already makes the visibility.
+
+### P1-T \S5.3's split, measured
+
+Bulk carries the **gravitational half only**, $-(a\tilde{\mathcal B}_1)'/k$:
+
+| background | $k$ | frame gap, released | split | bulk/boundary, released | split |
+|---|---:|---:|---:|---:|---:|
+| EdS | 10 | 1.2847 | **0.2779** | 344.41 | **0.09** |
+| EdS | 60 | 1.5642 | 0.8772 | 343.99 | 2.63 |
+| EdS | 300 | 1.0362 | 0.9925 | 143.73 | 14.87 |
+| PLANCK | 10 | 1.4159 | **0.5983** | 221.65 | **0.74** |
+| PLANCK | 60 | 1.6705 | 0.9204 | 164.62 | 5.38 |
+| PLANCK | 300 | 0.9961 | 1.0050 | 43.72 | 56.04 |
+
+**The first change all day to move the frame gap by more than a percent**, and
+it removes the bulk's absurd dominance at the same time --- one change, both
+symptoms.
+
+Leaving the Thomson half un-by-parted puts it on the **kernel derivative**,
+$j_\ell'$, which is the standard Doppler projection and which this bundle has
+never carried. Measured with both sign conventions (P1-T: Annals II has two,
+differing by a sign per derivative): it moves the gap by a further few percent
+at $k=10$ and is not the dominant piece. **The split is.**
+
+### What is still open
+
+$k=300$ is untouched ($1.0362\to0.9925$ on EdS, $0.9961\to1.0050$ on PLANCK),
+and the gap is $0.28$--$0.92$ rather than zero. **This is a large improvement,
+not a closure**, and the acceptance criterion is a theorem.
+
+### P1-B's error, recorded
+
+**I discharged D2 on 2026-10-19 on a measurement that did not test it.** The
+"cancellation metric 1.00 at every $k$ and $\ell$" measured
+*boundary-against-bulk* cancellation. **D2 is a *within-bulk* conditioning
+defect** --- $\mathcal VC_1$ against $WC_1'$ --- and I never measured that, and
+measured the wrong weight besides, pre-T-69. P2-T's D-table and P1-T \S5.2
+were right and the discharge is withdrawn.
+
+*This is the second time today that a conclusion came from a statistic that
+did not address the claim* (the first being T-68's amplitude/offset, read off a
+coarse table). The pattern is **answering an adjacent question and reporting it
+as the question**, and it is worth its own guard beside V4.
+
+### The restored monopole row --- P1-T's, confirmed and excluded
+
+With $\mathcal B_0$ restored, $C_0=-\tfrac13a\mathcal B_2-a\mathcal B_0$ and
+$a\mathcal B_0=-\tfrac13k\tau_1$ ($\tau_1$ velocity-normalised, T-66):
+
+$$\Delta C_0=-\tfrac13a\Delta\mathcal B_2+\tfrac13k\Delta\tau_1
+=+\tfrac13kv-\tfrac13kv=0 .$$
+
+**Measured on the grid: $\Delta C_0=3.5\times10^{-15}$, $3.2\times10^{-14}$,
+$3.4\times10^{-16}$, $1.9\times10^{-15}$, $6.5\times10^{-15}$,
+$1.5\times10^{-13}$** --- machine zero at every $k$ on both backgrounds.
+**$C_0$ is boost-invariant with $\mathcal B_0$ restored and is not without
+it**, confirming P1-T's derivation independently.
+
+It does **not** close the frame gap ($1.5642\to1.5203$ at $k=60$; *worse* at
+$k=300$ on PLANCK). So $C_0$ is now **excluded by proof rather than by
+ablation**, which is a stronger statement than the one T-74 could make.
+
+**Note the contradiction this creates and do not assume it away.**
+`slowdecoupling-ng-0` states that $\tilde\sigma_{ab}\approx0$ implies
+$\tilde C_0\approx0$. That holds only if $C_0\propto\mathcal B_2$ alone. With
+an $a\mathcal B_0$ term the Newtonian frame acquires a rank-0 source it has
+never had, and (110) is wrong --- or the restoration is. **Unresolved.**
+
+---
+
+## T-76 — a correction to T-74's elimination table, and the guard it earns
+
+**2026-10-19. P1-T caught this and it is P1-B's error.**
+
+T-74 listed `beta = -alpha: flip C_2''` among eleven eliminated candidates,
+on the measurement $1.2847\to1.2847$ at $k=10$ on EdS, and concluded *"which
+says the $C_2''$ slot carries essentially nothing there."* **The conclusion
+was drawn from a test that could not have come out any other way.**
+
+$|C_2''|$ against the terms it sits beside in the same bracket, CDM frame:
+
+| background | $k$ | $\lvert C_0\rvert$ | $\lvert C_1'\rvert$ | $\lvert C_2''\rvert$ | $C_2''/C_1'$ |
+|---|---:|---:|---:|---:|---:|
+| EdS | 10 | $1.667\times10^{2}$ | $8.072\times10^{3}$ | $1.306\times10^{-4}$ | $1.6\times10^{-8}$ |
+| EdS | 60 | $6.000\times10^{3}$ | $2.428\times10^{3}$ | $1.306\times10^{-4}$ | $5.4\times10^{-8}$ |
+| EdS | 300 | $1.500\times10^{5}$ | $1.699\times10^{4}$ | $1.306\times10^{-4}$ | $7.7\times10^{-9}$ |
+| PLANCK | 10 | $1.856\times10^{2}$ | $2.699\times10^{3}$ | $1.125\times10^{1}$ | $4.2\times10^{-3}$ |
+| PLANCK | 60 | $6.680\times10^{3}$ | $3.104\times10^{3}$ | $1.125\times10^{1}$ | $3.6\times10^{-3}$ |
+
+**On EdS the slot is $10^{-8}$ of its neighbours.** Flipping its sign is a
+no-op *by construction*, so the measurement was void. On PLANCK it is
+$10^{-3}$: not void, but orders below the sensitivity the test needed.
+
+> **`beta = -alpha` is UNTESTED, not eliminated.** T-74's table is corrected
+> here. The derivation stands as exact algebra; nothing this bundle has run
+> bears on it, and a background with $C_2''$ comparable to $C_1'$ is required
+> before it can.
+
+### The guard
+
+P1-T's own diagnosis of six of its corrections --- *"a mechanism derived
+correctly, then offered as a diagnosis without being run against the control
+that would falsify it"* --- applies to P1-B in a second form, and today it
+caught three:
+
+| | what happened |
+|---|---|
+| T-68 | an amplitude/offset pair **read off a coarse table** instead of computed; the conclusion came out backwards |
+| T-75 | D2 discharged on a **boundary-against-bulk** metric when D2 is a **within-bulk** claim |
+| T-76 | a sign flipped on a term that is $10^{-8}$ of its neighbours, and the null **reported as information** |
+
+All three are the same shape: **answering an adjacent question and reporting
+it as the question.** V4 guards comparing across stages; this is comparing
+across *questions*, and it needs its own line:
+
+> **V11 --- before reporting that a change did not matter, show that it
+> could have.** A null from a lever with no travel is not evidence. State
+> the magnitude of the thing varied against the thing it sits beside, or
+> the null says nothing.
+
+This bundle's residual register (the Replacement's item 4) should carry that
+column: not only each quantity's stage and normalisation, but **its size
+against its neighbours**, so a void test is visible before it is run.
