@@ -5901,3 +5901,104 @@ this is a factor $2.7$ dip at $\ell=5$ recovering by $\ell=20$. Under
 $e^{-\kappa}$: $0.779,0.654,0.601$ --- monotone, also not flat. **Both weights
 put too much power at $\ell=2$ relative to $5\le\ell\le30$**, and that is a
 separate open defect from the peaks.
+
+---
+
+## T-74 — the ISW is not what deletes the low-$\ell$ power, and the frame gap is immune to (102)
+
+**2026-10-19. Two of P1-T's four ledger items refuted by their own controls.**
+
+### Item 1: $\mathcal V$ does **not** delete an ISW
+
+P1-T: *"$\mathcal V=0$ after recombination and $e^{-\kappa}=1$. Weighting the
+integrated group with $\mathcal V$ deletes the integrated Sachs--Wolfe term
+outright. That is the missing low-$\ell$ power... in EdS, $\Phi$ is constant,
+so there is no late ISW to delete... Every frame and weight test run so far has
+been blind to this row."*
+
+**The test they asked for, with their own control.** $D_\ell/D_{30}$ ---
+*not* normalised at $\ell=2$, because that hides the quantity under test:
+
+| background | weight | $\ell=2$ | 3 | 5 | 10 | 30 | 100 |
+|---|---|---|---|---|---|---|---|
+| **EdS (control, $\Phi$ const)** | $\mathcal V$ | 1.437 | 1.342 | 0.526 | 0.626 | 1.000 | 0.471 |
+| **EdS (control)** | $e^{-\kappa}$ | 0.086 | 0.124 | 0.197 | 0.376 | 1.000 | 1.646 |
+| $\Lambda$CDM | $\mathcal V$ | 1.440 | 1.356 | 0.594 | 0.714 | 1.000 | 0.382 |
+| $\Lambda$CDM | $e^{-\kappa}$ | 0.094 | 0.134 | 0.210 | 0.392 | 1.000 | 1.485 |
+| PLANCK | $\mathcal V$ | 1.612 | 1.542 | 1.387 | 0.342 | 1.000 | 0.750 |
+| PLANCK | $e^{-\kappa}$ | 0.096 | 0.135 | 0.210 | 0.388 | 1.000 | 1.588 |
+
+**Ratio $e^{-\kappa}/\mathcal V$ at $\ell=2$: EdS 0.060, $\Lambda$CDM 0.065,
+PLANCK 0.060.** The three agree to a few percent --- **including the control
+with no ISW in it at all.**
+
+> **If the difference were the ISW, EdS would show none.** It shows the same
+> factor of sixteen as the two $\Lambda$ backgrounds. The weight difference at
+> low $\ell$ is **not** the integrated Sachs--Wolfe term.
+
+What $e^{-\kappa}$ actually produces on EdS is a monotone rise,
+$0.086\to1.000\to1.646$, on a background where $\Phi_A'=\Phi_H'=0$ exactly, so
+**there is no gravitational integrand at all**. It is the frozen $\tau_1$
+Doppler term running the whole line of sight under $W\to1$ --- **T-68's
+mechanism, confirmed on a new axis**, and it is what A-2 originally described
+before T-66 reversed the trend.
+
+**Also measured and separately deficient:** neither weight produces a
+detectable late ISW. PLANCK's $\ell=2$ exceeds EdS's by 12% under $\mathcal V$;
+$\Lambda$CDM's by 0.2%. **A real late ISW is a factor, not a few percent.** The
+bundle does not carry one, and the reason is *not* the weight. That is a
+separate open defect and it is now named.
+
+**Consequence for the A-2 flip (T-69): it stands.** P1-T asked for the weight
+to be changed inside item (iii) and for no switch. The premise does not
+survive its own control, so the change is not made. The switch stays because
+it is how this bundle measures, not a configuration option offered to a reader.
+
+### Item 3: refuted on the number P1-T themselves named
+
+*"Compute $r_s$ and $r_\theta$ from the background the code actually
+integrates and compare $\ell_A$ to the control's."* Done. EdS:
+$r_s=0.031641$, $r_\theta=1.9404$, $\ell_A=192.7$ --- **the same values the
+synthetic control used**, so there is no discrepancy in the tabulated
+quantities. And the *solver's* effective sound horizon, fitted from the
+extrema of $(\delta T+\Phi_A)(\eta_*)$ over $k=20\ldots700$, is
+$0.032289$ --- a ratio of **1.0205**, and the series $201,302,400,500,599$
+matches $n\times99.3$ to $\simeq1\%$ once the spurious first extremum at
+$k=117$ ($n\simeq1.18$, not 1) is dropped. **2%, not the 11% the
+$\sqrt{(1+R)/(1+R/2)}$ mechanism requires.** The numerical coincidence
+($1.1099$ against an apparent $1.1287$) is real and is not this.
+
+### The frame gap is immune to every term in (102)
+
+Eleven candidates, each measured, **each with the control that the Newtonian
+column must not move** --- it never did, to $10^{-14}$:
+
+| candidate | gap at $k=10$, EdS |
+|---|---|
+| released | 1.2847 |
+| $C_0\times2/15$ (P2-T \S4) | 1.2825 |
+| rank-2 by-parts terms (T-72) | 1.3157 |
+| $\gamma=0$: drop $C_0$ from the bulk (P1-T) | 1.2824 |
+| $\beta=-\alpha$: flip $C_2''$ (P1-T) | 1.2847 |
+| both, P1-T's full prescription | 1.2824 |
+| $-C_2'(\eta_*)$ at the boundary | 1.2846 |
+| shear boundary zeroed | 1.2843 |
+| Thomson term $\kappa'\tilde v_B$ zeroed | 1.2846 |
+| $\mathcal V$ against $e^{-\kappa}$ on the bulk | unchanged in the gap |
+| projection kernel | verified sound against a synthetic known answer |
+
+**P1-T's rank-2 derivation does not close it**, and at $k=60$ their full
+prescription is *worse*: $1.5642\to1.9112$. $\beta=-\alpha$ is numerically a
+no-op on EdS, which says the $C_2''$ slot carries essentially nothing there.
+
+### Where that leaves the frame question
+
+P1-T's \S6.3 gate **passes exactly** --- the invariant
+$(\delta T+\Phi_A)-C_2'$ is identical in both threadings to every printed
+digit. The invariant is preserved and the transfer is not, and **no
+rearrangement of (102) reconciles them.** The gap is $\ell$-independent, order
+one, and immune to every slot, boundary and weight the equation has.
+
+> **So the defect is upstream of (102), in how the CDM coefficient set is
+> built --- not in how (102) consumes it.** That is where the next work goes,
+> and it narrows the search from an equation to a constructor.
