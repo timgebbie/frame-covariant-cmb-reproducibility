@@ -6237,3 +6237,57 @@ and wrong for anything touching $v^B_a$, because $\tilde v^B_a=v^B_a-v_a$.*
 Accepted. T-74's *"Thomson term $\kappa'\tilde v_B$ zeroed"* row was judged
 against a control that cannot respond to it, and is withdrawn from the
 elimination list on that ground as well as T-77's.
+
+---
+
+## T-78 — the restored monopole source and (106)'s dipole term are the same object
+
+**2026-10-19, late. A structural finding, and an explicit failure to explain
+what it was sought for.**
+
+With $\mathcal B_0$ restored (T-77), $C_0=-\tfrac13a\mathcal B_2-a\mathcal B_0$
+and $a\mathcal B_0=-\tfrac13k\tau_1$. In the **Newtonian** frame
+$a\mathcal B_2=0$, so $C_0^N=+\tfrac13k\tau_1$.
+
+$-\tilde C_1'$ already contains $+\tfrac{k}{3}\tau_1$, from (106)'s
+$\tfrac13k^2\tilde\tau_1$ divided by $k$. Measured, Newtonian frame, max over
+the $\eta$ grid:
+
+| background | $k$ | $C_0$ restored | $\tau_1$ piece of $-C_1'$ | **ratio** | rest of $-C_1'$ | $C_0$/rest |
+|---|---:|---:|---:|---:|---:|---:|
+| EdS | 10 | $3.8494\times10^{0}$ | $3.8494\times10^{0}$ | **1.0000** | $5.897\times10^{3}$ | 0.0007 |
+| EdS | 60 | $6.5439\times10^{1}$ | $6.5439\times10^{1}$ | **1.0000** | $1.139\times10^{4}$ | 0.0057 |
+| EdS | 300 | $1.1228\times10^{2}$ | $1.1228\times10^{2}$ | **1.0000** | $3.587\times10^{3}$ | 0.0313 |
+| PLANCK | 10 | $3.7712\times10^{0}$ | $3.7712\times10^{0}$ | **1.0000** | $4.651\times10^{3}$ | 0.0008 |
+| PLANCK | 300 | $4.8973\times10^{1}$ | $4.8973\times10^{1}$ | **1.0000** | $3.311\times10^{3}$ | 0.0148 |
+
+**Identically equal, to every digit, at every $k$ on both backgrounds.**
+
+So the bracket $\{C_0-C_1'+C_2''\}$ carries the dipole-divergence source
+**twice** once $\mathcal B_0$ is restored. The two are different objects by
+provenance --- $\mathcal B_0=-\tfrac13\mathcal D^a\tau_a$ is the $\ell=0$
+*source* in the matching; (106)'s $\tilde\tau_1$ term is the *time evolution*
+of the rank-1 coefficient, through $\delta T'=\tfrac k3\tau_1$ --- and
+numerically they are one number. **One of the two slots is wrong and this does
+not say which.** For P1-T.
+
+### What this does **not** explain, stated because it is what it was sought for
+
+It is **not** the $k=10$ reversal. The doubled term is **0.07%** of the rest
+of $-C_1'$ at $k=10$ and 3% at $k=300$ --- orders too small to turn
+$0.278\to0.980$. The $k=10$ reversal of T-77 remains **unexplained**.
+
+*Recorded this way deliberately.* The measurement was run to explain $k=10$,
+found something real, and does not explain $k=10$. Under **V11** the honest
+report is both halves; reporting only the finding would be the same error in a
+fifth costume --- answering an adjacent question and letting it stand for the
+question asked.
+
+### Why the $k=10$ reversal is larger than it looks
+
+Restoring $\mathcal B_0$ **creates** a rank-0 source in the Newtonian frame
+(where there was none) and **shrinks** the CDM one from $-\tfrac52a\mathcal B_2$
+to $\tfrac13k\tau_1$. The Newtonian side moves by 0.07%; the CDM side moves by
+a lot. So the frame gap moves mostly because the CDM column moved, and at
+$k=10$ it moves the wrong way. That is a description of the arithmetic, **not
+a diagnosis**, and it is the next thread.
