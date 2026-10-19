@@ -210,6 +210,101 @@ def newtonian_coefficients(
     )
 
 
+#: **Finding T-66, 2026-10-18 --- the conversion that was never written.**
+#:
+#: `solve_acoustic` integrates (152)/(153) with $k$ on **both** source terms,
+#: so its $\tau_1$ is a **velocity** amplitude. Three independent confirmations:
+#: (152) carries $-k\delta T/(1+R)-k\Phi_A$; (153) carries $+(k/3)\tau_1$; and
+#: the heavily-loaded limit $\tau_1'+\mathcal H\tau_1=-k\Phi_A$ is *identical*
+#: to `cdm_frame_velocity_equation` for $v$. So $\tau_1=v_B$, un-reduced.
+#:
+#: Everything from (89) down assumes the **reduced** dipole
+#: $\tilde v_B=\tilde\tau_1=v_B/k$ --- `newtonian_coefficients` multiplies its
+#: `v_b` by $k$ to rebuild (89)'s $\kappa'v_B$, and (107) takes the derivative
+#: of the *un*-multiplied one, which is **T-25**. T-25 got the derivative right
+#: under a convention the oscillator never honoured.
+#:
+#: **Measured at $\eta_*$ on Einstein--de Sitter, where $\Omega_r=0$ and A-3 is
+#: identically zero.** The Doppler piece of the Newtonian primary against its
+#: temperature piece: **397x at $k=200$ and 193x at $k=400$** as released,
+#: against **2.0x and 0.48x** under (90). Doppler and Sachs--Wolfe are the same
+#: order at the acoustic scales or the oscillator is not an oscillator; this is
+#: not a tolerance, it is a power of $k$.
+#:
+#: Converged on independently by three streams: P1-B's measurement above,
+#: P1-T \S3.3 withdrawing its acceptance of T-27, and the external review
+#: narrowing to *"the assembly passes the oscillator output directly into the
+#: reduced-dipole coefficient machinery; I did not find a conversion."*
+#:
+#: `"velocity"` is the default because it is what `solve_acoustic` returns.
+#: `"reduced"` restores the released behaviour --- $\tau_1$ consumed as though
+#: it were already $\tilde v_B$ --- and is kept so the change is a measurement
+#: rather than a claim, the way `acoustic_start='z_max'` keeps the pre-T-51
+#: grid. **It is not a physics switch to leave lying about.**
+DIPOLE_NORMALISATION: str = "velocity"
+
+#: **Finding T-67, 2026-10-18 --- OPEN, and the default is unchanged.**
+#:
+#: (106) carries $-a^2H\tilde{\mathcal B}_1-2Hak\Phi_A$. Those are the
+#: product-rule terms for **physical** $k$ with a varying $a$. This bundle is
+#: comoving-$k$ throughout and $a\tilde{\mathcal B}_1=k_{\rm com}(\delta\tilde
+#: T+\Phi_A)$ carries no $a$ at all, so in a comoving-$k$ implementation they
+#: double-count. That is P1-T \S6.4's test, and **it returns a C3.1 violation**:
+#:
+#: | $k$ | med \|released/$dC_1$\| | med \|comoving/$dC_1$\| |
+#: |---|---|---|
+#: | 20 | 5.2736 | **1.000004** |
+#: | 50 | 1.2270 | **0.999998** |
+#: | 150 | 0.5620 | **1.000001** |
+#: | 400 | 0.5310 | **1.000004** |
+#: | 600 | 0.4951 | **1.000172** |
+#:
+#: Dropping the pair makes the supplied $\tilde C_1'$ **exactly** the derivative
+#: of the $\tilde C_1$ the code constructs; as released it is wrong by factors
+#: of 2--5 across the whole band. The structural argument is independent of the
+#: source: (102)'s boundary carries $C_1(\eta_*)$ and its integrand carries
+#: $C_1'$, so if those are not one object's value and derivative then (102) is
+#: not a by-parts of anything.
+#:
+#: **`True` --- (106) as printed --- remains the default anyway**, for two
+#: reasons. P1-T owns the algebra and has been asked to confirm against (105)
+#: and (106) in `cbrII.tex` that $a\tilde{\mathcal B}_1$ carrying a different
+#: $a$-dependence is excluded; and P1-T \S6.2 is right that a by-parts identity
+#: cannot be *judged* until item (iii) is settled, so changing this default on
+#: the spectrum would be the error T-3 warns about. **The switch exists so the
+#: decision costs one word when it is P1-B's to make.**
+#:
+#: Note the **sign hazard**, confirmed in `decoupling.py`: `kappa` is built as
+#: `forward[-1] - forward`, so $d\kappa/d\eta=-\,$`kappa_prime` and
+#: $W'=+\kappa'e^{-\kappa}=+\mathcal V$. The stored `kappa_prime` is the
+#: scattering **rate**, not the derivative of the optical-depth array.
+A_B1_PRIME_EXPANSION_TERMS: bool = True
+
+
+def reduce_dipole(tau_1: np.ndarray, k_com: float,
+                  normalisation: str | None = None) -> np.ndarray:
+    r"""$\tilde v_B=v_B/k$ from the oscillator's velocity-normalised $\tau_1$.
+
+    The single conversion point for **finding T-66**. Every consumer of (89),
+    (107) or (109) reaches the dipole through here, so the convention is stated
+    in one place rather than assumed in six.
+    """
+    which = DIPOLE_NORMALISATION if normalisation is None else str(normalisation)
+    tau_1 = np.asarray(tau_1, dtype=float)
+    if which == "velocity":
+        return tau_1 / float(k_com)
+    if which == "reduced":
+        return tau_1
+    raise ValueError(
+        f"dipole normalisation must be 'velocity' (what solve_acoustic "
+        f"returns, and the default since finding T-66) or 'reduced' (the "
+        f"released control, which consumes tau_1 as though it were already "
+        f"v_B/k); got {which!r}")
+
+
+__all__ += ["DIPOLE_NORMALISATION", "A_B1_PRIME_EXPANSION_TERMS", "reduce_dipole"]
+
+
 def newtonian_c1_prime(
     eta: np.ndarray,
     k_com: float,
@@ -277,13 +372,16 @@ def newtonian_a_b1_prime(
     k = float(k_com)
     aH = np.asarray(conformal_hubble, dtype=float)
     a_b1 = k * (np.asarray(delta_t, dtype=float) + np.asarray(phi_a, dtype=float))
-    return (
-        -aH * a_b1
-        + k * (np.asarray(phi_a_prime, dtype=float)
-               - np.asarray(phi_h_prime, dtype=float))
-        - 2.0 * aH * k * np.asarray(phi_a, dtype=float)
+    dynamical = (
+        k * (np.asarray(phi_a_prime, dtype=float)
+             - np.asarray(phi_h_prime, dtype=float))
         + (k**2 / 3.0) * np.asarray(tau_1, dtype=float)
     )
+    # (106)'s two expansion terms, kept separable --- **finding T-67, open**.
+    expansion = -aH * a_b1 - 2.0 * aH * k * np.asarray(phi_a, dtype=float)
+    if A_B1_PRIME_EXPANSION_TERMS:
+        return dynamical + expansion
+    return dynamical
 
 
 __all__ += ["newtonian_c1_prime", "newtonian_a_b1_prime"]
@@ -522,10 +620,15 @@ def newtonian_set(
     kp = np.asarray(kappa_prime, dtype=float)
     t1p = tau_1_prime(k_com, tau_1=tau1, delta_t=delta_t, phi_a=phi_a,
                       r_baryon=r_baryon, r_baryon_prime=r_baryon_prime)
-    kpvb_prime = kp * t1p + np.asarray(kappa_double_prime, dtype=float) * tau1
+    # **Finding T-66, 2026-10-18.** `solve_acoustic` returns the dipole in the
+    # **velocity** normalisation and everything from (89) down assumes the
+    # reduced one. `reduce_dipole` is the conversion that was never written.
+    vb_t = reduce_dipole(tau1, k_com)
+    vb_t_prime = reduce_dipole(t1p, k_com)
+    kpvb_prime = kp * vb_t_prime + np.asarray(kappa_double_prime, dtype=float) * vb_t
 
     coefficients = newtonian_coefficients(
-        eta, k_com, delta_t=delta_t, phi_a=phi_a, kappa_prime=kp, v_b=tau1)
+        eta, k_com, delta_t=delta_t, phi_a=phi_a, kappa_prime=kp, v_b=vb_t)
     c1p = newtonian_c1_prime(
         eta, k_com, delta_t=delta_t, phi_a=phi_a, phi_a_prime=phi_a_prime,
         phi_h_prime=phi_h_prime, tau_1=tau1, conformal_hubble=conformal_hubble,
@@ -542,7 +645,8 @@ def newtonian_set(
             phi_h_prime=phi_h_prime, tau_1=tau1, conformal_hubble=conformal_hubble),
         a_b2=zero, a_b2_prime=zero, a_b2_second=zero,
         # (89) prints kappa' v_B; the bundle carries v~_B = tau~_1 = v_B/k.
-        v_b=k * tau1, v_b_prime=k * t1p,
+        # **T-66**: that is now true, because `reduce_dipole` makes it true.
+        v_b=k * vb_t, v_b_prime=k * vb_t_prime,
     )
 
 
@@ -764,12 +868,21 @@ def cdm_set(
     # --- the Thomson term: n-t4, with (152) for the Newtonian dipole ---------
     tau_1_prime_N = tau_1_prime(k, tau_1=tau_1, delta_t=delta_t, phi_a=phi_a,
                                 r_baryon=r_baryon, r_baryon_prime=r_baryon_prime)
-    # **T-27**: the dipole is carried in the covariant normalisation
-    # tau~_1 = v~_B = v_B/k, so (37) tau~_a = tau_a - v_a reads
-    # tau~_1 -> tau~_1 - v/k here. The same 1/k the monopole carries in
-    # `FrameShift.temperature_shift`, for the same reason.
-    tau_1_E = tau_1 - v / k
-    tau_1_prime_E = tau_1_prime_N - vp / k
+    # **T-27, as narrowed by T-66 and by P1-T \S3.** The boost (37)
+    # tau~_a = tau_a - v_a is applied in the normalisation the quantity is
+    # carried in, and `tau_1` here is `solve_acoustic`'s, which is a
+    # **velocity** amplitude. So it shifts by **-v**, not -v/k, and the
+    # reduction to v~_B comes afterwards, where `reduce_dipole` then makes
+    # the reduced dipole shift by -v/k exactly as T-27 says it must.
+    #
+    # Both readings in the record are right about different objects: P1-T
+    # \S3.2 "the boost is -v" (of tau_1), and the external review's "-v/k is
+    # the correct boost for the reduced dipole" (of v~_B). The released code
+    # applied the **reduced** boost to the **un-reduced** quantity.
+    boost = v if DIPOLE_NORMALISATION == "velocity" else v / k
+    boost_prime = vp if DIPOLE_NORMALISATION == "velocity" else vp / k
+    tau_1_E = tau_1 - boost
+    tau_1_prime_E = tau_1_prime_N - boost_prime
     # **The two are differently normalised and the names do not say so.**
     # `match_coefficients` takes kappa' v_B, which is k times the kappa' v~_B of
     # (109); `newtonian_c1_prime` takes the derivative of the *un*-multiplied
@@ -777,8 +890,14 @@ def cdm_set(
     # second with the k of the first is a factor of k_com -- 60 at the first k
     # this was run at -- and it is what the first draft of this function did.
     # Recorded as **T-25**; the argument names are now explicit about it.
-    kappa_prime_v_b_E = k * kp * tau_1_E                       # for (89)
-    kappa_prime_v_b_tilde_prime_E = kpp * tau_1_E + kp * tau_1_prime_E   # for (107)
+    #
+    # **T-66.** T-25 got the derivative right under a convention the oscillator
+    # never honoured: both lines below assumed `tau_1_E` was already v~_B.
+    # `reduce_dipole` is the conversion, and it is applied once, here.
+    vb_t_E = reduce_dipole(tau_1_E, k)
+    vb_t_prime_E = reduce_dipole(tau_1_prime_E, k)
+    kappa_prime_v_b_E = k * kp * vb_t_E                        # for (89)
+    kappa_prime_v_b_tilde_prime_E = kpp * vb_t_E + kp * vb_t_prime_E   # for (107)
 
     # --- rank two: the sector that is empty in the Newtonian frame -----------
     sigma, sigma_dot, sigma_ddot = cdm_frame_shear(
@@ -832,7 +951,7 @@ def cdm_set(
         a_b1=a_b1_E, a_b1_prime=a_b1_prime_E,
         a_b2=-(k**2) * c2, a_b2_prime=-(k**2) * c2_prime,
         a_b2_second=-(k**2) * c2_second,
-        v_b=k * tau_1_E, v_b_prime=k * tau_1_prime_E,
+        v_b=k * vb_t_E, v_b_prime=k * vb_t_prime_E,
     )
 
 

@@ -62,7 +62,8 @@ from functions.spectra.acoustic import (
     sound_horizon_from_zero,
 )
 from functions.spectra.bessel_table import BesselTable
-from functions.spectra.coefficients import newtonian_c1_prime, newtonian_coefficients
+from functions.spectra.coefficients import (
+    newtonian_c1_prime, newtonian_coefficients, reduce_dipole)
 from functions.spectra.decoupling import RecombinationHistory, diffusion_scale
 from functions.spectra.integral_solution import integral_solution, required_multipoles
 from functions.spectra.pipeline import (
@@ -247,8 +248,11 @@ def two_route_transfer(
     damping = scattering.diffusion(k)
 
     # ---- route one: (177)-(179), assembled in the Newtonian frame ---------
+    # **T-66**: v_b is the reduced v~_B = v_B/k that (177)/(178) want; tau_1
+    # stays velocity-normalised, which is what (178)'s (1/3) k tau~_1 wants.
     history = PerturbationHistory(eta=eta, delta_T=delta_t, phi_a=phi_a,
-                                  phi_h=phi_h, tau_1=tau_1, v_b=tau_1,
+                                  phi_h=phi_h, tau_1=tau_1,
+                                  v_b=reduce_dipole(tau_1, k),
                                   frame="newtonian")
     primary = source_primary(history, scattering, damping_total=damping)
     # **The one place the two routes are not reading the same way.** (102)'s
@@ -277,14 +281,18 @@ def two_route_transfer(
         + float(np.trapezoid(integrated * table(int(l), x), eta)) for l in ells])
 
     # ---- route two: (102), carried generically, specialised at the end ----
+    # **T-66**, route two: the same reduction route one now makes. Both routes
+    # reached the dipole through their own line, which is why no comparison
+    # between them could see this -- T-3's lesson, in duplicate again.
+    vb_t = reduce_dipole(tau_1, k)
     coefficients = newtonian_coefficients(eta, k, delta_t=delta_t, phi_a=phi_a,
-                                          kappa_prime=kp, v_b=tau_1)
+                                          kappa_prime=kp, v_b=vb_t)
     c1_prime = newtonian_c1_prime(
         eta, k, delta_t=delta_t, phi_a=phi_a,
         phi_a_prime=CubicSpline(eta, phi_a).derivative(1)(eta),
         phi_h_prime=CubicSpline(eta, phi_h).derivative(1)(eta),
         tau_1=tau_1, conformal_hubble=aH,
-        kappa_prime_v_b_prime=CubicSpline(eta, kp * tau_1).derivative(1)(eta))
+        kappa_prime_v_b_prime=CubicSpline(eta, kp * vb_t).derivative(1)(eta))
     generic = integral_solution(
         ells, coefficients=coefficients, table=table, weight=opa,
         diffusion=damping, damping_total=damping, eta_star=rec.eta_star,

@@ -130,6 +130,28 @@ class FrameShift:
         """
         return -np.asarray(self.v, dtype=float) / self.k_com
 
+    def velocity_shift(self) -> np.ndarray:
+        r"""$-v$ --- what an **un-reduced** dipole shifts by. **Finding T-66.**
+
+        `dipole_shift` above is right, and so is the reasoning for it: a
+        *reduced* dipole $\tilde v_B=v_B/k$ shifts by $-v/k$. What was missing
+        is that `solve_acoustic` does not return a reduced dipole. It
+        integrates (152)/(153) with $k$ on both source terms, so its $\tau_1$
+        is a **velocity** amplitude --- and the heavily-loaded limit
+        $\tau_1'+\mathcal H\tau_1=-k\Phi_A$ is *identical* to
+        `cdm_frame_velocity_equation` for $v$, which is the argument this
+        module's own header makes and then does not act on.
+
+        So (37) applied to that object is $-v$, and the reduction to
+        $\tilde v_B$ comes afterwards. **Both readings in the record are right
+        about different objects**: P1-T \S3.2's *"the boost is $-v$"* (of
+        $\tau_1$) and the external review's *"$-v/k$ is the correct boost for
+        the reduced dipole"* (of $\tilde v_B$). The released code applied the
+        **reduced** boost to the **un-reduced** quantity, which is one power of
+        $k_{\rm com}$ --- 300 at the top of the grid.
+        """
+        return -np.asarray(self.v, dtype=float)
+
 
 def cdm_frame_shift(
     eta: np.ndarray,
@@ -210,7 +232,12 @@ def to_frame(
         delta_T=np.asarray(history.delta_T, dtype=float) + shift.temperature_shift(),
         phi_a=np.asarray(history.phi_a, dtype=float) + potential,
         phi_h=np.asarray(history.phi_h, dtype=float) + potential,
-        tau_1=np.asarray(history.tau_1, dtype=float) + shift.dipole_shift(),
+        # **T-66**: `tau_1` is velocity-normalised and takes `-v`; `v_b` is the
+        # reduced $\tilde v_B$ and takes `-v/k`. Two rank-one objects in one
+        # dataclass, differently normalised -- which is what
+        # `dipole_shift`'s own docstring says of `temperature_shift`, one
+        # field too early.
+        tau_1=np.asarray(history.tau_1, dtype=float) + shift.velocity_shift(),
         v_b=np.asarray(history.v_b, dtype=float) + shift.dipole_shift(),
         frame=shift.target,
     )

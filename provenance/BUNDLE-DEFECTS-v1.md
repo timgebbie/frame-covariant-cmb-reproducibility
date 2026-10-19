@@ -5327,3 +5327,235 @@ $\Omega_r=0$ control here, and T-62's Einstein--de Sitter $1.0000$ --- had one.
 The three that cost hours did not. **A tolerance on a quantity with no right
 answer cannot fail usefully**, and that is now the standing argument for
 building the control first.
+
+
+---
+
+## T-65 — `fig:bulk` is on the right side of T-57, and the control says what it would have cost
+
+**Measured 2026-10-18**, closing a question Coordination raised about a paper
+under review. `outputs/line-of-sight-field.csv` is what Paper 1's `fig:bulk` is
+drawn from, and `scripts/emit_handover_fields.py` builds it as
+
+```python
+source = source_doppler(history, scattering, RAY_K_COM, weight=opacity) \
+       + source_integrated(history, scattering, RAY_K_COM, aH=aH, weight=opacity)
+```
+
+with `source_primary` **never called** --- correctly, since the primary term is
+a boundary term at $\eta_*$ and `fig:bulk` is a statement about the bulk.
+
+### The control, run on the released script
+
+Not on a rebuild. **The first attempt rebuilt the ray by hand and did not
+reproduce the released file** --- the endpoint agreed to four digits and the
+running excursion did not --- so none of its numbers were evidence and they
+were discarded. This monkeypatches one thing per trial, calls
+`emit_handover_fields.main()` itself, and diffs the CSV the script writes. The
+released file is regenerated unpatched at the end and reproduces
+`endpoint = -1.088150e+00`, `excursion = 2.2172e-01` exactly.
+
+| perturbation | integrand, $|\Delta|/$scale | integrand **shape** | running **shape** | endpoint |
+|---|---|---|---|---|
+| $\kappa'\times1.01$ | $1.001\times10^{-2}$ | $2.91\times10^{-4}$ | $1.81\times10^{-3}$ | $\times1.008$ |
+| weight $\to\mathcal V$ (**T-57**) | $3.009\times10^{2}$ | $0.491$ | $0.392$ | $\times197$ |
+
+**The file is not unmoved, and the two rows say different things.**
+
+A 1% change in $\kappa'$ moves the amplitude by 1.0% and the **shape by
+0.03%** --- very nearly a pure rescale, so `fig:bulk`'s structural claim is
+insensitive to a $\kappa'$ rescaling even though the field is linear in it.
+
+The T-57 weight substitution moves the amplitude by **301$\times$**, the
+endpoint by **197$\times$**, and the **shape by 49%**. That is not a rescale.
+It would be a different figure.
+
+### And it does not apply, because this caller named its weight
+
+`emit_handover_fields.py` passes `weight=opacity` **explicitly**, on both
+source terms. It is one of the callers that complied with approximation
+**A-1**'s rule --- *"the caller states which"* --- all along, which is exactly
+what the eight `two_frame` callers of T-57 did not do.
+
+**So `fig:bulk` is on the correct weighting and the finding does not reach the
+paper.** The control is worth keeping anyway: it prices what the defect would
+have cost had this path defaulted like the others, and it is the difference
+between asserting that and knowing it.
+
+### A note on the instrument
+
+The useful column is the **shape**, not the amplitude, and the first version of
+this control reported only the amplitude. Under $\kappa'\times1.01$ that reads
+"MOVES" and says nothing; the shape column separates *the figure's amplitude
+moved* from *the figure's claim moved*, which for a paper under review is the
+entire question. That is **D5's distinction** --- the normalised shape gap ---
+applied to a different artefact.
+
+---
+
+## T-66 — the dipole conversion that was never written
+
+**2026-10-18. Five instances, one defect, one per route. Landed.**
+
+`solve_acoustic` returns the photon dipole in the **velocity** normalisation.
+Three independent confirmations, all in the code rather than in the reading:
+(152) is integrated with $k$ on *both* source terms,
+$-k\delta T/(1+R)-k\Phi_A$; (153) carries $+(k/3)\tau_1$; and the
+heavily-loaded limit $\tau_1'+\mathcal H\tau_1=-k\Phi_A$ is **identical** to
+`cdm_frame_velocity_equation` for $v$. So $\tau_1=v_B$, un-reduced.
+
+Everything from (89) down assumes the **reduced** dipole
+$\tilde v_B=\tilde\tau_1=v_B/k$. `newtonian_coefficients` multiplies its `v_b`
+by $k$ to rebuild (89)'s $\kappa'v_B$; (107) takes the derivative of the
+*un*-multiplied one, which is **T-25**. **T-25 got the derivative right under
+a convention the oscillator never honoured.** No conversion existed anywhere
+between the two, and five call sites each wrote `v_b=tau_1` in their own line.
+
+### The measurement
+
+At $\eta_*$ on Einstein--de Sitter, where $\Omega_r=0$ and **A-3** is
+identically zero, so nothing here is radiation driving. The Doppler piece of
+the Newtonian primary against its temperature piece:
+
+| $k$ | $(\delta T+\Phi_A)(\eta_*)$ | $\kappa'\tau_1$ as released | $\kappa'\tau_1/k$ per (90) | ratio |
+|---:|---:|---:|---:|---:|
+| 10 | $3.183\times10^{-1}$ | $-5.916\times10^{1}$ | $-5.916\times10^{0}$ | 10.0 |
+| 50 | $-2.038\times10^{-2}$ | $-2.316\times10^{2}$ | $-4.632\times10^{0}$ | 50.0 |
+| 200 | $-1.245\times10^{-1}$ | $-4.935\times10^{1}$ | $-2.468\times10^{-1}$ | 200.0 |
+| 400 | $-8.277\times10^{-2}$ | $-1.595\times10^{1}$ | $-3.987\times10^{-2}$ | 400.0 |
+| 600 | $-5.675\times10^{-2}$ | $-8.376\times10^{0}$ | $-1.396\times10^{-2}$ | 600.0 |
+
+**The arbiter is the physics, not a tolerance.** Doppler and Sachs--Wolfe are
+the same order at the acoustic scales or the oscillator is not an oscillator.
+Released, the ratio is **397$\times$ at $k=200$** and **193$\times$ at
+$k=400$**; under (90) it is **1.92** and **0.47**. A ratio that scales exactly
+as $k$ is a power of $k$, not an error bar.
+
+### What it does to the spectrum, and the negative result
+
+EdS, Newtonian, $K_{\max}=900$, 1668 modes, $n_\eta=8000$, opacity weight.
+$\ell_A=192.8$, so $\cos(kr_s)$ peaks at 193, 386, 578.
+
+| $\ell$ | released | T-66 |
+|---:|---:|---:|
+| 2 | 1.3126 | 1.7135 |
+| 100 | 1.0609 | 0.5278 |
+| 200 | 0.6494 | 0.1637 |
+| 300 | 1.0662 | 0.0617 |
+| 400 | 1.0554 | 0.0257 |
+| 600 | 0.5417 | 0.0056 |
+| 800 | 0.4098 | 0.0016 |
+
+```
+  released   max over l>100 = 1.2398 at l = 360
+  T-66       max over l>100 = 0.4107 at l = 120
+```
+
+**The released $\ell\approx360$ maximum was the $\kappa'\tau_1$ contamination,
+not a weak acoustic peak.** The earlier framing --- *"peaks roughly 4$\times$
+too weak"* --- was wrong in the way that matters: there were no peaks to be
+weak. T-66 **removes a spurious signal; it does not supply a missing one**, and
+it is correct independently of that, because it is settled by (90)'s own
+dimensional content.
+
+### The five instances
+
+`newtonian_set`, `cdm_set`, `pipeline.run`, `two_route` (both halves) and
+`emit_handover_fields`. Each reached the dipole through its own line, which is
+**why no comparison among them could see it** --- T-3's lesson, now in
+quintuplicate. `reduce_dipole` is the single conversion point, so the
+convention is stated once rather than assumed six times.
+
+`DIPOLE_NORMALISATION="reduced"` restores the released behaviour as a control,
+the way `acoustic_start='z_max'` keeps the pre-T-51 grid.
+
+### The frame change, and two readings that are both right
+
+`FrameShift.dipole_shift` returns $-v/k$ and its reasoning is **correct**: a
+*reduced* dipole shifts by $-v/k$. What was missing is that the object it was
+applied to was not reduced. `velocity_shift` is the $-v$ an un-reduced dipole
+takes, and `to_frame` now gives `tau_1` the first and `v_b` the second.
+
+P1-T \S3.2 (*"the boost is $-v$"*) and the external review (*"$-v/k$ is the
+correct boost for the reduced dipole"*) are **both right, about different
+objects**. The released code applied the reduced boost to the un-reduced
+quantity. This also withdraws P1-B's earlier "worry 2 is settled" measurement
+(degradation 11$\times$/131$\times$/202$\times$): that compared `tau_1 - v/k`
+against `tau_1 - v` in `FrameShift` and was aimed at the wrong object. It does
+not bear on T-66.
+
+### Attribution
+
+Converged on independently by three streams: P1-B's measurement above; P1-T
+\S3.3, withdrawing its own acceptance of T-27 (*"available in principle, not in
+force"*); and the external review, narrowing to *"the assembly passes the
+oscillator output directly into the reduced-dipole coefficient machinery; I did
+not find a conversion between those equations."*
+
+### Blast radius
+
+307 physics tests pass. One moved and is recorded in place:
+`test_102_must_carry_the_visibility_and_substituting_the_opacity_wrecks_it`'s
+printed-weight rank share goes 0.47--0.62% to 0.22%, 0.11%, 0.71%, **5.19%**
+over $\ell=2,5,10,20$. Rank 1 got smaller and nothing else changed, so the
+rank-0/2 share rises; the threshold moves **with the measurement recorded**,
+and the control half --- which must invert --- is untouched and still does.
+
+---
+
+## T-67 — (106)'s expansion terms double-count in comoving $k$. **OPEN**
+
+**2026-10-18. Measured, implemented behind a switch, default unchanged.**
+
+(106) carries $-a^2H\tilde{\mathcal B}_1-2Hak\Phi_A$. Those are the
+product-rule terms for **physical** $k$ with a varying $a$. This bundle is
+comoving-$k$ throughout and $a\tilde{\mathcal B}_1=k_{\rm com}(\delta\tilde
+T+\Phi_A)$ carries no $a$ at all, so in a comoving-$k$ implementation they
+double-count. That is **P1-T \S6.4's test**, and it returns a **C3.1
+violation**:
+
+| $k$ | med $\lvert$released$/dC_1\rvert$ | med $\lvert$comoving$/dC_1\rvert$ | max rel err |
+|---:|---:|---:|---:|
+| 20 | 5.2736 | **1.000004** | $8.5\times10^{-4}$ |
+| 50 | 1.2270 | **0.999998** | $8.3\times10^{-4}$ |
+| 150 | 0.5620 | **1.000001** | $3.4\times10^{-3}$ |
+| 400 | 0.5310 | **1.000004** | $2.2\times10^{-2}$ |
+| 600 | 0.4951 | **1.000172** | $3.6\times10^{-2}$ |
+
+Scattering off throughout, so T-66's contamination cannot enter. The residual
+at high $k$ is spline error on a fast oscillation and falls with $k$.
+
+Dropping the pair makes the supplied $\tilde C_1'$ **exactly** the derivative
+of the $\tilde C_1$ the code constructs; as released it is wrong by factors of
+**2--5 across the whole band**. The structural argument needs no reading of the
+source: (102)'s boundary carries $C_1(\eta_*)$ and its integrand carries
+$C_1'$, so if those are not one object's value and derivative then (102) is not
+a by-parts of anything.
+
+**T-23's defence does not reach this and is hereby narrowed.** T-23 is about
+mode-expanding $\mathcal D_{\langle a}\dot{\mathcal B}_{b\rangle}$, where a
+tensor index is carried through a derivative. By the time (102) is evaluated,
+$C_1$ is a **scalar** mode coefficient and there is no tensor left to commute.
+
+**The default stays `A_B1_PRIME_EXPANSION_TERMS=True`, (106) as printed**, for
+two reasons that are not timidity. P1-T owns the algebra and has been asked to
+confirm against (105)/(106) in `cbrII.tex` that $a\tilde{\mathcal B}_1$
+carrying a different $a$-dependence is excluded. And P1-T \S6.2 is right that a
+by-parts identity cannot be *judged* until item (iii) is settled, so flipping
+this on the spectrum would be the error T-3 warns about. **The switch exists so
+that the decision costs one word when it is P1-B's to make.**
+
+Measured with the switch flipped, on EdS: `max over l>100 = 1.0846 at l = 120`
+and `D_2/D_30 = 0.0901`. The quadrupole collapse is **not** evidence against
+T-67 for the reason above.
+
+### The sign hazard, confirmed
+
+`decoupling.py` builds `kappa = forward[-1] - forward`, so $\kappa(\eta_0)=0$
+and $d\kappa/d\eta=-\,$`kappa_prime`. Therefore
+$W'=\mathrm d(e^{-\kappa})/\mathrm d\eta=+\kappa'e^{-\kappa}=+\mathcal V$,
+**positive**. The stored `kappa_prime` is the scattering **rate**, not the
+derivative of the optical-depth array. Raised independently by P1-T \S5.4 and
+by the external review's claim 4; both are right, and the by-parts expansion
+$WC_0-(WC_1)'+(WC_2)''=W(C_0-C_1'+C_2'')-\mathcal VC_1+2\mathcal VC_2'
++\dot{\mathcal V}C_2$ carries that sign.

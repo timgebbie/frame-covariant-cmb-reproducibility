@@ -42,6 +42,7 @@ sys.path.insert(0, str(ROOT))
 
 from functions.background.flrw import LCDM_MODEL  # noqa: E402
 from functions.spectra.acoustic import solve_acoustic  # noqa: E402
+from functions.spectra.coefficients import reduce_dipole  # noqa: E402
 from functions.spectra.decoupling import RecombinationHistory, Weighting  # noqa: E402
 from functions.spectra.emissions import (  # noqa: E402
     comoving_distance,
@@ -123,7 +124,9 @@ def main() -> int:
 
     history = PerturbationHistory(
         eta=eta, delta_T=delta_T, phi_a=phi_a, phi_h=phi_h,
-        tau_1=tau_1, v_b=tau_1, frame="newtonian",
+        # **T-66**: v_b is the reduced v~_B = v_B/k; tau_1 stays as the
+        # oscillator returns it, which is the velocity normalisation.
+        tau_1=tau_1, v_b=reduce_dipole(tau_1, RAY_K_COM), frame="newtonian",
     )
     scattering = ScatteringHistory(
         eta=eta, kappa_prime=kappa_prime, visibility=visibility,

@@ -74,7 +74,7 @@ def setup():
 def _pipeline_transfer(s) -> np.ndarray:
     """What `pipeline.run` assembles, from (177)-(179)."""
     h = PerturbationHistory(eta=s["eta"], delta_T=s["dT"], phi_a=s["phi_a"],
-                            phi_h=s["phi_h"], tau_1=s["t1"], v_b=s["t1"],
+                            phi_h=s["phi_h"], tau_1=s["t1"], v_b=s["t1"] / K,
                             frame="newtonian")
     sc = ScatteringHistory(eta=s["eta"], kappa_prime=s["kp"],
                            visibility=s["vis"], damping_k=s["k_d"])
@@ -96,7 +96,7 @@ def _pipeline_transfer(s) -> np.ndarray:
 def _generic_transfer(s, *, spline_the_amplitude: bool):
     eta, bg = s["eta"], s["bg"]
     c = newtonian_coefficients(eta, K, delta_t=s["dT"], phi_a=s["phi_a"],
-                               kappa_prime=s["kp"], v_b=s["t1"])
+                               kappa_prime=s["kp"], v_b=s["t1"] / K)
     if spline_the_amplitude:
         c1p = CubicSpline(eta, c.c1).derivative(1)(eta)          # T-23's trap
     else:
@@ -106,7 +106,7 @@ def _generic_transfer(s, *, spline_the_amplitude: bool):
             phi_h_prime=CubicSpline(eta, s["phi_h"]).derivative(1)(eta),
             tau_1=s["t1"], conformal_hubble=s["aH"],
             kappa_prime_v_b_prime=CubicSpline(
-                eta, s["kp"] * s["t1"]).derivative(1)(eta))
+                eta, s["kp"] * s["t1"] / K).derivative(1)(eta))
     sc = ScatteringHistory(eta=eta, kappa_prime=s["kp"], visibility=s["vis"],
                            damping_k=s["k_d"])
     damping = sc.diffusion(K)
@@ -158,7 +158,7 @@ def test_the_shear_boundary_term_is_not_empty_once_b2_is(setup):
     sigma = 0.02 * np.exp(-((eta - setup["rec"].eta_star) / 0.4) ** 2)
     c = match_coefficients(eta, K, a_b1=K * (setup["dT"] + setup["phi_a"]),
                            a_b2=sigma,
-                           kappa_prime_v_b=K * setup["kp"] * setup["t1"],
+                           kappa_prime_v_b=setup["kp"] * setup["t1"],
                            frame="cdm")
     sc = ScatteringHistory(eta=eta, kappa_prime=setup["kp"],
                            visibility=setup["vis"], damping_k=setup["k_d"])

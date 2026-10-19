@@ -51,7 +51,7 @@ finely.
 
 ### `eta` — the line-of-sight integration grid for C_ell
 
-`functions/spectra/pipeline.py:421`, `np.linspace`
+`functions/spectra/pipeline.py:422`, `np.linspace`
 
 `required_n_eta(k_max, span)` at 12 samples per j_ell oscillation, and
 `run` RAISES rather than accepting an n_eta below it --- *"Pass n_eta=None to
@@ -60,7 +60,7 @@ template the other rows are measured against.
 
 ### `mode_eta` — one acoustic mode's own integration grid, from its derived start
 
-`functions/spectra/pipeline.py:505`, `np.linspace`
+`functions/spectra/pipeline.py:506`, `np.linspace`
 
 `required_acoustic_points(k, eta_couple - start)` at 24 samples per
 acoustic oscillation, on a floor of 512. Arithmetic, not a knob: delta_T goes
@@ -96,7 +96,7 @@ and `acoustic_start_eta` are shared, so the three cannot drift apart again.
 
 ### `eta` — the eta grid for criterion 5b's gate, both routes
 
-`functions/spectra/two_route.py:204`, `np.linspace`
+`functions/spectra/two_route.py:205`, `np.linspace`
 
 `required_n_eta` at **48** samples per oscillation, four times the C_ell
 route's twelve, on a floor of 8000. The higher rate is not caution: this
@@ -108,7 +108,7 @@ it derived.
 
 ### `mode_eta` — one acoustic mode's integration grid inside criterion 5b's gate
 
-`functions/spectra/two_route.py:234`, `np.linspace`
+`functions/spectra/two_route.py:235`, `np.linspace`
 
 `required_acoustic_points`, floored at the gate's own `n_eta` so that
 the mode grid is never coarser than the line-of-sight grid it is interpolated
@@ -240,7 +240,7 @@ Linear at `DK`, the same rule as F3. D5's claim is 0.26% against a 5% criterion,
 
 ### `eta` — the eta grid for the handover emissions
 
-`scripts/emit_handover_fields.py:107`, `np.linspace`
+`scripts/emit_handover_fields.py:108`, `np.linspace`
 
 Taken from `required_n_eta` via the same derivation the pipeline uses; the emissions are evaluated on the pipeline's own grid so that a downstream consumer is not handed a different discretisation from the one the spectrum was computed on.
 
@@ -304,7 +304,7 @@ Set by the transform length, not chosen. The FFT's own grid is the k grid of its
 
 ### `master` — the grid Phi_A and Phi_H are splined on, shared by every mode
 
-`functions/spectra/pipeline.py:496`, `np.logspace`
+`functions/spectra/pipeline.py:497`, `np.logspace`
 
 16384 logarithmic samples from the earliest acoustic start to
 eta_couple. **It carries no physical scale of its own**: it resamples a

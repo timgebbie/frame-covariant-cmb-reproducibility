@@ -76,6 +76,7 @@ from functions.spectra.acoustic import (
 )
 from functions.spectra.angular import AngularSpectrum, angular_spectrum
 from functions.spectra.bessel_table import BesselTable
+from functions.spectra.coefficients import reduce_dipole
 from functions.spectra.decoupling import RecombinationHistory, Weighting, diffusion_scale
 from functions.spectra.potentials import matter_domination_eta, potentials
 from functions.spectra.sources import (
@@ -522,9 +523,16 @@ def run(
                 omega_b_h2=omega_b_h2, expansion_coupling=expansion_coupling,
             )
             delta_T, tau_1 = freeze(acoustic.delta_T), freeze(acoustic.tau_1)
+        # **Finding T-66.** `tau_1` stays as `solve_acoustic` returns it --- the
+        # **velocity** normalisation, which is what (178)'s $(1/3)k\tilde\tau_1$
+        # wants, since that term is $(1/k)(a\mathcal B_1)'$'s dipole piece.
+        # `v_b` is the **reduced** $\tilde v_B=v_B/k$, which is what (177)'s
+        # $\kappa'v_B$ and (178)'s $(\kappa'\tilde v_B)'$ want, per (109). The
+        # two fields are differently normalised **and now they are each the one
+        # their consumers assume**; before T-66 both were the oscillator's.
         history = PerturbationHistory(
             eta=eta, delta_T=delta_T, phi_a=phi_a, phi_h=phi_h,
-            tau_1=tau_1, v_b=tau_1, frame="newtonian",
+            tau_1=tau_1, v_b=reduce_dipole(tau_1, float(k)), frame="newtonian",
         )
         scattering = ScatteringHistory(
             eta=eta, kappa_prime=kappa_prime, visibility=visibility, damping_k=damping_k
