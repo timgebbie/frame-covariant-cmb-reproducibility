@@ -5559,3 +5559,104 @@ derivative of the optical-depth array. Raised independently by P1-T \S5.4 and
 by the external review's claim 4; both are right, and the by-parts expansion
 $WC_0-(WC_1)'+(WC_2)''=W(C_0-C_1'+C_2'')-\mathcal VC_1+2\mathcal VC_2'
 +\dot{\mathcal V}C_2$ carries that sign.
+
+---
+
+## T-68 — the bulk integral buries the peaks, and A-2 rests on a measurement T-66 invalidated
+
+**2026-10-19. Measured on Einstein--de Sitter, post-T-66. The mechanism of the
+acoustic peak deficit, found at last.**
+
+### The oscillation exists at last scattering
+
+$(\delta T+\Phi_A)(\eta_*)$ tracks $\cos(kr_s)$ in **exact phase and period**,
+amplitude $0.565$ on an offset of $-0.295$ --- a contrast *better* than the
+closed form (181)'s $0.935/{-0.605}$. $r_s(\eta_*)=0.03164$,
+$r_\theta=1.9404$, $\ell_A=\pi r_\theta/r_s=192.7$. **So the peaks are created
+correctly and destroyed in projection.**
+
+### Which half destroys them
+
+(102) has two pieces in the Newtonian frame and `IntegralSolution` keeps them
+apart, so one pass separates them. EdS, T-66 landed, T-67 default, $T(k)$ off:
+
+| $\ell$ | boundary | bulk | total |
+|---:|---:|---:|---:|
+| 100 | 0.5175 | 0.9127 | 0.8474 |
+| 200 | 0.0577 | 0.4726 | 0.4546 |
+| 400 | 0.0216 | 0.1588 | 0.1558 |
+| 580 | 0.0091 | 0.0653 | 0.0634 |
+
+```
+  boundary  interior maxima above l=100: [460]
+  bulk      interior maxima above l=100: NONE
+  total     interior maxima above l=100: NONE
+```
+
+**The boundary carries acoustic structure. The bulk has none at all, is
+perfectly monotonic, and is 7--8$\times$ larger across the whole acoustic
+band.** The peaks are not weak; they are buried.
+
+**And on this background the bulk should be nearly empty.** EdS has
+$\Omega_r=0$ and T-52 measures $\Phi_A=1.0$ to $10^{-13}$, so
+$\Phi_A'=\Phi_H'=0$ and the true integrated Sachs--Wolfe effect is
+**identically zero**. A term that should vanish is dominating. What fills it is
+$W=e^{-\kappa}\to1$ running over the entire line of sight against a $\tau_1$
+frozen past $6\eta_*$ --- that is **approximation A-2**, plus T-67's disputed
+expansion terms, which on EdS *are* the rest of the integrand.
+
+### The printed weight restores them
+
+The same run with (102)'s printed $\mathcal V$ on the bulk:
+
+| $\ell$ | boundary | bulk | total |
+|---:|---:|---:|---:|
+| 2 | 1.3952 | 1.4467 | 1.4469 |
+| 200 | 0.0577 | 0.0262 | 0.0261 |
+| 460 | --- | --- | *interior maximum* |
+
+```
+  total  D_2/D_30 = 1.4469   interior maxima above l=100: [320, 460, 700]
+```
+
+**Acoustic structure appears, and the Sachs--Wolfe plateau survives.**
+
+### Why this reopens A-2
+
+`SOURCE-APPROXIMATIONS-v1.md` records A-2's basis: weighting the integrated
+sources with $\mathcal V$ *"gives $D_\ell\propto\ell^2$ --- there is no
+Sachs--Wolfe plateau at all"*, measured as a rise from $\ell=2$ to 30 of
+**80.5$\times$** against 8.17$\times$ for $e^{-\kappa}$. That measurement was
+made **before T-66**, when $\kappa'\tilde v_B$ was too large by $k_{\rm com}$
+--- and the object that destroyed the plateau is exactly
+$\mathcal V\kappa'\sim\kappa'^2e^{-\kappa}$, which P1-T \S5.2 flags and which
+**T-66 has now divided by $k$**.
+
+Post-T-66 the printed weight gives $D_2/D_{30}=1.4469$: a **flat plateau**, not
+$\ell^2$.
+
+> **A-2 is a released departure from the antecedent resting on a measurement
+> that T-66 invalidated.** It must be re-measured on all three backgrounds
+> before any further conclusion is drawn from a spectrum. This is T-3's lesson
+> arriving from a new direction: a *decision* taken from a measurement is only
+> as good as the measurement, and nothing in the bundle re-checks a decision
+> when its evidence moves.
+
+### What is **not** claimed
+
+The peak **positions** (320, 460, 700 against $\ell_A$, $2\ell_A$,
+$3\ell_A=193$, 386, 578) and the high-$\ell$ **amplitude** (still orders below
+CAMB) are **both still wrong**. T-68 identifies the mechanism that was hiding
+the oscillation; it does not claim a correct spectrum. Those are the next
+questions and they are separable now that there is structure to measure.
+
+### Also retired here
+
+$T(k)$ --- Appendix J, **T-37** --- is a *radiation-era* transfer function and
+is applied on `CDM_MODEL`, which carries $\Omega_r=0$ and has no radiation era
+at all. It suppresses $k=600$ to $0.273\times$ of $k=100$, a factor of 13 in
+power at the third peak. It is A-3's mirror image: **A-3 omits radiation
+driving, which would raise the peaks; $T(k)$ applies radiation suppression,
+which lowers them.** On Einstein--de Sitter neither belongs, and the EdS
+*control* has carried this contaminant throughout. Measured with it off, high
+$\ell$ rises by 6--15$\times$. Raised independently in the external review.

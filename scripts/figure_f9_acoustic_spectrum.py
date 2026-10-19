@@ -145,6 +145,30 @@ def spectrum(background, omega_b_h2: float,
 
 
 def shape(ell: np.ndarray, cl: np.ndarray) -> np.ndarray:
+    r"""$C_\ell/C_{30}$ --- **the plotted quantity, the PI's call 2026-10-19.**
+
+    This used to be $D_\ell/D_{30}$ with $D_\ell=\ell(\ell+1)C_\ell/2\pi$. The
+    change is to $C_\ell$ on log-log, and it is not cosmetic:
+
+    * $D_\ell$'s $\ell^2$ **manufactures a rise** that flatters a spectrum with
+      no acoustic structure. $C_\ell$ shows the spectrum the transfer function
+      actually produces, so a monotonic curve reads as monotonic.
+    * The damping tail is a power law times $e^{-2(k/k_D)^2}$. On log-log it is
+      a straight line with a knee, so $k_D$ becomes something the reader can
+      **place by eye** rather than something the caption asserts.
+    * A ratio normalised at $\ell=30$ stays positive, so a plain log axis is
+      honest here; `symlog` would put a free threshold parameter underneath a
+      figure whose entire claim is the shape.
+
+    `shape_d` keeps the $D_\ell$ form, because the acoustic peak positions and
+    $\ell_A$ are $D_\ell$ statements and `first_peak` must stay on that footing
+    --- the first maximum of $C_\ell$ is not the first acoustic peak.
+    """
+    return cl / np.interp(30.0, ell, cl)
+
+
+def shape_d(ell: np.ndarray, cl: np.ndarray) -> np.ndarray:
+    r"""$D_\ell/D_{30}$ --- retained for **peak finding only**, not for the axes."""
     d = d_ell(ell, cl)
     return d / np.interp(30.0, ell, d)
 
@@ -278,7 +302,7 @@ def draw(curves, peaks, frames, gaps) -> int:
         xy=(0.985, 0.30), xycoords="axes fraction", ha="right", va="top",
         fontsize=7.2, color=INK["secondary"])
     ax.set_title("(a) the spectrum, CDM frame", fontsize=9, loc="left")
-    ax.set_ylabel(r"$D_\ell/D_{30}$  (shape, renormalised at $\ell=30$)")
+    ax.set_ylabel(r"$C_\ell/C_{30}$  (shape, renormalised at $\ell=30$)")
 
     # (b) the same spectra in BOTH frames. (102) is carried with a generic u^a
     # and specialised at the end, so both frames come from one solve --- the
@@ -298,8 +322,21 @@ def draw(curves, peaks, frames, gaps) -> int:
         fontsize=7.2, color=INK["secondary"])
     ax.set_title("(b) the same spectra, both frames", fontsize=9, loc="left")
 
+    # **Log-log, the PI's call, 2026-10-19.** A linear $D_\ell$ axis shows peak
+    # *contrast* and hides everything below a few percent of $D_{30}$, which on
+    # these curves is most of $\ell>400$. The damping tail is a power law times
+    # a Gaussian and on log-log it is a straight line with a knee at $k_D$, so
+    # the diffusion scale becomes something the eye can place rather than
+    # something the caption has to assert. It also makes a curve that is
+    # *monotonic* --- no acoustic structure at all --- immediately legible as
+    # such, which a linear axis with one visible bump does not.
+    #
+    # `symlog` is deliberately **not** used: these are renormalised ratios that
+    # stay positive, and a symlog threshold would be a free parameter sitting
+    # under a figure whose whole claim is the shape.
     for ax in axes:
         ax.set_xscale("log")
+        ax.set_yscale("log")
         ax.set_xlabel(r"multipole $\ell$")
         ax.legend(fontsize=6.6, frameon=False, loc="upper left",
                   handlelength=2.6, borderaxespad=0.4)
@@ -357,7 +394,13 @@ def main() -> int:
             print("          with no arguments to recompute. Finding T-54.")
             return 1
         ELLS, curves, frames = load_csv()
-        peaks = {n: first_peak(ELLS, c) for n, c in curves.items()}
+        # The CSV now stores the C_l shape, so the D_l shape peaks are found
+        # on are reconstructed rather than read: D_l/D_30 = [l(l+1)/(30*31)]
+        # * (C_l/C_30), exactly. **Without this the replot branch would find
+        # the first maximum of C_l and call it the acoustic peak**, which is a
+        # different l -- the defect T-54 guards against in a different place.
+        _w = (ELLS * (ELLS + 1.0)) / (30.0 * 31.0)
+        peaks = {n: first_peak(ELLS, c * _w) for n, c in curves.items()}
         gaps = {label: np.abs(frames[label]["cdm"] - frames[label]["newtonian"])
                        / np.abs(frames[label]["cdm"])
                 for label, _, _, _ in BACKGROUNDS}
@@ -369,7 +412,11 @@ def main() -> int:
         both = spectrum(background, omega_b_h2, hubble_h)
         frames[label] = {n: shape(ELLS, cl) for n, cl in both.items()}
         curves[label] = frames[label]["cdm"]
-        peaks[label] = first_peak(ELLS, curves[label])
+        # **Peaks are found on D_l, drawn on C_l.** The acoustic peak
+        # positions and l_A are D_l statements; the first maximum of C_l
+        # is not the first acoustic peak. Mixing the two would move every
+        # reported peak by order l_A/2.
+        peaks[label] = first_peak(ELLS, shape_d(ELLS, both["cdm"]))
         gaps[label] = (np.abs(frames[label]["cdm"] - frames[label]["newtonian"])
                        / np.abs(frames[label]["cdm"]))
         where = (f"l={peaks[label]:.1f}" if np.isfinite(peaks[label])
@@ -381,7 +428,8 @@ def main() -> int:
         ell_ref, cl_ref = reference(name)
         s = np.interp(ELLS, ell_ref, shape(ell_ref, cl_ref))
         curves[name.upper()] = s
-        peaks[name.upper()] = first_peak(ELLS, s)
+        peaks[name.upper()] = first_peak(
+            ELLS, np.interp(ELLS, ell_ref, shape_d(ell_ref, cl_ref)))
         found = peaks[name.upper()]
         print(f"    {name.upper():26s} first peak at "
               + (f"l={found:.1f}" if np.isfinite(found) else "NONE above l=30"))
