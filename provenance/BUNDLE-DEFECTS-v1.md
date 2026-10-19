@@ -5660,3 +5660,31 @@ driving, which would raise the peaks; $T(k)$ applies radiation suppression,
 which lowers them.** On Einstein--de Sitter neither belongs, and the EdS
 *control* has carried this contaminant throughout. Measured with it off, high
 $\ell$ rises by 6--15$\times$. Raised independently in the external review.
+
+---
+
+## T-69 — A-2's basis is void, re-measured on all three backgrounds
+
+**2026-10-19.** Full table and the amendment in place in
+`SOURCE-APPROXIMATIONS-v1.md`. Summary: the $\mathcal V$ row that justified
+departing from (178) went $4.29\to1212$ pre-T-66 and goes $0.371\to0.008$
+post-T-66 --- the trend **reversed**, not merely shrank. $\mathcal V$ gives
+acoustic interior maxima on **3 of 3** backgrounds; $e^{-\kappa}$ on **0 of 3**.
+
+**The governance finding is the one that generalises.** A-2's own closing
+paragraph named the defect that would invalidate it --- *"it is possible that
+(178) is consistent under a reading of $\tilde v_B$ that differs from the
+$\tilde v_B=\tilde\tau_1$ used here"* --- thirteen days before T-66 found
+exactly that, and the decision stood on the measurement regardless.
+
+> **Nothing in this bundle re-checks a decision when its evidence moves.**
+> Every approximation in `SOURCE-APPROXIMATIONS-v1.md` is a decision taken
+> from a measurement at a stated stage. A finding that changes that stage
+> should re-open every decision that rests on it, and no mechanism does that.
+> A-1, A-3 and A-4 have not been re-measured post-T-66 either.
+
+Method note, against **V4**: both weights were computed from **one** acoustic
+solve per $k$ --- the weight enters only at `integral_solution` --- so the two
+rows differ by the weight and by nothing else. Running them separately would
+have been two integrations of the same dynamics, which is the difference T-3
+warns about.

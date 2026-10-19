@@ -102,6 +102,45 @@ designed to catch.
 > later. **A decision recorded for the bundle was in force in two of its three
 > routes.** `diagnostic_d4_monopole.py` now measures it on every harness run.
 
+> **Amended 2026-10-19, finding T-69. THE BASIS BELOW IS VOID.** The table in
+> this entry was measured **before T-66**, when $\kappa'\tilde v_B$ was too
+> large by $k_{\rm com}$. The object that destroys the plateau is exactly
+> $\mathcal V\kappa'\sim\kappa'^2e^{-\kappa}$ --- the "$\sim10^6$ against a
+> primary source of order unity" computed two paragraphs below --- and **T-66
+> divided it by $k$**. Re-measured post-T-66 on all three backgrounds, same
+> normalisation at $\ell=2$ and the same $\ell$ as the table:
+>
+> | background | weight | $D_5$ | $D_{10}$ | $D_{20}$ | $D_{50}$ | $D_{100}$ | $D_{200}$ | interior maxima $\ell>100$ |
+> |---|---|---|---|---|---|---|---|---|
+> | CDM (EdS) | $\mathcal V$ | 0.371 | 0.405 | 0.604 | 0.510 | 0.216 | 0.008 | **300, 460, 700** |
+> | CDM (EdS) | $e^{-\kappa}$ | 0.779 | 0.654 | 0.601 | 0.521 | 0.308 | 0.096 | NONE |
+> | $\Lambda$CDM | $\mathcal V$ | 0.427 | 0.475 | 0.648 | 0.532 | 0.209 | 0.004 | **280, 420, 620** |
+> | $\Lambda$CDM | $e^{-\kappa}$ | 0.774 | 0.661 | 0.627 | 0.564 | 0.346 | 0.123 | NONE |
+> | PLANCK | $\mathcal V$ | 0.854 | 0.197 | 0.480 | 0.562 | 0.361 | 0.068 | **420, 720** |
+> | PLANCK | $e^{-\kappa}$ | 0.765 | 0.645 | 0.586 | 0.538 | 0.363 | 0.131 | NONE |
+>
+> **The $\mathcal V$ row no longer rises. It falls.** $4.29\to1212$ has become
+> $0.371\to0.008$: not a reduced rise but a reversed trend, so *"$D_\ell\propto
+> \ell^2$, there is no Sachs--Wolfe plateau at all"* is no longer true of
+> anything. And on the one criterion that physically separates the two weights
+> --- **does the spectrum have acoustic structure** --- $\mathcal V$ has
+> interior maxima on **3 of 3** backgrounds and $e^{-\kappa}$ on **0 of 3**.
+>
+> **A-2 predicted this defect in its own closing paragraph and did not act on
+> it:** *"it is possible that (178) is consistent under a reading of
+> $\tilde v_B$ that differs from the $\tilde v_B=\tilde\tau_1$ used here."*
+> That is T-66, named thirteen days early. The caveat was written and the
+> decision stood on the measurement anyway --- **T-57's pattern exactly**, a
+> correct paragraph above a decision that did not act on it.
+>
+> **Status: OPEN. The default is unchanged pending the PI's call**, because
+> flipping it changes every released figure in a paper under review. What is
+> *not* claimed: the spectrum is still wrong under **both** weights --- peak
+> positions (300/460/700 against $\ell_A,2\ell_A,3\ell_A$) and high-$\ell$
+> amplitude are both wrong, and $\mathcal V$ now falls too steeply
+> ($D_{200}=0.008$ against $0.096$). The discriminator is structure versus no
+> structure, not correctness.
+
 A-1 records that *Annals II* weights the integrated sources with the visibility
 $\mathcal V=\kappa'e^{-\kappa}$ by deliberate choice, and that this cannot carry
 a late integrated Sachs–Wolfe term. A-2 is the sharper consequence, on the
