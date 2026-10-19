@@ -173,7 +173,21 @@ def test_T14_the_transfer_function_is_NOT_frame_invariant_under_177_to_179():
         # moves the residual by 6% and does not touch the collapse. A defect
         # whose cause has been correctly named survives the correction of a
         # different defect; that is the test of the naming.
-        assert 0.9 < relative < 1.05, (
+        # **Re-pinned 2026-10-19, findings T-66 and T-67.** This read
+        # `0.9 < relative < 1.05` -- *near-total collapse* -- and now measures
+        # **0.604 at l=2**. Two defects moved it, both sitting in the rank-one
+        # source this gap is a gap in: T-66's dipole conversion and T-67's
+        # expansion terms. The paragraph above said a defect correctly named
+        # survives the correction of a *different* defect; these two were not
+        # different, and the residual moved by 40%.
+        #
+        # **A real improvement, and not the answer.** P1-T's acceptance
+        # criterion is a theorem -- identical multipoles at every l >= 2,
+        # differing at l = 1 by exactly v -- so the target is 0, not 0.604.
+        # The range is widened to what is *measured*, not to what is wanted,
+        # and the test keeps its original job: fail loudly the day the
+        # generic-u^a source lands.
+        assert 0.45 < relative < 0.75, (
             f"l={ell}: expected the known T-14 collapse, got {relative:.3e}. "
             "If the generic-u^a source has landed, this test is now wrong and "
             "should assert invariance instead."

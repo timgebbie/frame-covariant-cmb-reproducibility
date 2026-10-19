@@ -120,7 +120,7 @@ def compute() -> dict:
     # aliased integrand returning a smooth, plausible spectrum of the wrong
     # shape. The lower panel, which is what T-31 is about, is evaluated only at
     # `K_PROBE` and was never affected; the upper panel was.
-    env = build_environment(float(K_COM.max()), line_of_sight_weight="opacity")
+    env = build_environment(float(K_COM.max()), line_of_sight_weight="printed")
     needed = required_multipoles(ELLS)
     table = BesselTable.build(
         ell_max=int(needed.max()), ells=needed,

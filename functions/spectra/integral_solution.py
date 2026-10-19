@@ -104,6 +104,9 @@ def integral_solution(
     c2_second: np.ndarray | None = None,
     c2_prime_star: float = 0.0,
     eta_floor: float | None = None,
+    c2_prime: np.ndarray | None = None,
+    visibility: np.ndarray | None = None,
+    by_parts_weight_terms: bool = False,
 ) -> IntegralSolution:
     r"""Evaluate (102) at one $k$ for a set of multipoles.
 
@@ -159,6 +162,47 @@ def integral_solution(
 
     # --- the integrand's source bracket, (102) third line --------------------
     bracket = coefficients.c0 - c1_prime + c2_second
+
+    # **Finding T-72 --- the rank-two by-parts slot (102) never carries.**
+    #
+    # The exact bulk source of $\int W[C_0K+C_1K'+C_2K'']$, by parts, is
+    #
+    #     W C_0 - (W C_1)' + (W C_2)''
+    #       = W(C_0 - C_1' + C_2'')  -  V C_1  +  2 V C_2'  +  Vdot C_2
+    #
+    # verified by direct quadrature independently by P1-T (1e-11..1e-15).
+    # (102) carries **only the first group**. Of the other three:
+    #
+    #   -V C_1   collapses to the primary under $\int\mathcal V=1$, which is
+    #            Annals II's own `visibe` step, and this bundle already carries
+    #            it as the boundary term. Nothing to add.
+    #   +2V C_2' and Vdot C_2 are **rank two**. They are identically zero in
+    #            the Newtonian frame --- which is why Annals II never needed
+    #            them, having specialised to that frame at \S7.1.1 *before*
+    #            writing its sources --- and in the CDM frame they are, by
+    #            T-62 and P1-T \S1.2, **the whole source**: $\delta T_E\equiv0$
+    #            there, so rank one vanishes identically and everything the
+    #            CDM column has must arrive through $C_2$.
+    #
+    # Measured: the frame gap is ~1.0--1.9 at **every** multipole and barely
+    # moves when $C_0$ is rescaled by 7.5 (P2-T \S4's value). An
+    # $\ell$-independent gap of order one is not a projection defect; it is a
+    # source that is missing. This is it.
+    #
+    # The sign is the one `decoupling.py`'s convention forces: $\kappa$ is
+    # built as `forward[-1] - forward`, so $d\kappa/d\eta=-\kappa'$ and
+    # $W'=+\kappa'e^{-\kappa}=+\mathcal V$, **positive**.
+    #
+    # `by_parts_weight_terms=False` restores (102) exactly as printed, and is
+    # the control. Nothing moves in the Newtonian frame either way.
+    if by_parts_weight_terms and visibility is not None:
+        vis = np.asarray(visibility, dtype=float)
+        if c2_prime is not None:
+            bracket = bracket + 2.0 * vis * np.asarray(c2_prime, dtype=float)
+        if not np.all(coefficients.c2 == 0.0):
+            vis_dot = np.gradient(vis, eta, edge_order=2)
+            bracket = bracket + vis_dot * coefficients.c2
+
     integrand_weight = weight * np.asarray(diffusion, dtype=float)
 
     floor = float(eta_star if eta_floor is None else eta_floor)

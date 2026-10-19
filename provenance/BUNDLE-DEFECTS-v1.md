@@ -5569,9 +5569,30 @@ acoustic peak deficit, found at last.**
 
 ### The oscillation exists at last scattering
 
-$(\delta T+\Phi_A)(\eta_*)$ tracks $\cos(kr_s)$ in **exact phase and period**,
-amplitude $0.565$ on an offset of $-0.295$ --- a contrast *better* than the
-closed form (181)'s $0.935/{-0.605}$. $r_s(\eta_*)=0.03164$,
+$(\delta T+\Phi_A)(\eta_*)$ tracks $\cos(kr_s)$ in **exact phase and period**.
+
+> **Corrected 2026-10-19, same day.** This paragraph first read *"amplitude
+> $0.565$ on an offset of $-0.295$ --- a contrast better than the closed form
+> (181)'s $0.935/{-0.605}$."* **Both numbers were wrong and the conclusion was
+> backwards.** They were read by eye off a $\Delta k=20$ print-out rather than
+> computed. Measured properly over $k=40\ldots410$ in steps of 10:
+>
+> | | amplitude | offset | $\lvert$amp/offset$\rvert$ |
+> |---|---|---|---|
+> | solved $(\delta T+\Phi_A)(\eta_*)$ | 0.4698 | $-0.3890$ | 1.208 |
+> | closed form (181) | 0.9365 | $-0.6041$ | 1.550 |
+>
+> **The solved oscillation amplitude is 1.99$\times$ too small and its contrast
+> is 22% worse, not better.** Neither $(1/3)(1+3R_*)=0.937$ nor the WKB
+> $(1/3)(1+R_*)^{-1/4}=0.296$ reproduces $0.4698$, so the solver is not
+> obviously either form and the disagreement is open --- **two routes in this
+> bundle to the same quantity differ by a factor of two**, which is a T-3
+> finding in its own right and is tracked as such.
+>
+> *Process note.* Two arithmetic slips in one day, both from reading a coarse
+> table by eye instead of computing the summary statistic. That is **V4**'s
+> neighbour: not comparing across stages, but comparing across *samplings*.
+> Any amplitude/offset pair quoted in this bundle is now computed, never read. $r_s(\eta_*)=0.03164$,
 $r_\theta=1.9404$, $\ell_A=\pi r_\theta/r_s=192.7$. **So the peaks are created
 correctly and destroyed in projection.**
 
@@ -5688,3 +5709,195 @@ solve per $k$ --- the weight enters only at `integral_solution` --- so the two
 rows differ by the weight and by nothing else. Running them separately would
 have been two integrations of the same dynamics, which is the difference T-3
 warns about.
+
+---
+
+## T-70 — a gate whose denominator collapsed
+
+**2026-10-19.** `test_two_frame_is_gated` went red at $k=1$ after T-67, at
+$2.27\times10^{-2}$ against a $10^{-2}$ gate. **It is not a new disagreement.**
+
+| T-67 | absolute gap | row scale | relative |
+|---|---|---|---|
+| on (as printed) | $2.6345\times10^{-3}$ | 2.8150 | $9.36\times10^{-4}$ |
+| off (comoving) | $2.6362\times10^{-3}$ | 0.1159 | $2.27\times10^{-2}$ |
+
+**The absolute gap is unchanged to four figures.** T-67 removes the dominant
+term at low $k$, collapsing the row scale by **24$\times$**, and the ratio grew
+entirely through its denominator. That is **D5's distinction** --- normalised
+shape gap against absolute amplitude --- arriving in a gate rather than in a
+figure: *a ratio whose denominator collapses is not measuring agreement any
+more.* `ABSOLUTE_GATE` is now checked beside the relative one.
+
+---
+
+## T-71 — T-67 flipped, and where the peaks actually are
+
+**2026-10-19. P1-T supplied the confirmation T-67 was gated on.**
+`cbrII.tex` lines 540--541, verbatim: *"corresponding to a wavenumber $k$. The
+physical wavenumber is defined by $k_{phys}(t)=k/a(t)$."* **Annals II's $k$ is
+comoving**, in its own text. Paper 1's **C3.1** declares $k$ *physical*,
+$\dot k=-\mathcal Hk$. One symbol, opposite conventions, two documents, neither
+saying so. So $a\tilde{\mathcal B}_1=k_{\rm com}(\delta\tilde T+\Phi_A)$ carries
+no scale factor, $\dot k=0$, and (106)'s two terms cannot arise from either
+product rule. **Default flipped; `True` retained as the control.**
+
+**The same term appears in both routes under two printed forms** --- (106)'s
+$-a^2H\tilde{\mathcal B}_1-2Hak\Phi_A$ is (179)'s $-aH(\delta\tilde T+3\Phi_A)$
+times $-k$ --- so `source_integrated` gained `expansion_terms` and the gate
+caught the mismatch within one test run. Two transcription tests now state
+`expansion_terms=True` to pin (179) **as printed**; they are marked
+`transcription` under Coordination's split and are correct to fail against the
+released default.
+
+### Peak positions, against a known-answer control
+
+The projection machinery was cleared first: a synthetic $\cos(kr_s)$ fed
+through the bundle's own kernel and `cl_covariant_route` gives maxima at
+**172, 360, 552, 744** --- spacing $\simeq\ell_A$ --- and a $\sin(kr_s)$
+control at **76, 264, 456, 648**, offset by $\ell_A/2$ exactly as it must be.
+**The kernel is sound and uses comoving $k$ with conformal $\Delta\eta$**
+(`integral_solution`: `x = k_com * (eta_0 - eta)`), which is what Annals II's
+own convention requires --- so P1-T's proposed kernel-argument run is a no-op
+here and the varying-$a$ mechanism is **excluded**.
+
+Following P1-T: peaks located in the **oscillatory residual**, not the total
+(degree-4 log-log fit divided out; a quartic over 2.5 decades cannot
+manufacture three maxima). EdS, $\mathcal V$ weight, $T(k)$ off:
+
+| | residual maxima |
+|---|---|
+| synthetic control, measured contrast | 196, 544 |
+| boundary only | 164, 468 |
+| total | 176, 476 |
+
+**Boundary and total now agree** --- post-T-67 the bulk no longer drags the
+located maxima, which was P1-T's concern and T-68's mechanism.
+
+The residual maxima sit at $0.898$ and $0.875$ of the control's. **That
+compression is roughly uniform**, and by P1-T's own discriminator a uniform
+rescale is $r_s$ or a constant $r_\theta$ --- *not* the varying-$a$ kernel,
+which is independently excluded above. **A $\simeq12\%$ constant in the sound
+horizon or the angular-diameter distance is the next thing to measure.**
+
+### Not claimed
+
+Only two maxima resolve in the residual where three were sought; the degree-4
+fit may be absorbing one. The synthetic control carries no damping and no
+envelope, so the comparison is indicative rather than exact. And the solved
+oscillation amplitude is still $1.99\times$ below the closed form (T-68, as
+corrected), which is a separate open disagreement between two of this bundle's
+own routes.
+
+### Frame invariance moved
+
+`test_T14_the_transfer_function_is_NOT_frame_invariant_under_177_to_179`
+pinned *near-total collapse*, $0.9<r<1.05$. It now measures **0.604 at
+$\ell=2$**. Both T-66 and T-67 sit in the rank-one source that gap is a gap in.
+Re-pinned to what is measured, not to what is wanted: P1-T's acceptance
+criterion is a theorem --- identical multipoles at every $\ell\ge2$ --- so the
+target is **0**, and 0.604 is progress, not arrival.
+
+### A locator rule, adopted
+
+P1-T: cite Paper 1 by **label** (`eq:resN`, `eq:resC`), never by printed
+number --- (83)/(84) today, different at v1.0.x, and the table reference
+already differs between the GRG and arXiv lines. Adopted. This bundle's
+Annals II numbers stay as they are, because they are **generated** from the
+accepted source's own `.aux` rather than read off a PDF.
+
+---
+
+## T-72 — the rank-two by-parts slot, implemented and measured. **Not the carrier.**
+
+**2026-10-19.** The exact bulk source of $\int W[C_0K+C_1K'+C_2K'']$ is
+$W(C_0-C_1'+C_2'')-\mathcal VC_1+2\mathcal VC_2'+\dot{\mathcal V}C_2$ (P1-T
+\S2.1, verified by direct quadrature to $10^{-11}$--$10^{-15}$). (102) carries
+only the first group. $-\mathcal VC_1$ collapses to the primary under
+$\int\mathcal V=1$ --- Annals II's own `visibe` step, already carried as the
+boundary. The other two are **rank two**: identically zero in the Newtonian
+frame, which is why Annals II never needed them, having specialised at \S7.1.1
+*before* writing its sources.
+
+Implemented behind `by_parts_weight_terms`, **default off**. Measured frame gap
+on EdS: $1.2847\to1.3157$ at $k=10$, $1.5642\to1.7239$ at $k=60$ ---
+**slightly worse, not better.** Default stays off until the pairing question
+below is settled; adding exact terms to a wrong pairing is not obviously right.
+
+---
+
+## T-73 — the frame mismatch is real, and it is none of the things we suspected
+
+**2026-10-19. The PI's hypothesis, tested.** *"We have the physics right before
+decoupling but it is not correctly projected in free streaming... the problem
+might be the frame mechanics, and that is not entirely in Annals II."*
+
+### What it is not
+
+| candidate | result |
+|---|---|
+| $C_0$'s monopole-row normalisation (P2-T \S4, ratio 7.5) | scaling $C_0$ by $2/15$ moves the gap $1.2847\to1.2825$ at $k=10$. **Not the carrier.** |
+| the rank-two by-parts terms (T-72) | $1.2847\to1.3157$. **Not the carrier.** |
+| the projection kernel | synthetic $\cos(kr_s)$ gives maxima at 172, 360, 552, 744, spacing $\simeq\ell_A$; $\sin$ control offset by $\ell_A/2$. **Sound**, and already comoving $k$ with conformal $\Delta\eta$. |
+| anything acting per multipole | the gap is **$\ell$-independent**: 1.0003 at every $\ell$ for $k=1$; 1.2847 at every $\ell$ for $k=10$; $\simeq1.6$ for $k=60$. |
+
+**Control throughout: the Newtonian column moves by exactly $0.000\times10^{0}$
+under every $C_0$ rescaling**, as it must, $C_0$ being identically zero there.
+
+### What is *correct*, measured
+
+**P1-T's \S6.3 gate passes.** The invariant combination
+$(\delta T+\Phi_A)-C_2'$ comes out **identical in the two threadings to every
+printed digit**, at $k=1,10,60,300$ and at $\eta_*,2\eta_*,8\eta_*$ --- and
+equals $\Phi/3=0.33333$ to $2\times10^{-4}$ exactly where it should, in the
+super-horizon limit ($k=1$ at $\eta_*$). It departs from $\Phi/3$ once
+$kr_s\gtrsim1$, which **is the acoustic oscillation, not a defect**.
+
+> **So the frame transformation is right and the invariant is preserved.**
+
+### Where that leaves it
+
+The same physics sits in **$C_1$** in the Newtonian threading and in
+**$C_2'$** in the CDM one --- $\Phi_A^E=0$ and $\delta T_E\equiv0$ by
+construction and T-62, so the CDM column has no rank-one source at all and
+everything must arrive through $C_2$. (102)'s bulk then takes $-C_1'$ against
+$+C_2''$, and its boundary $-C_1(\eta_*)$ against $+C_2'(\eta_*)$.
+
+**For the two frames to agree, that pairing must be exact, and P1-T \S1.3 says
+it is not:** *"the weight is $k^{-2}$ on $\sigma_{ab}$, i.e. $k^0$ on $C_2$ ---
+the same weight as the rank-1 potential. $C_2''$ is not the pairing; it is one
+derivative too many, since nothing at rank 1 changes by $\ddot w/k$."*
+
+**That is the open item**, and it is where the PI's instinct pointed: the
+defect is in how (102) *consumes* the coefficients across ranks, not in the
+frame transformation, not in the sources, and not in the projection.
+
+### And it is new, which is why it was never found
+
+Annals II specialises to the Newtonian frame at \S7.1.1 **before** it writes
+its sources, so (110), (111) and (176)--(181) carry $\tilde C_1$ alone and the
+rank-two slots of (102) are **never evaluated anywhere in the antecedent**.
+This bundle carries a generic $u^a$ through (102) and specialises at the end.
+*It is the first thing to evaluate those slots at all.* A defect in them could
+not have been found by reproducing Annals II, only by departing from it in the
+direction the bundle departed.
+
+### The ISW question, answered
+
+The PI asked where the ISW went. **A-1 answers it, and the T-69 flip made it
+binding.** $\mathcal V=\kappa'e^{-\kappa}$ is a sharp spike at recombination
+and is zero to many decimal places by $z\lesssim1$, which is exactly where a
+late ISW from $\Lambda$ accumulates --- A-1's own words: ***"Annals II's
+expression cannot carry a late-ISW."*** It cost Annals II nothing because
+\S8.3.2's model is standard CDM with no $\Lambda$. Flipping A-2 back to the
+printed weight restores the acoustic structure **and gives up the late ISW on
+$\Lambda$CDM and PLANCK**. On Einstein--de Sitter there is none to lose.
+
+### The plateau is **not** resolved
+
+Normalised at $\ell=2$ on EdS with $\mathcal V$: $D_5/D_2=0.371$,
+$D_{10}=0.405$, $D_{20}=0.604$. A Sachs--Wolfe plateau is flat in $D_\ell$;
+this is a factor $2.7$ dip at $\ell=5$ recovering by $\ell=20$. Under
+$e^{-\kappa}$: $0.779,0.654,0.601$ --- monotone, also not flat. **Both weights
+put too much power at $\ell=2$ relative to $5\le\ell\le30$**, and that is a
+separate open defect from the peaks.

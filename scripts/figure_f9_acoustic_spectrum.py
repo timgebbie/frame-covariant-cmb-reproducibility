@@ -121,7 +121,7 @@ def spectrum(background, omega_b_h2: float,
         K_MAX, omega_m=background.omega_m,
         omega_lambda=background.omega_lambda, omega_r=background.omega_r,
         omega_b_h2=omega_b_h2, transfer_gamma=gamma, hubble_h=hubble_h,
-        f_2=F2_DEFAULT, line_of_sight_weight="opacity")
+        f_2=F2_DEFAULT, line_of_sight_weight="printed")
     r_theta = float(env.background.eta_0 - env.eta_star)
     k_com = np.linspace(0.05, K_MAX, required_k_points(K_MAX, r_theta))
     print(f"      r_theta = {r_theta:.4f}, k to {K_MAX:.0f} in {k_com.size} modes "

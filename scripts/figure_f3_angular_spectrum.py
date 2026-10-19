@@ -75,7 +75,7 @@ def compute():
         # returned a smooth, plausible spectrum of the wrong shape.
         run = pipeline.run(
             model, ells=ELLS, k_com=K_COM,
-            weighting=Weighting.STANDARD_ISW, n_eta=None,
+            weighting=Weighting.ANNALS_II, n_eta=None,
         )
         # **Report the convergence of what this figure plots** --- finding T-16.
         # This used to print "TRUNCATED, not converged" whenever the k grid

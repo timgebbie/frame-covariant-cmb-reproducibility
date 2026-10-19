@@ -278,7 +278,27 @@ DIPOLE_NORMALISATION: str = "velocity"
 #: `forward[-1] - forward`, so $d\kappa/d\eta=-\,$`kappa_prime` and
 #: $W'=+\kappa'e^{-\kappa}=+\mathcal V$. The stored `kappa_prime` is the
 #: scattering **rate**, not the derivative of the optical-depth array.
-A_B1_PRIME_EXPANSION_TERMS: bool = True
+#: **FLIPPED 2026-10-19 on P1-T's confirmation.** The gate set when T-67 was
+#: recorded was: P1-T confirms against the source that $a\tilde{\mathcal B}_1$
+#: carrying a different $a$-dependence is excluded. **It is.** `cbrII.tex`
+#: lines 540--541, verbatim:
+#:
+#:   *"corresponding to a wavenumber $k$. The physical wavenumber is defined
+#:   by $k_{phys}(t)=k/a(t)$."*
+#:
+#: **Annals II's $k$ is comoving**, stated in its own text. So
+#: $a\tilde{\mathcal B}_1=k_{\rm com}(\delta\tilde T+\Phi_A)$ carries no
+#: scale factor, $\dot k=0$, and (106)'s $-a^2H\tilde{\mathcal B}_1
+#: -2Hak\Phi_A$ **cannot arise from either product rule**. They double-count,
+#: and dropping them makes $\tilde C_1'$ exactly $\mathrm d\tilde C_1/
+#: \mathrm d\eta$ (1.000004, measured).
+#:
+#: Paper 1's **C3.1** declares $k$ *physical*, $\dot k=-\mathcal Hk$. Same
+#: symbol, opposite conventions, across two documents, neither of which says
+#: so --- P1-T's finding, and the root of both this residual and (106)'s
+#: shape. **`True` is retained as the control** and reproduces (106) as
+#: printed.
+A_B1_PRIME_EXPANSION_TERMS: bool = False
 
 
 def reduce_dipole(tau_1: np.ndarray, k_com: float,
@@ -544,6 +564,14 @@ class CoefficientSet:
     c1_prime: np.ndarray
     c2_second: np.ndarray
     c2_prime_star: float
+    #: $C_2'$ on the grid --- **finding T-72**. Carried because the exact
+    #: by-parts bulk source needs it: $WC_0-(WC_1)'+(WC_2)''$ expands to
+    #: $W(C_0-C_1'+C_2'')-\mathcal VC_1+2\mathcal VC_2'+\dot{\mathcal V}C_2$,
+    #: and (102) carries only the first group. The $2\mathcal VC_2'$ slot is
+    #: **rank two, hence identically zero in the Newtonian frame and the whole
+    #: of the CDM one**, which is why nothing in this bundle needed it until a
+    #: generic $u^a$ was carried through.
+    c2_prime: np.ndarray | None = None
 
     # --- the primitives of (89), kept because (101) is printed in them -------
     # (102) is written in $C_A$; the fuller solution (101) it is approximated
@@ -947,6 +975,7 @@ def cdm_set(
         coefficients=coefficients,
         c1_prime=c1_prime,
         c2_second=c2_second,
+        c2_prime=c2_prime,
         c2_prime_star=float(np.interp(float(eta_star), eta, c2_prime)),
         a_b1=a_b1_E, a_b1_prime=a_b1_prime_E,
         a_b2=-(k**2) * c2, a_b2_prime=-(k**2) * c2_prime,

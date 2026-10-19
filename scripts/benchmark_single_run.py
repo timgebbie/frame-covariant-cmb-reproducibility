@@ -99,7 +99,7 @@ def main() -> int:
             float(K_COM.max()), omega_m=background.omega_m,
             omega_lambda=background.omega_lambda, omega_r=background.omega_r,
             omega_b_h2=PLANCK_OMEGA_B_H2, transfer_gamma=gamma,
-            hubble_h=PLANCK_H, f_2=F2_DEFAULT, line_of_sight_weight="opacity")
+            hubble_h=PLANCK_H, f_2=F2_DEFAULT, line_of_sight_weight="printed")
 
     with stage("Bessel table",
                "j_l(x) tabulated once, 12 samples per oscillation, reused by every mode"):

@@ -88,7 +88,7 @@ RANK_SLOT = {0: 3, 1: 1, 2: 2}
 
 
 def compute() -> dict:
-    env = build_environment(float(K_COM.max()), line_of_sight_weight="opacity")
+    env = build_environment(float(K_COM.max()), line_of_sight_weight="printed")
     needed = required_multipoles(ELLS)
     table = BesselTable.build(
         ell_max=int(needed.max()), ells=needed,

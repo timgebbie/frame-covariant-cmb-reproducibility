@@ -138,7 +138,7 @@ K_TAIL = (20.0, 60.0, 140.0)
 
 
 def compute() -> dict:
-    env = build_environment(float(K_COM.max()), line_of_sight_weight="opacity")
+    env = build_environment(float(K_COM.max()), line_of_sight_weight="printed")
     needed = required_multipoles(np.union1d(ELLS, ELLS_COST))
     table = BesselTable.build(
         ell_max=int(needed.max()), ells=needed,

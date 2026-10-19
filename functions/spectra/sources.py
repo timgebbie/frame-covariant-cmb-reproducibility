@@ -91,6 +91,7 @@ from scipy.interpolate import CubicSpline
 
 from functions.harmonics.weights import alpha
 from functions.spectra.bessel_table import BesselTable
+from functions.spectra.coefficients import A_B1_PRIME_EXPANSION_TERMS
 
 __all__ = [
     "PerturbationHistory",
@@ -267,6 +268,7 @@ def source_integrated(
     aH: np.ndarray,
     isw_sign: float = PUBLISHED_ISW_SIGN,
     weight: np.ndarray | None = None,
+    expansion_terms: bool | None = None,
 ) -> np.ndarray:
     """(179). W exp[-(k/k_D)^2] [ (Phi_A' - Phi_H') + s aH (dT + 3 Phi_A) ].
 
@@ -291,7 +293,17 @@ def source_integrated(
         np.asarray(history.delta_T, dtype=float)
         + 3.0 * np.asarray(history.phi_a, dtype=float)
     )
-    bracket = isw + isw_sign * frame
+    # **T-67, flipped 2026-10-19.** `frame` is aH(dT + 3 Phi_A), which is the
+    # SAME object as (106)'s -a^2 H B_1 - 2 H a k Phi_A divided by -k: the two
+    # routes carry one term under two printed forms. Annals II's k is comoving
+    # (`cbrII.tex` L540-541, verbatim: "The physical wavenumber is defined by
+    # k_phys(t) = k/a(t)"), so a B_1 = k_com (dT + Phi_A) carries no scale
+    # factor and neither product rule can produce it. Dropping it in the (102)
+    # route and keeping it here would put the two routes on different physics
+    # -- T-3's lesson, and the gate caught it within one test run.
+    keep = (A_B1_PRIME_EXPANSION_TERMS if expansion_terms is None
+            else bool(expansion_terms))
+    bracket = isw + (isw_sign * frame if keep else np.zeros_like(frame))
     chosen = scattering.visibility if weight is None else np.asarray(weight, dtype=float)
     return np.asarray(chosen, dtype=float) * scattering.diffusion(k_com) * bracket
 

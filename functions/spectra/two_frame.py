@@ -168,7 +168,23 @@ class TwoFrameEnvironment:
     #: requires every released caller to name this argument, which is the
     #: enforcement A-1 asked for in words --- *"the caller states which"* ---
     #: and never had.
-    line_of_sight_weight: str = "opacity"
+    #: **Finding T-69, 2026-10-19 --- flipped back to the antecedent.**
+    #: A-2's basis is void. The measurement that justified departing from
+    #: (102)'s printed $\mathcal V$ was taken **before T-66**, when
+    #: $\kappa'\tilde v_B$ was too large by $k_{\rm com}$ --- and the object
+    #: that destroyed the plateau is exactly
+    #: $\mathcal V\kappa'\sim\kappa'^2e^{-\kappa}$, which T-66 divided by $k$.
+    #: Re-measured on all three backgrounds, the $\mathcal V$ row no longer
+    #: rises ($4.29\to1212$ became $0.371\to0.008$: the trend **reversed**),
+    #: and on the one criterion that separates the two weights --- **does the
+    #: spectrum have acoustic structure** --- $\mathcal V$ has interior maxima
+    #: on **3 of 3** backgrounds and $e^{-\kappa}$ on **0 of 3**.
+    #:
+    #: This bundle's rule is reproduce the antecedent unless there is a
+    #: measured reason to depart. The measured reason has evaporated, so the
+    #: default returns to what (102) prints. **`"opacity"` is retained as the
+    #: named control**, exactly as it was the default before.
+    line_of_sight_weight: str = "printed"
     #: **Finding T-51, decision S40.** `"derived"` starts each mode where
     #: $k\,r_s(\eta)\le\varepsilon$; `"z_max"` starts every mode at the first
     #: point of the recombination grid, which is what this route did until
@@ -253,7 +269,7 @@ def build_environment(
     hubble_h: float = 0.5,
     apply_transfer: bool = True,
     f_2: float = F2_DEFAULT,
-    line_of_sight_weight: str = "opacity",
+    line_of_sight_weight: str = "printed",
     acoustic_start: str = "derived",
 ) -> TwoFrameEnvironment:
     r"""The $k$-independent half: background, recombination, potentials.
@@ -436,9 +452,14 @@ def transfer_by_rank(
     # (177)--(179) column with the window already matched, the omission alone
     # cost **2.2e-01 at k=1** --- the modes that build the Sachs-Wolfe
     # plateau --- and 8.1e-01 at k=10.
+    # `visibility` is supplied beside `weight` because **T-72**'s rank-two
+    # by-parts terms carry $\mathcal V$ regardless of which weight the caller
+    # chose for the main bracket: they come from differentiating
+    # $W=e^{-\kappa}$, not from A-2's choice.
     common = dict(table=table, weight=env.weight, diffusion=diffusion,
                   damping_total=diffusion, eta_star=env.eta_star,
                   eta_floor=float(env.eta[0]),
+                  visibility=env.visibility,
                   eta_0=float(env.background.eta_0))
     zero = np.zeros_like(env.eta)
 
@@ -453,11 +474,13 @@ def transfer_by_rank(
             c1_prime=coefficients.c1_prime if rank == 1 else zero,
             c2_second=coefficients.c2_second if rank == 2 else zero,
             c2_prime_star=coefficients.c2_prime_star if rank == 2 else 0.0,
+            c2_prime=coefficients.c2_prime if rank == 2 else None,
             **common).total
     out[-1] = integral_solution(
         ells, coefficients=coefficients.coefficients,
         c1_prime=coefficients.c1_prime, c2_second=coefficients.c2_second,
-        c2_prime_star=coefficients.c2_prime_star, **common).total
+        c2_prime_star=coefficients.c2_prime_star,
+        c2_prime=coefficients.c2_prime, **common).total
     return out
 
 

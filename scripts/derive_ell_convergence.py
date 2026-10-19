@@ -51,7 +51,7 @@ BANDS = (0.01, 0.02, 0.05)
 
 def spectrum(model, k_max: float) -> np.ndarray:
     k = np.arange(0.05, k_max, DK)
-    out = run(model, ells=ELLS, k_com=k, weighting=Weighting.STANDARD_ISW, n_eta=None)
+    out = run(model, ells=ELLS, k_com=k, weighting=Weighting.ANNALS_II, n_eta=None)
     return np.asarray(out.spectrum.d_ell()), out
 
 

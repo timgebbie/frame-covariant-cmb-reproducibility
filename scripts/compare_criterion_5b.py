@@ -106,7 +106,7 @@ def bundle_spectrum(f_2: float) -> tuple[np.ndarray, dict]:
         float(K_COM.max()), omega_m=PLANCK_MODEL.omega_m,
         omega_lambda=PLANCK_MODEL.omega_lambda, omega_r=PLANCK_MODEL.omega_r,
         omega_b_h2=PLANCK_OMEGA_B_H2, transfer_gamma=gamma, hubble_h=PLANCK_H,
-        f_2=f_2, line_of_sight_weight="opacity")
+        f_2=f_2, line_of_sight_weight="printed")
     needed = required_multipoles(ELLS)
     table = BesselTable.build(
         ell_max=int(needed.max()), ells=needed,

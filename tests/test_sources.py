@@ -148,6 +148,7 @@ def test_isw_sign_is_a_finding_not_a_free_parameter():
         source_integrated(history, scattering, 100.0, aH=aH, isw_sign=0.0)
 
 
+@pytest.mark.transcription
 def test_b6_sign_alternative_is_not_a_no_op():
     """The two readings of (179) give different sources. B-6 has consequences.
 
@@ -158,12 +159,18 @@ def test_b6_sign_alternative_is_not_a_no_op():
     history, scattering = _history(eta), _scattering(eta)
     aH = CDM_MODEL.aH_of_eta(np.clip(eta, 1e-6, CDM_MODEL.eta_0))
 
-    published = source_integrated(history, scattering, 100.0, aH=aH, isw_sign=PUBLISHED_ISW_SIGN)
-    thesis = source_integrated(history, scattering, 100.0, aH=aH, isw_sign=THESIS_ISW_SIGN)
+    # **T-67**: the frame term is what the two signs differ by, so this
+    # transcription control states `expansion_terms=True` -- (179) as
+    # printed -- rather than taking the released default, which drops it.
+    published = source_integrated(history, scattering, 100.0, aH=aH,
+                                  isw_sign=PUBLISHED_ISW_SIGN, expansion_terms=True)
+    thesis = source_integrated(history, scattering, 100.0, aH=aH,
+                               isw_sign=THESIS_ISW_SIGN, expansion_terms=True)
     separation = np.max(np.abs(published - thesis)) / np.max(np.abs(published))
     assert separation > 0.1
 
 
+@pytest.mark.transcription
 def test_in_eds_with_constant_potentials_only_the_frame_term_survives():
     """The discriminator for B-6, stated as a test while the finding is open.
 
@@ -181,7 +188,10 @@ def test_in_eds_with_constant_potentials_only_the_frame_term_survives():
     isw_proper = (history.derivative("phi_a") - history.derivative("phi_h"))[interior]
     assert np.allclose(isw_proper, 0.0, atol=1e-10)
 
-    remaining = source_integrated(history, scattering, 1.0, aH=aH)[interior]
+    # **T-67**: this pins (179) AS PRINTED -- the frame term is exactly what
+    # the released default now drops, so the assertion states the flag.
+    remaining = source_integrated(history, scattering, 1.0, aH=aH,
+                                  expansion_terms=True)[interior]
     assert np.max(np.abs(remaining)) > 1e-3
 
 
