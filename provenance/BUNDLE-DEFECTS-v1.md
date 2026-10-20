@@ -7413,3 +7413,90 @@ right* is open.
    the repair does nothing above $k\simeq100$. A tail that comes out right
    would falsify this entry's account rather than confirm it.
 3. The low-$\ell$ residue, which is the last frame-sensitive thing standing.
+
+---
+
+## T-89 — the $7\times$ rewrite is $(k/3)\tau_1$ under the wrong weight, and **the same term closes the gap**. The two requirements pull it in opposite directions
+
+**2026-10-20, while F9 runs.** T-88 left two things unexplained: the repair
+does nothing at $k=300$, and the split rewrites the Newtonian column by
+$1.1$ on EdS and $7.1$ on PLANCK. Both are one term, and identifying it
+produces a contradiction rather than a fix.
+
+### The diagnosis
+
+T-88 moved the **whole** gravitational half of $C_1$ to $W$. The standard
+line-of-sight decomposition says that is wrong: the Sachs--Wolfe combination
+$(\delta T+\Phi_A)$ is evaluated **at last scattering** and belongs under $g$;
+only the potential derivative accumulated **along the path** belongs under $W$.
+From (107), with `newtonian_a_b1_prime`'s own expansion,
+
+$$-C_1'=(\kappa'\hat v_B)'+\frac{(a\mathcal B_1)'}{k},\qquad
+\frac{(a\mathcal B_1)'}{k}=\underbrace{(\Phi_A'-\Phi_H')}_{\text{ISW}\ \to\ W}
++\underbrace{\tfrac{k}{3}\tau_1}_{\delta T'\ \to\ g}$$
+
+so the gravitational half is itself **two** things and only the first is a path
+integral. Putting $\tfrac{k}{3}\tau_1$ under $W$ puts a rapidly oscillating
+source under the wrong weight — and $\tau_1$ oscillates fastest exactly where
+the repair fails.
+
+### Measured, and the diagnosis is confirmed on one criterion and refuted on the other
+
+`w_half_is_isw_only` restricts the $W$ half to $(\Phi_A'-\Phi_H')$ and leaves
+$\tfrac k3\tau_1$ at $\mathcal V$, where (102) had it:
+
+| background | $k$ | isw-only | gap $\ell=50$ | gap $\ell=200$ | **Newt moved** |
+|---|---:|---|---:|---:|---:|
+| EdS | 60 | F | $4.233\times10^{-1}$ | $\mathbf{1.475\times10^{-3}}$ | $6.19\times10^{-2}$ |
+| EdS | 60 | **T** | $7.837\times10^{-1}$ | $1.527$ | $\mathbf{3.50\times10^{-4}}$ |
+| EdS | 300 | F | $9.978\times10^{-1}$ | $1.008$ | $1.108$ |
+| EdS | 300 | **T** | $9.987\times10^{-1}$ | $1.007$ | $\mathbf{7.74\times10^{-3}}$ |
+| PLANCK | 60 | F | $1.025$ | $\mathbf{1.703\times10^{-2}}$ | $1.68\times10^{-1}$ |
+| PLANCK | 60 | **T** | $1.028$ | $1.943$ | $\mathbf{2.91\times10^{-3}}$ |
+| PLANCK | 300 | F | $9.995\times10^{-1}$ | $1.000$ | $\mathbf{7.088}$ |
+| PLANCK | 300 | **T** | $9.999\times10^{-1}$ | $1.000$ | $\mathbf{1.26\times10^{-1}}$ |
+
+**The diagnosis is right about the column.** The $7.088$ rewrite collapses to
+$0.126$ and EdS's $1.108$ to $7.7\times10^{-3}$ — at or near D13's quadrature
+floor. **$\tfrac k3\tau_1$ under $W$ *is* what rewrites the Newtonian column.**
+
+**And it is wrong about the gap.** Every cell T-88 closed re-opens: EdS $k=60$,
+$\ell=200$ goes $1.5\times10^{-3}\to1.527$; PLANCK's $1.7\times10^{-2}\to1.943$.
+
+### The contradiction, stated rather than resolved
+
+**The term that closes the frame gap and the term that preserves the Newtonian
+column are the same term, and the two acceptance conditions pull it in
+opposite directions.** $\tfrac k3\tau_1$ must be under $W$ for the gap to
+close and under $\mathcal V$ for the column to stand.
+
+**Neither weight is right, so the question is not which.** $\tau_1$ differs
+between the columns — the CDM set carries $\tau_1-v$ — so
+$\tfrac k3\tau_1$ is frame-dependent and cannot simply be reassigned: **it
+carries part of the boost**, and whichever weight it takes, the boundary term
+must move with it, because the boundary *is* the $\mathcal V$-collapse of
+$-\mathcal VC_1$ and collapsing a term that is no longer at $\mathcal V$ weight
+is not available.
+
+**That is the next thing to derive, and it is a derivation and not a sweep.**
+T-77 is the standing warning: a lattice walked over controls that are not
+independent scores every cell as a partial failure, which is what the table
+above is. **The four controls are not independent and this entry is the proof
+of it** — M11a, fifth instance, and the first where the method's own
+instrument says to stop sweeping.
+
+### What is now established, and what is not
+
+| | |
+|---|---|
+| the missing $-\kappa'C_2$ in the $g$ slot | **established**, T-88: four orders at $\ell\ge50$, $k\le60$ |
+| $\tfrac k3\tau_1$ under $W$ rewrites the Newtonian column | **established**, this entry: $7.088\to0.126$ |
+| which weight $\tfrac k3\tau_1$ takes | **open, and the two criteria disagree** |
+| the boundary term under a reassigned $\tfrac k3\tau_1$ | **not derived.** Nothing here is valid until it is |
+| $k=300$ | **untouched either way.** Not explained by this entry |
+
+**No control is promoted to a default on this evidence**, and
+`two_frame.B_SLOT_REPAIR` keeps T-88's combination for F9's diagnostic run
+rather than adopting `w_half_is_isw_only`, because the run was launched under
+it and changing the code under a running measurement is how a comparison
+becomes void.

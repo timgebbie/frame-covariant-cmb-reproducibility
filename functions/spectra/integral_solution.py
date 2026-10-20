@@ -115,6 +115,8 @@ def integral_solution(
     jprime_bulk_slot: bool = False,
     boundary_weight_w: bool = False,
     thomson_carries_shear: bool = False,
+    c1_prime_isw: np.ndarray | None = None,
+    w_half_is_isw_only: bool = False,
 ) -> IntegralSolution:
     r"""Evaluate (102) at one $k$ for a set of multipoles.
 
@@ -288,9 +290,35 @@ def integral_solution(
         c1_grav = coefficients.c1 - c1_thom
         c1_grav_prime = c1_prime - c1_thom_prime
 
+    # **`w_half_is_isw_only` --- finding T-89, and it is the k=300 failure.**
+    #
+    # T-88 moved the WHOLE gravitational half to $W$. That is wrong, and the
+    # standard line-of-sight decomposition says why: the Sachs--Wolfe
+    # combination $(\delta T+\Phi_A)$ is evaluated **at last scattering** and
+    # belongs under $g$; only the potential derivative accumulated **along the
+    # path** belongs under $W$. From (107),
+    #
+    #     -C_1' = (kappa' vhat_B)' + (a B_1)'/k ,
+    #     (a B_1)'/k = (Phi_A' - Phi_H') + (k/3) tau_1
+    #                   \_____ISW, -> W___/   \_dT', -> g_/
+    #
+    # so the gravitational half is itself two things, and only the first is a
+    # path integral. Putting $(k/3)\tau_1$ under $W$ is putting a rapidly
+    # oscillating source under the wrong weight, which is why T-88 rewrites the
+    # Newtonian column by $7\times$ at $k=300$ and does nothing for the gap
+    # there: $\tau_1$ oscillates fastest exactly where the repair fails.
+    c1_isw = (np.zeros_like(eta) if c1_prime_isw is None
+              else np.asarray(c1_prime_isw, dtype=float))
     if slot_weight_split:
         # the gravitational half moves to W; the Thomson half keeps V
-        bracket_w = coefficients.c0 - c1_grav_prime + c2_second
+        if w_half_is_isw_only:
+            # only the ISW goes to W; the dynamical remainder stays at V with
+            # the Thomson half, where (102) already had it
+            bracket_w = coefficients.c0 - c1_isw + c2_second
+            c1_thom_prime = c1_thom_prime + (c1_grav_prime - c1_isw)
+            c1_grav_prime = c1_isw
+        else:
+            bracket_w = coefficients.c0 - c1_grav_prime + c2_second
         bracket_v = -c1_thom_prime
         weight_w = W_arr * np.asarray(diffusion, dtype=float)
         weight_v = (visibility if visibility is not None else weight) \

@@ -45,3 +45,7 @@ desktop.ini
 *~
 *.swp
 *.swo
+
+f9-repair.log
+f9-repair.err
+f9.log
