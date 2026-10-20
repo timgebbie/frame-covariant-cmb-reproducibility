@@ -6,10 +6,28 @@ Under the boost Dv_B = -v = -k s, so DC_1 = -sdot + kappa' s -- the
 gravitational -sdot PLUS a kappa' s.  That extra piece enters the alpha C_1 K'
 slot as alpha int V s K', and the K' coefficient becomes 2 alpha V.
 
-  A  kappa' v_B INSIDE C_1   -> no (alpha,beta,gamma) makes the bulk invariant
-  B  carried separately under V with coefficient c, reduced vhat_B = v_B/k
+  A  kappa' v_B INSIDE C_1 *AND DIFFERENTIATED* -> no (alpha,beta,gamma)
+     makes the bulk invariant
+  B  carried as its own term, NOT differentiated, reduced vhat_B = v_B/k
      -> invariance needs c = alpha, and the residual goes to machine zero
      unreduced v_B -> needs c = alpha/k, which is not a constant
+
+  CORRECTION 2026-10-20, P1-T, and it matters.  "Carried separately under V"
+  in an earlier version of this docstring read as a WEIGHT CHANGE.  It is not
+  one.  W*kappa' = V is an identity, so W*C_1^thom = -V*vhat_B already: the
+  Thomson term is at visibility weight in (102) as printed, and there was
+  never a weight to change.  What is wrong is that (102) DIFFERENTIATES it --
+  d/deta of a coefficient still carrying a bare kappa' is what manufactures
+  kappa'^2.  The remedy is not to move it; it is not to differentiate it.
+
+  P1-B measured the misreading at 320-682x and withdrew T-88 (T-93); T-94
+  measures what the differentiation costs -- the resulting V kappa'' vhat
+  term is 93-97% of the Newtonian integrand and 1.8e5 times the physical
+  Doppler source g vhat_B.
+
+  The ASSERTIONS BELOW ARE UNCHANGED by that correction.  What c6 establishes
+  is the invariance obstruction, and it survives: kappa' v_B inside C_1 AND
+  DIFFERENTIATED admits no (alpha,beta,gamma).  Only the remedy was misstated.
 """
 import sys, pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))

@@ -148,7 +148,7 @@ the last place a grid may be chosen by eye.
 
 ### `k_com` — the k grid the released angular spectrum is integrated on
 
-`scripts/figure_f9_acoustic_spectrum.py:126`, `np.linspace`
+`scripts/figure_f9_acoustic_spectrum.py:134`, `np.linspace`
 
 `required_k_points(1500, r_theta)`, per background because r_theta is.
 **Was `np.arange(0.05, 1500.0, np.pi/3)` until 2026-10-17** --- 0.96 samples

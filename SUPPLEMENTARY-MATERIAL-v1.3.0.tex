@@ -1109,6 +1109,32 @@ $R(\eta_*)$ and hence the sound speed.
 
 \input{tables/parameters-v1.0.0.tex}
 
+\subsection{The three backgrounds, side by side}
+\label{sec:model-parameters}
+Table~\ref{tab:model-parameters} is the one place every derived scale of the
+three backgrounds can be read against the others. It exists because a question
+the PI asked --- \emph{is the difference between two panels a parameter
+difference?} --- had no cheap answer while the models were defined in three
+places and compared nowhere.
+
+\textbf{The last three rows are the ones that answer a shape question.} Two
+models whose spectra differ \emph{in the position of the peaks} differ in
+$\ell_A=\pi r_\theta/r_s$. Two whose peaks sit at the same $\ell_A$ and still
+look different do \textbf{not} differ by a parameter, and the difference is in
+\texttt{provenance/BUNDLE-DEFECTS-v1.md}.
+
+Two rows carry a known defect and say so rather than being quietly correct for
+a different question. $\Omega_r=0$ is the \emph{control} on Einstein--de~Sitter,
+which is what makes that background the one where A-3 and $T(k)$ are
+identically inapplicable --- and on \textsc{lcdm} it is neither a control nor
+intended, worth $37\%$ in $\ell_A$ through $\eta_*$ at $1.571\times$ and $r_s$
+at $1.610\times$ (findings \textbf{T-81c}, \textbf{T-83}). $k_D$ is the $R=0$
+value, because \texttt{diffusion\_scale} is called with $R$ zeroed while the
+oscillator beside it runs at $R(\eta_*)\simeq0.61$ --- finding \textbf{T-21},
+measured at $\ell_D=1783$ against $1985$.
+
+\input{tables/model-parameters-v1.3.0.tex}
+
 \section{Numerical resolution and reproducibility}
 The hierarchy is integrated with an explicit Runge--Kutta method of order~8
 (\texttt{DOP853}) at relative tolerance $10^{-10}$ and absolute tolerance

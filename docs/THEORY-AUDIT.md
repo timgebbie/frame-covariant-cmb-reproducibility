@@ -2,7 +2,7 @@
 
 > **Generated, not transcribed. Do not edit by hand.**
 >
-> Produced by `tests/frame/gen_theory_audit.py` at 2026-10-19 14:12 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
+> Produced by `tests/frame/gen_theory_audit.py` at 2026-10-20 11:39 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
 
 **Status: ALL CHECKS PASS** — 15 assertions across 6 instruments.
 
@@ -121,13 +121,13 @@ $\kappa'v_B$ **cannot** sit inside $C_1$: the $K'$ coefficient becomes $2\alpha\
 | `r_c_alpha` | 3.19e-13 |
 | `r_c_2alpha` | 0.00888329 |
 
-*Instrument: `tests/frame/c6_thomson.py`, sha256 `8c4bce3f3c64…`*
+*Instrument: `tests/frame/c6_thomson.py`, sha256 `4c5fcbe50c2c…`*
 
 ## Provenance
 
 | | |
 |---|---|
-| generated | 2026-10-19 14:12 UTC |
+| generated | 2026-10-20 11:39 UTC |
 | python | 3.13.16 |
 | numpy | 2.5.3 |
 | scipy | 1.18.1 |

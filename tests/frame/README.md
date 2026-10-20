@@ -40,7 +40,7 @@ construction. Requires `numpy`, `scipy`, `sympy`.
 | `c3_byparts.py` | the exact bulk source `W(C₀−C₁′+C₂″) − 𝒱C₁ + 2𝒱C₂′ + 𝒱̇C₂`; Annals II's printed `int_soln_damping` does not reproduce its own integral |
 | `c4_rank_slot.py` | frame invariance forces `β = −α`, `γ = 0` |
 | `c5_monopole.py` | `a·Δℬ₀ = ⅓k²ΔC₂` exactly, so `γ = 0` closes **only with ℬ₀ restored** |
-| `c6_thomson.py` | `κ′v_B` cannot sit inside `C₁`; carried separately it needs `c = α` and the reduced `v̂_B = v_B/k` |
+| `c6_thomson.py` | `κ′v_B` inside `C₁` **and differentiated** breaks invariance; carried as its own undifferentiated term it needs `c = α` and the reduced `v̂_B = v_B/k`. **Not a weight change** — `Wκ′ = 𝒱` is an identity, so the Thomson term is already at visibility weight; the defect is the differentiation (P1-T, 2026-10-20; measured at **T-93**/**T-94**) |
 
 ## Three things to read before trusting the output
 

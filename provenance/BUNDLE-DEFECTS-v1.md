@@ -7823,3 +7823,116 @@ against $W$ is a factor of $\kappa'$, and $\kappa'\simeq1.4\times10^4$ at
 decoupling — **the control would not have been written in that form.** The
 column the register has been demanding since T-76 is the column that was
 missing here, in P1-B's own work, four days after P1-B wrote the rule.
+
+---
+
+## T-94 — **the released Newtonian integrand is 93–97% one term, and that term is $1.8\times10^5$ times the physical Doppler source**
+
+**2026-10-20. T-93's one surviving result, measured.**
+`scripts/diagnostic_d16_kappa_squared.py`,
+`diagnostics/d16-kappa-squared-v1.3.0.txt`. **P1-T derived the same statement
+symbolically within the hour and from the other direction**; their derivation
+and this measurement are recorded together below because neither was made with
+sight of the other.
+
+### The six pieces of (102)'s integrand, Newtonian frame
+
+From (107), $-C_1'=\kappa''\hat v_B+\kappa'\hat v_B'+(\Phi_A'-\Phi_H')+\tfrac k3\tau_1$,
+so the released bracket under $\mathcal V$ carries:
+
+| term | EdS $k{=}10$ | EdS $k{=}60$ | EdS $k{=}300$ | PLANCK $k{=}10$ | PLANCK $k{=}60$ |
+|---|---:|---:|---:|---:|---:|
+| $\mathcal V\kappa''\hat v_B$ | $\mathbf{0.935}$ | $\mathbf{0.971}$ | $\mathbf{0.616}$ | $\mathbf{0.933}$ | $\mathbf{0.974}$ |
+| $\mathcal V\kappa'\hat v_B'$ | 0.066 | 0.024 | 0.314 | 0.065 | 0.015 |
+| $\mathcal V\tfrac k3\tau_1$ | 0.0002 | 0.0064 | 0.082 | 0.0004 | 0.013 |
+| $\mathcal V(\Phi_A'-\Phi_H')$ | $0.0000$ | $0.0000$ | $0.0000$ | $\mathbf{0.0018}$ | $0.0028$ |
+| $\mathcal VC_0$, $\mathcal VC_2''$ | 0 | 0 | 0 | 0 | 0 |
+
+*(shares of the summed absolute integrand; rank 0 and 2 are identically zero
+in the Newtonian frame, which is (110))*
+
+**One term is 93–97% of the integrand at $k\le60$ on both backgrounds.** The
+acoustic driving $\tfrac k3\tau_1$ is **0.02%**. The ISW on PLANCK — where
+there is one — is **0.18%**.
+
+### What that term is, against the source it is supposed to represent
+
+The physical Doppler source is $g\,\hat v_B=W\kappa'\hat v_B$. The released
+dominant term is $\mathcal V\kappa''\hat v_B=W\kappa'\kappa''\hat v_B$. Their
+ratio is $\kappa''$, measured:
+
+| | $\kappa''(\eta_*)$ | $\max\lvert\mathcal V\kappa''\hat v_B\rvert/\max\lvert\mathcal V\hat v_B\rvert$ | $\kappa'(\eta_*)^2$ |
+|---|---:|---:|---:|
+| EdS | $-1.474\times10^{5}$ | $\mathbf{1.811\times10^{5}}$ | $1.459\times10^{5}$ |
+| PLANCK | $-6.885\times10^{4}$ | $\mathbf{8.988\times10^{4}}$ | $6.979\times10^{4}$ |
+
+and $\kappa'^2/\lvert\kappa''\rvert=0.989$ (EdS), $1.014$ (PLANCK) — **$\kappa''\simeq-\kappa'^2$.**
+So the dominant term carries **three powers of $\kappa'$** where the physical
+source carries one.
+
+### It is **not** A-2, and that is the point
+
+Changing $\mathcal V\to W$ divides **every** term in the bracket by $\kappa'$
+uniformly and **changes no ratio**. The shares above are weight-independent.
+**A-2 cannot reach this**, and neither can any of the weight controls T-88
+through T-90 tried.
+
+**The $\kappa''$ term exists only because (102) differentiates $C_1$, which
+contains $\kappa'$.** It is an artefact of by-parting **onto the coefficients**
+— T-86's structural finding, now with a number on it.
+
+### P1-T's derivation, arrived at independently and within the hour
+
+Multiplying the transport equation by the integrating factor,
+
+$$\tau_\ell'+(\text{streaming})+\kappa'\tau_\ell=a\mathcal B_\ell+\kappa'\mathcal S_\ell
+\ \xrightarrow{\times W}\
+\frac{\mathrm d}{\mathrm d\eta}\bigl[W\tau_\ell\bigr]+W(\text{streaming})
+=W\,a\mathcal B_\ell+\underbrace{(W\kappa')}_{=\,\mathcal V}\mathcal S_\ell$$
+
+> *"The gravitational source arrives under $W$. The in-scattered Thomson
+> source arrives under $\mathcal V$, with its $\kappa'$ consumed by the
+> integrating factor. **Nothing is left carrying a bare $\kappa'$.** So no
+> by-parts can manufacture $\kappa'^2$ — unless it differentiates a
+> coefficient that still has one in it, which is exactly what (102) does."*
+
+Verified symbolically on their side: **(102)'s $-\mathcal VC_1'$ reaches
+$\kappa'^2$; $\mathcal V\mathcal S_1$ reaches $\kappa'^1$.** And the rule with
+its mechanism:
+
+> **By-parts the product, never the coefficient.** CAMB by-parts too — on
+> $g\cdot\text{source}$, which generates $\dot{\mathcal V}$ and can never
+> generate $\kappa'^2$.
+
+**Three independent routes now say one thing**: T-86's read of the file,
+P1-T's integrating-factor derivation, and this magnitude column. None was made
+with sight of the others.
+
+### What this does not establish, stated before it is read as more
+
+**A large term is not automatically wrong**, and (102) is the printed equation
+this bundle reproduces. What is established is that **one term dominates the
+released integrand by two orders over everything the physics is supposed to
+produce**, that it carries two powers of $\kappa'$ more than the source it
+represents, and that **no weight choice can move it.** Whether removing it
+produces a correct spectrum is unmeasured and is not claimed.
+
+**A caveat on $\kappa''$ itself.** `two_frame.py:331` builds it as
+`np.gradient(kappa_prime, eta, edge_order=2)` — a spline through a steep
+amplitude, which is the shape **T-23** warns against. The
+$\kappa''\simeq-\kappa'^2$ agreement at $1\%$ is independent support that it
+is near enough for a magnitude column, **and it is not good enough for a
+coefficient.** If $\kappa''$ enters any landed expression it owes a published
+relation first.
+
+### And a correction P1-T supplies to their own instrument
+
+`tests/frame/c6_thomson.py`'s docstring said $\kappa'v_B$ is *"carried
+separately under $\mathcal V$"*, which reads as a weight change. P1-T's
+2026-10-18 §5.3 said the right thing — *leave $C_1^{\rm Th}$ under
+$e^{-\kappa}$ where its own $\kappa'$ makes $\mathcal V$ directly; by-parts
+only $C_1^{\rm grav}$* — and the instrument restated it as a weight.
+**T-88 implemented the phrasing, not the derivation.** What survives of c6 is
+the obstruction: $\Delta C_1\supset\kappa's$ puts $\kappa'$ into the boost
+response and no $(\alpha,\beta,\gamma)$ removes it. **The remedy is not to
+move the term. It is not to differentiate it.**

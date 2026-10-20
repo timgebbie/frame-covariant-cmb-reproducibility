@@ -182,6 +182,15 @@ DIAGNOSTICS: list[tuple[str, str]] = [
     # a time. Three of D14's four controls score as failures alone.
     ("D14 the B-slot repair, over the control lattice",
      "scripts/diagnostic_d14_slot_repair.py"),
+    # **D16 is the column M11b demands, for the term that dominates (102).**
+    # It measures and changes nothing: one term is 93-97% of the Newtonian
+    # integrand and 1.8e5 times the physical Doppler source it stands for, and
+    # the share is WEIGHT-INDEPENDENT, so A-2 cannot reach it. Finding T-94.
+    # D15 is the diagnostic F9 under the withdrawn T-88 variant and is not a
+    # harness entry: it is a 45-minute run and `figure_f9 --b-slot-repair`
+    # produces it on demand.
+    ("D16 the kappa-squared in (102)'s integrand",
+     "scripts/diagnostic_d16_kappa_squared.py"),
 ]
 
 

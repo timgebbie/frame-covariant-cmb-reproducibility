@@ -1,0 +1,113 @@
+D16 --- the $\kappa'^2$ in (102)'s integrand, measured against its neighbours.
+
+**Finding T-93's one surviving result, and it is in the RELEASED code.** This
+is not a repair and it changes nothing: it is the column **M11b** demands --
+each quantity's operational definition, its validity condition, and **its size
+against its neighbours** -- supplied for the term P1-T named in their item-2
+list and which T-93 located.
+
+THE TERM
+--------
+(102) carries the whole bracket $\{C_0 - C_1' + C_2''\}$ under $\mathcal V$,
+and from (107)
+
+    -C_1' = (kappa' vhat_B)' + (a B_1)'/k
+          = kappa'' vhat_B + kappa' vhat_B'  +  (Phi_A' - Phi_H') + (k/3) tau_1
+            \__Thomson, two pieces_______/      \__ISW__________/   \__dT'___/
+
+so the integrand carries
+
+    V * kappa'  vhat_B'  =  W * kappa'^2    * vhat_B'
+    V * kappa'' vhat_B   =  W * kappa' kappa'' * vhat_B
+
+**Two powers of the scattering rate where the $W$-form carries one.** At
+$\kappa'\simeq1.4\times10^4$ that is not a small distinction, and P1-T's
+\S5.3 flags the same structure in $\dot{\mathcal V}=(\kappa''+\kappa'^2)e^{-\kappa}$
+as a conditioning requirement: **form it from the weight's own derivative,
+never assemble it from $\kappa'^2$ and $\kappa''$ separately.**
+
+
+
+==============================================================================
+  EdS   kappa'(eta_*) = 3.8192e+02,  kappa''(eta_*) = -1.4742e+05,  V(eta_*) = 1.5046e+02
+  kappa'^2(eta_*) = 1.4586e+05   (kappa'^2 / |kappa''| = 0.9894)
+==============================================================================
+
+  k = 10            at eta_*    max over grid   share of total
+  ------------------------------------------------------------------------
+  V C_0                     -0.0000e+00       0.0000e+00           0.0000
+  V C_2''                    0.0000e+00       0.0000e+00           0.0000
+  V kappa'' vhat             3.4393e+05       4.1368e+05           0.9352
+  V kappa' vhat'            -2.1004e+04       2.9187e+04           0.0660
+  V (Phi_A'-Phi_H')          1.9137e-08       7.3759e-08           0.0000
+  V (k/3) tau_1             -7.7769e+01       7.7769e+01           0.0002
+                                        V/W on that term:       5.3060e+02
+
+  k = 60            at eta_*    max over grid   share of total
+  ------------------------------------------------------------------------
+  V C_0                     -0.0000e+00       0.0000e+00           0.0000
+  V C_2''                    0.0000e+00       0.0000e+00           0.0000
+  V kappa'' vhat             2.2671e+05       2.7851e+05           0.9713
+  V kappa' vhat'            -4.7191e+03       6.7802e+03           0.0236
+  V (Phi_A'-Phi_H')          1.5903e-08       6.1296e-08           0.0000
+  V (k/3) tau_1             -1.8454e+03       1.8454e+03           0.0064
+                                        V/W on that term:       5.4627e+02
+
+  k = 300            at eta_*    max over grid   share of total
+  ------------------------------------------------------------------------
+  V C_0                     -0.0000e+00       0.0000e+00           0.0000
+  V C_2''                    0.0000e+00       0.0000e+00           0.0000
+  V kappa'' vhat             5.5498e+03       9.6568e+03           0.6156
+  V kappa' vhat'             3.5082e+03       4.9226e+03           0.3138
+  V (Phi_A'-Phi_H')          7.1642e-09       2.7613e-08           0.0000
+  V (k/3) tau_1             -1.1294e+03       1.2826e+03           0.0818
+                                        V/W on that term:       5.3315e+02
+
+==============================================================================
+  PLANCK   kappa'(eta_*) = 2.6419e+02,  kappa''(eta_*) = -6.8849e+04,  V(eta_*) = 9.7393e+01
+  kappa'^2(eta_*) = 6.9794e+04   (kappa'^2 / |kappa''| = 1.014)
+==============================================================================
+
+  k = 10            at eta_*    max over grid   share of total
+  ------------------------------------------------------------------------
+  V C_0                     -0.0000e+00       0.0000e+00           0.0000
+  V C_2''                    0.0000e+00       0.0000e+00           0.0000
+  V kappa'' vhat             1.2756e+05       1.5866e+05           0.9333
+  V kappa' vhat'            -7.8829e+03       1.1118e+04           0.0654
+  V (Phi_A'-Phi_H')         -3.0010e+02       3.0010e+02           0.0018
+  V (k/3) tau_1             -6.1760e+01       6.1760e+01           0.0004
+                                        V/W on that term:       3.7252e+02
+
+  k = 60            at eta_*    max over grid   share of total
+  ------------------------------------------------------------------------
+  V C_0                     -0.0000e+00       0.0000e+00           0.0000
+  V C_2''                    0.0000e+00       0.0000e+00           0.0000
+  V kappa'' vhat             6.7082e+04       8.7568e+04           0.9736
+  V kappa' vhat'             1.1529e+03       1.3280e+03           0.0148
+  V (Phi_A'-Phi_H')         -2.4939e+02       2.4939e+02           0.0028
+  V (k/3) tau_1             -1.1692e+03       1.1692e+03           0.0130
+                                        V/W on that term:       2.8885e+02
+
+  k = 300            at eta_*    max over grid   share of total
+  ------------------------------------------------------------------------
+  V C_0                     -0.0000e+00       0.0000e+00           0.0000
+  V C_2''                    0.0000e+00       0.0000e+00           0.0000
+  V kappa'' vhat            -2.5366e+03       2.9793e+03           0.6123
+  V kappa' vhat'             2.9603e+02       1.3615e+03           0.2798
+  V (Phi_A'-Phi_H')         -1.1235e+02       1.1235e+02           0.0231
+  V (k/3) tau_1              1.1053e+03       1.1085e+03           0.2278
+                                        V/W on that term:       5.6144e+02
+
+  READING THIS
+  ------------
+  `V kappa' vhat'` is W kappa'^2 vhat'. The last line of each block is the
+  factor by which the PRINTED form exceeds the W-form on that one term, and it
+  is kappa'(eta_*) by construction -- stated so the arithmetic is visible
+  rather than asserted.
+
+  A large share is NOT a defect on its own. (102) is the printed equation and
+  this bundle reproduces it; A-2 records that the weight is a choice the
+  caller states. What the column establishes is which terms a change of weight
+  would move, BEFORE anyone changes one -- which is the column T-93 did not
+  have when it mattered.
+
