@@ -419,6 +419,23 @@ def coefficient_sets(
 _RANK_KEEPS = {0: ("c0",), 1: ("c1",), 2: ("c2",)}
 
 
+#: **The B-slot repair --- finding T-88. `False` is the released behaviour.**
+#:
+#: With this on, `transfer_by_rank` gives $C_1$'s gravitational half the weight
+#: $W=e^{-\kappa}$, gives its Thomson half $g=\mathcal V$ **carrying
+#: $\hat v_B + C_2$ together** (T-82's boost-invariant pair, which the first
+#: attempt separated and which is why that attempt failed), and supplies the
+#: $+k\int W M j_\ell'$ bulk slot (102) has no counterpart for.
+#:
+#: **It is a control and not yet a default**, because T-88 measures that it
+#: closes the frame gap by up to four orders at $\ell\ge50$ for $k\lesssim60$
+#: and does **nothing** at $k=300$, where it rewrites the Newtonian column by
+#: $7\times$ on PLANCK. A flag that is right in one regime and wrong in
+#: another is exactly what **A-2** already is, and this bundle does not
+#: silently default one of those again --- decision **S43**.
+B_SLOT_REPAIR: bool = False
+
+
 def transfer_by_rank(
     ells: np.ndarray,
     k_com: float,
@@ -461,6 +478,23 @@ def transfer_by_rank(
                   eta_floor=float(env.eta[0]),
                   visibility=env.visibility,
                   eta_0=float(env.background.eta_0))
+    if B_SLOT_REPAIR:
+        # C_1's Thomson half and its derivative, from the stored primitives:
+        # -C_1 = (dT + Phi_A) + kappa' vhat_B with vhat_B = v_B / k, and
+        # `v_b` is the UN-reduced v_B (T-66). The derivative comes from (107),
+        # -C_1' = (kappa' vhat_B)' + (a B_1)'/k, never from differentiating a
+        # stored amplitude -- finding T-23.
+        kp = np.asarray(env.kappa_prime, dtype=float)
+        v_b = np.asarray(coefficients.v_b, dtype=float)
+        a_b1_prime = np.asarray(coefficients.a_b1_prime, dtype=float)
+        common.update(
+            opacity=env.opacity,
+            c1_thomson=-(kp * v_b / float(k_com)),
+            c1_thomson_prime=np.asarray(coefficients.c1_prime, dtype=float)
+            + a_b1_prime / float(k_com),
+            c1_thomson_kappa=kp,
+            slot_weight_split=True, jprime_bulk_slot=True,
+            thomson_carries_shear=True, boundary_weight_w=False)
     zero = np.zeros_like(env.eta)
 
     out: dict[int, np.ndarray] = {}

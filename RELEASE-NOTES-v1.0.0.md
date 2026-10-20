@@ -1,6 +1,14 @@
 # Release notes — v1.0.0
 
-**Status: in preparation. Not released.**
+**Status: released 2026-10-05.** Tagged `v1.0.0` at
+`github.com/timgebbie/frame-covariant-cmb-reproducibility`.
+**This line read *in preparation, not released* until 2026-10-20**, while
+`README.md` described the tag, release asset and archived DOI as frozen and
+`CHANGELOG.md` carried a second `[Unreleased]` heading for it --- so
+`scripts/run_all.py`'s released-version regex matched neither heading and
+v1.0.0 was invisible to the check **T-47** added to refuse a deferral to an
+already-released version. Corrected on the PI's confirmation; finding
+**T-87**.
 
 v1.0.0 is the first public analytical reproducibility release: an independent
 Python reconstruction, from first $1+3$ covariant principles, of the

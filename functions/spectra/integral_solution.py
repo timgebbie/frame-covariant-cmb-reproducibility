@@ -107,6 +107,14 @@ def integral_solution(
     c2_prime: np.ndarray | None = None,
     visibility: np.ndarray | None = None,
     by_parts_weight_terms: bool = False,
+    opacity: np.ndarray | None = None,
+    c1_thomson: np.ndarray | None = None,
+    c1_thomson_prime: np.ndarray | None = None,
+    c1_thomson_kappa: np.ndarray | None = None,
+    slot_weight_split: bool = False,
+    jprime_bulk_slot: bool = False,
+    boundary_weight_w: bool = False,
+    thomson_carries_shear: bool = False,
 ) -> IntegralSolution:
     r"""Evaluate (102) at one $k$ for a set of multipoles.
 
@@ -205,6 +213,92 @@ def integral_solution(
 
     integrand_weight = weight * np.asarray(diffusion, dtype=float)
 
+    # **THE B-SLOT REPAIR --- findings T-85, T-86. Three independent controls,
+    # every one of them `False` by default, so nothing released moves unless a
+    # caller asks.** They exist to be measured, not to be believed.
+    #
+    # The identity the bundle is being held to is
+    #
+    #     Int g M j_l  =  [ W M j_l ]  -  Int W M' j_l  +  k Int W M j_l'
+    #
+    # and T-86 read what this file has against it: the boundary carries
+    # D(eta_0,k) where the identity wants W(eta_*); the bulk carries
+    # Int V.D {C_0 - C_1' + C_2''} j_l where the identity wants -Int W M' j_l,
+    # so weight AND sign differ; and **the third term has no counterpart at
+    # all**, because everything was by-parted onto the coefficients and that
+    # decomposition is only legal at W.
+    #
+    # `slot_weight_split` separates C_1's two contents and gives each the
+    # weight its physics calls for: the gravitational half under
+    # $W=e^{-\kappa}$, the Thomson half under $g=\mathcal V$. Scattering
+    # damping belongs to the scattering source; this is also **C6 / T-81b**,
+    # which is why one change is expected to move three symptoms.
+    #
+    # `jprime_bulk_slot` supplies the missing $+k\int W M j_\ell'$. The
+    # recurrence it needs is already in this file, at the rank-two boundary
+    # term, which has never been evaluated because $C_2$ vanishes in every
+    # Newtonian run.
+    #
+    # `boundary_weight_w` puts $W(\eta_*)$ on the boundary.
+    #
+    # **M11a governs how these are read.** T-77 is the instance: two defects
+    # that fix it only together score as two failed fixes one at a time. The
+    # measuring script walks the full 2^3 lattice for that reason, and no
+    # single column licenses a conclusion.
+    W_arr = None if opacity is None else np.asarray(opacity, dtype=float)
+    if (slot_weight_split or jprime_bulk_slot or boundary_weight_w) and W_arr is None:
+        raise ValueError(
+            "the B-slot controls need `opacity` (e^-kappa) on the eta grid: "
+            "the identity they implement is written at W weight and this "
+            "function cannot invent it from `weight`, which A-2 may have set "
+            "to V")
+
+    c1_thom = (np.zeros_like(eta) if c1_thomson is None
+               else np.asarray(c1_thomson, dtype=float))
+    c1_thom_prime = (np.zeros_like(eta) if c1_thomson_prime is None
+                     else np.asarray(c1_thomson_prime, dtype=float))
+    c1_grav = coefficients.c1 - c1_thom
+    c1_grav_prime = c1_prime - c1_thom_prime
+
+    # **`thomson_carries_shear` --- finding T-88, and it is T-82 read
+    # forwards.** CAMB carries the rank-1 scattering source as $g(v_b+\sigma)$,
+    # **one object**, and T-82 measured that in this bundle's variables the
+    # boost-invariant combination is $\hat v_B + C_2$ to $10^{-15}$. The first
+    # repair (D14, controls 1-3) split $C_1$ into gravitational and Thomson
+    # halves and left $C_2$ in the rank-two sector --- that is, **it separated
+    # the one pair T-82 had just shown must stay together**, and the CDM column
+    # is where $C_2\ne0$, so that is exactly where it broke.
+    #
+    # With this on, the $g$-weighted slot carries $-\kappa'(\hat v_B + C_2)$
+    # rather than $-\kappa'\hat v_B$. The added piece $-\kappa'C_2$ is a term
+    # this bundle has nowhere at present.
+    if thomson_carries_shear:
+        if c1_thomson_kappa is None:
+            raise ValueError(
+                "thomson_carries_shear needs `c1_thomson_kappa` --- kappa' on "
+                "the eta grid. It is not reconstructed from c1_thomson here: "
+                "two routes to one quantity is what S8 forbids")
+        kp_arr = np.asarray(c1_thomson_kappa, dtype=float)
+        c2_arr = np.asarray(coefficients.c2, dtype=float)
+        c2p_arr = (np.zeros_like(eta) if c2_prime is None
+                   else np.asarray(c2_prime, dtype=float))
+        kpp_arr = np.gradient(kp_arr, eta, edge_order=2)
+        c1_thom = c1_thom - kp_arr * c2_arr
+        c1_thom_prime = c1_thom_prime - (kpp_arr * c2_arr + kp_arr * c2p_arr)
+        c1_grav = coefficients.c1 - c1_thom
+        c1_grav_prime = c1_prime - c1_thom_prime
+
+    if slot_weight_split:
+        # the gravitational half moves to W; the Thomson half keeps V
+        bracket_w = coefficients.c0 - c1_grav_prime + c2_second
+        bracket_v = -c1_thom_prime
+        weight_w = W_arr * np.asarray(diffusion, dtype=float)
+        weight_v = (visibility if visibility is not None else weight) \
+            * np.asarray(diffusion, dtype=float)
+    else:
+        bracket_w, weight_w = bracket, integrand_weight
+        bracket_v, weight_v = None, None
+
     floor = float(eta_star if eta_floor is None else eta_floor)
     inside = eta >= floor
     if inside.sum() < 8:
@@ -223,7 +317,10 @@ def integral_solution(
     for i, ell in enumerate(ells):
         l = int(ell)
         j_l_star = float(table(l, np.array([x_star]))[0])
-        scalar[i] = (c2_prime_star - c1_star) * damping_total * j_l_star
+        boundary_weight = damping_total * (
+            float(np.interp(eta_star, eta, W_arr)) if boundary_weight_w
+            else 1.0)
+        scalar[i] = (c2_prime_star - c1_star) * boundary_weight * j_l_star
 
         # The rank-two boundary term. Zero wherever C_2 is, which is every
         # Newtonian run, and the reason this line has never been evaluated.
@@ -236,9 +333,21 @@ def integral_solution(
             shear[i] = k * c2_star * damping_total * combination
 
         j_l = table(l, x)
-        integrated[i] = float(
-            np.trapezoid((integrand_weight * bracket * j_l)[inside], eta[inside])
-        )
+        total_bulk = (weight_w * bracket_w * j_l)
+        if bracket_v is not None:
+            total_bulk = total_bulk + weight_v * bracket_v * j_l
+        if jprime_bulk_slot:
+            # j_l' = [ l j_{l-1} - (l+1) j_{l+1} ] / (2l+1) -- the SAME
+            # recurrence the rank-two boundary uses twenty lines above, and
+            # finding T-23's rule: a derivative comes from a published
+            # relation, never from differentiating a table.
+            j_lm1_grid = table(l - 1, x)
+            j_lp1_grid = table(l + 1, x)
+            j_l_prime = ((l / (2 * l + 1)) * j_lm1_grid
+                         - ((l + 1) / (2 * l + 1)) * j_lp1_grid)
+            total_bulk = total_bulk + k * (W_arr * np.asarray(diffusion, dtype=float)
+                                           * (-c1_grav) * j_l_prime)
+        integrated[i] = float(np.trapezoid(total_bulk[inside], eta[inside]))
 
     return IntegralSolution(
         ell=ells, k_com=k,

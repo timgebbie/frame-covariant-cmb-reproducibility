@@ -230,7 +230,7 @@ here.
 - **S21**: F5 and F7 move from v1.1.0 to v1.5.0, and F2 joins them — all three
   wait on the generic-$u^a$ hierarchy, not on figure work.
 
-## [Unreleased] — v1.0.0 in preparation
+## [1.0.0] — 2026-10-05
 
 ### Added
 

@@ -1,0 +1,136 @@
+D14 --- the B-slot repair, measured over the full control lattice.
+
+**The repair T-86 specified, and the measurement that decides whether it is
+one.** Three independent controls in `functions.spectra.integral_solution`,
+all `False` by default:
+
+    slot_weight_split   C_1's two contents separate; the gravitational half
+                        moves to W = e^-kappa, the Thomson half keeps
+                        g = V. Scattering damping belongs to the scattering
+                        source -- this is C6 / T-81b in the same stroke.
+    jprime_bulk_slot    supplies the missing +k Int W M j_l', the term the
+                        identity has and (102) does not.
+    boundary_weight_w   puts W(eta_*) on the boundary, where the released
+                        code has the diffusion factor D(eta_0,k) alone.
+
+**The lattice is walked in full, all eight cells, and that is M11a rather
+than thoroughness for its own sake.** T-77 is the instance: two defects that
+fix the gap only together score as two *failed* fixes one at a time. A single
+column licenses nothing here.
+
+
+
+======================================================================================
+  EdS
+======================================================================================
+
+  k = 10   (C_1 split check: |C_1^grav + aB_1/k| / scale = 9.29e-14)
+  split  jpri  bndW  +shr |      gap l=2     gap l=10     gap l=50    gap l=200 |  Newt moved
+  ------------------------------------------------------------------------------------
+      F     F     F     F |   1.2847e+00   1.2854e+00   1.2854e+00   1.2921e+00 |   0.000e+00  <- released
+      F     F     T     F |   1.2845e+00   1.2852e+00   1.2852e+00   1.2920e+00 |   1.783e-03
+      F     T     F     F |   1.2841e+00   1.2841e+00   1.2854e+00   1.2914e+00 |   5.851e-04
+      F     T     T     F |   1.2840e+00   1.2840e+00   1.2852e+00   1.2913e+00 |   2.344e-03
+      T     F     F     F |   1.1027e+00   1.3750e+00   1.2828e+00   1.2909e+00 |   5.017e-03
+      T     F     F     T |   1.4728e-01   8.7734e-02   5.6744e-04   9.0498e-03 |   5.017e-03
+      T     F     T     F |   1.1029e+00   1.3747e+00   1.2826e+00   1.2908e+00 |   6.800e-03
+      T     F     T     T |   1.4551e-01   8.9699e-02   2.6761e-03   7.6098e-03 |   6.800e-03
+      T     T     F     F |   1.1022e+00   1.3737e+00   1.2828e+00   1.2902e+00 |   5.578e-03
+      T     T     F     T |   1.4718e-01   8.7538e-02   4.9425e-04   1.5335e-03 |   5.578e-03
+      T     T     T     F |   1.1024e+00   1.3734e+00   1.2826e+00   1.2901e+00 |   7.361e-03
+      T     T     T     T |   1.4541e-01   8.9500e-02   2.6028e-03   8.4795e-05 |   7.361e-03
+
+  k = 60   (C_1 split check: |C_1^grav + aB_1/k| / scale = 2.13e-15)
+  split  jpri  bndW  +shr |      gap l=2     gap l=10     gap l=50    gap l=200 |  Newt moved
+  ------------------------------------------------------------------------------------
+      F     F     F     F |   1.5642e+00   1.6169e+00   1.6490e+00   1.6205e+00 |   0.000e+00  <- released
+      F     F     T     F |   1.5639e+00   1.6164e+00   1.6485e+00   1.6200e+00 |   1.915e-03
+      F     T     F     F |   1.5655e+00   1.6167e+00   1.6498e+00   1.6210e+00 |   3.503e-04
+      F     T     T     F |   1.5652e+00   1.6162e+00   1.6493e+00   1.6205e+00 |   1.565e-03
+      T     F     F     F |   1.0350e+00   1.2155e+00   7.6486e-01   1.5160e+00 |   6.171e-02
+      T     F     F     T |   1.0376e+00   1.3276e+00   4.2336e-01   2.1763e-03 |   6.171e-02
+      T     F     T     F |   1.0351e+00   1.2159e+00   7.6601e-01   1.5157e+00 |   6.131e-02
+      T     F     T     T |   1.0377e+00   1.3281e+00   4.2204e-01   4.5114e-03 |   6.131e-02
+      T     T     F     F |   1.0350e+00   1.2156e+00   7.6533e-01   1.5164e+00 |   6.191e-02
+      T     T     F     T |   1.0375e+00   1.3278e+00   4.2332e-01   1.4752e-03 |   6.191e-02
+      T     T     T     F |   1.0350e+00   1.2159e+00   7.6648e-01   1.5162e+00 |   6.150e-02
+      T     T     T     T |   1.0376e+00   1.3283e+00   4.2200e-01   3.8119e-03 |   6.150e-02
+
+  k = 300   (C_1 split check: |C_1^grav + aB_1/k| / scale = 2.32e-16)
+  split  jpri  bndW  +shr |      gap l=2     gap l=10     gap l=50    gap l=200 |  Newt moved
+  ------------------------------------------------------------------------------------
+      F     F     F     F |   1.0362e+00   1.0342e+00   8.2716e-01   1.0295e+00 |   0.000e+00  <- released
+      F     F     T     F |   1.0364e+00   1.0343e+00   8.2724e-01   1.0296e+00 |   4.686e-03
+      F     T     F     F |   1.0362e+00   1.0340e+00   8.2722e-01   1.0293e+00 |   7.737e-03
+      F     T     T     F |   1.0363e+00   1.0341e+00   8.2729e-01   1.0294e+00 |   3.538e-03
+      T     F     F     F |   9.9990e-01   1.0006e+00   9.9777e-01   1.0072e+00 |   1.108e+00
+      T     F     F     T |   9.9990e-01   1.0006e+00   9.9780e-01   1.0081e+00 |   1.108e+00
+      T     F     T     F |   9.9991e-01   1.0006e+00   9.9777e-01   1.0072e+00 |   1.104e+00
+      T     F     T     T |   9.9991e-01   1.0006e+00   9.9780e-01   1.0082e+00 |   1.104e+00
+      T     T     F     F |   9.9990e-01   1.0006e+00   9.9777e-01   1.0071e+00 |   1.108e+00
+      T     T     F     T |   9.9990e-01   1.0006e+00   9.9780e-01   1.0081e+00 |   1.108e+00
+      T     T     T     F |   9.9991e-01   1.0006e+00   9.9778e-01   1.0072e+00 |   1.104e+00
+      T     T     T     T |   9.9991e-01   1.0006e+00   9.9780e-01   1.0081e+00 |   1.104e+00
+
+======================================================================================
+  PLANCK
+======================================================================================
+
+  k = 10   (C_1 split check: |C_1^grav + aB_1/k| / scale = 2.95e-14)
+  split  jpri  bndW  +shr |      gap l=2     gap l=10     gap l=50    gap l=200 |  Newt moved
+  ------------------------------------------------------------------------------------
+      F     F     F     F |   1.4159e+00   1.4343e+00   1.4349e+00   1.4372e+00 |   0.000e+00  <- released
+      F     F     T     F |   1.4154e+00   1.4340e+00   1.4346e+00   1.4369e+00 |   2.859e-03
+      F     T     F     F |   1.4347e+00   1.4342e+00   1.4352e+00   1.4373e+00 |   8.998e-04
+      F     T     T     F |   1.4341e+00   1.4339e+00   1.4349e+00   1.4370e+00 |   3.191e-03
+      T     F     F     F |   1.0216e+00   1.2608e+00   1.4293e+00   1.4318e+00 |   9.066e-03
+      T     F     F     T |   1.0230e+00   1.3815e-01   1.2015e-03   1.1645e-03 |   9.066e-03
+      T     F     T     F |   1.0218e+00   1.2609e+00   1.4290e+00   1.4315e+00 |   1.044e-02
+      T     F     T     T |   1.0233e+00   1.3506e-01   4.8491e-03   4.5304e-03 |   1.044e-02
+      T     T     F     F |   1.0195e+00   1.2607e+00   1.4296e+00   1.4319e+00 |   9.966e-03
+      T     T     F     T |   1.0207e+00   1.3783e-01   1.1627e-03   1.1443e-04 |   9.966e-03
+      T     T     T     F |   1.0197e+00   1.2608e+00   1.4293e+00   1.4316e+00 |   1.077e-02
+      T     T     T     T |   1.0209e+00   1.3473e-01   4.8105e-03   3.4828e-03 |   1.077e-02
+
+  k = 60   (C_1 split check: |C_1^grav + aB_1/k| / scale = 3.47e-15)
+  split  jpri  bndW  +shr |      gap l=2     gap l=10     gap l=50    gap l=200 |  Newt moved
+  ------------------------------------------------------------------------------------
+      F     F     F     F |   1.6705e+00   1.6187e+00   1.4619e+00   1.7426e+00 |   0.000e+00  <- released
+      F     F     T     F |   1.6717e+00   1.6201e+00   1.4636e+00   1.7436e+00 |   3.514e-03
+      F     T     F     F |   1.6669e+00   1.6143e+00   1.4587e+00   1.7407e+00 |   4.312e-03
+      F     T     T     F |   1.6681e+00   1.6156e+00   1.4603e+00   1.7418e+00 |   7.984e-04
+      T     F     F     F |   1.0226e+00   1.0288e+00   1.0235e+00   1.9743e+00 |   1.639e-01
+      T     F     F     T |   1.0239e+00   1.0310e+00   1.0251e+00   1.7406e-02 |   1.639e-01
+      T     F     T     F |   1.0227e+00   1.0289e+00   1.0237e+00   1.9751e+00 |   1.604e-01
+      T     F     T     T |   1.0240e+00   1.0311e+00   1.0253e+00   2.2415e-02 |   1.604e-01
+      T     T     F     F |   1.0224e+00   1.0286e+00   1.0234e+00   1.9715e+00 |   1.682e-01
+      T     T     F     T |   1.0238e+00   1.0308e+00   1.0250e+00   1.7034e-02 |   1.682e-01
+      T     T     T     F |   1.0225e+00   1.0287e+00   1.0235e+00   1.9724e+00 |   1.647e-01
+      T     T     T     T |   1.0239e+00   1.0309e+00   1.0251e+00   2.2051e-02 |   1.647e-01
+
+  k = 300   (C_1 split check: |C_1^grav + aB_1/k| / scale = 2.69e-16)
+  split  jpri  bndW  +shr |      gap l=2     gap l=10     gap l=50    gap l=200 |  Newt moved
+  ------------------------------------------------------------------------------------
+      F     F     F     F |   9.9614e-01   9.9623e-01   9.9431e-01   9.9574e-01 |   0.000e+00  <- released
+      F     F     T     F |   9.9620e-01   9.9629e-01   9.9439e-01   9.9581e-01 |   1.348e-02
+      F     T     F     F |   9.9582e-01   9.9633e-01   9.9421e-01   9.9563e-01 |   5.244e-02
+      F     T     T     F |   9.9588e-01   9.9638e-01   9.9429e-01   9.9569e-01 |   4.365e-02
+      T     F     F     F |   9.9975e-01   9.9980e-01   9.9953e-01   1.0004e+00 |   7.141e+00
+      T     F     F     T |   9.9975e-01   9.9980e-01   9.9952e-01   1.0004e+00 |   7.141e+00
+      T     F     T     F |   9.9975e-01   9.9980e-01   9.9953e-01   1.0004e+00 |   7.149e+00
+      T     F     T     T |   9.9975e-01   9.9980e-01   9.9952e-01   1.0004e+00 |   7.149e+00
+      T     T     F     F |   9.9976e-01   9.9980e-01   9.9952e-01   1.0004e+00 |   7.088e+00
+      T     T     F     T |   9.9976e-01   9.9980e-01   9.9952e-01   1.0004e+00 |   7.088e+00
+      T     T     T     F |   9.9976e-01   9.9980e-01   9.9952e-01   1.0004e+00 |   7.097e+00
+      T     T     T     T |   9.9976e-01   9.9980e-01   9.9952e-01   1.0004e+00 |   7.097e+00
+
+  READING THIS TABLE
+  ------------------
+  A cell passes only on BOTH conditions: the gap falls, AND 'Newt moved' is
+  at or below the quadrature floor 2.2e-03. A cell that closes the gap
+  while moving the Newtonian column has made two wrong columns agree.
+
+  The 'released' row is all-False and reproduces the shipped code exactly.
+  If any released number moved, that is a defect in this patch and not a
+  result -- `tests/test_integral_solution.py` is the gate on it.
+

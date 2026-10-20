@@ -379,6 +379,28 @@ def main() -> int:
           f"background (T-56) and the")
     print("    line-of-sight weight is stated, not defaulted (T-57, A-1).")
 
+    # **`--b-slot-repair` --- finding T-88, and it is a DIAGNOSTIC switch.**
+    # With it on, C_1's gravitational half takes W = e^-kappa, its Thomson half
+    # takes g = V carrying (vhat_B + C_2) TOGETHER (T-82's boost-invariant
+    # pair), and the missing +k Int W M j_l' bulk slot is supplied.
+    #
+    # **What to expect, stated before the run so the output cannot be read
+    # charitably.** D14 measures the repair closing the frame gap by up to four
+    # orders at l >= 50 for k <~ 60, and doing NOTHING at k = 300, where it
+    # rewrites the Newtonian column by 7x on PLANCK. F9 integrates to k = 1500.
+    # **So the peaks should improve and the damping tail should be WRONG.** A
+    # tail that comes out right falsifies T-88's account rather than confirming
+    # it, and that is the point of saying so here rather than afterwards.
+    #
+    # The figure this produces is a control and does not enter `figures/` as a
+    # release artefact --- decision **V14**, a control is not evidence.
+    if "--b-slot-repair" in sys.argv:
+        from functions.spectra import two_frame as _tf
+        _tf.B_SLOT_REPAIR = True
+        print("    **B-SLOT REPAIR ON (T-88)** --- diagnostic run. Expect the "
+              "peaks to improve and the")
+        print("    damping tail to be wrong above k ~ 100; see D14.")
+
     if "--replot" in sys.argv:
         cached = ROOT / "outputs" / "f9-acoustic-spectrum.csv"
         stamped = ""

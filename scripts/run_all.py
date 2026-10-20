@@ -52,14 +52,14 @@ STAGES: list[tuple[str, str]] = [
 ]
 
 #: Deferred to v1.1.0. A control is not evidence, so the diagnostics here are
-#: not released figures; **scoped out of v1.0.0 by decision S-b**, accepted by
+#: not released figures; **scoped out of v1.0.0 by decision S45** (carried as `S-b` until T-87), accepted by
 #: the PI 2026-10-09. A deferred artefact is still reported as pending, so it
 #: cannot be forgotten; it just does not block the release it was deferred out
 #: of.
 #:
-#: **F5 is the one entry here that S-b did not put here** — it is marked
+#: **F5 is the one entry here that S45 did not put here** — it is marked
 #: *acceptance* in the figure plan, as F3 and F4 are, and acceptance figures
-#: were what S-b kept. It moves by **decision S20**, and the reason is worth
+#: were what S45 kept. It moves by **decision S20**, and the reason is worth
 #: carrying at the call site rather than only in the record: F5 and F7 are one
 #: piece of machinery. Both need the frame specialisation made numerical, and
 #: `"newtonian"` and `"cdm"` are today labels on `PerturbationHistory` that
@@ -76,7 +76,8 @@ STAGES: list[tuple[str, str]] = [
 #: block nobody updates. The version is data now, so the message cannot drift
 #: from the decision.
 DEFERRED: dict[str, tuple[str, str]] = {
-    # S-b: diagnostic and cross-check artefacts, not acceptance ones.
+    # S45 (carried as `S-b` until T-87): diagnostic and cross-check
+    # artefacts, not acceptance ones.
     # F6 and F8 were here and landed in v1.1.0; they are removed rather
     # than left with a stale version, which is T-16's lesson about labels.
     # **RETARGETED to v1.5.0, 2026-10-15 --- finding T-47.** Both were deferred
@@ -100,7 +101,7 @@ DEFERRED: dict[str, tuple[str, str]] = {
     # its STATED question looks safe can be the only instrument pointed at a
     # different question entirely, and nothing in the deferral records what
     # else it would have measured.
-    "D3  source terms against k": ("v1.5.0", "S-b"),
+    "D3  source terms against k": ("v1.5.0", "S45"),   # S-b, renumbered T-87/S45
     # **T-51 was here and is DISCHARGED**, fixed 2026-10-16 within hours
     # of being registered. It is removed rather than left with a stale
     # target --- which is the same rule F6 and F8 were removed under, and
@@ -175,6 +176,12 @@ DIAGNOSTICS: list[tuple[str, str]] = [
      "scripts/diagnostic_d12_vb_plus_sigma.py"),
     ("D13 the by-parts identity, direct against by-parts, in both frames",
      "scripts/diagnostic_d13_byparts_2x2.py"),
+    # D14 measures the B-slot repair over its full 2^4 control lattice, which
+    # is M11a as a method rather than a maxim: T-77 is the instance where two
+    # defects that fix the gap only together scored as two failed fixes one at
+    # a time. Three of D14's four controls score as failures alone.
+    ("D14 the B-slot repair, over the control lattice",
+     "scripts/diagnostic_d14_slot_repair.py"),
 ]
 
 

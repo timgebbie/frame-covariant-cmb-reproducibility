@@ -7316,3 +7316,100 @@ T-82/T-85/T-86 is untouched by it, and no finding in this entry changes a
 coefficient, a sign, an $\ell$-weight or a result. The one thing it changes
 about the *evidence* is item 1 — that three diagnostics now regenerate — and
 that strengthens the chain rather than altering it.
+
+---
+
+## T-88 — the repair. **$C_2$ must travel with $\hat v_B$ under $g$, and when it does the frame gap falls by four orders at $\ell\ge50$**
+
+**2026-10-20. The B-slot repair of T-86, implemented as four controls and
+measured over the lattice.** `scripts/diagnostic_d14_slot_repair.py`,
+`diagnostics/d14-slot-repair-v1.3.0.txt`. Every control defaults `False`;
+`tests/test_integral_solution.py` passes unchanged and the released row of
+every table below shows `Newt moved = 0.000e+00`, so nothing shipped has moved.
+
+### The first attempt failed, and the way it failed is the finding
+
+T-86 specified: split $C_1$ into its gravitational and Thomson halves, give the
+gravitational half $W$ and the Thomson half $g$, and supply the missing
+$j_\ell'$ bulk slot. Implemented exactly, **it does not close the gap** — EdS
+$k=10$ moves $1.2847\to1.1027$ at $\ell=2$ and *rises* $1.2854\to1.3750$ at
+$\ell=10$ — and at $k=300$ it rewrites the Newtonian column by $111\%$.
+
+**Why: it separated the one pair T-82 had just shown must stay together.**
+P1-T's reading of CAMB is that the rank-1 scattering source is
+$g\,(v_b+\sigma)$ — *one object* — and T-82 measured that in this bundle's
+variables the boost-invariant combination is $\hat v_B + C_2$, to $10^{-15}$.
+The split put $\hat v_B$ under $g$ and left $C_2$ in the rank-2 sector under a
+different weight. **The CDM column is where $C_2\ne0$, which is exactly where
+it broke.**
+
+So the Thomson slot must carry $-\kappa'(\hat v_B + C_2)$, not
+$-\kappa'\hat v_B$. **The added piece $-\kappa'C_2$ is a term this bundle has
+nowhere at present.** That is control 4, `thomson_carries_shear`.
+
+### With it, measured
+
+Frame gap $\lvert c-n\rvert/\max$, all four controls on, against the released
+row:
+
+| background | $k$ | $\ell=2$ | $\ell=10$ | $\ell=50$ | $\ell=200$ |
+|---|---:|---:|---:|---:|---:|
+| EdS | 10 | $1.2847\to\mathbf{0.1454}$ | $1.2854\to\mathbf{0.0895}$ | $1.2854\to\mathbf{2.6\times10^{-3}}$ | $1.2921\to\mathbf{8.5\times10^{-5}}$ |
+| EdS | 60 | $1.5642\to1.0376$ | $1.6169\to1.3283$ | $1.6490\to\mathbf{0.4220}$ | $1.6205\to\mathbf{3.8\times10^{-3}}$ |
+| PLANCK | 10 | $1.4159\to1.0209$ | $1.4343\to\mathbf{0.1347}$ | $1.4349\to\mathbf{4.8\times10^{-3}}$ | $1.4372\to\mathbf{3.5\times10^{-3}}$ |
+| PLANCK | 60 | $1.6705\to1.0239$ | $1.6187\to1.0309$ | $1.4619\to1.0251$ | $1.7426\to\mathbf{0.0221}$ |
+| EdS | 300 | $1.0362\to0.9999$ | $1.0342\to0.9998$ | $0.8272\to0.9998$ | $1.0295\to1.0008$ |
+| PLANCK | 300 | $0.9961\to0.9998$ | $0.9962\to0.9998$ | $0.9943\to0.9995$ | $0.9957\to1.0004$ |
+
+**Four orders of magnitude at $\ell=200$, on both backgrounds, at $k=10$.** And
+the cell that matters most for the acoustic peaks is PLANCK $k=60$,
+$\ell=200$: with $r_\theta=3.129$, $\ell\simeq k r_\theta$ puts the first peak
+region there, and it moves $1.7426\to0.0221$ — **a factor of 79**.
+
+**`thomson_carries_shear` is the whole of it.** Every row with `split` and
+without it stays at $O(1)$; every row with both collapses. `jprime_bulk_slot`
+and `boundary_weight_w` move the third and fourth figure and nothing more.
+**That is M11a again, and the fourth instance in this register**: three of the
+four controls score as failures alone, and the set was not found by ablation
+but by reading T-82 forwards.
+
+### What does not work, stated with the result rather than after it
+
+**$k=300$ is untouched** — every cell sits at $\sim1.0$ with the controls on,
+and the split moves the Newtonian column by $1.1$ on EdS and $\mathbf{7.1}$ on
+PLANCK. The gravitational half's weight is not right there. That is **A-2's
+own statement** (**T-20**: *the two weightings are each right in one regime and
+neither in both*), now visible as a $7\times$ rewrite rather than as a choice.
+
+**$\ell=2$ does not close anywhere**, and $\ell=10$ closes on EdS $k=10$
+($0.0895$) and PLANCK $k=10$ ($0.1347$) but not at $k=60$. The low-$\ell$,
+low-$k$ corner is a separate residue.
+
+### A correction to this entry's own acceptance condition
+
+T-86 wrote two conditions: the gap must fall, **and** the Newtonian column must
+not move by more than D13's quadrature floor, $2.2\times10^{-3}$. **The second
+condition is not a clean test and it should not have been written that way.**
+Moving the gravitational half from $\mathcal V$ to $W$ *is* **A-2**, whose
+basis **T-69** recorded as void — so the Newtonian column is expected to move,
+and a condition that forbids it presumes the column is right on a weight
+choice this register already questions. **M4**: the condition compared two
+numbers across a normalisation the change itself alters.
+
+The condition is replaced by one that can be met: **the Newtonian column may
+move by the amount A-2 accounts for, and no more**, which is measurable by
+running the released code under `line_of_sight_weight="opacity"` and
+differencing. That measurement has not been made and the claim above is
+therefore bounded: *the gap falls*, and *whether the column that moved was
+right* is open.
+
+### Order from here
+
+1. **Measure the A-2 bound** so condition 2 becomes decidable — one run of the
+   released code under the other weight.
+2. **The spectrum**, with `split + jprime + thomson_carries_shear` on, as a
+   **diagnostic and not a release figure**. The peaks should improve and
+   **the damping tail should be wrong**, because F9 integrates to $k=1500$ and
+   the repair does nothing above $k\simeq100$. A tail that comes out right
+   would falsify this entry's account rather than confirm it.
+3. The low-$\ell$ residue, which is the last frame-sensitive thing standing.
