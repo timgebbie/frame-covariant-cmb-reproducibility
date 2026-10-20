@@ -2,9 +2,9 @@
 
 > **Generated, not transcribed. Do not edit by hand.**
 >
-> Produced by `tests/frame/gen_theory_audit.py` at 2026-10-20 11:39 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
+> Produced by `tests/frame/gen_theory_audit.py` at 2026-10-20 11:54 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
 
-**Status: ALL CHECKS PASS** — 15 assertions across 6 instruments.
+**Status: ALL CHECKS PASS** — 18 assertions across 7 instruments.
 
 ## What this document does not establish — read first
 
@@ -123,16 +123,34 @@ $\kappa'v_B$ **cannot** sit inside $C_1$: the $K'$ coefficient becomes $2\alpha\
 
 *Instrument: `tests/frame/c6_thomson.py`, sha256 `4c5fcbe50c2c…`*
 
+### The $\kappa'$ ledger
+
+Multiplying the transport equation by $W=e^{-\kappa}$ sends the gravitational source to $W$ and the in-scattered Thomson source to $\mathcal V=W\kappa'$, its $\kappa'$ consumed by the integrating factor. **$\kappa'$ may live in $W$, in $\mathcal V$, or in a derivative of either --- never in a coefficient.** A coefficient carrying a bare $\kappa'$ manufactures $\kappa'^2$ the moment it is differentiated, which is what (102) does and what T-88 did. This separates the *legitimate* $\kappa'^2$ inside $\dot{\mathcal V}=(\kappa''+\kappa'^2)W$, from differentiating the **weight**, from the illegitimate one, from differentiating a **coefficient** --- both look identical in the output.
+
+| assertion | verdict |
+|---|---|
+| C7a  the W-form keeps every kappa-prime in the weight | **PASS** |
+| C7b  (102) as printed carries kappa-prime in a coefficient | **DEFECT PRESENT** — differentiating it gives kappa-prime squared |
+| C7c  T-88 carries kappa-prime in a coefficient | **DEFECT PRESENT** — measured 320-682x by P1-B |
+
+| measured | value |
+|---|---|
+| `w_form_clean` | True |
+| `printed_102_clean` | False |
+| `t88_clean` | False |
+
+*Instrument: `tests/frame/c7_kappa_ledger.py`, sha256 `9b171accd3ca…`*
+
 ## Provenance
 
 | | |
 |---|---|
-| generated | 2026-10-20 11:39 UTC |
+| generated | 2026-10-20 11:54 UTC |
 | python | 3.13.16 |
 | numpy | 2.5.3 |
 | scipy | 1.18.1 |
 | sympy | 1.14.0 |
-| generator | `tests/frame/gen_theory_audit.py`, sha256 `167bf19347bf…` |
+| generator | `tests/frame/gen_theory_audit.py`, sha256 `2d60cefc12cf…` |
 
 Annals II is read from `sources/annals/cbrII.tex` and referred to by label — `IBE-source`, `modeibe`, `source-calB`, `find_coef`, `C-B-coef`, `int_soln_damping`, `slowdecoupling`, `slowdecoupling-ng-0`. Paper 1 is referred to by label (`eq:B`, `eq:frame-transf`, `eq:raise`), never by printed number: those differ between the two lines.
 

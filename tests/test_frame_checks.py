@@ -40,6 +40,7 @@ CHECKS = [
     "c4_rank_slot.py",
     "c5_monopole.py",
     "c6_thomson.py",
+    "c7_kappa_ledger.py",
 ]
 
 

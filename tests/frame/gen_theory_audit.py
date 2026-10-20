@@ -11,7 +11,8 @@ import hashlib, json, pathlib, re, subprocess, sys, datetime
 
 HERE = pathlib.Path(__file__).resolve().parent
 CHECKS = ['c1_identity.py', 'c2_weight.py', 'c3_byparts.py',
-          'c4_rank_slot.py', 'c5_monopole.py', 'c6_thomson.py']
+          'c4_rank_slot.py', 'c5_monopole.py', 'c6_thomson.py',
+          'c7_kappa_ledger.py']
 
 ROWS = {   # check -> (short title, what it establishes)
  'c1_identity.py': ('The frame identity and the Sachs--Wolfe invariant',
@@ -47,6 +48,18 @@ ROWS = {   # check -> (short title, what it establishes)
    'invariant. Carried separately under $\\mathcal{V}$, invariance requires '
    '$c=\\alpha$ and the reduced $\\hat v_B=v_B/k$; the un-reduced form needs '
    '$c=\\alpha/k$, which is not a constant.'),
+ 'c7_kappa_ledger.py': ('The $\\kappa\'$ ledger',
+   'Multiplying the transport equation by $W=e^{-\\kappa}$ sends the '
+   'gravitational source to $W$ and the in-scattered Thomson source to '
+   '$\\mathcal V=W\\kappa\'$, its $\\kappa\'$ consumed by the integrating '
+   'factor. **$\\kappa\'$ may live in $W$, in $\\mathcal V$, or in a '
+   'derivative of either --- never in a coefficient.** A coefficient '
+   'carrying a bare $\\kappa\'$ manufactures $\\kappa\'^2$ the moment it is '
+   'differentiated, which is what (102) does and what T-88 did. This '
+   'separates the *legitimate* $\\kappa\'^2$ inside '
+   '$\\dot{\\mathcal V}=(\\kappa\'\'+\\kappa\'^2)W$, from differentiating the '
+   '**weight**, from the illegitimate one, from differentiating a '
+   '**coefficient** --- both look identical in the output.'),
 }
 
 def sha(p):

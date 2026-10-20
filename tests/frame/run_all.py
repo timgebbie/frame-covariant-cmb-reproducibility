@@ -3,7 +3,7 @@
 import subprocess, sys, pathlib
 HERE = pathlib.Path(__file__).resolve().parent
 CHECKS = ['c1_identity.py', 'c2_weight.py', 'c3_byparts.py',
-          'c4_rank_slot.py', 'c5_monopole.py', 'c6_thomson.py']
+          'c4_rank_slot.py', 'c5_monopole.py', 'c6_thomson.py', 'c7_kappa_ledger.py']
 fails = []
 for c in CHECKS:
     print(f'\n===== {c} ' + '='*(60-len(c)))
