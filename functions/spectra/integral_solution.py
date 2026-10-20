@@ -117,6 +117,7 @@ def integral_solution(
     thomson_carries_shear: bool = False,
     c1_prime_isw: np.ndarray | None = None,
     w_half_is_isw_only: bool = False,
+    thomson_boundary_and_vdot: bool = False,
 ) -> IntegralSolution:
     r"""Evaluate (102) at one $k$ for a set of multipoles.
 
@@ -261,6 +262,9 @@ def integral_solution(
                      else np.asarray(c1_thomson_prime, dtype=float))
     c1_grav = coefficients.c1 - c1_thom
     c1_grav_prime = c1_prime - c1_thom_prime
+    vis_dot_arr = (np.gradient(np.asarray(visibility, dtype=float), eta,
+                               edge_order=2) if visibility is not None
+                   else np.zeros_like(eta))
 
     # **`thomson_carries_shear` --- finding T-88, and it is T-82 read
     # forwards.** CAMB carries the rank-1 scattering source as $g(v_b+\sigma)$,
@@ -309,6 +313,32 @@ def integral_solution(
     # there: $\tau_1$ oscillates fastest exactly where the repair fails.
     c1_isw = (np.zeros_like(eta) if c1_prime_isw is None
               else np.asarray(c1_prime_isw, dtype=float))
+    # **THE BOUNDARY DERIVATION --- finding T-90, and it is what T-89 said was
+    # missing.** (102) descends from $\int W[C_0K+C_1K'+C_2K'']$, and the
+    # boundary is not an independent object: it is forced by the product rule.
+    # For a term carried under $W$,
+    #
+    #     Int W C K' = [W C K] - Int V C K - Int W C' K ,
+    #
+    # and $[WCK]$ vanishes at both ends --- $W(\eta_0)=1$ with $j_\ell(0)=0$
+    # for $\ell\ge1$ at the top, $W\to0$ at the bottom --- so the whole
+    # boundary this bundle draws is the **collapse of $-\int\mathcal VCK$**
+    # under $\int\mathcal V=1$, which is Annals II's `visibe` step.
+    #
+    # For a term carried under $\mathcal V$ instead, the product rule gives a
+    # different shape entirely:
+    #
+    #     Int V C K' = [V C K] - Int Vdot C K - Int V C' K ,   [V C K] = 0
+    #
+    # because $\mathcal V$ vanishes at both ends. **So a $\mathcal V$-carried
+    # term contributes NO primary and DOES contribute a $\dot{\mathcal V}C$
+    # bulk term.**
+    #
+    # T-88 moved the Thomson half to $\mathcal V$ and left the boundary
+    # carrying $C_1(\eta_*)$ **in full**. That double-counts the Thomson half
+    # at the boundary and omits its $\dot{\mathcal V}$ bulk term. This control
+    # supplies both corrections together, because the derivation produces them
+    # together and **M11a is the standing reason not to test them apart**.
     if slot_weight_split:
         # the gravitational half moves to W; the Thomson half keeps V
         if w_half_is_isw_only:
@@ -334,6 +364,9 @@ def integral_solution(
 
     # --- the two boundary terms, at eta_* ------------------------------------
     c1_star = float(c1_spline(eta_star))
+    # T-90: with the Thomson half carried at V it contributes no primary, so
+    # the boundary keeps only the W-carried (gravitational) part of C_1.
+    c1_grav_star = float(CubicSpline(eta, c1_grav)(eta_star))
     c2_star = float(c2_spline(eta_star))
     c2_prime_star = float(c2_prime_star)
     x_star = k * (eta_0 - eta_star)
@@ -348,7 +381,8 @@ def integral_solution(
         boundary_weight = damping_total * (
             float(np.interp(eta_star, eta, W_arr)) if boundary_weight_w
             else 1.0)
-        scalar[i] = (c2_prime_star - c1_star) * boundary_weight * j_l_star
+        c1_at_star = (c1_grav_star if thomson_boundary_and_vdot else c1_star)
+        scalar[i] = (c2_prime_star - c1_at_star) * boundary_weight * j_l_star
 
         # The rank-two boundary term. Zero wherever C_2 is, which is every
         # Newtonian run, and the reason this line has never been evaluated.
@@ -364,6 +398,12 @@ def integral_solution(
         total_bulk = (weight_w * bracket_w * j_l)
         if bracket_v is not None:
             total_bulk = total_bulk + weight_v * bracket_v * j_l
+        if thomson_boundary_and_vdot:
+            # - Int Vdot C_1^thom K : the term a V-carried piece owes and
+            #   which (102) has nowhere, because (102) carries nothing at V.
+            total_bulk = total_bulk - (vis_dot_arr
+                                       * np.asarray(diffusion, dtype=float)
+                                       * c1_thom * j_l)
         if jprime_bulk_slot:
             # j_l' = [ l j_{l-1} - (l+1) j_{l+1} ] / (2l+1) -- the SAME
             # recurrence the rank-two boundary uses twenty lines above, and

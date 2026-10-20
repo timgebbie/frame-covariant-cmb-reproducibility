@@ -7500,3 +7500,90 @@ instrument says to stop sweeping.
 rather than adopting `w_half_is_isw_only`, because the run was launched under
 it and changing the code under a running measurement is how a comparison
 becomes void.
+
+---
+
+## T-90 — the boundary derivation, and its refutation. **A $\mathcal V$-carried term owes no $-\mathcal VC$; it does not follow that it owes no primary**
+
+**2026-10-20.** T-89 left one thing to derive: what replaces the
+$\mathcal V$-collapse when $\tfrac k3\tau_1$ leaves $\mathcal V$ weight. This
+is that derivation, implemented and **refuted by measurement**, with the error
+identified. Sent to P1-T for independent checking at
+`claude/stream-P1B-to-P1T-boundary-derivation-2026-10-20.md`.
+
+### The derivation
+
+(102) descends from $\int W[C_0K+C_1K'+C_2K'']$ with $K=j_\ell(k(\eta_0-\eta))$.
+For a term carried under $W$,
+
+$$\int W C K'=\bigl[WCK\bigr]-\int \mathcal V C K-\int W C' K,$$
+
+and $[WCK]$ vanishes at both ends — $W(\eta_0)=1$ with $j_\ell(0)=0$ for
+$\ell\ge1$ at the top, $W\to0$ at the bottom. **So the whole boundary this
+bundle draws is the collapse of $-\int\mathcal VCK$ under $\int\mathcal V=1$,
+and it is forced by the product rule rather than chosen.** For a term carried
+under $\mathcal V$ instead,
+
+$$\int \mathcal V C K'=\bigl[\mathcal VCK\bigr]-\int \dot{\mathcal V} C K-\int \mathcal V C' K,\qquad \bigl[\mathcal VCK\bigr]=0$$
+
+since $\mathcal V$ vanishes at both ends. **No $-\mathcal VC$ term, and a
+$\dot{\mathcal V}C$ bulk term that (102) has nowhere.** T-88 moved the Thomson
+half to $\mathcal V$ and left the boundary carrying $C_1(\eta_*)$ in full, so
+on this reading it double-counts at the boundary and omits a bulk term.
+
+### Measured, both corrections together, and it is worse
+
+| background | $k$ | T-90 | $\ell=2$ | $\ell=10$ | $\ell=50$ | **Newt moved** |
+|---|---:|---|---:|---:|---:|---:|
+| EdS | 10 | off | $1.472\times10^{-1}$ | $8.754\times10^{-2}$ | $4.94\times10^{-4}$ | $5.58\times10^{-3}$ |
+| EdS | 10 | **on** | $1.189$ | $5.300\times10^{-1}$ | $6.73\times10^{-3}$ | $\mathbf{1.028}$ |
+| EdS | 60 | **on** | $9.598\times10^{-1}$ | $9.403\times10^{-1}$ | $9.033\times10^{-1}$ | $\mathbf{0.920}$ |
+| PLANCK | 10 | **on** | $1.090$ | $9.397\times10^{-1}$ | $2.05\times10^{-2}$ | $\mathbf{0.990}$ |
+
+**Every cell T-88 closed re-opens and the Newtonian column moves by order
+one.** The two corrections were supplied together rather than apart, which is
+**M11a** and is also what the derivation requires: it produces them together.
+
+### The error, and it is specific
+
+**The derivation treats the Thomson half as owing no primary at all. That does
+not follow, and the standard solution says so.** The Doppler term is
+
+$$\int g\,v_b\,j_\ell'\,\mathrm d\eta\;\simeq\;v_b(\eta_*)\,j_\ell'(x_*)\int g$$
+
+— it **has** a primary, and the primary sits in the $j_\ell'$ slot rather than
+the $j_\ell$ slot. The algebra above is about where the $-\mathcal VC$ term
+goes; **it is not a statement that a $\mathcal V$-carried source has no
+last-scattering contribution.** Doppler *is* a last-scattering effect, and
+removing its primary removes the Doppler peak.
+
+**So the implementation removed the Thomson primary instead of moving it.**
+The correction the algebra licenses is that the Thomson primary leaves the
+$j_\ell$ boundary and reappears at $j_\ell'(x_*)$, with the
+$\dot{\mathcal V}$ bulk term beside it. **That has not been implemented or
+measured**, and whether the $\dot{\mathcal V}$ term survives it is open.
+
+### One premise P1-T is asked to check, because it may void the refutation
+
+$[WCK]$ was taken to vanish at the lower limit because $W\to0$ there. **The
+bundle integrates from `eta_floor = env.eta[0]`, not from $\eta_*$** — finding
+T-58 — so the lower limit is the start of the recombination history, where
+$\kappa$ is large but finite. If $W(\eta_{\rm floor})$ is not negligible
+against the terms it sits beside, the derivation is incomplete and **T-90
+refutes the wrong statement.** That is one print and it has not been made;
+stated here rather than after.
+
+### Standing
+
+| | |
+|---|---|
+| $-\kappa'C_2$ missing from the $g$ slot | **established**, T-88 |
+| $\tfrac k3\tau_1$ under $W$ rewrites the Newtonian column | **established**, T-89 |
+| the product-rule derivation above | **unchecked by anyone but its author** |
+| that derivation as implemented | **refuted**, this entry |
+| the $j_\ell'(x_*)$ correction | **asserted, not instrumented** |
+| $W(\eta_{\rm floor})$ negligible | **assumed, not measured** |
+| $k=300$ | **untouched by any variant tried** |
+
+**No control is a default.** `tests/test_integral_solution.py` passes
+unchanged and D14's released row still shows `Newt moved = 0.000e+00`.
