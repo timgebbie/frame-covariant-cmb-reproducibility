@@ -24,13 +24,13 @@ Derived from the `Background` objects the code integrates, **not transcribed** f
 
 ## How to read it
 
-- **`Omega_r`** --- zero on two of three -- **A-3 and T(k) are both identically inapplicable there**, which is what makes EdS the control.
+- **`Omega_r`** --- zero on two of three -- **A-3 and T(k) are both identically inapplicable there**, which is what makes EdS the control. **For `LCDM` it is neither a control nor intended** and is recorded at **T-80**: at $z_*\simeq1109$ the omitted radiation is not negligible.
 - **`eta_*`** --- conformal time at the visibility peak, not at kappa = 1.
 - **`R(eta_*)`** --- baryon loading; sets the acoustic amplitude (1+3R)/3 and the offset -R.
 - **`r_s`** --- sound horizon at eta_*, integrated from the big bang (T-51/S40).
 - **`r_theta`** --- eta_0 - eta_*, the angular-diameter distance in these units.
 - **`l_A`** --- **pi r_theta / r_s -- where the acoustic peaks sit.** A difference between two models' spectra is a parameter difference only if it tracks this.
-- **`k_D`** --- diffusion scale at eta_*; the damping knee.
+- **`k_D`** --- diffusion scale at eta_*; the damping knee. **This row is the $R=0$ value** --- `diffusion_scale` is called with `r_of_eta = zeros`, which is finding **T-21**, while the oscillator beside it runs at the `R(eta_*)` three rows up. T-21 measured the cost: $\ell_D = 1783$ as called against $1985$ with the $R$ the bundle already has. Read it as the damping the code applies, **not** as the damping the parameters imply.
 
 **The last three rows are the ones that answer a shape question.** Two models whose spectra differ *in the position of the peaks* differ in `l_A`. Two whose peaks sit at the same `l_A` and still look different do **not** differ by a parameter, and the difference is somewhere in `provenance/BUNDLE-DEFECTS-v1.md`.
 

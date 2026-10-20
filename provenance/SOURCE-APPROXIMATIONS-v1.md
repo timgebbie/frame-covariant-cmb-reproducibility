@@ -335,3 +335,42 @@ Two further consequences worth having on the record now:
   $10^{-9}$. **The quantity the oscillator would need is present and verified;
   it simply never enters the dynamics.** Putting it back is a smaller step than
   it looks.
+
+---
+
+## A-5 — the tight-coupling oscillator is frozen at a fixed time; polarization and baryon–photon slip are never built
+
+**Opened 2026-10-19 from an independent review relayed by the PI, recorded at
+T-80.** This approximation was in force from v1.0.0 and had no entry. That is
+the defect this register exists to prevent, and it is recorded as such.
+
+**What the bundle does.** `solve_acoustic` integrates (152)/(153) from
+`acoustic_start_eta` to `couple = min(eta_0, TIGHT_COUPLING_FACTOR * eta_star)`
+and its $\delta T$ and $\tau_1$ are then handed to the matching. The tight
+coupling is **ended at a time**, not by a rate.
+
+**What that leaves out.** Three things, all absent and none previously stated:
+
+| | |
+|---|---|
+| the evolving photon quadrupole | $\tau_{ab}$ is $\mathcal O(t_c)$ in tight coupling and grows through decoupling. **A-4** drops it from the oscillator by §5.5's ordering; A-5 records that nothing restores it across the transition either |
+| polarization | not implemented anywhere in the bundle. It feeds back on the quadrupole through the Thomson source and is a $\sim10\%$ effect on the damping tail |
+| baryon–photon slip | $v_B-v_\gamma$ is identically zero by construction: the oscillator carries one dipole. The slip is what makes decoupling gradual rather than instantaneous |
+
+**Why it is an envelope concern and not a frame concern, which is how it is
+triaged.** None of the three is frame-dependent. They change the amplitude and
+the shape of the damping tail; they do **not** redistribute between intrinsic
+temperature, velocity, acceleration and shear, so they cannot open or close a
+gap between the Newtonian and CDM columns. The reviewer placed them exactly
+there and the placement is accepted.
+
+**It is not scheduled.** The frame gap is the week's measurement and A-5 moves
+the envelope under it. Opening A-5 while the gap is open would change the
+number being measured for reasons unrelated to it. **v1.4.0, after the gap
+closes** — and if it does not close, A-5 is one of the reasons the envelope is
+not expected to match an external code, which `provenance/EXTERNAL-CODE-COMPARISON-v1.md` should carry.
+
+**What *Annals II* says, so this is not read as a departure.** §5.5.3 bounds the
+scattering-strength expansion at $\mathcal O(t_c^3)$; the paper works to that
+order and a frozen oscillator is consistent with it. The approximation is the
+antecedent's. **What was missing was this entry, not the fidelity.**

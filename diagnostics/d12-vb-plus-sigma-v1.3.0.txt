@@ -1,0 +1,63 @@
+D12 --- $v_B+\sigma$ differenced between the two columns, before projection.
+
+**P1-T, 2026-10-19, converting CAMB's source into this bundle's slots.** CAMB
+carries the rank-1 scattering source as $g\,(v_b+\sigma)$ --- *one object*.
+Under a boost $v_b\to v_b-v$ while $\sigma$ shifts oppositely, so the sum is
+invariant and **CAMB has no frame gap because it never separates them.** This
+bundle does separate them, so the two columns must each produce the same sum.
+
+**Why this is strictly stronger than the frame gap on $\tau_\ell$.** It is a
+statement about the *source*, evaluated before any line-of-sight integral:
+
+    no transfer function, no j_l, no weight, no damping, no validity gate
+
+A failure here is upstream of everything (102) does, which is where the gap has
+already been localised (T-77, T-79). A pass here puts the defect downstream, in
+the slots and weights --- P1-T's items 2 and 3.
+
+**Nothing about the sign is assumed.** The boost sends $\Delta C_2=+v/k$ and
+$\Delta\hat v_B=+v/k$ going Newtonian to CDM, so *a priori* the invariant is the
+difference; both combinations are printed and the measurement says which, rather
+than this docstring. That is **M5a**, which is the clause this register landed
+one finding earlier.
+
+
+
+=== EdS ===   does v_B + sigma agree between the columns?
+      k     |d(v_b)|     |d(C_2)|   |d(v_b - C_2)|   |d(v_b + C_2)|
+  ------------------------------------------------------------------
+      1    1.218e+00    1.000e+00        1.098e+00        9.337e-16
+     10    1.210e+00    1.000e+00        1.095e+00        1.606e-15
+     60    1.089e+00    1.000e+00        1.043e+00        4.251e-15
+    300    1.006e+00    1.000e+00        1.003e+00        6.525e-14
+
+=== PLANCK ===   does v_B + sigma agree between the columns?
+      k     |d(v_b)|     |d(C_2)|   |d(v_b - C_2)|   |d(v_b + C_2)|
+  ------------------------------------------------------------------
+      1    1.198e+00    1.000e+00        1.090e+00        1.249e-15
+     10    1.180e+00    1.000e+00        1.083e+00        1.640e-15
+     60    1.041e+00    1.000e+00        1.020e+00        1.018e-14
+    300    1.002e+00    1.000e+00        1.001e+00        1.797e-13
+
+  Columns 1 and 2 are the two halves apart; one of columns 3 and 4
+  is the CAMB combination. Machine zero there puts the defect
+  DOWNSTREAM of the source, in the slots and weights. Anything else
+  puts it upstream of (102) entirely.
+
+  === is it the boost, or is it phase? (M11b) ===
+  Newtonian v_b minus CDM v_b, against the boost v/k it should be.
+  bg          k   |res|/|v/k|   corr(res, v/k)   corr(res, d/d.eta)
+  ------------------------------------------------------------------
+  EdS         1     1.669e-16            0.029               -0.016
+  EdS        10     3.425e-16           -0.114                0.100
+  EdS        60     4.121e-16           -0.312                0.135
+  EdS       300     2.287e-16           -0.207                0.023
+  PLANCK      1     1.499e-16           -0.017               -0.007
+  PLANCK     10     3.076e-16           -0.062                0.030
+  PLANCK     60     3.702e-16           -0.042               -0.021
+  PLANCK    300     4.109e-16           -0.164               -0.104
+
+  A residual aligned with v/k is a BOOST failure. One aligned with
+  d(v_b)/d(eta) is a PHASE error between two integrations, and is a
+  grid finding, not a frame finding.
+

@@ -63,7 +63,11 @@ def test_frame_instrument(check):
 
 @pytest.mark.verification
 def test_the_thomson_floor_is_the_same_number_in_three_instruments():
-    r"""**V11a, as a worked instance rather than a maxim.**
+    r"""**M11a, as a worked instance rather than a maxim.**
+
+    (`M` is the method-failure series, renamed from `V` at T-79 so the letter
+    is free for `provenance/DECISIONS-v1.0.0.md`'s released visual grammar.
+    Numbers are unchanged: `V11a` is `M11a`.)
 
     C4's residual floor at $\beta=-\alpha,\gamma=0$, C5's at $\gamma=0$ and
     C6's gravitational-only column are **the same number** --- it is the

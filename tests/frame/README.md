@@ -62,7 +62,10 @@ any additive boost-invariant `X` with `ΔX = 0` passes for free. Since
 where the `k²` piece dominates and dominant where it does not. **Nothing in this
 instrument excludes that case.**
 
-> **This suite is a worked instance of V11a.** Three of the four conditions
+> **This suite is a worked instance of M11a** (the method-failure series,
+> renamed from `V` at T-79 to free the letter for
+> `provenance/DECISIONS-v1.0.0.md`'s released visual grammar; numbers are
+> unchanged, so `V11a` ≡ `M11a`)**.** Three of the four conditions
 > together leave `~9e-3`; all four give `~3e-13`. **No proper subset works**, so
 > a one-at-a-time ablation would have scored each of the four as a failed fix.
 > The conditions were not found by ablation — they fall out jointly from one

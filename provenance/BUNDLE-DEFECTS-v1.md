@@ -6291,3 +6291,655 @@ to $\tfrac13k\tau_1$. The Newtonian side moves by 0.07%; the CDM side moves by
 a lot. So the frame gap moves mostly because the CDM column moved, and at
 $k=10$ it moves the wrong way. That is a description of the arithmetic, **not
 a diagnosis**, and it is the next thread.
+
+---
+
+## T-79 — the $\ell=0$ row: $\kappa'$ is absent from **both** sides, and *Annals II* prints two different $\ell=0$ equations
+
+**2026-10-19, late. P1-T asked one binary question and it decides the branch.
+This entry also withdraws a P1-B result from earlier the same day.**
+
+### The question, and the answer read off the artefact
+
+> *"Is $\kappa'$ absent from both sides of the $\ell=0$ equation, or only from
+> the right?"*
+
+**Both sides.** `grep kappa functions/spectra/acoustic.py` returns nothing and
+exits 1: $\kappa'$ does not appear anywhere in the module that integrates the
+acoustic pair, at either $\ell$.
+
+```
+d_tau   = -R'/(1+R) tau_1 - k/(1+R) delta_t - k phi_a
+d_delta = -phi_h' + k/3 tau_1            [- aH phi_a, and
+                                          expansion_coupling=False is
+                                          production: two_frame.py:384,393]
+```
+
+### The asymmetry, which is the finding
+
+The **matching** carries $\kappa'$ at $\ell=1$ and nothing at all at $\ell=0$.
+From `_solved_match()`, verbatim:
+
+```
+# ell = 2:  C_2 k^2 * (5/b2) * j_2''(0) = -(a B_2)
+# ell = 1:  C_1 * (1/b1) * k            = -(a B_1 + kappa' v_B)
+# ell = 0:  C_0 + C_2 k^2 * (5/b2) * j_0''(0) = 0        <- RHS is zero
+```
+
+| | $\ell=0$ | $\ell=1$ |
+|---|---|---|
+| solver (`acoustic.py`) | no $\kappa'$ | no $\kappa'$ |
+| matching (`coefficients.py`) | no $\kappa'$, **and no source of any kind** | $\kappa'v_B$ |
+
+So the $\ell=1$ row is sourced and the $\ell=0$ row is not. **That is one
+defect with a direction**, not a mismatch to be discovered: the dipole row was
+brought to the solver's convention and the monopole row was left behind.
+
+### P1-T's addendum, and what it corrects in this entry's first draft
+
+P1-T reads `modeibe` at $\ell=0$, where the recursion coefficient is
+$(\ell+1)^2/[(2\ell+1)(2\ell+3)]=\tfrac13$ and $\tau_{-1}=0$:
+
+$$\tau_0'+\tfrac{k}{3}\tau_1+\kappa'\tau_0=-a\mathcal B_0,\qquad
+a\mathcal B_0=-\tfrac13k\tau_1\ \Longrightarrow\ \tau_0'+\kappa'\tau_0=0$$
+
+with the convention checked against `cbrII.tex` line 2563 rather than imported.
+**The printed $\ell=0$ equation is self-cancelling**: the streaming term is on
+the right as $-a\mathcal B_0$ *and* on the left as $+\tfrac k3\tau_1$, and they
+cancel, leaving a monopole with no source that is then damped by a $\kappa'$
+Thomson scattering does not supply.
+
+**P1-B's first draft of this entry said the solver had silently corrected
+*Annals II*. That is not what the code shows and it is withdrawn.**
+`solve_acoustic` integrates **(152)/(153)** — `mode-dipole` and `mode-mono` —
+not (70) `modeibe` at $\ell=0$. Those are two *printed* equations for the same
+quantity and they are not the same equation:
+
+| | $+\tfrac k3\tau_1$ | $\kappa'\tau_0$ | $\Phi_H'$ |
+|---|---|---|---|
+| (70) `modeibe` at $\ell=0$, as P1-T reads it | on the **left**, and again on the right as $-a\mathcal B_0$ | **present** | absent |
+| (153) `mode-mono`, as the bundle integrates it | on the **right**, once | absent | **present** |
+
+So the correction is *Annals II*'s own, made between its general-$\ell$
+hierarchy and its specialised monopole equation, and the bundle follows the
+second. The matching (89) `find_coef` descends from (71) `source-calB`, which
+is (70)'s source — **so the matching inherits the first.** That is why the
+monopole row was left behind, and it is a sharper statement than "the code
+fixed the paper".
+
+> **P1-B cannot read `sources/annals/cbrII.tex` from this workspace.** It is
+> not in the repository and the cloud session has no copy. Everything above
+> about what (70) and (153) *print* is P1-T's reading and the bundle's own
+> transcriptions, and is marked as such. **For P1-T, who has the file:**
+> confirm (153)'s printed form carries $+\tfrac k3\tau_1$ on the right and no
+> $\kappa'$, which is the half of the table P1-B cannot check.
+
+### What `d_delta` settles — P1-T's caution, answered
+
+P1-T flagged that if $a\mathcal B_0$ is the streaming term rather than a
+source, `c5_monopole.py` restores the wrong object while still returning
+$\Delta C_0=0$, and left it to be settled by reading `d_delta`. Read:
+
+$$\texttt{d\_delta}=-\Phi_H'+\tfrac k3\tau_1,\qquad
+a\mathcal B_0=-\tfrac13k\tau_1\ \Longrightarrow\
+\boxed{\texttt{d\_delta}=-a\mathcal B_0-\Phi_H'}$$
+
+**$a\mathcal B_0$ is on the right, once, as a source.** `c5_monopole.py`
+restores the right object, and the double count P1-T identifies in the printed
+equation is not in the code. The V11a worry does not apply in that form.
+
+### But there is a second driving term, and no $\mathcal B$ carries it
+
+$\Phi_H'$ drives $\tau_0$ in `d_delta` and appears in no $\mathcal B$, so the
+$\ell=0$ matching row cannot see it. Measured as `rhs()` forms the two terms,
+max over the solver's own grid, production settings:
+
+| background | $k$ | $\lvert-a\mathcal B_0\rvert$ | $\lvert-\Phi_H'\rvert$ | **ratio** |
+|---|---:|---:|---:|---:|
+| EdS | 10 | $3.7434\times10^{0}$ | $3.0159\times10^{-10}$ | **0.0000** |
+| EdS | 60 | $5.2884\times10^{1}$ | $4.2171\times10^{-10}$ | **0.0000** |
+| EdS | 300 | $4.0876\times10^{1}$ | $1.9084\times10^{-10}$ | **0.0000** |
+| PLANCK | 10 | $3.6674\times10^{0}$ | $2.1647\times10^{0}$ | **0.5903** |
+| PLANCK | 60 | $2.8214\times10^{1}$ | $1.7990\times10^{0}$ | **0.0638** |
+| PLANCK | 300 | $2.2362\times10^{1}$ | $8.1059\times10^{-1}$ | **0.0362** |
+
+**Machine zero on EdS at every $k$** — matter domination holds $\Phi_H$
+constant — and **59% of the monopole source on PLANCK at $k=10$.**
+
+This is the fourth time EdS has been the control that kills a candidate
+(T-74 ISW, T-76 rank-2, T-77's $\beta=-\alpha$, now this): **$\Phi_H'$ cannot
+be the EdS $k=10$ reversal, because on EdS it is not there.** Stated under
+V11 before the interesting half.
+
+The interesting half is that it is **background-dependent with exactly the
+shape of the EdS/PLANCK asymmetry P1-T predicted no single constant could
+reconcile** — zero on one background and 0.59 on the other, at the same $k$.
+That is a lead, not a result.
+
+**It is not landed and will not be until a double count is excluded.**
+`sources.py:291` builds the integrated bracket as
+$\texttt{isw}=\Phi_A'-\Phi_H'$, and the integral's lower limit is
+`eta_floor = env.eta[0]`, **not** $\eta_*$ — so the integrated slot already
+covers the range in which $\Phi_H'$ drives $\tau_0$. Whether adding $-\Phi_H'$
+to the $\ell=0$ matching row restores a missing term or counts an existing one
+twice is a question about two integration limits, it is a **read** rather than
+a measurement, and it has not been done. **Nothing is added to $C_0$ until it
+has.**
+
+---
+
+### Withdrawn: $\kappa'\tau_0$'s "gap collapse" is a metric artefact
+
+P1-B reported earlier today that supplying $\kappa'\tau_0$ to the $\ell=0$ row
+collapses the frame gap — EdS $k=10$ $0.98\to0.03$, and similarly at $k=60$
+and $k=300$. **The gap is $\lvert C_{\rm CDM}-C_{\rm Newt}\rvert/\text{scale}$,
+and only the denominator moved.** Measured at $\ell=10$:
+
+| $k$ | variant | $\lvert c-n\rvert$ | scale | gap |
+|---:|---|---:|---:|---:|
+| 10 | $\mathcal B_0$ | $1.1237\times10^{-1}$ | $1.1896\times10^{-1}$ | 0.9446 |
+| 10 | $\mathcal B_0-\kappa'\tau_0$ | $1.1237\times10^{-1}$ | $4.6771\times10^{0}$ | **0.0240** |
+| 60 | $\mathcal B_0$ | $2.8191\times10^{-2}$ | $1.6397\times10^{-1}$ | 0.1719 |
+| 60 | $\mathcal B_0-\kappa'\tau_0$ | $2.8191\times10^{-2}$ | $2.3860\times10^{0}$ | **0.0118** |
+| 300 | $\mathcal B_0$ | $4.1191\times10^{-3}$ | $4.3145\times10^{-2}$ | 0.0955 |
+| 300 | $\mathcal B_0-\kappa'\tau_0$ | $4.1191\times10^{-3}$ | $8.0172\times10^{-1}$ | **0.0051** |
+
+**$\lvert c-n\rvert$ is identical to five figures in every pair.** The two
+columns did not move together; the scale inflated by up to $39\times$ and
+carried the ratio down with it. **The frames agree no better than before.**
+
+This is **T-70 inverted** — there a denominator collapsed and manufactured a
+large number; here one inflates and manufactures a small one. It is the same
+defect and the register now has it in both polarities.
+
+P1-B had already stated the risk one message earlier — *"a term $4\times10^3$
+times its neighbour that makes two columns agree is as likely to have made two
+**wrong** columns agree; frame agreement is necessary, not sufficient"* — and
+the measurement shows it was the weaker failure still: not even frame
+agreement. **The additive route via $\kappa'\tau_0$ is closed on this evidence**,
+which is the branch P1-T's first fork predicts.
+
+---
+
+### The method clause, and a numbering decision
+
+P1-T proposed, and it is landed in their wording:
+
+> **A statement about what a quantity must be is not a statement about what
+> the code has.** Size tells you what a term would *do* if absent, never
+> whether it *is* absent. **Any claim about an artefact is read off the
+> artefact or it is not made.**
+
+**The attribution is split, and splitting it is the point.**
+
+| | the error | mode |
+|---|---|---|
+| P1-T | withdrew $\kappa'\tau_0$ on *"if it were absent nothing would work at all — it is present"*: a statement about what must be, offered as a statement about what the code has | **the new clause** |
+| P1-B | reported a gap collapse from a ratio whose **denominator** moved by $39\times$ while the numerator did not move at all | **V4** — comparing across normalisations — and **V11b**, whose definition column would have pinned the denominator before the number was recorded |
+
+Putting both under the new clause would be the error the new clause names.
+P1-B read the artefact; P1-B compared two numbers without holding their
+normalisation fixed. Those are different failures and they need different
+guards.
+
+**The numbering, which P1-T left to P1-B.** There is a name collision and this
+is the cheapest moment it will ever be fixed. `provenance/DECISIONS-v1.0.0.md`
+carries a **V-series of its own** — V1–V15, the *visual grammar*, where V5 is
+*"Legend present for $\ge2$ series"* — and it is released, hashed and cited by
+figure captions, so it cannot move. The method series lives in project
+documents and in two lines of this repository, so it moves for the cost of one
+commit.
+
+**Decision: the method-failure series is renamed `M`.** M1–M11b are V1–V11b
+unchanged in content and in number, so every cross-reference written this week
+resolves by substituting the letter. The new clause is **M5a**, placed under
+M5 (*assessing a finding from a summary, not its own file* — guard: *open the
+manuscript*), which it generalises from a manuscript to any artefact, code
+included.
+
+It is **not** M11c. M11's family is about *magnitude as a test of travel*;
+this is about *reading as a substitute for inferring*, which is M5's. That
+distinction is the same one the attribution table above makes, and collapsing
+it would lose both.
+
+*Executive decision, P1-B's lane, informing P1-T and Coordination rather than
+asking. `tests/frame/README.md` and `tests/test_frame_checks.py` carry the two
+repository references to `V11a`; they are updated in the same commit.*
+
+---
+
+## T-80 — an independent review's five concerns, mapped onto the register
+
+**2026-10-19, late. Relayed by the PI.** A reader ranked five concerns from the
+code snapshot. **Four of the five land on findings already open, and the
+reader's first-ranked concern names the three suspects T-66, T-77 and T-79
+name.** Recorded for the mapping, and because item 5 is new.
+
+> **M2 — this is not counted as an independent check, and the first draft of
+> this entry counted it as one.** P1-T's caution, accepted and applied here
+> rather than noted: *"whether this is corroboration or restatement depends on
+> whether the reviewer reached those suspects from the code or from a briefing
+> that already carried them. Three arrivals through one briefing is one
+> check."* **P1-B does not know which**, and wrote *"arrived at
+> independently"* without establishing it — which is M2 exactly, in the entry
+> that lands M5a. The claim is withdrawn and the mapping below stands on its
+> own, because a map is useful whether or not it is a second witness.
+>
+> **The one question that settles it, for the PI:** was this reader given any
+> of this project's material — the register, a stream document, a summary —
+> before they read the code? A *yes* makes the first four items a restatement
+> and leaves only item 5. A *no* makes them a second source and they are
+> counted. **Until then they are counted as zero**, which is the conservative
+> direction and costs nothing, since item 5 does not depend on it.
+
+| rank | the concern, in the reader's framing | register |
+|---|---|---|
+| **1** | frame cancellation incomplete; monopole/shear normalisation, **omitted monopole source**, **Thomson velocity term** | **T-66** ($\kappa'v_B$'s spurious $\times k$), **T-77** ($C_0$ not a boost apart; split + $\mathcal B_0$), **T-79** (the $\ell=0$ row). *All three named suspects are open findings.* |
+| **2** | scattering belongs under $g$, gravitational redshift under $e^{-\kappa}$; combining before differentiating adds rate factors, drops product-rule terms, double-counts boundaries | **A-2** (the weight choice, flipped by T-69), **T-72** (the rank-2 by-parts pair), **T-69** (A-2's basis void) |
+| **3** | potentials prescribed from matter growth, not evolved with the photons; static $T(k)$ suppresses the initial amplitude and its forcing | **A-3** (matter-dominated driving), **T-67/T-71** (the comoving $k$ of the transfer) |
+| **4** | tight coupling frozen at a fixed time; **photon quadrupole, polarization and baryon–photon slip** | **A-1** covers the freeze. **Polarization and slip are carried by neither A-1 nor any finding — new, and correctly raised.** |
+| **5** | diffusion uses zero baryon loading against a baryon-loaded oscillator; one damping factor on sources with different histories; `LCDM_MODEL` omits $\Omega_r$; helium; $h$; the Thomson-rate conversion | **T-21** for the first, and **confirmed again below**. The rest is partly new. |
+
+### What was checked on receipt, and what it says
+
+**Zero baryon loading in the damping — confirmed, and it is T-21.**
+`pipeline.py:437` passes `r_of_eta=recombination.kappa_prime * 0.0`, while the
+oscillator runs at $R(\eta_*)=0.6038$ (EdS), $0.6125$ (LCDM), $0.6089$
+(PLANCK) — read from `provenance/MODEL-PARAMETERS-v1.3.0.md`, which the code
+generates. T-21 measured the cost: $\ell_D=1783$ as called against $1985$ with
+the $R$ the bundle already has. `scripts/make_model_table.py:69` carries the
+same `np.zeros_like` call, so the generated table's `k_D` row is the $R=0$
+number and **is mislabelled**; the row is correct for what was asked of it and
+wrong for what it is read as.
+
+**`LCDM_MODEL` omits $\Omega_r$ — confirmed.** `Omega_r` is `0` for both CDM
+and LCDM in the generated table. For EdS that is the **control** and is
+deliberate, and the table says so. **For LCDM it is neither a control nor
+stated**, and at $z_*\simeq1109$ the radiation the model omits is not
+negligible. *New. Not previously registered.*
+
+**Helium — confirmed absent.** `_thomson_scale` takes
+$n_{b,0}=1.123\times10^{-5}\,\omega_bh^2\ \mathrm{cm^{-3}}$ and
+`kappa_prime = thomson_scale * x_e * a**(-2)` uses it as the *electron*
+density. With helium, $n_e=x_e(1-Y_p)n_b$, so a factor $(1-Y_p)\simeq0.76$ is
+missing from $\kappa'$ uniformly. `grep` for helium in `decoupling.py` returns
+nothing. *New. Not previously registered.* It is a uniform rescaling of
+$\kappa'$ and therefore of the visibility's **width and height but not its
+location**, which is why no test has seen it.
+
+**$h$ propagation — not adjudicated.** `_thomson_scale`'s docstring gives an
+explicit cancellation argument for the one surviving factor of $h$. It may be
+right. It was not re-derived here and **nothing is claimed either way**, which
+is M5a.
+
+### What this review is, and what it is not
+
+It is a ranking, not a measurement — the reader says so themselves: *"the
+relative contribution of each problem still requires controlled numerical
+isolation"* — and that isolation is exactly what T-77 showed one-at-a-time
+ablation cannot do (**M11a**). Its evidential weight is suspended pending the
+M2 question above.
+
+**One clause of item 2 is already refuted and must not be acted on.**
+*"Gravitational redshifts accumulated along the photon path belong under the
+survival probability $e^{-\kappa}$"* is correct as algebra and **was refuted as
+a prescription by this bundle's EdS control at T-74**: EdS contains no ISW, and
+the three columns moved by 0.060/0.065/0.060 under it, so the weight is not
+what is costing the plateau. P1-T raised the same clause as a mechanism on
+2026-10-18 and withdrew it on that control. **Anyone acting on item 2's
+$e^{-\kappa}$ clause as written repeats a refuted step**, and it is flagged
+here because the review will be read by people who do not have T-74.
+
+**P1-T's reading of items 3 and 4, recorded so the mapping is complete.**
+Item 3 is not the peak explanation: the measured effective sound horizon shift
+is **2%**, against the **11%** that mechanism requires. Item 4's closing
+sentence — *"the Bessel projection itself is a legitimate free-streaming
+method; the concern is the source history supplied to it"* — **is T-71**, and
+is the bundle's own position.
+
+**Their closing judgement is the bundle's own and worth recording in their
+words:** these are *"problems in the implemented specialization and
+approximations; they do not establish a failure of the underlying
+frame-covariant formulation"*, and *"the acoustic oscillator is present"*.
+That is the PI's standing position — *paper 1 is correct, the problem is
+getting the acoustic peaks working* — reached from outside.
+
+### Actions
+
+1. **Polarization and baryon–photon slip** are added to A-1's scope in
+   `provenance/SOURCE-APPROXIMATIONS-v1.md` as *stated, unimplemented, and not
+   a control*. They are not candidates for the frame gap — neither is
+   frame-dependent — so they are an **envelope** concern, which is where the
+   reader placed them.
+2. **Item 5 gets entries of its own at T-81**, on P1-T's suggestion and
+   because it is the only item with no prior finding behind it.
+   **`LCDM_MODEL`'s $\Omega_r=0$** and **the missing $(1-Y_p)$** are
+   **not fixed in this commit.** Both change the envelope
+   and neither changes the frame gap; fixing an envelope term while the frame
+   gap is open would move the one number the week is measuring, for reasons
+   unrelated to it. They are **v1.4.0 work**, after the gap closes.
+3. **`make_model_table.py`'s `k_D` row** is relabelled in place to say it is
+   the $R=0$ value and to name T-21. One line, and it stops the table being
+   read as a parameter sheet it is not.
+
+---
+
+## T-81 — item 5: the damping and background inputs, opened as their own entries
+
+**2026-10-19, late.** T-80's item 5 is the only one of the five with no prior
+finding behind it, so it gets entries rather than a row in a mapping table.
+**P1-T: *"None has been looked at."* Five have now been looked at; four are
+confirmed, one is half-wrong and the correction matters more than the half
+that stands.**
+
+### T-81a — zero baryon loading in the diffusion scale. **Confirmed. It is T-21.**
+
+`pipeline.py:437` and `scripts/make_model_table.py:69` both pass
+`r_of_eta = zeros` while the oscillator beside them runs at
+$R(\eta_*) = 0.6038$ (EdS), $0.6125$ (LCDM), $0.6089$ (PLANCK).
+T-21 measured it: $\ell_D = 1783$ as called against $1985$ with the $R$ the
+bundle already computes, **12% in the damping knee**. Open since T-21 and now
+raised a second time from outside. The generated model table's `k_D` row is
+relabelled in this commit to say which number it is.
+
+### T-81b — *"one damping factor on sources with different histories."* **Half wrong, and the correction is the interesting half.**
+
+**The half that is wrong.** The bundle already separates them.
+`integral_solution.py:118` states it and lines 206 and 226/236 do it:
+
+```
+integrand_weight = weight * diffusion       # e^{-(k/k_D(eta))^2}, an ARRAY
+scalar[i] = (c2_prime_star - c1_star) * damping_total * j_l_star   # a SCALAR
+```
+
+The boundary carries $\mathcal D(\eta_0,k)$ and the integrand carries the
+pointwise $e^{-(k/k_D(\eta))^2}$. **It is not one factor and the review's
+wording should not be transcribed as if it were.**
+
+**The half that stands, and it is sharper than what was asked.** The integrand
+carries a diffusion factor **at all**. Photon diffusion damps perturbations
+that are *scattering*; gravitational redshift accumulated along the path after
+decoupling is not damped by it. So
+`integrand_weight = weight * diffusion` applies a scattering suppression to a
+gravitational source for the whole line of sight.
+
+**This sits directly beside the missing late ISW, and gives it a second
+mechanism.** A-1 already says *Annals II*'s $\mathcal V$ weight cannot carry a
+late ISW because $\mathcal V$ is zero by $z\lesssim1$. T-81b adds that even
+under $e^{-\kappa}$ the integrand would still be multiplied by
+$e^{-(k/k_D)^2}$. **Two independent suppressions of the same term**, and T-74's
+EdS control cannot distinguish them — EdS has no ISW to suppress, so **it is
+void against both** (**M11**, stated before the lead rather than after it).
+
+**Not measured.** Whether removing the diffusion factor from the integrand
+recovers a late ISW is one run and it has not been made. It is the first
+candidate in the register with a *named mechanism* for the missing ISW rather
+than a symptom, which is why it is written down tonight and not acted on
+tonight.
+
+### T-81c — `LCDM_MODEL` omits $\Omega_r$. **Confirmed.**
+
+`Omega_r` is exactly `0` for `CDM_MODEL` and `LCDM_MODEL` in
+`provenance/MODEL-PARAMETERS-v1.3.0.md`, which the code generates from the
+`Background` objects it integrates. For EdS that is the **control** and is
+stated. **For LCDM it is neither a control nor intended**, and at
+$z_*\simeq1109$ the omitted radiation is not negligible. **Envelope, not frame.**
+
+### T-81d — helium is absent from $\kappa'$. **Confirmed.**
+
+`_thomson_scale` takes $n_{b,0}=1.123\times10^{-5}\,\omega_bh^2\
+\mathrm{cm^{-3}}$ and `kappa_prime = thomson_scale * x_e * a**(-2)` uses it as
+the **electron** density. With helium, $n_e = x_e(1-Y_p)n_b$, so a uniform
+factor $(1-Y_p)\simeq0.76$ is missing. `grep` for helium in `decoupling.py`
+returns nothing.
+
+**Why no test has seen it.** It rescales $\kappa'$ uniformly, so it changes the
+visibility's **width and height** and not its **location** — and $\eta_*$ is
+defined here as the visibility *peak*. Every test that pins decoupling pins the
+peak. **Envelope, not frame.**
+
+### T-81e — $h$ propagation and the Thomson-rate conversion. **Not adjudicated.**
+
+`_thomson_scale`'s docstring gives an explicit argument for the one surviving
+factor of $h$: $n_{b,0}\propto\omega_bh^2$ against $c/H_0 = 9.2506\times
+10^{27}/h$ cm leaves one $h$, *"which cancels against $c/H_0$ for the
+combination that appears here."* **It was not re-derived.** Nothing is claimed
+either way, which is **M5a** — the clause landed at T-79 one entry earlier, and
+the first place it binds is P1-B's own entry.
+
+### Triage, and why none of it is fixed tonight
+
+| | changes the frame gap? | changes the envelope? | when |
+|---|---|---|---|
+| T-81a | no | **yes**, 12% in $\ell_D$ | v1.4.0 |
+| T-81b | no | **yes**, and is a *named mechanism for the missing ISW* | **next measurement** |
+| T-81c | no | **yes** | v1.4.0 |
+| T-81d | no | **yes**, visibility width | v1.4.0 |
+| T-81e | unknown | unknown | after it is read |
+
+**Not one of these can open or close the frame gap** — none is
+frame-dependent, so none redistributes between intrinsic temperature,
+velocity, acceleration and shear. They move the envelope **under** the number
+the week is measuring. Fixing an envelope term mid-measurement changes that
+number for reasons unrelated to it, which is the M4 error with a schedule
+attached. **T-81b is the exception and is promoted**, because the missing late
+ISW is a separate open defect that has had no named cause since it was raised,
+and it now has one.
+
+---
+
+## T-82 — $v_B+\sigma$ agrees between the columns to machine precision. **The source is not where the frame gap is.**
+
+**2026-10-19, late. P1-T's conversion of CAMB's source into this bundle's
+slots, run as the action item it was offered as.** CAMB carries the rank-1
+scattering source as $g\,(v_b+\sigma)$ — **one object**. Under a boost
+$v_b\to v_b-v$ while $\sigma$ shifts oppositely, so the sum is invariant and
+*CAMB has no frame gap because it never separates them.* This bundle does
+separate them, so the two columns must produce the same sum.
+
+**Strictly stronger than the frame gap on $\tau_\ell$**: no transfer function,
+no $j_\ell$, no weight, no damping, no validity gate. A failure is upstream of
+everything (102) does. `scripts/diagnostic_d12_vb_plus_sigma.py`,
+`diagnostics/d12-vb-plus-sigma-v1.3.0.txt`.
+
+| background | $k$ | $\lvert\Delta(\hat v_B-C_2)\rvert$ | $\lvert\Delta(\hat v_B+C_2)\rvert$ |
+|---|---:|---:|---:|
+| EdS | 1 | 1.098 | $\mathbf{9.34\times10^{-16}}$ |
+| EdS | 10 | 1.095 | $\mathbf{1.61\times10^{-15}}$ |
+| EdS | 60 | 1.043 | $\mathbf{4.25\times10^{-15}}$ |
+| EdS | 300 | 1.003 | $\mathbf{6.53\times10^{-14}}$ |
+| PLANCK | 1 | 1.090 | $\mathbf{1.25\times10^{-15}}$ |
+| PLANCK | 10 | 1.083 | $\mathbf{1.64\times10^{-15}}$ |
+| PLANCK | 60 | 1.020 | $\mathbf{1.02\times10^{-14}}$ |
+| PLANCK | 300 | 1.001 | $\mathbf{1.80\times10^{-13}}$ |
+
+**$\hat v_B+C_2$ is the CAMB combination and it is invariant to machine
+precision at every $k$ on both backgrounds.** The residual against the boost
+$v/k$ runs $1.7$–$4.1\times10^{-16}$ throughout, and is aligned with neither
+the boost nor $\mathrm d\hat v_B/\mathrm d\eta$.
+
+### What this decides
+
+**The rank-1 source is frame-consistent before projection.** The gap measured
+at T-77 and T-79 is therefore **downstream** of the source — in the slot and
+weight assignment, which is P1-T's items 2 and 3:
+
+> **2.** The rank-1 slot takes two different things under two different
+> weights. $M$'s by-parts residue enters under $W$; $(v_b+\sigma)$ enters
+> under $g$. $C_1=-(\delta T+\Phi_A+qU/k)$ bundles both and gives them one
+> weight. *That is §5.3's split with the weights now specified — which §5.3
+> did not do, and which is why the split helped but did not close.*
+>
+> **3.** $M$ belongs in the $j_\ell$ slot, not $j_\ell'$. Converting it into
+> the $j_\ell'$ slot generates a boundary carrying $W$ and a bulk
+> $-\int WM'j_\ell$. **This bundle's boundary carries $\mathcal D(k)$ and no
+> $W$; its bulk carries $+\int g\,(-C_1')j_\ell$. Weight and sign both differ
+> from the identity.**
+
+**This reorders the work**, and the reorder is the finding's practical content.
+The PI's proposed order was *source construction → coupled gravitational
+driving → decoupling and diffusion*. **The first item is discharged by this
+measurement**: the source is already consistent, and T-77's split "helped but
+did not close" for the reason item 2 names. The frame gap now has exactly one
+place left to be, and it is item 3's slot-and-weight mismatch.
+
+### P1-B ran this wrong first, and the guard written an hour earlier caught it
+
+**`CoefficientSet.v_b` is the *un-reduced* dipole** — both sets store
+`v_b = k * vb_t` (`coefficients.py:677` and `:983`) while $C_2=v/k$. The first
+run of D12 differenced them **as stored**, mixing normalisations. That is
+**M4**, and it is the **third M4 in one day** (T-79's $\kappa'\tau_0$ gap, and
+T-68's amplitude pair before it).
+
+It produced a table that read as a catastrophic frame failure — invariance at
+$k=1$ and $O(1)$ violation at every other $k$ — and **it would have been
+reported** but for the discriminator built into the script before it was run:
+
+```
+  bg       k   |res|/|v/k|
+  EdS      1     1.669e-16
+  EdS     10     9.000e+00
+  EdS     60     5.900e+01
+  EdS    300     2.990e+02
+```
+
+$9$, $59$, $299$ at $k=10,60,300$ is **exactly $k-1$**, and $\mathrm{corr}(\text{res},v/k)=1.000$.
+**A residual that is an exact integer multiple of the thing it is compared
+against is the signature of a normalisation, not of a dynamics** — and $k=1$
+passing is not a physical scale, it is the one $k$ at which reduced and
+un-reduced coincide.
+
+**The guard was M11b's second clause**, written into the script as a validity
+condition before the number was read, for a different purpose — to separate a
+boost failure from a phase error between two integrations. It separated a
+third thing instead. **Recorded because a guard that catches what it was not
+written for is the only evidence that the guard is real**, and because this
+register now carries the same mode three times in one day, which is the
+argument for the column rather than for the maxim.
+
+*The script is fixed to reduce before differencing and the comment at the
+fix site says why. The uncorrected table is not in `diagnostics/`; it is
+above, in full, because a withdrawn number that is not shown cannot be
+checked.*
+
+### The overnight F9, which arrived after this entry was written, and makes it sharper
+
+The PI's overnight F9 run, 2026-10-19 16:49, local:
+
+```
+CDM (Einstein-de Sitter)   first peak l=280.4;  frame gap median 100.0% worst 100.0%
+$\Lambda$CDM               first peak l=224.5;  frame gap median 100.0% worst 100.0%
+PLANCK_MODEL               first peak l=341.7;  frame gap median 100.0% worst 340.8%
+CAMB                       first peak at l=206.1
+CLASS                      first peak at l=206.2
+```
+
+**The frame gap at the spectrum is 100%.** Set that beside this entry's
+measurement — $\lvert\Delta(\hat v_B+C_2)\rvert$ between $9\times10^{-16}$ and
+$2\times10^{-13}$ — and the two numbers together say something neither says
+alone:
+
+> **The source is frame-consistent to fourteen significant figures and the
+> spectrum it produces is 100% apart.** Everything between the two is the
+> projection: the slot assignment and the weights. There is no longer a
+> *range* of places the frame gap can be; T-82 closes the upstream end and F9
+> measures the downstream end at saturation.
+
+That is P1-T's items 2 and 3 with nothing else left beside them, and it is the
+first time this register can say so rather than rank it.
+
+### The peaks, which are a second and separate finding
+
+| | first peak | $\ell_A$ | ratio |
+|---|---:|---:|---:|
+| EdS | 280.4 | 192.663 | **1.455** |
+| LCDM | 224.5 | 172.71 | **1.300** |
+| PLANCK | 341.7 | 272.177 | **1.255** |
+| CAMB | 206.1 | — | — |
+| CLASS | 206.2 | — | — |
+
+**CAMB and CLASS agree to 0.05%**, which is the external comparison working
+and is worth stating before the discrepancy.
+
+**The first peak should sit *below* $\ell_A$, near $0.7$–$0.8\,\ell_A$**, and
+in all three backgrounds it sits **above** it. The ratio is not constant —
+1.455, 1.300, 1.255 — so **it is not a single missing factor**, and
+`provenance/MODEL-PARAMETERS-v1.3.0.md`'s test applies in the negative: three
+models whose peaks do not track their own $\ell_A$ do **not** differ by a
+parameter.
+
+**This is not the frame gap and must not be folded into it.** $\ell_A$ is
+computed from the background alone and is frame-independent; a peak in the
+wrong place relative to its own $\ell_A$ is a statement about the projection's
+$\ell$–$k$ correspondence, not about the two columns. It is recorded as its
+own thread. **It is also the PI's standing objective** — *getting the acoustic
+peaks working* — so it is first in the order, beside items 2 and 3, and the
+two may well be one defect: a slot that enters under $j_\ell'$ instead of
+$j_\ell$ shifts power in $\ell$, which is exactly item 3.
+
+---
+
+## T-83 — $\ell_A$ for all three backgrounds. **P1-T's 192.7 is EdS; PLANCK is 10% low, not 36%; LCDM is where the omitted radiation shows**
+
+**2026-10-19, late. No run: the numbers are already generated**, in
+`provenance/MODEL-PARAMETERS-v1.3.0.md`, which `scripts/make_model_table.py`
+builds from the `Background` objects the code integrates. P1-T asked for one
+number and the table has three.
+
+| | $r_\theta$ | $r_s$ | $\ell_A=\pi r_\theta/r_s$ | against $\simeq302$ |
+|---|---:|---:|---:|---:|
+| **EdS** | 1.94041 | 0.0316406 | **192.663** | *not applicable* |
+| **LCDM** | 3.1955 | 0.0581262 | **172.71** | $0.572\times$ |
+| **PLANCK** | 3.12897 | 0.0361159 | **272.177** | $\mathbf{0.901\times}$ |
+
+### The three answers
+
+**1. P1-T's 192.7 is EdS**, from their own $r_\theta=1.9404$, $r_s=0.031641$ —
+the EdS row to six figures. Their first branch applies: *"if it is EdS it is
+expected and means nothing."* $\Omega_m=1$, $h=0.5$, no $\Lambda$: its $\ell_A$
+is not supposed to be 302 and the comparison is void. **The $0.64\times$ does
+not stand**, and the inference drawn from it does not either.
+
+**2. PLANCK is $0.901\times$, not $0.64\times$.** A 10% deficit in the acoustic
+scale. That is real and it is open — it is the **T-51/S40** sound-horizon
+thread, where $r_s$ is integrated from the big bang — but it is a tenth of
+what was inferred, and a 10% error cannot be what misplaces the peaks, because:
+
+**The peaks are misplaced in the opposite direction.** The overnight F9 puts
+PLANCK's first peak at $\ell=341.7$ against its own $\ell_A=272.177$, a ratio
+of **1.255** where it should be $\simeq0.75$. An $\ell_A$ that is **too small**
+moves peaks **down**. The measured peaks are **up**, by $1.67\times$. So the
+$\ell_A$ deficit and the peak misplacement have **opposite signs** and the
+second is not caused by the first. **The peak position is in the projection**,
+which is what T-82 and P1-T's item 3 say.
+
+**3. LCDM is where the omitted radiation shows, and the direction is P1-T's.**
+LCDM and PLANCK differ in $\Omega_m$ by 0.3 against 0.3138 — four percent —
+and in $\ell_A$ by **37%**. The mechanism is exactly the one P1-T names:
+
+| | $\eta_*$ | $r_s$ |
+|---|---:|---:|
+| LCDM ($\Omega_r=0$) | 0.109581 | 0.0581262 |
+| PLANCK ($\Omega_r=5.45\times10^{-5}$) | 0.0697426 | 0.0361159 |
+| **ratio** | **1.571** | **1.610** |
+
+*Matter domination earlier, larger $\eta_*$, larger $r_s$, smaller $\ell_A$* —
+confirmed, at $1.6\times$ in both. **T-81c is therefore not only an envelope
+concern**: on LCDM it is a peak-position error of 37%, independent of every
+source question. The T-81 triage table's *"changes the frame gap? no"* stands;
+its *"envelope"* column understates it for LCDM and is corrected here.
+
+### The validity note P1-T asked for, beside the 2%
+
+> **P1-B's effective-sound-horizon measurement — 2%, against the 11% the
+> radiation-driving mechanism needs — compared the solver's effective $r_s$
+> against the $r_s$ the code computes from the same background. Both are
+> wrong together if the background is. An internal-consistency check is blind
+> to a background error by construction.**
+
+That is **M4**'s shape and it is recorded here rather than left in a message.
+The 2% is not withdrawn — it is correct for what it measures, which is the
+solver against its own background — but it **cannot** bound a background
+error, and it was offered as if it could. The three-column table above is the
+check that is not blind to it, and it exists because the PI asked for a model
+table two days ago for exactly this reason.

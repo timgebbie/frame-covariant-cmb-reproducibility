@@ -425,3 +425,18 @@ points is a step in Phi-prime, and the first draft of D10 read a sign flip in
 delta_T(eta_*) off a 0.13% change in Phi because of it. The row is `measured`
 rather than `derived` for that reason --- the number that matters here is not
 the rate but the count below eta_eq, and D10 prints it in every row."""
+
+[[grid]]
+key = "scripts/diagnostic_d11_monopole_driving.py::me"
+what = "the acoustic grid D11 reads the two terms of d_delta off"
+status = "derived"
+note = """`required_acoustic_points(k, couple - start)` on
+`[acoustic_start_eta, min(eta_0, TIGHT_COUPLING_FACTOR*eta_star)]` --- the
+SAME construction as `two_frame.py::mode_eta` and `d10::grid`, by the same
+three lines, deliberately. **D11's whole claim is that a B_0 and Phi_H' are
+the two terms the released solver's own `rhs()` forms**, so reading them on
+any grid but the released one would answer a different question (that is M4).
+The ratio it reports is grid-insensitive for the reason D10's count is not:
+both terms are evaluated at the same points and a refinement moves them
+together --- and on EdS the Phi_H' column is 1e-10 against 3.7, which no
+plausible grid change reaches. Finding **T-79**."""

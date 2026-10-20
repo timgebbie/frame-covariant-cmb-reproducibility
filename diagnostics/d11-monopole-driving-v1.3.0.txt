@@ -1,0 +1,17 @@
+
+  d_delta = -phi_h' + (k/3) tau_1 ,  a B_0 = -(1/3) k tau_1
+  => d_delta = -a B_0 - phi_h'   -- a B_0 is a SOURCE, on the right, ONCE
+
+  bg          k   max|-aB_0|  max|-phi_h|  |phi_h|/|aB_0|  max|d_delta|
+  ----------------------------------------------------------------------
+  EdS        10   3.7434e+00   3.0159e-10          0.0000    3.7434e+00
+  EdS        60   5.2884e+01   4.2171e-10          0.0000    5.2884e+01
+  EdS       300   4.0876e+01   1.9084e-10          0.0000    4.0876e+01
+  PLANCK     10   3.6674e+00   2.1647e+00          0.5903    3.6916e+00
+  PLANCK     60   2.8214e+01   1.7990e+00          0.0638    2.8234e+01
+  PLANCK    300   2.2362e+01   8.1059e-01          0.0362    2.2362e+01
+
+  READ, not measured: a B_0 is on the right, once. c5_monopole restores
+  the right object. What it does NOT restore is -phi_h', which drives
+  tau_0 in d_delta and which no B carries.
+

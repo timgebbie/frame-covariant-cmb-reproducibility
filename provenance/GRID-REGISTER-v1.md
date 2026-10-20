@@ -18,7 +18,7 @@ being possible.
 | status | count | means |
 |---|---|---|
 | **open** | 1 | a chosen literal whose convergence is **not** established. This status is the point of the register. |
-| **derived** | 9 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
+| **derived** | 10 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
 | **measured** | 6 | a chosen literal whose convergence has been measured, with the number stated. |
 | **described** | 10 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
 | **index** | 18 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
@@ -37,7 +37,7 @@ share this history, so a grid shift moves them together and cancels. Finding
 **T-46**, question **Q7**, decision **S33** --- derived immediately after the
 v1.2.0 tag. v1.2.0 ships it as a stated limit.
 
-## derived — 9
+## derived — 10
 
 ### `x` — the x grid j_ell(x) is tabulated on
 
@@ -73,7 +73,7 @@ spanning a factor of two thousand in k, which is why no number is chosen.
 
 ### `eta` — the eta grid for the two-frame evaluation of (102): F2, F5, F7
 
-`functions/spectra/two_frame.py:281`, `np.linspace`
+`functions/spectra/two_frame.py:297`, `np.linspace`
 
 `required_n_eta(k_max, span)` when `n_eta is None`, which is how every
 figure calls it, and `check_k` RAISES when a caller asks for a mode the grid
@@ -83,7 +83,7 @@ nothing in the bundle does.
 
 ### `mode_eta` — one acoustic mode's integration grid on the (102) generic-u^a route
 
-`functions/spectra/two_frame.py:362`, `np.linspace`
+`functions/spectra/two_frame.py:378`, `np.linspace`
 
 The same construction as `pipeline.py::mode_eta` and in the same
 release, because **T-51 had one instance per route**: `pipeline.run`,
@@ -120,6 +120,21 @@ half the sound horizon missing from both sides. Measured after the fix:
 8.240e-06. The number barely moved, which is the correct behaviour for a gate
 that tests assembly algebra --- and is exactly why **S4c** says it cannot
 stand in for an external comparison.
+
+### `me` — the acoustic grid D11 reads the two terms of d_delta off
+
+`scripts/diagnostic_d11_monopole_driving.py:73`, `np.linspace`
+
+`required_acoustic_points(k, couple - start)` on
+`[acoustic_start_eta, min(eta_0, TIGHT_COUPLING_FACTOR*eta_star)]` --- the
+SAME construction as `two_frame.py::mode_eta` and `d10::grid`, by the same
+three lines, deliberately. **D11's whole claim is that a B_0 and Phi_H' are
+the two terms the released solver's own `rhs()` forms**, so reading them on
+any grid but the released one would answer a different question (that is M4).
+The ratio it reports is grid-insensitive for the reason D10's count is not:
+both terms are evaluated at the same points and a refinement moves them
+together --- and on EdS the Phi_H' column is 1e-10 against 3.7, which no
+plausible grid change reaches. Finding **T-79**.
 
 ### `k_com` — the k grid D4 integrates C_ell by rank on
 

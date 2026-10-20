@@ -94,7 +94,10 @@ KEYS = ["Omega_m", "Omega_L", "Omega_r", "omega_b h^2", "h", "n_s",
 
 NOTE = {
     "Omega_r": "zero on two of three -- **A-3 and T(k) are both identically "
-               "inapplicable there**, which is what makes EdS the control",
+               "inapplicable there**, which is what makes EdS the control. "
+               "**For `LCDM` it is neither a control nor intended** and is "
+               "recorded at **T-80**: at $z_*\\simeq1109$ the omitted "
+               "radiation is not negligible",
     "eta_*": "conformal time at the visibility peak, not at kappa = 1",
     "R(eta_*)": "baryon loading; sets the acoustic amplitude (1+3R)/3 and the "
                 "offset -R",
@@ -103,7 +106,13 @@ NOTE = {
     "l_A": "**pi r_theta / r_s -- where the acoustic peaks sit.** A difference "
            "between two models' spectra is a parameter difference only if it "
            "tracks this",
-    "k_D": "diffusion scale at eta_*; the damping knee",
+    "k_D": "diffusion scale at eta_*; the damping knee. **This row is the "
+           "$R=0$ value** --- `diffusion_scale` is called with "
+           "`r_of_eta = zeros`, which is finding **T-21**, while the "
+           "oscillator beside it runs at the `R(eta_*)` three rows up. T-21 "
+           "measured the cost: $\\ell_D = 1783$ as called against $1985$ with "
+           "the $R$ the bundle already has. Read it as the damping the code "
+           "applies, **not** as the damping the parameters imply",
 }
 
 
