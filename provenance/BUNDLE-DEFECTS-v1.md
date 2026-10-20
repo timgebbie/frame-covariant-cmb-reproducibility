@@ -7587,3 +7587,239 @@ stated here rather than after.
 
 **No control is a default.** `tests/test_integral_solution.py` passes
 unchanged and D14's released row still shows `Newt moved = 0.000e+00`.
+
+---
+
+## T-91 — the premise is settled. $\kappa(\eta_{\rm floor})=123$ and $185.5$, against P1-T's threshold of $15$. **§2 stands and T-90's refutation is of §2 itself**
+
+**2026-10-20. P1-T checked the derivation and supplied the criterion; P1-B had
+already made the print.** The two arrived within minutes of each other and
+agree, which is the first time this week two streams have converged on a
+number without one having seen the other's.
+
+### P1-T's criterion
+
+$W(\eta_{\rm floor})=\int_{-\infty}^{\eta_{\rm floor}}\mathcal V\,\mathrm d\eta$
+— the visibility mass below the floor — and the discarded
+$\lvert[WCK]_{\rm floor}\rvert$ against the collapsed primary, with
+$\sigma=\Delta\eta_{\rm vis}/2.355=0.00413$:
+
+| floor | $W$ | $\kappa$ | $\ell{=}2,k{=}300$ |
+|---|---:|---:|---:|
+| $-1\sigma$ | $1.6\times10^{-1}$ | 1.8 | $\mathbf{1.4}$ |
+| $-3\sigma$ | $1.4\times10^{-3}$ | 6.6 | $5.3\times10^{-3}$ |
+| $-5\sigma$ | $2.9\times10^{-7}$ | 15.1 | $4.8\times10^{-7}$ |
+
+*"$\kappa(\eta_{\rm floor})\gtrsim15$ and §2 stands; $\kappa\lesssim5$ and §2
+is incomplete."*
+
+### Measured
+
+| background | $\kappa(\eta_{\rm floor})$ | $W(\eta_{\rm floor})$ | $W(\eta_*)$ |
+|---|---:|---:|---:|
+| EdS | $\mathbf{123}$ | $3.94\times10^{-54}$ | $0.3945$ |
+| PLANCK | $\mathbf{185.5}$ | $2.75\times10^{-81}$ | $0.3692$ |
+
+and $\lvert[WCK]_{\rm floor}\rvert$ against the collapsed primary runs
+$10^{-52}$ to $10^{-55}$ on EdS and $10^{-79}$ to $10^{-81}$ on PLANCK, at
+every $(k,\ell)$ tried.
+
+**$123$ and $185.5$ against a threshold of $15$.** The floor is eight times
+further out than §2 needs, and P1-T's $-1\sigma$ row — where the discarded
+boundary is $1.4\times$ the primary — is nowhere near where this bundle
+integrates from.
+
+**So §2's premise holds, T-90 refutes §2 itself rather than §2-with-a-bad-premise,
+and the error identified at T-90's §4 is the error.** P1-T's standing note is
+discharged: §2 is now checked by someone other than its author, and the one
+number it rested on is printed.
+
+### P1-T's two further rulings, recorded because they close questions
+
+**§4 is right, and CAMB confirms it independently.** CAMB's implemented source
+carries $[g(v_b+\sigma)]'/k$, which against $j_\ell$ gives
+$\int g(v_b+\sigma)j_\ell'\,\mathrm d\eta$ — boundary vanishing because $g$
+does — and collapses to $(v_b+\sigma)(\eta_*)\,j_\ell'(x_*)$ in the sharp
+limit. **The coefficient is $(v_b+\sigma)$, not $v_b$ alone**, which is T-82's
+pair and T-88's four orders arriving from a third direction.
+
+> **The primary §2 removed and the $j_\ell'$ slot T-86 found missing are the
+> same slot**, needed for two independent reasons: the Doppler primary under
+> $g$, and the gravitational $+k\int WMj_\ell'$ under $W$. A bulk with no
+> $j_\ell'$ slot can hold neither.
+
+**$\dot{\mathcal V}C$ survives §4 and is not optional.** It comes from
+differentiating the weight, which §4 does not touch, and it is already in the
+four-term identity as $\dot{\mathcal V}C_2$ — *the one piece of
+`int_soln_damping` Annals II prints correctly*, which `c3_byparts.py`
+confirms. **Implementation note from P1-T, and it is a conditioning
+requirement rather than a preference:** $\dot{\mathcal V}=(\kappa''+\kappa'^2)e^{-\kappa}$,
+so at $\kappa'\simeq1.4\times10^4$ it carries the $\kappa'^2$ problem and
+**must be formed from the weight's own derivative, never assembled from
+$\kappa'^2$ and $\kappa''$ separately.**
+
+---
+
+## T-92 — the spectrum under T-88. **The peaks crossed the target rather than reaching it, and the frame gap did not move. The prediction held**
+
+**2026-10-20. The diagnostic F9 run, `--b-slot-repair`**, written to
+`diagnostics/d15-f9-b-slot-repair.{csv,pdf,png}`; the released pair is
+untouched and still carries 2026-10-19. The banner printed its expectation
+before the numbers, which is what makes the result readable:
+
+> *Expect the peaks to improve and the damping tail to be wrong above
+> $k\simeq100$.*
+
+### Measured
+
+| | $\ell_A$ | released $\ell_1$ | ratio | **repaired $\ell_1$** | **ratio** |
+|---|---:|---:|---:|---:|---:|
+| EdS | 192.663 | 280.4 | 1.455 | $\mathbf{106.9}$ | $\mathbf{0.555}$ |
+| LCDM | 172.710 | 224.5 | 1.300 | $\mathbf{168.5}$ | $\mathbf{0.976}$ |
+| PLANCK | 272.177 | 341.7 | 1.255 | $\mathbf{154.0}$ | $\mathbf{0.566}$ |
+| CAMB | — | — | — | 206.1 | — |
+| CLASS | — | — | — | 206.2 | — |
+
+An adiabatic first peak sits near $0.73$–$0.78\,\ell_A$. **The peaks moved
+from all three too high to two of three too low: they crossed the target
+rather than reaching it.** That is a large effect in the right direction and
+it overshoots.
+
+**EdS $0.555$ and PLANCK $0.566$ agree to 2%.** LCDM's $0.976$ is the outlier
+and it is the model whose $\ell_A$ is **known wrong** — $\Omega_r=0$, a 37%
+error, **T-81c** and **T-83**. Against a radiation-corrected $\ell_A$ near
+PLANCK's, LCDM gives $0.619$. **So all three backgrounds return a peak ratio
+of $0.56$–$0.62$ once a known background defect is accounted for** — flat
+across three very different backgrounds, which makes it a property of the
+**projection** and not of the parameters. It is low by a factor of $\simeq1.3$.
+
+### The frame gap did not move, and that is the prediction holding
+
+| | released | repaired |
+|---|---|---|
+| EdS | 100.0% / 100.0% | 99.9% / 100.0% |
+| LCDM | 100.0% / 100.0% | 100.0% / 100.0% |
+| PLANCK | 100.0% / **340.8%** | 99.9% / **105.7%** |
+
+Against D14's per-mode gaps of $10^{-3}$–$10^{-4}$ at $\ell\ge50$ for
+$k\le60$. **F9 integrates to $k=1500$ and the repair does nothing above
+$k\simeq100$**, so the sum is dominated by modes it does not touch and the
+spectrum-level gap stays at saturation. That is exactly what the banner said
+would happen; **a gap that had closed here would have falsified T-88**, and
+it did not.
+
+PLANCK's *worst* cell improving $340.8\%\to105.7\%$ is the one place the
+repair is visible in the spectrum, and it is the cell where $\ell\simeq k
+r_\theta$ puts the first peak — the same cell D14 measured at $79\times$.
+
+### What this does and does not license
+
+**Does:** the repair has a large, consistent, background-independent effect on
+peak position. It is not a parameter effect and it is not noise.
+
+**Does not:** it is not an improvement in the spectrum. Two of three ratios
+moved from 1.3–1.5 to 0.56, and *passing through* the right answer is not
+reaching it. **CAMB and CLASS agree at $206.1$ and $206.2$** and neither
+column is near them.
+
+**And it is a control, not a figure.** `diagnostics/`, never `figures/` —
+decision **V14**. The released F9 is unchanged.
+
+---
+
+## T-93 — **T-88 is withdrawn. The four orders came from a spurious $\times\kappa'$ of $320$–$680$, and T-92's peak shift with it**
+
+**2026-10-20, within the hour. This is T-66's defect, one level up, and this
+time it is in P1-B's repair rather than in the released code.**
+
+### The identity that settles it
+
+$C_1^{\rm thom}=-\kappa'\hat v_B$ and $W\kappa'=\mathcal V$ **by definition**,
+so
+
+$$W\,C_1^{\rm thom}\;=\;-W\kappa'\hat v_B\;=\;-\mathcal V\,\hat v_B$$
+
+**identically.** The Thomson term is *already* at $g$ weight in (102) as
+printed — the $\kappa'$ inside $C_1$ and the $W$ outside it combine into the
+visibility with nothing left over. **There was never a weight to change.**
+
+Measured, on the bundle's own grids:
+
+| background | $\max\lvert W\kappa'-\mathcal V\rvert/\max\lvert\mathcal V\rvert$ | $\lvert WC_1^{\rm thom}-(-\mathcal V\hat v_B)\rvert/\text{scale}$ | $\lvert\mathcal V C_1^{\rm thom}\rvert/\lvert WC_1^{\rm thom}\rvert$ |
+|---|---:|---:|---:|
+| EdS, $k=10$ | $1.11\times10^{-2}$ | $1.07\times10^{-2}$ | $\mathbf{509}$ |
+| EdS, $k=60$ | — | $1.10\times10^{-2}$ | $\mathbf{523}$ |
+| EdS, $k=300$ | — | $1.36\times10^{-2}$ | $\mathbf{682}$ |
+| PLANCK, $k=10$ | $1.40\times10^{-2}$ | $1.34\times10^{-2}$ | $\mathbf{350}$ |
+| PLANCK, $k=300$ | — | $1.24\times10^{-2}$ | $\mathbf{321}$ |
+
+The $1.1$–$1.4\%$ is the recombination grid's own residual — **T-46**, measured
+at $1.2\%$ in the primary — not a discrepancy in the identity.
+
+**T-88's `slot_weight_split` applies $\mathcal V\,C_1^{\rm thom}$ where (102)
+applies $W\,C_1^{\rm thom}$. That is a spurious factor of $\kappa'$, measured
+at $320$ to $682$.**
+
+### What is withdrawn
+
+**T-88's headline — *"four orders of magnitude at $\ell=200$"* — is withdrawn.**
+It was produced by a $500\times$ error on one term, and a term inflated by
+$500$ that makes two columns agree is the failure mode this register has now
+recorded five times. **Frame agreement is necessary, not sufficient**, and
+here it was not even that: it was agreement bought with a wrong number.
+
+**T-92 goes with it.** The peak shift from $1.455\,\ell_A$ to $0.555\,\ell_A$,
+and the $0.56$–$0.62$ ratio *"flat across three backgrounds, which makes it a
+property of the projection"* — that was a sentence away from being reported
+as a finding. **It is the signature of a $500\times$ error, not of the
+projection.** The diagnostic F9 at `diagnostics/d15-f9-b-slot-repair.*` is
+retained as the record of what the defective variant produces and is **not**
+evidence about the physics.
+
+**T-90's refutation is void in both directions.** It tested a boundary
+correction on top of a $\kappa'$-inflated Thomson term, so neither its failure
+nor §2's standing can be read from it. **T-91's conclusion that *"T-90 refutes
+§2 itself"* is withdrawn**: §2's algebra is checked and its premise is
+measured ($\kappa(\eta_{\rm floor})=123$ and $185.5$), and both of those
+stand — but what T-90 refuted was an implementation with a $500\times$ error
+in it, which is not §2.
+
+### What survives, and it is not nothing
+
+| | |
+|---|---|
+| **T-82** — $\hat v_B+C_2$ agrees between the columns to $10^{-15}$ | **stands.** Independent of all of this; no weight enters it |
+| **T-85** — the by-parts identity holds in both frames; $A_N\neq A_C$ | **stands.** Measured on the released coefficients |
+| **T-86** — the boundary carries $\mathcal D$, the bulk $\mathcal V\mathcal D$, and there is no $j_\ell'$ slot | **stands as a read.** It is what the file contains |
+| **T-91 §2** — the product-rule algebra and $\kappa(\eta_{\rm floor})\simeq123$ | **stands.** Checked by P1-T, premise printed |
+| **T-91 §5.2** — the Doppler primary belongs at $j_\ell'(x_*)$ with coefficient $(v_b+\sigma)$ | **stands.** P1-T's, from CAMB, independent of P1-B's code |
+| T-88's fix | **withdrawn** |
+| T-92's peak numbers as physics | **withdrawn** |
+| T-90's refutation | **void** |
+
+### And the released code's $\kappa'^2$, which this *does* locate
+
+(102) carries the whole bracket $\{C_0-C_1'+C_2''\}$ under $\mathcal V$, and
+$C_1'$ contains $(\kappa'\hat v_B)'=\kappa''\hat v_B+\kappa'\hat v_B'$. Under
+$\mathcal V$ that is $\mathcal V\kappa''\hat v_B+\mathcal V\kappa'\hat v_B'$
+— and $\mathcal V\kappa'=W\kappa'^2$. **So the released code already carries
+$\kappa'^2$ where the $W$-form would carry $\kappa'$ once**, which is
+precisely P1-T's *"extra scattering-rate factors"* and the $\kappa'^2$-against-$\kappa''$
+mechanism from their item-2 list. **That is a real finding and it is the one
+this correction leaves standing** — it is in the released code, not in the
+repair, and it was reached by taking the repair apart.
+
+### How it was caught, recorded because the route matters
+
+**Not by a test.** P1-T's §5.2 said the Doppler coefficient is
+$(v_b+\sigma)$ *"not $v_b$ alone"*, which sent P1-B back to the Thomson slot's
+algebra to see where $\sigma$ would enter — and $W\kappa'=\mathcal V$ is the
+first line you write. **One print, and it was available from the moment
+`slot_weight_split` was written.**
+
+Under **M11**: the magnitude of the thing varied against the thing it sits
+beside was never stated for `slot_weight_split`. Had it been — $\mathcal V$
+against $W$ is a factor of $\kappa'$, and $\kappa'\simeq1.4\times10^4$ at
+decoupling — **the control would not have been written in that form.** The
+column the register has been demanding since T-76 is the column that was
+missing here, in P1-B's own work, four days after P1-B wrote the rule.
