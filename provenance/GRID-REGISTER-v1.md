@@ -19,7 +19,7 @@ being possible.
 |---|---|---|
 | **open** | 1 | a chosen literal whose convergence is **not** established. This status is the point of the register. |
 | **derived** | 10 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
-| **measured** | 6 | a chosen literal whose convergence has been measured, with the number stated. |
+| **measured** | 7 | a chosen literal whose convergence has been measured, with the number stated. |
 | **described** | 10 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
 | **index** | 18 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
 
@@ -158,7 +158,7 @@ Int dk j_l^2/k = 1/(2 l (l+1)). Finding **T-56**: the eta grid was derived from
 the oscillation it resolves and the k grid never was, though it is the same
 kernel read along the other axis.
 
-## measured — 6
+## measured — 7
 
 ### `u` — the panel division of the conformal-time integral eta(a)
 
@@ -208,6 +208,22 @@ points is a step in Phi-prime, and the first draft of D10 read a sign flip in
 delta_T(eta_*) off a 0.13% change in Phi because of it. The row is `measured`
 rather than `derived` for that reason --- the number that matters here is not
 the rate but the count below eta_eq, and D10 prints it in every row.
+
+### `e2` — D13's refinement probe: the environment grid at 1x, 2x and 4x
+
+`scripts/diagnostic_d13_byparts_2x2.py:136`, `np.linspace`
+
+`linspace(eta[0], eta[-1], (n-1)*mult + 1)` for mult in 1, 2, 4,
+with M, W and V interpolated onto it. **This grid exists to measure a floor,
+not to carry a result**, which is why it is `measured` and why refining it is
+the point rather than a risk. It answers the only question D13's |A-B| can
+raise: A and B are the same integral by an exact identity, so a difference is
+quadrature or bookkeeping, and a ratio that FALLS under refinement is the
+first. Measured: EdS k=10 l=2 runs 2.83e-3 -> 2.20e-3 -> 2.04e-3, and the
+oscillatory k=300 l=2 cell runs 1.105 -> 0.279 -> 0.0727, about 4x per
+doubling, which is second order and is what trapezoid gives. One cell does NOT
+fall --- EdS k=10 l=200, flat at 2.646 --- and that cell is void, |A| being
+4e-176 at l >> k.d(eta). Finding **T-85**.
 
 ### `eta` — the integration grid for the relative-sign control
 

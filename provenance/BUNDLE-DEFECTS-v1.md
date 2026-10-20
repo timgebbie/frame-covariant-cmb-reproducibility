@@ -6943,3 +6943,185 @@ solver against its own background — but it **cannot** bound a background
 error, and it was offered as if it could. The three-column table above is the
 check that is not blind to it, and it exists because the PI asked for a model
 table two days ago for exactly this reason.
+
+---
+
+## T-84 — the published preprint's title is `CMBR`; decision S17 fixed `CMB`. **Raised, not silently normalised**
+
+**2026-10-20. The PI supplied the Paper 1 preprint reference and the record
+does not say what the bundle says.**
+
+| | string |
+|---|---|
+| Zenodo record 23475234, title as printed | *Frame covariance of **CMBR** lensing in the exact 1+3 covariant radiation hierarchy* |
+| attached file | `TG-FrameCovariantCMBR-v1.1.6.pdf` |
+| decision **S17**, accepted 2026-10-07, **closed 2026-10-09 on the manuscript freeze** | *Frame covariance of **CMB** lensing in the exact 1+3 covariant radiation hierarchy* |
+| `README.md`, `CITATION.cff`, `SUPPLEMENTARY-MATERIAL-v1.3.0.tex` before today | `CMB` |
+| the PI's own message supplying the reference, 2026-10-20 | `CMB` |
+
+**Read twice off the record, the second time asking for a character-for-character
+transcription with no normalisation**, because a summariser silently correcting
+`CMBR` to `CMB` is exactly the failure this would look like. Both reads return
+`CMBR`, and the filename carries it independently.
+
+### What was changed, and why this way
+
+**The citation slots now carry the record's string.** A citation reproduces the
+title of the thing it points at or it does not resolve for a reader, and the
+record is the artefact. The supplement's own title and its two prose references
+to its companion were changed with them, because a supplement naming a
+companion that does not exist under that name is the cohesion failure mode
+this project already has on file — a correction landing where it was found and
+not travelling to the places that restate it.
+
+Changed: `README.md` (header, and the *Associated paper* row), `CITATION.cff`
+(`preferred-citation`), `SUPPLEMENTARY-MATERIAL-v1.3.0.tex` (`\title`, the
+abstract, §*Scientific scope*). **Not** changed: `SUPPLEMENTARY-MATERIAL-v1.2.0.tex`,
+which is a frozen released artefact, and **S17 itself**, which is a PI decision.
+
+### Why it is raised rather than corrected silently
+
+The standing rule makes a typographical difference silent and a material one
+correctable-with-a-log. **This is neither.** Two artefacts that are supposed to
+name one paper name two, and *which string is canonical is not determinable
+from either of them*:
+
+- If **S17 is right**, the Zenodo record's title is wrong and fixing it means
+  **uploading a new version**, which mints a new version DOI and makes the one
+  now in `README.md` point at a superseded record.
+- If **the record is right**, S17 was superseded on 19 October by an act that
+  did not reach the decision register, and S17 should be amended to say so.
+
+**Only the PI can say which**, and the cost is asymmetric enough that guessing
+is not available: one branch changes a published DOI.
+
+### The second thing the record does not have
+
+**No concept DOI.** `10.5281/zenodo.23475234` is a **version** DOI: the record
+exposes no *Cite all versions* entry and its Versions list is empty. This
+bundle's own `README.md` already argues, for the ZivaHub DOI, that *the concept
+DOI is the one to cite because it resolves to the latest version* — and the
+Zenodo row cannot honour that yet. **Stated in the table rather than left for a
+reader to discover**, and it interacts with the branch above: a v1.1.7 uploaded
+to fix the title would strand the string now published in this README.
+
+---
+
+## T-85 — the $2\times2$. **Both identities hold; $A_N\neq A_C$. The constructor conclusion is proven, not inferred**
+
+**2026-10-20. P1-T's decisive check, which displaced their own one-frame
+boundary test of the day before.** The same transport source $M=-C_1$
+evaluated directly and through its fully integrated-by-parts form, identical
+histories and identical endpoints, in both frames.
+
+$$\int \mathcal V M j_\ell\,\mathrm d\eta=\bigl[W M j_\ell\bigr]-\int W M' j_\ell\,\mathrm d\eta+k\int W M j_\ell'\,\mathrm d\eta$$
+
+`scripts/diagnostic_d13_byparts_2x2.py`, `diagnostics/d13-byparts-2x2-v1.3.0.txt`.
+
+### Result 1 — both identities hold. **It is not bookkeeping.**
+
+$\lvert A-B\rvert/\lvert A\rvert$ sits at $10^{-3}$–$10^{-2}$ in every valid
+cell **and falls under grid refinement**, which is the discriminator and was
+measured rather than assumed:
+
+| background | $k$ | $\ell$ | $1\times$ | $2\times$ | $4\times$ |
+|---|---:|---:|---:|---:|---:|
+| EdS | 10 | 2 | $2.83\times10^{-3}$ | $2.20\times10^{-3}$ | $2.04\times10^{-3}$ |
+| EdS | 300 | 2 | $1.105$ | $0.279$ | $0.0727$ |
+| PLANCK | 10 | 200 | $8.68\times10^{-4}$ | $2.35\times10^{-4}$ | $7.74\times10^{-5}$ |
+| PLANCK | 300 | 2 | $9.230$ | $2.326$ | $0.598$ |
+
+The $k=300$, $\ell=2$ cells start large and fall by $\simeq4\times$ per
+doubling — second order, which is what `trapezoid` on an oscillatory integrand
+gives. **Quadrature, not a defect.**
+
+> **$A$ and $B$ are the same integral by an exact identity, so a difference
+> has only two available explanations and one of them has now been measured
+> away.** The $\eta_*$-boundary-against-`eta_floor` mixing P1-T named as the
+> first suspect **is excluded.**
+
+**One cell is void and is not read:** EdS $k=10$, $\ell=200$, where the ratio
+is $2.646$ and does **not** fall under refinement — because $A=-3.9\times
+10^{-176}$. That is $\ell\gg k\Delta\eta$ ($k\Delta\eta\simeq19.4$), the
+validity condition already in P1-B's diagnostic register, and both numbers are
+noise. **It is in the table rather than removed from it**, because a cell
+dropped silently is a cell a reader cannot check.
+
+### Result 2 — $A_N\neq A_C$ in every valid cell, by $1.00$ to $1.78$ of scale
+
+| background | $k$ | $\ell$ | $A_N$ | $A_C$ | $\lvert A_N-A_C\rvert/\max$ |
+|---|---:|---:|---:|---:|---:|
+| EdS | 10 | 2 | $1.8666\times10^{-1}$ | $-5.0149\times10^{-2}$ | **1.269** |
+| EdS | 60 | 2 | $-9.2737\times10^{-3}$ | $4.5815\times10^{-3}$ | **1.494** |
+| EdS | 300 | 200 | $-5.2384\times10^{-4}$ | $3.4448\times10^{-3}$ | **1.152** |
+| PLANCK | 10 | 10 | $1.4919\times10^{-1}$ | $-5.7453\times10^{-2}$ | **1.385** |
+| PLANCK | 60 | 200 | $-5.7596\times10^{-4}$ | $4.4693\times10^{-4}$ | **1.776** |
+| PLANCK | 300 | 50 | $-1.3534\times10^{-5}$ | $1.6379\times10^{-3}$ | **1.008** |
+
+**This is P1-T's second branch, taken:** *"Both identities hold but
+$A_N\neq A_C$ → coefficient definitions, upstream of (102). Your constructor
+conclusion, proven rather than inferred."* The sign flips between columns in
+every row, which is the whole of the frame gap and not a fraction of it.
+
+### Result 3 — the $\ell$-independence is **the visibility, not the frames**, and is not reported as a finding
+
+At $k=10$ the ratio $A_C/A_N$ is $\ell$-free to four figures
+($-3.72208$, $-3.71998$, $-3.72062$ at $\ell=2,10,50$ on EdS), and P1-T's own
+earlier criterion reads an $\ell$-independent residue as *still constructor*.
+**It carries no information here, and the reason is mechanical:** $\mathcal V$
+is a spike, so $\int\mathcal V f j_\ell\simeq f(\eta_*)j_\ell(x_*)\int\mathcal V$
+for **any** $f$, and the ratio of two $\mathcal V$-weighted integrals is
+$f_C(\eta_*)/f_N(\eta_*)$ — $\ell$-free by construction, whatever the frames do.
+
+Measured against that prediction:
+
+| background | $k$ | $A_C/A_N$ | $M_C/M_N$ at $\eta_*$ | agreement |
+|---|---:|---:|---:|---:|
+| EdS | 10 | $-0.2688$ | $-0.2574$ | **4.2%** |
+| EdS | 60 | $-0.4508$ | $-0.4462$ | **1.0%** |
+| PLANCK | 10 | $-0.3851$ | $-0.3818$ | **0.9%** |
+| EdS | 300 | $-7.3793$ | $-5.4682$ | 25.9% |
+| PLANCK | 300 | $-0.1934$ | $-18.2734$ | 9346% |
+
+**Confirmed where the spike approximation holds and failing where it does
+not** — at $k=300$ the mode oscillates inside the visibility width, and the
+$2\times2$'s own $k=300$ rows are correspondingly **not** $\ell$-free
+($A_C/A_N$ runs $-7.38$ at $\ell=10$ and $-0.152$ at $\ell=200$).
+
+*Recorded under **M11** before the result it sits beside.* The
+$\ell$-independence was about to be reported as corroboration and it is an
+artefact of the weight. Stating it costs one run and removes a finding rather
+than adding one.
+
+### What the $2\times2$ and T-82 say **together**, which neither says alone
+
+| | measured | verdict |
+|---|---|---|
+| the rank-1 **source**, $\hat v_B+C_2$ (T-82) | $9\times10^{-16}$ – $2\times10^{-13}$ | **frame-consistent** |
+| the by-parts **identity**, $\lvert A-B\rvert/\lvert A\rvert$ (T-85) | quadrature, falls under refinement | **not bookkeeping** |
+| the rank-1 **slot**, $A_N$ against $A_C$ (T-85) | $1.00$–$1.78$ of scale, sign flipped | **the whole gap** |
+
+> **The object is right, the integral is right, and the split of the object
+> across the slots is wrong.** That is P1-T's item 2 stated as a measurement
+> rather than as a reading of CAMB: *the rank-1 slot takes two different
+> things under two different weights — $M$'s by-parts residue under $W$ and
+> $(v_b+\sigma)$ under $g$ — and $C_1$ bundles both and gives them one
+> weight.* Both ends are now measured and nothing is left between them.
+
+**This is why §5.3's split helped and did not close** (T-75, T-77): splitting
+$C_1$ without also splitting its **weight** fixes half of a defect whose two
+halves were never independent. That is **M11a** once more, and the third time
+this register has recorded it.
+
+### T-84 closed, 2026-10-20
+
+The PI supplied the citation in the record's form —
+*"Gebbie, T. (2026). Frame covariance of CMBR lensing in the exact 1+3
+covariant radiation hierarchy (Version v1.1.6). Zenodo.
+https://doi.org/10.5281/zenodo.23475234"* — so the branch is taken: **the
+record is canonical and `CMBR` is the title.** Decision **S17** is amended in
+place with that date and this finding's number, rather than the Zenodo record
+being re-uploaded, which keeps the published DOI resolving to the version the
+bundle now cites. The second half of T-84 stands open and is not closed by
+this: **the Zenodo row carries a version DOI, not a concept DOI**, and the
+README says so.

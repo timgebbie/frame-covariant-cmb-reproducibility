@@ -20,12 +20,26 @@ abstract: >-
   Physics 282, 321 (2000). Analytical release; no empirical data are required.
 preferred-citation:
   type: article
-  title: "Frame covariance of CMB lensing in the exact 1+3 covariant radiation hierarchy"
+  # **Transcribed from the Zenodo record, not from decision S17.** The record
+  # prints `CMBR`; S17 fixed `CMB`. A citation reproduces the title of the
+  # thing it points at or it does not resolve for a reader, so this field
+  # follows the artefact. The discrepancy is finding T-84 and is the PI's to
+  # settle -- changing it the other way means a new Zenodo version.
+  title: "Frame covariance of CMBR lensing in the exact 1+3 covariant radiation hierarchy"
   authors:
     - family-names: Gebbie
       given-names: Tim
-  # arXiv identifier is assigned on submission; filled at manuscript freeze
-  # (acceptance criterion 6).
+      orcid: "https://orcid.org/0000-0002-4061-2621"
+      affiliation: "University of Cape Town"
+  year: 2026
+  month: 10
+  # Version DOI, read off the record. Zenodo's concept DOI is not exposed on
+  # this record (Versions list empty), so it cannot be cited here yet.
+  doi: "10.5281/zenodo.23475234"
+  url: "https://zenodo.org/records/23475234"
+  version: "v1.1.6"
+  license: CC-BY-4.0
+  notes: "Preprint, Zenodo, 19 October 2026. The arXiv identifier is assigned on submission and is filled at manuscript freeze (acceptance criterion 6); it is additional to this DOI, not a replacement for it."
 keywords:
   - cosmic microwave background
   - 1+3 covariant formalism

@@ -8,9 +8,11 @@ the full linear spectrum with the acoustic peaks and the Silk damping tail
 (F9), in both frames; the integral solution (102) carried with a generic
 4-velocity and specialised back; acceptance criterion 5b closed.
 
-Supplementary code and materials for: Tim Gebbie, *"Frame covariance of CMB
-lensing in the exact $1+3$ covariant radiation hierarchy,"* arXiv: identifier
-assigned on submission.
+Supplementary code and materials for: Tim Gebbie, *"Frame covariance of CMBR
+lensing in the exact $1+3$ covariant radiation hierarchy,"* preprint v1.1.6,
+Zenodo, 19 October 2026,
+[doi:10.5281/zenodo.23475234](https://doi.org/10.5281/zenodo.23475234),
+CC BY 4.0.
 
 The supplementary-materials document is included here:
 
@@ -749,10 +751,11 @@ cite.
 
 | Item | Value |
 |---|---|
-| **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMB lensing in the exact 1+3 covariant radiation hierarchy*. arXiv: identifier assigned on submission |
+| **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMBR lensing in the exact 1+3 covariant radiation hierarchy*. Preprint **v1.1.6**, Zenodo, 19 October 2026. [doi:10.5281/zenodo.23475234](https://doi.org/10.5281/zenodo.23475234). CC BY 4.0. **The title is transcribed from the record and reads `CMBR`**, which is not the string decision **S17** fixed — see finding **T-84** |
 | **Supplementary PDF** | [supplement-v1.3.0.pdf](supplementary-materials/supplement-v1.3.0.pdf) |
 | **GitHub repository** | [timgebbie/frame-covariant-cmb-reproducibility](https://github.com/timgebbie/frame-covariant-cmb-reproducibility) |
 | **ZivaHub/Figshare DOI** | [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509) — **live**. The **concept** DOI: it always resolves to the latest version, so it is the one to cite |
+| **Zenodo DOI (the paper, not this bundle)** | [10.5281/zenodo.23475234](https://doi.org/10.5281/zenodo.23475234) — the **preprint**'s record. **This is a version DOI, not a concept DOI**: the record exposes no *Cite all versions* entry and its Versions list is empty, so a v1.1.7 would mint a different string and this one would keep resolving to v1.1.6. Checked, not assumed. The concept DOI should be read off the record and substituted here once a second version exists |
 | **Associated antecedent** | Gebbie, T.; Dunsby, P. K. S.; Ellis, G. F. R. (2000). *1+3 covariant cosmic microwave background anisotropies II: the almost-Friedmann–Lemaître model*. Annals of Physics **282**, 321–394. [doi:10.1006/aphy.2000.6034](https://doi.org/10.1006/aphy.2000.6034) |
 | **Code license** | MIT, see [`LICENSE`](LICENSE) |
 | **Supplement, text, figures and tables** | CC BY 4.0, see [`CONTENT-LICENSE.md`](CONTENT-LICENSE.md) |

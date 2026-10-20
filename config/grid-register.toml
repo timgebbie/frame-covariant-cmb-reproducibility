@@ -440,3 +440,19 @@ The ratio it reports is grid-insensitive for the reason D10's count is not:
 both terms are evaluated at the same points and a refinement moves them
 together --- and on EdS the Phi_H' column is 1e-10 against 3.7, which no
 plausible grid change reaches. Finding **T-79**."""
+
+[[grid]]
+key = "scripts/diagnostic_d13_byparts_2x2.py::e2"
+what = "D13's refinement probe: the environment grid at 1x, 2x and 4x"
+status = "measured"
+note = """`linspace(eta[0], eta[-1], (n-1)*mult + 1)` for mult in 1, 2, 4,
+with M, W and V interpolated onto it. **This grid exists to measure a floor,
+not to carry a result**, which is why it is `measured` and why refining it is
+the point rather than a risk. It answers the only question D13's |A-B| can
+raise: A and B are the same integral by an exact identity, so a difference is
+quadrature or bookkeeping, and a ratio that FALLS under refinement is the
+first. Measured: EdS k=10 l=2 runs 2.83e-3 -> 2.20e-3 -> 2.04e-3, and the
+oscillatory k=300 l=2 cell runs 1.105 -> 0.279 -> 0.0727, about 4x per
+doubling, which is second order and is what trapezoid gives. One cell does NOT
+fall --- EdS k=10 l=200, flat at 2.646 --- and that cell is void, |A| being
+4e-176 at l >> k.d(eta). Finding **T-85**."""
