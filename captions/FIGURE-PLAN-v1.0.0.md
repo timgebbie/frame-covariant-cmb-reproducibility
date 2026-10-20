@@ -96,7 +96,7 @@ set.
 |---|---|---|---|---|
 | **F1** | Appendix F match | small multiples | `scripts/figure_f1_appendix_f.py` | cross-check |
 | **F2** | truncation convergence | lines, log y, sequential ramp | `scripts/figure_f2_truncation.py` | diagnostic |
-| **F3** | angular autocorrelation | lines + residual panel | `scripts/figure_f3_spectrum.py` | acceptance |
+| **F3** | angular autocorrelation | lines + residual panel | `scripts/figure_f3_angular_spectrum.py` | acceptance |
 | **F4** | real-space $C(\theta)$ | lines | `scripts/figure_f4_correlation.py` | acceptance |
 | **F5** | source decomposition, two frames | two panels, two frames | `scripts/figure_f5_sources.py` | acceptance |
 | **F6** | impact of the approximations | lines, ratios to full | `scripts/figure_f6_approximations.py` | diagnostic |

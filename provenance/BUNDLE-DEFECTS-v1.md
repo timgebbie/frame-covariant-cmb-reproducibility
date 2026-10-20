@@ -7125,3 +7125,194 @@ being re-uploaded, which keeps the published DOI resolving to the version the
 bundle now cites. The second half of T-84 stands open and is not closed by
 this: **the Zenodo row carries a version DOI, not a concept DOI**, and the
 README says so.
+
+---
+
+## T-86 — the B-slot read. **The identity's three terms all carry $W$; the bundle's two carry $\mathcal D$ and $\mathcal V\mathcal D$, and the third is absent**
+
+**2026-10-20. P1-T's §8 item 1, and it is a read, not a run.** The shape they
+predicted is the shape the code has. Under their §9 that keeps the frame gap's
+named site; had it not matched, the gap would have returned to having none.
+
+### The identity, and the bundle beside it
+
+$$\int g M j_\ell=\underbrace{\bigl[W M j_\ell\bigr]}_{W}\;\underbrace{-\int W M' j_\ell}_{W,\ \text{minus}}\;\underbrace{+\,k\!\int W M j_\ell'}_{W,\ M\ \text{undifferentiated}}$$
+
+| | the identity requires | `functions/spectra/integral_solution.py` has | line |
+|---|---|---|---|
+| **boundary** | $\bigl[W M j_\ell\bigr]$, weight $W=e^{-\kappa}$ | `(c2_prime_star - c1_star) * damping_total * j_l_star` — weight $\mathcal D(\eta_0,k)$, a **diffusion** factor, with no $W$ and no $\mathcal V$ in it | 226 |
+| **$j_\ell$ bulk** | $-\int W M' j_\ell$, weight $W$, **minus** | `integrand_weight * bracket * j_l` with `integrand_weight = weight * diffusion` and `bracket = c0 - c1_prime + c2_second` — weight $\mathcal V\mathcal D$ under the T-69 default, **plus** | 206, 240 |
+| **$j_\ell'$ bulk** | $+k\int W M j_\ell'$, $M$ **undifferentiated** | **nothing. The bulk has no $j_\ell'$ slot at all.** | — |
+
+**All three of the identity's terms carry $W$. The bundle's two carry
+$\mathcal D$ and $\mathcal V\mathcal D$. Not one of the three weights matches,
+and the third term has no counterpart.**
+
+### Why there is no $j_\ell'$ slot, which is the structural half
+
+Everything was by-parted **onto the coefficients** — $\{C_0-C_1'+C_2''\}$ is
+(102)'s printed bracket, and it is the $W$-weighted by-parts form of
+$\int W[C_0K+C_1K'+C_2K'']$. **That decomposition is not available at $g$
+weight**, and the bundle then evaluates it at $g$ weight. P1-T's sentence, and
+the code says it in two lines.
+
+The boundary is Annals II's own `visibe` collapse: under $\int\mathcal V=1$
+the $-\mathcal V C_1$ term becomes $C_1(\eta_*)$, which is what line 226
+evaluates. **So the bundle carries one term from each of two incompatible
+decompositions** — (102)'s $W$-weighted bracket in the bulk and the
+$\mathcal V$-collapsed primary at the boundary — and then applies a third
+weight, $\mathcal D$, to the second and $\mathcal V\mathcal D$ to the first.
+
+### The machinery for the missing slot already exists
+
+$j_\ell'=\bigl[\ell j_{\ell-1}-(\ell+1)j_{\ell+1}\bigr]/(2\ell+1)$ is **already
+built in this file**, at line 235, inside the rank-2 *boundary* term:
+
+```python
+combination = (l / (2 * l + 1)) * j_lm1 - ((l + 1) / (2 * l + 1)) * j_lp1
+```
+
+That is $j_\ell'(x_*)$ under another name. **The recurrence is present, in the
+one slot that has never been evaluated** — it is guarded by `if c2_star == 0.0`
+and $C_2$ is zero in every Newtonian run. So the missing bulk slot needs no new
+numerics, only the term.
+
+### What the fix is, stated so it can be refuted
+
+**Not a split of the slot. A split, plus a weight change on each half, plus a
+slot the bulk does not have.** In P1-T's words and now in the code's:
+
+1. $C_1$'s two contents separate — $M$'s by-parts residue and $(v_b+\sigma)$.
+2. They take **different weights**: $W$ for the gravitational half, $g$ for the
+   scattering half. One weight for both is the defect T-85 measured.
+3. The $W$-weighted half needs **both** bulk slots, $j_\ell$ **and**
+   $j_\ell'$, because by-parting onto the coefficients is what removed the
+   second and that step is only legal at $W$.
+
+**And C6 is the same change seen again.** T-81b's *"the integrand carries a
+diffusion factor at all"* is this table's second row: $\mathcal D$ multiplying
+a gravitational source generated where no scattering occurs. **Scattering
+damping belongs to the scattering half and not to the gravitational one**, so
+the split that fixes the weights fixes the damping in the same stroke. One
+change, three symptoms — the frame gap, the missing late ISW, and the
+$\mathcal D$-on-the-boundary mismatch.
+
+### Validity, stated before the next step
+
+**This is a read.** It establishes what the code does, not that changing it
+closes the gap. The test is already specified and is cheap: the split must
+leave T-85's $A_N$ and $A_C$ **equal** and must not move the Newtonian column
+by more than the quadrature floor T-85 measured. **Frame agreement alone will
+not do** — two wrong columns can agree — so the spectrum adjudicates, and it
+adjudicates last.
+
+---
+
+## T-87 — project audit: the record had drifted from the tree in fourteen places, and three of them were load-bearing
+
+**2026-10-20, at the PI's direction.** A mechanical sweep for staleness,
+dangling references, orphans, superseded claims and duplication. **It is an
+audit of the record, not of the physics**, and it is recorded here because the
+record is a deliverable of this bundle rather than packaging around one.
+
+### The three that were load-bearing
+
+**1. D11, D12 and D13 had no generator.** `diagnostics/d11-*.txt`,
+`d12-*.txt` and `d13-*.txt` were **hand-captured console redirects** — the
+three scripts printed to stdout and wrote nothing — and the files were hashed
+into `FILE-MANIFEST-SHA256.txt` and `PORTABLE-MANIFEST-SHA256.txt` **as if
+they regenerated**. `BUNDLE-DEFECTS-v1.md` cites d12's and d13's files as the
+evidence for T-82 and T-85.
+
+> **A number in this register whose artefact cannot be regenerated is a
+> transcription, and this register's own clause M5a says a claim about an
+> artefact is read off the artefact or it is not made.** The clause was landed
+> at T-79 and the first thing it binds is the evidence for T-82 and T-85.
+
+Fixed: each now writes its own file through a `_report()`/`main()` split, and
+**all three are registered in `scripts/run_all.py`'s `DIAGNOSTICS`**, so they
+run on a release route. Re-run after the change, all three exit 0 and
+reproduce their committed tables.
+
+**2. Decision **S17** closed twice, with two answers.** The row at
+`DECISIONS-v1.0.0.md:153` still read *"CLOSED 2026-10-09 … the title is
+settled — Frame covariance of **CMB** lensing"* while S17 itself, 116 lines
+above in the same file, had been amended to **CMBR** on 2026-10-20 by T-84.
+**One register, two canonical titles.** Corrected, with the history kept: the
+2026-10-09 closure stood for eleven days against a record that reads `CMBR`.
+
+**3. `captions/FIGURE-PLAN-v1.0.0.md` names `scripts/figure_f3_spectrum.py`,
+which does not exist.** The script is `figure_f3_angular_spectrum.py`. Every
+other row in that table resolves. Corrected.
+
+### Superseded claims that were still standing
+
+| where | the claim | superseded by |
+|---|---|---|
+| `README.md` ×2 | the Hu & Sugiyama cross-check is *"deferred to v1.5.0 (S35)"* | **S35a**, which promoted it to v1.3.0's method and which the same README cites twice elsewhere |
+| `README.md` | *"The regression suite passes and `run_all.py --strict` reports `CLEAN`"* | **T-54** — the finding that `CLEAN` was printed over a two-day-old spectrum — and the same README's figure table, which records F9 as *unrun and failing its fingerprint correctly*, eighty lines later |
+| `README.md` | T-84 presented as a live discrepancy | T-84's own closure, same day |
+| `captions/F5-sources.md` | frame gap *"median 15%, worst 49% … not a defect"* | **T-57**, **T-59** — it is total, and $\ell\ge2$ is frame-invariant by theorem |
+| `captions/F9-acoustic-spectrum.md` | frame gap *"median 40% … a result and not a defect"* | the same |
+| `captions/F2-truncation.md` | truncation cost *"0.54–0.68% … 32.6%"* | **T-57** — $99.93\%$ and $100\%$ |
+
+**The three captions are annotated, not overwritten.** Decision **V15** makes
+a caption the figure's *specification*, and these figures predate T-57, so
+replacing the numbers would describe a figure that does not exist. Each now
+carries a dated *Superseded* block naming the finding and pointing at this
+register, and says it is not regenerated until the figure is.
+
+### Stale counts, corrected
+
+`README.md` advertised the registers as **T-1…T-50** (now T-87), **S1…S39**
+(now S42) and **B-1…B-14** (now B-15), and said *"fourteen findings"* against
+the antecedent in three places and *"the 424 tests in this tree"* in one —
+in a paragraph that elsewhere forbids typing a test count because *"the
+previous version of this paragraph came to claim a test total that was 36
+short."* **The paragraph had done it again.** The count is replaced by a
+pointer to `pytest -q`. The dated decision prose in **S37** and **S38** keeps
+its 2026-10-16 numbers: that is historical quotation and is correct.
+
+### Raised, not fixed — these need the PI
+
+**`RELEASE-NOTES-v1.0.0.md` says *"Status: in preparation. Not released."***
+and `README.md` says v1.0.0 has a *"frozen public tag, release asset and
+archived DOI"*, and `dist/` holds v1.1.0 and v1.2.0 and **no v1.0.0 archive**.
+Three statements, at most two of which can be true. `CHANGELOG.md` carries two
+`## [Unreleased]` headings for this reason, and `scripts/run_all.py:197`'s
+released-version regex matches neither — so **v1.0.0 is invisible to the
+harness's released-version check**, which is the mechanism T-47 added to refuse
+a deferral to an already-released version. **Not guessed at**: whether v1.0.0
+was tagged and whether the ZivaHub DOI covers it is the PI's to say, and the
+fix differs by branch.
+
+**Decisions `S43`, `S44` and `S-b` are referenced as live and are in no
+register.** `S44` in `README.md`, `BUNDLE-DEFECTS-v1.md` and
+`OPEN-QUESTIONS-v1.0.0.md`; `S43` in `BUNDLE-DEFECTS-v1.md`; **`S-b` in nine
+places including `scripts/run_all.py` ×5**, where the harness prints it to an
+operator as the authority for a deferral. The register runs S1…S42 and its
+*Still awaiting a decision* table lists none of the three. **Either they are
+decisions and belong in the register, or they are placeholders and must not be
+printed as authorities.** Needs one line from the PI each; `S-b` additionally
+needs a real identifier before the next release route runs.
+
+**`captions/F7-frames.md` and `provenance/RELEASE-STATUS-v1.md` say the worst
+frame ratio is $1.25\times$; `README.md:705` says $1.24\times$.** One is
+wrong. **It could not be adjudicated from the artefact**: `outputs/f7-frames.csv`
+carries `frame_difference` as a *fraction* (max $0.0999$), which is neither
+number, so the ratio is computed somewhere the committed output does not hold.
+**Stated as unadjudicated rather than resolved by picking one**, which is M5a.
+
+**`provenance/RELEASE-STATUS-v1.md` has no v1.3.0 section at all**, because
+`scripts/make_release_status.py:353` enumerates only `v1.0.0, v1.1.0, v1.2.0,
+v1.5.0`. The tree is v1.3.0-dev with D9–D13, S40–S42 and T-51…T-87 landed and
+**none of it has a rung on S27's maturity ladder.** The generator needs a
+v1.3.0 row written for it; what belongs on that rung is a release decision.
+
+### What this audit does not cover
+
+**Nothing here touches the physics or the mathematics.** The frame-gap chain
+T-82/T-85/T-86 is untouched by it, and no finding in this entry changes a
+coefficient, a sign, an $\ell$-weight or a result. The one thing it changes
+about the *evidence* is item 1 — that three diagnostics now regenerate — and
+that strengthens the chain rather than altering it.

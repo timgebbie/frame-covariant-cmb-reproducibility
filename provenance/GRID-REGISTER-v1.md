@@ -123,7 +123,7 @@ stand in for an external comparison.
 
 ### `me` — the acoustic grid D11 reads the two terms of d_delta off
 
-`scripts/diagnostic_d11_monopole_driving.py:73`, `np.linspace`
+`scripts/diagnostic_d11_monopole_driving.py:77`, `np.linspace`
 
 `required_acoustic_points(k, couple - start)` on
 `[acoustic_start_eta, min(eta_0, TIGHT_COUPLING_FACTOR*eta_star)]` --- the
@@ -211,7 +211,7 @@ the rate but the count below eta_eq, and D10 prints it in every row.
 
 ### `e2` — D13's refinement probe: the environment grid at 1x, 2x and 4x
 
-`scripts/diagnostic_d13_byparts_2x2.py:136`, `np.linspace`
+`scripts/diagnostic_d13_byparts_2x2.py:139`, `np.linspace`
 
 `linspace(eta[0], eta[-1], (n-1)*mult + 1)` for mult in 1, 2, 4,
 with M, W and V interpolated onto it. **This grid exists to measure a floor,

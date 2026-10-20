@@ -41,6 +41,9 @@ from functions.background.flrw import (  # noqa: E402
     CDM_MODEL, PLANCK_MODEL, PLANCK_H, PLANCK_OMEGA_B_H2)
 from functions.spectra.two_frame import build_environment, coefficient_sets  # noqa: E402
 
+SLUG = "d12-vb-plus-sigma"
+VERSION = "v1.3.0"
+
 KS = (1.0, 10.0, 60.0, 300.0)
 
 
@@ -51,7 +54,7 @@ def rel(a, b):
     return float(np.max(np.abs(a - b)) / (scale if scale > 0 else 1.0))
 
 
-def main() -> int:
+def _report() -> None:
     print(__doc__.split("Shapes")[0])
     for label, bg, obh2, h in (("EdS", CDM_MODEL, 0.0224, 0.5),
                                ("PLANCK", PLANCK_MODEL, PLANCK_OMEGA_B_H2, PLANCK_H)):
@@ -126,6 +129,21 @@ def main() -> int:
     print("\n  A residual aligned with v/k is a BOOST failure. One aligned with")
     print("  d(v_b)/d(eta) is a PHASE error between two integrations, and is a")
     print("  grid finding, not a frame finding.\n")
+
+
+def main() -> int:
+    """Print the report **and write it**, so `diagnostics/` is regenerated
+    rather than hand-captured from a console redirect --- finding **T-87**."""
+    import contextlib, io
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        _report()
+    text = buf.getvalue()
+    print(text, end="")
+    out = ROOT / "diagnostics" / f"{SLUG}-{VERSION}.txt"
+    out.parent.mkdir(exist_ok=True)
+    out.write_text(text, encoding="utf-8", newline="\n")
+    print(f"wrote {out.relative_to(ROOT)}")
     return 0
 
 

@@ -28,6 +28,7 @@ claim is a gate and not a caption.\\\\[2pt]
 rank-0/2 share is flat at the quadrupole ($0.54\\%$) and rises only with $\\ell$:
 a $1+3$ excess at low $\\ell$ would appear here, and does not. That question is
 parked as \\textbf{Q5}, and this panel is what parks it honestly.\\\\[2pt]
+\\textbf{Superseded 2026-10-20, finding T-57.} The $0.54$--$0.68\\%$ and $32.6\\%$ above are the figure's, and the figure predates \\textbf{T-57}. The post-T-57 values are \\textbf{$99.93\\%$ at $\\ell=2$ and $100\\%$ by $\\ell=600$}. \\texttt{provenance/BUNDLE-DEFECTS-v1.md} is authoritative; this caption is not regenerated until the figure is.\\\\[2pt]
 \\textbf{Its $k$ grid runs to 1900, not 420} --- finding \\textbf{T-32}, where
 every v1.2.0 figure had been drawn on a grid stopping at the peak of the shear
 integrand. At $k_{\\max}=1900$ against $k_D=754.6$ the damping envelope is

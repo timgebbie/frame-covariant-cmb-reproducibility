@@ -125,7 +125,7 @@ Boltzmann code, and it inherits no other code's conventions.
 **Derived, not transcribed**, wherever the antecedent prints a result that can be
 obtained instead. The FLRW background is integrated from the 1+3 energy
 constraint, so Eqs. (185) and (G.3) are **checks on this bundle rather than
-sources for it** — three of the fourteen recorded findings are disagreements between a
+sources for it** — three of the fifteen recorded findings are disagreements between a
 derived quantity and a printed one, and a port would have inherited all three
 silently. The exceptions are stated where they occur: recombination rests on an
 imported atomic-physics fit, and `functions/spectra/peebles.py` tabulates what is
@@ -153,9 +153,9 @@ and reading the tree cannot disagree.
 | stated limit shipped with it | the recombination grid, **1.2%**, which 5b cannot bound | **Q7**, **S33** |
 | discretisations | **all** registered; the generator fails on one it does not name | `provenance/GRID-REGISTER-v1.md` |
 | external comparison | recorded, reproducible without CAMB or CLASS, **outside** the bundled testing | `tables/criterion-5b-v1.2.0.tex` |
-| findings against the antecedent | **B-1 … B-14** | `provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md` |
-| findings against this bundle | **T-1 … T-50** | `provenance/BUNDLE-DEFECTS-v1.md` |
-| decisions | **S1 … S39**, with the withdrawn ones struck rather than deleted | `provenance/DECISIONS-v1.0.0.md` |
+| findings against the antecedent | **B-1 … B-15** | `provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md` |
+| findings against this bundle | **T-1 … T-86** | `provenance/BUNDLE-DEFECTS-v1.md` |
+| decisions | **S1 … S42**, with the withdrawn ones struck rather than deleted | `provenance/DECISIONS-v1.0.0.md` |
 
 **This shows that** the release closes on evidence that regenerates, not on a
 claim typed once: the only way to change a number above is to change the code
@@ -237,7 +237,7 @@ reader must know to read the rest honestly.
 |---|---|---|
 | **S1** | the deliverable is **the CDM and ΛCDM angular power spectra** in the almost-Friedmann–Lemaître formulation — (186) from (176), by both routes | it is what "done" means; F9 is that deliverable |
 | **S15** | **reproduce the antecedent's approximations rather than correct them** | reproducing a paper means reproducing its narrowing choices. They are recorded as **A-n**, kept apart from defects (**B-n**), and F6 is the one place their cost is a number rather than an adjective |
-| **S19** | the release sequence is fixed, and **nothing goes public before Paper 1 is submitted** | otherwise `provenance/` announces fourteen corrections to a published paper *ahead of* the paper that makes them quietly. **Paper 1 is submitted and frozen**, so this gate is satisfied |
+| **S19** | the release sequence is fixed, and **nothing goes public before Paper 1 is submitted** | otherwise `provenance/` announces fifteen corrections to a published paper *ahead of* the paper that makes them quietly. **Paper 1 is submitted and frozen**, so this gate is satisfied |
 | **S26** | v1.2.0 is an extension **and an audit**, and the audit half is in scope | a bundle that only reproduces cannot say whether what it reproduces is right. It is why the generic Ḃ_A relations and criterion 5b's gate exist at all |
 | **S27** | every artefact carries a **maturity rung**, and the rung is **verified, not declared** | a claim whose module, object, test or harness entry is missing fails `scripts/make_release_status.py` instead of appearing in the record |
 | **S30** | **run-time optimisation is deferred** to a dedicated assessment for v2.0.0 | the benchmark below measures the cost; it does not license tuning it now, and no decision in this release may be taken on speed |
@@ -252,7 +252,8 @@ than by a reader remembering them.
 (**Q7**/**S33**, derived immediately after this tag); the numeric manifest gate,
 which canonicalises by rounding to a string and so cannot express a tolerance
 (**T-38** part 1, three designs recorded, the PI's choice); the Hu & Sugiyama
-acoustic cross-check, deferred with its reason to v1.5.0 (**S35**); and a
+acoustic cross-check, deferred to v1.5.0 by **S35** and since **promoted to
+v1.3.0's method by S35a**, which is the live decision; and a
 parked physics question about whether the full $1+3$ treatment predicts excess
 power at low $\ell$ (**Q5**), which F2's third panel measures and which goes
 the other way at this order.
@@ -351,7 +352,7 @@ findings that **change what the code computes**:
 - **B-10** — (J.5) prints the transfer function with +1/ν where the fit requires
   −1/ν. Both forms are implemented, for the same reason.
 
-The complete record — fourteen findings, together with the antecedent's deliberate
+The complete record — fifteen findings, together with the antecedent's deliberate
 approximations and the one lineage note — is in `provenance/`.
 
 ## Future situation: the route to the full spectrum
@@ -437,7 +438,8 @@ approximations and the one lineage note — is in `provenance/`.
   rather than fixed — **S33**, the first work after this tag, because a
   nonlinear correction measured against a base with a 1.2% uncertainty in the
   term it modifies is measured against the wrong thing. (ii) The Hu & Sugiyama
-  acoustic cross-check, deferred with its reason — **S35**. (iii) The numeric
+  acoustic cross-check — **S35** deferred it, **S35a** promoted it to v1.3.0's
+  method, and S35a is the live decision. (iii) The numeric
   manifest gate, **T-38** part (1). (iv) The factorised interface of **S24**,
   accepted as option (a) and deliberately not frozen until the forward model's
   high-ℓ envelope was right (**S25**) — which it now is.
@@ -457,8 +459,8 @@ approximations and the one lineage note — is in `provenance/`.
   **Paper 2 and its bundle inherit the whole chain** — Annals I and II, the
   correction, Paper 1, the linear recovery here, the acoustic modes at v1.3.0,
   the high-ℓ work at v1.5.0 — and take the learning *without* the testing that
-  is necessary here. That distinction is exact rather than casual: the 424
-  tests in this tree are the cost of being **the antecedent**, the bundle that
+  is necessary here. That distinction is exact rather than casual: the
+tests in this tree are the cost of being **the antecedent**, the bundle that
   must show the antecedent's equations produce what the paper says and locate
   every place they do not. A replicant inherits a settled result and owes
   something narrower — **reproduce the numbers**, not re-derive the record.
@@ -613,9 +615,12 @@ a mismatch there is release-blocking. `FILE-MANIFEST-SHA256.txt` is a
 artefact of every figure**; the PNG is a convenience copy. Findings **T-15** and
 **T-36**.
 
-The regression suite passes and `python scripts/run_all.py --strict` reports
-`CLEAN` — run `pytest -q` for the current counts rather than trusting a number
-typed here, which is how the previous version of this paragraph came to claim a
+The regression suite passes. **`run_all.py --strict` reporting `CLEAN` is not
+a statement that the spectrum is right**: finding **T-54** is precisely the case
+where it printed `CLEAN` over a two-day-old spectrum and no gate could see it,
+and this README's own figure table records F9 as *unrun and failing its
+fingerprint correctly*. Run both for the current state rather than trusting a
+verdict or a number typed here, which is how the previous version of this paragraph came to claim a
 test total that was 36 short and a criteria tally that was half the truth.
 
 The acceptance criteria are recorded in `RELEASE-NOTES-v1.0.0.md` and this
@@ -723,7 +728,7 @@ The development lineage:
 
 | Version | Established or changed | Status in v1.2.0 |
 |---|---|---|
-| *Annals II* (2000) | the almost-Friedmann–Lemaître 1+3 covariant hierarchy, its integral solution (176) and the spectrum (186) | the antecedent this bundle reconstructs; **fourteen** findings recorded against it in `provenance/`, B-1 to B-14 |
+| *Annals II* (2000) | the almost-Friedmann–Lemaître 1+3 covariant hierarchy, its integral solution (176) and the spectrum (186) | the antecedent this bundle reconstructs; **fifteen** findings recorded against it in `provenance/`, B-1 to B-15 |
 | Correction to astro-ph/9912072 | withdrew the 1999 claim of a new effect | binding — it fixes the scientific boundary stated above, and no new effect is claimed here |
 | Conventions gate C1 | the normative sign and ℓ-weight sheet | source of the generated `provenance/conventions.md`; drift detectable through `conventions-source.txt` |
 | Paper 1 (2026) | the 1+3 route to CMB lensing from the exact hierarchy | the paper this bundle reproduces; frozen 2026-10-09 |
@@ -751,7 +756,7 @@ cite.
 
 | Item | Value |
 |---|---|
-| **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMBR lensing in the exact 1+3 covariant radiation hierarchy*. Preprint **v1.1.6**, Zenodo, 19 October 2026. [doi:10.5281/zenodo.23475234](https://doi.org/10.5281/zenodo.23475234). CC BY 4.0. **The title is transcribed from the record and reads `CMBR`**, which is not the string decision **S17** fixed — see finding **T-84** |
+| **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMBR lensing in the exact 1+3 covariant radiation hierarchy*. Preprint **v1.1.6**, Zenodo, 19 October 2026. [doi:10.5281/zenodo.23475234](https://doi.org/10.5281/zenodo.23475234). CC BY 4.0. **The title is transcribed from the record and reads `CMBR`.** Decision **S17** was amended to it on 2026-10-20; finding **T-84** records why the record rather than S17 is canonical |
 | **Supplementary PDF** | [supplement-v1.3.0.pdf](supplementary-materials/supplement-v1.3.0.pdf) |
 | **GitHub repository** | [timgebbie/frame-covariant-cmb-reproducibility](https://github.com/timgebbie/frame-covariant-cmb-reproducibility) |
 | **ZivaHub/Figshare DOI** | [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509) — **live**. The **concept** DOI: it always resolves to the latest version, so it is the one to cite |

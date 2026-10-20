@@ -45,48 +45,72 @@ from functions.spectra.two_frame import (                                 # noqa
     TIGHT_COUPLING_FACTOR, build_environment)
 from scipy.interpolate import CubicSpline                                 # noqa
 
+SLUG = "d11-monopole-driving"
+VERSION = "v1.3.0"
+
 KS = (10.0, 60.0, 300.0)
 
-print()
-print("  d_delta = -phi_h' + (k/3) tau_1 ,  a B_0 = -(1/3) k tau_1")
-print("  => d_delta = -a B_0 - phi_h'   -- a B_0 is a SOURCE, on the right, ONCE")
-print()
-print(f"  {'bg':<7} {'k':>5} {'max|-aB_0|':>12} {'max|-phi_h|':>12}"
-      f" {'|phi_h|/|aB_0|':>15} {'max|d_delta|':>13}")
-print("  " + "-" * 70)
+def _report() -> None:
+    print()
+    print("  d_delta = -phi_h' + (k/3) tau_1 ,  a B_0 = -(1/3) k tau_1")
+    print("  => d_delta = -a B_0 - phi_h'   -- a B_0 is a SOURCE, on the right, ONCE")
+    print()
+    print(f"  {'bg':<7} {'k':>5} {'max|-aB_0|':>12} {'max|-phi_h|':>12}"
+          f" {'|phi_h|/|aB_0|':>15} {'max|d_delta|':>13}")
+    print("  " + "-" * 70)
 
-for label, bg, obh2, h in (("EdS", CDM_MODEL, 0.0224, 0.5),
-                           ("PLANCK", PLANCK_MODEL, PLANCK_OMEGA_B_H2, PLANCK_H)):
-    # `line_of_sight_weight` is named because the release gate requires every
-    # caller to name it (A-1, enforced after T-57), **not** because this
-    # diagnostic depends on it: nothing below the environment build touches the
-    # line-of-sight integral. 'printed' is the T-69 default, so the environment
-    # here is the same one the register's other numbers were measured in.
-    env = build_environment(400.0, omega_m=bg.omega_m, omega_lambda=bg.omega_lambda,
-                            omega_r=bg.omega_r, omega_b_h2=obh2, hubble_h=h,
-                            line_of_sight_weight="printed")
-    for k in KS:
-        t_k = env.transfer_at(k)
-        couple = min(float(env.background.eta_0),
-                     TIGHT_COUPLING_FACTOR * env.eta_star)
-        start = acoustic_start_eta(float(k), env.eta_rs, env.r_s_table)
-        me = np.linspace(start, couple,
-                         required_acoustic_points(float(k), couple - start))
-        ma, mh = potentials(env.background, me, constant_below=env.md_reference)
-        ac = solve_acoustic(float(k), me, background=env.background,
-                            phi_a=ma * t_k, phi_h=mh * t_k,
-                            omega_b_h2=env.omega_b_h2, expansion_coupling=False)
-        # exactly the two terms rhs() forms, on the solver's own grid
-        php = CubicSpline(me, mh * t_k).derivative()(me)
-        a_b0 = -(k / 3.0) * ac.tau_1          # a B_0
-        src_b0 = -a_b0                        # the +(k/3) tau_1 term
-        src_ph = -php                         # the -phi_h' term
-        d_delta = src_b0 + src_ph
-        mb, mp = np.max(np.abs(src_b0)), np.max(np.abs(src_ph))
-        print(f"  {label:<7} {k:>5.0f} {mb:>12.4e} {mp:>12.4e}"
-              f" {mp / mb:>15.4f} {np.max(np.abs(d_delta)):>13.4e}")
-print()
-print("  READ, not measured: a B_0 is on the right, once. c5_monopole restores")
-print("  the right object. What it does NOT restore is -phi_h', which drives")
-print("  tau_0 in d_delta and which no B carries.")
-print()
+    for label, bg, obh2, h in (("EdS", CDM_MODEL, 0.0224, 0.5),
+                               ("PLANCK", PLANCK_MODEL, PLANCK_OMEGA_B_H2, PLANCK_H)):
+        # `line_of_sight_weight` is named because the release gate requires every
+        # caller to name it (A-1, enforced after T-57), **not** because this
+        # diagnostic depends on it: nothing below the environment build touches the
+        # line-of-sight integral. 'printed' is the T-69 default, so the environment
+        # here is the same one the register's other numbers were measured in.
+        env = build_environment(400.0, omega_m=bg.omega_m, omega_lambda=bg.omega_lambda,
+                                omega_r=bg.omega_r, omega_b_h2=obh2, hubble_h=h,
+                                line_of_sight_weight="printed")
+        for k in KS:
+            t_k = env.transfer_at(k)
+            couple = min(float(env.background.eta_0),
+                         TIGHT_COUPLING_FACTOR * env.eta_star)
+            start = acoustic_start_eta(float(k), env.eta_rs, env.r_s_table)
+            me = np.linspace(start, couple,
+                             required_acoustic_points(float(k), couple - start))
+            ma, mh = potentials(env.background, me, constant_below=env.md_reference)
+            ac = solve_acoustic(float(k), me, background=env.background,
+                                phi_a=ma * t_k, phi_h=mh * t_k,
+                                omega_b_h2=env.omega_b_h2, expansion_coupling=False)
+            # exactly the two terms rhs() forms, on the solver's own grid
+            php = CubicSpline(me, mh * t_k).derivative()(me)
+            a_b0 = -(k / 3.0) * ac.tau_1          # a B_0
+            src_b0 = -a_b0                        # the +(k/3) tau_1 term
+            src_ph = -php                         # the -phi_h' term
+            d_delta = src_b0 + src_ph
+            mb, mp = np.max(np.abs(src_b0)), np.max(np.abs(src_ph))
+            print(f"  {label:<7} {k:>5.0f} {mb:>12.4e} {mp:>12.4e}"
+                  f" {mp / mb:>15.4f} {np.max(np.abs(d_delta)):>13.4e}")
+    print()
+    print("  READ, not measured: a B_0 is on the right, once. c5_monopole restores")
+    print("  the right object. What it does NOT restore is -phi_h', which drives")
+    print("  tau_0 in d_delta and which no B carries.")
+    print()
+
+
+def main() -> int:
+    """Print the report **and write it**, so `diagnostics/` is regenerated
+    rather than hand-captured from a console redirect --- finding **T-87**."""
+    import contextlib, io
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        _report()
+    text = buf.getvalue()
+    print(text, end="")
+    out = ROOT / "diagnostics" / f"{SLUG}-{VERSION}.txt"
+    out.parent.mkdir(exist_ok=True)
+    out.write_text(text, encoding="utf-8", newline="\n")
+    print(f"wrote {out.relative_to(ROOT)}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

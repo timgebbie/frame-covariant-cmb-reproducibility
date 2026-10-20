@@ -30,11 +30,12 @@
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
 \date{\textbf{v1.3.0-dev} --- the derived recombination grid, the structural
-  audit, and the acoustic modes against the antecedent's own $1+3$ acoustic
-  equations\\
+  audit, the acoustic modes against the antecedent's own $1+3$ acoustic
+  equations, and the localisation of the frame discrepancy
+  (\S\ref{sec:frame-discrepancy})\\
   Previous release: v1.2.0, the full linear spectrum with the acoustic peaks in
   both frames. First public analytical reproducibility release: v1.0.0,
-  5 October 2026\\16 October 2026}
+  5 October 2026\\20 October 2026}
 
 \begin{document}
 \maketitle
@@ -57,7 +58,7 @@ code.
 evidence for a \emph{linear} reconstruction: that the antecedent's equations,
 re-derived and evaluated independently, produce what the antecedent says they
 produce, and that where they do not the disagreement is located and named. The
-record of those disagreements is itself a deliverable --- fourteen findings
+record of those disagreements is itself a deliverable --- fifteen findings
 against the antecedent and forty-eight against this bundle, each with the
 measurement that settles it.
 
@@ -812,6 +813,8 @@ explicit argument, by criterion~5b. Decision~\textbf{S31}, finding
 which is recorded as a \textbf{question} --- it may be a convention in how $R$
 and the factor of~6 are distributed --- and not as a correction.
 
+\input{supplementary-materials/section-frame-discrepancy-v1.3.0.tex}
+
 \section{Comparison and its range}
 The $C_\ell$ comparison is Sachs--Wolfe only: (196) descends from (181), in which
 the acoustic modulation $\cos(k r_s)$ is dropped by taking $r_s^*\to0$, and
@@ -997,7 +1000,38 @@ is not tested by the run that passes it.}
         self-consistent when evaluated?} and answered yes, at $10^{-5}$,
         while finding that the question had been answered three times before
         without being measured.
+  \item \textbf{v1.3.0} asks \emph{where does the frame discrepancy come
+        from?} --- and \S\ref{sec:frame-discrepancy} is the answer so far: not
+        the source, not the by-parts bookkeeping, not the projection, but the
+        slot-and-weight assignment of $C_1$. The question it has \emph{not}
+        answered is whether repairing that assignment also recovers the
+        acoustic peaks, which is a separate defect with a separate signature.
 \end{itemize}
+
+\subsection{v1.3.0 --- the structural audit, and the discrepancy localised}
+Two halves, in the order decision~\textbf{S37} fixed: the structural audit of
+the code first, the acoustic modes second. The audit produced the generated
+registers this supplement now rests on --- the grid register, which walks the
+abstract syntax tree and \emph{fails} when the code holds a discretisation the
+register does not name; the model table, derived from the \texttt{Background}
+objects the code integrates rather than transcribed from a parameter sheet; and
+the theory audit, generated from six self-contained instruments that import no
+project code.
+
+The acoustic half did not go as planned, and the record says so. It began as a
+search for the missing peaks and became the localisation in
+\S\ref{sec:frame-discrepancy}, because the frame discrepancy turned out to be
+upstream of the peak question and to admit a cleaner instrument. \textbf{Two
+defects were separated that had been one symptom}: the frame gap, now reduced
+to a single site with both of its boundaries measured; and the peak positions,
+which sit above their own $\ell_A$ on all three backgrounds, in both frames,
+and which the acoustic scale does not explain --- the signs are opposite.
+
+\textbf{What v1.3.0 has not done.} It has not repaired the assignment, it has
+not recovered the peaks, and it has not bounded the envelope approximations
+A-3, A-5 and the damping inputs, which are deferred to v1.4.0 precisely because
+changing an envelope term mid-measurement moves the number being measured for
+reasons unrelated to it.
 
 \textbf{What the arc did not do, and says so.} No release has bounded the
 accuracy of the \emph{source} as distinct from the consistency of its

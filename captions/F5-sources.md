@@ -29,6 +29,7 @@ frame-dependent pieces, and the invariance statement~(102) satisfies is about
 the \\emph{total} at fixed $k$, which diagnostic~D6 measures separately. The
 median moved from $11\\%$ to $15\\%$ when finding \\textbf{T-37} wired the
 transfer function, which is the kind of movement a figure should report rather
-than absorb.
+than absorb.\\\\[2pt]
+\\textbf{Superseded 2026-10-20, findings T-57, T-59 and T-85.} The number above is the figure's, and the figure predates \\textbf{T-57}. \\textbf{The frame disagreement is no longer read as a result.} It is \\emph{total} --- median $9.99\\times10^{-1}$, worst $1.00$ --- and the $\\ell\\ge2$ multipoles are frame-invariant \\emph{by theorem}, so a gap there is a defect and is being hunted. It is localised: the rank-1 source agrees between the columns to $10^{-15}$ (\\textbf{T-82}) and the by-parts identity holds in both (\\textbf{T-85}), so the whole of it is the slot-and-weight assignment of $C_1$ (\\textbf{T-86}). \\texttt{provenance/BUNDLE-DEFECTS-v1.md} is authoritative; this caption is not regenerated until the figure is.
 """
 +++

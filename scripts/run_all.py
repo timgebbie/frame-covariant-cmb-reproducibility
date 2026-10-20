@@ -161,6 +161,20 @@ DIAGNOSTICS: list[tuple[str, str]] = [
     # splice on three points is a step in Phi-prime, not physics. Finding T-64.
     ("D10 what A-3 costs: the potential that does not decay",
      "scripts/diagnostic_d10_radiation_driving.py"),
+    # **D11, D12 and D13 are the frame-gap localisation**, and they were
+    # outside the harness until **T-87** found that their `diagnostics/` files
+    # had no generator -- they printed to stdout and the committed artefacts
+    # were hand-captured console redirects, hashed into two manifests as if
+    # they regenerated. Each now writes its own file and each runs here, which
+    # is the only thing that makes a number in `BUNDLE-DEFECTS-v1.md` checkable
+    # by re-running rather than by trusting a transcription. That is the whole
+    # argument of **M5a**, applied to this bundle's own evidence.
+    ("D11 the two driving terms of the l=0 equation",
+     "scripts/diagnostic_d11_monopole_driving.py"),
+    ("D12 v_B + sigma differenced between the frames, before projection",
+     "scripts/diagnostic_d12_vb_plus_sigma.py"),
+    ("D13 the by-parts identity, direct against by-parts, in both frames",
+     "scripts/diagnostic_d13_byparts_2x2.py"),
 ]
 
 
