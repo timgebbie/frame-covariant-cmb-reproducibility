@@ -7936,3 +7936,281 @@ only $C_1^{\rm grav}$* — and the instrument restated it as a weight.
 the obstruction: $\Delta C_1\supset\kappa's$ puts $\kappa'$ into the boost
 response and no $(\alpha,\beta,\gamma)$ removes it. **The remedy is not to
 move the term. It is not to differentiate it.**
+
+---
+
+## T-95 — **six commits carry subject lines that do not distinguish them, because P1-B reused one message file.** The content is intact; the history is not navigable
+
+**2026-10-20. Raised by the PI on reading the pushed history.** Read off
+`github.com/timgebbie/frame-covariant-cmb-reproducibility/commits/main`
+through the browser, since the API is not reachable from this session.
+
+### What is sound
+
+**Every commit is real, distinct and pushed.** Fifteen distinct SHAs over
+three days, `git status -sb` reports `## main...origin/main` with no `ahead`
+or `behind`, and the only uncommitted change is one CHANGELOG correction.
+`scripts/make_manifests.py --check` passes on the local tree, and the local
+tree equals `HEAD`. **Nothing is missing and nothing is corrupted.**
+
+### What is not
+
+Six commits carry subjects that a reader cannot tell apart:
+
+| SHA | subject | |
+|---|---|---|
+| `c0d1ff2` | T-94: one term is 93-97% of (102)'s integrand… | **duplicate subject** |
+| `60faeae` | T-94: one term is 93-97% of (102)'s integrand… | **duplicate subject** |
+| `6622abf` | T-91..T-93: the premise holds… | |
+| `fc8d545` | T-90: the boundary derivation, and its refutation | |
+| `9806a51` | T-89: the 7x rewrite is (k/3)tau_1… | |
+| `3bb6cdb` | T-79..T-88: the repair — C_2 must travel with v_B under g | **duplicate subject** |
+| `2b1306c` | T-79..T-88: the repair — C_2 must travel with v_B under g | **duplicate subject** |
+| `ee5ebac` | T-79..T-87: the frame gap is the slot-and-weight split… | |
+| `1d007e2` | T-79..T-85: the frame gap is in the split… | |
+| `b0a4168` | T-79..T-83: the l=0 row, the external review… | |
+
+**And `tests/frame/c7_kappa_ledger.py` appears under no commit of its own.**
+It was handed over after the T-94 message file was written, so it is almost
+certainly inside `c0d1ff2` — a commit whose subject says T-94 and whose
+content includes P1-T's seventh instrument. *A commit that does not announce
+what it carries.*
+
+### The cause, which is P1-B's and is a process defect not a judgement one
+
+**P1-B wrote every commit message to one path, `commit-msg-t79-t82.txt`, and
+rewrote it in place as the work grew.** Each time the PI ran
+`git commit -F`, the file had moved on. The `T-79..T-83 / T-79..T-85 /
+T-79..T-87 / T-79..T-88` series is that file being extended four times, and
+the two identical pairs are it being committed twice without changing.
+
+**This matters here more than it would elsewhere.** This bundle's record *is*
+its deliverable — `provenance/` is the product, and **L5** counts independent
+checks by their sources. A history in which `git log --oneline` cannot say
+which commit carries which finding is a record that has to be reconstructed
+rather than read, and reconstruction is where **M5** says errors enter.
+
+### What is not being done about it
+
+**The history is not rewritten.** It is pushed, the PI owns git, and **S39**'s
+principle — *a released tag is never moved* — applies with more force to
+public history than to a tag. **Rewriting ten commits to tidy their subjects
+would destroy the only authentic record of the order in which this week's
+findings were made and withdrawn**, which is the thing the bundle exists to
+carry. The defect is recorded; the history stands.
+
+### The process fix, in force from now
+
+**One commit message, one uniquely named file, never reused.**
+`commit-msg-<finding>-<date>.txt`, written once, and a new path for every
+commit even when the previous one was not used. P1-B does not rewrite a
+message file that the PI may already have committed from.
+
+### What the PI can verify in one command
+
+```
+git log --oneline --name-status -12
+```
+
+The mapping above is **reconstructed from this session's record of which
+message file held what, not read off `git log`** — the browser shows subjects
+and SHAs, not file lists. If `c0d1ff2` does not contain
+`tests/frame/c7_kappa_ledger.py`, this entry is wrong about that one claim and
+nothing else.
+
+---
+
+## T-96 — the $W$-form instrumented. **The first run was void on a normalisation; the second is not conclusive and is not reported as if it were**
+
+**2026-10-20. P1-T's item 2**, `scripts/diagnostic_d17_w_form.py`,
+`diagnostics/d17-w-form-v1.3.0.txt`.
+
+### Run 1, void — and the signature proves it rather than argues it
+
+P1-T's box carries $\mathfrak B_n=a\mathcal B_n$ **reduced to its potential**;
+the bundle stores the *un*-reduced $a\mathcal B_n$, which carries $k^n$. The
+first run used the stored form. Measured against P1-T's §4 frame table, the
+residual on $\Delta\mathfrak B_1$ against $\dot s$ came out at
+
+$$0.900\ (k{=}10),\qquad 0.98333\ (k{=}60),\qquad 0.99667\ (k{=}300)$$
+
+which is **exactly $1-1/k$** — the signature of comparing $k\dot s$ against
+$\dot s$. **A normalisation, not a defect**, and it is T-66's shape for the
+third time in this register.
+
+The same run read $\Delta\mathcal S_0=1.000$ against P1-T's required $0$.
+**That was also the instrument.** $\mathcal S_0=\tau_0=\delta T$ and the
+acoustic solver produces **one** $\delta T$ that both columns read, so
+$\Delta\mathcal S_0=0$ *by construction*; reconstructing it per frame as
+$a\mathcal B_1/k-\Phi_A$ is what moved it, because $a\mathcal B_1=k(\delta
+T+\Phi_A)$ holds in the Newtonian specialisation and was applied to both.
+
+**With normalisations matched, three of P1-T's four frame conditions are
+satisfied by the bundle's own inputs**, and $\Delta\mathcal S_1=-s$ holds at
+$1.7\times10^{-16}$.
+
+### Run 2, corrected, and **not conclusive**
+
+| background | $k$ | $\ell=2$ | $\ell=10$ | $\ell=50$ | $\ell=200$ |
+|---|---:|---:|---:|---:|---:|
+| EdS | 10 | 1.492 | 1.157 | $\mathbf{2.68\times10^{-2}}$ | 1.595 |
+| EdS | 60 | 1.082 | 1.020 | 1.675 | $\mathbf{1.43\times10^{-2}}$ |
+| EdS | 300 | 0.998 | 0.987 | 0.991 | 0.874 |
+
+The $W$-form's frame gap is $O(1)$ at most cells and **two orders below that
+at two of them**. It is not machine zero and it is not uniformly $O(1)$.
+
+### Why this is **not** reported as P1-T's §6.3 second branch
+
+The tempting reading is *"the reference is not invariant either, so the frame
+gap is not in the assembly and the triage needs a new site."* **Two defects in
+this instrument are unexcluded and either would produce exactly this.**
+
+1. **$\sigma_0$ on the rank-0 row is taken as $-1$**, from T-77's restored
+   $C_0=-\tfrac13\mathfrak B_2-\mathfrak B_0$. P1-T do not state $\sigma_0$
+   numerically and `_solved_match()` gives $p_0=-2.5$ for a row that carries
+   $\mathcal B_2$, not $\mathcal B_0$. **The rank-0 normalisation is a
+   choice this instrument made and did not measure.**
+2. **$\mathcal S_2=\tau_2$ is set to zero** because the bundle has no photon
+   quadrupole source (**A-5**) — while $\mathfrak B_2\neq0$ in the CDM column.
+   **T-72** records that $\delta T_E\equiv0$ there, so rank 1 vanishes
+   identically and *everything the CDM column has arrives through rank 2*.
+   **Zeroing one half of the rank-2 pair in the column that is entirely
+   rank-2 is the leading candidate for this result**, and it is a property of
+   the instrument, not of (102).
+
+**So the second branch is not taken.** Claiming it would be the sixth premise
+failure of the week, and the first five are in this register above.
+
+### What run 2 does establish
+
+**The two assemblies differ by $O(1)$ within a single frame** — columns 3 and
+4 of the diagnostic run $0.99$–$1.08$ at nearly every cell. The $W$-form and
+(102) are not small perturbations of one another, which is consistent with
+T-94: the by-parts moves a term that is $93$–$97\%$ of the integrand.
+
+### What is needed before the branch can be taken
+
+| | |
+|---|---|
+| $\sigma_0$ for the rank-0 row | from P1-T, or derived; **not** chosen here |
+| $\mathcal S_2$ in the CDM column | the bundle has none (A-5). Either P1-T's form needs it and the comparison is incomplete without it, or it is $O(t_c)$ and may be dropped — **and which is a derivation** |
+| the $k=300$ column | unmoved by every variant, here as elsewhere |
+
+---
+
+## T-97 — the GitHub repository is the project's public face, and letting it lag is a failure mode. **M12, and decision S46**
+
+**2026-10-20, the PI, after T-95.** Two instructions, taken as standing and
+recorded here rather than remembered:
+
+> *"Please in the future be aware of the GitHub repo state. This is important
+> as this is the public face of the project and it needs to be the cleanest
+> and most reliable representation."*
+>
+> *"Please consider it a failure mode when the GitHub repo deviates more than
+> six hours away from the current state of play of the project."*
+>
+> *"Colleagues look at the README and supplementary materials in order to get
+> an idea of the current state of play."*
+
+### M12 — the public artefact is six hours behind, or it is a defect
+
+> **M12 — a public artefact that lags the work is wrong, not merely old.**
+> The GitHub repository, `README.md` and the supplement are read by people
+> who are not in the session and who have no other source. **A reader who
+> acts on a six-hour-old state of play is acting on a finding that may have
+> been withdrawn since**, and five of this week's were.
+
+**It joins the method series as a failure mode rather than a preference,
+because it has the same shape as the rest of it:** M5a says a claim about an
+artefact is read off the artefact; M12 says the artefact a *reader* has must
+be the one the claim was read off. T-93 withdrew a four-order result within
+six hours of recording it. **In that window the README said it was a
+result.**
+
+### S46 — what that requires operationally
+
+**Taken, P1-B's call under the PI's delegation, 2026-10-20.**
+
+1. **Every working session ends with a commit and a push**, not with files on
+   disk waiting for one. A finding that is in `provenance/` locally and not on
+   GitHub is a finding only this session can see.
+2. **`README.md` carries the current state of play, not the last release's.**
+   The register counts, the figure's status block and the open-defect summary
+   are part of the deliverable and go stale faster than anything else in the
+   tree. They were four findings and six diagnostics behind when T-87 found
+   them, and two findings behind again six hours later.
+3. **The supplement carries the live result**, not only the settled ones.
+   §\emph{The frame discrepancy} now carries the five failed repairs and the
+   $\kappa'^2$ measurement, because a reader who has only this document should
+   be able to see what is open and what has been withdrawn.
+4. **A withdrawal propagates to the public artefacts in the same commit as
+   the withdrawal.** This is `failure-mode-cohesion-and-propagation`'s rule
+   — *a correction lands where it was found and is never carried to the
+   places that restate it* — applied to the one audience that cannot ask.
+
+### The outstanding audit items from T-87, now closed
+
+| | |
+|---|---|
+| v1.0.0's release state | **closed** — tagged and released; CHANGELOG heading qualified, T-95 |
+| `S43`, `S44`, `S-b` dangling | **closed** — S43 taken, S44 deferred with a trigger, S-b renumbered S45 |
+| `RELEASE-STATUS-v1.md` had no v1.3.0 section | **closed** — `make_release_status.py` enumerated four releases and not this one, so the generator *could not* emit it; v1.3.0 now has a rung |
+| its pre-T-57 numbers presented as current | **closed** — corrected in the generator, with what they read now beside what they read then |
+| `energy frame` alias after **S8a** retired it | **closed** — in the generated table's header, its local variable, and `provenance/README.md`. S8a says *"no aliases were kept"*; one was, for six days, in a generated file |
+| `FIGURE-PLAN`'s *"the key figure is F3"* | **closed** — superseded block added; the plan is kept as a v1.0.0 artefact rather than rewritten to a release it did not plan |
+| F7's $1.25\times$ against README's $1.24\times$ | **still open, and now labelled as open in both** — the authoritative value is `figure_f7_frames.py`'s own `.2f` print and neither copy was read off it |
+
+---
+
+## T-98 — P1-B broke **V13** while fixing T-87's captions, and the PI caught it. **The audit's own output needed auditing**
+
+**2026-10-20, the PI:** *"Do not break or deviate from the agreed visual
+grammar in terms of conformity — that was also a previous failure mode, as was
+staleness in the project state files. That is the purpose of the audit."*
+
+### The deviation
+
+**V13:** *"Where a figure depends on a corrected expression, its caption
+carries **one** footnote naming the printed equation and pointing to
+`provenance/`."* And `captions/FIGURE-PLAN-v1.0.0.md` rule 9, which is V13's
+own statement of itself: *"Corrections are silent, and marked by one
+footnote… **the caption carries no narrative.**"*
+
+**T-87 annotated three captions — F2, F5 and F9 — with four- to six-sentence
+blocks.** Each named the superseding findings, restated the current numbers,
+explained why the figure had not been regenerated and asserted which file was
+authoritative. **That is narrative, and V13 forbids it in a caption.**
+
+> **The fix for a staleness defect introduced a conformity defect.** T-87 was
+> opened to close exactly these two classes, and its own output carried one of
+> them for six hours. **M12** applies to the audit's product as much as to the
+> work it audits.
+
+### Corrected
+
+Each of the three now carries the conforming one-line form and nothing more:
+
+```
+$^{\dagger}$ Superseded by findings T-57, T-59; see
+             provenance/BUNDLE-DEFECTS-v1.md.
+```
+
+The narrative is where it belongs — in this register, which is the file V13
+points the reader at. **V15 is also satisfied again**: *the caption is the
+specification, not a description*, and a paragraph about which findings
+superseded which numbers is a description.
+
+### What this says about the audit, and it is the PI's point
+
+**An audit that is not itself audited produces its own class of defect.**
+T-87's sweep was mechanical and found real things; its *repairs* were written
+by hand and were not checked against the decision register they were repairing
+*to*. The repair is the part that needed a gate and did not have one.
+
+**There is no automated check for V13 and this entry does not propose one** —
+"carries no narrative" is not expressible as an assertion. What is available
+is cheaper: **a repair that touches a caption, a figure or the supplement is
+read against §V of `provenance/DECISIONS-v1.0.0.md` before it is committed.**
+Fifteen rows, and the PI read them faster than any gate would have run.

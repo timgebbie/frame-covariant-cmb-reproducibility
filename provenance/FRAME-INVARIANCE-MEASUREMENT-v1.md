@@ -16,52 +16,52 @@ Newtonian frame and has never been evaluated in any released figure.
 
 | k | l | Newtonian | energy | rel | rank-2 | grav | Thomson |
 |---|---|---|---|---|---|---|---|
-| 1.0 | 2 | -2.5214e+00 | -2.1728e+00 | 1.38e-01 | 1.1e-03 | -8.475e-03 | -1.302e+02 |
-| 1.0 | 5 | -2.2828e-02 | -1.8084e-02 | 2.08e-01 | 4.8e-03 | -1.780e-04 | -1.561e+00 |
-| 1.0 | 10 | -3.9981e-07 | -2.9245e-07 | 2.69e-01 | 1.3e-02 | -6.576e-09 | -3.432e-05 |
+| 1.0 | 2 | 5.3067e+01 | -6.2297e+01 | 1.85e+00 | 4.4e-05 | -8.127e-03 | -1.154e+02 |
+| 1.0 | 5 | 6.3613e-01 | -7.4639e-01 | 1.85e+00 | 1.5e-04 | -1.739e-04 | -1.383e+00 |
+| 1.0 | 10 | 1.3991e-05 | -1.6404e-05 | 1.85e+00 | 3.1e-04 | -6.484e-09 | -3.041e-05 |
 | 1.0 | 30 | below floor | below floor | --- | --- | --- | --- |
 | 1.0 | 80 | below floor | below floor | --- | --- | --- | --- |
 | 1.0 | 200 | below floor | below floor | --- | --- | --- | --- |
 | 1.0 | 400 | below floor | below floor | --- | --- | --- | --- |
-| 5.0 | 2 | -8.3505e-01 | -5.4739e+00 | 8.47e-01 | 1.4e-03 | -4.974e-02 | -3.927e+01 |
-| 5.0 | 5 | -7.8148e-01 | -2.8375e+00 | 7.25e-01 | 3.0e-03 | 3.074e-02 | 2.131e+01 |
-| 5.0 | 10 | -7.8430e-01 | -7.5108e-01 | 4.24e-02 | 3.5e-03 | -4.441e-02 | -3.824e+01 |
-| 5.0 | 30 | below floor | below floor | --- | --- | --- | --- |
+| 5.0 | 2 | 8.7810e+01 | 5.3373e+01 | 3.92e-01 | 8.7e-05 | -4.709e-02 | -3.478e+01 |
+| 5.0 | 5 | -4.7587e+01 | -2.8920e+01 | 3.92e-01 | 1.8e-04 | 2.929e-02 | 1.885e+01 |
+| 5.0 | 10 | 8.5571e+01 | 5.2017e+01 | 3.92e-01 | 3.3e-05 | -4.184e-02 | -3.389e+01 |
+| 5.0 | 30 | 1.5871e-10 | 9.6443e-11 | 3.92e-01 | 1.9e-04 | -1.012e-13 | -6.287e-11 |
 | 5.0 | 80 | below floor | below floor | --- | --- | --- | --- |
 | 5.0 | 200 | below floor | below floor | --- | --- | --- | --- |
 | 5.0 | 400 | below floor | below floor | --- | --- | --- | --- |
-| 20.0 | 2 | 6.5393e-01 | -2.2449e+01 | 1.03e+00 | 1.5e-04 | 2.760e-01 | 1.615e+01 |
-| 20.0 | 5 | -3.2033e-01 | -1.4698e+01 | 9.78e-01 | 6.5e-04 | 3.858e-02 | 1.929e+00 |
-| 20.0 | 10 | 4.1478e-01 | -8.5347e+00 | 1.05e+00 | 9.3e-04 | 1.897e-01 | 1.075e+01 |
-| 20.0 | 30 | 1.3845e+00 | -4.3765e-01 | 1.32e+00 | 1.1e-03 | 3.701e-01 | 2.141e+01 |
+| 20.0 | 2 | -1.3906e+02 | -1.2536e+02 | 9.85e-02 | 2.4e-05 | 2.585e-01 | 1.430e+01 |
+| 20.0 | 5 | -1.7267e+01 | -1.5573e+01 | 9.81e-02 | 5.5e-04 | 3.695e-02 | 1.763e+00 |
+| 20.0 | 10 | -9.3259e+01 | -8.4078e+01 | 9.84e-02 | 8.5e-05 | 1.785e-01 | 9.578e+00 |
+| 20.0 | 30 | -1.8455e+02 | -1.6637e+02 | 9.85e-02 | 8.5e-06 | 3.472e-01 | 1.897e+01 |
 | 20.0 | 80 | below floor | below floor | --- | --- | --- | --- |
 | 20.0 | 200 | below floor | below floor | --- | --- | --- | --- |
 | 20.0 | 400 | below floor | below floor | --- | --- | --- | --- |
-| 60.0 | 2 | -9.6947e-01 | -6.2679e+01 | 9.85e-01 | 1.3e-04 | -5.823e-03 | -6.286e-01 |
-| 60.0 | 5 | -1.0890e+00 | -4.1929e+01 | 9.74e-01 | 6.2e-05 | -8.706e-01 | -5.711e+00 |
-| 60.0 | 10 | -9.4941e-01 | -2.9244e+01 | 9.68e-01 | 2.2e-04 | -3.849e-01 | -3.083e+00 |
-| 60.0 | 30 | 6.5513e-01 | -1.2967e+01 | 1.05e+00 | 3.0e-04 | 6.779e-01 | 4.873e+00 |
-| 60.0 | 80 | -9.5900e-01 | -4.6057e+00 | 7.92e-01 | 7.3e-04 | -8.177e-01 | -5.704e+00 |
+| 60.0 | 2 | 1.1759e+01 | 1.1353e+01 | 3.45e-02 | 6.8e-04 | 4.077e-03 | -5.054e-01 |
+| 60.0 | 5 | 1.2082e+02 | 1.1605e+02 | 3.95e-02 | 2.2e-05 | -8.164e-01 | -5.075e+00 |
+| 60.0 | 10 | 6.3776e+01 | 6.1315e+01 | 3.86e-02 | 1.0e-04 | -3.519e-01 | -2.690e+00 |
+| 60.0 | 30 | -1.0197e+02 | -9.7992e+01 | 3.90e-02 | 3.8e-05 | 6.288e-01 | 4.292e+00 |
+| 60.0 | 80 | 1.1965e+02 | 1.1496e+02 | 3.92e-02 | 2.8e-05 | -7.609e-01 | -5.034e+00 |
 | 60.0 | 200 | below floor | below floor | --- | --- | --- | --- |
 | 60.0 | 400 | below floor | below floor | --- | --- | --- | --- |
-| 140.0 | 2 | -2.7135e-01 | -1.0532e+02 | 9.97e-01 | 4.2e-06 | 1.604e+00 | 2.278e+00 |
-| 140.0 | 5 | -2.0840e-01 | -7.0759e+01 | 9.97e-01 | 8.4e-05 | 8.371e-01 | 6.524e-01 |
-| 140.0 | 10 | -1.2358e-01 | -5.0347e+01 | 9.98e-01 | 1.4e-05 | 1.749e+00 | 2.381e+00 |
-| 140.0 | 30 | -9.4405e-02 | -2.7373e+01 | 9.97e-01 | 2.2e-04 | 6.892e-01 | 4.461e-01 |
-| 140.0 | 80 | -7.1701e-02 | -1.3487e+01 | 9.95e-01 | 2.5e-04 | -9.284e-01 | -1.585e+00 |
-| 140.0 | 200 | 6.3477e-03 | -3.4114e+00 | 1.00e+00 | 7.2e-04 | 1.545e+00 | 2.251e+00 |
+| 140.0 | 2 | -6.0909e+01 | -5.8823e+01 | 3.42e-02 | 7.3e-06 | 1.478e+00 | 2.003e+00 |
+| 140.0 | 5 | -1.8907e+01 | -1.8040e+01 | 4.59e-02 | 3.1e-04 | 8.221e-01 | 6.265e-01 |
+| 140.0 | 10 | -6.3936e+01 | -6.1704e+01 | 3.49e-02 | 1.1e-05 | 1.621e+00 | 2.103e+00 |
+| 140.0 | 30 | -1.3378e+01 | -1.2701e+01 | 5.06e-02 | 4.4e-04 | 6.855e-01 | 4.446e-01 |
+| 140.0 | 80 | 4.1662e+01 | 4.0345e+01 | 3.16e-02 | 8.3e-05 | -8.299e-01 | -1.368e+00 |
+| 140.0 | 200 | -5.9900e+01 | -5.7872e+01 | 3.39e-02 | 4.1e-05 | 1.416e+00 | 1.969e+00 |
 | 140.0 | 400 | below floor | below floor | --- | --- | --- | --- |
-| 300.0 | 2 | -1.0142e-01 | -1.2164e+02 | 9.99e-01 | 1.6e-05 | -3.328e-01 | -3.905e-01 |
-| 300.0 | 5 | -5.6972e-02 | -8.2185e+01 | 9.99e-01 | 3.2e-05 | -2.884e+00 | -8.407e-01 |
-| 300.0 | 10 | -6.3262e-02 | -5.9083e+01 | 9.99e-01 | 2.8e-05 | -5.896e-01 | -4.648e-01 |
-| 300.0 | 30 | -4.3977e-02 | -3.3515e+01 | 9.99e-01 | 1.5e-05 | -2.299e+00 | -8.800e-01 |
-| 300.0 | 80 | 2.2902e-03 | -1.8800e+01 | 1.00e+00 | 1.6e-04 | -1.640e+00 | -2.580e-01 |
-| 300.0 | 200 | -3.4098e-02 | -9.1866e+00 | 9.96e-01 | 1.0e-04 | -1.404e+00 | -6.843e-01 |
-| 300.0 | 400 | 1.8894e-02 | -3.2291e+00 | 1.01e+00 | 6.8e-04 | -7.118e-02 | 2.761e-01 |
+| 300.0 | 2 | 1.6684e+00 | 1.4958e+00 | 1.03e-01 | 1.1e-03 | -1.663e-01 | -3.070e-01 |
+| 300.0 | 5 | 2.1044e+00 | 8.4020e-01 | 6.01e-01 | 1.2e-03 | -2.711e+00 | -7.614e-01 |
+| 300.0 | 10 | 1.8529e+00 | 1.5677e+00 | 1.54e-01 | 8.9e-04 | -4.080e-01 | -3.744e-01 |
+| 300.0 | 30 | 2.6970e+00 | 1.6700e+00 | 3.81e-01 | 1.9e-04 | -2.056e+00 | -7.637e-01 |
+| 300.0 | 80 | 1.3108e-01 | -5.6751e-01 | 1.23e+00 | 5.4e-03 | -1.651e+00 | -2.683e-01 |
+| 300.0 | 200 | 2.3530e+00 | 1.7125e+00 | 2.72e-01 | 4.1e-04 | -1.182e+00 | -5.760e-01 |
+| 300.0 | 400 | -1.3071e+00 | -1.3053e+00 | 1.34e-03 | 1.7e-03 | -2.045e-01 | 2.086e-01 |
 
-Worst relative difference over the grid: **1.316e+00**, over the 28 of 42 entries above the floor.
+Worst relative difference over the grid: **1.853e+00**, over the 29 of 42 entries above the floor.
 
-**14 entries are below it and are reported as bounds, not values.**
+**13 entries are below it and are reported as bounds, not values.**
 The floor is `1e-12` of the largest transfer at the same
 `k`. Above $\ell\simeq k\Delta\eta$ the Bessel projection dies and
 those entries reach $10^{-91}$ and $10^{-211}$: zero to machine
@@ -74,7 +74,7 @@ platforms. Finding **T-38**.
 assuming.** The ratio of two sub-floor numbers is an $O(1)$ quantity that
 looks like a result, so the suspicion was that the worst relative
 difference was being set by rows where both frames return zero. It was
-not: excluding all of them moves it from 1.859 to 1.316e+00. **The number is a real measurement** --- there are modes
+not: excluding all of them moves it from 1.859 to 1.853e+00. **The number is a real measurement** --- there are modes
 where the two frames' transfers differ by more than 100% --- and the
 floor buys reproducibility of the file, not a correction to its claim.
 
@@ -82,23 +82,23 @@ floor buys reproducibility of the file, not a correction to its claim.
 
 | k | median `rel` over `l` | spread (max/min) | Thomson / grav |
 |---|---|---|---|
-| 1.0 | 2.08e-01 | 1.9 | 15361.0 |
-| 5.0 | 7.25e-01 | 20.0 | 789.5 |
-| 20.0 | 1.04e+00 | 1.3 | 57.8 |
-| 60.0 | 9.74e-01 | 1.3 | 6.6 |
-| 140.0 | 9.97e-01 | 1.0 | 1.4 |
-| 300.0 | 9.99e-01 | 1.0 | 0.3 |
+| 1.0 | 1.85e+00 | 1.0 | 14205.1 |
+| 5.0 | 3.92e-01 | 1.0 | 738.6 |
+| 20.0 | 9.85e-02 | 1.0 | 54.7 |
+| 60.0 | 3.90e-02 | 1.1 | 6.2 |
+| 140.0 | 3.46e-02 | 1.6 | 1.3 |
+| 300.0 | 2.72e-01 | 915.8 | 0.3 |
 
 ## What the numbers say
 
 1. **Close, and closer as `k` grows.** The median disagreement falls
-   from 2.08e-01 at `k = 1` to 2.08e-01 at `k = 1`,
+   from 1.85e+00 at `k = 1` to 3.46e-02 at `k = 140`,
    roughly like `1/k` across the grid. Before **T-25** and **T-27** the
    same measurement gave one to two hundred percent and, at most `k`,
    the opposite sign.
 2. **The residual is flat in `l` at fixed `k`** wherever the Newtonian
-   total is not itself passing through zero: at k = 20, 60, 140, 300 the spread over `l` is under 1.5.
-   At k = 1, 5 it is not, and
+   total is not itself passing through zero: at k = 1, 5, 20, 60 the spread over `l` is under 1.5.
+   At k = 140, 300 it is not, and
    there the ratio is reporting where the oscillation was sampled rather
    than the size of the discrepancy --- T-6 in the continuum. Flatness in
    `l` is the signature of a residual living in the `C_A`, which are
@@ -112,7 +112,7 @@ floor buys reproducibility of the file, not a correction to its claim.
    everything `kappa'` multiplies.
 4. **Of those, mostly the Thomson sector at low `k`.** The last column is
    the ratio of the two sectors' largest contributions; it runs from
-   15361 at `k = 1` to 0.3 at `k = 300`.
+   14205 at `k = 1` to 0.3 at `k = 300`.
 
 ## What it does not yet say
 

@@ -230,7 +230,17 @@ here.
 - **S21**: F5 and F7 move from v1.1.0 to v1.5.0, and F2 joins them — all three
   wait on the generic-$u^a$ hierarchy, not on figure work.
 
-## [1.0.0] — 2026-10-05
+## [1.0.0] — 2026-10-05 *(tag date; the GitHub **release** is dated 9 Oct)*
+
+> **The two dates are not in conflict and neither is verified here.** This
+> heading was written on 2026-10-20 from the supplement's own front matter,
+> *"First public analytical reproducibility release: v1.0.0, 5 October 2026"*.
+> The GitHub releases page, read the same day, dates the **release object**
+> 9 Oct — and v1.1.0 shows the same pattern, tagged 12 Oct (`dist/`) and
+> released 14 Oct. A tag and its release are different events. **Neither date
+> has been read off `git log`**, which is the artefact that settles it:
+> `git log -1 --format=%ai v1.0.0`. Until it is, this line is the supplement's
+> date and says so.
 
 ### Added
 

@@ -103,6 +103,13 @@ set.
 | **F7** | frame specialisation | lines + residual panel | `scripts/figure_f7_frames.py` | cross-check |
 | **F8** | coupling schematic | diagram, no computation | `scripts/figure_f8_schematic.py` | schematic |
 
+> **Superseded 2026-10-20, finding T-87.** **The key figure is F9**, the
+> normalised angular spectrum, from v1.2.0 onward — this README's own
+> promise, which `scripts/figure_f9_acoustic_spectrum.py` cites. F9 is
+> also absent from this file's figure table below. **This plan is a
+> v1.0.0 artefact and is kept as one**, not updated to a release it did
+> not plan; the paragraph below is what was true then.
+
 **The key figure is F3.** It is what a reader checks first and what the release is
 for. **F1 is where the bundle's independence lives** — not F3, because F3's
 comparison target is derived from the same antecedent.

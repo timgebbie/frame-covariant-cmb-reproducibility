@@ -159,7 +159,15 @@ ARTEFACTS: list[Artefact] = [
              note="drawn in ranks, which (89) produces and which is defined in "
                   "every frame, rather than the Newtonian three-way split of "
                   "7.1.1 --- the PI's call 2026-10-14. The frame disagreement is "
-                  "its own panel: 47% at l=2, 7% at l=102, 13% at l=405, median 15% "
+                  "its own panel. **Superseded by T-57 and T-59**: it read 47% at l=2, "
+                  "7% at l=102, 13% at l=405 and median 15% and is now "
+                  "TOTAL -- median 9.99e-1, worst 1.00. The l>=2 "
+                  "multipoles are frame-invariant by theorem, so that "
+                  "is a defect and not a result; it is localised to the "
+                  "slot-and-weight assignment of C_1 (T-82, T-85, T-86) "
+                  "and five repair attempts are recorded as failures "
+                  "(T-88..T-93, T-96). The numbers below are the "
+                  "pre-T-57 ones over "
                   "over 2 <= l <= 400 --- the post-T-37 numbers, moved from "
                   "42 / 7 / 11 by wiring the transfer function"),
     Artefact("F2 - truncation convergence, both frames", "S", "v1.2.0",
@@ -171,7 +179,8 @@ ARTEFACTS: list[Artefact] = [
              note="Appendix E made quantitative in both frames. What a "
                   "truncation discards falls off a per-k cliff at l ~ k dEta; "
                   "what it destroys has no l_max in it at all, is flat at "
-                  "0.54-0.68% to l~20 and rises to 32% by l=600 (0.8-0.9% and 29% "
+                  "**99.93% at l=2 and 100% by l=600 post-T-57** (it read 0.54-0.68% "
+                  "to l~20 and 32% by l=600 before it, and 0.8-0.9% / 29% "
                   "before T-37 wired the transfer function). Footnote 29 "
                   "p.365 checked and upheld: identically zero in the Newtonian "
                   "frame, which has no shear to lose. Its k grid runs to 1900 "
@@ -183,7 +192,10 @@ ARTEFACTS: list[Artefact] = [
              script="scripts/figure_f7_frames.py",
              note="reports that its own planned claim is false: the dipole was "
                   "to stand an order of magnitude apart and lands on each curve "
-                  "instead, worst ratio 1.25x, because (102) builds every l from "
+                  "instead, worst ratio 1.25x **in this file and 1.24x in README.md -- "
+                  "UNADJUDICATED, T-87**; the authoritative value is "
+                  "figure_f7_frames.py's own .2f print and both copies are "
+                  "regenerated from it when F7 next runs. (102) builds every l from "
                   "the same three C_A --- finding T-31. Its environment is built "
                   "for the k grid rather than the probe modes --- finding T-34"),
     Artefact("F9 - the angular spectrum with the acoustic peaks, both frames",
@@ -350,7 +362,11 @@ def render(artefacts: list[Artefact]) -> str:
         "| **S** | shipped — in a tagged release, hashed, cited |",
         "",
     ]
-    for release in ("v1.0.0", "v1.1.0", "v1.2.0", "v1.5.0"):
+    # **v1.3.0 was missing from this tuple until 2026-10-20 (T-87)**, so
+    # the generated file had no v1.3.0 section at all while the tree was
+    # v1.3.0-dev with D9-D17, S40-S45 and T-51..T-96 landed. A generator
+    # that cannot emit a release is a register that silently omits it.
+    for release in ("v1.0.0", "v1.1.0", "v1.2.0", "v1.3.0", "v1.5.0"):
         here = [a for a in artefacts if a.release == release]
         if not here:
             continue

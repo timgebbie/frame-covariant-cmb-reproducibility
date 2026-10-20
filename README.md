@@ -58,6 +58,14 @@ before the code if you want to know what this release does and does not claim.
 >   failed and are recorded as failures (**T-88**–**T-93**); the derivation is
 >   with P1-T.
 >
+> **The repair was attempted five times and all five are recorded as
+> failures.** T-88's fix closed the gap by four orders and was **withdrawn**:
+> it applied 𝒱·C₁^thom where (102) applies W·C₁^thom, and since Wκ′=𝒱 is an
+> identity that is a spurious ×κ′ measured at 320–682 (**T-93**). The peak
+> shift it produced went with it. P1-T's W-form, instrumented directly, is
+> **not conclusive** and is not reported as if it were — two defects in that
+> instrument are unexcluded (**T-96**).
+>
 > **And one term dominates the integrand (T-94).** In the Newtonian frame
 > 93–97% of (102)'s integrand at k ≤ 60 is the single term 𝒱κ″v̂_B, which is
 > **1.8×10⁵ times the physical Doppler source g·v̂_B** — three powers of κ′
@@ -168,8 +176,8 @@ and reading the tree cannot disagree.
 | discretisations | **all** registered; the generator fails on one it does not name | `provenance/GRID-REGISTER-v1.md` |
 | external comparison | recorded, reproducible without CAMB or CLASS, **outside** the bundled testing | `tables/criterion-5b-v1.2.0.tex` |
 | findings against the antecedent | **B-1 … B-15** | `provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md` |
-| findings against this bundle | **T-1 … T-94** | `provenance/BUNDLE-DEFECTS-v1.md` |
-| decisions | **S1 … S42**, with the withdrawn ones struck rather than deleted | `provenance/DECISIONS-v1.0.0.md` |
+| findings against this bundle | **T-1 … T-96** | `provenance/BUNDLE-DEFECTS-v1.md` |
+| decisions | **S1 … S45**, with the withdrawn ones struck rather than deleted | `provenance/DECISIONS-v1.0.0.md` |
 
 **This shows that** the release closes on evidence that regenerates, not on a
 claim typed once: the only way to change a number above is to change the code

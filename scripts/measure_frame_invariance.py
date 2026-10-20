@@ -58,7 +58,7 @@ RESIDUAL_FLOOR = 1e-12
 
 def both_frames(k: float, env, table: BesselTable, ells: np.ndarray) -> dict:
     """(102) evaluated in the Newtonian frame and in the CDM frame."""
-    newtonian, energy = coefficient_sets(float(k), env)
+    newtonian, cdm = coefficient_sets(float(k), env)
     diffusion = float(np.exp(-((float(k) / env.damping_k) ** 2)))
     common = dict(table=table, weight=env.weight, diffusion=diffusion,
                   damping_total=diffusion, eta_star=env.eta_star,
@@ -66,7 +66,7 @@ def both_frames(k: float, env, table: BesselTable, ells: np.ndarray) -> dict:
     return {name: integral_solution(
                 ells, coefficients=cs.coefficients, c1_prime=cs.c1_prime,
                 c2_second=cs.c2_second, c2_prime_star=cs.c2_prime_star, **common)
-            for name, cs in (("newtonian", newtonian), ("cdm", energy))}
+            for name, cs in (("newtonian", newtonian), ("cdm", cdm))}
 
 
 def residual_decomposition(k: float, env: dict, table: BesselTable,
@@ -202,7 +202,13 @@ def main() -> int:
         "Newtonian frame and has never been evaluated in any released figure.",
         "`grav` and `Thomson` are the two sectors of the closed-form residual.",
         "",
-        "| k | l | Newtonian | energy | rel | rank-2 | grav | Thomson |",
+        # **S8a: the frame is the CDM frame and no aliases were kept** ---
+        # *"two names for one thing is the failure S8 exists to prevent"*.
+        # This header said `energy` for six days after the rename, in a
+        # GENERATED file, which is finding **T-87**'s class: a correction
+        # that landed where it was found and did not travel. The local
+        # variable below is renamed with it, so the two cannot drift again.
+        "| k | l | Newtonian | CDM | rel | rank-2 | grav | Thomson |",
         "|---|---|---|---|---|---|---|---|",
     ]
     for r in rows:

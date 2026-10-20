@@ -287,6 +287,70 @@ read.
 If removing $\mathcal D(k)$ from the integrand alone recovers a late ISW, C6 is
 confirmed and C3--C5 reduce to amplitude-only concerns.
 
+\subsection{The repair, attempted five times, and withdrawn}
+\label{sec:repair-attempts}
+\textbf{Recorded here because five failures carry more information than one
+success would, and because a reader of this document should not have to
+reconstruct them from the register.}
+
+T-86's reading was implemented as four independent controls, every one
+defaulting to \texttt{False}. The first combination closed the frame gap by
+four orders at $\ell\ge50$ for $k\lesssim60$ --- and \textbf{is withdrawn}.
+It applied $\mathcal V\,C_1^{\rm thom}$ where (102) applies
+$W\,C_1^{\rm thom}$, and since
+
+$$C_1^{\rm thom}=-\kappa'\hat v_B,\qquad W\kappa'=\mathcal V
+\quad\Longrightarrow\quad W\,C_1^{\rm thom}=-\mathcal V\hat v_B\ \textbf{identically,}$$
+
+\textbf{the Thomson term is already at visibility weight in (102) as printed
+and there was never a weight to change.} The control therefore multiplied it
+by a spurious $\kappa'$, measured at $320$ to $682$. The diagnostic spectrum
+it produced --- first peaks moving from $1.3$--$1.5\,\ell_A$ to
+$0.56\,\ell_A$ --- is withdrawn with it and is retained in
+\texttt{diagnostics/} as the record of what the defective variant produces,
+not as evidence.
+
+\textbf{What the five failures leave standing is a rule}, and it is P1-T's:
+$\kappa'$ may live in $W$, in $\mathcal V$, or in a derivative of either ---
+\emph{never in a coefficient}. A coefficient carrying a bare $\kappa'$
+manufactures $\kappa'^2$ the moment it is differentiated. This separates the
+\emph{legitimate} $\kappa'^2$ inside $\dot{\mathcal V}=(\kappa''+\kappa'^2)W$,
+which comes from differentiating the \textbf{weight}, from the illegitimate
+one, which comes from differentiating a \textbf{coefficient}; both look
+identical in the output. It is enforced structurally by
+\texttt{tests/frame/c7\_kappa\_ledger.py}, and \textbf{both of this week's
+defects would have been caught before implementation by that one test.}
+
+\subsection{What one term does to the integrand}
+Measured on the released code, as shares of the summed absolute Newtonian
+integrand:
+
+\begin{center}\small
+\begin{tabular}{lrrrrr}
+\toprule
+term & EdS $k{=}10$ & $k{=}60$ & $k{=}300$ & PLANCK $k{=}10$ & $k{=}60$ \\
+\midrule
+$\mathcal V\kappa''\hat v_B$ & \textbf{0.935} & \textbf{0.971} & 0.616 & \textbf{0.933} & \textbf{0.974} \\
+$\mathcal V\kappa'\hat v_B'$ & 0.066 & 0.024 & 0.314 & 0.065 & 0.015 \\
+$\mathcal V\tfrac k3\tau_1$ & 0.0002 & 0.0064 & 0.082 & 0.0004 & 0.013 \\
+$\mathcal V(\Phi_A'-\Phi_H')$ & 0 & 0 & 0 & 0.0018 & 0.0028 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{One term is $93$--$97\%$ of the integrand}; the acoustic driving is
+$0.02\%$ and the ISW, where there is one, $0.18\%$. Against the source it
+stands for --- the physical Doppler $g\hat v_B=W\kappa'\hat v_B$ --- it is
+$1.81\times10^{5}$ (EdS) and $8.99\times10^{4}$ (PLANCK), and
+$\kappa''\simeq-\kappa'^2$, so it carries \textbf{three powers of $\kappa'$
+where the source carries one}.
+
+\textbf{This is weight-independent.} Changing $\mathcal V\to W$ divides every
+term in the bracket by $\kappa'$ uniformly and changes no ratio, so A-2
+cannot reach it. The term exists only because (102) differentiates $C_1$,
+which contains $\kappa'$ --- that is, because the integration by parts was
+taken \emph{onto the coefficients} rather than onto the product.
+
 \subsection{What this section does not establish}
 No measurement here is a comparison against an external code, and none is a
 claim that the spectrum is right. The chain establishes that the rank-1 source

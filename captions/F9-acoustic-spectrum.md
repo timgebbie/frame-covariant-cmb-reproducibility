@@ -40,7 +40,6 @@ into its start --- the claim the $1+3$ covariant approach exists to make, drawn
 here rather than asserted. The median frame gap reaches $40\\%$, which is a
 \\emph{result} and not a defect: $C_\\ell$ is quadratic in frame-dependent
 pieces, while the invariance~(102) satisfies is a statement about the total at
-fixed $k$, measured separately by~D6.\\\\[2pt]
-\\textbf{Superseded 2026-10-20, findings T-57, T-59 and T-85.} The number above is the figure's, and the figure predates \\textbf{T-57}. \\textbf{The frame disagreement is no longer read as a result.} It is \\emph{total} --- median $9.99\\times10^{-1}$, worst $1.00$ --- and the $\\ell\\ge2$ multipoles are frame-invariant \\emph{by theorem}, so a gap there is a defect and is being hunted. It is localised: the rank-1 source agrees between the columns to $10^{-15}$ (\\textbf{T-82}) and the by-parts identity holds in both (\\textbf{T-85}), so the whole of it is the slot-and-weight assignment of $C_1$ (\\textbf{T-86}). \\texttt{provenance/BUNDLE-DEFECTS-v1.md} is authoritative; this caption is not regenerated until the figure is.
+fixed $k$, measured separately by~D6.\\\\[2pt]$^{\\dagger}$\\,\\emph{Superseded by findings} \\textbf{T-59}\\emph{,} \\textbf{T-74}\\emph{; see} \\texttt{provenance/BUNDLE-DEFECTS-v1.md}.
 """
 +++
