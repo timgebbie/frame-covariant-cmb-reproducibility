@@ -98,6 +98,14 @@ ELLS = np.unique(np.concatenate([
 #: fewer modes. `K_MAX` is shared; the grid is not.
 K_MAX = 1500.0
 
+#: Where this run writes. **A diagnostic run must not overwrite the release
+#: artefacts** --- decision **V14**, *a control is not evidence; controls live
+#: in `diagnostics/`, never `figures/`*. `--b-slot-repair` rebinds both of
+#: these in `main()`, so the released figure, its CSV and their manifest
+#: hashes are untouched by a T-88 run.
+STEM = "f9-acoustic-spectrum"
+CSV_PATH_REL = ("outputs", "f9-acoustic-spectrum.csv")
+
 BACKGROUNDS = [
     ("CDM (Einstein-de Sitter)", CDM_MODEL, 0.0224, 0.5),
     (r"$\Lambda$CDM", LCDM_MODEL, 0.0224, 0.7),
@@ -343,7 +351,19 @@ def draw(curves, peaks, frames, gaps) -> int:
         ax.legend(fontsize=6.4, frameon=False, loc="lower left", ncol=2,
                   handlelength=2.2, borderaxespad=0.4, columnspacing=1.1)
     fig.tight_layout()
-    for path in save_figure(fig, "f9-acoustic-spectrum", VERSION):
+    written = save_figure(fig, STEM, VERSION)
+    if STEM != "f9-acoustic-spectrum":
+        # V14: a control does not enter figures/. The pair is moved rather
+        # than save_figure being taught a second destination -- one writer,
+        # one rule.
+        moved = []
+        for path in written:
+            dest = ROOT / "diagnostics" / path.name
+            dest.parent.mkdir(exist_ok=True)
+            path.replace(dest)
+            moved.append(dest)
+        written = moved
+    for path in written:
         print(f"wrote {path.relative_to(ROOT)}")
 
     return 0
@@ -357,7 +377,7 @@ def load_csv() -> tuple[np.ndarray, dict, dict]:
     the last number had been produced, and the first of them threw the numbers
     away. `--replot` exists so the third one costs seconds.
     """
-    path = ROOT / "outputs" / "f9-acoustic-spectrum.csv"
+    path = ROOT.joinpath(*CSV_PATH_REL)
     rows = [r for r in csv.reader(path.open(encoding="utf-8"))
             if r and not r[0].startswith("#")]
     header, body = rows[0][1:], np.array([[float(v) for v in r] for r in rows[1:]])
@@ -372,7 +392,7 @@ def load_csv() -> tuple[np.ndarray, dict, dict]:
 
 
 def main() -> int:
-    global ELLS
+    global ELLS, STEM, CSV_PATH_REL
     print("F9  the normalised angular spectrum with the acoustic peaks")
     print(f"    ells {ELLS.min()}..{ELLS.max()} ({ELLS.size}), "
           f"k to {K_MAX:.0f}, f_2 = {F2_DEFAULT}; the k grid is derived per "
@@ -397,12 +417,14 @@ def main() -> int:
     if "--b-slot-repair" in sys.argv:
         from functions.spectra import two_frame as _tf
         _tf.B_SLOT_REPAIR = True
+        STEM = "d15-f9-b-slot-repair"
+        CSV_PATH_REL = ("diagnostics", "d15-f9-b-slot-repair.csv")
         print("    **B-SLOT REPAIR ON (T-88)** --- diagnostic run. Expect the "
               "peaks to improve and the")
         print("    damping tail to be wrong above k ~ 100; see D14.")
 
     if "--replot" in sys.argv:
-        cached = ROOT / "outputs" / "f9-acoustic-spectrum.csv"
+        cached = ROOT.joinpath(*CSV_PATH_REL)
         stamped = ""
         if cached.exists():
             for line in cached.read_text(encoding="utf-8").splitlines():
@@ -462,7 +484,7 @@ def main() -> int:
     # once threw away three backgrounds of computation at the plotting
     # call, forty-five minutes after the last number was produced. The
     # CSV is the expensive artefact; the figure is cheap and redrawable.
-    out = ROOT / "outputs" / "f9-acoustic-spectrum.csv"
+    out = ROOT.joinpath(*CSV_PATH_REL)
     with out.open("w", encoding="utf-8", newline="\n") as fh:
         fh.write("# shape, D_l renormalised at l=30, both frames. "
                  "CAMB and CLASS are context (S4c).\n")
