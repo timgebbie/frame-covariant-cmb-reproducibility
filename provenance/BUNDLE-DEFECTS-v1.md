@@ -8347,3 +8347,159 @@ and the README's artefact table names it with its status: it reads
 $\mathcal O(1)$ in both columns and is **held inconclusive** pending
 $\sigma_0$ for the rank-0 row and whether $S_2$ is needed in the CDM column,
 both with P1-T.
+
+---
+
+## T-101 — **the $\kappa'$ ledger, run against the released assembly: $C_1$ and $C_1'$ carry a bare $\kappa'$, and it is essentially the whole of them.** P1-T's §6 item 1, executed
+
+*Measured 2026-10-21, `scripts/diagnostic_d18_released_kappa_ledger.py`
+(**D18**), on EdS and PLANCK, at $k=10,60,300$, in both frames.*
+
+### The rule being applied
+
+P1-T, 2026-10-20: *$\kappa'$ may live in $W$, in $\mathcal V$, or in a
+derivative of either. **It may never live in a coefficient.*** Counting powers
+of $\kappa'$ on a term cannot decide this — $\dot{\mathcal V}$ reaches
+$\kappa'^2$ legitimately — so the measurement has to be **where the $\kappa'$
+sits**, not how many of it there are.
+
+### How it was measured, rather than read off the source
+
+Every coefficient this bundle builds is **affine in $\kappa'$**: it enters
+`match_coefficients` only through `kappa_prime_v_b` and `newtonian_c1_prime`
+only through `kappa_prime_v_b_prime`. `Environment` is a frozen dataclass, so
+scaling $\kappa'\to\lambda\kappa'$ **in the coefficient construction alone** —
+`visibility` and `opacity` untouched — gives $C(\lambda)=C_{\rm free}+\lambda
+C_{\kappa}$ and separates the two parts exactly.
+
+**The affineness is verified, not assumed.** D18 evaluates at $\lambda=2$ and
+checks $C(2)-C_{\rm free}-2C_{\kappa}$ against a bar of $10^{-12}$ relative;
+measured residuals are $10^{-16}$ to $10^{-19}$ throughout. A construction that
+stopped being affine would **void** the split rather than be reported wrongly.
+
+### The ledger
+
+| coefficient | released slot | carries $\kappa'$ | $\kappa'$ share, min–max |
+|---|---|---|---|
+| $C_0$ | bulk, under the weight | no | — |
+| $C_1$ | **boundary-1, under $\mathcal D$ alone** | **YES** | 0.514 – 1.015 |
+| $C_1'$ | bulk, under the weight | **YES** | 0.994 – 1.009 |
+| $C_2$ | boundary-2, under $\mathcal D$ alone | no | — |
+| $C_2''$ | bulk, under the weight | no | — |
+
+### What the share says, and it is more than the boolean
+
+**A share of 1.00 means the $\kappa'$-carrying part is not a correction to
+$C_1$ — it is essentially the whole of it.** From (89),
+$C_1=(p_1/k)(a\mathcal B_1+\kappa'v_B)$, and the measurement says the second
+entry dominates the first almost everywhere. Values slightly above unity are
+the two parts partially cancelling in sup norm.
+
+**The one exception is $k=300$ in the Newtonian frame, at 0.514**, where the
+gravitational half $a\mathcal B_1/k$ finally becomes comparable. $k=300$ is the
+mode **no repair variant has ever moved**, and this is the first structural
+difference *measured* at it rather than asserted about it.
+
+### Two sites, and the second is the sharper
+
+1. **The bulk.** $-C_1'=(\kappa'\hat v_B)'+(a\mathcal B_1)'/k$, so the
+   by-parts of (102) differentiates a coefficient that still carries a bare
+   $\kappa'$: $\mathcal V\,\mathrm d/\mathrm d\eta[\kappa'\hat v_B] = W\kappa'
+   (\kappa''\hat v_B+\kappa'\hat v_B')$ — **two powers of the scattering rate
+   where the $W$-form carries one**, for the same physics. This is T-94's
+   mechanism, now attributed to its coefficient rather than to its term.
+2. **The boundary.** `boundary_weight_w` is `False` in the released path, so
+   $C_1(\eta_*)$ enters with the diffusion factor and **nothing else — no $W$,
+   no $\mathcal V$.** The bare $\kappa'(\eta_*)$ it carries is
+   $3.82\times10^2$ on EdS and $2.64\times10^2$ on PLANCK, under **no
+   exponential suppression at all**. The $W$-form has no counterpart: its
+   Thomson entry is $\mathcal V\mathcal S_1K^{(1)}$ with
+   $\mathcal S_1=\bar f_1v_B$, $\kappa'$-free, and its boundary vanishes
+   because $\mathcal V$ does at both ends.
+
+> **The Thomson in-scattering has been folded into the matching coefficients
+> rather than left under the visibility where it belongs.** Once it is inside
+> $C_1$, every subsequent operation — the by-parts, the boundary evaluation —
+> acts on a quantity carrying a scattering rate it should never have had.
+
+### What this does not say
+
+**It is not a repair and licenses none.** Five have been attempted and
+withdrawn (**T-88**–**T-93**); the one that looked best was a spurious
+$\times\kappa'$ of 320–682. It also does not say the spectrum is wrong by these
+factors — a term can be large and correct (**M11**). D16 supplies the size,
+D18 the structure; neither is the verdict.
+
+**A-2 cannot reach it.** A-2 is a recorded choice of *weight*; this is a
+statement about the *coefficients*, which no choice of weight touches — T-94
+measured that independently and weight-independently.
+
+### Why this is the answer to P1-T's question and five sweeps were not
+
+P1-T asked for *"a read, not a sweep."* Five sweeps moved controls and scored
+outcomes; none of them established **where the $\kappa'$ was**, which is why
+T-88 could post a four-order improvement that was a factor of $\kappa'$ in
+disguise. One structural measurement on the coefficients answers it in both
+frames, on both backgrounds, at every $k$ — and **would have caught T-88 and
+the printed (102) before either was implemented**, which is exactly what P1-T
+said when they wrote `c7`.
+
+---
+
+## T-102 — **F9 re-run: T-99 closed, and the README's peak-position control had lost its provenance between the register and the public page**
+
+*2026-10-21. The PI ran `figure_f9_acoustic_spectrum.py` on the released code;
+P1-T's §3.5 asked where one of the README's numbers came from.*
+
+### T-99 is closed
+
+The committed figure is now the one the script produces: **linear-log
+$D_\ell/D_{30}$**, shape renormalised at $\ell=30$, panel (a) in the **CDM
+frame**. Read off the rendering, not off the script — **V12**, which is what
+T-99 was about.
+
+| | first peak |
+|---|---|
+| CDM (Einstein–de Sitter) | 280.4 |
+| ΛCDM | 224.5 |
+| PLANCK | 341.7 |
+| CAMB, matched at $N_{\rm eff}=0$ | 206.1 |
+| CLASS, matched at $N_{\rm eff}=0$ | 206.2 |
+
+Frame gap median 100.0%, worst **340.8%** on PLANCK — unchanged in kind by the
+re-run, and the figure is published in that state deliberately.
+
+### The provenance defect, which is the part worth keeping
+
+P1-T, §3.5: *"The README's control number is unsourced and disagrees with the
+bundle's own by 5%... 196 occurs only in that README line, with no named
+generator and no statement of which code or what N_eff produced it."*
+
+**The first half is right and the second half is not, and the distinction is
+the finding.** The register has the provenance in full (**T-74**): 196 and 544
+are the residual maxima of **this bundle's own synthetic control** — a
+$\cos(kr_s)$ fed through its own projection kernel, EdS, $\mathcal V$ weight,
+transfer function off, with measured contrast. The README carried the numbers
+and dropped every qualifier, so on the public page they read as an external
+known answer.
+
+> **196 and 206 are not the same quantity and there is no 5% dispute between
+> them.** 196 is a maximum of the *oscillatory residual* of a *synthetic
+> control*; 206 is the first peak of $D_\ell$ in *CAMB*. Different object,
+> different estimator. The README now says which is which, and says that
+> neither is the other's target.
+
+**The class: a number that survives the move from the register to the README
+and leaves its qualifiers behind is a new claim, not the same claim.** T-74
+stated the control, the weight, the background and what was switched off; the
+README stated the digits. This is the same shape as **T-100** — a public
+artefact written as though its reader held the working record.
+
+### What it does not settle
+
+**Neither gap is explained.** 342 against 206 is 1.66×; 176 against 196 is
+0.90×. They are not the same discrepancy and nothing here claims a cause for
+either. P1-T's §3.2 excludes the parameters as the cause of the first —
+$N_{\rm eff}=0$ is a documented specialisation and the external codes are
+matched to it — which makes **"why 342 against our own matched 206"** the
+question, and it is open.

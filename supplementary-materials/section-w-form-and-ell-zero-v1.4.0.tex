@@ -1,0 +1,304 @@
+% ---------------------------------------------------------------------------
+% The transport assembly: the W-form, the ell=0 row, and the kappa' ledger.
+%
+% SELF-CONTAINED BY DESIGN. Inputs one file, the history figure, and defines
+% nothing. Written 2026-10-21 by the Paper 1 stream at the PI's direction.
+%
+% This section SUPERSEDES three statements printed elsewhere in this
+% supplement and says so in place rather than by implication:
+%   - Sec. "The generic source derivatives", -C_0 \simeq +5/2 a B_2      -> 2.2
+%   - the same section's paragraph "Rank 0: not needed"                  -> 2.2
+%   - Sec. "The frame discrepancy", Triage B item 2, "they take
+%     different weights"
+%
+% THREE FINDING NUMBERS ARE REQUIRED AND ARE NOT MINTED HERE. The bundle
+% stream owns provenance/BUNDLE-DEFECTS-v1.md. Three places below read
+% "finding \FINDINGTBA" and must be resolved before this file is committed.
+% T-101 is already taken (D18, the released kappa' ledger read, 2026-10-21).
+% A placeholder that is left in prints visibly as [FINDING NUMBER TBA].
+\providecommand{\FINDINGTBA}{\textbf{[FINDING NUMBER TBA]}}
+% ---------------------------------------------------------------------------
+\section{The transport assembly}
+\label{sec:transport-assembly}
+
+\emph{The reader who wants only the result: \S\ref{sec:w-form} replaces the
+integration by parts, \S\ref{sec:ell-zero-row} replaces (90)'s $C_0$, and
+\S\ref{sec:kappa-ledger} is the rule that makes both of them checkable before
+they are implemented.}
+
+Three questions about the line-of-sight solution are one question, and this
+section answers it once. They are: which weight carries which source; what the
+$\ell=0$ matching row of (89) should be; and why every repair attempted on
+(102) so far has moved a weight without moving the term that dominates the
+integrand. The common answer is that \textbf{(102)'s integration by parts was
+taken onto the coefficients}, and that the assembly in which that step never
+arises is the one obtained by multiplying the transport equation by its own
+integrating factor.
+
+\input{supplementary-materials/figure-history-flow-v1.4.0.tex}
+
+Figure~\ref{fig:history-flow} is the order this section and
+\S\ref{sec:frame-discrepancy} are written in. It is the photon's history and
+not a table of contents: each open question is drawn at the conformal time it
+acts at, which is what separates the questions that a frame instrument can see
+from the questions it cannot.
+
+% ===========================================================================
+\subsection{The $W$-form}
+\label{sec:w-form}
+
+\paragraph{The derivation, in three lines.} The covariant transport equation
+at rank $\ell$ is
+\begin{equation}
+  \tau_\ell' \;+\; (\text{streaming couplings}) \;+\; \kappa'\tau_\ell
+  \;=\; a\mathcal B_\ell \;+\; \kappa'\mathcal S_\ell ,
+  \label{eq:transport}
+\end{equation}
+with $a\mathcal B_\ell$ the gravitational source of
+\S\emph{The generic source derivatives}' rank decomposition and
+$\mathcal S_\ell$ the in-scattered Thomson source. Both
+$\kappa'$ on display are the same $\kappa'$: the out-scattering on the left and
+the in-scattering on the right are two halves of one collision term.
+
+Multiply through by $W=e^{-\kappa}$. With $\kappa$ accumulated backwards from
+$\eta_0$, so that $\mathrm d\kappa/\mathrm d\eta=-\kappa'$ and
+$W'=+\kappa'W=\mathcal V$ --- the sign this bundle's convention forces, stated
+at \S\ref{sec:frame-discrepancy} --- the first and third terms of
+\eqref{eq:transport} combine exactly:
+\begin{equation}
+  W\tau_\ell' + W\kappa'\tau_\ell \;=\; W\tau_\ell' + W'\tau_\ell
+  \;=\; \frac{\mathrm d}{\mathrm d\eta}\big[W\tau_\ell\big] .
+\end{equation}
+Hence
+\begin{equation}
+  \boxed{\;
+  \frac{\mathrm d}{\mathrm d\eta}\big[W\tau_\ell\big]
+  \;+\; W\,(\text{streaming couplings})
+  \;=\; W\,a\mathcal B_\ell \;+\; \mathcal V\,\mathcal S_\ell \;}
+  \label{eq:w-form}
+\end{equation}
+and integrating from $\eta_*$ to $\eta_0$ gives the solution with
+$\big[W\tau_\ell\big]_{\eta_*}^{\eta_0}
+=\tau_\ell(\eta_0)-W(\eta_*)\tau_\ell(\eta_*)$ as its only boundary term,
+since $W(\eta_0)=1$.
+
+\paragraph{What \eqref{eq:w-form} says, and it is four things.}
+
+\begin{enumerate}\itemsep3pt
+\item \textbf{The gravitational source travels under $W$ and the in-scattered
+      source under $\mathcal V$.} Neither weight is assigned; both fall out of
+      one multiplication. $\mathcal V$ appears because $\kappa'$ was already
+      beside $\mathcal S_\ell$ in the collision term, and $W\kappa'=\mathcal V$
+      is an identity.
+\item \textbf{$\kappa'$ is consumed once}, by the integrating factor. It
+      appears nowhere else. \emph{No coefficient holds a $\kappa'$, so no
+      differentiation can produce a $\kappa'^2$.}
+\item \textbf{There is no integration by parts.} (102)'s bracket
+      $C_0-C_1'+C_2''$ exists because the by-parts was taken onto the
+      coefficients; \eqref{eq:w-form} has no coefficients to take it onto. The
+      three bulk slots and the boundary pair that \S\ref{sec:b-slot} tries to
+      reassign are artefacts of a step \eqref{eq:w-form} does not take.
+\item \textbf{The boundary term is one object, and it is exponentially
+      suppressed at $\eta_*$.} $\big[W\tau_\ell\big]$, not
+      $\big[C_2'-C_1\big]$ plus $kC_2$, and it carries $W$ rather than a
+      diffusion factor. \textbf{D18} measures what the released boundary
+      carries instead: with \texttt{boundary\_weight\_w} \texttt{False},
+      $C_1(\eta_*)$ enters under the diffusion factor alone --- no $W$, no
+      $\mathcal V$ --- so its bare $\kappa'(\eta_*)$, $3.82\times10^2$ on
+      Einstein--de~Sitter and $2.64\times10^2$ on \texttt{PLANCK\_MODEL},
+      stands under no exponential suppression at all. \eqref{eq:w-form} has no
+      counterpart: $\mathcal V\mathcal S_1$ is $\kappa'$-free.
+\end{enumerate}
+
+\paragraph{This supersedes \S\ref{sec:b-slot}'s item~2, and the wording that
+item carries is what \textbf{T-88} implemented.} That item reads \emph{``they
+take different weights: $W$ for the gravitational half, $g=\mathcal V$ for the
+scattering half''}. As a description of the outcome of \eqref{eq:w-form} it is
+correct. As an instruction to a solver it is not, and it was read as one:
+multiplying $C_1^{\rm thom}=-\kappa'\hat v_B$ by $\mathcal V$ applies a second
+$\kappa'$, which \S\ref{sec:repair-attempts} measures at $320$ to $682$.
+\textbf{The scattering half arrives at $\mathcal V$ weight carried on the
+undifferentiated $\hat v_B$; it is not multiplied by $\mathcal V$.} Finding
+\FINDINGTBA; the phrasing is the Paper~1 stream's and the correction is
+recorded against it rather than against the implementation that followed it.
+
+\paragraph{What $\mathcal S_2$ is, and why it cannot be a frame defect.}
+\emph{Annals~II}'s collision term is
+$C[\tau]\simeq\sigma_{\rm T}n_E\big(\bar f_1e^av^B_a
++\bar f_2e^ae^b\tau_{ab}-\tau\big)$ with $\bar f_1=1$ and
+$\bar f_2=0$, so $\mathcal S_2=0$ in this reconstruction. That is
+approximation \textbf{A-5} stated at the collision term rather than at the
+oscillator. \textbf{It cannot produce a frame disagreement at any $\ell$}:
+$\mathcal S_2\propto\tau_{ab}$, and GDE99~(37) makes $\tau_{A_\ell}$ invariant
+for $\ell\ge2$, so $\Delta\mathcal S_2=0$ identically and dropping the term
+changes both columns by the same amount. It is a
+\textbf{\S\ref{sec:frame-discrepancy} Triage~C} site --- it can ruin the
+spectrum and it cannot be seen by a frame instrument --- and listing it as a
+candidate for the frame gap confuses the two questions the triage tables exist
+to separate.
+
+% ===========================================================================
+\subsection{The $\ell=0$ matching row}
+\label{sec:ell-zero-row}
+
+\paragraph{The rows of (89) are Taylor coefficients of the kernel at the
+origin, and two of the three use their own rank's normalisation.}
+With $h_\ell=\alpha_\ell j_\ell$ and
+$\alpha_\ell=(2\ell+1)/\beta_\ell$ --- this bundle's own
+\texttt{functions/harmonics/weights.py}, where
+$\beta_\ell=\ell!/(2\ell-1)!!$ gives $\beta_0=\beta_1=1$ and
+$\beta_2=\tfrac23$ --- each row of (89) pairs $C_n$ with
+$h_\ell^{(n)}(0)$:
+
+\begin{center}\small
+\begin{tabular}{@{}cccl@{}}
+\toprule
+row & used & its own & the entry \\
+\midrule
+$\ell=2$ & $\alpha_2=\tfrac{15}2$ & $\alpha_2$ &
+  $h_2''(0)=\tfrac{15}2\cdot\tfrac2{15}=1$ \\
+$\ell=1$ & $\alpha_1=3$ & $\alpha_1$ &
+  $h_1'(0)=3\cdot\tfrac13=1$ \\
+$\ell=0$ & $\boldsymbol{\alpha_2=\tfrac{15}2}$ & $\boldsymbol{\alpha_0=1}$ &
+  $-\tfrac52$ printed; $h_0''(0)=-\tfrac13$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+(89) writes its $\delta_{\ell0}$ entry as $5\beta_2^{-1}\cdot\tfrac13$, which
+is $\alpha_2$ times $j_0''(0)$ up to the sign \textbf{B-11} corrects. The
+rank-two normalisation is right where it belongs and is carried into a row
+that is not rank two. \textbf{The two rows that are exactly unity are the
+control}: a normalisation error cannot produce $1$ twice and then
+$-\tfrac52$ once. Finding \FINDINGTBA; the discrepancy is
+$\alpha_2/\alpha_0=\tfrac{15}2$.
+
+\textbf{This route is independent of (89), which is what makes it a check
+rather than a restatement.} $\beta_\ell$ is fixed by the PSTF normalisation
+$O^{A_\ell}O_{A_\ell}$ and $j_0''(0)=-\tfrac13$ by the ascending series;
+neither comes from (89). (89) is the \emph{claim} about what the rows hold and
+the kernel is the \emph{object}. Two of the three rows reproduce (89)'s entry
+exactly from the object, which validates the route; the third does not.
+
+\paragraph{The $a\mathcal B_0\delta_{\ell0}$ row is not optional, and
+restoring it is the other half of the same correction.} The paragraph
+\emph{``Rank 0: not needed''} of \S\emph{The generic source derivatives} is
+\textbf{withdrawn}. With $\alpha_0$ on the left and the source row on the
+right,
+\begin{equation}
+  C_0 + k^2C_2\,h_0''(0) = -a\mathcal B_0 ,
+  \qquad h_0''(0)=-\tfrac13 ,
+\end{equation}
+and with $C_2=-k^{-2}a\mathcal B_2$ this solves to
+\begin{equation}
+  \boxed{\;C_0 \;=\; -\tfrac13\,a\mathcal B_2 \;-\; a\mathcal B_0\;}
+  \label{eq:c0-corrected}
+\end{equation}
+in place of (90)'s $C_0=-\tfrac52a\mathcal B_2$. Both corrections are needed
+and neither alone suffices: the rank-2 slot residual $\gamma$ is $-\tfrac52$
+as printed, $+\tfrac13$ with $\alpha_0$ alone, and $0$ only with both.
+Instrument \texttt{c5\_monopole.py}, under \texttt{tests/frame/}, which also
+carries a negative control on each alternative.
+
+\paragraph{The corrected row makes $C_0$ frame-invariant, which answers
+Appendix~\ref{sec:frame-division}'s open question~3.} That appendix
+finds $\Delta C_0=+\tfrac52kv$ with no partner anywhere in (102), and measures
+the consequence at three to four orders of magnitude. Under
+\eqref{eq:c0-corrected} the shift is instead
+\begin{equation}
+  \Delta C_0 = -\tfrac13\,\Delta(a\mathcal B_2) - \Delta(a\mathcal B_0)
+             = -\tfrac13(-kv) - \tfrac13 kv = 0 ,
+\end{equation}
+using the appendix's own frame table for $a\mathcal B_2=-kv$ and, for the
+monopole, $\mathcal B_0=-\tfrac13\mathrm D^a\tau_a$ with
+$\tilde\tau_a\approx\tau_a-v_a$, giving $a\,\Delta\mathcal B_0=+\tfrac13kv$.
+\textbf{$\Delta C_0$ has no partner because it is zero.} Finding
+\FINDINGTBA. Appendix~\ref{sec:frame-division}'s questions~3 and~4 close
+with it; its questions~1 and~2 are settled by \textbf{T-66} and by
+\S\ref{sec:w-form} respectively.
+
+\paragraph{One thing \eqref{eq:c0-corrected} does not disturb.} Appendix
+\ref{sec:frame-division} excludes a comoving/physical or amplitude/potential
+mismatch by measuring $C_0/(k^2C_2)$ as a background-independent and
+$k$-independent rational. That argument holds under
+\eqref{eq:c0-corrected} unchanged --- the ratio is still a pure rational, now
+$\tfrac13$ rather than $\tfrac52$ --- because what it rests on is that $C_0$
+and $C_2$ divide one $a\mathcal B_2$. \textbf{The measurement was right and
+what it established was internal consistency, which is not correctness.} It is
+the same reading the bundle gave T-82 and T-85, applied to itself.
+
+% ===========================================================================
+\subsection{The $\kappa'$ ledger}
+\label{sec:kappa-ledger}
+
+\paragraph{The rule.} \emph{$\kappa'$ may live in $W$, in $\mathcal V$, or in a
+derivative of either --- never in a coefficient.} A coefficient carrying a bare
+$\kappa'$ manufactures $\kappa'^2$ the moment it is differentiated. At
+$\eta_*$ in this bundle's units \textbf{D18} measures
+$\kappa'=3.82\times10^2$ on Einstein--de~Sitter and $2.64\times10^2$ on
+\texttt{PLANCK\_MODEL}, so a spurious power of it is two to three orders.
+
+\paragraph{Why it is a rule and not a preference.} It separates two $\kappa'^2$
+that are indistinguishable in the output. The \emph{legitimate} one is inside
+$\dot{\mathcal V}=(\kappa''+\kappa'^2)W$ and comes from differentiating the
+\textbf{weight}; it is required, and \eqref{eq:w-form} produces it whenever a
+streaming term is integrated. The \emph{illegitimate} one comes from
+differentiating a \textbf{coefficient}, and nothing requires it. Only the
+provenance distinguishes them, so the rule is stated on the provenance.
+
+\paragraph{(102) as printed violates it, and this supplement prints both halves
+of that without reconciling them.} \S\emph{The generic source derivatives}
+gives $-C_1\simeq k^{-1}(a\mathcal B_1+\kappa'v_B)$ --- a coefficient holding a
+bare $\kappa'$ --- and (102) then differentiates it. \S\ref{sec:frame-discrepancy}
+measures the result: $\mathcal V\kappa''\hat v_B$ is $93$--$97\%$ of the
+released integrand, three powers of $\kappa'$ where the physical Doppler source
+$g\hat v_B=W\kappa'\hat v_B$ carries one. \textbf{The definition and the rule
+are both correct and they contradict each other}; \eqref{eq:w-form} is the
+assembly in which the contradiction does not arise, because $C_1$ does not
+exist in it.
+
+\paragraph{It is enforced before implementation, not after.}
+\texttt{tests/frame/c7\_kappa\_ledger.py} grades an assembly structurally ---
+for each term, whether its coefficient holds $\kappa'$ and at what power ---
+rather than measuring an output. It reports the $W$-form clean, and (102) as
+printed and T-88's variant as carrying $\kappa'$ in a coefficient at power two.
+\textbf{Both of the defects of 19--20~October would have been caught by that
+one test before either was implemented}, which is the argument for a structural
+check over a numerical one: a numerical check on an assembly that is wrong in
+this way measures the defect faithfully and reports a number.
+
+% ===========================================================================
+\subsection{What this section establishes, and what it does not}
+
+\textbf{Established.} That \eqref{eq:w-form} follows from
+\eqref{eq:transport} by one multiplication; that it assigns both weights
+without a choice and leaves no $\kappa'$ in any coefficient; that (89)'s
+$\ell=0$ row carries $\alpha_2$ where $\alpha_0$ belongs, with the $\ell=1$ and
+$\ell=2$ rows as controls; that \eqref{eq:c0-corrected} is the row solved with
+both corrections and that it makes $\Delta C_0=0$; and that
+$\mathcal S_2$ is a Triage~C site and cannot carry a frame gap.
+
+\textbf{Not established.} That \eqref{eq:w-form} closes the frame gap. It is
+the only assembly in the register that satisfies the ledger, and no setting of
+\texttt{integral\_solution}'s seven controls reaches it --- each redistributes
+weights while leaving $\kappa'$ inside $C_1$ --- but that is an argument from
+exhaustion of what has been tried, not a measurement.
+
+\textbf{The acceptance condition, stated in advance so the repair can fail
+visibly.} (i)~$A_N=A_C$ to the quadrature floor \textbf{T-85} measures, neither
+better nor worse; (ii)~the Newtonian column moves by no more than that floor;
+(iii)~\texttt{c7\_kappa\_ledger.py} reports the assembly clean
+\emph{by construction}, no coefficient holding $\kappa'$, rather than clean by
+measurement; (iv)~\texttt{c5\_monopole.py} reports $\gamma=0$ on the live
+coefficients and not only on the instrument's own; and (v)~\textbf{the spectrum
+adjudicates, and it adjudicates last}, since two wrong columns can agree.
+
+\textbf{The order is forced, not preferred --- in implementation, not in
+exposition.} \S\ref{sec:ell-zero-row} is implemented before
+\S\ref{sec:w-form}: the $\ell=0$ row sits inside the bracket the $W$-form
+reweights, so a weight correction applied over a $C_0$ that is wrong by
+$\tfrac{15}2$ measures the wrong thing. \textbf{T-96}'s second run is that
+measurement --- a $W$-form instrument run against coefficients still carrying
+the printed row, returning $O(1)$ --- and it is reported there as not
+conclusive, correctly.

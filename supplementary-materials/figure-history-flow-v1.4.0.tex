@@ -1,0 +1,147 @@
+% ---------------------------------------------------------------------------
+% The photon's history, radiation era through decoupling to free streaming.
+%
+% SELF-CONTAINED BY DESIGN. Inputs nothing. Requires tikz with the libraries
+% positioning, arrows.meta, fit, backgrounds, calc.  Written 2026-10-21 by the
+% Paper 1 stream at the PI's direction; it is the spine the theory sections
+% are ordered on, and every box names the section that treats it.
+%
+% GRAYSCALE-SAFE. Nothing is distinguished by colour alone: the three source
+% weights are distinguished by line style (solid / dashed / dotted) and by
+% their printed label, and every defect box carries its letter.
+% ---------------------------------------------------------------------------
+\begin{figure*}[tb]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  font=\footnotesize,
+  >={Stealth[length=5pt]},
+  epoch/.style={draw, rounded corners=1pt, align=center, minimum height=7mm,
+                inner sep=3pt, fill=black!4},
+  phys/.style={align=center, inner sep=2pt},
+  slot/.style={draw, align=center, inner sep=3pt, minimum height=6mm,
+               font=\scriptsize},
+  defect/.style={draw, dashed, align=left, inner sep=3pt, font=\scriptsize,
+                 rounded corners=1pt},
+  sec/.style={font=\scriptsize\itshape, text=black!55},
+  tick/.style={draw, black!55},
+]
+
+% ---- the conformal-time spine --------------------------------------------
+\def\XA{0}  \def\XB{3.0} \def\XC{6.2} \def\XD{8.8} \def\XE{12.0} \def\XF{15.4}
+\draw[->, thick] (\XA-0.5,0) -- (\XF+0.9,0);
+\node[anchor=west] at (\XF+1.0,0) {$\eta$};
+
+\foreach \x/\lab in {\XB/{$\eta_{\rm eq}$}, \XD/{$\eta_*$},
+                     \XE/{$6\eta_*$}, \XF/{$\eta_0$}} {
+  \draw[tick] (\x,-0.13) -- (\x,0.13);
+  \node[below=1pt, font=\scriptsize] at (\x,-0.13) {\lab};
+}
+
+% ---- epoch band -----------------------------------------------------------
+\node[epoch, anchor=south west] at (\XA-0.5,0.30)
+  {radiation era};
+\node[epoch, anchor=south west] at (\XB+0.08,0.30)
+  {tight coupling};
+\node[epoch, anchor=south west] at (\XD+0.08,0.30)
+  {slow decoupling};
+\node[epoch, anchor=south west] at (\XE+0.08,0.30)
+  {free streaming};
+
+% ---- what the hierarchy is, stage by stage --------------------------------
+\node[phys, anchor=south west] at (\XA-0.5,1.15)
+  {\begin{minipage}{3.2cm}\centering
+   $\Phi$ decays through\\horizon entry;\\the oscillator is \emph{driven}
+   \end{minipage}};
+\node[phys, anchor=south west] at (\XB+0.05,1.15)
+  {\begin{minipage}{2.8cm}\centering
+   $\tau_{A_\ell}\!\approx\!0$, $\ell>2$;\\
+   $\tau_{ab}\simeq-\kappa'^{-1}\!\big[\sigma_{ab}\!+\!\mathrm D_{\langle a}v^B_{b\rangle}\big]$
+   \end{minipage}};
+\node[phys, anchor=south west] at (\XD+0.05,1.15)
+  {\begin{minipage}{2.9cm}\centering
+   the visibility $\mathcal V$\\has finite width\\$\Delta\eta=0.00972$
+   \end{minipage}};
+\node[phys, anchor=south west] at (\XE+0.05,1.15)
+  {\begin{minipage}{3.0cm}\centering
+   $\kappa'\!\to\!0$, $W\!\to\!1$;\\GDE99~(37) holds\\
+   \textsc{theorem}
+   \end{minipage}};
+
+% ---- the two weights, drawn as what they are ------------------------------
+\node[anchor=east, font=\scriptsize] at (\XA-0.6,-1.15) {$W=e^{-\kappa}$};
+\draw[thick, domain=\XA-0.5:\XF, samples=160, smooth]
+  plot (\x, {-1.15 + 0.55/(1+exp(max(-8,min(8,-(\x-\XD)*2.2))))});
+\node[anchor=east, font=\scriptsize] at (\XA-0.6,-2.35) {$\mathcal V=W\kappa'$};
+\draw[thick, dashed, domain=\XA-0.5:\XF, samples=200, smooth]
+  plot (\x, {-2.35 + 0.95*exp(max(-8,-((\x-\XD)*1.55)^2))});
+\draw[tick, dotted] (\XD,-2.45) -- (\XD,0);
+
+% ---- the W-form: which source travels under which weight -------------------
+\node[slot, anchor=north west, text width=5.9cm, align=left] at (\XA-0.5,-3.15)
+  {\textbf{under $W$ --- the gravitational source $a\mathcal B_\ell$}\\[1pt]
+   $a\mathcal B_0=-\tfrac13\mathrm D^a\tau_a$,\quad
+   $a\mathcal B_1=\mathrm D_a\ln T+A_a$,\\
+   $a\mathcal B_2=\sigma_{ab}$\quad(all three vanish in the background)};
+\node[slot, anchor=north east, text width=5.9cm, dashed, align=left]
+  at (\XF+0.9,-3.15)
+  {\textbf{under $\mathcal V$ --- the in-scattered source $\mathcal S_\ell$}\\[1pt]
+   $\mathcal S_1=\bar f_1v^B_a$,\quad
+   $\mathcal S_2=\bar f_2\tau_{ab}$\\
+   \emph{Annals~II} sets $\bar f_2=0$: that is A-5, and it is \textsc{triage c}
+   --- $\Delta\mathcal S_2=0$ by GDE99~(37)};
+\node[anchor=north, align=center, font=\footnotesize]
+  at ({(\XA+\XF)/2}, -4.62)
+  {$\dfrac{\mathrm d}{\mathrm d\eta}\big[W\tau_\ell\big]
+    + W\,(\text{streaming})
+    \;=\; W\,a\mathcal B_\ell \;+\; \mathcal V\,\mathcal S_\ell$};
+\node[anchor=north, align=center, font=\scriptsize]
+  at ({(\XA+\XF)/2}, -5.25)
+  {\textbf{One $\kappa'$, consumed by the integrating factor. No coefficient
+   holds one, so none can be differentiated.}};
+
+% ---- the defects, each at the conformal time it acts at --------------------
+\node[defect, anchor=north west, text width=2.9cm] at (\XA-0.5,-6.05)
+  {\textbf{C3} radiation driving\\
+   prescribed $\Phi$, static $T(k)$\\
+   \emph{amplitude and phase}\\\textsc{open} (A-3)};
+\node[defect, anchor=north west, text width=2.9cm] at (\XB+0.45,-6.05)
+  {\textbf{C5} $k_D$ taken at $R=0$\\
+   while $R(\eta_*)\simeq0.61$\\
+   \emph{the damping scale}\\\textsc{measured}, T-81};
+\node[defect, anchor=north west, text width=3.0cm] at (\XD-0.95,-6.05)
+  {\textbf{A4\,/\,A5} the $\ell=0$ row\\
+   $\alpha_2$ where $\alpha_0$ belongs;\\
+   $a\mathcal B_0\delta_{\ell0}$ dropped\\\textsc{theorem}, \texttt{c5}};
+\node[defect, anchor=north west, text width=2.9cm] at (\XE-0.55,-6.05)
+  {\textbf{C4} frozen at $6\eta_*$\\
+   no slip, no quadrupole,\\no polarisation\\\textsc{open} (A-5)};
+\node[defect, anchor=north west, text width=2.9cm] at (\XF-0.1,-6.05)
+  {\textbf{C6} $\mathcal D(k)$ applied\\
+   where $e^{-\kappa}=1$\\
+   \emph{the late ISW}\\\textsc{open}, T-81b};
+
+% the one defect that is not local in eta
+\node[defect, anchor=north, text width=13.4cm, thick]
+  at ({(\XA+\XF)/2+1.0}, -7.95)
+  {\textbf{A1 --- not local in $\eta$, and the one that is upstream of the rest.}
+   (102) carries $\kappa'$ inside $C_1$ and then differentiates it, so the
+   released integrand holds $\mathcal V\kappa''\hat v_B$ at $93$--$97\%$ of its
+   own total: \textbf{three powers of $\kappa'$ where the source carries one}.
+   The $W$-form above is the assembly in which that term cannot arise, because
+   no coefficient holds $\kappa'$ to be differentiated. Instrument:
+   \texttt{tests/frame/c7\_kappa\_ledger.py}.};
+
+% ---- section index --------------------------------------------------------
+\node[sec, anchor=north west] at (\XA-0.5,-9.55)
+  {§\,\ref{sec:w-form} the $W$-form\ \ \textbar\ \
+   §\,\ref{sec:ell-zero-row} the $\ell=0$ row\ \ \textbar\ \
+   §\,\ref{sec:kappa-ledger} the $\kappa'$ ledger\ \ \textbar\ \
+   §\,\ref{sec:frame-discrepancy} triage\ \ \textbar\ \
+   §\,\ref{sec:scattering-expansion} the scattering expansion};
+
+\end{tikzpicture}%
+}
+\caption{The photon's history and where each open question acts.$^{\dagger}$}
+\label{fig:history-flow}
+\end{figure*}

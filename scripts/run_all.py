@@ -201,6 +201,15 @@ DIAGNOSTICS: list[tuple[str, str]] = [
     # tree cannot drift away from the harness that is supposed to run it.
     ("D17 P1-T's W-form against the released (102)",
      "scripts/diagnostic_d17_w_form.py"),
+    # D18 is P1-T's section 6 item 1: their kappa' ledger applied to the
+    # arrays this bundle actually builds, rather than to c7's fixtures. The
+    # split of each coefficient into its kappa'-free and kappa'-carrying parts
+    # is EXACT -- every coefficient is affine in kappa' -- and the diagnostic
+    # verifies that affineness at lambda=2 before reporting, so a construction
+    # that stopped being affine would void the split rather than be reported
+    # wrongly. Finding T-101.
+    ("D18 the kappa' ledger against the released assembly",
+     "scripts/diagnostic_d18_released_kappa_ledger.py"),
 ]
 
 
