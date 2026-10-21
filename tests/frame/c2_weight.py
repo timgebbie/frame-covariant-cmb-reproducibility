@@ -6,6 +6,12 @@ never S''.   Audit result 1 (weight half).
 """
 import sys, pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+
+#: The one source for this check's wording in docs/THEORY-AUDIT.md.
+#: The generator reads it from here and holds no copy, so correcting
+#: the instrument corrects the audit by construction.
+AUDIT_TITLE = 'The rank-2 weight'
+AUDIT_PROSE = "The rank-2 sector enters at $k^{-2}$, and the boundary pair left by two integrations by parts is in $S$ and $S'$ — **never** $S''$."
 import numpy as np
 from _common import finish, j, jp, jpp, report
 from scipy.integrate import quad

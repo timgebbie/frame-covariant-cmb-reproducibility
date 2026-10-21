@@ -1,6 +1,15 @@
 #!/usr/bin/env python3
 """C5 -- the monopole row, and the dipole shift.   Audit results 7, 8.
 
+SUPERSEDED IN ITS CONCLUSION BY T-107, 2026-10-21.  Every measurement below
+stands.  What was drawn from them does not: gamma pairs Delta C_0 against
+k^2 Delta C_2, and the partner of Delta C_0 is in -C_1' instead -- (107)
+carries +(k/3) tau_1 = -a.B_0 already.  So the restoration that drives gamma
+to zero counts the monopole source twice and criterion 5b doubles.  The l=0
+row is correctly EMPTY of B_0: tau_0 = 0 is a CONSTRAINT, since T is defined
+as the monopole of T(x,e), and differentiating it puts a zero on the right.
+Only the normalisation is wrong -- B-16.  See c8_rank0_partner.py.
+
 The l=0 matching row of Annals II `find_coef`, with the l=0 SOURCE restored
 (which `source-calB` carries and `find_coef` drops):
 
@@ -25,6 +34,22 @@ as excluding one.
 """
 import sys, pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+
+#: The one source for this check's wording in docs/THEORY-AUDIT.md.
+#: The generator reads it from here and holds no copy, so correcting
+#: the instrument corrects the audit by construction.
+AUDIT_TITLE = 'The monopole row and the dipole shift'
+AUDIT_PROSE = (
+  '$a\\,\\Delta\\mathcal{B}_0=\\tfrac13kv=\\tfrac13k^2\\Delta C_2$ exactly, and '
+  '$\\gamma$ -- which pairs $\\Delta C_0$ against $k^2\\Delta C_2$ -- vanishes '
+  'only with $\\mathcal{B}_0$ restored. **Both measurements stand and the '
+  'conclusion drawn from them was wrong.** Finding **T-107**: the partner of '
+  '$\\Delta C_0$ is not in $C_2$ but in $-C_1$\u2032, so $\\gamma$ asks the wrong '
+  'pairing, and the restoration that makes it vanish counts the monopole '
+  'source twice -- criterion 5b doubles at $98.5\\%$. See **C8**, which scores '
+  'the whole rank-0 content of the bracket instead of one coefficient against '
+  'another. **M15: a gate built from one coefficient cannot see a '
+  'cancellation distributed across the bracket.**')
 import sympy as sp
 from _common import (finish, ETA_0 as E0, W, s, sdot, j, jp, jpp, integrate, GRID, report)
 

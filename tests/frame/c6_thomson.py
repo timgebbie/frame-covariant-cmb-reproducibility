@@ -31,6 +31,12 @@ slot as alpha int V s K', and the K' coefficient becomes 2 alpha V.
 """
 import sys, pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+
+#: The one source for this check's wording in docs/THEORY-AUDIT.md.
+#: The generator reads it from here and holds no copy, so correcting
+#: the instrument corrects the audit by construction.
+AUDIT_TITLE = 'The Thomson $v^B_a$ slot'
+AUDIT_PROSE = "$\\kappa'v_B$ **cannot** sit inside $C_1$: the $K'$ coefficient becomes $2\\alpha\\mathcal{V}$ and no $(\\alpha,\\beta,\\gamma)$ makes the bulk invariant. Carried as its own **undifferentiated** term, invariance requires $c=\\alpha$ and the reduced $\\hat v_B=v_B/k$; the un-reduced form needs $c=\\alpha/k$, which is not a constant. **This is not a weight change**: $W\\kappa'=\\mathcal{V}$ is an identity, so the Thomson term is already at visibility weight in (102) as printed. What (102) does wrong is **differentiate** it --- $\\mathrm d/\\mathrm d\\eta$ of a coefficient still carrying a bare $\\kappa'$ is what manufactures $\\kappa'^2$. The remedy is not to move it; it is not to differentiate it."
 import sympy as sp
 from _common import (finish, ETA_0 as E0, V, W, s, sdot, j, jp, jpp, integrate, GRID,
                      report)

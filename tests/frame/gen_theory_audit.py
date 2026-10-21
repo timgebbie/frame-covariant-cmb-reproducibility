@@ -3,77 +3,53 @@
 
     python3 gen_theory_audit.py > ../../docs/THEORY-AUDIT.md
 
-Every number in the output is read from a check's own machine-readable record.
-Nothing is transcribed. Exits non-zero if any check fails, so a failing suite
+Every number in the output is read from a check's own machine-readable
+record, and **every word of prose is read from the instrument it describes**
+-- its AUDIT_TITLE and AUDIT_PROSE. This generator holds no copy of either, so
+correcting an instrument corrects the audit by construction and a wording
+cannot drift from the test it reports. Exits non-zero if any check fails, so a failing suite
 cannot produce a document.
 """
-import hashlib, json, pathlib, re, subprocess, sys, datetime
+import ast, hashlib, json, pathlib, re, subprocess, sys, datetime
 
 HERE = pathlib.Path(__file__).resolve().parent
 CHECKS = ['c1_identity.py', 'c2_weight.py', 'c3_byparts.py',
           'c4_rank_slot.py', 'c5_monopole.py', 'c6_thomson.py',
-          'c7_kappa_ledger.py']
+          'c7_kappa_ledger.py', 'c8_rank0_partner.py']
 
-ROWS = {   # check -> (short title, what it establishes)
- 'c1_identity.py': ('The frame identity and the Sachs--Wolfe invariant',
-   'Under $\\tilde u_a=u_a+w_a$, $\\Delta(\\delta T+\\Phi_A)=(\\Delta C_2)\'$ with '
-   'coefficient exactly 1 — the $-Hw_a$ arising from the projector '
-   '$\\tilde h_{ab}=h_{ab}+2u_{(a}w_{b)}$, not from $T$. The boost-invariant '
-   'combination $(\\delta T+\\Phi_A)-C_2\'$ equals the same value in **both** '
-   'threadings, independent of $k$ and $\\eta$, and it is the Sachs--Wolfe '
-   'combination.'),
- 'c2_weight.py': ('The rank-2 weight',
-   'The rank-2 sector enters at $k^{-2}$, and the boundary pair left by two '
-   'integrations by parts is in $S$ and $S\'$ — **never** $S\'\'$.'),
- 'c3_byparts.py': ('The bulk source, against the integral it comes from',
-   'The exact bulk source is $W(C_0-C_1\'+C_2\'\')-\\mathcal{V}C_1+2\\mathcal{V}C_2\''
-   '+\\dot{\\mathcal{V}}C_2$. Annals II\'s printed `int_soln_damping` does not '
-   'reproduce its own integral: $+2\\mathcal{V}C_2\'$ is printed as '
-   '$-2\\mathcal{V}C_2$, the sign on $\\mathcal{V}C_1$ is reversed, and a '
-   'lower-limit boundary $\\mathcal{V}(\\eta_*)C_2(\\eta_*)$ is absent.'),
- 'c4_rank_slot.py': ('The rank-2 slot forced by frame invariance',
-   'Requiring $\\Delta\\tau_\\ell=0$ at $\\ell\\ge2$ for arbitrary boost potential '
-   'gives $\\beta=-\\alpha$ and $\\gamma=0$. **The residual floor here is not '
-   'numerical** — it is the Thomson term, absent from this functional; see C6.'),
- 'c5_monopole.py': ('The monopole row and the dipole shift',
-   '$a\\,\\Delta\\mathcal{B}_0=\\tfrac13kv=\\tfrac13k^2\\Delta C_2$ exactly, so '
-   '$\\gamma=0$ closes **only with $\\mathcal{B}_0$ restored** to the $\\ell=0$ '
-   'matching row. The monopole row is the only place GDE99 (37)\'s dipole shift '
-   'enters the integral solution. **This check cannot see an additive '
-   'boost-invariant piece in $C_0$** — $\\Delta C_0=0$ fixes normalisation, not '
-   'content.'),
- # **This entry carried the pre-correction wording until 2026-10-21.** It read
- # "Carried separately under $\mathcal{V}$", which is what T-88 implemented as
- # a WEIGHT CHANGE. It is not one: $W\kappa'=\mathcal V$ is an identity, so
- # $W C_1^{\rm thom}=-\mathcal V\hat v_B$ already and there was never a weight
- # to change. P1-T corrected `c6_thomson.py`'s docstring on 2026-10-20 and the
- # correction did not travel here, because this text is HARD-CODED in the
- # generator rather than read from the instrument --- so re-running the
- # generator reproduced the defect instead of fixing it. Finding **T-103**.
- 'c6_thomson.py': ('The Thomson $v^B_a$ slot',
-   '$\\kappa\'v_B$ **cannot** sit inside $C_1$: the $K\'$ coefficient becomes '
-   '$2\\alpha\\mathcal{V}$ and no $(\\alpha,\\beta,\\gamma)$ makes the bulk '
-   'invariant. Carried as its own **undifferentiated** term, invariance '
-   'requires $c=\\alpha$ and the reduced $\\hat v_B=v_B/k$; the un-reduced '
-   'form needs $c=\\alpha/k$, which is not a constant. **This is not a weight '
-   'change**: $W\\kappa\'=\\mathcal{V}$ is an identity, so the Thomson term is '
-   'already at visibility weight in (102) as printed. What (102) does wrong is '
-   '**differentiate** it --- $\\mathrm d/\\mathrm d\\eta$ of a coefficient '
-   'still carrying a bare $\\kappa\'$ is what manufactures $\\kappa\'^2$. The '
-   'remedy is not to move it; it is not to differentiate it.'),
- 'c7_kappa_ledger.py': ('The $\\kappa\'$ ledger',
-   'Multiplying the transport equation by $W=e^{-\\kappa}$ sends the '
-   'gravitational source to $W$ and the in-scattered Thomson source to '
-   '$\\mathcal V=W\\kappa\'$, its $\\kappa\'$ consumed by the integrating '
-   'factor. **$\\kappa\'$ may live in $W$, in $\\mathcal V$, or in a '
-   'derivative of either --- never in a coefficient.** A coefficient '
-   'carrying a bare $\\kappa\'$ manufactures $\\kappa\'^2$ the moment it is '
-   'differentiated, which is what (102) does and what T-88 did. This '
-   'separates the *legitimate* $\\kappa\'^2$ inside '
-   '$\\dot{\\mathcal V}=(\\kappa\'\'+\\kappa\'^2)W$, from differentiating the '
-   '**weight**, from the illegitimate one, from differentiating a '
-   '**coefficient** --- both look identical in the output.'),
-}
+def audit_prose(check):
+    """Read AUDIT_TITLE and AUDIT_PROSE from the instrument's SOURCE TEXT.
+
+    By `ast.parse`, which builds the syntax tree without executing anything --
+    the instruments run and `sys.exit`, so importing one would execute it.
+    Parsing rather than pattern-matching also takes whatever literal form the
+    author used: a single string or a parenthesised concatenation.
+    **The generator holds no copy of any wording.**
+
+    A check without both literals fails the run rather than being reported
+    with stale or absent prose -- which is the defect that put the
+    pre-correction c6 wording into a *generated* file and left it there
+    through a regeneration (D6).
+    """
+    tree = ast.parse((HERE / check).read_text(), filename=check)
+    found = {}
+    for node in tree.body:
+        if not isinstance(node, ast.Assign):
+            continue
+        for t in node.targets:
+            if isinstance(t, ast.Name) and t.id in ('AUDIT_TITLE', 'AUDIT_PROSE'):
+                try:
+                    found[t.id] = ast.literal_eval(node.value)
+                except ValueError:
+                    print(f'{check}: {t.id} is not a literal', file=sys.stderr)
+                    sys.exit(2)
+    for name in ('AUDIT_TITLE', 'AUDIT_PROSE'):
+        if name not in found:
+            print(f'{check} carries no {name}', file=sys.stderr)
+            sys.exit(2)
+    return found['AUDIT_TITLE'], found['AUDIT_PROSE']
+
+
 
 def sha(p):
     return hashlib.sha256(p.read_bytes()).hexdigest()[:12]
@@ -128,7 +104,7 @@ o.append('**Polarity.** A row marked `DEFECT PRESENT` asserts that a defect in '
          'exists.\n')
 o.append('## Results\n')
 for c in CHECKS:
-    title, body = ROWS[c]
+    title, body = audit_prose(c)
     r = recs[c]
     o.append(f'### {title}\n')
     o.append(body + '\n')

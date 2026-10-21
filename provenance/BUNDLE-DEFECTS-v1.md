@@ -8881,3 +8881,87 @@ and confirmed; the size is measured and smaller.
 **The pointwise share at $\eta_*$ still falls at $k=300$** (0.234 → 0.209), so
 the phase argument P1-T gave for the pointwise–envelope gap is untouched by
 this. The two estimators disagree at $k=300$ and now disagree more.
+
+---
+
+## T-111 — **F9 after T-109: the primary peak moves 22% and more than half its error is gone. The plateau and the secondary peaks do not move at all, and that splits the problem in two**
+
+*PI's re-run 2026-10-21, read off the rendering and the CSV. P1-B's own
+prediction for this run was wrong by a factor of ten and is recorded as wrong.*
+
+### The peak
+
+| | before T-109 | after | |
+|---|---|---|---|
+| EdS | 280.4 | **224.2** | $-20.0\%$ |
+| ΛCDM | 224.5 | **193.7** | $-13.7\%$ |
+| PLANCK | 341.7 | **266.6** | $-22.0\%$ |
+
+Against the matched CAMB/CLASS at $206.1$, PLANCK's excess falls from
+**$+65.8\%$ to $+29.4\%$**. More than half the peak-position error is gone,
+and it went on a units defect the PI found.
+
+### P1-B predicted 2% and measured 22%
+
+T-109 recorded *"the first peak moves down by about 2%"*, reasoning from
+$\ell_A$ alone ($272.19\to266.75$). **That was wrong by an order of
+magnitude.** The ratio of the peak to $\ell_A$ is what moved:
+
+$$\frac{\ell_{\rm peak}}{\ell_A}:\quad 1.2554 \;\longrightarrow\; 0.9994 .$$
+
+$\ell_A$ moved 2%; the *position within* $\ell_A$ moved 20%, and nothing in
+the $\ell_A$ argument could see it. **A prediction built from one factor
+cannot see a change in a second one** — M14 and M15's shape a third time, now
+against P1-B's own forecast.
+
+### And it says where the rest of the error is
+
+The standard first peak sits at $\simeq0.757\,\ell_A$ — which is exactly what
+the matched CAMB gives, $206.1/272.19=0.7572$. **This bundle now puts it at
+$1.00\,\ell_A$.** The residual excess is $1.2935\times$ and $1/0.757=1.3210$:
+agreeing to 2%.
+
+> **The remaining peak-position error is, to within 2%, the whole acoustic
+> phase shift.** A peak at $1.00\,\ell_A$ is the first extremum of
+> $\cos(kr_s)$ with *no driving*; the shift to $0.757$ is what radiation-era
+> driving does to the phase. That is **A-3**, it is already recorded as a
+> deliberate approximation, and it is **v1.4.0's**, not a defect.
+
+### The morphology, counted from the CSV rather than read off the picture
+
+Interior local maxima, CDM frame:
+
+| | low $\ell$ | primary | secondary |
+|---|---|---|---|
+| CAMB / CLASS | **none** | 210 | **480, 720** |
+| EdS | **(7, 13.88)** | 210 | **none** |
+| ΛCDM | **(7, 10.41)** | 180 | **none** |
+| PLANCK | **(7, 8.83)** | 270 | **none** |
+
+And the **Newtonian column has no acoustic structure at all** — its maxima are
+$(22,1.01)$ then machine zero at 450, 690, 870. The frame gap, in morphology.
+
+### This corrects P1-B's own audit of this morning
+
+That audit said *"the low-ℓ plateau and the first peak are one defect seen at
+the two ends of $k$."* **The measurement splits them differently:**
+
+1. **No plateau — a spurious maximum at $\ell=7$** at 8.8–13.9× the
+   normalisation point, where CAMB has no maximum below the primary at all.
+2. **No secondary peaks**, where CAMB has two. The oscillation *exists in the
+   source* — $(\delta T+\Phi_A)(\eta_*)$ tracks $\cos(kr_s)$ in exact phase
+   and period (**T-71**, **T-74**) — and does not survive the projection.
+3. **The primary peak**, now 29% high, which is the phase shift above.
+
+**(1) and (2) are the same defect and it is not the one (3) is.** At low $k$
+the boundary term is 105% $\kappa'\hat v_B$ (**T-101**), which puts a
+Doppler-shaped term where the Sachs–Wolfe plateau belongs; in the bulk
+$\mathcal V\kappa''\hat v_B$ is 93–97% of the integrand (**T-94**) and is
+*smooth*, so it swamps the oscillating part and buries the secondary peaks.
+**One term, two symptoms, and the $W$-form is the repair for both** —
+decision **S48**.
+
+> **Three of the four morphology failures are one repair, and the fourth is
+> already scheduled.** Plateau, secondary peaks and the frame gap are the
+> $\kappa'$-in-$C_1$ defect; the peak position is A-3 and v1.4.0. That is the
+> clearest the state of play has been.

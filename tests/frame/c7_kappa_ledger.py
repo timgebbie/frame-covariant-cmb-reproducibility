@@ -25,6 +25,12 @@ T-88's withdrawn slot_weight_split.
 """
 import sys, pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+
+#: The one source for this check's wording in docs/THEORY-AUDIT.md.
+#: The generator reads it from here and holds no copy, so correcting
+#: the instrument corrects the audit by construction.
+AUDIT_TITLE = "The $\\kappa'$ ledger"
+AUDIT_PROSE = "Multiplying the transport equation by $W=e^{-\\kappa}$ sends the gravitational source to $W$ and the in-scattered Thomson source to $\\mathcal V=W\\kappa'$, its $\\kappa'$ consumed by the integrating factor. **$\\kappa'$ may live in $W$, in $\\mathcal V$, or in a derivative of either --- never in a coefficient.** A coefficient carrying a bare $\\kappa'$ manufactures $\\kappa'^2$ the moment it is differentiated, which is what (102) does and what T-88 did. This separates the *legitimate* $\\kappa'^2$ inside $\\dot{\\mathcal V}=(\\kappa''+\\kappa'^2)W$, from differentiating the **weight**, from the illegitimate one, from differentiating a **coefficient** --- both look identical in the output."
 import sympy as sp
 from _common import report, finish
 

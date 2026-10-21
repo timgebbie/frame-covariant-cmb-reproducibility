@@ -11,6 +11,12 @@ Thomson term, absent from this functional.  See c6_thomson.py.
 """
 import sys, pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+
+#: The one source for this check's wording in docs/THEORY-AUDIT.md.
+#: The generator reads it from here and holds no copy, so correcting
+#: the instrument corrects the audit by construction.
+AUDIT_TITLE = 'The rank-2 slot forced by frame invariance'
+AUDIT_PROSE = 'Requiring $\\Delta\\tau_\\ell=0$ at $\\ell\\ge2$ for arbitrary boost potential gives $\\beta=-\\alpha$ and $\\gamma=0$. **The residual floor here is not numerical** — it is the Thomson term, absent from this functional; see C6.'
 import sympy as sp
 from _common import (finish, ETA_STAR as ES, ETA_0 as E0, W, s, sdot, j, jp, jpp,
                      integrate, GRID, report)

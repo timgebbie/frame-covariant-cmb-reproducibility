@@ -9,6 +9,12 @@ threadings, independent of k and eta.
 """
 import sys, pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+
+#: The one source for this check's wording in docs/THEORY-AUDIT.md.
+#: The generator reads it from here and holds no copy, so correcting
+#: the instrument corrects the audit by construction.
+AUDIT_TITLE = 'The frame identity and the Sachs--Wolfe invariant'
+AUDIT_PROSE = "Under $\\tilde u_a=u_a+w_a$, $\\Delta(\\delta T+\\Phi_A)=(\\Delta C_2)'$ with coefficient exactly 1 — the $-Hw_a$ arising from the projector $\\tilde h_{ab}=h_{ab}+2u_{(a}w_{b)}$, not from $T$. The boost-invariant combination $(\\delta T+\\Phi_A)-C_2'$ equals the same value in **both** threadings, independent of $k$ and $\\eta$, and it is the Sachs--Wolfe combination."
 import sympy as sp
 from _common import finish, report
 
