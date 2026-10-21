@@ -1,0 +1,78 @@
+D21 --- the Sachs--Wolfe scalar, on the LIVE coefficients.
+
+**P1-T's \S4.1, and it is the cheapest decisive instrument in the register.**
+`c1_identity.py` verifies it against fixtures; **it has never been pointed at
+the production path.**
+
+THE THEOREM, AND ITS REGIME
+---------------------------
+In the **large-scale, adiabatic, matter-dominated** limit, in both threadings,
+
+    (dT + Phi_A) - C_2'  =  + Phi / 3 .
+
+$(\delta T+\Phi_A)$ is $a\mathcal B_1/k$. It is a statement about the
+*coefficients*, upstream of every weight, every by-parts and every projection,
+so it separates "the source assembly is wrong" from "the transport of a right
+source is wrong" --- the division v1.3.0 turns on.
+
+**What it does NOT contain, and an earlier draft of this file said it did.**
+The expression holds $\delta T$, $\Phi_A$ and $C_2'$ and **nothing else**:
+there is no $C_0$ in it, no $C_1'$, and no dipole. So it cannot be broken by a
+wrong $C_0$, by a wrong $C_1'$, or by a dipole normalisation, and this
+instrument must not be cited as covering any of them. It is a test of the
+intrinsic temperature source against the potential, and that is all it is.
+
+**Nor does it hold at arbitrary $k$ and $\eta$** --- the regime is stated
+above, and the window below enforces it. Both corrections are P1-T's, against
+their own earlier wording and against this file's first draft.
+
+
+
+  SCORED AS:   ratio = [ (dT + Phi_A) - C_2' ] / (Phi_A / 3)
+  which the theorem puts at 1 everywhere. Reported at the visibility peak and
+  as the worst over the super-horizon part of the grid.
+
+
+==============================================================================
+  EdS
+==============================================================================
+      k frame        ratio at eta_*   worst, super-horizon
+  ------------------------------------------------------------
+      2 newtonian          0.993177              9.195e-02
+      2 cdm                0.993177              9.195e-02
+     10 newtonian          0.938372              5.463e-02
+     10 cdm                0.938372              5.463e-02
+     60 newtonian         -0.483459                    nan
+     60 cdm               -0.483459                    nan
+    300 newtonian         -0.957360                    nan
+    300 cdm               -0.957360                    nan
+
+==============================================================================
+  PLANCK
+==============================================================================
+      k frame        ratio at eta_*   worst, super-horizon
+  ------------------------------------------------------------
+      2 newtonian          0.621685              1.066e+00
+      2 cdm                0.621685              1.066e+00
+     10 newtonian          0.552134              2.722e-01
+     10 cdm                0.552134              2.722e-01
+     60 newtonian         -1.384886                    nan
+     60 cdm               -1.384886                    nan
+    300 newtonian         -0.688628                    nan
+    300 cdm               -0.688628                    nan
+
+  READING THIS
+  ------------
+  Inside its regime the ratio should be 1. A ratio that is 1 there says the
+  intrinsic temperature source reproduces the covariant large-scale result, and
+  the plateau failure is then entirely downstream -- in the weight, the
+  by-parts or the projection. A ratio that is not 1, or that depends on k or
+  eta, says the failure starts in the coefficients, before any of that.
+
+  The Newtonian column has C_2' identically zero, so there the test is
+  (dT + Phi_A) = Phi_A/3 alone and nothing can hide in the rank-two slot.
+
+  THIS IS NOT A TEST OF THE SPECTRUM. It is the division between "wrong
+  source" and "wrong transport of a right source", which is the question
+  v1.3.0 exists to answer and the one five withdrawn repairs never posed.
+

@@ -8965,3 +8965,215 @@ decision **S48**.
 > already scheduled.** Plateau, secondary peaks and the frame gap are the
 > $\kappa'$-in-$C_1$ defect; the peak position is A-3 and v1.4.0. That is the
 > clearest the state of play has been.
+
+---
+
+## T-112 — **the Sachs–Wolfe scalar, run on the live coefficients for the first time: it holds to 0.68% on EdS. The plateau failure is therefore downstream of the source assembly**
+
+*P1-B, 2026-10-21, `diagnostic_d21_sachs_wolfe_scalar.py` (**D21**). P1-T's
+§4.1, which `c1_identity.py` has verified against fixtures since v1.0.0 and
+which **had never been pointed at the production path.***
+
+### The theorem and the measurement
+
+$(\delta T+\Phi_A)-C_2'=+\Phi/3$, in both threadings, **independent of $k$ and
+$\eta$**. Scored as the ratio to $\Phi_A/3$, super-horizon ($kr_s\le0.3$):
+
+| | $k=2$ at $\eta_*$ | worst super-horizon | $\rho_r/\rho_m$ at $z_*$ |
+|---|---|---|---|
+| **EdS** | **0.9932** | $9.2\times10^{-2}$ | **0** |
+| PLANCK | 0.6217 | $1.07$ | **0.188** |
+
+### What it establishes, and it is the division v1.3.0 exists to make
+
+**Einstein–de Sitter carries $\Omega_r=0$ exactly, so the matter-dominated
+Sachs–Wolfe relation is exact there — and the live coefficients reproduce it
+to 0.68%.**
+
+> **The source assembly is right where it can be checked exactly, and the
+> plateau is still absent.** F9's EdS column has a spurious maximum at
+> $\ell=7$ at $13.88\times$ the normalisation point and no plateau at all
+> (**T-111**). So **the plateau failure is not in the coefficients. It is
+> downstream — in the weight, the by-parts, or the projection.**
+
+That is the "wrong source" versus "wrong transport of a right source"
+question, and it is now answered on the one background where the answer is
+unambiguous. **Five withdrawn repairs never posed it.**
+
+### PLANCK's 37.8% is not the same finding
+
+PLANCK carries **18.8% radiation at $z_*$**, so the matter-dominated theorem
+is *not* exact there and a violation is expected. The measured 37.8% is of
+that order — roughly twice the radiation fraction, which is the shape of a
+$\Phi$ that is decaying while **A-3** holds the driving static.
+
+**So D21 reads as two separate statements**, and they must not be merged:
+on EdS it is a clean pass and localises the plateau failure downstream; on
+PLANCK it is a *measurement of what A-3 costs at the plateau*, which is a
+v1.4.0 quantity and not a defect.
+
+### What it does not establish
+
+The $k$-dependence at $k=10$ (0.938 on EdS) is a sub-horizon correction —
+$kr_s=0.32$ there, at the edge of the window — and is not evidence of
+anything. **At $k=60$ and $k=300$ no grid point is super-horizon at all**, so
+the theorem does not apply and the negative ratios printed at $\eta_*$ for
+those modes are **not** violations. They are reported because suppressing them
+would hide the window's boundary.
+
+And it says nothing about the first peak: the Sachs–Wolfe limit is a
+large-scale statement and the peak is not a large-scale object.
+
+---
+
+## T-113 — **P1-B's own withdrawals.** Six claims in this register and one decision rest on premises P1-T has now withdrawn, and an external review at `f887301` forced the revision
+
+*2026-10-21. The register is append-only, so the corrections are here rather
+than in the entries they correct. **Each names the entry it narrows.***
+
+### What was withdrawn upstream, and what it costs here
+
+**1. *"$\kappa'$ may never live in a coefficient"* is not a theorem.**
+$W(\kappa'S)=\mathcal V S$ is exact, so a coefficient *may* hold $\kappa'$.
+The defect in (102) is **wrong weights, signs, boundaries or missing
+partners** — which is what `c3` measures at 10–250% — not the presence of
+$\kappa'$ itself.
+
+> **Decision S48 is revised accordingly**, from a prohibition to a **review
+> flag**. It still earns its place: every assembly that failed this month
+> fails the flag, and the flag is cheap. It is no longer normative.
+>
+> Narrows **T-101**, **T-103**, **S48**. The *measurements* in T-101 stand —
+> $C_1$ and $C_1'$ do carry a bare $\kappa'$ and it is essentially all of
+> them. What does not stand is the inference that this is *by itself* the
+> defect.
+
+**2. *"Three powers of $\kappa'$"* is local, not general.**
+$\kappa''=-\kappa'^2$ holds **at the visibility maximum**, where
+$\mathcal V'=(\kappa''+\kappa'^2)W=0$. The 93–97% share follows because
+$\mathcal V$ concentrates the integrand *there*. Stated generally it is wrong.
+Narrows **T-94**, **T-101**, **T-111**.
+
+**3. The acoustic-phase mechanism is withdrawn by its author.** An exact
+integration by parts preserves the transfer **including its phase**, so
+*"(102) sums $\delta T$ and $\hat v_B$ and differentiates them together,
+rotating the phase"* cannot be a peak-position mechanism. **P1-B had this
+queued as the next run and it is cancelled.** Narrows nothing already written
+here; it removes a planned measurement.
+
+**4. The plateau-as-sub-percent-residue reasoning does not propagate.**
+Coefficient fractions at sampled $(k,\eta)$ — D18's 0.15–3.9% — **do not
+propagate to $|\sum_\ell T_\ell|^2$**. Narrows **T-111** and P1-B's morphology
+audit: *"at low $k$ the boundary term is 105% $\kappa'\hat v_B$, which puts a
+Doppler-shaped term where Sachs–Wolfe belongs"* is a statement about a
+coefficient, **not** about the plateau, and it was used as though it were
+about the plateau.
+
+**5. *"A wrong $C_0$ breaks the SW scalar"* is false.** The scalar is
+$(\delta T+\Phi_A)-C_2'$ and contains **no $C_0$, no $C_1'$ and no dipole**.
+**D21's first draft said it did** — inherited from P1-T's §4.1 wording — and
+is corrected in place. **T-112 is narrowed by this**: D21 tests the intrinsic
+temperature source against the potential and **that is all it tests**.
+
+**6. The scalar does not hold at arbitrary $k$ and $\eta$** — large-scale,
+adiabatic, matter-dominated only. D21's window already enforced it; its prose
+did not. Corrected.
+
+### T-112 restated under these corrections
+
+**What still stands**, and it is the useful half: on Einstein–de Sitter
+($\Omega_r=0$ exactly, so the limit is exact) the live coefficients reproduce
+the Sachs–Wolfe relation **to 0.68% super-horizon**, and F9's EdS column has
+no plateau. **So the intrinsic temperature source is right and the plateau
+failure is downstream of it.**
+
+**What does not**: that this exonerates the *whole* source assembly. It
+exonerates $\delta T$, $\Phi_A$ and $C_2'$. $C_0$, $C_1$ and $C_1'$ are
+untested by it, and P1-T's **O2** — whether the *complete transfer* approaches
+the covariant SW transfer — is a different test that has never been run.
+
+### The pattern, and it is the fourth instance this week
+
+**M14**: a gate built only from frame differences cannot see a defect common
+to both frames. **M15**: a gate built from one coefficient cannot see a
+cancellation distributed across the bracket. **T-111**: a prediction built
+from one factor ($\ell_A$) cannot see a change in a second. And now:
+
+> **M16 — a quantity measured on the coefficients does not transfer to a
+> statement about the spectrum without the projection in between.** Five
+> entries in this register argue from a coefficient share to a morphology
+> feature. **None of them is entitled to.** The share is real and measured;
+> what it does to $|\sum_\ell T_\ell|^2$ is a separate calculation that has
+> not been done.
+
+**Three of this week's four methodological findings are the same error in
+different clothes: scoring on the wrong object.** That is the honest
+assessment of why the morphology has not moved.
+
+---
+
+## T-114 — **Stage 3's gate, on live histories: (102)'s by-parts needs $\mathrm dC_1/\mathrm d\eta$ and this bundle supplies $C_1'$ from (107). Both are right separately and they cannot be used together**
+
+*P1-B, 2026-10-21, `diagnostic_d22_identity_live.py` (**D22**). P1-T's open
+question **O1**, and the first instrument in this project pointed at
+**transport** rather than at coefficients.*
+
+### The identity, derived in the diagnostic rather than transcribed
+
+With $K=j_\ell(k(\eta_0-\eta))$ and every derivative taken in $\eta$ — so
+$\dot K=-kj_\ell'$, $\ddot K=k^2j_\ell''$, the second from the Bessel ODE
+rather than a second recurrence — two integrations by parts give
+$A=B$ exactly, for **any** coefficients, **provided $C_1'=\mathrm
+dC_1/\mathrm d\eta$.**
+
+### Scored both ways, inside $\ell\lesssim k\Delta\eta$
+
+| | worst | typical |
+|---|---|---|
+| $C_1'$ **as the bundle supplies it**, from (106)/(107) | $6.5\times10^{-1}$ | $5\times10^{-3}$–$2\times10^{-2}$ |
+| $C_1'=\mathrm dC_1/\mathrm d\eta$ | $1.1\times10^{-2}$ | $10^{-5}$–$10^{-7}$ |
+
+**The released assembly's distance from the integral it descends from tracks
+the first column almost exactly** — $|A-R|$ and $|A-B_{\rm supplied}|$ agree
+to a few per cent at every entry — so the gap is the derivative, not the
+missing $-\mathcal VC_1+2\mathcal VC_2'+\dot{\mathcal V}C_2$ groups.
+
+### And it is not quadrature
+
+$n_\eta=400\to3200$, an eightfold refinement, moves the residual by **under
+5%**: $1.6555\times10^{-2}\to1.7299\times10^{-2}$. **Converged.** An exact
+identity failing by a converged 0.4–65% is an assembly statement.
+
+### Both halves are right and that is the whole point
+
+**T-23 is correct**: the mode coefficient of a covariant derivative is not the
+derivative of the mode coefficient — the footnote to (105) carries a
+$2\mathcal H\mathcal B_1$ that a spline through the stored amplitude cannot
+see, and a plain derivative of $a\tilde{\mathcal B}_1$ is wrong by a median of
+100%. **So the bundle is right to take $C_1'$ from (106)/(107).**
+
+**And (102)'s bracket $C_0-C_1'+C_2''$ is the output of an integration by
+parts, which produces $\mathrm dC_1/\mathrm d\eta$.** Not the same object.
+
+> **Two correct things that cannot be used together.** This is a statement
+> about **(102) in mode space**, not about either derivative. Whether the
+> by-parts step is legitimate there at all is theory, and it is P1-T's.
+
+### What it does not say
+
+**It does not say which to change**, it does not say what it costs the
+spectrum (**M16** — a residual here is not a morphology feature), and **it is
+not a repair.** Stage 3's gate is *"original = complete by-parts, to
+quadrature, in each frame"*: it **passes** with a consistent derivative and
+**fails** with the released one, so the gate's verdict is that the assembly,
+not the arithmetic, is what has to move.
+
+### Why this is the first time it has been seen
+
+`c3_byparts.py` verifies the identity on **fixtures**, where $C_1'$ is
+whatever the fixture sets — so it is consistent by construction and the
+instrument cannot see this. **The production path had never been tested
+against the identity.** Six repairs were withdrawn before anyone pointed a
+measurement at transport; four of this week's methodological findings
+(**M14**, **M15**, **M16**, T-111) say the same thing, which is that the
+objects being scored were not the ones that were wrong.

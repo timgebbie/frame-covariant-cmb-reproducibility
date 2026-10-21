@@ -223,6 +223,22 @@ DIAGNOSTICS: list[tuple[str, str]] = [
     # after T-107 passed four difference-based conditions and was still wrong.
     ("D20 what the two h defects in the scattering rate are worth",
      "scripts/diagnostic_d20_recombination_h.py"),
+    # D21 is the Sachs-Wolfe scalar on the LIVE coefficients -- c1_identity.py
+    # has verified it against fixtures since v1.0.0 and it had never been
+    # pointed at the production path. It tests dT, Phi_A and C_2' and NOTHING
+    # else: no C_0, no C_1', no dipole (T-113). Stage 4(a) of the staged plan,
+    # and 4(a) alone is insufficient -- 4(b) is the complete transfer against
+    # the SW transfer, which has never been run.
+    ("D21 the Sachs-Wolfe scalar, on the live coefficients",
+     "scripts/diagnostic_d21_sachs_wolfe_scalar.py"),
+    # D22 is Stage 3's gate and the first instrument pointed at TRANSPORT
+    # rather than at coefficients. The identity closes to 1e-5..1e-7 with a
+    # consistent derivative and fails at 0.4-65% with the one the bundle
+    # supplies from (106)/(107) -- both right separately, and they cannot be
+    # used together. Finding T-114. c3_byparts.py cannot see this: on fixtures
+    # the derivative is consistent by construction.
+    ("D22 the transport identity on live histories",
+     "scripts/diagnostic_d22_identity_live.py"),
 ]
 
 

@@ -1,0 +1,124 @@
+D22 --- the transport identity on LIVE coefficient histories, and the
+derivative the by-parts needs against the one the bundle supplies.
+
+**Stage 3's gate, and the first instrument in this project pointed at
+*transport* rather than at coefficients.** `c3_byparts.py` verifies the
+identity on fixtures; the production path had never been tested against it ---
+P1-T's open question **O1**.
+
+THE IDENTITY, DERIVED HERE RATHER THAN TRANSCRIBED
+--------------------------------------------------
+This project has lost a power of $k$ three times, so nothing below is copied
+from a printed form. With $K=j_\ell(k(\eta_0-\eta))$ and **every derivative
+taken in $\eta$** --- $\dot K=-k\,j_\ell'(x)$, $\ddot K=k^2j_\ell''(x)$, with
+$j_\ell''$ from the spherical Bessel equation rather than a second recurrence
+--- two integrations by parts give
+
+    A  =  Int W [ C_0 K + C_1 Kdot + C_2 Kddot ] d.eta
+
+    B  =  [ W C_1 K ] + [ W C_2 Kdot ] - [ (V C_2 + W C_2') K ]
+          + Int [ W (C_0 - C_1' + C_2'') - V C_1 + 2 V C_2' + Vdot C_2 ] K d.eta
+
+**A = B is an identity for any coefficients whatever --- PROVIDED $C_1'$ is
+$\mathrm dC_1/\mathrm d\eta$.**
+
+THE PROVISO IS THE FINDING
+--------------------------
+**This bundle does not supply that derivative, and is right not to.** Finding
+**T-23**: the mode coefficient of a covariant derivative is not the derivative
+of the mode coefficient --- the footnote to (105) expands
+$\mathrm D_{\langle a}\dot{\mathcal B}_{b\rangle}\simeq-(a/k)(\dot{\mathcal
+B}_1+2\mathcal H\mathcal B_1)\mathrm D_{\langle a}\mathrm D_{b\rangle}Q$, and
+the $2\mathcal H\mathcal B_1$ is invisible to a spline through the stored
+amplitude. So $C_1'$ comes from (106)/(107).
+
+**But (102)'s bracket $C_0-C_1'+C_2''$ is the output of an integration by
+parts, and that step produces $\mathrm dC_1/\mathrm d\eta$.** The two are not
+the same object. This diagnostic scores the identity **twice, once with each**,
+and the gap is what the released transport carries.
+
+HOW IT IS SCORED, AND WHY NOT THE OBVIOUS WAY
+---------------------------------------------
+**Normalised by a scale that cannot vanish** --- the integrated absolute
+contribution plus the boundary --- because $A$ is a near-cancelling total and
+$|A-B|/|A|$ reports the cancellation rather than the error. A first draft of
+this file divided by $|A|$ and read $2.6\times10^3$, which is **M15's shape**:
+scoring on the wrong object.
+
+**And only where $\ell\lesssim k\Delta\eta$.** Outside it $j_\ell$ is
+exponentially small and a ratio of two vanishing numbers is not a residual.
+
+**The residual is converged**: 8x refinement, $n_\eta=400\to3200$, moves it by
+under 5%. It is not quadrature.
+
+
+
+==============================================================================
+  EdS   (ell <= k x 1.939 is the window)
+==============================================================================
+       k frame          l   C1p supplied   C1p consistent   |A-R|/scale
+  ------------------------------------------------------------------------
+      20 newtonian     10      1.592e-01        2.492e-03     2.230e-01
+      20 cdm           10      1.352e-01        3.387e-04     1.261e-01
+      80 newtonian     10      1.728e-02        3.529e-05     1.621e-02
+      80 newtonian     50      2.103e-02        9.366e-06     2.144e-02
+      80 cdm           10      1.697e-02        3.728e-05     1.784e-02
+      80 cdm           50      2.056e-02        1.637e-05     2.113e-02
+     200 newtonian     10      5.064e-03        1.781e-07     5.022e-03
+     200 newtonian     50      4.378e-03        5.998e-08     4.459e-03
+     200 newtonian    200      8.929e-03        3.932e-07     8.603e-03
+     200 cdm           10      4.996e-03        1.260e-05     5.307e-03
+     200 cdm           50      4.277e-03        2.381e-05     3.679e-03
+     200 cdm          200      8.847e-03        7.392e-05     1.102e-02
+
+==============================================================================
+  PLANCK   (ell <= k x 3.128 is the window)
+==============================================================================
+       k frame          l   C1p supplied   C1p consistent   |A-R|/scale
+  ------------------------------------------------------------------------
+      20 newtonian     10      8.688e-02        5.688e-04     1.040e-01
+      20 newtonian     50      6.545e-01        1.105e-02     9.125e-01
+      20 cdm           10      7.906e-02        1.428e-04     7.805e-02
+      20 cdm           50      5.678e-01        3.017e-03     4.951e-01
+      80 newtonian     10      9.777e-03        1.708e-05     9.365e-03
+      80 newtonian     50      9.823e-03        2.575e-05     8.894e-03
+      80 newtonian    200      5.924e-02        1.809e-04     5.712e-02
+      80 cdm           10      9.656e-03        3.736e-05     1.045e-02
+      80 cdm           50      9.614e-03        3.852e-05     1.055e-02
+      80 cdm          200      5.733e-02        4.986e-04     6.765e-02
+     200 newtonian     10      3.561e-03        5.972e-07     3.551e-03
+     200 newtonian     50      2.755e-03        1.043e-06     2.709e-03
+     200 newtonian    200      3.423e-03        2.879e-06     3.570e-03
+     200 cdm           10      3.507e-03        7.652e-06     3.519e-03
+     200 cdm           50      2.724e-03        2.474e-05     3.105e-03
+     200 cdm          200      3.289e-03        2.856e-05     2.373e-03
+
+==============================================================================
+  GATE
+==============================================================================
+  FAIL   the identity closes with a CONSISTENT derivative:   worst 1.105e-02  (floor 1e-04)
+         and does NOT with the one the bundle supplies: worst 6.545e-01
+
+  the released transport leaves 59.2x the residual a consistent derivative does
+
+  READING THIS
+  ------------
+  The identity is exact for any coefficients, so neither column can be failed
+  by the physics being wrong. The right-hand column is the trapezium rule and
+  nothing else. The left-hand column is the same arithmetic with the
+  derivative the RELEASED path supplies, and the difference between them is a
+  property of the assembly, not of the quadrature -- the residual is converged
+  under 8x refinement.
+
+  WHAT IT DOES AND DOES NOT ESTABLISH. It establishes that (102)'s bulk
+  bracket and this bundle's C_1' are not the same object: the bracket is the
+  output of a by-parts that produces dC_1/d.eta, and T-23 is the reason the
+  bundle supplies something else. BOTH CAN BE RIGHT SEPARATELY AND THEY
+  CANNOT BE USED TOGETHER, which is a statement about (102) in mode space and
+  not about either derivative.
+
+  It does NOT say which to change, it does not say what it costs the
+  spectrum -- M16 -- and it is not a repair. The next question is whether the
+  by-parts step is legitimate in mode space at all, which is theory and is
+  P1-T's.
+
