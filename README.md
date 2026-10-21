@@ -11,10 +11,10 @@ the full linear spectrum with the acoustic peaks and the Silk damping tail
 4-velocity and specialised back; acceptance criterion 5b closed.
 
 Supplementary code and materials for: Tim Gebbie, *"Frame covariance of CMBR
-lensing in the exact $1+3$ covariant radiation hierarchy,"* preprint v1.1.6,
-Zenodo, 19 October 2026,
-[doi:10.5281/zenodo.23475234](https://doi.org/10.5281/zenodo.23475234),
-CC BY 4.0.
+lensing in the exact $1+3$ covariant radiation hierarchy"* (**Paper 1**),
+University of Cape Town, 2026, CC BY 4.0. **The identifier is assigned on
+submission** and is filled here at manuscript freeze; this bundle has its own
+archival DOI below and does not depend on the paper's.
 
 The supplementary-materials document is included here:
 
@@ -598,16 +598,15 @@ are in `provenance/DECISIONS-v1.0.0.md`.
 
 | Item | Value |
 |---|---|
-| **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMBR lensing in the exact 1+3 covariant radiation hierarchy*. Preprint **v1.1.6**, Zenodo, 19 October 2026. [doi:10.5281/zenodo.23475234](https://doi.org/10.5281/zenodo.23475234). CC BY 4.0 |
+| **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMBR lensing in the exact 1+3 covariant radiation hierarchy* — **Paper 1**, University of Cape Town. CC BY 4.0. **No identifier yet**: it is assigned on submission and is filled at manuscript freeze (acceptance criterion 6). Cite this bundle by the ZivaHub DOI below until it is |
 | **Supplementary PDF** | [supplement-v1.3.0.pdf](supplementary-materials/supplement-v1.3.0.pdf) |
 | **GitHub repository** | [timgebbie/frame-covariant-cmb-reproducibility](https://github.com/timgebbie/frame-covariant-cmb-reproducibility) |
-| **ZivaHub/Figshare DOI** | [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509) 
-| **Zenodo DOI (the paper, not this bundle)** | [10.5281/zenodo.23475234](https://doi.org/10.5281/zenodo.23475234) 
+| **ZivaHub/Figshare DOI** | [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509) — **live**. The **concept** DOI: it always resolves to the latest version, so it is the one to cite |
 | **Associated antecedent** | Gebbie, T.; Dunsby, P. K. S.; Ellis, G. F. R. (2000). *1+3 covariant cosmic microwave background anisotropies II: the almost-Friedmann–Lemaître model*. Annals of Physics **282**, 321–394. [doi:10.1006/aphy.2000.6034](https://doi.org/10.1006/aphy.2000.6034) |
 | **Code license** | MIT, see [`LICENSE`](LICENSE) |
 | **Supplement, text, figures and tables** | CC BY 4.0, see [`CONTENT-LICENSE.md`](CONTENT-LICENSE.md) |
 
 Citation metadata is in [`CITATION.cff`](CITATION.cff). Its `version` field
 tracks the tag that exists, not the one in preparation: GitHub's *Cite this
-repository* and Zenodo both read it, and a version there that has not been
-released asserts a release nobody can fetch.
+repository* reads it, and a version there that has not been released asserts
+a release nobody can fetch.

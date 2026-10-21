@@ -3,8 +3,8 @@ message: "If you use this software, please cite the associated paper and this so
 title: "1+3 covariant CMB anisotropies: analytical reproducibility software"
 type: software
 # Tracks the tag that exists, not the one being prepared. GitHub's "Cite this
-# repository" and Zenodo both read this field, so a version here that has not
-# been released asserts a release that cannot be fetched.
+# repository" reads this field, so a version here that has not been released
+# asserts a release that cannot be fetched.
 version: "1.2.0"
 # Stamped by scripts/bump_release.py together with the version above, so the
 # two cannot disagree about which release this file describes.
@@ -20,11 +20,10 @@ abstract: >-
   Physics 282, 321 (2000). Analytical release; no empirical data are required.
 preferred-citation:
   type: article
-  # **Transcribed from the Zenodo record, not from decision S17.** The record
-  # prints `CMBR`; S17 fixed `CMB`. A citation reproduces the title of the
-  # thing it points at or it does not resolve for a reader, so this field
-  # follows the artefact. The discrepancy is finding T-84 and is the PI's to
-  # settle -- changing it the other way means a new Zenodo version.
+  # Decision S17, as amended 2026-10-20 (finding T-84): the title reads
+  # `CMBR`, confirmed by the PI 2026-10-21 as the paper's own title. The
+  # withdrawn Zenodo record is how the discrepancy was found, not what
+  # settles it; a citation reproduces the title the paper carries.
   title: "Frame covariance of CMBR lensing in the exact 1+3 covariant radiation hierarchy"
   authors:
     - family-names: Gebbie
@@ -33,13 +32,12 @@ preferred-citation:
       affiliation: "University of Cape Town"
   year: 2026
   month: 10
-  # Version DOI, read off the record. Zenodo's concept DOI is not exposed on
-  # this record (Versions list empty), so it cannot be cited here yet.
-  doi: "10.5281/zenodo.23475234"
-  url: "https://zenodo.org/records/23475234"
-  version: "v1.1.6"
+  # No identifier yet, and none is asserted. A `doi:` or `url:` here would be
+  # read by GitHub's "Cite this repository" and would resolve to nothing, so
+  # the fields are absent rather than placeholder. They are filled at
+  # manuscript freeze (acceptance criterion 6), from the record that exists.
   license: CC-BY-4.0
-  notes: "Preprint, Zenodo, 19 October 2026. The arXiv identifier is assigned on submission and is filled at manuscript freeze (acceptance criterion 6); it is additional to this DOI, not a replacement for it."
+  notes: "Paper 1, University of Cape Town. The identifier is assigned on submission and is filled at manuscript freeze (acceptance criterion 6). Until then, cite the software bundle by its own DOI above."
 keywords:
   - cosmic microwave background
   - 1+3 covariant formalism

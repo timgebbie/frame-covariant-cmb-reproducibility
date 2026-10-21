@@ -129,7 +129,7 @@ def released_version() -> str:
     `CITATION.cff` is the right source and is already treated as such
     elsewhere: `tests/test_readme_artefacts.py` calls it *the one version
     statement a machine acts on*, since GitHub's "Cite this repository" and
-    Zenodo both read it, and `scripts/bump_release.py` keeps it current as part
+    reads it, and `scripts/bump_release.py` keeps it current as part
     of the release act. An archive named from it cannot disagree with the
     release it is an archive of.
     """
