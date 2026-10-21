@@ -191,6 +191,16 @@ DIAGNOSTICS: list[tuple[str, str]] = [
     # produces it on demand.
     ("D16 the kappa-squared in (102)'s integrand",
      "scripts/diagnostic_d16_kappa_squared.py"),
+    # D17 evaluates P1-T's boxed integrating-factor form of the line-of-sight
+    # solution beside the released (102), in both frames. It is the discriminator
+    # for where the frame gap enters: a W-form that is frame-invariant where
+    # (102) is not puts the gap in the assembly, and a W-form that carries it too
+    # says the assembly is not the site. It reads O(1) in both columns and is
+    # held INCONCLUSIVE --- the rank-0 row needs sigma_0 and the CDM column needs
+    # S_2, both referred to P1-T. It is registered so that an instrument in the
+    # tree cannot drift away from the harness that is supposed to run it.
+    ("D17 P1-T's W-form against the released (102)",
+     "scripts/diagnostic_d17_w_form.py"),
 ]
 
 

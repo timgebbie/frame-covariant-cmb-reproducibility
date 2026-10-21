@@ -8214,3 +8214,136 @@ by hand and were not checked against the decision register they were repairing
 is cheaper: **a repair that touches a caption, a figure or the supplement is
 read against §V of `provenance/DECISIONS-v1.0.0.md` before it is committed.**
 Fifteen rows, and the PI read them faster than any gate would have run.
+
+---
+
+## T-99 — the committed F9 is the **log–log** figure, the script produces **linear-log**, and T-87 "fixed" the caption to the one that does not exist
+
+**2026-10-20, caught by the PI: *"F9 figure is still stale… in README."***
+
+### What is actually on disk
+
+`figures/f9-acoustic-spectrum-v1.2.0.png`, 2026-10-19 16:49, read directly:
+**both panels are log–log, the ordinate is $C_\ell/C_{30}$, and panel (a)'s
+legend sits over the curves.** It is the pre-revert rendering.
+
+`scripts/figure_f9_acoustic_spectrum.py` produces **linear-log $D_\ell/D_{30}$
+with the legend at lower left**, reverted on 2026-10-19 at the PI's direction
+— *"I was wrong about the log-log plot for F9, the linear-log plot does work
+better and is more recognisable."*
+
+**The overnight run that produced the committed figure was launched before the
+revert landed.** F9 has not been re-run since, so the artefact is one code
+version behind its own script.
+
+### And T-87's repair made it worse
+
+T-87 found the caption saying *"Log–log $C_\ell/C_{30}$"* and **corrected it
+to "Linear-log $D_\ell/D_{30}$"** — on the reasoning that the script had been
+reverted and the caption had not travelled with it. **The reasoning was right
+about the script and wrong about the figure.** For six hours the README
+described a rendering that exists in no file.
+
+> **A caption is checked against the figure, not against the script that
+> would produce it.** The rendered page is the artefact — this project's own
+> rule, and **M5a**'s: *a claim about an artefact is read off the artefact*.
+> T-87 read the script.
+
+**Caught by looking at the PNG**, which neither T-87 nor any gate had done.
+**V12** requires it — *"every figure is rendered and looked at before its
+caption is signed off"* — and T-87 signed off three captions without opening
+one image.
+
+### Corrected, and what remains
+
+The caption now describes **the figure that exists** and says the script no
+longer produces it. **The fix is to re-run F9**: no code change, roughly
+forty-five minutes, and the committed artefact and its caption agree again.
+
+### A second defect found by the same look
+
+**P1-B's cloud copy of F9 was from 2026-10-16** — older still — and **every
+manifest P1-B generated for two days hashed it.** `FILE-MANIFEST-SHA256.txt`
+carried the hash of a 428,673-byte PNG while the PI's tree held a
+276,781-byte one. `make_manifests.py --check` passed in the container because
+it checked P1-B's own stale copy against P1-B's own stale hash.
+
+**A manifest computed in one tree and shipped to another is not a manifest.**
+The three F9 artefacts are now staged from the PI's machine and adopted, and
+the manifests are regenerated against them. **Any F9-derived figure or output
+a session edits must be staged from the PI's tree first**, because the PI runs
+the long figures and the container does not have the results.
+
+---
+
+## T-100 — **the README carried the bundle's internal governance into the public face of the project, and the PI removed it by hand.** The readership was never the one the text was written for
+
+*Found 2026-10-21, by the PI reading the README as a colleague would.*
+
+### What was in it
+
+The citation table's *Associated paper* row ended:
+
+> *"The title is transcribed from the record and reads `CMBR`. Decision
+> **S17** was amended to it on 2026-10-20; finding **T-84** records why the
+> record rather than S17 is canonical."*
+
+Every clause of that is **true**, and every clause of it is **internal**. A
+reader who opens this README wants the paper's title; what they were given was
+the project's audit trail for how the title came to be spelled that way. The
+PI deleted it manually, which is the clearest possible statement that the
+README is read by people who do not hold the decision register.
+
+### The class, not the instance
+
+The instance is one row. **The class is a readership error**: P1-B had been
+writing the README as though its reader were another stream of this project.
+Colleagues read the README and the supplementary materials to learn **the
+state of the physics**, and governance in that position does not merely waste
+their attention — it displaces the thing they came for.
+
+The PI, 2026-10-20: *"colleagues complained that the README and docs should
+have more physics and the progression of the physics and implementation and
+less on governance and reliving errors and dead-ends."* And 2026-10-21:
+*"more physics in each stage, release and less governance, so that the
+staging and versioning map better to the development of the physics and its
+implementation."*
+
+> **M13 — a public artefact is written for the reader it has, not the reader
+> who wrote it.** Governance belongs in `provenance/`, in the version-control
+> policy tables, and in the bundle's own `.md` files. It does not belong in
+> the README except where it constrains what a physical claim may say.
+
+### What was done
+
+Three structural changes, beyond deleting the row:
+
+1. **The release sequence now names the term each release puts back into the
+   calculation**, with the module that carries it and the artefact that is
+   evidence for it — free streaming (v1.0.0), a visibility of finite width
+   (v1.1.0), the full linear source with a generic $u^a$ (v1.2.0), the
+   acoustic oscillator (v1.3.0), the envelope (v1.4.0), second order in the
+   shear (v1.5.0). **The version numbers track the physics, which is what
+   makes them informative to a reader who does not hold the decision log.**
+2. **One release table, not two.** A second, overlapping *"three releases,
+   latest first"* table had grown in the current-situation section; a
+   duplicated statement is a statement that can disagree with itself.
+3. **The duplicated Appendix F figure subsection** was folded into the figure
+   section it duplicated, and the legacy *Annals II* findings were promoted
+   out from under the governance heading they had been filed beneath. They
+   are physics: they change what the code computes.
+
+Verification status keeps the released-tag check (**T-30**) and the manifest
+reading notes, both of which a reproducer needs, and loses the narration
+around them. Governance by section line count: **47% → 14%**.
+
+### A second gap found in the same pass
+
+`scripts/diagnostic_d17_w_form.py` — P1-T's $W$-form instrumented against the
+released (102) — **was in the tree and not in `run_all.py`'s `DIAGNOSTICS`.**
+An instrument the harness does not run is an instrument that drifts from the
+code it measures, which is the same class as **T-54**. It is registered now,
+and the README's artefact table names it with its status: it reads
+$\mathcal O(1)$ in both columns and is **held inconclusive** pending
+$\sigma_0$ for the rank-0 row and whether $S_2$ is needed in the CDM column,
+both with P1-T.
