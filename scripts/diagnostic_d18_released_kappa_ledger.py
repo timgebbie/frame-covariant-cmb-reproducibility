@@ -184,6 +184,72 @@ def _report() -> None:
                     verdicts.append((f"{label} k={k:.0f} {frame}", name, slot,
                                      carries and ok, sh))
 
+    # ---- P1-T's ratio, tested pointwise, and the boost split -------------
+    print(f"\n{'='*78}")
+    print("  THE SHARE AGAINST kappa'/(kappa'+k), AND THE FRAME SHIFT")
+    print(f"{'='*78}")
+    print("""
+  P1-T, 2026-10-21: the share should be kappa'/(kappa'+k), because C_1's two
+  entries are (dT + Phi_A), unreduced, and kappa' vhat_B, reduced by 1/k. And
+  the frame SHIFT should be kappa'-dominated at kappa'/(kappa'+H), which has
+  no k in it at all -- so the frame test and the spectrum test decouple at
+  high k.
+
+  The first claim cannot be tested against a SUP-NORM share: that is a ratio
+  of two maxima taken over the whole grid, and kappa' varies by orders of
+  magnitude across it, so the sup of the kappa' part and the sup of the total
+  need not occur at the same eta. Tested POINTWISE at eta_*, where P1-T's
+  kappa'(eta_*) is the right number to use, it is a fair test. Both are
+  printed below. Delta is CDM minus Newtonian, split by the same exact
+  affine decomposition.
+""")
+    for label, bg, obh2, h in (("EdS", CDM_MODEL, 0.0224, 0.5),
+                               ("PLANCK", PLANCK_MODEL, PLANCK_OMEGA_B_H2, PLANCK_H)):
+        env = build_environment(400.0, omega_m=bg.omega_m,
+                                omega_lambda=bg.omega_lambda, omega_r=bg.omega_r,
+                                omega_b_h2=obh2, hubble_h=h,
+                                line_of_sight_weight="printed")
+        kp = np.asarray(env.kappa_prime, dtype=float)
+        i_star = int(np.argmax(np.asarray(env.visibility, dtype=float)))
+        kps = float(kp[i_star])
+        aH = float(np.asarray(env.conformal_hubble, dtype=float)[i_star])
+        print(f"\n  {label}   kappa'(eta_*) = {kps:.4e}   H(eta_*) = {aH:.4e}")
+        print(f"  {'k':>5} {'pred kp/(kp+k)':>15} {'sup-norm':>10} {'pointwise':>11}"
+              f" {'| dC_1 kp share':>16} {'pred kp/(kp+H)':>15}")
+        print("  " + "-" * 78)
+        for k in KS:
+            n1, c1_ = _scaled_sets(env, k, 1.0)
+            n0, c0_ = _scaled_sets(env, k, 0.0)
+            a1 = np.asarray(n1.coefficients.c1, dtype=float)
+            a0 = np.asarray(n0.coefficients.c1, dtype=float)
+            free, kpart = _split(a1, a0)
+            sup = _share(free, kpart)
+            pt = (abs(kpart[i_star]) / abs(a1[i_star])
+                  if a1[i_star] else float("nan"))
+            # the frame shift, split by the same affine decomposition
+            d_free = np.asarray(c0_.coefficients.c1, dtype=float) - a0
+            d_tot = np.asarray(c1_.coefficients.c1, dtype=float) - a1
+            d_kap = d_tot - d_free
+            den = float(np.max(np.abs(d_tot)))
+            d_share = float(np.max(np.abs(d_kap))) / den if den else float("nan")
+            print(f"  {k:5.0f} {kps/(kps+k):15.4f} {sup:10.4f} {pt:11.4f}"
+                  f" {d_share:16.4f} {kps/(kps+abs(aH)):15.4f}")
+
+    print("""
+  READING THIS
+  ------------
+  Column 2 is P1-T's prediction, column 4 the fair test of it. Column 5 is
+  their section 3 ask -- the frame shift's kappa' share -- and column 6 their
+  prediction for it, which carries no k.
+
+  The sup-norm column is what T-101 reported and it is NOT the quantity the
+  ratio predicts; the two are printed side by side so the difference is
+  visible rather than argued. Where the pointwise column tracks column 2, the
+  mechanism is confirmed; where column 5 is flat in k, the frame test and the
+  spectrum test decouple at high k exactly as P1-T stated IN ADVANCE, and the
+  W-form is then predicted to close the gap at k=300 as well as at low k.
+""")
+
     # ---- the ledger, collapsed -------------------------------------------
     print(f"\n{'='*78}")
     print("  THE LEDGER")

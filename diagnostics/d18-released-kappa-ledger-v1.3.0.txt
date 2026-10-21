@@ -178,6 +178,53 @@ split is void and this diagnostic says so instead of reporting a number.
   C_2       boundary-2, D only            no     0.0000    0.00e+00  clean
 
 ==============================================================================
+  THE SHARE AGAINST kappa'/(kappa'+k), AND THE FRAME SHIFT
+==============================================================================
+
+  P1-T, 2026-10-21: the share should be kappa'/(kappa'+k), because C_1's two
+  entries are (dT + Phi_A), unreduced, and kappa' vhat_B, reduced by 1/k. And
+  the frame SHIFT should be kappa'-dominated at kappa'/(kappa'+H), which has
+  no k in it at all -- so the frame test and the spectrum test decouple at
+  high k.
+
+  The first claim cannot be tested against a SUP-NORM share: that is a ratio
+  of two maxima taken over the whole grid, and kappa' varies by orders of
+  magnitude across it, so the sup of the kappa' part and the sup of the total
+  need not occur at the same eta. Tested POINTWISE at eta_*, where P1-T's
+  kappa'(eta_*) is the right number to use, it is a fair test. Both are
+  printed below. Delta is CDM minus Newtonian, split by the same exact
+  affine decomposition.
+
+
+  EdS   kappa'(eta_*) = 3.8192e+02   H(eta_*) = 3.3565e+01
+      k  pred kp/(kp+k)   sup-norm   pointwise  | dC_1 kp share  pred kp/(kp+H)
+  ------------------------------------------------------------------------------
+     10          0.9745     1.0033      1.0559           1.0020          0.9192
+     60          0.8642     1.0010      0.9632           1.0020          0.9192
+    300          0.5601     0.5143      0.2341           1.0020          0.9192
+
+  PLANCK   kappa'(eta_*) = 2.6419e+02   H(eta_*) = 2.0442e+01
+      k  pred kp/(kp+k)   sup-norm   pointwise  | dC_1 kp share  pred kp/(kp+H)
+  ------------------------------------------------------------------------------
+     10          0.9635     1.0038      1.0365           1.0038          0.9282
+     60          0.8149     1.0011      0.8666           1.0038          0.9282
+    300          0.4683     1.0028      0.7679           1.0038          0.9282
+
+  READING THIS
+  ------------
+  Column 2 is P1-T's prediction, column 4 the fair test of it. Column 5 is
+  their section 3 ask -- the frame shift's kappa' share -- and column 6 their
+  prediction for it, which carries no k.
+
+  The sup-norm column is what T-101 reported and it is NOT the quantity the
+  ratio predicts; the two are printed side by side so the difference is
+  visible rather than argued. Where the pointwise column tracks column 2, the
+  mechanism is confirmed; where column 5 is flat in k, the frame test and the
+  spectrum test decouple at high k exactly as P1-T stated IN ADVANCE, and the
+  W-form is then predicted to close the gap at k=300 as well as at low k.
+
+
+==============================================================================
   THE LEDGER
 ==============================================================================
 

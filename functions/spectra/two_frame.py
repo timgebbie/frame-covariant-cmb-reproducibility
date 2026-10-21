@@ -427,12 +427,24 @@ _RANK_KEEPS = {0: ("c0",), 1: ("c1",), 2: ("c2",)}
 #: attempt separated and which is why that attempt failed), and supplies the
 #: $+k\int W M j_\ell'$ bulk slot (102) has no counterpart for.
 #:
-#: **It is a control and not yet a default**, because T-88 measures that it
-#: closes the frame gap by up to four orders at $\ell\ge50$ for $k\lesssim60$
-#: and does **nothing** at $k=300$, where it rewrites the Newtonian column by
-#: $7\times$ on PLANCK. A flag that is right in one regime and wrong in
-#: another is exactly what **A-2** already is, and this bundle does not
-#: silently default one of those again --- decision **S43**.
+#: **T-88 IS WITHDRAWN AND SO IS ITS RESULT.** This docstring read, until
+#: 2026-10-21, that the flag *"closes the frame gap by up to four orders at
+#: $\ell\ge50$ for $k\lesssim60$"*. **That number is void**: `slot_weight_split`
+#: applied $\mathcal V\,C_1^{\rm thom}$ where (102) applies $W\,C_1^{\rm thom}$,
+#: and since $W\kappa'=\mathcal V$ is an *identity* that is a spurious factor of
+#: $\kappa'$, measured at **320--682** (**T-93**). The peak shift T-92 reported
+#: with it went too. The withdrawal was recorded in the supplement within hours
+#: and **not here**, so a reader of this module alone got the pre-withdrawal
+#: reading for a day --- finding **T-103**'s class, and **S46**'s reason for
+#: requiring that a withdrawal reach the public artefacts in the same commit.
+#:
+#: **It stays a control and not a default**, now for a structural reason rather
+#: than a measured one: **T-101** shows every one of this file's controls
+#: redistributes weights while leaving $\kappa'$ inside $C_1$ and leaving the
+#: differentiation of $C_1$ in place, so none can be clean by `c7`'s grade.
+#: The target assembly is the $W$-form --- decision **S48** --- which has no
+#: coefficients to carry $\kappa'$ at all. Weight defaults still follow
+#: **S43**: a default that encodes an approximation is named at every call site.
 B_SLOT_REPAIR: bool = False
 
 

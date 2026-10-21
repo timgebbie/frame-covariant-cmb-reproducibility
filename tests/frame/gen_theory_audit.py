@@ -42,12 +42,25 @@ ROWS = {   # check -> (short title, what it establishes)
    'enters the integral solution. **This check cannot see an additive '
    'boost-invariant piece in $C_0$** — $\\Delta C_0=0$ fixes normalisation, not '
    'content.'),
+ # **This entry carried the pre-correction wording until 2026-10-21.** It read
+ # "Carried separately under $\mathcal{V}$", which is what T-88 implemented as
+ # a WEIGHT CHANGE. It is not one: $W\kappa'=\mathcal V$ is an identity, so
+ # $W C_1^{\rm thom}=-\mathcal V\hat v_B$ already and there was never a weight
+ # to change. P1-T corrected `c6_thomson.py`'s docstring on 2026-10-20 and the
+ # correction did not travel here, because this text is HARD-CODED in the
+ # generator rather than read from the instrument --- so re-running the
+ # generator reproduced the defect instead of fixing it. Finding **T-103**.
  'c6_thomson.py': ('The Thomson $v^B_a$ slot',
    '$\\kappa\'v_B$ **cannot** sit inside $C_1$: the $K\'$ coefficient becomes '
    '$2\\alpha\\mathcal{V}$ and no $(\\alpha,\\beta,\\gamma)$ makes the bulk '
-   'invariant. Carried separately under $\\mathcal{V}$, invariance requires '
-   '$c=\\alpha$ and the reduced $\\hat v_B=v_B/k$; the un-reduced form needs '
-   '$c=\\alpha/k$, which is not a constant.'),
+   'invariant. Carried as its own **undifferentiated** term, invariance '
+   'requires $c=\\alpha$ and the reduced $\\hat v_B=v_B/k$; the un-reduced '
+   'form needs $c=\\alpha/k$, which is not a constant. **This is not a weight '
+   'change**: $W\\kappa\'=\\mathcal{V}$ is an identity, so the Thomson term is '
+   'already at visibility weight in (102) as printed. What (102) does wrong is '
+   '**differentiate** it --- $\\mathrm d/\\mathrm d\\eta$ of a coefficient '
+   'still carrying a bare $\\kappa\'$ is what manufactures $\\kappa\'^2$. The '
+   'remedy is not to move it; it is not to differentiate it.'),
  'c7_kappa_ledger.py': ('The $\\kappa\'$ ledger',
    'Multiplying the transport equation by $W=e^{-\\kappa}$ sends the '
    'gravitational source to $W$ and the in-scattered Thomson source to '

@@ -8503,3 +8503,108 @@ either. P1-T's §3.2 excludes the parameters as the cause of the first —
 $N_{\rm eff}=0$ is a documented specialisation and the external codes are
 matched to it — which makes **"why 342 against our own matched 206"** the
 question, and it is open.
+
+---
+
+## T-103 — **"they take different weights" is an outcome read as an instruction, and the correction did not travel to the generator that prints it**
+
+*P1-T, 2026-10-21; the second half measured by P1-B the same day.*
+
+`section-frame-discrepancy`'s Triage B item 2 read *"They take **different**
+weights: $W$ for the gravitational half, $g=\mathcal V$ for the scattering
+half."* **True as a description of the outcome; false as an instruction to a
+solver**, and it was implemented as one — that is **T-88**, and multiplying
+$C_1^{\rm thom}=-\kappa'\hat v_B$ by $\mathcal V$ applies a second $\kappa'$,
+measured at **320–682** (**T-93**). The phrasing is the Paper 1 stream's and
+the correction is recorded against it, not against the implementation.
+
+**The sharper half is P1-B's.** P1-T reported `docs/THEORY-AUDIT.md:109` as
+stale and asked for a regeneration. It is not stale — **the pre-correction
+wording is hard-coded in `tests/frame/gen_theory_audit.py:48`**, so running the
+generator *reproduced* the defect rather than fixing it. A generated file whose
+text is a literal in its generator is not generated; it is transcribed, and it
+drifts from the instrument it claims to report. The generator now carries c6's
+corrected statement — *it is not a weight change, because $W\kappa'=\mathcal V$
+is an identity; what (102) does wrong is **differentiate** it*.
+
+## T-104 — **(89)'s $\ell=0$ row applies $\alpha_2=15/2$ where $\alpha_0=1$ belongs**
+
+*P1-T, 2026-10-21; verified independently by P1-B in exact rationals before
+acceptance.*
+
+`coefficients.py:87` computes the monopole row with `Fraction(5)/b2`, which
+**is** $\alpha_2$. Derived from the kernel rather than from (89) — $\beta_\ell$
+is the PSTF normalisation and $j_0''(0)=-\tfrac13$ the ascending series,
+neither from (89) — so it is a check, not a restatement.
+
+| row | uses | should use | $h_\ell^{(n)}(0)$ |
+|---|---|---|---|
+| $\ell=2$ | $\alpha_2=15/2$ | $\alpha_2$ | $1$ **exactly** |
+| $\ell=1$ | $\alpha_1=3$ | $\alpha_1$ | $1$ **exactly** |
+| $\ell=0$ | $\alpha_2=15/2$ | $\alpha_0=1$ | $-5/2$ printed, $-1/3$ correct |
+
+**The two rows that come out exactly unity are the control**: a normalisation
+error cannot give 1 twice and $-5/2$ once. P1-B reproduced $p_0=-5/2$ as coded,
+$-1/3$ with $\alpha_0$, ratio **exactly $15/2$**.
+
+## T-105 — **with the $\ell=0$ row corrected and the $a\mathcal B_0$ row restored, $\Delta C_0=0$**
+
+$C_0=-\tfrac13a\mathcal B_2-a\mathcal B_0$, so
+$\Delta C_0=-\tfrac13(-kv)-\tfrac13kv=0$. `appendix-frame-division`'s
+*"$\Delta C_0$ has no partner"* is answered: **it has no partner because it is
+zero.** Questions 3 and 4 of that appendix close; 1 and 2 are closed by T-66
+and by the $W$-form. The appendix's $C_0/(k^2C_2)=2.5000$ survives as an
+argument — the ratio is still a pure rational, now $1/3$ — and what it
+established was internal consistency, which is not correctness.
+
+**Neither correction suffices alone**: $\gamma=-5/2$ as printed, $+1/3$ with
+$\alpha_0$ only, $0$ with both. **M11a**, and it is why they land together.
+
+## T-106 — **the $\kappa'$ share is not $\kappa'/(\kappa'+k)$ cell by cell; but the frame shift is *wholly* $\kappa'$-carried and *exactly* flat in $k$**
+
+*P1-B, 2026-10-21, D18 extended. P1-T's §1 and §3, tested.*
+
+P1-T derived share $=\kappa'/(\kappa'+k)$ from (109) and reported it as
+bracketing P1-B's measurement, *"predicted 0.468–0.974, you measure
+0.514–1.015."* **That is a range overlap, and it hides cell-level
+disagreement.** Tested properly — sup-norm *and* pointwise at $\eta_*$, since a
+sup-norm ratio takes two maxima over a grid on which $\kappa'$ varies by orders
+of magnitude:
+
+| EdS | predicted | sup-norm | pointwise at $\eta_*$ |
+|---|---|---|---|
+| $k=10$ | 0.9745 | 1.0033 | 1.0559 |
+| $k=60$ | 0.8642 | 1.0010 | 0.9632 |
+| $k=300$ | 0.5601 | 0.5143 | **0.2341** |
+
+**At $k=300$ the fair test is a factor 2.4 from the prediction**, in the
+opposite direction to the sup-norm agreement that made the range look right.
+The mechanism is sound — the share *does* collapse where $k$ approaches
+$\kappa'(\eta_*)$, and that is the first account the register has of why
+$k=300$ looks singular — but **it is qualitative, not quantitative, and must
+not be cited as a fit.**
+
+### The result, and it is better than the prediction
+
+P1-T's §3: boost $C_{\rm free}$ and $C_\kappa$ separately and read off
+$\Delta C_1$'s $\kappa'$ share. Predicted $\kappa'/(\kappa'+\mathcal H)\simeq
+0.92$, k-independent.
+
+| | $k=10$ | $k=60$ | $k=300$ | predicted |
+|---|---|---|---|---|
+| EdS | 1.0020 | 1.0020 | 1.0020 | 0.9192 |
+| PLANCK | 1.0038 | 1.0038 | 1.0038 | 0.9282 |
+
+**Flat in $k$ to four digits, and the share is 1.00, not 0.92.** The frame
+shift of $C_1$ is **entirely** $\kappa'$-carried: $\Delta(\delta T+\Phi_A)$
+contributes 0.2–0.4%, not the 8% an $\mathcal H/(\kappa'+\mathcal H)$ estimate
+gives. P1-T's structural claim is confirmed and strengthened; their amplitude
+for the $\kappa'$-free part is ~20× too large.
+
+> **The two tests decouple at high $k$, and this is stated before the run that
+> will be held to it.** What the $W$-form repairs is ~100% of $\Delta C_1$ at
+> *every* $k$, so it should close the frame gap at $k=300$ as well as at low
+> $k$ — **the register's first falsifiable prediction for that mode.** But only
+> 23% of $C_1$ itself is $\kappa'$-carrying at $k=300$, so **the spectrum there
+> should move far less**, and a small spectral change at $k=300$ is expected
+> and is *not* evidence against the repair.
