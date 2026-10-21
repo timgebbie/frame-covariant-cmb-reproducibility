@@ -89,13 +89,48 @@ def test_the_newtonian_specialisation_is_equation_109():
     assert np.allclose(-c.c1, (DT + PHI) + KP * VB, rtol=1e-14, atol=0.0)
 
 
+#: A dipole for the restored a B_0 row; any non-zero profile serves, since
+#: the assertion is that C_0 tracks -a B_0 exactly rather than a value.
+TAU1_FOR_B0 = np.linspace(1.0, 2.0, ETA.size)
+
+
 def test_the_newtonian_frame_empties_the_shear_sector():
-    r"""$\tilde{\mathcal B}_2=0\Rightarrow\tilde C_0=\tilde C_2=0$, which is
-    (110). Identically zero, not small."""
-    c = newtonian_coefficients(ETA, K, delta_t=DT, phi_a=PHI,
-                               kappa_prime=KP, v_b=VB)
-    assert c.shear_sector_is_empty
-    assert np.all(c.c0 == 0.0) and np.all(c.c2 == 0.0)
+    r"""$\tilde{\mathcal B}_2=0\Rightarrow\tilde C_2=0$. **And $\tilde C_0$
+    is zero only on the $\ell=0$ row as (89) prints it.**
+
+    This test asserted $\tilde C_0=\tilde C_2=0$ outright, *"which is (110).
+    Identically zero, not small."* That was true of the implementation and is
+    **not** true of the physics: (89)'s $\delta_{\ell0}$ row drops the
+    $a\mathcal B_0$ source, and $a\mathcal B_0=-\tfrac13k\tau_1$ is **not**
+    zero in this frame. **(110) inherits the omission** --- findings
+    \textbf{B-16} and \textbf{B-17} against the antecedent, measured on the
+    live coefficients by `diagnostic_d19_monopole_row.py`.
+
+    So the assertion is now made **per branch**, which is what it should always
+    have been: an acceptance condition that can only be met by the defect is
+    the defect's alibi, not a check on it.
+    """
+    from functions.spectra import coefficients as _C
+
+    was = _C.MONOPOLE_ROW
+    try:
+        _C.MONOPOLE_ROW = "printed"
+        c = newtonian_coefficients(ETA, K, delta_t=DT, phi_a=PHI,
+                                   kappa_prime=KP, v_b=VB)
+        assert c.shear_sector_is_empty
+        assert np.all(c.c0 == 0.0) and np.all(c.c2 == 0.0)
+
+        _C.MONOPOLE_ROW = "corrected"
+        a_b0 = -(K / 3.0) * TAU1_FOR_B0
+        cc = newtonian_coefficients(ETA, K, delta_t=DT, phi_a=PHI,
+                                    kappa_prime=KP, v_b=VB, a_b0=a_b0)
+        # rank two is still empty --- that half of (110) is untouched
+        assert np.all(cc.c2 == 0.0)
+        # rank zero is NOT, and it is exactly -a B_0
+        assert np.allclose(cc.c0, -a_b0, rtol=0.0, atol=0.0)
+        assert not np.all(cc.c0 == 0.0)
+    finally:
+        _C.MONOPOLE_ROW = was
 
 
 def test_b11_is_invisible_in_the_newtonian_frame():

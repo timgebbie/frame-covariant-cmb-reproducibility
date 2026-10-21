@@ -210,6 +210,13 @@ DIAGNOSTICS: list[tuple[str, str]] = [
     # wrongly. Finding T-101.
     ("D18 the kappa' ledger against the released assembly",
      "scripts/diagnostic_d18_released_kappa_ledger.py"),
+    # D19 is the acceptance measurement for the ell=0 row control. It is kept
+    # after T-107 REFUTED the correction it measures, for D14's reason: a
+    # withdrawn variant that cannot be regenerated cannot be checked. Its four
+    # conditions all PASS and the repair is still wrong -- which is M14, and
+    # the reason it is in the harness rather than in a notebook.
+    ("D19 the ell=0 row control, measured on the live coefficients",
+     "scripts/diagnostic_d19_monopole_row.py"),
 ]
 
 

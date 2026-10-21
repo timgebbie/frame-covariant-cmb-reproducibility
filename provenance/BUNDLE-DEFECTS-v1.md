@@ -8608,3 +8608,163 @@ for the $\kappa'$-free part is ~20× too large.
 > 23% of $C_1$ itself is $\kappa'$-carrying at $k=300$, so **the spectrum there
 > should move far less**, and a small spectral change at $k=300$ is expected
 > and is *not* evidence against the repair.
+
+---
+
+## T-107 — **the restored $a\mathcal B_0$ row double-counts against (107), and criterion 5b caught it at 98.5% where the stated acceptance conditions all passed**
+
+*P1-B, 2026-10-21. The control was built, measured, and **not** flipped.*
+
+### What was built
+
+`coefficients.MONOPOLE_ROW`, one control carrying both halves of **T-104** and
+**T-105** together (M11a): $\alpha_0=1$ in place of $\alpha_2=15/2$ on (89)'s
+monopole row, *and* the dropped $a\mathcal B_0\delta_{\ell0}$ source restored,
+giving $C_0=-\tfrac13a\mathcal B_2-a\mathcal B_0$.
+
+### The acceptance conditions passed. All four of them.
+
+`diagnostic_d19_monopole_row.py`, on the **live** coefficients:
+
+| | |
+|---|---|
+| $\gamma$ with the row as printed | **2.500000** exactly — the control works |
+| $\gamma$ with the row corrected | **$1.5\times10^{-16}$** against a $10^{-10}$ bar |
+| $C_1$ moves | $0$ |
+| $C_2$ moves | $0$ |
+| $\kappa'$ in the new $C_0$ | **none** — clean under **S48** |
+
+### And it is wrong anyway
+
+Flipping the default broke **criterion 5b** — (102) carried generically
+against (177)–(179), which had agreed to $9.5\times10^{-6}$ against a
+$10^{-3}$ gate:
+
+| | generic / pipeline, row printed | row corrected |
+|---|---|---|
+| $k=10$ | 1.000 | 1.930, 1.954, 1.705, 1.030 |
+| $k=60$ | 1.000 | **1.985, 1.983, 1.981**, 1.368 |
+| $k=300$ | 1.000 | **1.987, 1.986, 1.977, 2.012** |
+
+**The mode route is bit-identical under both rows**, as it must be — it does
+not go through (89). **The covariant route roughly doubles.**
+
+### The mechanism, and the register already had it
+
+**D11, finding T-79:** $(a\mathcal B_1)'/k=(\Phi_A'-\Phi_H')+\tfrac k3\tau_1$,
+and (107) gives $-C_1'=(\kappa'\hat v_B)'+(a\mathcal B_1)'/k$. So
+$-C_1'$ **already contains $+\tfrac k3\tau_1$**, which *is* $-a\mathcal B_0$.
+The integrand is $C_0-C_1'+C_2''$; putting $C_0=-a\mathcal B_0=+\tfrac k3\tau_1$
+into it counts that source **twice**, and $\simeq2$ is what is measured. The
+ratio falls below 2 exactly where the $\kappa''$ term and the ISW dominate
+instead.
+
+> **T-79 said it in advance**: *"$a\mathcal B_0$ is a **source, on the right,
+> once**."* It is already on the right, once, inside $C_1'$.
+
+### The methodological finding, which is the part that generalises
+
+**$\gamma=0$ cannot see this, and neither can any of the other three.**
+$\gamma$ is built from $\Delta C_0$ — a frame *difference* — and the
+double-counted term is common to both frames, so it cancels identically out of
+$\gamma$. The term that breaks the calculation is invisible to every condition
+that was stated in advance to catch exactly this kind of error.
+
+> **M14 — an acceptance condition built only from frame differences cannot see
+> a defect that is common to both frames.** A repair must be scored against at
+> least one gate that is not a difference. Here that gate was criterion 5b, it
+> was never designed for this, and it is the only thing that caught it.
+
+Five repairs were withdrawn on their own numbers. **This is the sixth, and it
+is the first to be refuted by an instrument pointed somewhere else entirely.**
+
+### What stands and what does not
+
+- **T-104 stands and is untested by this.** $\alpha_0$ versus $\alpha_2$
+  multiplies $a\mathcal B_2$, which is $\equiv0$ in the Newtonian frame, so it
+  changes nothing criterion 5b can see. The $15/2$ is verified in exact
+  rationals and is a defect in **(89) as printed** — an antecedent finding,
+  and it should carry a `B-` number rather than a `T-` one.
+- **T-105 is refuted as implemented.** $\Delta C_0=0$ remains true and is not
+  the question; *where* $a\mathcal B_0$ enters is.
+- **The open question is for P1-T**, because it is a statement about the
+  antecedent's own equations and not about this bundle: if $a\mathcal B_0$
+  belongs in $C_0$, then the $\tfrac k3\tau_1$ inside $(a\mathcal B_1)'$ at
+  (106)/(107) must not be there — and if (106) is right, then (89)'s
+  $\delta_{\ell0}$ row is **correctly** empty of $\mathcal B_0$ and only its
+  normalisation is wrong.
+
+**The control stays, defaulting to `"printed"`, and D19 stays with it.** A
+refuted variant that cannot be regenerated cannot be checked — the same reason
+D14 was kept after T-88 was withdrawn.
+
+---
+
+## T-108 — **two units defects in the scattering rate, found by the PI: a surviving $1/h$ dropped from $c/H_0$, and $h=0.674$ used for all three backgrounds**
+
+*Raised by the PI 2026-10-21; both confirmed by P1-B the same day. Neither is
+repaired yet — see the last section.*
+
+### The surviving $1/h$
+
+`decoupling.py:_thomson_scale` returns $\sigma_Tn_{b,0}c/H_0$ and its own
+docstring states the arithmetic:
+
+> *"$n_{b,0}=1.123\times10^{-5}\,\Omega_bh^2$ cm$^{-3}$ … the Hubble length
+> $c/H_0=2997.9/h$ Mpc $=9.2506\times10^{27}/h$ cm. **Taking $h$ inside
+> $\Omega_bh^2$ leaves one factor of $h$, which cancels against $c/H_0$.**"*
+
+**The cancellation does not happen.** $n_{b,0}\propto\Omega_bh^2$ and
+$c/H_0\propto h^{-1}$, so the product is $\propto\Omega_bh$ — **one power of
+$h$ survives, and it is not cancelled, it is dropped.** The function uses
+`hubble_length_cm = 9.2506e27`, which is $c/H_0$ at $h=1$, and **it takes no
+`h` argument at all**, so it could not apply the factor even if it wanted to.
+
+$$\kappa'_{\rm code}=h\,\kappa'_{\rm correct}$$
+
+so the released scattering rate is **low by $1/h$**: a factor **1.48 on
+`PLANCK_MODEL`** ($h=0.6736$) and **2.00 on Einstein–de Sitter** ($h=0.5$).
+
+> This is **T-103's shape in a second file**: a docstring that states the rule
+> and then breaks it, with the code implementing the docstring rather than the
+> arithmetic. The statement *"which cancels"* is the whole defect, and it has
+> been read as a derivation for four releases.
+
+### $h=0.674$ for every background
+
+`RecombinationHistory.build` takes `h: float = 0.674`, passes it into
+`peebles_ionisation`, and **every caller omits it** —
+`two_frame.py:284`, `pipeline.py:367`, `two_route.py:201`,
+`benchmark_single_run.py:92`. So the Peebles ODE runs at the **Planck** $h$ on
+Einstein–de Sitter ($h=0.5$) and on $\Lambda$CDM alike.
+
+**This is exactly the class S43 exists to forbid** — a default that is right
+for one model, silently inherited by another — and the third instance of it:
+**T-57/T-58** (the line-of-sight weight), P1-T's §3.6
+(`transfer_gamma = 0.48`, `hubble_h = 0.5` on `PLANCK_MODEL`), and now this.
+**S43's gate counts call sites that name their *weight*; it does not count
+call sites that name their $h$.** The gate is narrower than the rule it
+enforces.
+
+### Why it is not a small correction
+
+$\kappa'$ sets the visibility: its peak fixes $z_*$ and therefore $r_s$, and
+its width fixes the Silk damping envelope. **A factor 1.5–2.0 in the
+scattering rate is not a normalisation**, it moves the sound horizon and the
+damping scale, and both are inputs to the peak positions this release is
+trying to get right. The second defect moves the same quantities on the two
+backgrounds where $h\neq0.674$.
+
+**No size is claimed here.** This entry records that the arithmetic is wrong
+and by what factor the *rate* is wrong; what that does to $z_*$, $r_s$,
+$\ell_A$ and the peaks is a measurement, and it has not been taken.
+
+### Not repaired, deliberately
+
+Both defects change **every released number in the bundle**, on every
+background. **T-107 is six hours old and is the register's standing argument
+for why a correction is measured before its default moves** — there, all four
+stated acceptance conditions passed and criterion 5b still caught the repair
+at 98.5%. These two get the same treatment: a control, a diagnostic that
+measures $z_*$, $r_s$, $\ell_A$ and the visibility width under each, and the
+flip only after.

@@ -43,7 +43,7 @@ from functools import lru_cache
 
 import numpy as np
 
-from functions.harmonics.weights import beta
+from functions.harmonics.weights import alpha, beta
 
 __all__ = [
     "SourceCoefficients",
@@ -85,6 +85,57 @@ def _solved_match() -> tuple[Fraction, Fraction, Fraction]:
     p0 = -(Fraction(5) / b2 * j0_second) * p2
 
     return p0, p1, p2
+
+
+@lru_cache(maxsize=1)
+def _solved_match_corrected() -> tuple[Fraction, Fraction]:
+    r"""(89)'s $\ell=0$ row at **its own** normalisation, with the
+    $a\mathcal B_0\delta_{\ell0}$ row restored. Findings **T-104**, **T-105**.
+
+    Returns $(q_0^{B_2},q_0^{B_0})$ with
+    $C_0=q_0^{B_2}(a\mathcal B_2)+q_0^{B_0}(a\mathcal B_0)$.
+
+    **Derived here rather than transcribed**, from objects that are not (89):
+    `beta` is the PSTF normalisation $O^{A_\ell}O_{A_\ell}$, `alpha` is the
+    normalisation in which (F.4) takes the Ma & Bertschinger form, and
+    $j_0''(0)=-\tfrac13$ is the ascending series. So this is a **check** on
+    (89) and not a restatement of it --- and the check is validated by the two
+    rows it does *not* change: $h_1'(0)=\alpha_1j_1'(0)=1$ and
+    $h_2''(0)=\alpha_2j_2''(0)=1$, both exactly, both reproducing (89) as
+    printed. **A normalisation error cannot give 1 twice and $-5/2$ once.**
+
+    `_solved_match()` applies $\alpha_2=15/2$ --- the rank-**two**
+    normalisation --- to this monopole row, where $\alpha_0=1$ belongs. The
+    discrepancy is exactly $\alpha_2/\alpha_0=15/2$, and it is **T-104**.
+    """
+    j0_second = Fraction(-1, 3)
+    _, _, p2 = _solved_match()
+    # ell = 0:  C_0 + C_2 k^2 * alpha_0 * j_0''(0) = -(a B_0),  C_2 k^2 = p2 a B_2
+    q0_b2 = -(alpha(0) * j0_second) * p2
+    q0_b0 = Fraction(-1)
+    return q0_b2, q0_b0
+
+
+#: **The $\ell=0$ row control --- `"printed"` or `"corrected"`.**
+#:
+#: `"corrected"` applies **both** halves of findings **T-104** and **T-105**
+#: together: $\alpha_0=1$ in place of $\alpha_2=15/2$ on the monopole row,
+#: *and* the dropped $a\mathcal B_0\delta_{\ell0}$ source row restored, giving
+#:
+#:     C_0 = -(1/3) a B_2 - a B_0
+#:
+#: **Neither half alone is a correction.** `c5_monopole.py` measures
+#: $\gamma=-5/2$ as printed, $+1/3$ with $\alpha_0$ only, and $0$ only with
+#: both --- so splitting them would score a repair that is still wrong as an
+#: improvement, which is **M11a** and is how **T-88** happened.
+#:
+#: **It defaults to `"printed"` and moves nothing released.** Turning it on
+#: changes every Newtonian number in the bundle, because $a\mathcal B_2\equiv0$
+#: in that frame makes $C_0\equiv0$ today while $a\mathcal B_0=-\tfrac13k\tau_1$
+#: is **not** zero there: the correction gives the Newtonian column a rank-0
+#: source it has never carried. That is measured by **D19** before the default
+#: moves, not asserted.
+MONOPOLE_ROW: str = "printed"
 
 
 #: $C_0$ as it follows from (89) **with the sign (89) prints** on its
@@ -135,6 +186,8 @@ def match_coefficients(
     kappa_prime_v_b: np.ndarray,
     frame: str,
     use_printed_c0: bool = False,
+    a_b0: np.ndarray | None = None,
+    monopole_row_corrected: bool = False,
 ) -> SourceCoefficients:
     r"""Solve (89) for $C_0,C_1,C_2$ at one $k$.
 
@@ -162,10 +215,29 @@ def match_coefficients(
         raise ValueError("every source array must share the eta grid's shape")
 
     prefactor = float(p0) if not use_printed_c0 else float(c0_from_printed_89)
+    if monopole_row_corrected:
+        # T-104 and T-105, together. Neither half alone is a correction.
+        if a_b0 is None:
+            raise ValueError(
+                "monopole_row_corrected needs `a_b0` --- a B_0 on the eta "
+                "grid. It is not reconstructed from the other sources here: "
+                "two routes to one quantity is what S8 forbids, and the whole "
+                "point of the correction is that this row was never supplied.")
+        if use_printed_c0:
+            raise ValueError(
+                "use_printed_c0 and monopole_row_corrected are two different "
+                "ell=0 rows and cannot both be taken. The first is B-11's "
+                "known-wrong control on the SIGN of j_0''(0); the second is "
+                "T-104's correction to its NORMALISATION. Asking for both "
+                "would score one against the other and report neither.")
+        q0_b2, q0_b0 = _solved_match_corrected()
+        c0 = float(q0_b2) * a_b2 + float(q0_b0) * np.asarray(a_b0, dtype=float)
+    else:
+        c0 = prefactor * a_b2
     return SourceCoefficients(
         eta=np.asarray(eta, dtype=float),
         k_com=k,
-        c0=prefactor * a_b2,
+        c0=c0,
         c1=float(p1) / k * (a_b1 + kpvb),
         c2=float(p2) / k**2 * a_b2,
         frame=frame,
@@ -180,6 +252,7 @@ def newtonian_coefficients(
     phi_a: np.ndarray,
     kappa_prime: np.ndarray,
     v_b: np.ndarray,
+    a_b0: np.ndarray | None = None,
 ) -> SourceCoefficients:
     r"""The Newtonian specialisation, $\tilde\sigma_{ab}\approx0$.
 
@@ -207,6 +280,8 @@ def newtonian_coefficients(
         kappa_prime_v_b=float(k_com) * np.asarray(kappa_prime, dtype=float)
         * np.asarray(v_b, dtype=float),
         frame="newtonian",
+        a_b0=a_b0,
+        monopole_row_corrected=(MONOPOLE_ROW == "corrected"),
     )
 
 
@@ -655,8 +730,14 @@ def newtonian_set(
     vb_t_prime = reduce_dipole(t1p, k_com)
     kpvb_prime = kp * vb_t_prime + np.asarray(kappa_double_prime, dtype=float) * vb_t
 
+    # **a B_0 = -(1/3) k tau_1**, from B_0 = -(1/3) D^a tau_a. D11 measures it
+    # as the source of the ell=0 equation (finding T-79) and it is NOT zero in
+    # the Newtonian frame --- which is why restoring the row gives this column
+    # a rank-0 source it has never carried. T-105.
+    a_b0 = -(float(k_com) / 3.0) * tau1
     coefficients = newtonian_coefficients(
-        eta, k_com, delta_t=delta_t, phi_a=phi_a, kappa_prime=kp, v_b=vb_t)
+        eta, k_com, delta_t=delta_t, phi_a=phi_a, kappa_prime=kp, v_b=vb_t,
+        a_b0=a_b0)
     c1p = newtonian_c1_prime(
         eta, k_com, delta_t=delta_t, phi_a=phi_a, phi_a_prime=phi_a_prime,
         phi_h_prime=phi_h_prime, tau_1=tau1, conformal_hubble=conformal_hubble,
@@ -951,9 +1032,15 @@ def cdm_set(
 
     a = np.asarray(scale_factor, dtype=float)
     a_b2 = a * sigma
+    # a B_0 in THIS frame: B_0 = -(1/3) D^a tau_a and the dipole here is
+    # tau_1_E = tau_1 - boost, so Delta(a B_0) = +(1/3) k v, which is the
+    # partner that makes Delta C_0 = 0 against Delta(a B_2) = -k v. T-105.
+    a_b0_E = -(k / 3.0) * tau_1_E
     coefficients = match_coefficients(
         eta, k, a_b1=a_b1_E, a_b2=a_b2,
-        kappa_prime_v_b=kappa_prime_v_b_E, frame="cdm")
+        kappa_prime_v_b=kappa_prime_v_b_E, frame="cdm",
+        a_b0=a_b0_E,
+        monopole_row_corrected=(MONOPOLE_ROW == "corrected"))
     # (90) through `match_coefficients` and the $v$ route must agree.
     if not np.allclose(coefficients.c2, c2, rtol=1e-12, atol=0.0):
         raise ValueError(

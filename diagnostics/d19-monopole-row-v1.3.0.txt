@@ -1,0 +1,95 @@
+D19 --- the $\ell=0$ row correction, measured on the LIVE coefficients.
+
+**The acceptance measurement for findings T-104 and T-105, taken before the
+default moves and not after.** Five repairs have been attempted and withdrawn
+(T-88--T-93); the one that looked best was a spurious $\times\kappa'$ of
+320--682 scored on a lattice nobody had checked. This one is measured first.
+
+WHAT IS BEING CHANGED
+---------------------
+`coefficients.MONOPOLE_ROW` switches (89)'s $\ell=0$ row between:
+
+    "printed"     C_0 = -(5/2) a B_2                   <- released
+    "corrected"   C_0 = -(1/3) a B_2 - a B_0           <- T-104 + T-105
+
+Two corrections, **one control**, because neither alone is a correction:
+`c5_monopole.py` gives $\gamma=-5/2$ as printed, $+1/3$ with $\alpha_0$ only,
+and $0$ only with both. Splitting them would score a still-wrong repair as an
+improvement. **M11a.**
+
+THE FOUR THINGS MEASURED
+------------------------
+1. **gamma on the live coefficients.** `c5_monopole.py` establishes
+   $\gamma=0$ symbolically on its own fixtures; P1-T's acceptance condition is
+   that the live arrays agree. With $\Delta(a\mathcal B_2)=a\mathcal B_2$ in
+   the CDM column and $a\mathcal B_2=-kv$,
+
+       gamma_live  =  Delta C_0 / a_B2(CDM)
+
+   which is $p_0=-5/2$ exactly when the row is printed, and must be $0$ when
+   it is corrected. **This is the condition that can fail early and cheaply.**
+2. **The size of the new Newtonian rank-0 source.** $C_0\equiv0$ in that
+   column today, because $a\mathcal B_2\equiv0$ there. $a\mathcal B_0=
+   -\tfrac13k\tau_1$ is **not** zero there, so the correction gives the
+   Newtonian column a monopole source it has never carried --- and the
+   monopole is the Sachs--Wolfe plateau. Reported against $C_1$, the
+   coefficient that currently dominates.
+3. **The two rows that must not move.** $C_1$ and $C_2$ are untouched by this
+   control. If either moves, the change has reached further than its
+   derivation and the result is void.
+4. **$\kappa'$ in the new row.** $a\mathcal B_0$ is $-\tfrac13k\tau_1$ and
+   carries no scattering rate, so the corrected $C_0$ must still grade clean
+   under **S48**'s ledger. Checked with D18's affine split rather than
+   asserted.
+
+
+
+==============================================================================
+  EdS
+==============================================================================
+      k  gamma printed  gamma corrected  |C_0^N|/|C_1^N|  C_1 moved  C_2 moved
+  ----------------------------------------------------------------------------
+     10       2.500000        1.164e-16           0.0387    0.0e+00    0.0e+00
+     60       2.500000        1.502e-16           0.4989    0.0e+00    0.0e+00
+    300       2.500000        1.223e-16           5.3376    0.0e+00    0.0e+00
+
+  S48 ledger on the corrected C_0: kappa'-carrying part = 0.000e+00  (CLEAN)
+
+==============================================================================
+  PLANCK
+==============================================================================
+      k  gamma printed  gamma corrected  |C_0^N|/|C_1^N|  C_1 moved  C_2 moved
+  ----------------------------------------------------------------------------
+     10       2.500000        1.292e-16           0.0431    0.0e+00    0.0e+00
+     60       2.500000        9.049e-17           0.2640    0.0e+00    0.0e+00
+    300       2.500000        1.328e-16           3.2801    0.0e+00    0.0e+00
+
+  S48 ledger on the corrected C_0: kappa'-carrying part = 0.000e+00  (CLEAN)
+
+==============================================================================
+  ACCEPTANCE
+==============================================================================
+  PASS   A1  gamma is 5/2 with the row as printed
+  PASS   A2  gamma is ZERO with the row corrected
+  PASS   A3  C_1 does not move
+  PASS   A4  C_2 does not move
+
+  worst gamma printed   2.500000   (exactly 5/2 = 2.5)
+  worst gamma corrected 1.502e-16   (bar 1e-10)
+  new Newtonian rank-0 source, |C_0|/|C_1|: 0.0387 to 5.3376
+
+  READING THIS
+  ------------
+  A2 is the condition P1-T stated in advance and it is the one that can fail
+  early and cheaply: gamma = 0 on the LIVE coefficients, not only on
+  c5_monopole's own fixtures. A1 is the control --- it says the instrument is
+  pointed at the right quantity, because a measurement that could not see the
+  defect could not see the repair either.
+
+  The |C_0|/|C_1| column is NOT an acceptance condition. It is the size of a
+  source the Newtonian column has never carried, reported so that whatever the
+  spectrum does next is read against a number fixed beforehand. The monopole
+  is the Sachs-Wolfe plateau, and the plateau is what F9 gets wrong at low
+  ell -- but a source being the right size is not the same as the spectrum
+  being right, which is M11 and is why the spectrum run comes after this.
+

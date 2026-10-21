@@ -285,8 +285,13 @@ def two_route_transfer(
     # reached the dipole through their own line, which is why no comparison
     # between them could see this -- T-3's lesson, in duplicate again.
     vb_t = reduce_dipole(tau_1, k)
+    # a B_0 = -(1/3) k tau_1, the ell=0 source row of (89). Supplied here
+    # rather than defaulted, because MONOPOLE_ROW decides whether it is used
+    # and a caller that cannot supply it cannot take the corrected row.
+    # B-16, B-17.
     coefficients = newtonian_coefficients(eta, k, delta_t=delta_t, phi_a=phi_a,
-                                          kappa_prime=kp, v_b=vb_t)
+                                          kappa_prime=kp, v_b=vb_t,
+                                          a_b0=-(float(k) / 3.0) * tau_1)
     c1_prime = newtonian_c1_prime(
         eta, k, delta_t=delta_t, phi_a=phi_a,
         phi_a_prime=CubicSpline(eta, phi_a).derivative(1)(eta),

@@ -73,7 +73,7 @@ from functions.background.flrw import (  # noqa: E402
     CDM_MODEL, PLANCK_MODEL, PLANCK_H, PLANCK_OMEGA_B_H2)
 from functions.spectra.two_frame import build_environment, coefficient_sets  # noqa: E402
 
-KS = (10.0, 60.0, 300.0)
+KS = (2.0, 5.0, 10.0, 60.0, 300.0)
 
 #: Machine-precision bar for the linearity check. The arrays are O(1e2)-O(1e6)
 #: and the split is a difference of two of them, so a relative residual above
