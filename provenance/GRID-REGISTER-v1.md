@@ -27,7 +27,7 @@ being possible.
 
 ### `eta` — the recombination history: kappa', visibility and opacity in eta
 
-`functions/spectra/decoupling.py:230`, `np.linspace`
+`functions/spectra/decoupling.py:233`, `np.linspace`
 
 **1.2% in the primary source at eta_*, measured.** `n_eta=4000`, spacing
 4.9e-04, which is COARSER than the line-of-sight grid it is interpolated onto.
@@ -73,7 +73,7 @@ spanning a factor of two thousand in k, which is why no number is chosen.
 
 ### `eta` — the eta grid for the two-frame evaluation of (102): F2, F5, F7
 
-`functions/spectra/two_frame.py:297`, `np.linspace`
+`functions/spectra/two_frame.py:303`, `np.linspace`
 
 `required_n_eta(k_max, span)` when `n_eta is None`, which is how every
 figure calls it, and `check_k` RAISES when a caller asks for a mode the grid
@@ -83,7 +83,7 @@ nothing in the bundle does.
 
 ### `mode_eta` — one acoustic mode's integration grid on the (102) generic-u^a route
 
-`functions/spectra/two_frame.py:378`, `np.linspace`
+`functions/spectra/two_frame.py:384`, `np.linspace`
 
 The same construction as `pipeline.py::mode_eta` and in the same
 release, because **T-51 had one instance per route**: `pipeline.run`,

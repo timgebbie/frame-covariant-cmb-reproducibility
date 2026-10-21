@@ -8768,3 +8768,116 @@ stated acceptance conditions passed and criterion 5b still caught the repair
 at 98.5%. These two get the same treatment: a control, a diagnostic that
 measures $z_*$, $r_s$, $\ell_A$ and the visibility width under each, and the
 flip only after.
+
+---
+
+## T-109 — **the scattering-rate units correction is CONFIRMED by an external gate and is now the released default.** $z_*$'s error against CAMB falls from $+2.40\%$ to $-0.83\%$
+
+*P1-B, 2026-10-21, `diagnostic_d20_recombination_h.py` (**D20**). The repair of
+**T-108**, measured before the default moved and then moved.*
+
+### What was flipped
+
+`decoupling.RECOMBINATION_H`, `"released"` → `"corrected"`: the background's
+own $h$ in the Peebles ODE, and the surviving $1/h$ restored to $c/H_0$ in the
+Thomson scale. **Both together**, because the first cannot be applied without
+the second — M11a satisfied by the arithmetic rather than by choice.
+
+### The gate that decided it, and it is not a difference
+
+**M14**, six hours old: *a repair must be scored against at least one gate
+that is not a difference.* Here it is $z_*$ against **1088.5**, the value CAMB
+and CLASS report specialised to this bundle's own $N_{\rm eff}=0$ — external,
+not fitted, and not self-referential.
+
+| | released | corrected | against 1088.5 |
+|---|---|---|---|
+| EdS | 1125.62 | **1089.39** | $+3.41\%\to+0.08\%$ |
+| ΛCDM | 1109.49 | **1077.38** | $+1.93\%\to-1.02\%$ |
+| PLANCK | 1114.64 | **1079.44** | $+2.40\%\to-0.83\%$ |
+
+**All three move towards it, and the sign was predicted in advance**: more
+scattering means recombination finishes later, which lowers $z_*$. A
+correction that moved $z_*$ the other way would have been refuted on the spot.
+PLANCK is the like-for-like comparison and its error falls by $2.9\times$;
+EdS's by $42\times$.
+
+**The released 1114.64 reproduces the README's own 1114.5** — the control that
+says D20 is measuring the shipped quantity.
+
+### What it does not do
+
+$\ell_A$ falls by **1.3–2.0%** (PLANCK $272.19\to266.75$), so the first peak
+moves **down by about 2%**. The gap is $341.7$ against $206$ — **40%**.
+
+> **This is not the peak-position answer and it is not reported as one.** It
+> makes $z_*$ right and moves $\ell_A$ the right way by a fortieth of what is
+> needed. The README's criterion-5b itemisation says the peak offset is
+> *"consistent with $z_*=1114.5$ against 1088.5"*; **that implied causal link
+> is now measured and it is too strong** — $z_*$ is fixed and the peak barely
+> moved.
+
+### Two controls, and one of them caught an error in this diagnostic
+
+**Criterion 5b passes clean**, which is the gate that refuted T-107 at 98.5%
+yesterday. And D20's $\ell_A$ reproduces `MODEL-PARAMETERS-v1.3.0.md` exactly
+— 192.67/172.72/**272.19** against 192.663/172.71/272.177.
+
+**It did not at first.** A first draft integrated $r_s$ from the recombination
+grid's own first point instead of from the big bang, missing everything below
+$z=3000$, and returned $\ell_A=553$ on PLANCK — a factor of **2.03** that
+would have gone into the headline. It was caught by reading the diagnostic
+against the generated table, **which is the only reason that table is
+generated**.
+
+An earlier draft of D20 also asserted that $\kappa'(\eta_*)$ *"must rise by
+exactly $1/h$"*. **That was wrong and is recorded as wrong in the file**: the
+*scale* rises by $1/h$, but $\kappa'$ is then read at a peak that has moved,
+and a later peak sits at a lower electron density. On PLANCK the scale rises
+by 1.48 and $\kappa'(\eta_*)$ comes out at **0.977**.
+
+### What is now stale
+
+**Every artefact built from $\kappa'$**, which is every figure and output in
+the tree. F9 above all: the committed rendering and its first peaks
+(280.4 / 224.5 / 341.7) are **pre-T-109** and the README says so until the
+re-run lands. Two pinned test values moved with the rate and carry their
+reason in place — $k_D$ $619.92\to642.14$ and its $f_2$-corrected partner
+$536.87\to556.11$, **the same 3.6% on both**, which is the check that this is
+$\kappa'$ and not something that reached only one of them.
+
+---
+
+## T-110 — **the $k=300$ share collapse is an artefact of the defective scattering rate, and repairing T-108 removes it**
+
+*P1-B, 2026-10-21, D18 re-run with `RECOMBINATION_H = "corrected"`. P1-T's
+prediction, stated in advance in their fourth message §5.*
+
+P1-T: *"the share crossover sits at $k=\kappa'(\eta_*)$, and you measured
+$\kappa'(\eta_*)$ on the defective rate… fixing T-108 would either move
+$k=300$'s singular behaviour or remove it. That is a prediction and it is
+cheap."*
+
+**It removes it.** EdS sup-norm $\kappa'$ share of $C_1$:
+
+| $k$ | 2 | 5 | 10 | 60 | **300** |
+|---|---|---|---|---|---|
+| before T-109 | 1.0020 | 1.0130 | 1.0033 | 1.0010 | **0.5143** |
+| after T-109 | 1.0010 | 1.0065 | 1.0017 | 1.0005 | **0.9952** |
+
+$\kappa'(\eta_*)$ rises from $3.82\times10^2$ to $4.40\times10^2$ and the
+collapse at the top of the grid is gone.
+
+> **$k=300$ was not a special mode. It was the top of a $k$ grid sitting on a
+> crossover that a units defect had dragged down into it.** Two weeks of *"no
+> variant moves $k=300$"* has a cause, and it is not in the assembly.
+
+**P1-T's amplitude is again too large and for the reason already recorded.**
+They predicted the crossover moves to $\simeq764$ on EdS — $382\times2.00$.
+Measured, $\kappa'(\eta_*)$ goes to $440$, not $764$, because it is read at a
+peak that **moved**: T-109's own correction to D20. The direction is theirs
+and confirmed; the size is measured and smaller.
+
+**The pointwise share at $\eta_*$ still falls at $k=300$** (0.234 → 0.209), so
+the phase argument P1-T gave for the pointwise–envelope gap is untouched by
+this. The two estimators disagree at $k=300$ and now disagree more.

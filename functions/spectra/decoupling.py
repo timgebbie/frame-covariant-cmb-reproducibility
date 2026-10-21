@@ -226,6 +226,9 @@ class RecombinationHistory:
         recombination: "Recombination" = None,  # type: ignore[assignment]
         h: float = 0.674,
     ) -> "RecombinationHistory":
+        # T-108: under "released" the Peebles ODE runs at h = 0.674 on every
+        # background, which is what every shipped number was computed with.
+        h_used = _RELEASED_H if RECOMBINATION_H == "released" else float(h)
         eta_min = background.eta_at_redshift(z_max)
         eta = np.linspace(eta_min, background.eta_0, n_eta)
         a = background.a_of_eta(eta)
@@ -248,7 +251,7 @@ class RecombinationHistory:
             z_hi = min(float(np.max(z)), 2000.0)
             solution = peebles_ionisation(
                 background, z_start=z_hi, z_end=max(float(np.min(z)), 10.0),
-                omega_b_h2=omega_b_h2, h=h,
+                omega_b_h2=omega_b_h2, h=h_used,
             )
             # Above the integration's start the gas is still in equilibrium by
             # construction (see `peebles_ionisation`), so Saha is the solution
@@ -263,7 +266,7 @@ class RecombinationHistory:
         # into `thomson_scale`: only the shape and the location of the visibility
         # peak matter for the tests, and the scale is fixed by requiring
         # kappa(eta_0) = 0 with kappa increasing backwards in time.
-        thomson_scale = _thomson_scale(omega_b_h2)
+        thomson_scale = _thomson_scale(omega_b_h2, h_used)
         kappa_prime = thomson_scale * x_e * a ** (-2)
 
         # kappa(eta) = Int_eta^eta_0 kappa' d(eta'), so kappa(eta_0) = 0
@@ -310,18 +313,61 @@ class RecombinationHistory:
         return self.visibility if which is Weighting.ANNALS_II else self.opacity
 
 
-def _thomson_scale(omega_b_h2: float) -> float:
-    """sigma_T n_{b,0} c / H0, dimensionless, for a_0 = 1.
+#: **The $h$ convention in recombination --- `"released"` or `"corrected"`.
+#: Finding T-108, raised by the PI 2026-10-21.**
+#:
+#: `"released"` reproduces the shipped numbers exactly: $h=0.674$ in the
+#: Peebles ODE **whatever the background**, and no $1/h$ in the Thomson scale.
+#: `"corrected"` uses the caller's $h$ in both places.
+#:
+#: **The two defects land together because the first needs the second.** The
+#: surviving $1/h$ cannot be applied without knowing $h$ per background, and
+#: knowing $h$ per background *is* the second defect. M11a is satisfied by the
+#: arithmetic rather than by choice.
+#:
+#: **It defaults to `"released"` and moves nothing.** What it does to $z_*$,
+#: $r_s$, $\ell_A$ and the visibility width is measured by **D20** before the
+#: default moves --- T-107 is the standing reason.
+RECOMBINATION_H: str = "corrected"
 
-    n_{b,0} = 1.123e-5 Omega_b h^2 cm^-3, sigma_T = 6.6525e-25 cm^2, and the
-    Hubble length c/H0 = 2997.9/h Mpc = 9.2506e27/h cm. Taking h inside
-    Omega_b h^2 leaves one factor of h, which cancels against c/H0 for the
-    combination that appears here.
+#: The $h$ every released run has silently used, on all three backgrounds.
+_RELEASED_H: float = 0.674
+
+
+def _thomson_scale(omega_b_h2: float, h: float | None = None) -> float:
+    r"""$\sigma_Tn_{b,0}c/H_0$, dimensionless, for $a_0=1$.
+
+    $n_{b,0}=1.123\times10^{-5}\,\Omega_bh^2$ cm$^{-3}$,
+    $\sigma_T=6.6525\times10^{-25}$ cm$^2$, and the Hubble length
+    $c/H_0=2997.9/h$ Mpc $=9.2506\times10^{27}/h$ cm.
+
+    **Finding T-108.** This docstring used to end: *"Taking h inside
+    Omega_b h^2 leaves one factor of h, **which cancels** against c/H0."* **It
+    does not cancel.** $n_{b,0}c/H_0\propto\Omega_bh^2\cdot h^{-1}
+    =\Omega_bh$: one power of $h$ **survives**, and the released code dropped
+    it by using $c/H_0$ at $h=1$ --- the function did not even take an `h`
+    argument, so it could not have applied the factor. The released rate is
+    therefore **low by $1/h$**: 1.48 on `PLANCK_MODEL`, 2.00 on
+    Einstein--de~Sitter, 1.43 on $\Lambda$CDM at $h=0.7$.
+
+    The statement *"which cancels"* was read as a derivation for four
+    releases. It is **T-103's shape in a second file**: a docstring that
+    states the rule and then breaks it, with the code implementing the
+    docstring rather than the arithmetic.
     """
     n_b0 = 1.123e-5 * omega_b_h2
     sigma_t = 6.6525e-25
-    hubble_length_cm = 9.2506e27
-    return n_b0 * sigma_t * hubble_length_cm
+    hubble_length_cm = 9.2506e27          # c/H0 at h = 1
+    scale = n_b0 * sigma_t * hubble_length_cm
+    if RECOMBINATION_H == "corrected":
+        if h is None:
+            raise ValueError(
+                "the corrected Thomson scale needs h: the surviving 1/h in "
+                "c/H0 cannot be applied without it, which is why the released "
+                "signature taking no h was not merely incomplete but "
+                "unable to be right. T-108.")
+        scale /= float(h)
+    return scale
 
 
 #: **(dif-damp) and (dif-damp-correct), in *Annals II*'s own parameter.**

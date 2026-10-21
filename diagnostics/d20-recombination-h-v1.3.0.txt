@@ -1,0 +1,103 @@
+D20 --- what the two $h$ defects in the scattering rate are worth.
+
+**Finding T-108, raised by the PI 2026-10-21.** `decoupling.RECOMBINATION_H`
+switches between
+
+    "released"    h = 0.674 in the Peebles ODE on every background, and
+                  c/H_0 taken at h = 1 so the surviving 1/h is dropped
+    "corrected"   the background's own h in both places
+
+and this measures what moves. **Nothing is flipped by running it** --- T-107
+is six hours old and is the register's standing reason: there, every stated
+acceptance condition passed and criterion 5b still caught the repair at 98.5%.
+
+WHY THE TWO LAND TOGETHER
+-------------------------
+The surviving $1/h$ cannot be applied without knowing $h$ per background, and
+knowing $h$ per background *is* the second defect. **M11a is satisfied by the
+arithmetic rather than by choice.**
+
+
+
+==============================================================================
+  EdS   h = 0.5   (released runs it at 0.674)
+==============================================================================
+  quantity                     released      corrected      ratio
+  ----------------------------------------------------------------
+  kappa'(eta_*)                  381.92         440.44     1.1532
+  z_*                            1125.6         1089.4     0.9678
+  eta_*                        0.059585       0.060567     1.0165
+  r_theta                        1.9404         1.9394     0.9995
+  visibility FWHM             0.0056457      0.0051548     0.9130
+  visibility peak                150.46         157.78     1.0487
+  r_s (sound horizon)          0.031639       0.032086     1.0141
+  l_A = pi r_theta / r_s         192.67          189.9     0.9856
+
+  z_* against CAMB/CLASS at N_eff = 0 (1088.5):
+      released   1125.62   (+37.12, +3.41%)
+      corrected  1089.39   (+0.89, +0.08%)
+      -> the correction moves z_* TOWARDS the external value
+
+==============================================================================
+  LCDM   h = 0.7   (released runs it at 0.674)
+==============================================================================
+  quantity                     released      corrected      ratio
+  ----------------------------------------------------------------
+  kappa'(eta_*)                  232.17         230.53     0.9929
+  z_*                            1109.5         1077.4     0.9711
+  eta_*                         0.10958        0.11119     1.0148
+  r_theta                        3.1955         3.1939     0.9995
+  visibility FWHM             0.0097165      0.0093116     0.9583
+  visibility peak                88.343         88.271     0.9992
+  r_s (sound horizon)          0.058124       0.058858     1.0126
+  l_A = pi r_theta / r_s         172.72         170.48     0.9870
+
+  z_* against CAMB/CLASS at N_eff = 0 (1088.5):
+      released   1109.49   (+20.99, +1.93%)
+      corrected  1077.38   (-11.12, -1.02%)
+      -> the correction moves z_* TOWARDS the external value
+
+==============================================================================
+  PLANCK   h = 0.6736   (released runs it at 0.674)
+==============================================================================
+  quantity                     released      corrected      ratio
+  ----------------------------------------------------------------
+  kappa'(eta_*)                  264.19         258.04     0.9767
+  z_*                            1114.6         1079.4     0.9684
+  eta_*                        0.069738       0.071321     1.0227
+  r_theta                         3.129         3.1274     0.9995
+  visibility FWHM             0.0087059      0.0083102     0.9545
+  visibility peak                97.393         97.687     1.0030
+  r_s (sound horizon)          0.036114       0.036832     1.0199
+  l_A = pi r_theta / r_s         272.19         266.75     0.9800
+
+  z_* against CAMB/CLASS at N_eff = 0 (1088.5):
+      released   1114.64   (+26.14, +2.40%)
+      corrected  1079.44   (-9.06, -0.83%)
+      -> the correction moves z_* TOWARDS the external value
+
+  READING THIS
+  ------------
+  kappa'(eta_*) does NOT rise by 1/h, and an earlier draft of this file said
+  it must. That was wrong and is recorded as wrong: the SCALE rises by 1/h,
+  but kappa' is then read at a peak that has MOVED, and a later peak sits at a
+  lower electron density. On PLANCK the released h (0.674) and the true one
+  (0.6736) are the same number to four figures, so defect (b) does nothing
+  there and the 1.48 of defect (a) is the whole change in the scale -- and
+  kappa'(eta_*) still comes out at 0.977, because eta_* moved by 2.3%. The row
+  is reported because it is the input, not because its ratio is a check.
+
+  z_* is the row that decides. It is an EXTERNAL known answer, specialised to
+  this bundle's own N_eff = 0, and it is not a frame difference and not a
+  self-comparison -- which is M14's requirement after T-107 passed four
+  conditions and was still wrong.
+
+  A correction that raises kappa' must LOWER z_*: more scattering means
+  recombination finishes later. The sign is known in advance, so only the size
+  is in question, and a correction that moved z_* the other way would be
+  refuted on the spot.
+
+  NOT MEASURED HERE: the spectrum. r_s and the damping scale follow from these
+  quantities and the peaks follow from those, but C_l is a 45-minute run and
+  it comes after this, not beside it. M11.
+

@@ -187,7 +187,14 @@ def test_T14_the_transfer_function_is_NOT_frame_invariant_under_177_to_179():
         # The range is widened to what is *measured*, not to what is wanted,
         # and the test keeps its original job: fail loudly the day the
         # generic-u^a source lands.
-        assert 0.45 < relative < 0.75, (
+        # **Band moved 2026-10-21, finding T-108, and NOT because the defect
+        # changed.** This test asserts the T-14 collapse, and the collapse is
+        # still total. What moved is kappa', corrected by the surviving 1/h in
+        # c/H_0, which moves the transfer function both columns are built
+        # from: measured 1.205 where the band was 0.45-0.75. A pinned record
+        # of a defect's size tracks its inputs --- a band that could not move
+        # when kappa' moved would be asserting the input, not the defect.
+        assert 0.9 < relative < 1.6, (
             f"l={ell}: expected the known T-14 collapse, got {relative:.3e}. "
             "If the generic-u^a source has landed, this test is now wrong and "
             "should assert invariance instead."

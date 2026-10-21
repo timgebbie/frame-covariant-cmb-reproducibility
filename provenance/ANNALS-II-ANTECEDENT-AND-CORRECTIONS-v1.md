@@ -1596,3 +1596,68 @@ closed form against it term for term.
 implementation is (152)/(153), which descends from (mom-flux) at *first* order;
 $\tau_{(2)}$ enters nothing that v1.2.0 released. It becomes load-bearing only
 under **S42**, where the expansion is carried past first order on purpose.
+
+---
+
+## B-16 — (89)'s $\ell=0$ row carries the rank-**two** normalisation $\alpha_2=15/2$ where $\alpha_0=1$ belongs
+
+*Found by P1-T 2026-10-21; verified independently by P1-B in exact rationals
+before acceptance; adjudicated 2026-10-21 after one wrong repair (**T-107**).*
+
+### The defect
+
+With $h_\ell=\alpha_\ell j_\ell$ and $\alpha_\ell=(2\ell+1)/\beta_\ell$:
+
+| row | uses | should use | $h_\ell^{(n)}(0)$ |
+|---|---|---|---|
+| $\ell=2$ | $\alpha_2=15/2$ | $\alpha_2$ | $1$ **exactly** |
+| $\ell=1$ | $\alpha_1=3$ | $\alpha_1$ | $1$ **exactly** |
+| $\ell=0$ | $\alpha_2=15/2$ | $\alpha_0=1$ | $-5/2$ printed, $-1/3$ correct |
+
+**The two rows that come out exactly unity are the control**: a normalisation
+error cannot give $1$ twice and $-5/2$ once. The correction is derived from
+objects that are **not** (89) — $\beta_\ell$ is the PSTF normalisation,
+$\alpha_\ell$ the one in which (F.4) takes the Ma & Bertschinger form, and
+$j_0''(0)=-\tfrac13$ the ascending series — so it is a check on (89) and not a
+restatement of it. The discrepancy is exactly $\alpha_2/\alpha_0=15/2$.
+
+$$C_0 \;=\; -\tfrac13\,a\mathcal B_2 \quad\text{in place of (90)'s }
+-\tfrac52\,a\mathcal B_2 .$$
+
+### The row is **not** mis-sourced, and that was tested the wrong way first
+
+$a\mathcal B_0\delta_{\ell0}$ is **correctly absent**. $\tau_0\equiv0$ is a
+*constraint*, not an evolution — $T(x)$ is **defined** as the monopole of
+$T(x,e)$ — so (89)'s $\ell=0$ line is what fixes $(\ln T)^{\textstyle\cdot}$
+and has zero on the right by construction. $\mathcal B_0=-\tfrac13\mathrm
+D^a\tau_a$ is the **dipole divergence** and reaches the solution through the
+dipole, which is where **D11/T-79** found it.
+
+**Restoring it is a double count, measured by criterion 5b at 98.5%** — that
+is **T-107**, and `appendix-frame-division-v1.3.0.tex:224–229` had already
+tested and rejected the same repair before either stream proposed it.
+
+### Why the normalisation is load-bearing rather than cosmetic
+
+The bracket's rank-0 content is $C_0+\tfrac k3\tau_1$, the second term being
+the partner (107) already carries. With $\Delta(a\mathcal B_2)=-kv$ and
+$\Delta\tau_1=-v$ un-reduced (**T-66**), in units of $kv$:
+
+| row | $\Delta C_0$ | bracket shift |
+|---|---|---|
+| printed, $\alpha_2$ | $+5/2$ | $+13/6$ |
+| **corrected, $\alpha_0$** | $+1/3$ | **$0$ exactly** |
+| corrected $+\,\mathcal B_0$ | $0$ | $-1/3$ |
+
+**$\Delta C_0$ was never without a partner — the partner was outmatched by
+$15/2$.** So the corrected normalisation is the thing that closes the rank-0
+frame shift, and it closes it against a term in $-C_1'$.
+
+### Status
+
+**Corrected in this bundle and on by default**, `coefficients.MONOPOLE_ROW`.
+It changes nothing in the Newtonian frame, where $a\mathcal B_2\equiv0$, so
+criterion 5b cannot see it either way; the CDM column's $\Delta C_0$ moves
+from $5/2\,kv$ to $kv/3$. **No separate `T-` number is filed beside it**:
+`_solved_match()` implements (89) faithfully, so correcting (89) corrects the
+code by the same edit. One number, under `B-`.

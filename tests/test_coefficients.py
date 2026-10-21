@@ -120,15 +120,25 @@ def test_the_newtonian_frame_empties_the_shear_sector():
         assert c.shear_sector_is_empty
         assert np.all(c.c0 == 0.0) and np.all(c.c2 == 0.0)
 
+        # **T-107 adjudicated: the row is correctly EMPTY of a B_0.** tau_0 is
+        # constrained --- T(x) is defined as the monopole of T(x,e) --- so
+        # (89)'s ell=0 line has zero on the right by construction, and B_0,
+        # being the dipole divergence, reaches the solution through the
+        # dipole. T-104 corrects the NORMALISATION only, and alpha_0 multiplies
+        # a B_2, which is identically zero here. So this frame is untouched.
         _C.MONOPOLE_ROW = "corrected"
-        a_b0 = -(K / 3.0) * TAU1_FOR_B0
         cc = newtonian_coefficients(ETA, K, delta_t=DT, phi_a=PHI,
+                                    kappa_prime=KP, v_b=VB)
+        assert np.all(cc.c0 == 0.0) and np.all(cc.c2 == 0.0)
+
+        # The refuted variant is the one that breaks it, and it is kept
+        # regenerable so that T-107's measurement can be reproduced.
+        _C.MONOPOLE_ROW = "corrected+b0"
+        a_b0 = -(K / 3.0) * TAU1_FOR_B0
+        cb = newtonian_coefficients(ETA, K, delta_t=DT, phi_a=PHI,
                                     kappa_prime=KP, v_b=VB, a_b0=a_b0)
-        # rank two is still empty --- that half of (110) is untouched
-        assert np.all(cc.c2 == 0.0)
-        # rank zero is NOT, and it is exactly -a B_0
-        assert np.allclose(cc.c0, -a_b0, rtol=0.0, atol=0.0)
-        assert not np.all(cc.c0 == 0.0)
+        assert np.allclose(cb.c0, -a_b0, rtol=0.0, atol=0.0)
+        assert not np.all(cb.c0 == 0.0)
     finally:
         _C.MONOPOLE_ROW = was
 
@@ -539,7 +549,18 @@ def test_the_frame_shift_of_every_coefficient_is_the_closed_form_one():
     def worst(got, want):
         return np.max(np.abs(got - want)) / np.max(np.abs(want))
 
-    assert worst(e.coefficients.c0 - n.coefficients.c0, 2.5 * k * v) < 1e-13
+    # **5/2 until 2026-10-21, 1/3 after. Finding T-104, under B-16.** (89)'s
+    # ell=0 row applied alpha_2 = 15/2, the rank-TWO normalisation, to a
+    # monopole slot where alpha_0 = 1 belongs. The closed form of Delta C_0 is
+    # -(1/3) Delta(a B_2) = +(1/3) k v, and 5/2 was that times 15/2.
+    #
+    # **And the sign of its importance is not in this line.** Delta C_0 does
+    # not have to vanish: its partner is +(k/3) tau_1 inside -C_1', so the
+    # bracket's rank-0 shift is +1/3 - 1/3 = 0 exactly under the corrected row
+    # and 13/6 under the printed one. gamma, which pairs Delta C_0 against
+    # k^2 Delta C_2, cannot see that -- M15. c8_rank0_partner.py scores the
+    # bracket, which is the object the cancellation lives in.
+    assert worst(e.coefficients.c0 - n.coefficients.c0, k * v / 3.0) < 1e-13
     assert worst(e.coefficients.c1 - n.coefficients.c1, -(vp - kp * v) / k) < 1e-13
     assert worst(e.coefficients.c2 - n.coefficients.c2, v / k) < 1e-13
     assert worst(e.c1_prime - n.c1_prime, -(vpp - kpp * v - kp * vp) / k) < 1e-13

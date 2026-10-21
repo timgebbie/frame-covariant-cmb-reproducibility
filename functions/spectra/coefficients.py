@@ -116,26 +116,43 @@ def _solved_match_corrected() -> tuple[Fraction, Fraction]:
     return q0_b2, q0_b0
 
 
-#: **The $\ell=0$ row control --- `"printed"` or `"corrected"`.**
+#: **The $\ell=0$ row of (89) --- `"printed"`, `"corrected"` or
+#: `"corrected+b0"`. Findings T-104 and T-107.**
 #:
-#: `"corrected"` applies **both** halves of findings **T-104** and **T-105**
-#: together: $\alpha_0=1$ in place of $\alpha_2=15/2$ on the monopole row,
-#: *and* the dropped $a\mathcal B_0\delta_{\ell0}$ source row restored, giving
+#:     "printed"        C_0 = -(5/2) a B_2      alpha_2 on a monopole row
+#:     "corrected"      C_0 = -(1/3) a B_2      alpha_0, finding T-104
+#:     "corrected+b0"   C_0 = -(1/3) a B_2 - a B_0     REFUTED, T-107
 #:
-#:     C_0 = -(1/3) a B_2 - a B_0
+#: **The row is correctly empty of $a\mathcal B_0$, and the reason is a
+#: constraint rather than an omission.** $\tau_0\equiv0$ is not a choice:
+#: $T(x)$ is *defined* as the monopole of $T(x,e)$, so (89)'s $\ell=0$ line is
+#: not an evolution equation but the constraint fixing $(\ln T)^\cdot$, and
+#: differentiating it puts a **zero** on the right.
+#: $\mathcal B_0=-\tfrac13\mathrm D^a\tau_a$ was never an independent source
+#: --- it is the dipole divergence, and it reaches the solution through the
+#: dipole, which is where **D11/T-79** found it.
 #:
-#: **Neither half alone is a correction.** `c5_monopole.py` measures
-#: $\gamma=-5/2$ as printed, $+1/3$ with $\alpha_0$ only, and $0$ only with
-#: both --- so splitting them would score a repair that is still wrong as an
-#: improvement, which is **M11a** and is how **T-88** happened.
+#: **Only the normalisation is wrong, and correcting it is what makes the
+#: rank-0 frame shift cancel.** The bracket's rank-0 content is
+#: $C_0+\tfrac k3\tau_1$, the second term being the partner (107) already
+#: carries. With $\Delta(a\mathcal B_2)=-kv$ and $\Delta\tau_1=-v$ (T-66), in
+#: units of $kv$:
 #:
-#: **It defaults to `"printed"` and moves nothing released.** Turning it on
-#: changes every Newtonian number in the bundle, because $a\mathcal B_2\equiv0$
-#: in that frame makes $C_0\equiv0$ today while $a\mathcal B_0=-\tfrac13k\tau_1$
-#: is **not** zero there: the correction gives the Newtonian column a rank-0
-#: source it has never carried. That is measured by **D19** before the default
-#: moves, not asserted.
-MONOPOLE_ROW: str = "printed"
+#:     printed        Delta C_0 = +5/2    bracket shift = +13/6
+#:     corrected      Delta C_0 = +1/3    bracket shift =  0  exactly
+#:     corrected+b0   Delta C_0 =  0      bracket shift = -1/3
+#:
+#: **$\Delta C_0$ was never without a partner --- the partner was outmatched
+#: by $\alpha_2/\alpha_0=15/2$.** `"corrected+b0"` adds a second copy of a
+#: source the bracket already held, which criterion 5b measured at 98.5%
+#: (**T-107**); it is kept because a refuted variant that cannot be
+#: regenerated cannot be checked.
+#:
+#: **$\gamma$ is the wrong gate for this and always was** --- it pairs
+#: $\Delta C_0$ against $k^2\Delta C_2$ while the partner sits in $-C_1'$.
+#: That is **M15**, the dual of M14: *a gate built from one coefficient cannot
+#: see a cancellation distributed across the bracket.*
+MONOPOLE_ROW: str = "corrected"
 
 
 #: $C_0$ as it follows from (89) **with the sign (89) prints** on its
@@ -188,6 +205,7 @@ def match_coefficients(
     use_printed_c0: bool = False,
     a_b0: np.ndarray | None = None,
     monopole_row_corrected: bool = False,
+    restore_b0: bool = False,
 ) -> SourceCoefficients:
     r"""Solve (89) for $C_0,C_1,C_2$ at one $k$.
 
@@ -216,13 +234,6 @@ def match_coefficients(
 
     prefactor = float(p0) if not use_printed_c0 else float(c0_from_printed_89)
     if monopole_row_corrected:
-        # T-104 and T-105, together. Neither half alone is a correction.
-        if a_b0 is None:
-            raise ValueError(
-                "monopole_row_corrected needs `a_b0` --- a B_0 on the eta "
-                "grid. It is not reconstructed from the other sources here: "
-                "two routes to one quantity is what S8 forbids, and the whole "
-                "point of the correction is that this row was never supplied.")
         if use_printed_c0:
             raise ValueError(
                 "use_printed_c0 and monopole_row_corrected are two different "
@@ -231,7 +242,15 @@ def match_coefficients(
                 "T-104's correction to its NORMALISATION. Asking for both "
                 "would score one against the other and report neither.")
         q0_b2, q0_b0 = _solved_match_corrected()
-        c0 = float(q0_b2) * a_b2 + float(q0_b0) * np.asarray(a_b0, dtype=float)
+        c0 = float(q0_b2) * a_b2
+        if restore_b0:
+            # T-107: REFUTED. Kept regenerable, never default.
+            if a_b0 is None:
+                raise ValueError(
+                    "restore_b0 needs `a_b0`. It is the refuted variant of "
+                    "T-105 and is kept only so that the measurement which "
+                    "refuted it can be reproduced --- D14's reason.")
+            c0 = c0 + float(q0_b0) * np.asarray(a_b0, dtype=float)
     else:
         c0 = prefactor * a_b2
     return SourceCoefficients(
@@ -281,7 +300,8 @@ def newtonian_coefficients(
         * np.asarray(v_b, dtype=float),
         frame="newtonian",
         a_b0=a_b0,
-        monopole_row_corrected=(MONOPOLE_ROW == "corrected"),
+        monopole_row_corrected=MONOPOLE_ROW.startswith("corrected"),
+        restore_b0=(MONOPOLE_ROW == "corrected+b0"),
     )
 
 
@@ -1040,7 +1060,8 @@ def cdm_set(
         eta, k, a_b1=a_b1_E, a_b2=a_b2,
         kappa_prime_v_b=kappa_prime_v_b_E, frame="cdm",
         a_b0=a_b0_E,
-        monopole_row_corrected=(MONOPOLE_ROW == "corrected"))
+        monopole_row_corrected=MONOPOLE_ROW.startswith("corrected"),
+        restore_b0=(MONOPOLE_ROW == "corrected+b0"))
     # (90) through `match_coefficients` and the $v$ route must agree.
     if not np.allclose(coefficients.c2, c2, rtol=1e-12, atol=0.0):
         raise ValueError(

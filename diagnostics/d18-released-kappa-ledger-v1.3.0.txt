@@ -62,34 +62,34 @@ split is void and this diagnostic says so instead of reporting a number.
 
 
 ==============================================================================
-  EdS    kappa'(eta_*) = 3.8192e+02
+  EdS    kappa'(eta_*) = 4.4044e+02
 ==============================================================================
 
   k = 2     Newtonian frame
   coefficient sits under            carries kp   kp share   linearity  verdict
   ----------------------------------------------------------------------------
   C_0       bulk, weight                 n/a         --          --  identically zero in this frame
-  C_1'      bulk, weight                 YES     1.0000    3.29e-20  DEFECT: kappa' in a coefficient
+  C_1'      bulk, weight                 YES     1.0000    6.57e-20  DEFECT: kappa' in a coefficient
   C_2''     bulk, weight                 n/a         --          --  identically zero in this frame
-  C_1       boundary-1, D only           YES     1.0020    4.22e-17  DEFECT: kappa' in a coefficient
+  C_1       boundary-1, D only           YES     1.0010    5.27e-18  DEFECT: kappa' in a coefficient
   C_2       boundary-2, D only           n/a         --          --  identically zero in this frame
 
   k = 2     CDM frame
   coefficient sits under            carries kp   kp share   linearity  verdict
   ----------------------------------------------------------------------------
   C_0       bulk, weight                  no     0.0000    0.00e+00  clean
-  C_1'      bulk, weight                 YES     0.9922    1.44e-16  DEFECT: kappa' in a coefficient
+  C_1'      bulk, weight                 YES     0.9963    1.36e-16  DEFECT: kappa' in a coefficient
   C_2''     bulk, weight                  no     0.0000    0.00e+00  clean
-  C_1       boundary-1, D only           YES     1.0073    8.57e-17  DEFECT: kappa' in a coefficient
+  C_1       boundary-1, D only           YES     1.0036    4.27e-17  DEFECT: kappa' in a coefficient
   C_2       boundary-2, D only            no     0.0000    0.00e+00  clean
 
   k = 5     Newtonian frame
   coefficient sits under            carries kp   kp share   linearity  verdict
   ----------------------------------------------------------------------------
   C_0       bulk, weight                 n/a         --          --  identically zero in this frame
-  C_1'      bulk, weight                 YES     1.0000    7.67e-20  DEFECT: kappa' in a coefficient
+  C_1'      bulk, weight                 YES     1.0000    3.83e-20  DEFECT: kappa' in a coefficient
   C_2''     bulk, weight                 n/a         --          --  identically zero in this frame
-  C_1       boundary-1, D only           YES     1.0130    5.64e-16  DEFECT: kappa' in a coefficient
+  C_1       boundary-1, D only           YES     1.0065    2.80e-16  DEFECT: kappa' in a coefficient
   C_2       boundary-2, D only           n/a         --          --  identically zero in this frame
 
   k = 5     CDM frame
@@ -105,16 +105,16 @@ split is void and this diagnostic says so instead of reporting a number.
   coefficient sits under            carries kp   kp share   linearity  verdict
   ----------------------------------------------------------------------------
   C_0       bulk, weight                 n/a         --          --  identically zero in this frame
-  C_1'      bulk, weight                 YES     1.0001    6.20e-19  DEFECT: kappa' in a coefficient
+  C_1'      bulk, weight                 YES     1.0000    1.47e-19  DEFECT: kappa' in a coefficient
   C_2''     bulk, weight                 n/a         --          --  identically zero in this frame
-  C_1       boundary-1, D only           YES     1.0033    5.87e-16  DEFECT: kappa' in a coefficient
+  C_1       boundary-1, D only           YES     1.0017    2.93e-16  DEFECT: kappa' in a coefficient
   C_2       boundary-2, D only           n/a         --          --  identically zero in this frame
 
   k = 10    CDM frame
   coefficient sits under            carries kp   kp share   linearity  verdict
   ----------------------------------------------------------------------------
   C_0       bulk, weight                  no     0.0000    0.00e+00  clean
-  C_1'      bulk, weight                 YES     1.0000    1.13e-19  DEFECT: kappa' in a coefficient
+  C_1'      bulk, weight                 YES     1.0000    9.05e-19  DEFECT: kappa' in a coefficient
   C_2''     bulk, weight                  no     0.0000    0.00e+00  clean
   C_1       boundary-1, D only           YES     1.0000    4.19e-16  DEFECT: kappa' in a coefficient
   C_2       boundary-2, D only            no     0.0000    0.00e+00  clean
@@ -123,130 +123,130 @@ split is void and this diagnostic says so instead of reporting a number.
   coefficient sits under            carries kp   kp share   linearity  verdict
   ----------------------------------------------------------------------------
   C_0       bulk, weight                 n/a         --          --  identically zero in this frame
-  C_1'      bulk, weight                 YES     1.0010    2.47e-17  DEFECT: kappa' in a coefficient
+  C_1'      bulk, weight                 YES     1.0005    3.09e-18  DEFECT: kappa' in a coefficient
   C_2''     bulk, weight                 n/a         --          --  identically zero in this frame
-  C_1       boundary-1, D only           YES     1.0010    5.36e-16  DEFECT: kappa' in a coefficient
+  C_1       boundary-1, D only           YES     1.0005    2.68e-16  DEFECT: kappa' in a coefficient
   C_2       boundary-2, D only           n/a         --          --  identically zero in this frame
 
   k = 60    CDM frame
   coefficient sits under            carries kp   kp share   linearity  verdict
   ----------------------------------------------------------------------------
   C_0       bulk, weight                  no     0.0000    0.00e+00  clean
-  C_1'      bulk, weight                 YES     0.9941    1.16e-16  DEFECT: kappa' in a coefficient
+  C_1'      bulk, weight                 YES     0.9972    2.74e-17  DEFECT: kappa' in a coefficient
   C_2''     bulk, weight                  no     0.0000    0.00e+00  clean
-  C_1       boundary-1, D only           YES     1.0054    4.61e-16  DEFECT: kappa' in a coefficient
+  C_1       boundary-1, D only           YES     1.0027    2.30e-16  DEFECT: kappa' in a coefficient
   C_2       boundary-2, D only            no     0.0000    0.00e+00  clean
 
   k = 300   Newtonian frame
   coefficient sits under            carries kp   kp share   linearity  verdict
   ----------------------------------------------------------------------------
   C_0       bulk, weight                 n/a         --          --  identically zero in this frame
-  C_1'      bulk, weight                 YES     1.0002    8.71e-17  DEFECT: kappa' in a coefficient
+  C_1'      bulk, weight                 YES     1.0001    8.71e-17  DEFECT: kappa' in a coefficient
   C_2''     bulk, weight                 n/a         --          --  identically zero in this frame
-  C_1       boundary-1, D only           YES     0.5143    3.48e-16  DEFECT: kappa' in a coefficient
+  C_1       boundary-1, D only           YES     0.9952    4.49e-16  DEFECT: kappa' in a coefficient
   C_2       boundary-2, D only           n/a         --          --  identically zero in this frame
 
   k = 300   CDM frame
   coefficient sits under            carries kp   kp share   linearity  verdict
   ----------------------------------------------------------------------------
   C_0       bulk, weight                  no     0.0000    0.00e+00  clean
-  C_1'      bulk, weight                 YES     0.9999    1.15e-18  DEFECT: kappa' in a coefficient
+  C_1'      bulk, weight                 YES     1.0000    2.30e-18  DEFECT: kappa' in a coefficient
   C_2''     bulk, weight                  no     0.0000    0.00e+00  clean
-  C_1       boundary-1, D only           YES     1.0015    4.60e-16  DEFECT: kappa' in a coefficient
+  C_1       boundary-1, D only           YES     1.0007    4.60e-16  DEFECT: kappa' in a coefficient
   C_2       boundary-2, D only            no     0.0000    0.00e+00  clean
 
 ==============================================================================
-  PLANCK    kappa'(eta_*) = 2.6419e+02
+  PLANCK    kappa'(eta_*) = 2.5804e+02
 ==============================================================================
 
   k = 2     Newtonian frame
   coefficient sits under            carries kp   kp share   linearity  verdict
   ----------------------------------------------------------------------------
   C_0       bulk, weight                 n/a         --          --  identically zero in this frame
-  C_1'      bulk, weight                 YES     1.0001    5.01e-19  DEFECT: kappa' in a coefficient
+  C_1'      bulk, weight                 YES     1.0000    6.75e-19  DEFECT: kappa' in a coefficient
   C_2''     bulk, weight                 n/a         --          --  identically zero in this frame
-  C_1       boundary-1, D only           YES     1.0020    4.33e-17  DEFECT: kappa' in a coefficient
+  C_1       boundary-1, D only           YES     1.0014    1.46e-17  DEFECT: kappa' in a coefficient
   C_2       boundary-2, D only           n/a         --          --  identically zero in this frame
 
   k = 2     CDM frame
   coefficient sits under            carries kp   kp share   linearity  verdict
   ----------------------------------------------------------------------------
   C_0       bulk, weight                  no     0.0000    0.00e+00  clean
-  C_1'      bulk, weight                 YES     0.9969    9.78e-19  DEFECT: kappa' in a coefficient
+  C_1'      bulk, weight                 YES     0.9979    1.32e-18  DEFECT: kappa' in a coefficient
   C_2''     bulk, weight                  no     0.0000    0.00e+00  clean
-  C_1       boundary-1, D only           YES     0.9771    3.32e-16  DEFECT: kappa' in a coefficient
+  C_1       boundary-1, D only           YES     0.9845    2.25e-16  DEFECT: kappa' in a coefficient
   C_2       boundary-2, D only            no     0.0000    0.00e+00  clean
 
   k = 5     Newtonian frame
   coefficient sits under            carries kp   kp share   linearity  verdict
   ----------------------------------------------------------------------------
   C_0       bulk, weight                 n/a         --          --  identically zero in this frame
-  C_1'      bulk, weight                 YES     1.0000    7.23e-17  DEFECT: kappa' in a coefficient
+  C_1'      bulk, weight                 YES     1.0000    7.61e-19  DEFECT: kappa' in a coefficient
   C_2''     bulk, weight                 n/a         --          --  identically zero in this frame
-  C_1       boundary-1, D only           YES     1.0088    4.83e-16  DEFECT: kappa' in a coefficient
+  C_1       boundary-1, D only           YES     1.0059    6.48e-16  DEFECT: kappa' in a coefficient
   C_2       boundary-2, D only           n/a         --          --  identically zero in this frame
 
   k = 5     CDM frame
   coefficient sits under            carries kp   kp share   linearity  verdict
   ----------------------------------------------------------------------------
   C_0       bulk, weight                  no     0.0000    0.00e+00  clean
-  C_1'      bulk, weight                 YES     1.0011    1.45e-18  DEFECT: kappa' in a coefficient
+  C_1'      bulk, weight                 YES     1.0007    1.96e-18  DEFECT: kappa' in a coefficient
   C_2''     bulk, weight                  no     0.0000    0.00e+00  clean
-  C_1       boundary-1, D only           YES     1.0016    3.73e-16  DEFECT: kappa' in a coefficient
+  C_1       boundary-1, D only           YES     1.0011    5.02e-16  DEFECT: kappa' in a coefficient
   C_2       boundary-2, D only            no     0.0000    0.00e+00  clean
 
   k = 10    Newtonian frame
   coefficient sits under            carries kp   kp share   linearity  verdict
   ----------------------------------------------------------------------------
   C_0       bulk, weight                 n/a         --          --  identically zero in this frame
-  C_1'      bulk, weight                 YES     1.0009    1.26e-17  DEFECT: kappa' in a coefficient
+  C_1'      bulk, weight                 YES     1.0006    3.39e-17  DEFECT: kappa' in a coefficient
   C_2''     bulk, weight                 n/a         --          --  identically zero in this frame
-  C_1       boundary-1, D only           YES     1.0038    6.68e-16  DEFECT: kappa' in a coefficient
+  C_1       boundary-1, D only           YES     1.0025    4.49e-16  DEFECT: kappa' in a coefficient
   C_2       boundary-2, D only           n/a         --          --  identically zero in this frame
 
   k = 10    CDM frame
   coefficient sits under            carries kp   kp share   linearity  verdict
   ----------------------------------------------------------------------------
   C_0       bulk, weight                  no     0.0000    0.00e+00  clean
-  C_1'      bulk, weight                 YES     1.0038    6.77e-19  DEFECT: kappa' in a coefficient
+  C_1'      bulk, weight                 YES     1.0026    9.11e-19  DEFECT: kappa' in a coefficient
   C_2''     bulk, weight                  no     0.0000    0.00e+00  clean
-  C_1       boundary-1, D only           YES     1.0037    4.39e-16  DEFECT: kappa' in a coefficient
+  C_1       boundary-1, D only           YES     1.0025    2.96e-16  DEFECT: kappa' in a coefficient
   C_2       boundary-2, D only            no     0.0000    0.00e+00  clean
 
   k = 60    Newtonian frame
   coefficient sits under            carries kp   kp share   linearity  verdict
   ----------------------------------------------------------------------------
   C_0       bulk, weight                 n/a         --          --  identically zero in this frame
-  C_1'      bulk, weight                 YES     1.0018    5.40e-18  DEFECT: kappa' in a coefficient
+  C_1'      bulk, weight                 YES     1.0012    1.82e-18  DEFECT: kappa' in a coefficient
   C_2''     bulk, weight                 n/a         --          --  identically zero in this frame
-  C_1       boundary-1, D only           YES     1.0011    5.32e-16  DEFECT: kappa' in a coefficient
+  C_1       boundary-1, D only           YES     1.0008    7.16e-16  DEFECT: kappa' in a coefficient
   C_2       boundary-2, D only           n/a         --          --  identically zero in this frame
 
   k = 60    CDM frame
   coefficient sits under            carries kp   kp share   linearity  verdict
   ----------------------------------------------------------------------------
   C_0       bulk, weight                  no     0.0000    0.00e+00  clean
-  C_1'      bulk, weight                 YES     1.0001    2.27e-17  DEFECT: kappa' in a coefficient
+  C_1'      bulk, weight                 YES     1.0000    6.11e-17  DEFECT: kappa' in a coefficient
   C_2''     bulk, weight                  no     0.0000    0.00e+00  clean
-  C_1       boundary-1, D only           YES     1.0153    5.05e-16  DEFECT: kappa' in a coefficient
+  C_1       boundary-1, D only           YES     1.0103    6.77e-16  DEFECT: kappa' in a coefficient
   C_2       boundary-2, D only            no     0.0000    0.00e+00  clean
 
   k = 300   Newtonian frame
   coefficient sits under            carries kp   kp share   linearity  verdict
   ----------------------------------------------------------------------------
   C_0       bulk, weight                 n/a         --          --  identically zero in this frame
-  C_1'      bulk, weight                 YES     1.0091    4.76e-17  DEFECT: kappa' in a coefficient
+  C_1'      bulk, weight                 YES     1.0061    6.39e-17  DEFECT: kappa' in a coefficient
   C_2''     bulk, weight                 n/a         --          --  identically zero in this frame
-  C_1       boundary-1, D only           YES     1.0028    3.27e-16  DEFECT: kappa' in a coefficient
+  C_1       boundary-1, D only           YES     1.0019    4.40e-16  DEFECT: kappa' in a coefficient
   C_2       boundary-2, D only           n/a         --          --  identically zero in this frame
 
   k = 300   CDM frame
   coefficient sits under            carries kp   kp share   linearity  verdict
   ----------------------------------------------------------------------------
   C_0       bulk, weight                  no     0.0000    0.00e+00  clean
-  C_1'      bulk, weight                 YES     1.0055    4.44e-17  DEFECT: kappa' in a coefficient
+  C_1'      bulk, weight                 YES     1.0037    1.19e-16  DEFECT: kappa' in a coefficient
   C_2''     bulk, weight                  no     0.0000    0.00e+00  clean
-  C_1       boundary-1, D only           YES     1.0037    4.62e-16  DEFECT: kappa' in a coefficient
+  C_1       boundary-1, D only           YES     1.0025    3.11e-16  DEFECT: kappa' in a coefficient
   C_2       boundary-2, D only            no     0.0000    0.00e+00  clean
 
 ==============================================================================
@@ -268,23 +268,23 @@ split is void and this diagnostic says so instead of reporting a number.
   affine decomposition.
 
 
-  EdS   kappa'(eta_*) = 3.8192e+02   H(eta_*) = 3.3565e+01
+  EdS   kappa'(eta_*) = 4.4044e+02   H(eta_*) = 3.3021e+01
       k  pred kp/(kp+k)   sup-norm   pointwise  | dC_1 kp share  pred kp/(kp+H)
   ------------------------------------------------------------------------------
-      2          0.9948     1.0020      1.0459           1.0020          0.9192
-      5          0.9871     1.0130      1.0878           1.0020          0.9192
-     10          0.9745     1.0033      1.0559           1.0020          0.9192
-     60          0.8642     1.0010      0.9632           1.0020          0.9192
-    300          0.5601     0.5143      0.2341           1.0020          0.9192
+      2          0.9955     1.0010      1.0389           1.0010          0.9303
+      5          0.9888     1.0065      1.0720           1.0010          0.9303
+     10          0.9778     1.0017      1.0469           1.0010          0.9303
+     60          0.8801     1.0005      0.9657           1.0010          0.9303
+    300          0.5948     0.9952      0.2087           1.0010          0.9303
 
-  PLANCK   kappa'(eta_*) = 2.6419e+02   H(eta_*) = 2.0442e+01
+  PLANCK   kappa'(eta_*) = 2.5804e+02   H(eta_*) = 2.0066e+01
       k  pred kp/(kp+k)   sup-norm   pointwise  | dC_1 kp share  pred kp/(kp+H)
   ------------------------------------------------------------------------------
-      2          0.9925     1.0020      1.0324           1.0038          0.9282
-      5          0.9814     1.0088      1.0582           1.0038          0.9282
-     10          0.9635     1.0038      1.0365           1.0038          0.9282
-     60          0.8149     1.0011      0.8666           1.0038          0.9282
-    300          0.4683     1.0028      0.7679           1.0038          0.9282
+      2          0.9923     1.0014      1.0317           1.0025          0.9278
+      5          0.9810     1.0059      1.0556           1.0025          0.9278
+     10          0.9627     1.0025      1.0352           1.0025          0.9278
+     60          0.8113     1.0008      0.8564           1.0025          0.9278
+    300          0.4624     1.0019      0.8703           1.0025          0.9278
 
   READING THIS
   ------------
@@ -307,8 +307,8 @@ split is void and this diagnostic says so instead of reporting a number.
   coefficient carries kappa-prime    share: min        max
   --------------------------------------------------------
   C_0       no                             --         --
-  C_1       YES --- DEFECT             0.5143     1.0153
-  C_1'      YES --- DEFECT             0.9922     1.0091
+  C_1       YES --- DEFECT             0.9845     1.0103
+  C_1'      YES --- DEFECT             0.9963     1.0061
   C_2       no                             --         --
   C_2''     no                             --         --
 

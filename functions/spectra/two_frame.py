@@ -281,7 +281,13 @@ def build_environment(
     """
     background = Background(omega_m=omega_m, omega_lambda=omega_lambda,
                             omega_r=omega_r)
-    recombination = RecombinationHistory.build(background, omega_b_h2=omega_b_h2)
+    # T-108: the background's own h, named at the call site rather than left
+    # to RecombinationHistory.build's 0.674. Under RECOMBINATION_H ==
+    # "released" it is ignored and 0.674 is used, so nothing moves until
+    # the control is flipped. S43's rule, applied to h rather than to a
+    # weight --- the gate counts the one and not the other.
+    recombination = RecombinationHistory.build(
+        background, omega_b_h2=omega_b_h2, h=float(hubble_h))
     eta_star = recombination.eta_star
     span = float(background.eta_0 - recombination.eta[0])
     # **The floor is applied here too --- finding T-58.** `required_n_eta` is

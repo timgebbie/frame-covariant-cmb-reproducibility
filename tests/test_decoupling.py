@@ -179,13 +179,24 @@ def test_the_damping_uses_dif_damp_correct_and_f2_reaches_all_three_coefficients
     with pytest.raises(ValueError):
         quadrupole_from_f2(0.0)
 
-    # And it moves k_D by the amount T-39 measured: 619.92 -> 536.87 on
+    # And it moves k_D by the amount T-39 measured (619.92 -> 536.87 before
+    # T-108 raised kappa'; 642.14 -> 556.11 after, the same ratio) on
     # PLANCK_MODEL, a factor of 0.866.
     history = RecombinationHistory.build(PLANCK_MODEL, omega_b_h2=PLANCK_OMEGA_B_H2)
     zero = np.zeros_like(history.eta)
     tight = float(diffusion_scale(history, r_of_eta=zero,
                                   f_2=F2_TIGHT_COUPLING)(history.eta_star))
     corrected = float(diffusion_scale(history, r_of_eta=zero)(history.eta_star))
-    assert abs(tight - 619.92) < 1.0
-    assert abs(corrected - 536.87) < 1.0
+    # **619.92 until 2026-10-21, 642.14 after. Finding T-108.** k_D follows
+    # kappa', and kappa' was low by 1/h: the released Thomson scale used
+    # c/H_0 at h = 1 on a docstring's claim that the surviving h "cancels",
+    # which it does not. This number is PINNED, not derived, so it moves when
+    # the rate it is built from is corrected -- and it moving is the point.
+    # D20 carries the measurement; the +3.6% here is its damping half.
+    assert abs(tight - 642.14) < 1.0
+    # The same T-108 shift on the f_2-corrected branch: 536.87 -> 556.11.
+    # Both pinned values move together and by the same ~3.6%, which is the
+    # check that this is kappa' and not something that reached only one of
+    # them. T-39's RATIO -- what f_2 is worth -- is unchanged by it.
+    assert abs(corrected - 556.11) < 1.0
     assert abs(corrected / tight - 0.866) < 0.005

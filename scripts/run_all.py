@@ -217,6 +217,12 @@ DIAGNOSTICS: list[tuple[str, str]] = [
     # the reason it is in the harness rather than in a notebook.
     ("D19 the ell=0 row control, measured on the live coefficients",
      "scripts/diagnostic_d19_monopole_row.py"),
+    # D20 is T-108's measurement and T-109's evidence: what the two h defects
+    # in the scattering rate are worth, scored against z_* = 1088.5 from the
+    # matched external codes -- an EXTERNAL gate, which is M14's requirement
+    # after T-107 passed four difference-based conditions and was still wrong.
+    ("D20 what the two h defects in the scattering rate are worth",
+     "scripts/diagnostic_d20_recombination_h.py"),
 ]
 
 
