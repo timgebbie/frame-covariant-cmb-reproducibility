@@ -20,7 +20,7 @@ since been renamed. Both were committed, both entered the released archive, and
 So the version is read, once, from the two files that are allowed to state it:
 
 * `CITATION.cff` carries the **released** version. It is the one version
-  statement a machine acts on --- GitHub's *Cite this repository* and Zenodo
+  statement a machine acts on --- GitHub's *Cite this repository*
   both read it --- so a version there that is not tagged asserts a release
   nobody can fetch. See `bump_release.py`.
 * `README.md`'s header carries the **tree** version, which during development
@@ -58,7 +58,7 @@ def released_version(root: Path) -> str:
     if not found:
         raise RuntimeError(
             "CITATION.cff has no `version: \"X.Y.Z\"` field. It is the version "
-            "statement Zenodo and GitHub read; nothing here may substitute a "
+            "statement GitHub reads; nothing here may substitute a "
             "default for it.")
     return found.group(1)
 

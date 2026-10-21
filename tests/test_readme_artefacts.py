@@ -231,7 +231,7 @@ def test_the_released_version_is_named_consistently_too():
         f"section says {status.group(1)}")
 
     # CITATION.cff is the one version statement a machine acts on: GitHub's
-    # "Cite this repository" and Zenodo both read it, so a version there that is
+    # "Cite this repository" reads it, so a version there that is
     # not tagged asserts a release nobody can fetch. It tracks the *released*
     # version, never the tree's.
     cff = re.search(r'^version:\s*"([0-9.]+)"',
@@ -239,7 +239,7 @@ def test_the_released_version_is_named_consistently_too():
     assert cff, "CITATION.cff has no version field"
     assert f"v{cff.group(1)}" == header.group(1), (
         f"CITATION.cff says {cff.group(1)}, the README says the last release is "
-        f"{header.group(1)}. Zenodo reads the first of those.")
+        f"{header.group(1)}. GitHub reads the first of those.")
 
 
 #: The decisions a reader must know to read the README honestly. Adding one

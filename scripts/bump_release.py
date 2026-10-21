@@ -57,7 +57,7 @@ two lines a reader sees. The script cannot write that sentence; the release
 checklist must. Read the header after bumping.
 
 **Run it on a clean tree, immediately before tagging.** Everything it writes is
-a claim that the release exists; `CITATION.cff` in particular is read by Zenodo
+a claim that the release exists; `CITATION.cff` in particular is read by GitHub
 and GitHub, so a version there that is not tagged asserts a release nobody can
 fetch.
 """
