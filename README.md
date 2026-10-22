@@ -12,9 +12,17 @@ the full linear spectrum with the acoustic peaks and the Silk damping tail
 
 Supplementary code and materials for: Tim Gebbie, *"Frame covariance of CMBR
 lensing in the exact $1+3$ covariant radiation hierarchy"* (**Paper 1**),
-University of Cape Town, 2026, CC BY 4.0. **The identifier is assigned on
-submission** and is filled here at manuscript freeze; this bundle has its own
-archival DOI below and does not depend on the paper's.
+University of Cape Town, 2026, **arXiv:astro-ph/9912072v4**
+([doi:10.48550/arXiv.astro-ph/9912072](https://doi.org/10.48550/arXiv.astro-ph/9912072)), submitted to *General Relativity and
+Gravitation* 2026-10-16, CC BY 4.0.
+
+> **Cite it versioned.** A bare `astro-ph/9912072` resolves to whatever is
+> current, and that identifier has carried **three distinct documents**:
+> **v1/v2** (Dec 1999) the legacy 1999 work, **v3** (3 Oct 2026) **the
+> correction** that withdrew the 1999 claim of a new effect, and **v4**
+> (21 Oct 2026) **Paper 1**. So **`v4` for Paper 1, `v3` for the correction,
+> `v2` for the legacy work** — an unversioned reference to any of them now
+> points at Paper 1 instead.
 
 The supplementary-materials document is included here:
 
@@ -144,12 +152,39 @@ repository is called `NonlinearShear`. `functions/spectra/coefficients.py`.
 
 **3 — The frame law, and what is invariant.** Under a change of fundamental
 congruence $\tilde u^a=u^a+v^a$, GDE99 (37) gives
-$\tilde\tau_{A_\ell}=\tau_{A_\ell}-v_{A_\ell}$ with $v_{A_\ell}\equiv0$ for
-$\ell\ge2$: **only the monopole and dipole move, and every $\ell\ge2$
-multipole is a frame invariant.** The bundle computes the spectrum **twice** —
-once with $\tilde\sigma_{ab}\simeq0$ (Newtonian) and once in the CDM frame —
-and the two must agree. `functions/spectra/frame_transform.py`,
+
+$$\tilde\tau_{A_\ell}=\tau_{A_\ell}-v_{A_\ell},
+\qquad v_{A_\ell}\equiv0\ \ (\ell\ge2)$$
+
+— only the monopole and dipole move. Every $\ell\ge2$ multipole is a frame
+invariant **at first order**, and not because a boost cannot reach it: those
+multipoles are already first-order small, so what a boost would generate from
+them is second order. Only $\tau_0$ is $O(1)$, which is why the dipole moves
+and nothing above it does. The bundle computes the spectrum **twice** — once
+with $\tilde\sigma_{ab}\simeq0$ (Newtonian) and once in the CDM frame — and the
+two must agree. A disagreement is therefore a defect and not physics, which is
+what **F5** and **D6** measure. `functions/spectra/frame_transform.py`,
 `functions/frames.py`.
+
+**The same $v^a$ acts a second way, and that one does not die at $\ell=2$.**
+The frame law above moves the *moments* against a fixed direction basis; the
+boost also moves the *basis*, which is aberration. Aberration couples
+neighbouring multipoles with coefficients that grow like $\ell$, and the
+difference of the two neighbour weights differs between the frames:
+
+$$c_+-c_-\Big|_{\mathrm N}=\frac{2(2\ell^2+2\ell-1)}{(2\ell-1)(2\ell+3)}\xrightarrow{\ \ell\to\infty\ }1,
+\qquad
+c_+-c_-\Big|_{\mathrm{CDM}}=\frac{3(4\ell^4+8\ell^3-11\ell^2-15\ell+6)}{(2\ell-3)(2\ell-1)(2\ell+3)(2\ell+5)}\xrightarrow{\ \ell\to\infty\ }\tfrac34$$
+
+Both stencils are unit-normalised, $2\times\tfrac12=1$ and $4\times\tfrac14=1$,
+so the two frames thread different coefficients onto the same
+$\ell\,\partial_\ell f_\ell$. That is frame covariance holding at $O(\ell)$,
+where the moment law has nothing left to say — and the surviving $O(\ell)$
+content is **gravitational lensing together with observer aberration**, which
+is the result Paper 1 is named for. The coefficients are Paper 1's printed
+post-$\beta$ brackets. *This is not the claim that lensing is a frame effect.*
+It is narrower and better: one $v^a$ acts on the moments and on the direction
+basis, and only the second action survives at large $\ell$.
 
 **4 — Decoupling and the acoustic oscillator.** Before last scattering the
 photons and baryons are tightly coupled and the rank-0 and rank-1 multipoles
@@ -157,31 +192,111 @@ obey the acoustic pair (152)/(153),
 
 $$\tau_1'=-\frac{R'}{1+R}\tau_1-\frac{k}{1+R}\delta T-k\Phi_A,
 \qquad
-\delta T'=-\Phi_H'+\tfrac k3\tau_1,$$
+\delta T'=-\mathcal H\Phi_A-\Phi_H'+\tfrac k3\tau_1,$$
 
 with $R=3\rho_b/4\rho_\gamma$ the baryon loading — the oscillator whose
-$\cos(kr_s)$ is the acoustic peaks. The recombination history is solved from
-Peebles' equation and the grid is **derived from the visibility's own width**.
-`functions/spectra/acoustic.py`, `decoupling.py`, `peebles.py`.
+$\cos(kr_s)$ is the acoustic peaks. Dropping the $-\mathcal H\Phi_A$ is
+*Annals II*'s own small-scale approximation and is exactly what turns the pair
+into (154); the bundle integrates the pair, not the approximation. The
+recombination history is solved from Peebles' equation and the grid is
+**derived from the visibility's own width**. `functions/spectra/acoustic.py`,
+`decoupling.py`, `peebles.py`.
 
-**5 — Matching, and the integral solution.** At decoupling the free-streaming
-solution is matched to the source rank by rank, (89)/(90), giving three
-coefficients $C_0,C_1,C_2$; the line-of-sight integral (102) then carries them
-to the present through the radial kernel $j_\ell(k(\eta_0-\eta))$, with a
-boundary term at $\eta_*$ and a bulk integral along the path.
-`functions/spectra/coefficients.py`, `integral_solution.py`.
+**5 — Free streaming, and where every $\ell\ge3$ comes from.** After decoupling
+$\kappa'\to0$, and by step 2 the gravitational source is identically zero for
+$\ell\ge3$. What is left of step 1 is a pure recursion coupling each multipole
+to its two neighbours — *Annals II* Appendix F (F.3), in conformal time:
 
-**6 — The spectrum.** (186) assembles $C_\ell$ from the transfer function and
-the primordial power. The bundle also evaluates the same spectrum by the
-*mode* route (177)–(179) as an independent check on the covariant one, which
-is acceptance criterion 5b.
-`functions/spectra/angular.py`, `two_route.py`, `pipeline.py`.
+$$-(\beta_\ell\tau_\ell)'
+=k\left[\frac{\ell+1}{2\ell+3}\,(\beta_{\ell+1}\tau_{\ell+1})
+-\frac{\ell}{2\ell-1}\,(\beta_{\ell-1}\tau_{\ell-1})\right]$$
+
+**This ladder is the whole of the high-$\ell$ spectrum.** The source supplies
+$\ell=0,1,2$ and nothing else; every multipole above that is streamed up from
+them by this equation. Its closed-form solution is $j_\ell(k(\eta_0-\eta))$,
+which is *why* the kernel in step 6 is a spherical Bessel function rather than
+a fitted window — the projection is not an approximation imposed on the
+hierarchy, it is the hierarchy's own solution. Appendix F writes the recursion
+three ways — (F.1) in proper time with the comoving wavenumber, (F.3) above,
+and (F.4) in the normalisation that makes it the Ma & Bertschinger form. The
+bundle integrates all three **as printed** and privileges none, which is the
+acceptance spine of v1.0.0 and what **F1** reports: four external hierarchies,
+two normalisations, two phase conventions, residuals $\lesssim10^{-13}$. (F.4)
+as printed keeps $(2\ell+1)$ on the left although its own preceding text
+specifies the division — finding **B-2**; the bundle divides.
+`functions/harmonics/free_streaming.py`, `weights.py`, `external.py`.
+
+**6 — Matching, and the integral solution.** At decoupling the free-streaming
+solution of step 5 is matched to the source rank by rank, (89), giving three
+coefficients:
+
+$$C_0=p_0\,(a\mathcal B_2),\qquad
+C_1=p_1\,\tfrac1k\!\left(a\mathcal B_1+\kappa'\hat v_B\right),\qquad
+C_2=p_2\,\tfrac1{k^2}(a\mathcal B_2)$$
+
+(89) is the definition and (90) a result, so the bundle solves (89) in exact
+rationals and uses (90) as a check on itself. Solved that way (90)'s $C_0$
+comes out with the opposite sign to the printed one — finding **B-11**,
+traceable to $j_0''(0)=-\tfrac13$ from the ascending series, printed as
+$+\tfrac13$. The coefficients are CGI with respect to a generic $u^a$, so a
+frame choice sets them: Newtonian is $\tilde\sigma_{ab}\approx0$, hence
+$\tilde C_0\approx\tilde C_2\approx0$ and $\tilde C_1$ alone; CDM is $q_a=0$
+and keeps all three. The line-of-sight integral (102) carries them to the
+present:
+
+$$\frac{\beta_\ell\,\tau_\ell(\eta_0)}{2\ell+1}\simeq
+\underbrace{\big[C_2'-C_1\big]_{\eta_*}\mathcal D\,j_\ell(k\Delta\eta_*)}_{\text{boundary, rank }0/1}
++\underbrace{kC_2(\eta_*)\mathcal D\left[\tfrac{\ell}{2\ell+1}j_{\ell-1}-\tfrac{\ell+1}{2\ell+1}j_{\ell+1}\right]_{k\Delta\eta_*}}_{\text{boundary, rank }2}
++\underbrace{\int_{\eta_*}^{\eta_0}\!\!\mathrm d\eta\;\mathcal V\,e^{-(k/k_D)^2}\big\{C_0-C_1'+C_2''\big\}\,j_\ell(k\Delta\eta)}_{\text{bulk}}$$
+
+The second term has never been evaluated in a released figure: it is the
+rank-two boundary, and $\tilde C_2\equiv0$ in the Newtonian frame. It is also
+the only place in the scheme where the *projection* couples $\ell$ to
+$\ell\pm1$ — a different coupling from step 5's, acting at the boundary rather
+than along the path. `functions/spectra/coefficients.py`,
+`integral_solution.py`.
+
+**7 — The spectrum, and the two routes.** The observable is assembled from
+three factors and nothing else: the primordial power $P(k)$, the transfer
+$T_\ell(k)$ that (102) returns, and the projection $j_\ell$ already inside it.
+*Annals II* §7.2 writes the assembly twice —
+
+$$C_\ell=\frac2\pi\frac{\beta_\ell^2}{(2\ell+1)^2}\int\frac{\mathrm dk}{k}\,k^3\,
+\big|\tau_\ell(k,\eta_0)\big|^2\qquad(186)$$
+
+$$\big\langle\tau_{A_\ell}\tau^{A_\ell}\big\rangle
+=\frac{\beta_\ell}{2\pi^2}\int k^2\mathrm dk\,\big|\tau_\ell\big|^2,
+\qquad
+C_\ell=\frac{\Delta_\ell}{2\ell+1}\big\langle\tau_{A_\ell}\tau^{A_\ell}\big\rangle,
+\quad \Delta_\ell=\frac{4\pi\beta_\ell}{2\ell+1}\qquad(187,188)$$
+
+— (186) by the mode route and (187)–(188) by the covariant route. They were
+proved identical before either was implemented, and the bundle computes both
+so the release reports a number rather than a claim: they agree to
+$9.5\times10^{-6}$ against a gate of $10^{-3}$, which is acceptance criterion
+5b. **The $\ell$-dependent normalisation cancels exactly.** With
+$T_\ell\equiv\beta_\ell\tau_\ell(\eta_0)/(2\ell+1)=\alpha_\ell^{-1}\tau_\ell$,
+which is what (176) returns, (186) collapses to
+
+$$C_\ell=\frac2\pi\int \mathrm dk\,k^2\,\big|T_\ell(k)\big|^2$$
+
+because $\alpha_\ell=(2\ell+1)/\beta_\ell$ makes the prefactor exactly one —
+asserted as exact rationals, not floating point. That is worth more than
+tidiness: a $\beta_\ell$ or $\alpha_\ell$ slip cannot hide in the spectrum,
+because it would have to survive an identity. And the variable in which it
+vanishes is precisely the one step 5's solution is bare in. **The covariant
+route is the one that generalises**: (186) is a statement about mode
+coefficients and holds only for almost-Robertson–Walker geometries, (187) is a
+multipole mean square and holds generally, which is why every released figure
+plots the multipole quantity. `functions/spectra/angular.py`, `two_route.py`,
+`pipeline.py`.
 
 ### Where the implementation stands
 
 **Working, and checked.** The hierarchy against four external treatments; both
 routes to (186) agreeing at $9.5\times10^{-6}$ against a $10^{-3}$ tolerance;
-the Sachs–Wolfe limit; the covariant→mode→covariant round trip, identically
+the Sachs–Wolfe scalar **in the coefficients**, $(\delta T+\Phi_A)-C_2'=\Phi_A/3$
+to 0.68% on EdS (**D21**); the covariant→mode→covariant round trip, identically
 zero in exact arithmetic; the recombination history and the acoustic
 oscillator, whose $(\delta T+\Phi_A)(\eta_*)$ tracks $\cos(kr_s)$ in exact
 phase and period.
@@ -204,6 +319,20 @@ $(\delta T+\Phi_A)(\eta_*)$ tracks $\cos(kr_s)$ in exact phase and period —
 and buries the secondary peaks. One term, two symptoms, and the $W$-form
 (**S48**) is the repair for both; the two frames disagreeing is the third
 symptom of the same term.
+
+**Measured at the limit where it is decidable, 2026-10-22 — finding T-117.**
+The transfer $T_\ell(k)$ does **not** reduce to the Sachs–Wolfe transfer
+$(\Phi_A(\eta_*)/3)\mathcal D j_\ell$ as $k\to0$. The limit *exists* and is
+$\ell$-independent across $\ell=2\ldots20$ to 0.6%, so no wrong $j_\ell$,
+$\alpha_\ell$ or $\beta_\ell$ can be responsible. On EdS it is
+$+9.4\times10^3$ in the Newtonian frame — of which the boundary is $-25.7$ and
+the bulk $+9.46\times10^3$, both of them $\kappa'\hat v_B$ and its derivative
+— and $-1.10$ in the CDM frame, whose **boundary tends to $-0.9999$: the
+Sachs–Wolfe transfer with the sign reversed, to one part in $10^4$.** Flipping
+that one sign alone would put the CDM limit at $+0.896$. Whether it *is* a
+sign defect is not yet established and **B-11** is the obvious suspect; what is
+established is that the failure lives in what the matching carries into (102)
+and nowhere else. `scripts/diagnostic_d23_superhorizon_transfer.py`.
 
 **The peak position is a different thing and it is already scheduled.** The
 peak now sits at $1.00\,\ell_A$ where the standard is $0.757\,\ell_A$ — the
@@ -631,7 +760,7 @@ are in `provenance/DECISIONS-v1.0.0.md`.
 
 | Item | Value |
 |---|---|
-| **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMBR lensing in the exact 1+3 covariant radiation hierarchy* — **Paper 1**, University of Cape Town. CC BY 4.0. **No identifier yet**: it is assigned on submission and is filled at manuscript freeze (acceptance criterion 6). Cite this bundle by the ZivaHub DOI below until it is |
+| **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMBR lensing in the exact 1+3 covariant radiation hierarchy* — **Paper 1**, University of Cape Town. **arXiv:astro-ph/9912072v4**, [doi:10.48550/arXiv.astro-ph/9912072](https://doi.org/10.48550/arXiv.astro-ph/9912072). Submitted to *General Relativity and Gravitation*, 2026-10-16. CC BY 4.0. **The version suffix is not optional** — the bare identifier has carried three documents: `v2` the legacy 1999 work, `v3` the correction, `v4` this paper |
 | **Supplementary PDF** | [supplement-v1.3.0.pdf](supplementary-materials/supplement-v1.3.0.pdf) |
 | **GitHub repository** | [timgebbie/frame-covariant-cmb-reproducibility](https://github.com/timgebbie/frame-covariant-cmb-reproducibility) |
 | **ZivaHub/Figshare DOI** | [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509) — **live**. The **concept** DOI: it always resolves to the latest version, so it is the one to cite |

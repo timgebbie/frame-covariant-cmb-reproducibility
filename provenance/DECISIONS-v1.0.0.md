@@ -179,7 +179,7 @@ THREE, FOUR, SIX.
 | 3 Sachs–Wolfe and kinetic theory | `CHAPTER-FIVE` | — | $T(x_0,e)=T(x_0)\exp[-\int\mathcal{D}E\,dv]$ — the nullcone/timelike link |
 | 4 COBE–Copernican limits | `CHAPTER-THREE` | — | almost-EGS bounds. **Not this stream** — stream G, Paper 1b |
 | 5 Scalar almost-FLRW | `CHAPTER-FOUR` | **Annals II** | $\tau_{A_\ell}(x_0)$ as the three-source projection — Eq. (176) in multipole form |
-| 6 Scalar nonlinear corrections | `CHAPTER-SIX` | astro-ph/9912072 | $\delta\dot\tau_{NL}$ **and** $\dot{\delta C}_{NL}$ |
+| 6 Scalar nonlinear corrections | `CHAPTER-SIX` | astro-ph/9912072**v2** | $\delta\dot\tau_{NL}$ **and** $\dot{\delta C}_{NL}$ |
 
 ### What this fixes
 

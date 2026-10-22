@@ -239,6 +239,24 @@ DIAGNOSTICS: list[tuple[str, str]] = [
     # the derivative is consistent by construction.
     ("D22 the transport identity on live histories",
      "scripts/diagnostic_d22_identity_live.py"),
+    # D23 is Stage 4(b) -- the complete transfer against the Sachs-Wolfe
+    # transfer as k -> 0, which the D21 comment above records as never run.
+    # The limit EXISTS and is ell-independent, which excludes every projection
+    # defect at once, and it is 9.4e3 (Newtonian) / -1.10 (CDM) rather than 1.
+    # The CDM boundary tends to -0.9999: Sachs-Wolfe with the sign reversed.
+    # Finding T-117. The reference is built twice and the two agree to 3e-08,
+    # so nothing in the ratio is a convention.
+    ("D23 Stage 4(b): the transfer against Sachs-Wolfe as k -> 0",
+     "scripts/diagnostic_d23_superhorizon_transfer.py"),
+    # D24 is the Phi' sweep: whether the driving channel is DEAD, DROWNED or
+    # merely UNFED, which are three different repairs. It scales
+    # (Phi_A' - Phi_H') and nothing else -- scaling C_1' whole would conflate
+    # driving with Doppler, which is M15's class inside a coefficient -- and
+    # it reports ell_peak, a spectrum-level quantity, so M16 is satisfied by
+    # construction. L1-L4 gate the output: with no arguments it runs the
+    # two-point test, lambda in {0, 1}, at both kappa'' settings.
+    ("D24 the Phi' sweep: dead, drowned, or unfed",
+     "scripts/diagnostic_d24_phi_prime_sweep.py"),
 ]
 
 

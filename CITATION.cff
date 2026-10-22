@@ -32,12 +32,17 @@ preferred-citation:
       affiliation: "University of Cape Town"
   year: 2026
   month: 10
-  # No identifier yet, and none is asserted. A `doi:` or `url:` here would be
-  # read by GitHub's "Cite this repository" and would resolve to nothing, so
-  # the fields are absent rather than placeholder. They are filled at
-  # manuscript freeze (acceptance criterion 6), from the record that exists.
+  # **Filled 2026-10-22 from the record that exists**, which is what S47 said
+  # would happen at manuscript freeze. The `url` carries the VERSION SUFFIX
+  # deliberately: a bare astro-ph/9912072 resolves to whatever is current, and
+  # that identifier has carried three distinct documents -- v1/v2 the legacy
+  # 1999 work, v3 THE CORRECTION, v4 Paper 1. The DOI is version-agnostic by arXiv's own
+  # design, so the url is what pins it.
+  doi: "10.48550/arXiv.astro-ph/9912072"
+  url: "https://arxiv.org/abs/astro-ph/9912072v4"
+  version: "v4"
   license: CC-BY-4.0
-  notes: "Paper 1, University of Cape Town. The identifier is assigned on submission and is filled at manuscript freeze (acceptance criterion 6). Until then, cite the software bundle by its own DOI above."
+  notes: "Paper 1, arXiv:astro-ph/9912072v4, submitted to General Relativity and Gravitation 2026-10-16. CITE IT VERSIONED: v4 is Paper 1, v3 is the correction, v1/v2 are the legacy 1999 work."
 keywords:
   - cosmic microwave background
   - 1+3 covariant formalism

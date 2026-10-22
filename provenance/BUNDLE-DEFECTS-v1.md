@@ -9242,3 +9242,240 @@ rather than by weight, with the declared set in `MODEL_DEPENDENT`.
 > premise lesson.** Coordination's item was right that this is cheap and
 > independent; it was wrong about where it bites, and reading the call sites
 > rather than the module header is what separated them.
+
+---
+
+## T-116 — **Paper 1's arXiv identifier landed, versioned. The bare identifier now resolves to Paper 1 and one reference in the bundle pointed at the wrong document**
+
+*P1-T, 2026-10-22; landed by P1-B with one correction to the request.*
+
+### The hazard, which is P1-T's and is real
+
+`astro-ph/9912072` has carried **three distinct documents**:
+
+| | date | what |
+|---|---|---|
+| v1 / v2 | Dec 1999 | the original work and **the correction** |
+| v3 | 3 Oct 2026 | a note with a different title |
+| **v4** | 21 Oct 2026 | **Paper 1** |
+
+A bare identifier resolves to whatever is current, so **every unversioned
+reference to "the correction" now points at Paper 1.** Landed as
+`arXiv:astro-ph/9912072v4`, doi `10.48550/arXiv.astro-ph/9912072`, submitted
+to *General Relativity and Gravitation* 2026-10-16, in the README header, the
+citation table, `CITATION.cff` and **both** of the supplement's citation
+sites, each stating the versioning rule in place rather than relying on the
+reader to know it.
+
+**The bundle held exactly one such reference** — `DECISIONS-v1.0.0.md:182`,
+Chapter 6's scalar nonlinear corrections — and it is the 1999 work, so it now
+reads `astro-ph/9912072v2`. Found by searching the tree rather than by taking
+the count on trust.
+
+### The correction to the request
+
+P1-T asked for the identifier *"beside the Zenodo DOI… not replacing it. The
+Zenodo DOI stays"*, and quoted a README header reading *"preprint v1.1.6,
+Zenodo, 19 October 2026, doi:10.5281/zenodo.23475234"*.
+
+**That header has not existed since 2026-10-21.** Decision **S47** withdrew
+the Zenodo preprint at the PI's instruction — *arXiv's guidance is to submit
+the paper rather than post a replacement preprint* — and removed that DOI from
+the README, `CITATION.cff` and the supplement.
+
+> **A PI decision outranks a stream request, and P1-T was reading a
+> superseded file.** The Zenodo DOI is **not** restored. The arXiv identifier
+> goes exactly where S47 said it would: *"the identifier is assigned on
+> submission and is filled at manuscript freeze"* — which is what this is.
+
+`CITATION.cff` had no `doi:` or `url:` under `preferred-citation` by the same
+decision, *because a placeholder that resolves to nothing is worse than an
+absent field*. Both are filled now, and **the `url` carries the version suffix
+while the DOI cannot** — arXiv's DOI is version-agnostic by design, so the url
+is the only field that pins which of the three documents is meant.
+
+### Checked rather than assumed
+
+The bundle URL in the README is
+`timgebbie/frame-covariant-cmb-reproducibility`, which is the repository this
+is. Supplement rebuilt: 54 pages, 0 errors; the overfull-hbox count moves
+15→17 on the added citation text, worst unchanged at 31.9pt against a 35pt
+threshold.
+
+---
+
+## T-117 — **Stage 4(b). The transfer does not reduce to Sachs–Wolfe as $k\to0$. The limit EXISTS, is $\ell$-independent, and the two frames miss it by two unrelated mechanisms — one of which is a sign**
+
+*P1-B, 2026-10-22. P1-T's **O2**, open since the staged revision and never run.
+`scripts/diagnostic_d23_superhorizon_transfer.py`.*
+
+### What was measured
+
+$T_\ell(k)\big/\big[(\Phi_A(\eta_*)/3)\,\mathcal D\,j_\ell(k\Delta\eta_*)\big]$
+at fixed $\ell\in\{2,4,8,20\}$, swept down $k\in[0.025,40]$, both frames, EdS
+and PLANCK. The reference is built **twice** — once through `transfer_by_rank`
+on a coefficient set zeroed but for $C_1=-\Phi_A/3$, once written out — and the
+two agree to `0.0e+00` on EdS and `3.3e-08` on PLANCK. Nothing about
+$\alpha_\ell$, $\beta_\ell$, the weight or (188) can enter the ratio, because
+it is the same code path on both sides of the division.
+
+### The result
+
+| $k\to0$ | ratio $\ell=2$ | $\ell=4$ | $\ell=8$ | $\ell=20$ | boundary | bulk |
+|---|---|---|---|---|---|---|
+| EdS, Newtonian | $+9.435\times10^3$ | $9.430\times10^3$ | $9.430\times10^3$ | $9.430\times10^3$ | $-25.65$ | $+9.461\times10^3$ |
+| EdS, CDM | $-1.104$ | $-1.036$ | $-1.061$ | $-1.034$ | $\mathbf{-0.9999}$ | $-0.104$ |
+| PLANCK, Newtonian | $+4.81\times10^3$ | | | | $-19.7$ | $+4.83\times10^3$ |
+| PLANCK, CDM | $-6.69\times10^2$ | | | | $+1.27$ | $-6.70\times10^2$ |
+
+**The limit exists.** Settled by $k\lesssim0.1$ and flat across $\ell=2\ldots20$
+to 0.6%. So this is **not** a projection defect: a wrong $j_\ell$, a wrong
+$\alpha_\ell$ or a wrong $\beta_\ell$ would be $\ell$-dependent, and an entire
+class of candidate causes is excluded by one column.
+
+### The two mechanisms, derived and verified
+
+The derivation is in the instrument and its residual is printed. From (102)'s
+boundary $[C_2'-C_1]_{\eta_*}$, (109) $-C_1=(\delta T+\Phi_A)+\kappa'\hat v_B$,
+and the Sachs–Wolfe scalar $(\delta T+\Phi_A)=\Phi_A/3+C_2'$:
+
+$$C_2'-C_1=\frac{\Phi_A}{3}+2C_2'+\frac{\kappa'v_B}{k}\qquad(*)$$
+
+verified numerically to $1.2\times10^{-6}$ (EdS, Newtonian, $k=0.025$), falling
+monotonically with $k$. Then:
+
+- **Newtonian.** $C_2'\equiv0$, so $(*)$ is $\Phi_A/3+\kappa'v_B/k$ alone and
+  **$\kappa'v_B/k\to-8.8818$ — it does not die.** It is $-26.6\times$ the
+  Sachs–Wolfe term, which is the whole of the $-25.65$ boundary. The bulk is
+  $\int\mathcal V\mathcal D(-C_1')j_\ell$ with $C_0=C_2=0$ and, on EdS,
+  $\Phi'=0$ and $(k/3)\tau_1\to0$ — so in the limit **the entire bulk is
+  $\int\mathcal V(\kappa'\hat v_B)'j_\ell$, and it is $9.46\times10^3$.**
+  One object, both terms, $369\times$ apart.
+- **CDM.** $\kappa'v_B/k\to3.0\times10^{-5}$ — it **does** die, correctly — but
+  $2C_2'\to-0.66664=-2(\Phi_A/3)$, so $C_2'\to-\Phi_A/3$ and
+  $$C_2'-C_1\;\to\;\frac{\Phi_A}{3}-\frac{2\Phi_A}{3}=-\frac{\Phi_A}{3}.$$
+  **The CDM boundary is the Sachs–Wolfe transfer with the sign reversed, to
+  one part in $10^4$** ($-0.9999$ at $k=0.025$, approached monotonically:
+  $-0.9846,-0.9952,-0.9983,-0.9993,-0.9997,-0.9998,-0.9999$).
+
+### What this licenses, and what it does not
+
+**Licensed.** Stage 4(b) fails. D21 cleared the source on EdS to 0.68%; this
+clears the projection by $\ell$-independence; so the defect is in **what the
+matching carries into (102)** — the coefficients' super-horizon content — and
+nowhere else. That is a smaller place than "downstream" was yesterday.
+
+**Licensed.** Flip the CDM boundary's sign alone and the EdS CDM limit becomes
+$+0.9999-0.104=\mathbf{+0.896}$ — **within 10.4% of Sachs–Wolfe.** Arithmetic
+on measured numbers, not a repair.
+
+**NOT licensed, and recorded here so it is not read as if it were.** That the
+CDM sign is *a defect* rather than this bundle's convention. $C_2'\to-\Phi_A/3$
+may be forced by the solved match and correct; **B-11** is already a sign
+finding in that same solve ($j_0''(0)=-\tfrac13$ printed $+\tfrac13$), and
+$C_0$ and $C_2$ both carry $\mathcal B_2$, so a $\mathcal B_2$ sign would move
+both — but that is a **hypothesis with a cheap test**, not a finding. **M15**
+is the standing reason not to promote it: a gate built from one coefficient
+cannot see a cancellation distributed across the bracket, and the Newtonian
+column is nowhere near $\pm1$, so a single sign cannot be the whole story.
+
+**NOT licensed.** That this explains the missing plateau. The excess is
+$\ell$-independent *at fixed $k$*, and each $\ell$ integrates a different $k$
+range, so an $\ell$-independent-at-fixed-$k$ ratio still tilts $C_\ell$. The
+ratio runs $9.4\times10^3$ for $k\le2$, dips to $4.8\times10^3$ at $k=5$ and
+oscillates to $7.8\times10^3$ by $k=20$ — but **above $k\simeq2$ the true
+transfer legitimately departs from Sachs–Wolfe**, so no part of that variation
+is a defect on this instrument's evidence. Only the $k\to0$ value is.
+
+### The connection to S48, stated as what it is
+
+The Newtonian failure is $\kappa'\hat v_B$ in the boundary and
+$(\kappa'\hat v_B)'$ in the bulk, which is the **S48 ledger's object**, now
+measured in the one limit where its size is decidable rather than arguable.
+S48 was revised 2026-10-22 from a prohibition to a review flag, and this is
+the review: in the super-horizon limit the term is $26.6\times$ the quantity it
+sits beside, and its derivative under $\int\mathcal V$ is $9.46\times10^3\times$.
+**That is a measurement, and S48 asked for one.**
+
+### Reproduce
+
+```
+python3 -I scripts/diagnostic_d23_superhorizon_transfer.py
+```
+
+---
+
+## T-118 — **Coordination's hardening item 6 is wrong on both halves, and the second half is a table that does not exist**
+
+*P1-B, 2026-10-22. Second correction to the same item; the first is at T-115.*
+
+Coordination wrote that `figure_f5_sources.py`, `figure_f7_frames.py` and
+`measure_frame_invariance.py` *"pass none of `transfer_gamma`, `hubble_h` or
+`apply_transfer` — so all three take the dataclass defaults on every background
+they sweep"*, and that *"the frame gap — one of the three failures — is
+measured in a published artefact built on a transfer function belonging to
+standard CDM"*, naming `FRAME-INVARIANCE-MEASUREMENT-v1.md` and *"its PLANCK
+and ΛCDM columns"*.
+
+**Read rather than assumed:**
+
+1. All five inheriting scripts call `build_environment(...)` with **no
+   background override**, so they take `omega_m=1.0` — **Einstein–de Sitter**,
+   which *is* `CDM_MODEL`. `PLANCK_MODEL` and `LCDM_MODEL` occur **0 times** in
+   all five. $\Gamma=0.48$ and $h=0.5$ are *Annals II* §8.3.2's standard-CDM
+   values and are therefore **the correct values for the background those
+   scripts actually run on** — which `two_frame.py`'s own field comment says in
+   as many words: *"the model `CDM_MODEL` reconstructs"*.
+2. `FRAME-INVARIANCE-MEASUREMENT-v1.md` has **no PLANCK column and no ΛCDM
+   column**. Its table is $k\times\ell$ on one background. `grep -i
+   'planck|lcdm|EdS'` returns nothing.
+
+So the premise is wrong and the artefact described is not the artefact in the
+tree. **Nothing is changed in response to item 6.** Where the two constants
+*do* bite is T-115's finding and is already recorded: 5 of 31
+`build_environment` call sites name both, and the hygiene gate now counts them.
+
+> **Fifth instance of the class in one week.** Checking a premise costs one
+> `grep`; acting on a wrong one costs a regeneration, a diff, a correction
+> entry and the credibility of the next report. **M14** is the general form:
+> an acceptance condition built from the wrong object cannot see what it
+> claims to.
+
+---
+
+## T-119 — **Two stale arXiv version labels, one of them inside T-116's own hazard table**
+
+*P1-B, 2026-10-22, on P1-T's corrected citation rule.*
+
+P1-T's rule of 2026-10-22 superseded their own of the same day: **v1/v2** are
+the 1999 original and its revision, **v3** is the withdrawal and correction,
+**v4** is Paper 1. The PI had already said so and
+`claude/correction-v3-reduction-sign.md` has said so since 19 October.
+
+`grep 9912072` across `README.md`, `supplementary-materials/`, `CITATION.cff`
+and `provenance/`, **excluding the frozen `correction/`**:
+
+| site | reads | verdict |
+|---|---|---|
+| `README.md:19–24` | v1/v2 legacy, v3 the correction, v4 Paper 1 | **correct** |
+| `CITATION.cff:37–45` | same, `url` pinned `…v4` | **correct** |
+| supplement abstract | same | **correct** |
+| supplement §Scientific scope | same | **correct** |
+| `DECISIONS-v1.0.0.md:182` | Chapter 6 → `…v2` | **correct** — it is the 1999 work |
+| **`BUNDLE-DEFECTS-v1.md`, T-116's table** | *"v1/v2 … the original work and **the correction**"*, *"v3 … a note with a different title"* | **stale** |
+
+**The one stale site is in the register, and the register is append-guarded.**
+So it is corrected here rather than rewritten there, which is what an
+append-only record is for. T-116's hazard table should read:
+
+| | date | size | what |
+|---|---|---|---|
+| v1 | 3 Dec 1999 | 21 KB | the original 1999 submission |
+| v2 | 5 Dec 1999 | 21 KB | its revision — the final 1999 form |
+| v3 | 3 Oct 2026 | 30 KB | **the withdrawal and correction** |
+| **v4** | 21 Oct 2026 | 353 KB | **Paper 1** |
+
+**Every public-facing site was already right**, because they were written from
+the PI's correction and not from P1-T's first message. The mislabel reached
+exactly one file, and that file is the one that records mislabels.
+

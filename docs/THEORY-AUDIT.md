@@ -2,7 +2,7 @@
 
 > **Generated, not transcribed. Do not edit by hand.**
 >
-> Produced by `tests/frame/gen_theory_audit.py` at 2026-10-22 06:04 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
+> Produced by `tests/frame/gen_theory_audit.py` at 2026-10-22 11:42 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
 
 **Status: ALL CHECKS PASS** — 23 assertions across 8 instruments.
 
@@ -168,7 +168,7 @@ Multiplying the transport equation by $W=e^{-\kappa}$ sends the gravitational so
 
 | | |
 |---|---|
-| generated | 2026-10-22 06:04 UTC |
+| generated | 2026-10-22 11:42 UTC |
 | python | 3.13.16 |
 | numpy | 2.5.3 |
 | scipy | 1.18.1 |

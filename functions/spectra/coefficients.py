@@ -395,6 +395,43 @@ DIPOLE_NORMALISATION: str = "velocity"
 #: printed.
 A_B1_PRIME_EXPANSION_TERMS: bool = False
 
+#: **The driving channel's affine handle --- P1-T's $\Phi'$ sweep, 2026-10-22.**
+#:
+#: Multiplies $(\Phi_A'-\Phi_H')$ **and nothing else**, inside
+#: `newtonian_a_b1_prime` and therefore inside $C_1'$ in both frames. It does
+#: not reach $C_0$, $C_2$, $C_2''$ or either boundary term: in the Newtonian
+#: frame those are identically zero, and in the CDM frame they come from $v/k$
+#: and $-(k/3)\tau_1^E$, neither of which reads this function.
+#: `diagnostic_d24` asserts all of that rather than relying on this comment.
+#:
+#: **Why not scale $C_1'$ or $a\mathcal B_1$ whole.** $C_1'$ carries two
+#: physically distinct things --- the potential decay, which is the driving and
+#: the ISW, and $(k/3)\tau_1$, which is acoustic. Scaling the coefficient
+#: conflates driving with Doppler and the sweep then measures nothing in
+#: particular. That is **M15**'s class, with the structure inside the
+#: coefficient rather than across the bracket.
+#:
+#: **The released value is 1.0 and the released path is bit-identical to it**,
+#: because IEEE-754 multiplication by 1.0 is exact for every finite double.
+#: That is S43's rule: a control is a named branch with the released default,
+#: never a bare number someone can drift.
+PHI_PRIME_DRIVING_LAMBDA: float = 1.0
+
+#: **The $\kappa''$ handle --- P1-T's \S5 confound, 2026-10-22.**
+#:
+#: Multiplies $\kappa''\tilde v_B$ inside $(\kappa'\tilde v_B)'$, in both
+#: frames, and nothing else. It exists because a flat
+#: $\ell_{\rm peak}(\lambda)$ has **two** readings and only this separates
+#: them: either the driving channel is dead, or D16/T-94's
+#: $\mathcal V\kappa''\hat v_B$ --- 93--97% of the integrand, and *smooth* ---
+#: outvotes a 3% term whatever is done to it. A term at 97% will hold the
+#: morphology against anything, and reading that as "the channel is dead" when
+#: it is "the channel is drowned" sends the next repair to the wrong place.
+#: Flat in both runs is dead; flat only at $\kappa''=1$ is drowned.
+#:
+#: Released value 1.0, exact, same rule as above.
+KAPPA_SECOND_LAMBDA: float = 1.0
+
 
 def reduce_dipole(tau_1: np.ndarray, k_com: float,
                   normalisation: str | None = None) -> np.ndarray:
@@ -487,9 +524,13 @@ def newtonian_a_b1_prime(
     k = float(k_com)
     aH = np.asarray(conformal_hubble, dtype=float)
     a_b1 = k * (np.asarray(delta_t, dtype=float) + np.asarray(phi_a, dtype=float))
+    # `PHI_PRIME_DRIVING_LAMBDA` multiplies the FIRST term only -- the driving
+    # and the ISW -- and never the acoustic (k^2/3) tau_1 beside it. Released
+    # value 1.0, which is exact.
     dynamical = (
-        k * (np.asarray(phi_a_prime, dtype=float)
-             - np.asarray(phi_h_prime, dtype=float))
+        PHI_PRIME_DRIVING_LAMBDA
+        * k * (np.asarray(phi_a_prime, dtype=float)
+               - np.asarray(phi_h_prime, dtype=float))
         + (k**2 / 3.0) * np.asarray(tau_1, dtype=float)
     )
     # (106)'s two expansion terms, kept separable --- **finding T-67, open**.
@@ -748,7 +789,9 @@ def newtonian_set(
     # reduced one. `reduce_dipole` is the conversion that was never written.
     vb_t = reduce_dipole(tau1, k_com)
     vb_t_prime = reduce_dipole(t1p, k_com)
-    kpvb_prime = kp * vb_t_prime + np.asarray(kappa_double_prime, dtype=float) * vb_t
+    kpvb_prime = (kp * vb_t_prime
+                  + KAPPA_SECOND_LAMBDA
+                  * np.asarray(kappa_double_prime, dtype=float) * vb_t)
 
     # **a B_0 = -(1/3) k tau_1**, from B_0 = -(1/3) D^a tau_a. D11 measures it
     # as the source of the ell=0 equation (finding T-79) and it is NOT zero in
@@ -1026,7 +1069,8 @@ def cdm_set(
     vb_t_E = reduce_dipole(tau_1_E, k)
     vb_t_prime_E = reduce_dipole(tau_1_prime_E, k)
     kappa_prime_v_b_E = k * kp * vb_t_E                        # for (89)
-    kappa_prime_v_b_tilde_prime_E = kpp * vb_t_E + kp * vb_t_prime_E   # for (107)
+    kappa_prime_v_b_tilde_prime_E = (KAPPA_SECOND_LAMBDA * kpp * vb_t_E
+                                     + kp * vb_t_prime_E)              # for (107)
 
     # --- rank two: the sector that is empty in the Newtonian frame -----------
     sigma, sigma_dot, sigma_ddot = cdm_frame_shear(

@@ -18,9 +18,9 @@ being possible.
 | status | count | means |
 |---|---|---|
 | **open** | 1 | a chosen literal whose convergence is **not** established. This status is the point of the register. |
-| **derived** | 10 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
+| **derived** | 11 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
 | **measured** | 7 | a chosen literal whose convergence has been measured, with the number stated. |
-| **described** | 10 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
+| **described** | 11 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
 | **index** | 18 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
 
 ## open — 1
@@ -37,7 +37,7 @@ share this history, so a grid shift moves them together and cancels. Finding
 **T-46**, question **Q7**, decision **S33** --- derived immediately after the
 v1.2.0 tag. v1.2.0 ships it as a stated limit.
 
-## derived — 10
+## derived — 11
 
 ### `x` — the x grid j_ell(x) is tabulated on
 
@@ -135,6 +135,16 @@ The ratio it reports is grid-insensitive for the reason D10's count is not:
 both terms are evaluated at the same points and a refinement moves them
 together --- and on EdS the Phi_H' column is 1e-10 against 3.7, which no
 plausible grid change reaches. Finding **T-79**.
+
+### `k_com` — the k grid the Phi' sweep integrates C_ell on
+
+`scripts/diagnostic_d24_phi_prime_sweep.py:278`, `np.linspace`
+
+`required_k_points(K_MAX, r_theta)` at 3 samples per j_ell^2
+oscillation --- finding **T-56**, the same derivation F9 and D4 use. `K_MAX` is
+600 rather than F9's 1500, which is the ell <= 420 this instrument needs and no
+more. An aliased k integral moves the interpolated peak, and a sweep whose
+*observable is a peak position* cannot afford a grid chosen by eye.
 
 ### `k_com` — the k grid D4 integrates C_ell by rank on
 
@@ -241,7 +251,7 @@ side of anything the grid could contribute.
 four external recursions match at 1e-13 to 1e-14 at scale exactly 1, which no
 under-resolved grid produces.
 
-## described — 10
+## described — 11
 
 ### `K_COM` — the k grid the cost benchmark is measured on
 
@@ -262,6 +272,20 @@ the grid runs past the damping scale as **T-32** requires.
 `scripts/derive_ell_convergence.py:53`, `np.arange`
 
 Linear at `DK`. This script's entire output IS a convergence measurement, so its grid is the independent variable rather than an assumption.
+
+### `ELLS` — the multipole grid the Phi' sweep locates the first peak on
+
+`scripts/diagnostic_d24_phi_prime_sweep.py:90`, `np.arange`
+
+Dense at spacing 5 through `arange(100, 421, 5)` and sparse below,
+because the sweep reports **ell_peak by parabolic interpolation on three
+samples**, not `argmax`. The rule is therefore explicit: the grid must be fine
+enough near the maximum that three samples bracket it and the interpolated
+position is not spacing-limited above the effect being measured. L4 is the
+guard --- the peak finder is run on a synthetic C_ell with a known maximum and
+must recover it to better than 0.5 in ell, which is a fifth of this spacing.
+Capped at 420 because this instrument needs the first peak **located**, not the
+damping tail resolved; F9 owns that and runs to 1000.
 
 ### `k` — the k quadrature grid for the Sachs-Wolfe limit
 
