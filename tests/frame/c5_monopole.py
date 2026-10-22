@@ -77,10 +77,28 @@ print(f'  worst residual:  gamma=-5/2 {r[0]:.2e} | gamma=+1/3 {r[1]:.2e}'
       f' | gamma=0 {r[2]:.2e}')
 print('  NB this check cannot see an ADDITIVE boost-invariant piece in C_0;')
 print('     see the docstring.  Delta C_0 = 0 fixes normalisation, not content.')
+# **C5b and C5c are DEFECT-polarity as of 2026-10-21, finding T-107.**
+#
+# They asserted that the restored a.B_0 row is the right one, because it is
+# the only one giving gamma = 0.  **That measurement is correct and its
+# conclusion is refuted**: criterion 5b caught the restoration at 98.5% and
+# c8_rank0_partner.py shows why -- gamma pairs Delta C_0 against k^2 Delta C_2
+# while the partner sits in -C_1'.  **M15: a gate built from one coefficient
+# cannot see a cancellation distributed across the bracket.**
+#
+# The numbers are kept and the polarity is flipped, so the suite now records
+# gamma's misleading zero as a KNOWN DEFECT OF THIS GATE rather than asserting
+# its conclusion.  If either ever stops holding, something has changed in the
+# gamma pairing and DEFECT GONE will say so -- which is what S33(d) is for.
+# **c8 is the gate for the ell=0 row; this is the record of why it had to be.**
 allok = (report('C5a  a.Delta B_0 cancels (1/3) k^2 Delta C_2 exactly', ok_cancel)
-         & report('C5b  only the restored row gives gamma = 0', gammas[2] == 0)
-         & report('C5c  and it is >=10x better than either alternative',
-                  r[2]*10 < min(r[0], r[1]), f'{r[2]:.1e} vs {min(r[0],r[1]):.1e}'))
+         & report('C5b  gamma reports zero for the row c8 REFUTES (M15)',
+                  gammas[2] == 0, 'the pairing is wrong, not the arithmetic',
+                  polarity='defect')
+         & report('C5c  and gamma scores it >=10x better than the correct row',
+                  r[2]*10 < min(r[0], r[1]),
+                  f'{r[2]:.1e} vs {min(r[0],r[1]):.1e} -- see c8, T-107',
+                  polarity='defect'))
 finish({'gamma_printed': str(gammas[0]), 'gamma_no_B0': str(gammas[1]),
         'gamma_restored': str(gammas[2]), 'r_printed': r[0], 'r_no_B0': r[1],
         'r_restored': r[2]})

@@ -131,5 +131,25 @@ o.append('Annals II is read from `sources/annals/cbrII.tex` and referred to by '
          '`eq:frame-transf`, `eq:raise`), never by printed number: those '
          'differ between the two lines.\n')
 
-print('\n'.join(o))
+text = '\n'.join(o)
+print(text)
+
+# **The generator WRITES the document.  Added 2026-10-21 by P1-B.**
+#
+# It used to print to stdout only, so `docs/THEORY-AUDIT.md` existed solely by
+# a shell redirection somebody had to remember.  They did not: the committed
+# file sat five days and one instrument behind its own instruments, publishing
+# a refuted conclusion and a withdrawn prohibition as normative record, under
+# a header reading "Generated, not transcribed".  And a well-meant
+# `>/dev/null` while checking the exit status DISCARDED the document.
+#
+# An artefact whose generation depends on a human remembering a redirection is
+# not generated.  `run_all.py` runs this, and the write is here.
+out = HERE.parents[1] / 'docs' / 'THEORY-AUDIT.md'
+if allok:
+    out.parent.mkdir(exist_ok=True)
+    out.write_text(text + '\n', encoding='utf-8', newline='\n')
+    print(f'\nwrote {out.relative_to(HERE.parents[1])}', file=sys.stderr)
+else:
+    print('\nFAILING SUITE -- document NOT written', file=sys.stderr)
 sys.exit(0 if allok else 1)

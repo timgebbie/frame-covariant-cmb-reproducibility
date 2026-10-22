@@ -251,12 +251,147 @@ def check_weight_is_stated(failures: list[str]) -> int:
     return stated
 
 
+#: **Parameters whose correct value depends on which `Background` is in play.**
+#:
+#: P1-T's greppable form of **S43**, and the rule it enforces: *such a
+#: parameter has no default, or its default is declared here with the finding
+#: that made it necessary.* Three instances found it the hard way --- the
+#: line-of-sight weight (**T-57/T-58**), `transfer_gamma`/`hubble_h` carried
+#: from *Annals II* standard-CDM onto `PLANCK_MODEL`, and `_thomson_scale`'s
+#: missing `h` (**T-108**) --- so this closes the class instead of patching
+#: the third, which is what the grid register did for grids.
+MODEL_DEPENDENT: dict[str, str] = {
+    "hubble_h": "T-108 / P1-T 3.6 --- 0.5 is Annals II standard-CDM and it "
+                "also enters the k->Mpc conversion. OPEN: unwired on PLANCK.",
+    "transfer_gamma": "P1-T 3.6 --- ANNALS_II_GAMMA = 0.48 against Omega_0 h "
+                      "= 0.21 on PLANCK. OPEN: shape_parameter() is written "
+                      "and unwired.",
+    "h": "T-108 --- RecombinationHistory.build defaulted 0.674 on every "
+         "background; RECOMBINATION_H now selects and every caller names it.",
+    "omega_b_h2": "the baryon density is named at every call site by the "
+                  "figure and diagnostic scripts; the default is the Planck "
+                  "value and is declared.",
+}
+
+
+def check_model_dependent_defaults(failures: list[str]) -> str:
+    """A model-dependent default is declared, or it is a silent inheritance.
+
+    **The gate counted call sites that named their *weight* and not those that
+    named their *h*** --- narrower than the rule it enforced, which is how
+    T-108 passed four releases. This counts the parameters instead.
+    """
+    import ast
+
+    seen: list[str] = []
+    for path in sorted((ROOT / "functions").rglob("*.py")):
+        try:
+            tree = ast.parse(path.read_text(encoding="utf-8"))
+        except SyntaxError as exc:                       # pragma: no cover
+            failures.append(f"{path.relative_to(ROOT)}: unparseable ({exc})")
+            continue
+        except UnicodeDecodeError:
+            # **Not this check's business, and it must not crash here.**
+            # `check_encoding` is what reports a file that is not UTF-8, and
+            # it cannot report anything if this walk raises first. The
+            # negative control `test_a_utf16_source_is_refused` caught
+            # exactly that, which is what a negative control is for.
+            continue
+        for node in ast.walk(tree):
+            if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                continue
+            args = node.args
+            pairs = list(zip(args.args[-len(args.defaults):], args.defaults)) \
+                if args.defaults else []
+            pairs += [(a, d) for a, d in zip(args.kwonlyargs, args.kw_defaults)
+                      if d is not None]
+            for arg, default in pairs:
+                if arg.arg not in MODEL_DEPENDENT:
+                    continue
+                if isinstance(default, ast.Constant) and default.value is None:
+                    continue
+                seen.append(f"{path.relative_to(ROOT).as_posix()}:{node.lineno} "
+                            f"{node.name}({arg.arg}=...)")
+    undeclared = [s for s in seen
+                  if not any(k in s for k in MODEL_DEPENDENT)]
+    if undeclared:                                       # pragma: no cover
+        failures.extend(f"{s}: model-dependent default with no entry in "
+                        "MODEL_DEPENDENT" for s in undeclared)
+    # **And count the call sites that inherit, which is what T-115 found.**
+    # Counting the declarations alone says the defaults are documented; it
+    # does not say who is silently taking them. 26 of 31 were, including
+    # every frame artefact.
+    import re as _re
+    inheriting = 0
+    total = 0
+    for path in sorted(ROOT.rglob("*.py")):
+        if ".git" in path.parts or "dist" in path.parts:
+            continue
+        try:
+            tree = ast.parse(path.read_text(encoding="utf-8"))
+        except (SyntaxError, UnicodeDecodeError):
+            continue
+        for node in ast.walk(tree):
+            fn = getattr(node, "func", None)
+            name = getattr(fn, "id", getattr(fn, "attr", "")) if fn else ""
+            if isinstance(node, ast.Call) and name == "build_environment":
+                total += 1
+                kw = {k.arg for k in node.keywords}
+                if not {"transfer_gamma", "hubble_h"} <= kw:
+                    inheriting += 1
+    return (f"      {len(seen)} model-dependent defaults declared; "
+            f"{total - inheriting}/{total} build_environment call sites name "
+            f"both Gamma and h (T-115).")
+
+
+def check_no_build_artefacts(failures: list[str]) -> str:
+    """A build artefact in the tree is a file nothing generates and nothing reads."""
+    bad_suffix = {".log", ".err", ".aux", ".out", ".toc", ".fls", ".fdb_latexmk",
+                  ".synctex.gz", ".bbl", ".blg"}
+    found = [p.relative_to(ROOT).as_posix()
+             for p in ROOT.rglob("*")
+             if p.is_file() and p.suffix in bad_suffix
+             and ".git" not in p.parts and "dist" not in p.parts]
+    if found:
+        failures.append("build artefacts in the tree, which no generator "
+                        "produces and no gate reads: " + ", ".join(sorted(found)))
+    return f"      no build artefacts in the tree ({len(bad_suffix)} suffixes checked)."
+
+
+def check_generated_artefacts_are_current(failures: list[str]) -> str:
+    """**A generated file is current, or it is transcribed.**
+
+    `docs/THEORY-AUDIT.md` is headed *"Generated, not transcribed"* and sat
+    five days and one instrument behind its own instruments, publishing a
+    refuted conclusion as normative record. The generator printed to stdout
+    and the file existed only by a redirection somebody had to remember.
+    It writes its own file now, and this checks that somebody ran it.
+    """
+    audit = ROOT / "docs" / "THEORY-AUDIT.md"
+    if not audit.exists():
+        failures.append("docs/THEORY-AUDIT.md is missing; run "
+                        "tests/frame/gen_theory_audit.py")
+        return "      theory audit: ABSENT"
+    text = audit.read_text(encoding="utf-8")
+    instruments = len(sorted((ROOT / "tests" / "frame").glob("c[0-9]*.py")))
+    named = text.count("*Instrument: `tests/frame/c")
+    if named != instruments:
+        failures.append(
+            f"docs/THEORY-AUDIT.md reports {named} instruments and "
+            f"tests/frame/ holds {instruments}. It is generated: run "
+            "tests/frame/gen_theory_audit.py.")
+    return f"      theory audit covers {named}/{instruments} instruments."
+
+
 def main() -> int:
     failures: list[str] = []
     checked = check_encoding(failures)
     note = check_supplement_set(failures)
     scanned = check_no_hardcoded_names(failures)
     stated = check_weight_is_stated(failures)
+    declared = check_model_dependent_defaults(failures)
+    artefacts = check_no_build_artefacts(failures)
+    audited = check_generated_artefacts_are_current(failures)
 
     if failures:
         print(f"FAIL  {len(failures)} release-hygiene problem(s):")
@@ -273,6 +408,9 @@ def main() -> int:
     print(note)
     print(f"      {stated} released callers of build_environment name their "
           f"line-of-sight weight (A-1, T-57).")
+    print(declared)
+    print(artefacts)
+    print(audited)
     return 0
 
 

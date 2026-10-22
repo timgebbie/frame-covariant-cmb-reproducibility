@@ -9177,3 +9177,68 @@ against the identity.** Six repairs were withdrawn before anyone pointed a
 measurement at transport; four of this week's methodological findings
 (**M14**, **M15**, **M16**, T-111) say the same thing, which is that the
 objects being scored were not the ones that were wrong.
+
+---
+
+## T-115 — **`shape_parameter` is wired, not unwired: F9 and criterion 5b name both defaults. 26 of 31 call sites do not, and they include every frame artefact**
+
+*P1-B, 2026-10-22, AST audit of every `build_environment` call site. Raised by
+Coordination as *"one run, the best prior on the board"*; **the premise is
+wrong and the finding underneath it is better.***
+
+### The correction
+
+Coordination: *"`transfer.shape_parameter(omega_0, h)` is already written and
+unwired… one run, independent of every stage."*
+
+**It is wired.** `figure_f9_acoustic_spectrum.py:128`,
+`compare_criterion_5b.py:105`, `diagnostic_d4_monopole.py:96,124` and
+`benchmark_single_run.py:98` all pass `transfer_gamma=shape_parameter(...)`
+**and** `hubble_h`. **So the released spectrum and the criterion-5b gate do
+not inherit the defaults, and the proposed run would have moved nothing on
+either.**
+
+### What the audit found instead
+
+| | |
+|---|---|
+| call sites of `build_environment` | **31** |
+| naming **both** `transfer_gamma` and `hubble_h` | **5** |
+| inheriting at least one named-model default | **26** |
+
+**And the five that name both are the spectrum and its gates. The ones that
+inherit *both* are the frame artefacts:**
+
+`figure_f2_truncation.py`, `figure_f5_sources.py`, `figure_f7_frames.py`,
+`diagnostic_d7_frame_identification.py` and `measure_frame_invariance.py`
+(**D6**) — which are F2, F5, F7, D6 and D7, the truncation and
+frame-invariance artefacts, the ones whose captions carry the 100% frame gap.
+**They run with $\Gamma=0.48$ and $h=0.5$ — *Annals II* standard-CDM — on
+whatever background they are handed.**
+
+### What it does and does not touch
+
+**It does not invalidate D11–D22.** Every one of them reports a **ratio** —
+shares, residuals normalised by scale, $z_*$ against an external value — and
+$T(k)$ enters as a common factor that cancels. D20 is untouched for a second
+reason: recombination does not call the transfer at all. **They were built as
+ratios for this reason and the audit confirms it was worth it.**
+
+**It is not yet a measurement of the frame artefacts either.** $T(k)$
+multiplies both frames identically, so a frame *ratio* may well be insensitive
+too — but F2's and F5's absolute shares are not ratios in that sense, and
+$h$ also enters the $k\to$Mpc conversion at `two_frame.py:235`, which moves
+the grid. **No size is claimed. The run is one command and it has not been
+made.**
+
+### The gate was counting the wrong thing, again
+
+`check_release_hygiene.py` counted call sites that named their **weight**
+(A-1, T-57) and not those that named their **model-dependent constants** —
+which is how this stood for four releases. It now counts both, by parameter
+rather than by weight, with the declared set in `MODEL_DEPENDENT`.
+
+> **Fourth instance of the class in one week, and the third of the check-the-
+> premise lesson.** Coordination's item was right that this is cheap and
+> independent; it was wrong about where it bites, and reading the call sites
+> rather than the module header is what separated them.
