@@ -26,11 +26,20 @@ the printed row (5/beta_2 * 1/3 = +5/2) leaves gamma = -5/2.
 Delta C_0 = 0 constrains how B_0 MOVES, not what it IS.  It fixes the
 multiplicative normalisation exactly -- scale a.B_0 by lambda and the
 cancellation closes only at lambda = 1 -- but any ADDITIVE boost-invariant
-piece X with Delta X = 0 passes this check for free.  Since
-C_0 = (1/3) k^2 C_2 + (1/3) k tau_1, a missing additive term of O(k) or lower
-is invisible where the k^2 piece dominates and dominant where it does not.
-This instrument cannot distinguish that case and nothing here should be read
-as excluding one.
+piece X with Delta X = 0 passes this check for free.  A missing additive term
+of O(k) or lower is invisible where the k^2 piece dominates and dominant where
+it does not.  This instrument cannot distinguish that case and nothing here
+should be read as excluding one.
+
+**CORRECTED 2026-10-22.**  The sentence above read "Since
+C_0 = (1/3) k^2 C_2 + (1/3) k tau_1, ..." -- the RESTORED form, written while
+T-105 stood.  T-105 has fallen: tau_0 == 0 is a constraint, not initial data,
+so (89)'s ell = 0 row carries ZERO on the right and solves to
+C_0 = -(1/3) a.B_2 with no a.B_0 in it.  a.B_0 = -(k/3) tau_1 is an identity
+and -C_1' carries +(k/3) tau_1 already, so the restoration double-counts; and
+criterion 5b doubles to 98.5% under it (T-107).  The caveat itself is
+unaffected -- it is about additive boost-invariant pieces and holds under
+either form -- so only the parenthetical justification is withdrawn.
 """
 import sys, pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))

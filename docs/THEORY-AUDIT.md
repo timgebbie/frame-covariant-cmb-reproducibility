@@ -2,7 +2,7 @@
 
 > **Generated, not transcribed. Do not edit by hand.**
 >
-> Produced by `tests/frame/gen_theory_audit.py` at 2026-10-22 11:42 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
+> Produced by `tests/frame/gen_theory_audit.py` at 2026-10-22 16:39 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
 
 **Status: ALL CHECKS PASS** — 23 assertions across 8 instruments.
 
@@ -102,7 +102,7 @@ $a\,\Delta\mathcal{B}_0=\tfrac13kv=\tfrac13k^2\Delta C_2$ exactly, and $\gamma$ 
 | `r_no_B0` | 0.32445 |
 | `r_restored` | 0.00888329 |
 
-*Instrument: `tests/frame/c5_monopole.py`, sha256 `a22e62befb58…`*
+*Instrument: `tests/frame/c5_monopole.py`, sha256 `bd1ff2707f09…`*
 
 ### The Thomson $v^B_a$ slot
 
@@ -168,7 +168,7 @@ Multiplying the transport equation by $W=e^{-\kappa}$ sends the gravitational so
 
 | | |
 |---|---|
-| generated | 2026-10-22 11:42 UTC |
+| generated | 2026-10-22 16:39 UTC |
 | python | 3.13.16 |
 | numpy | 2.5.3 |
 | scipy | 1.18.1 |

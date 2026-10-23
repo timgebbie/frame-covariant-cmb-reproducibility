@@ -257,6 +257,15 @@ DIAGNOSTICS: list[tuple[str, str]] = [
     # two-point test, lambda in {0, 1}, at both kappa'' settings.
     ("D24 the Phi' sweep: dead, drowned, or unfed",
      "scripts/diagnostic_d24_phi_prime_sweep.py"),
+    # D25 is Coordination's \S7: where in k each low-ell C_ell actually comes
+    # from. It closes the gap between a k -> 0 result and an ell-space claim,
+    # which P1-T and P1-B had both written as a caveat rather than measured.
+    # Verdict: the k <= 0.1 window where T-117's limit holds supplies at most
+    # 0.64% of any C_ell measured, so T-117 is NOT the plateau; and median k
+    # runs 1.5-4.2x above ell/r_theta, which is small scales leaking down.
+    # Finding T-122.
+    ("D25 the k-decomposition of the low-ell spectrum",
+     "scripts/diagnostic_d25_k_decomposition.py"),
 ]
 
 

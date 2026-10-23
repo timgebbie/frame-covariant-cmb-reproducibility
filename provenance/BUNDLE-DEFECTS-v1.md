@@ -9479,3 +9479,123 @@ append-only record is for. T-116's hazard table should read:
 the PI's correction and not from P1-T's first message. The mislabel reached
 exactly one file, and that file is the one that records mislabels.
 
+
+---
+
+## T-120 — **The README's mathematics did not render on GitHub, and the (102) display — the centre of the physics chain — was a red error box on the public page**
+
+*P1-B, 2026-10-22, found by the PI from the rendered page.*
+
+Five `\eta_*` in one `$$` block. GitHub runs markdown's emphasis parser
+**before** the maths one, and CommonMark's asymmetry is the whole mechanism:
+**`*` opens emphasis intraword and `_` does not.** So `\tau_{A_\ell}` has
+always rendered and `\eta_*` never could — the asterisks paired, were consumed,
+and the subscripts became `\eta__`. The repository front page showed *"Missing
+open brace for subscript"* above a wall of raw source, where (102) belongs.
+
+Also found: `high-$\ell$`, `post-$\beta$`, `per-$k$` — inline maths
+hyphen-adjacent, rendering as literal source; and `$z_\ast=1114.5$`, the same
+asterisk defect one dollar sign smaller, which needs only one `*` because the
+paragraph's `**bold**` markers supply its partner.
+
+**Nothing in the suite was looking at the rendered page.** The markdown was
+well-formed, the LaTeX was well-formed, every link resolved, 489 tests passed.
+It was wrong only *where it is read*, which is **M13**'s exact shape and the
+fourth instance of that class. `tests/test_readme_renders_on_github.py` now
+asserts: no bare `*` in display or inline maths, no hyphen-adjacent inline
+maths, balanced braces in every display, delimiters on their own lines. **Not**
+applied to the supplement — `.tex` goes to LaTeX, which has no emphasis parser,
+and `\eta_*` is correct there. Enforcing it on both would be the mirror-image
+mistake.
+
+All eleven displays now also carry their **published equation numbers** —
+(68), (71), GDE99 (37), Paper 1, (152)/(153), (F.3), (89), (102), (186),
+(187)/(188) — at the PI's instruction.
+
+---
+
+## T-121 — **D24. The driving channel is DROWNED, not dead: $\lambda$ changes nothing at the released setting, and suppressing $\kappa''$ alone moves the CDM first peak from $\ell=8$ to $\ell=173$**
+
+*P1-B, 2026-10-22, built to P1-T's specification.
+`scripts/diagnostic_d24_phi_prime_sweep.py`. L1–L4 pass:
+L1 $1.6\times10^{-16}$ against a $10^{-14}$ gate, L2 `array_equal` True,
+L3 all identical, L4 recovers 213.700 as 213.703.*
+
+| $\kappa''$ | $\lambda$ | frame | $\ell_{\rm peak}$ | $/\ell_A$ | $\kappa''$ share of $C_1'$ |
+|---|---|---|---|---|---|
+| 1 | 0 | Newtonian | 2.00 | 0.0073 | 0.998 |
+| 1 | 0 | CDM | 8.10 | 0.0297 | 1.098 |
+| 1 | 1 | Newtonian | **2.00** | 0.0073 | 1.002 |
+| 1 | 1 | CDM | **8.10** | 0.0298 | 1.095 |
+| **0** | 0 | Newtonian | 8.07 | 0.0297 | 0.998 |
+| **0** | 0 | CDM | **172.75** | **0.6347** | 1.098 |
+
+**The two-point test is unambiguous.** $\ell_{\rm peak}(\lambda=0)=\ell_{\rm
+peak}(\lambda=1)$ to the digit, in both frames. The driving contributes
+**nothing** to the peak position at the released setting, so **A-3 is
+irrelevant until $C_1'$ is repaired** — the channel it would feed is not
+connected to the output.
+
+**And the channel is drowned, not dead.** $\kappa''\tilde v_B$ is **99.8% of
+$|C_1'|$** in the Newtonian frame and **109.8%** in the CDM frame — larger than
+D16/T-94's 93–97%, measured on the live path. Suppress that one term and the
+CDM first peak appears at $\ell=172.75\pm2.5$, $0.635\,\ell_A$ against the
+matched target $0.757$, where the released setting has a spurious maximum at
+$\ell=8$. **A term at 99.8% holds the morphology against anything done to the
+other 0.2%**, which is precisely the confound P1-T's §5 was written to catch,
+and it would otherwise have been read as a dead channel.
+
+> **P1-T's reading table, applied: "flat in the released run, moves with
+> $\kappa''$ suppressed → the channel is DROWNED. S48 / the $W$-form is the
+> repair and A-3 is downstream of it."**
+
+---
+
+## T-122 — **D25. T-117 is a real defect and it is NOT the plateau. The window where its verdict holds supplies under 1% of every $C_\ell$ measured**
+
+*P1-B, 2026-10-22, built to Coordination's §7 specification.
+`scripts/diagnostic_d25_k_decomposition.py`.*
+
+$\mathrm dC_\ell/\mathrm d\ln k$ formed from **the array
+`cl_covariant_route` integrates**, not rebuilt from the formula.
+
+| | $\ell$ | median $k$ | share $k\le0.1$ | share $k\ge2$ | $\ell/r_\theta$ |
+|---|---|---|---|---|---|
+| EdS N | 2 | 1.538 | **0.0036** | 0.238 | 1.031 |
+| EdS N | 10 | 6.790 | **0.0000** | 1.000 | 5.156 |
+| EdS CDM | 2 | 3.693 | **0.0000** | 1.000 | 1.031 |
+| PLANCK N | 2 | 0.972 | **0.0064** | 0.050 | 0.640 |
+| PLANCK N | 10 | 5.424 | **0.0000** | 0.999 | 3.198 |
+| PLANCK CDM | 2 | 2.717 | **0.0027** | 0.600 | 0.640 |
+
+**Coordination's second branch, decisively: "most of it comes from
+$k\gtrsim2$ — T-117 cannot be the plateau."** The $k\le0.1$ window where
+T-117's limit is settled and flat contributes **at most 0.64%** of any $C_\ell$
+measured, and 0.00% at every $\ell\ge5$.
+
+**So my own framing of T-117 was wrong and is corrected here.** T-117 is a
+true defect, in a limit with a known answer, and it does **not** cause the
+plateau. It cannot: the observable never visits that window.
+
+**The second column is the finding that replaces it.** Median $k$ runs
+**1.5 to 4.2 times above** $\ell/r_\theta$ — PLANCK CDM at $\ell=2$ draws its
+median power from $k=2.72$ where the projection should put it near $0.64$.
+**The bundle's low-$\ell$ power is drawn from small scales leaking down**,
+which is the "acoustic region bleeding down" branch D23's reading table named
+and did not expect to see confirmed elsewhere.
+
+**T-121 and T-122 are the same mechanism from two sides.** A source at 99.8%
+that is *smooth* in $\eta$ has no $j_\ell$ localisation, so it contributes at
+every $k$ rather than at $k\simeq\ell/r_\theta$ — which is exactly a low-$\ell$
+median $k$ several times too high, and exactly a morphology that cannot be
+moved by anything done to the remaining 0.2%.
+
+### The limit, stated rather than discovered later
+
+This decomposes **the bundle's own** $C_\ell$. `reference/` carries $C_\ell$
+only — `camb-tt-v1.2.0.csv` and `class-tt-v1.2.0.csv` are `ell` and
+`cl_tt_muK2`, no per-$k$ transfer — so the comparison that would make it a
+verdict **cannot be made from what the bundle holds.** That was Coordination's
+open question and this is the answer. D25 settles *can a $k\to0$ measurement
+reach the plateau* (no) and does not settle *is the plateau right*. **M16.**
+

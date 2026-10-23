@@ -138,16 +138,25 @@ def peak_position(ell: np.ndarray, d_ell: np.ndarray) -> tuple[float, float]:
     return float(-b / (2.0 * a)), float(0.5 * min(x1 - x0, x2 - x1))
 
 
-def spectrum(env, table, k_com, power, frame: str):
-    """$D_\\ell$ on the released path, at whatever the module controls say."""
-    transfer = np.zeros((ELLS.size, k_com.size))
+def spectra_both_frames(env, table, k_com, power):
+    """$D_\\ell$ in **both** frames, on the released path, in one pass over $k$.
+
+    One pass, not two. `coefficient_sets` returns both frames from a single
+    acoustic solve, so looping per frame solves the oscillator twice for
+    nothing --- and this sweep already pays for four $\\lambda$ settings.
+    """
+    transfer = {f: np.zeros((ELLS.size, k_com.size)) for f in FRAMES}
     for j, k in enumerate(k_com):
         sets = dict(zip(FRAMES, coefficient_sets(float(k), env)))
-        transfer[:, j] = transfer_by_rank(ELLS, float(k), sets[frame],
-                                          env, table)[-1]
-    cl = np.array([cl_covariant_route(int(l), k_com, transfer[i], power)
-                   for i, l in enumerate(ELLS)])
-    return ELLS * (ELLS + 1.0) * cl / (2.0 * np.pi)
+        for f in FRAMES:
+            transfer[f][:, j] = transfer_by_rank(ELLS, float(k), sets[f],
+                                                 env, table)[-1]
+    out = {}
+    for f in FRAMES:
+        cl = np.array([cl_covariant_route(int(l), k_com, transfer[f][i], power)
+                       for i, l in enumerate(ELLS)])
+        out[f] = ELLS * (ELLS + 1.0) * cl / (2.0 * np.pi)
+    return out
 
 
 def kappa_second_share(env, k: float, frame: str) -> float:
@@ -296,15 +305,15 @@ def main() -> int:
             _co.KAPPA_SECOND_LAMBDA = k2
             for lam in lams:
                 _co.PHI_PRIME_DRIVING_LAMBDA = lam
+                d_both = spectra_both_frames(env, table, k_com, power)
                 for frame in FRAMES:
-                    d = spectrum(env, table, k_com, power, frame)
-                    pos, unc = peak_position(ELLS, d)
+                    pos, unc = peak_position(ELLS, d_both[frame])
                     _co.KAPPA_SECOND_LAMBDA = 1.0
                     share = kappa_second_share(env, 60.0, frame)
                     _co.KAPPA_SECOND_LAMBDA = k2
                     print(f"  {k2:7.1f} {lam:7.2f} {frame:<10} "
                           f"{pos:10.2f} {unc:5.1f} {pos/ELL_A:8.4f} "
-                          f"{share:10.3f}")
+                          f"{share:10.3f}", flush=True)
     finally:
         _co.PHI_PRIME_DRIVING_LAMBDA, _co.KAPPA_SECOND_LAMBDA = keep_p, keep_k
 

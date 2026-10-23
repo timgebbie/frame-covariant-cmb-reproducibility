@@ -22,6 +22,17 @@
 % comment where no reader meets them. That is the master file's own pattern
 % (its lines 347-354) and it is better than what this section did.
 %
+% RESHAPED 2026-10-22, second pass, after Coordination ruled that the W-form
+% is a coding standard and not a result and should come out. PARTLY ACCEPTED.
+% The ruling's premise is right -- an exact by-parts preserves the transfer --
+% but 'a correctly by-parted (102)' did not exist in print anywhere, so
+% deleting this would record a defect with no correction, which is not how
+% B-11, B-16 or T-103 were handled.  Resolution: the FINDING now leads.  The
+% exact four-term by-parts is displayed as the correction, the three printed
+% errors are named (c3's own list, not a percentage), and the W-form is
+% DEMOTED to the assembly in which those three cannot be made.  The B- entry
+% text is in claude/stream-P1T-pushback-on-coordination-5-2026-10-22.md.
+%
 % FINDING NUMBERS USED, ALL EXISTING, NONE MINTED HERE: T-103, T-104, T-107,
 % T-113, T-117, S48, B-11, B-16, T-101/D18, T-88, T-96, T-85, T-66, A-5.
 % The bundle stream owns provenance/BUNDLE-DEFECTS-v1.md.
@@ -53,32 +64,65 @@ acts at, which is what separates the questions that a frame instrument can see
 from the questions it cannot.
 
 % ===========================================================================
-\subsection{The $W$-form}
+\subsection{The by-parts, and the assembly that does not need it}
 \label{sec:w-form}
 
-\paragraph{The derivation, in three lines.} The covariant transport equation
-at rank $\ell$ is
+\paragraph{Done exactly, the by-parts carries three terms beyond the familiar
+bracket.} (102)'s bulk integrand comes from integrating
+$\int W\big(C_0K+C_1K'+C_2K''\big)\,\mathrm d\eta$ by parts \emph{onto the
+coefficients}, with kernel $K(\eta)=j_\ell(k\Delta\eta)$ and
+$\Delta\eta\equiv\eta_0-\eta$. The weight $W=e^{-\kappa}$ sits \emph{inside}
+the integral, so it is differentiated too, and
+$W'=\mathcal V$, $\mathcal V'=(\kappa''+\kappa'^2)W$:
+\begin{equation}
+  WC_0-(WC_1)'+(WC_2)''
+  \;=\;\underbrace{W\big(C_0-C_1'+C_2''\big)}_{\text{(102)'s bracket}}
+  \;-\;\mathcal VC_1\;+\;2\mathcal VC_2'\;+\;\mathcal V'C_2 .
+  \label{eq:byparts}
+\end{equation}
+
+\paragraph{\emph{Annals~II}'s printed form does not reproduce its own integral,
+and the gap is three specific errors.} Not a tolerance --- three substitutions,
+in order of size:
+
+\begin{center}\small
+\begin{tabular}{@{}clll@{}}
+\toprule
+ & exact & \texttt{int\_soln\_damping} as printed & \\
+\midrule
+1 & $+2\mathcal VC_2'$ & $-2\mathcal VC_2$ & wrong sign, and $C_2$ where $C_2'$ belongs \\
+2 & $-\mathcal VC_1$ & $+\mathcal VC_1$ & sign reversed \\
+3 & $+\mathcal V(\eta_*)C_2(\eta_*)$ & absent & the lower-limit boundary \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+\texttt{tests/frame/c3\_byparts.py} evaluates both against the integral
+\eqref{eq:byparts} comes from, over fifteen $(\ell,k)$ pairs:
+\textbf{C3a}, \eqref{eq:byparts} reproduces it to $<10^{-8}$; \textbf{C3b},
+the printed form does not, worst relative error $>10^{-2}$.
+
+\textbf{This is a defect in the antecedent} and carries a \textbf{B-} number in
+\texttt{provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md} beside B-10 and
+B-11. It is stated here as well because \eqref{eq:byparts} \emph{is} the
+correction, and this supplement prints the correction beside every other defect
+it records --- B-11's sign on $C_0$, T-104's normalisation, T-103's weighting.
+A defect recorded without its correction is not a record.
+
+\paragraph{The assembly in which those three terms never arise.} They arise
+only because the by-parts was taken \emph{onto the coefficients}. Multiplying
+the transport equation at rank $\ell$,
 \begin{equation}
   \tau_\ell' \;+\; (\text{streaming couplings}) \;+\; \kappa'\tau_\ell
   \;=\; a\mathcal B_\ell \;+\; \kappa'\mathcal S_\ell ,
   \label{eq:transport}
 \end{equation}
-with $a\mathcal B_\ell$ the gravitational source of
-\S\emph{The generic source derivatives}' rank decomposition and
-$\mathcal S_\ell$ the in-scattered Thomson source. Both
-$\kappa'$ on display are the same $\kappa'$: the out-scattering on the left and
-the in-scattering on the right are two halves of one collision term.
-
-Multiply through by $W=e^{-\kappa}$. With $\kappa$ accumulated backwards from
-$\eta_0$, so that $\mathrm d\kappa/\mathrm d\eta=-\kappa'$ and
-$W'=+\kappa'W=\mathcal V$ --- the sign this bundle's convention forces, stated
-at \S\ref{sec:frame-discrepancy} --- the first and third terms of
-\eqref{eq:transport} combine exactly:
-\begin{equation}
-  W\tau_\ell' + W\kappa'\tau_\ell \;=\; W\tau_\ell' + W'\tau_\ell
-  \;=\; \frac{\mathrm d}{\mathrm d\eta}\big[W\tau_\ell\big] .
-\end{equation}
-Hence
+through by $W$ --- with $\kappa$ accumulated backwards from $\eta_0$, so
+$\mathrm d\kappa/\mathrm d\eta=-\kappa'$ and $W'=+\kappa'W=\mathcal V$, the
+sign this bundle's convention forces, stated at
+\S\ref{sec:frame-discrepancy} --- combines the first and third terms exactly
+into $\mathrm d[W\tau_\ell]/\mathrm d\eta$, and gives
 \begin{equation}
   \boxed{\;
   \frac{\mathrm d}{\mathrm d\eta}\big[W\tau_\ell\big]
@@ -86,47 +130,44 @@ Hence
   \;=\; W\,a\mathcal B_\ell \;+\; \mathcal V\,\mathcal S_\ell \;}
   \label{eq:w-form}
 \end{equation}
-and integrating from $\eta_*$ to $\eta_0$ gives the solution with
-$\big[W\tau_\ell\big]_{\eta_*}^{\eta_0}
-=\tau_\ell(\eta_0)-W(\eta_*)\tau_\ell(\eta_*)$ as its only boundary term,
-since $W(\eta_0)=1$.
+with $\big[W\tau_\ell\big]_{\eta_*}^{\eta_0}=\tau_\ell(\eta_0)-W(\eta_*)
+\tau_\ell(\eta_*)$ as its only boundary term, since $W(\eta_0)=1$. Here
+$a\mathcal B_\ell$ is the gravitational source of \S\emph{The generic source
+derivatives}' rank decomposition and $\mathcal S_\ell$ the in-scattered Thomson
+source; both $\kappa'$ in \eqref{eq:transport} are the same $\kappa'$, the
+out-scattering and the in-scattering being two halves of one collision term.
 
-\paragraph{What \eqref{eq:w-form} says, and it is three things.}
+\paragraph{What \eqref{eq:w-form} is, at its true size.} \textbf{It is not
+different physics.} An exact by-parts preserves the transfer, so
+\eqref{eq:w-form} and a (102) corrected by \eqref{eq:byparts} give the same
+observable. \emph{An earlier draft of this section called (102)'s bulk slots
+and boundary pair ``artefacts of a step the $W$-form does not take''; that
+overstates and is withdrawn.} What \eqref{eq:w-form} is:
 
 \begin{enumerate}\itemsep3pt
-\item \textbf{The gravitational source travels under $W$ and the in-scattered
-      source under $\mathcal V$.} Neither weight is assigned; both fall out of
-      one multiplication. $\mathcal V$ appears because $\kappa'$ was already
-      beside $\mathcal S_\ell$ in the collision term, and $W\kappa'=\mathcal V$
-      is an identity.
-\item \textbf{$\kappa'$ is consumed once}, by the integrating factor, and
-      appears in no coefficient. So no differentiation of a coefficient can
-      produce a $\kappa'^2$ --- which is the error class
-      \S\ref{sec:kappa-ledger} flags, not a theorem about where $\kappa'$ may
-      live.
-\item \textbf{The boundary term is one object, and it is exponentially
-      suppressed at $\eta_*$.} $\big[W\tau_\ell\big]$, not
-      $\big[C_2'-C_1\big]$ plus $kC_2$, and it carries $W$ rather than a
-      diffusion factor. \textbf{D18} measures what the released boundary
-      carries instead: with \texttt{boundary\_weight\_w} \texttt{False},
-      $C_1(\eta_*)$ enters under the diffusion factor alone --- no $W$, no
-      $\mathcal V$ --- so its bare $\kappa'(\eta_*)$, $3.82\times10^2$ on
-      Einstein--de~Sitter and $2.64\times10^2$ on \texttt{PLANCK\_MODEL},
-      stands under no exponential suppression at all. \eqref{eq:w-form} has no
-      counterpart: $\mathcal V\mathcal S_1$ is $\kappa'$-free.
+\item \textbf{The assembly in which the three errors of \eqref{eq:byparts}
+      cannot be made}, because there are no coefficients to take a by-parts
+      onto. Both weights fall out of one multiplication rather than being
+      assigned: $\mathcal V$ appears beside $\mathcal S_\ell$ because $\kappa'$
+      was already there in the collision term and $W\kappa'=\mathcal V$ is an
+      identity.
+\item \textbf{The assembly in which no coefficient holds $\kappa'$}, so no
+      differentiation of one can produce a $\kappa'^2$ --- the error class
+      \S\ref{sec:kappa-ledger} flags, and which \textbf{T-117} measures at the
+      super-horizon limit as the whole of the Newtonian bulk,
+      $\int\mathcal V(\kappa'\hat v_B)'j_\ell$ at $9.46\times10^3$ against a
+      Sachs--Wolfe target of unity. \eqref{eq:w-form} has no counterpart term:
+      $\mathcal V\mathcal S_1$ is $\kappa'$-free.
+\item \textbf{The assembly whose boundary term is one object, exponentially
+      suppressed at $\eta_*$} --- $\big[W\tau_\ell\big]$, not
+      $\big[C_2'-C_1\big]$ plus $kC_2$, carrying $W$ rather than a diffusion
+      factor. \textbf{D18} measures what the released boundary carries instead:
+      with \texttt{boundary\_weight\_w} \texttt{False}, $C_1(\eta_*)$ enters
+      under the diffusion factor alone --- no $W$, no $\mathcal V$ --- so its
+      bare $\kappa'(\eta_*)$, $3.82\times10^2$ on Einstein--de~Sitter and
+      $2.64\times10^2$ on \texttt{PLANCK\_MODEL}, stands under no exponential
+      suppression at all.
 \end{enumerate}
-
-\paragraph{What \eqref{eq:w-form} does \emph{not} say, corrected here.}
-An earlier draft of this section called (102)'s three bulk slots and boundary
-pair \emph{artefacts of a step \eqref{eq:w-form} does not take}. \textbf{That
-overstates and is withdrawn.} An \emph{exact} integration by parts preserves
-the transfer function, so the slots are not artefacts: they are the correct
-consequence of a legitimate step. The defensible claim is narrower and is the
-one that matters --- \textbf{(102) as printed is not the exact by-parts of its
-own integral}, which \texttt{c3\_byparts.py} measures at $10$ to $250\%$ in
-the printed bulk. \eqref{eq:w-form} is therefore not a different physics; it is
-a construction in which that arithmetic cannot go wrong, because there are no
-coefficients to take the by-parts onto.
 
 \paragraph{This supersedes \S\ref{sec:b-slot}'s item~2, and the wording that
 item carries is what \textbf{T-88} implemented.} That item reads \emph{``they

@@ -414,19 +414,45 @@ real; settling it needs \S2.5's $O(\epsilon\epsilon_H)$ bookkeeping read against
 each term of (105), not a judgement about which is negligible. \textbf{Logged as
 open, not filed as a finding against the paper.}
 
-\paragraph{Rank 0: not needed. \textnormal{\textbf{Withdrawn
-2026-10-21.}}} This paragraph read: \emph{``$\dot{\mathcal B}_0$ is not
-required by (102) at all --- $C_0$ carries $\mathcal B_2$, not
-$\mathcal B_0$.''} \textbf{It is wrong, and the reason is
-\S\ref{sec:ell-zero-row}:} $C_0$ carries \emph{both}, because (89)'s
-$a\mathcal B_0\delta_{\ell0}$ row was dropped. Finding \textbf{T-105}. The
-earlier plan this paragraph overruled was right.
+\paragraph{Rank 0: not needed. \textnormal{\textbf{Un-withdrawn 2026-10-22:
+the claim stands, the reason does not.}}} This paragraph read:
+\emph{``$\dot{\mathcal B}_0$ is not required by (102) at all --- $C_0$ carries
+$\mathcal B_2$, not $\mathcal B_0$.''} It was withdrawn on 2026-10-21 on the
+authority of \textbf{T-105}, which held that (89)'s
+$a\mathcal B_0\delta_{\ell0}$ row had been dropped in error. \textbf{T-105 has
+since fallen, three times over}, and the claim above is restored with a
+different reason.
+
+$\tau_0\equiv0$ is a \emph{constraint}, not initial data: $T$ is \emph{defined}
+as the monopole of $T(x,e)$, so differentiating $\int A_0\,\mathrm{d}\eta'=0$ puts
+\textbf{zero} on the right of (89)'s $\ell=0$ row --- $\mathcal B_0$ is a
+functional of the solution and not an external forcing. Solving that row with
+$\alpha_0$ in place of $\alpha_2$ and $h_0''(0)=-\tfrac13$ gives
+$C_0=-\tfrac13a\mathcal B_2$ with \emph{no} $\mathcal B_0$ in it, and the
+factor against (90)'s printed $-\tfrac52a\mathcal B_2$ comes out as
+$\alpha_2/\alpha_0=\tfrac{15}{2}$ exactly --- finding \textbf{T-104}, which is
+\emph{cleaner} standing alone. Independently, $a\mathcal B_0=-(k/3)\tau_1$ is
+an identity and $-C_1'$ carries $+(k/3)\tau_1$ already, so restoring
+$a\mathcal B_0$ to $C_0$ counts the monopole source twice. The measurement
+agrees: criterion 5b doubles, to 98.5\%, under the restoration --- finding
+\textbf{T-107}.
+
+\textbf{So $\mathcal B_0$'s \emph{content} is required and its \emph{row} is
+correctly empty}, and both statements hold at once. The released code has
+carried this since 2026-10-21: \texttt{MONOPOLE\_ROW = "corrected"} is
+$C_0=-\tfrac13a\mathcal B_2$, and the restoration is kept only as the
+regenerable control that refuted it.
 
 \paragraph{Status.} \textbf{The derivation is complete for what the integral
-solution needs.} What remains open is $(\star)$ and the dropped
-$a\mathcal B_0\delta_{\ell0}$ row of (89) --- \textbf{both questions about the
-antecedent rather than gaps in this assembly}, and both recorded rather than
-resolved by assumption.
+solution needs.} What remains open is $(\star)$. The
+$a\mathcal B_0\delta_{\ell0}$ row of (89) is \textbf{not} open and is
+\textbf{not} dropped in error --- it is correctly absent, for the reason above.
+$\Delta C_0=+kv/3$ is non-zero and its partner is cross-coefficient, in
+$-C_1'$ rather than in $C_2$, which is why the rank-0 partner check
+\texttt{c8} scores the bracket and the single-coefficient residual $\gamma$
+cannot: \textbf{M15}. A $\gamma$ driven to zero by adding a term is a fit, not
+a gate; the $\ell=1$ and $\ell=2$ rows are controls because they come out at
+unity without adjustment.
 
 \section{Frames and specialisation}
 

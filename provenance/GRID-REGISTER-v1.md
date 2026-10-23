@@ -18,7 +18,7 @@ being possible.
 | status | count | means |
 |---|---|---|
 | **open** | 1 | a chosen literal whose convergence is **not** established. This status is the point of the register. |
-| **derived** | 11 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
+| **derived** | 12 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
 | **measured** | 7 | a chosen literal whose convergence has been measured, with the number stated. |
 | **described** | 11 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
 | **index** | 18 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
@@ -37,7 +37,7 @@ share this history, so a grid shift moves them together and cancels. Finding
 **T-46**, question **Q7**, decision **S33** --- derived immediately after the
 v1.2.0 tag. v1.2.0 ships it as a stated limit.
 
-## derived — 11
+## derived — 12
 
 ### `x` — the x grid j_ell(x) is tabulated on
 
@@ -138,13 +138,25 @@ plausible grid change reaches. Finding **T-79**.
 
 ### `k_com` — the k grid the Phi' sweep integrates C_ell on
 
-`scripts/diagnostic_d24_phi_prime_sweep.py:278`, `np.linspace`
+`scripts/diagnostic_d24_phi_prime_sweep.py:287`, `np.linspace`
 
 `required_k_points(K_MAX, r_theta)` at 3 samples per j_ell^2
 oscillation --- finding **T-56**, the same derivation F9 and D4 use. `K_MAX` is
 600 rather than F9's 1500, which is the ell <= 420 this instrument needs and no
 more. An aliased k integral moves the interpolated peak, and a sweep whose
 *observable is a peak position* cannot afford a grid chosen by eye.
+
+### `k_com` — the k grid the low-ell k-decomposition is computed on
+
+`scripts/diagnostic_d25_k_decomposition.py:103`, `np.linspace`
+
+`required_k_points(K_MAX, r_theta)` at 3 samples per j_ell^2
+oscillation --- **T-56**. `K_MAX` is 200: this instrument asks only about the
+plateau, ell <= 30, and a grid sized for the damping tail would spend its
+resolution where nothing is being measured. The derivation matters more here
+than in most rows, because the quantity reported IS a property of the k
+integral --- an aliased grid would move the median and the shares directly,
+and those two numbers are the whole verdict.
 
 ### `k_com` — the k grid D4 integrates C_ell by rank on
 

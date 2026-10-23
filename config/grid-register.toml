@@ -480,3 +480,15 @@ oscillation --- finding **T-56**, the same derivation F9 and D4 use. `K_MAX` is
 600 rather than F9's 1500, which is the ell <= 420 this instrument needs and no
 more. An aliased k integral moves the interpolated peak, and a sweep whose
 *observable is a peak position* cannot afford a grid chosen by eye."""
+
+[[grid]]
+key = "scripts/diagnostic_d25_k_decomposition.py::k_com"
+what = "the k grid the low-ell k-decomposition is computed on"
+status = "derived"
+note = """`required_k_points(K_MAX, r_theta)` at 3 samples per j_ell^2
+oscillation --- **T-56**. `K_MAX` is 200: this instrument asks only about the
+plateau, ell <= 30, and a grid sized for the damping tail would spend its
+resolution where nothing is being measured. The derivation matters more here
+than in most rows, because the quantity reported IS a property of the k
+integral --- an aliased grid would move the median and the shares directly,
+and those two numbers are the whole verdict."""
