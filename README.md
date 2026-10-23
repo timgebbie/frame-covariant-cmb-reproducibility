@@ -125,6 +125,57 @@ covariant radiation hierarchy** — not from a gauge-fixed perturbation theory
 with a covariant gloss. The chain below is the whole of it, and every step
 names the module that implements it.
 
+### Notation
+
+Every symbol used in the chain below is defined here, once, so no equation on
+this page needs another file to be read. Equation numbers in tags are
+*Annals II*'s published ones; the full conventions sheet is
+`provenance/conventions.md`.
+
+**$k$ is comoving throughout this README.** Appendix F's recursions and the
+integral solution (102) are written in the comoving wavenumber, so
+$k_{\rm phys}=k/a$. `functions/harmonics/free_streaming.py` carries the warning
+that a bare $k$ is ambiguous between the two and that they differ by a factor
+$a$ in precisely these equations.
+
+**Two derivatives appear, and step 1 uses both.** An overdot is the derivative
+along the fundamental congruence, $u^a\nabla_a$; a prime is
+$\mathrm d/\mathrm d\eta$, with $\eta$ conformal time.
+
+| symbol | meaning |
+|---|---|
+| $u^a$, $e^a$ | the fundamental 4-velocity; a unit direction on the sky, so $T(x,e)$ is the temperature seen looking along $e^a$ |
+| $\eta$, $\eta_0$, $\eta_\ast$ | conformal time; today; last scattering. $\Delta\eta\equiv\eta_0-\eta$ and $\Delta\eta_\ast\equiv\eta_0-\eta_\ast$ |
+| $a$, $\mathcal H$ | scale factor; conformal Hubble rate $a'/a$ |
+| $k$, $r_s$ | comoving wavenumber; comoving sound horizon at last scattering |
+| $\mathrm D_a$ | spatial derivative, projected orthogonal to $u^a$ |
+| $\langle\,\cdots\,\rangle$ | the projected, symmetric, trace-free (PSTF) part of the enclosed indices |
+| $A_\ell$ | the **multi-index** $a_1\ldots a_\ell$ |
+| $A_a$ | the **acceleration** $\dot u_a$ — a different object from $A_\ell$, sharing a letter |
+| $\tau_{A_\ell}$, $\tau_\ell$ | PSTF temperature multipoles; the mode coefficient of the same |
+| $T$, $\delta T$ | the temperature, *defined* as the monopole of $T(x,e)$; its perturbation |
+| $T_\ell(k)$ | the **transfer function** — carries a multipole index, and is not the temperature |
+| $O^{A_\ell}$, $\beta_\ell=\ell!/(2\ell-1)!!$ | the PSTF direction tensor; its normalisation $O^{A_\ell}O_{A_\ell}$. $\beta_0=\beta_1=1$, $\beta_2=\tfrac23$ |
+| $\alpha_\ell=(2\ell+1)/\beta_\ell$ | the normalisation in which (F.4) takes the Ma & Bertschinger form. $\alpha_0=1$, $\alpha_1=3$, $\alpha_2=\tfrac{15}2$ |
+| $\mathcal B_{A_\ell}$, $\mathcal S_{A_\ell}$ | the gravitational source; the in-scattered Thomson source |
+| $\sigma_{ab}$, $\sigma_T$ | the shear; the Thomson cross-section — again one letter, two objects |
+| $\kappa'=an_e\sigma_T$ | differential optical depth, with $n_e$ the free-electron density |
+| $W=e^{-\kappa}$, $\mathcal V=W\kappa'$ | the optical-depth weight; the visibility function |
+| $\mathcal D$, $k_D$ | the diffusion (Silk) damping factor $e^{-(k/k_D)^2}$ and its scale. $\mathcal D$ is **not** $\mathrm D_a$ |
+| $\Phi_A$, $\Phi_H$ | the two gauge-invariant potentials, acceleration and curvature |
+| $\rho_b$, $\rho_\gamma$, $R=3\rho_b/4\rho_\gamma$ | baryon and photon energy densities; the baryon loading |
+| $\hat v_B$, $q_a$ | the baryon velocity; the energy flux, which the CDM frame sets to zero |
+| $v^a$, $v_{A_\ell}$ | the frame tilt $\tilde u^a-u^a$; its rank-$\ell$ PSTF part, identically zero for $\ell\ge2$ |
+| $c_\pm$ | the $\tau_{\ell\pm1}$ coefficients of the $O(\ell)$ aberration coupling. Subscripts $\mathrm N$ and $\mathrm{CDM}$ label the two frames throughout |
+| $f_\ell$ | the multipole profile the $O(\ell)$ stencil differentiates, as $\ell\,\partial_\ell f_\ell$ |
+| $C_0,C_1,C_2$; $p_0,p_1,p_2$ | the matching coefficients of (89); their exact rational prefactors |
+| $j_\ell$, $P(k)$, $C_\ell$ | spherical Bessel function; primordial power; the angular power spectrum |
+
+**Rendering note.** Inside `$$` blocks this file writes $\eta_\ast$, never
+`\eta_*`: GitHub runs markdown's emphasis parser before the math renderer, and
+a literal `*` opens emphasis intraword. Finding **T-120**. The `.tex` sources
+are unaffected and keep `\eta_*`.
+
 **1 — The hierarchy.** The photon distribution is expanded in
 projected, symmetric, trace-free (PSTF) temperature multipoles
 $\tau_{A_\ell}=\tau_{a_1\ldots a_\ell}$ about a chosen 4-velocity $u^a$. The
