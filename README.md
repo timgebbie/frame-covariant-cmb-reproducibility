@@ -165,16 +165,19 @@ $\mathrm d/\mathrm d\eta$, with $\eta$ conformal time.
 | $\Phi_A$, $\Phi_H$ | the two gauge-invariant potentials, acceleration and curvature |
 | $\rho_b$, $\rho_\gamma$, $R=3\rho_b/4\rho_\gamma$ | baryon and photon energy densities; the baryon loading |
 | $\hat v_B$, $q_a$ | the baryon velocity; the energy flux, which the CDM frame sets to zero |
-| $v^a$, $v_{A_\ell}$ | the frame tilt $\tilde u^a-u^a$; its rank-$\ell$ PSTF part, identically zero for $\ell\ge2$ |
-| $c_\pm$ | the $\tau_{\ell\pm1}$ coefficients of the $O(\ell)$ aberration coupling. Subscripts $\mathrm N$ and $\mathrm{CDM}$ label the two frames throughout |
+| $v^a$, $v_{A_\ell}$ | the frame tilt $\tilde u^a-u^a$; its PSTF part of rank $\ell$, identically zero for $\ell\ge2$ |
+| $c_\pm$ | coefficients of $\tau_{\ell\pm1}$ in the $O(\ell)$ aberration coupling. Subscripts $\mathrm N$ and $\mathrm{CDM}$ label the two frames throughout |
 | $f_\ell$ | the multipole profile the $O(\ell)$ stencil differentiates, as $\ell\,\partial_\ell f_\ell$ |
 | $C_0,C_1,C_2$; $p_0,p_1,p_2$ | the matching coefficients of (89); their exact rational prefactors |
 | $j_\ell$, $P(k)$, $C_\ell$ | spherical Bessel function; primordial power; the angular power spectrum |
 
-**Rendering note.** Inside `$$` blocks this file writes $\eta_\ast$, never
-`\eta_*`: GitHub runs markdown's emphasis parser before the math renderer, and
-a literal `*` opens emphasis intraword. Finding **T-120**. The `.tex` sources
-are unaffected and keep `\eta_*`.
+**Rendering note.** In display equations this file writes `\eta_\ast`, never
+the asterisk form: GitHub runs markdown's emphasis parser before the maths
+renderer, and a literal asterisk opens emphasis intraword. Finding **T-120**.
+For the same reason **no prose on this page may contain a doubled dollar
+sign**, even inside backticks — the renderer counts it as a delimiter, pairs
+it with the next real one, and every display after it inverts with the prose
+around it. The `.tex` sources are unaffected and keep the asterisk form.
 
 **1 — The hierarchy.** The photon distribution is expanded in
 projected, symmetric, trace-free (PSTF) temperature multipoles

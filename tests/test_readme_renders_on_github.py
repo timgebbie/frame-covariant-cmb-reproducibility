@@ -49,6 +49,35 @@ def _display_blocks(text: str) -> list[tuple[int, str]]:
 
 
 @pytest.mark.parametrize("name", MARKDOWN)
+def test_the_display_delimiters_pair(name: str) -> None:
+    r"""An odd number of ``$$`` inverts prose and mathematics for the rest of the page.
+
+    **Finding T-120b, 2026-10-23, and it is the worse half of T-120.** A
+    rendering note was added to stop the next hand undoing the asterisk fix.
+    It said *"inside ``$$`` blocks this file writes ..."* — and that backticked
+    ``$$`` is a 23rd delimiter. **GitHub's maths renderer counts it**; backticks
+    do not hide it. It paired with the next block's opener, so the note and the
+    prose after it rendered as mathematics, every real display rendered as
+    prose, and the page was unreadable from that line to the end.
+
+    The note warning about rendering is what broke the rendering, which is the
+    sharpest possible argument for this test: **the author of a rendering rule
+    is not thereby able to see a rendering failure.** Only counting can.
+
+    This runs before the content checks below because a file that fails it has
+    no well-defined display blocks at all, so every other result in this module
+    would be measured against the wrong spans.
+    """
+    text = (ROOT / name).read_text(encoding="utf-8")
+    n = text.count("$$")
+    assert n % 2 == 0, (
+        f"{name}: {n} occurrences of '$$' — an odd count. One of them is "
+        f"stray, and from it onwards GitHub renders prose as mathematics and "
+        f"mathematics as prose. Backticks do NOT exempt it; write 'display "
+        f"block' in words instead.")
+
+
+@pytest.mark.parametrize("name", MARKDOWN)
 def test_no_bare_asterisk_in_a_display_block(name: str) -> None:
     """``\\eta_*`` in a ``$$`` block is eaten by markdown. Use ``\\eta_\\ast``."""
     text = (ROOT / name).read_text(encoding="utf-8")

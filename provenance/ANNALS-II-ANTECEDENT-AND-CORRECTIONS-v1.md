@@ -1661,3 +1661,50 @@ criterion 5b cannot see it either way; the CDM column's $\Delta C_0$ moves
 from $5/2\,kv$ to $kv/3$. **No separate `T-` number is filed beside it**:
 `_solved_match()` implements (89) faithfully, so correcting (89) corrects the
 code by the same edit. One number, under `B-`.
+
+---
+
+## B-17 — **(102) is not the exact by-parts of its own integral**
+
+*Text written by P1-T, 2026-10-22; numbered and placed by P1-B, 2026-10-23,
+with one correction from Coordination.*
+
+Integrating $\int W\big(C_0K+C_1K'+C_2K''\big)\,\mathrm d\eta$ by parts onto
+the coefficients gives a bulk source
+
+$$WC_0-(WC_1)'+(WC_2)''
+=W\big(C_0-C_1'+C_2''\big)-\mathcal VC_1+2\mathcal VC_2'+\dot{\mathcal V}C_2$$
+
+because the weight $W$ sits **inside** the integral and is differentiated.
+*Annals II*'s printed `int_soln_damping` carries three errors against it:
+
+| | correct | printed |
+|---|---|---|
+| **(i)** | $+2\mathcal VC_2'$ | $-2\mathcal VC_2$ — wrong sign **and** $C_2$ where $C_2'$ belongs |
+| **(ii)** | $-\mathcal VC_1$ | $+\mathcal VC_1$ — sign reversed |
+| **(iii)** | $+\mathcal V(\eta_\ast)C_2(\eta_\ast)$ | absent — a missing lower-limit boundary |
+
+Instrument `tests/frame/c3_byparts.py`: the four-term source reproduces the
+integral to $<10^{-8}$ (C3a); the printed form fails at $>10^{-2}$ (C3b).
+
+**Consequence measured in the observable by T-121 and T-122** — $\kappa''\tilde
+v_B$ at 99.8% (Newtonian) and 109.8% (CDM) of $|C_1'|$, and a median $k$
+displaced 1.5–4.2$\times$ above $\ell/r_\theta$.
+
+> **The citation was corrected on placement.** P1-T's draft closed *"Consequence
+> measured at the super-horizon limit by T-117."* It was written minutes before
+> D25 landed, and **T-122 bounds that limit's contribution at 0.64% of any
+> $C_\ell$ and 0.00% at $\ell\ge5$** — so T-117 cannot carry a consequence in
+> the observable. This is the same correction P1-B made to its own headline the
+> same day, and Coordination caught both. The three substitutions are
+> unaffected: they are a correction a reader can apply, which is what a B-
+> entry is for and what *"10–250%"* on its own is not.
+
+**Why this is recorded with its correction and not as a magnitude.** B-11 is a
+sign error in (90)'s $C_0$ and the supplement prints the corrected $C_0$; B-16
+is the $\alpha_2/\alpha_0$ normalisation and the supplement prints the
+corrected row. Recording this one as a percentage alone would leave a reader
+knowing (102) is wrong by 10–250% and not knowing what the right expression is
+— an asymmetry against every other entry here. **P1-T's objection, and it is
+upheld on the precedent rather than on the authorship.**
+

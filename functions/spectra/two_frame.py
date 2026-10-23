@@ -453,6 +453,24 @@ _RANK_KEEPS = {0: ("c0",), 1: ("c1",), 2: ("c2",)}
 #: **S43**: a default that encodes an approximation is named at every call site.
 B_SLOT_REPAIR: bool = False
 
+#: **The bulk-source lattice, reachable from the spectrum --- W1, 2026-10-23.**
+#:
+#: `integral_solution` carries seven boolean controls. `transfer_by_rank` could
+#: reach **one** combination of them --- `B_SLOT_REPAIR`'s --- so every other
+#: point of that lattice had been scored on fixtures and on coefficients and
+#: **never on $C_\ell$**, which is the only place **M16** permits a verdict.
+#: That is also why the lattice was previously scored against the frame gap:
+#: it was the only spectrum-level number available, and it is **M14**-blind to
+#: any defect the two frames share.
+#:
+#: Released as an **empty dict**, merged last into the call, so the released
+#: path is unchanged and `make_manifests --check` sees no movement. A
+#: diagnostic sets it, measures, and restores it in a `finally`.
+#:
+#: The keys are `integral_solution`'s own parameter names; anything else is a
+#: `TypeError` there rather than a silent no-op, which is the right failure.
+BULK_SOURCE_CONTROLS: dict[str, bool] = {}
+
 
 def transfer_by_rank(
     ells: np.ndarray,
@@ -496,7 +514,7 @@ def transfer_by_rank(
                   eta_floor=float(env.eta[0]),
                   visibility=env.visibility,
                   eta_0=float(env.background.eta_0))
-    if B_SLOT_REPAIR:
+    if B_SLOT_REPAIR or BULK_SOURCE_CONTROLS:
         # C_1's Thomson half and its derivative, from the stored primitives:
         # -C_1 = (dT + Phi_A) + kappa' vhat_B with vhat_B = v_B / k, and
         # `v_b` is the UN-reduced v_B (T-66). The derivative comes from (107),
@@ -511,8 +529,18 @@ def transfer_by_rank(
             c1_thomson_prime=np.asarray(coefficients.c1_prime, dtype=float)
             + a_b1_prime / float(k_com),
             c1_thomson_kappa=kp,
-            slot_weight_split=True, jprime_bulk_slot=True,
-            thomson_carries_shear=True, boundary_weight_w=False)
+            **(dict(slot_weight_split=True, jprime_bulk_slot=True,
+                    thomson_carries_shear=True, boundary_weight_w=False)
+               if B_SLOT_REPAIR else {}))
+    # **The lattice hook --- W1, 2026-10-23.** `integral_solution` carries
+    # seven boolean controls and `transfer_by_rank` could reach exactly one
+    # combination of them, the one `B_SLOT_REPAIR` names. So the lattice
+    # D14 walks on fixtures could not be walked on the *spectrum*, which is
+    # the only place **M16** lets a verdict be read. This passes a caller's
+    # selection through, and it is **empty in the released path**, so nothing
+    # moves until a diagnostic sets it. The primitives above are supplied
+    # whenever it is non-empty, because the controls raise without them.
+    common.update(BULK_SOURCE_CONTROLS)
     zero = np.zeros_like(env.eta)
 
     out: dict[int, np.ndarray] = {}
