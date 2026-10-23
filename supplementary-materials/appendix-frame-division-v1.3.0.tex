@@ -117,6 +117,33 @@ With $\Delta X\equiv X^{(u)}-X^{(n)}$: $\Delta(a\mathcal B_1)
 \end{equation}
 all three in one $v$ and one $k$.
 
+\textbf{The first entry is superseded, and so is the title of the subsection
+that follows. \textnormal{Corrected 2026-10-23, findings T-104 and T-107.}}
+$\Delta C_0=+\tfrac52kv$ is the shift of (90)'s \emph{printed} $C_0$. (89)'s
+$\delta_{\ell0}$ row carries $\alpha_2$ where $\alpha_0$ belongs --- a factor
+$\tfrac{15}2$, finding \textbf{T-104} --- and solved at its own normalisation
+the row gives $C_0=-\tfrac13a\mathcal B_2$, whence
+\begin{equation}
+  \Delta C_0=+\tfrac{kv}{3}\qquad\text{(corrected)},
+  \label{eq:dc0-corrected}
+\end{equation}
+smaller by $\tfrac{15}2$. \textbf{Every scaling below survives with its
+prefactor divided by $\tfrac{15}2$}: \eqref{eq:no-partner} becomes
+$\tfrac16(k/\mathcal H)^2$ in place of $\tfrac54(k/\mathcal H)^2$, and the
+conclusion that the ratio grows as $(k/\mathcal H)^2$ is unchanged, because
+$\Delta C_0$ and $\tfrac1k2v''$ are compared as powers of $k/\mathcal H$ and a
+constant does not move that.
+
+\textbf{What does not survive is ``$\Delta C_0$ has no partner''.}
+$a\mathcal B_0=-\tfrac k3\tau_1$ by identity, and $-C_1'$ carries
+$+\tfrac k3\tau_1$, so the partner exists and is \emph{cross-coefficient} ---
+finding \textbf{T-107}. $\gamma$, which pairs $\Delta C_0$ against
+$k^2\Delta C_2$, therefore asks the wrong pairing and cannot see it:
+\textbf{M15}, \emph{a gate built from one coefficient cannot see a
+cancellation distributed across the bracket}.
+\texttt{tests/frame/c8\_rank0\_partner.py} scores the whole rank-0 content of
+the bracket and is the gate for this question.
+
 \subsection{The shift of (102), and why $\Delta C_0$ has no partner}
 
 (102) reads
@@ -164,6 +191,13 @@ at all:
 \end{equation}
 Measured at $\eta_*$ on `CDM (Einstein--de Sitter)', `LCDM' and
 `PLANCK\_MODEL', at $k=1,5,20,60,140,300$: $\mathbf{2.5000}$ at every entry.
+\textbf{That value is the ratio under (89)'s \emph{printed} $\delta_{\ell0}$
+row; under the corrected row \eqref{eq:dc0-corrected} it is $\tfrac13$.}
+\emph{Both are right about different objects, and the argument of this
+subsection rests on neither}: what it needs is that $C_0$ and $C_2$ divide one
+$a\mathcal B_2$, which holds under either row, so the ratio is a
+background-independent $k$-independent rational either way. \textbf{What the
+measurement established is internal consistency, which is not correctness.}
 A mismatch between two different objects does not return a
 background-independent, $k$-independent rational; it drifts. \textbf{So the
 dominance is $(90)$'s own structure}, and a spurious scale factor in

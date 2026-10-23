@@ -14,7 +14,7 @@
 %     W(kappa' S) = V S is exact, so a coefficient MAY hold kappa'.
 %   - the by-parts slots as ARTEFACTS -> an exact by-parts preserves the
 %     transfer. The slots are a legitimate step performed inexactly; c3
-%     measures that at 10-250%.
+%     measures that at 2.55227, the generated value.
 % Plus two missing qualifiers: GDE99 (37) is first order, and kappa'' =
 % -kappa'^2 holds at the visibility maximum, not generally.
 %
@@ -128,8 +128,10 @@ outvoted --- finding \textbf{T-121}.
 integral it comes from to $<10^{-8}$ over fifteen $(\ell,k)$ pairs, so the
 identity is not in question. \textbf{C3b} evaluates a \emph{variant} --- it
 weights the bracket at $W$ and retains $\mathcal V(C_1-2C_2)$ --- so its
-$>10^{-2}$ bounds rows 2 and 3 and \textbf{is blind to row 1}, which is the
-one row whose weight it holds fixed. Its docstring's \emph{``evaluated as
+generated value --- \textbf{2.55227} --- bounds rows 2 and 3 and \textbf{is
+blind to row 1}, which is the one row whose weight it holds fixed. That number
+is the authoritative one: a bound of $>10^{-2}$ and a prose range of
+\emph{10--250\%} have both been quoted for it elsewhere and neither should be. Its docstring's \emph{``evaluated as
 printed''} should be read as \emph{``evaluated against a variant that differs
 from the printed form in the partner terms''}; the released weight is the
 \texttt{weight} argument, $\mathcal V$ by default, approximation \textbf{A-2}
@@ -202,9 +204,12 @@ overstates and is withdrawn.} What \eqref{eq:w-form} is:
 \end{enumerate}
 
 \paragraph{This supersedes \S\ref{sec:b-slot}'s item~2, and the wording that
-item carries is what \textbf{T-88} implemented.} That item reads \emph{``they
-take different weights: $W$ for the gravitational half, $g=\mathcal V$ for the
-scattering half''}. As a description of the outcome of \eqref{eq:w-form} it is
+item carries is what \textbf{T-88} implemented.} That item now reads \emph{``they
+\emph{arrive under} different weights: $W$ for the gravitational half,
+$g=\mathcal V$ for the scattering half''}, corrected at its own site from
+\emph{``take''} --- which is precisely the distinction this paragraph is
+about, and it is recorded here because an earlier draft quoted the old
+wording. As a description of the outcome of \eqref{eq:w-form} it is
 correct. As an instruction to a solver it is not, and it was read as one:
 multiplying $C_1^{\rm thom}=-\kappa'\hat v_B$ by $\mathcal V$ applies a second
 $\kappa'$, which \S\ref{sec:repair-attempts} measures at $320$ to $682$.
@@ -452,6 +457,27 @@ $-0.9999$ but \texttt{PLANCK\_MODEL} gives $+1.270$, so it is not one sign and
 the $-1$ was a coincidence of that background. The residual $0.635$ against
 $0.757$ is approximation \textbf{A-3}'s territory and D24 shows A-3 is not
 connected until $C_1'$ is repaired.
+
+\textbf{And approximation A-3 is not what closes the peak position.} Three
+places in this project's record say the first peak sits where it does because
+radiation-era driving is absent, and that A-3 supplies the residual.
+\textbf{That is backwards, and is withdrawn here rather than in a note.}
+Driving moves a peak \emph{down}: the undriven first compression extremum is
+$kr_s=\pi$, which projects to $\ell=\ell_A$, and the matched external spectrum
+sits at $0.757\,\ell_A$. \textbf{D24}, with $\kappa''\tilde v_B$ suppressed and
+A-3 still absent, puts the CDM peak at $0.635\,\ell_A$ --- \emph{already below
+the driven value} --- so applying A-3 to it moves it further down, away from
+$0.757$ and not toward it. \textbf{D25} supplies the mechanism that does fit:
+the median $k$ contributing to a given $\ell$ runs $1.5$--$4.2\times$ above
+$\ell/r_\theta$, so a feature fixed in $k$ appears at an $\ell$ below $\ell_A$
+by that factor, and $0.635$ sits at the top of the range. Findings
+\textbf{T-121} and \textbf{T-122}, one mechanism seen twice.
+
+\textbf{The test that settles it is D25 at $\ell\simeq173$}, which the existing
+instrument reaches by adding one multipole: a median-$k$ ratio near
+$1/0.635=1.57$ puts the peak position entirely in the displaced projection and
+retires A-3 from this question; a ratio near $1$ returns it to A-3. \emph{Until
+that runs, a repair should not be scored against $0.757$.}
 
 \textbf{Also not established, and it is a dependency of
 \eqref{eq:c0-solved}.} \eqref{eq:c0-solved} \emph{uses}

@@ -78,6 +78,86 @@ def test_the_display_delimiters_pair(name: str) -> None:
 
 
 @pytest.mark.parametrize("name", MARKDOWN)
+def test_display_blocks_are_one_source_line(name: str) -> None:
+    r"""A newline inside ``$$…$$`` becomes a layout break on GitHub.
+
+    **Finding T-120d.** LaTeX treats a source newline as a space, so a
+    multi-line display is identical mathematics — and GitHub's preprocessor
+    does not: the published page rendered (68), (71) and (GDE99 37) as
+    vertical stacks of fragments. **The ``\tag{}`` → ``\quad()`` pass of the
+    same morning did not touch line structure and so did not fix it**, which
+    is how this was separated from T-120c rather than confused with it.
+
+    Joining on whitespace cannot change what an expression means, so this is
+    the one rule in this file with no cost attached to obeying it.
+
+    **This test is also the answer to a question Coordination asked:** can the
+    suite see a layout break at all? It can see *this* one, because line count
+    is a property of the source. It cannot see width — display 8 is 347
+    characters and whether that wraps in a 562 px column is a fact about the
+    rendered page, not about the file. **So the manual look stays a named
+    release step and is not an accident**; this test narrows what the look has
+    to catch, it does not replace it.
+    """
+    text = (ROOT / name).read_text(encoding="utf-8")
+    bad = [(text[: m.start()].count("\n") + 1, m.group(1).count("\n"))
+           for m in re.finditer(r"\$\$(.*?)\$\$", text, re.S)
+           if "\n" in m.group(1)]
+    assert not bad, (
+        f"{name}: display blocks with internal newlines at (line, breaks) "
+        f"{bad}. GitHub renders each as a layout break and the equation "
+        f"comes out as a vertical stack of fragments. Join the block onto "
+        f"one source line — LaTeX reads a newline as a space, so the "
+        f"mathematics is untouched.")
+
+
+#: Commands that GitHub's maths pipeline cannot render, with the mechanism.
+#: Each was read off the LIVE page's DOM, not inferred from documentation.
+BANNED = {
+    r"\tag{": (
+        "emits <mlabeledtr>, which MathML Core -- what Chrome, Safari and "
+        "Firefox actually implement -- does not support. The browser cannot "
+        "lay out the row, falls back to rendering each child as its own "
+        "block, and EVERY ATOM OF THE EQUATION STACKS VERTICALLY. Carry the "
+        "number as \\quad(68) instead: that is an mtext in an mrow and "
+        "touches no table construct."),
+    r"\big": (
+        "GitHub's MathJax configuration rejects it -- the live page carried "
+        "'Missing or unrecognized delimiter for \\big' as a red error box. "
+        "Use the plain delimiter."),
+    r"\Big": (
+        "same as \\big: 'Missing or unrecognized delimiter'. Use the plain "
+        "delimiter."),
+}
+
+
+@pytest.mark.parametrize("name", MARKDOWN)
+def test_no_command_github_cannot_render(name: str) -> None:
+    r"""**Finding T-120c, 2026-10-23, and it is the third of three in two days.**
+
+    T-120 was ``\eta_*`` eaten by the emphasis parser. T-120b was a stray
+    backticked ``$$`` — *introduced by the note written to prevent T-120*.
+    T-120c is ``\tag{}``, added the same day to carry the published equation
+    numbers the PI asked for, which stacked all eleven displays atom by atom.
+
+    **Each failure was introduced by the fix to the previous one, and all
+    three passed every test in this repository.** The tests above check source
+    patterns already known; by construction they cannot catch the next unknown
+    one. This list can only ever be a record of what has already gone wrong.
+
+    **So the test that matters is not in this file.** It is the release rule:
+    *no change to README.md is complete until the rendered GitHub page has
+    been loaded and its DOM read.* V12 — every figure rendered and looked at —
+    already says this about figures; prose is what a colleague reads first and
+    it was never covered.
+    """
+    text = (ROOT / name).read_text(encoding="utf-8")
+    found = {cmd: text.count(cmd) for cmd in BANNED if cmd in text}
+    assert not found, "\n".join(
+        f"{name}: {n}x '{cmd}' — {BANNED[cmd]}" for cmd, n in found.items())
+
+
+@pytest.mark.parametrize("name", MARKDOWN)
 def test_no_bare_asterisk_in_a_display_block(name: str) -> None:
     """``\\eta_*`` in a ``$$`` block is eaten by markdown. Use ``\\eta_\\ast``."""
     text = (ROOT / name).read_text(encoding="utf-8")

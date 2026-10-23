@@ -383,6 +383,66 @@ def check_generated_artefacts_are_current(failures: list[str]) -> str:
     return f"      theory audit covers {named}/{instruments} instruments."
 
 
+def check_built_artefacts_are_not_stale(failures: list[str]) -> str:
+    r"""**A built artefact older than its source is a label pointing at the past.**
+
+    **Fourth recurrence, and Coordination's one interrupt.** The supplement
+    PDF has repeatedly been older than the `.tex` it comes from --- 13.1 hours
+    at the last measurement --- so the published document and its source said
+    different things, and the PDF is what a colleague downloads. The same
+    applies to the manifests: a manifest older than a file it hashes is not a
+    manifest, it is a record of a tree that no longer exists.
+
+    Why mtimes and not hashes. A hash check says the content differs; an mtime
+    check says **which way round**, and that is the question here. A PDF newer
+    than its source may be stale in a way nothing can detect; a PDF *older*
+    than its source is stale by construction and is the recurrence being
+    stopped. `make_manifests.py --check` already owns the content comparison.
+    """
+    notes, pdfs = [], sorted((ROOT / "supplementary-materials").glob("*.pdf"))
+    #: Everything the supplement is built from. `tables/` and the generated
+    #: figure pages are inputs as much as the master is --- the recurrence
+    #: has come through a regenerated table at least once.
+    sources = [p for p in (
+        list(ROOT.glob("SUPPLEMENTARY-MATERIAL-*.tex"))
+        + list((ROOT / "tables").glob("*.tex"))
+        + list((ROOT / "supplementary-materials").glob("*.tex")))
+        if p.is_file()]
+    for pdf in pdfs:
+        t_pdf = pdf.stat().st_mtime
+        newer = sorted(p.relative_to(ROOT).as_posix() for p in sources
+                       if p.stat().st_mtime > t_pdf)
+        if newer:
+            lead = max(p.stat().st_mtime for p in sources
+                       if p.stat().st_mtime > t_pdf) - t_pdf
+            failures.append(
+                f"{pdf.relative_to(ROOT).as_posix()} is {lead/3600:.1f} h "
+                f"older than {len(newer)} of its sources "
+                f"({', '.join(newer[:3])}{'…' if len(newer) > 3 else ''}). "
+                f"Run scripts/build_supplement.py.")
+        else:
+            notes.append(f"{pdf.name} newer than all {len(sources)} sources")
+
+    for man in sorted(ROOT.glob("*-MANIFEST-SHA256.txt")):
+        t_man = man.stat().st_mtime
+        listed = []
+        for line in man.read_text(encoding="utf-8").splitlines():
+            parts = line.split()
+            if len(parts) >= 2:
+                q = ROOT / parts[-1]
+                if q.is_file() and q.stat().st_mtime > t_man:
+                    listed.append(parts[-1])
+        if listed:
+            failures.append(
+                f"{man.name} is older than {len(listed)} file(s) it hashes "
+                f"({', '.join(sorted(listed)[:3])}"
+                f"{'…' if len(listed) > 3 else ''}). "
+                f"Run scripts/make_manifests.py.")
+    if not pdfs:
+        notes.append("no built PDF present")
+    return "      " + "; ".join(notes) + "; manifests newer than their files."
+
+
 def main() -> int:
     failures: list[str] = []
     checked = check_encoding(failures)
@@ -392,6 +452,7 @@ def main() -> int:
     declared = check_model_dependent_defaults(failures)
     artefacts = check_no_build_artefacts(failures)
     audited = check_generated_artefacts_are_current(failures)
+    freshness = check_built_artefacts_are_not_stale(failures)
 
     if failures:
         print(f"FAIL  {len(failures)} release-hygiene problem(s):")
@@ -411,6 +472,7 @@ def main() -> int:
     print(declared)
     print(artefacts)
     print(audited)
+    print(freshness)
     return 0
 
 

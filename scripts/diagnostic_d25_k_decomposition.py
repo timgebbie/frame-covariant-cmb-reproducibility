@@ -80,12 +80,19 @@ from functions.spectra.two_frame import (  # noqa: E402
 
 #: The plateau's own multipoles. D25 is about the plateau; the acoustic band
 #: is F9's and D24's and is not re-measured here.
-ELLS = np.array([2, 5, 10, 30])
+#: **173 added 2026-10-23, on P1-T's §6.** The first four are the plateau. 173
+#: is where the $\kappa''$-suppressed first peak sits ($\ell=172.75$, T-121),
+#: and the question there is different: if the peak position is *entirely* the
+#: displaced $k\to\ell$ map, the ratio at the peak must be $\simeq1/0.635=1.57$
+#: — the bottom of the 1.5–4.2 range, because the peak sits where the
+#: displacement is least. A ratio of 1 there instead says the projection is
+#: **not** displaced at the peak and $0.635$ needs another cause.
+ELLS = np.array([2, 5, 10, 30, 173])
 
 #: 200 is well past $\ell=30$ ($\ell\simeq k r_\theta$ puts it near $k=10$) and
 #: is **not** F9's 1500: nothing above the plateau is being asked about, and a
 #: grid sized for the damping tail would spend its resolution there.
-K_MAX = 200.0
+K_MAX = 700.0
 
 #: The two windows T-117 defines. `K_LOW` is where its limit is settled and
 #: flat; `K_HIGH` is where it explicitly carries no verdict.

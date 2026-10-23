@@ -184,11 +184,7 @@ projected, symmetric, trace-free (PSTF) temperature multipoles
 $\tau_{A_\ell}=\tau_{a_1\ldots a_\ell}$ about a chosen 4-velocity $u^a$. The
 exact transport equation is
 
-$$\dot\tau_{A_\ell}
-+\underbrace{\tfrac{\ell+1}{2\ell+3}\mathrm D^a\tau_{A_\ell a}-\mathrm D_{\langle a_\ell}\tau_{A_{\ell-1}\rangle}}_{\text{free streaming}}
-+\underbrace{\kappa'\tau_{A_\ell}}_{\text{out-scattering}}
-=\underbrace{a\mathcal B_{A_\ell}}_{\text{gravitational}}
-+\underbrace{\kappa'\mathcal S_{A_\ell}}_{\text{in-scattering}}\tag{68}$$
+$$\dot\tau_{A_\ell}+\tfrac{\ell+1}{2\ell+3}\mathrm D^a\tau_{A_\ell a}-\mathrm D_{\langle a_\ell}\tau_{A_{\ell-1}\rangle}+\kappa'\tau_{A_\ell}=a\mathcal B_{A_\ell}+\kappa'\mathcal S_{A_\ell}\quad(68)$$
 
 with $\kappa'=an_e\sigma_T$ the differential optical depth.
 `functions/spectra/` carries it; `tests/` holds the Appendix F chain against
@@ -197,9 +193,7 @@ four external hierarchies.
 **2 — The source closes at rank two.** The gravitational source
 $\mathcal B_{A_\ell}$ is **identically zero for $\ell\ge3$**:
 
-$$\mathcal B_0=-\tfrac13\mathrm D^a\tau_a,\qquad
-\mathcal B_a=\mathrm D_a\ln T+A_a,\qquad
-\mathcal B_{ab}=\sigma_{ab}\tag{71}$$
+$$\mathcal B_0=-\tfrac13\mathrm D^a\tau_a,\qquad \mathcal B_a=\mathrm D_a\ln T+A_a,\qquad \mathcal B_{ab}=\sigma_{ab}\quad(71)$$
 
 — a monopole from the dipole divergence, a gradient-plus-acceleration at rank
 one, and **the shear at rank two**. That the chain terminates is what makes a
@@ -209,8 +203,7 @@ repository is called `NonlinearShear`. `functions/spectra/coefficients.py`.
 **3 — The frame law, and what is invariant.** Under a change of fundamental
 congruence $\tilde u^a=u^a+v^a$, GDE99 (37) gives
 
-$$\tilde\tau_{A_\ell}=\tau_{A_\ell}-v_{A_\ell},
-\qquad v_{A_\ell}\equiv0\ \ (\ell\ge2)\tag{GDE99 37}$$
+$$\tilde\tau_{A_\ell}=\tau_{A_\ell}-v_{A_\ell}, \qquad v_{A_\ell}\equiv0\ \ (\ell\ge2)\quad(GDE99 37)$$
 
 — only the monopole and dipole move. Every $\ell\ge2$ multipole is a frame
 invariant **at first order**, and not because a boost cannot reach it: those
@@ -228,9 +221,7 @@ boost also moves the *basis*, which is aberration. Aberration couples
 neighbouring multipoles with coefficients that grow like $\ell$, and the
 difference of the two neighbour weights differs between the frames:
 
-$$c_+-c_-\Big|_{\mathrm N}=\frac{2(2\ell^2+2\ell-1)}{(2\ell-1)(2\ell+3)}\xrightarrow{\ \ell\to\infty\ }1,
-\qquad
-c_+-c_-\Big|_{\mathrm{CDM}}=\frac{3(4\ell^4+8\ell^3-11\ell^2-15\ell+6)}{(2\ell-3)(2\ell-1)(2\ell+3)(2\ell+5)}\xrightarrow{\ \ell\to\infty\ }\tfrac34\tag{Paper 1}$$
+$$c_+-c_-|_{\mathrm N}=\frac{2(2\ell^2+2\ell-1)}{(2\ell-1)(2\ell+3)}\xrightarrow{\ \ell\to\infty\ }1, \qquad c_+-c_-|_{\mathrm{CDM}}=\frac{3(4\ell^4+8\ell^3-11\ell^2-15\ell+6)}{(2\ell-3)(2\ell-1)(2\ell+3)(2\ell+5)}\xrightarrow{\ \ell\to\infty\ }\tfrac34\quad(Paper 1)$$
 
 Both stencils are unit-normalised, $2\times\tfrac12=1$ and $4\times\tfrac14=1$,
 so the two frames thread different coefficients onto the same
@@ -246,9 +237,7 @@ basis, and only the second action survives at large $\ell$.
 photons and baryons are tightly coupled and the rank-0 and rank-1 multipoles
 obey the acoustic pair (152)/(153),
 
-$$\tau_1'=-\frac{R'}{1+R}\tau_1-\frac{k}{1+R}\delta T-k\Phi_A,
-\qquad
-\delta T'=-\mathcal H\Phi_A-\Phi_H'+\tfrac k3\tau_1\tag{152, 153}$$
+$$\tau_1'=-\frac{R'}{1+R}\tau_1-\frac{k}{1+R}\delta T-k\Phi_A, \qquad \delta T'=-\mathcal H\Phi_A-\Phi_H'+\tfrac k3\tau_1\quad(152, 153)$$
 
 with $R=3\rho_b/4\rho_\gamma$ the baryon loading — the oscillator whose
 $\cos(kr_s)$ is the acoustic peaks. Dropping the $-\mathcal H\Phi_A$ is
@@ -263,9 +252,7 @@ $\kappa'\to0$, and by step 2 the gravitational source is identically zero for
 $\ell\ge3$. What is left of step 1 is a pure recursion coupling each multipole
 to its two neighbours — *Annals II* Appendix F (F.3), in conformal time:
 
-$$-(\beta_\ell\tau_\ell)'
-=k\left[\frac{\ell+1}{2\ell+3}\,(\beta_{\ell+1}\tau_{\ell+1})
--\frac{\ell}{2\ell-1}\,(\beta_{\ell-1}\tau_{\ell-1})\right]\tag{F.3}$$
+$$-(\beta_\ell\tau_\ell)' =k\left[\frac{\ell+1}{2\ell+3}\,(\beta_{\ell+1}\tau_{\ell+1}) -\frac{\ell}{2\ell-1}\,(\beta_{\ell-1}\tau_{\ell-1})\right]\quad(F.3)$$
 
 **This ladder is the whole of the high-multipole spectrum.** The source supplies
 $\ell=0,1,2$ and nothing else; every multipole above that is streamed up from
@@ -286,9 +273,7 @@ specifies the division — finding **B-2**; the bundle divides.
 solution of step 5 is matched to the source rank by rank, (89), giving three
 coefficients:
 
-$$C_0=p_0\,(a\mathcal B_2),\qquad
-C_1=p_1\,\tfrac1k\!\left(a\mathcal B_1+\kappa'\hat v_B\right),\qquad
-C_2=p_2\,\tfrac1{k^2}(a\mathcal B_2)\tag{89}$$
+$$C_0=p_0\,(a\mathcal B_2),\qquad C_1=p_1\,\tfrac1k\!\left(a\mathcal B_1+\kappa'\hat v_B\right),\qquad C_2=p_2\,\tfrac1{k^2}(a\mathcal B_2)\quad(89)$$
 
 (89) is the definition and (90) a result, so the bundle solves (89) in exact
 rationals and uses (90) as a check on itself. Solved that way (90)'s $C_0$
@@ -300,10 +285,7 @@ $\tilde C_0\approx\tilde C_2\approx0$ and $\tilde C_1$ alone; CDM is $q_a=0$
 and keeps all three. The line-of-sight integral (102) carries them to the
 present:
 
-$$\frac{\beta_\ell\,\tau_\ell(\eta_0)}{2\ell+1}\simeq
-\underbrace{\big[C_2'-C_1\big]_{\eta_\ast}\mathcal D\,j_\ell(k\Delta\eta_\ast)}_{\text{boundary, rank }0/1}
-+\underbrace{kC_2(\eta_\ast)\mathcal D\left[\tfrac{\ell}{2\ell+1}j_{\ell-1}-\tfrac{\ell+1}{2\ell+1}j_{\ell+1}\right]_{k\Delta\eta_\ast}}_{\text{boundary, rank }2}
-+\underbrace{\int_{\eta_\ast}^{\eta_0}\!\!\mathrm d\eta\;\mathcal V\,e^{-(k/k_D)^2}\big\{C_0-C_1'+C_2''\big\}\,j_\ell(k\Delta\eta)}_{\text{bulk}}\tag{102}$$
+$$\frac{\beta_\ell\,\tau_\ell(\eta_0)}{2\ell+1}\simeq[C_2'-C_1]_{\eta_\ast}\mathcal D\,j_\ell(k\Delta\eta_\ast)+kC_2(\eta_\ast)\mathcal D\left[\tfrac{\ell}{2\ell+1}j_{\ell-1}-\tfrac{\ell+1}{2\ell+1}j_{\ell+1}\right]_{k\Delta\eta_\ast}+\int_{\eta_\ast}^{\eta_0}\mathrm d\eta\,\mathcal V e^{-(k/k_D)^2}\{C_0-C_1'+C_2''\}\,j_\ell(k\Delta\eta)\quad(102)$$
 
 The second term has never been evaluated in a released figure: it is the
 rank-two boundary, and $\tilde C_2\equiv0$ in the Newtonian frame. It is also
@@ -317,14 +299,9 @@ three factors and nothing else: the primordial power $P(k)$, the transfer
 $T_\ell(k)$ that (102) returns, and the projection $j_\ell$ already inside it.
 *Annals II* §7.2 writes the assembly twice —
 
-$$C_\ell=\frac2\pi\frac{\beta_\ell^2}{(2\ell+1)^2}\int\frac{\mathrm dk}{k}\,k^3\,
-\big|\tau_\ell(k,\eta_0)\big|^2\tag{186}$$
+$$C_\ell=\frac2\pi\frac{\beta_\ell^2}{(2\ell+1)^2}\int\frac{\mathrm dk}{k}\,k^3\, |\tau_\ell(k,\eta_0)|^2\quad(186)$$
 
-$$\big\langle\tau_{A_\ell}\tau^{A_\ell}\big\rangle
-=\frac{\beta_\ell}{2\pi^2}\int k^2\mathrm dk\,\big|\tau_\ell\big|^2,
-\qquad
-C_\ell=\frac{\Delta_\ell}{2\ell+1}\big\langle\tau_{A_\ell}\tau^{A_\ell}\big\rangle,
-\quad \Delta_\ell=\frac{4\pi\beta_\ell}{2\ell+1}\tag{187, 188}$$
+$$\langle\tau_{A_\ell}\tau^{A_\ell}\rangle =\frac{\beta_\ell}{2\pi^2}\int k^2\mathrm dk\,|\tau_\ell|^2, \qquad C_\ell=\frac{\Delta_\ell}{2\ell+1}\langle\tau_{A_\ell}\tau^{A_\ell}\rangle, \quad \Delta_\ell=\frac{4\pi\beta_\ell}{2\ell+1}\quad(187, 188)$$
 
 — (186) by the mode route and (187)–(188) by the covariant route. They were
 proved identical before either was implemented, and the bundle computes both
@@ -334,7 +311,7 @@ $9.5\times10^{-6}$ against a gate of $10^{-3}$, which is acceptance criterion
 $T_\ell\equiv\beta_\ell\tau_\ell(\eta_0)/(2\ell+1)=\alpha_\ell^{-1}\tau_\ell$,
 which is what (176) returns, (186) collapses to
 
-$$C_\ell=\frac2\pi\int \mathrm dk\,k^2\,\big|T_\ell(k)\big|^2\tag{186 with 176}$$
+$$C_\ell=\frac2\pi\int \mathrm dk\,k^2\,|T_\ell(k)|^2\quad(186 with 176)$$
 
 because $\alpha_\ell=(2\ell+1)/\beta_\ell$ makes the prefactor exactly one —
 asserted as exact rationals, not floating point. That is worth more than

@@ -483,7 +483,7 @@ more. An aliased k integral moves the interpolated peak, and a sweep whose
 
 [[grid]]
 key = "scripts/diagnostic_d25_k_decomposition.py::k_com"
-what = "the k grid the low-ell k-decomposition is computed on"
+what = "the k grid the low-ell and peak k-decomposition is computed on"
 status = "derived"
 note = """`required_k_points(K_MAX, r_theta)` at 3 samples per j_ell^2
 oscillation --- **T-56**. `K_MAX` is 200: this instrument asks only about the
