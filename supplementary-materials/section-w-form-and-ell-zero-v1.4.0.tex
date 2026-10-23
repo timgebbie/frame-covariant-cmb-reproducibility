@@ -40,11 +40,11 @@
 \section{The transport assembly}
 \label{sec:transport-assembly}
 
-\emph{The reader who wants only the result: \S\ref{sec:w-form} is the
-assembly in which the by-parts does not have to be taken,
-\S\ref{sec:ell-zero-row} corrects (90)'s $C_0$ by a factor $\tfrac{15}2$, and
-\S\ref{sec:kappa-ledger} is the structural check that flags both before they
-are implemented.}
+\emph{The reader who wants only the result: \S\ref{sec:w-form} gives the
+exact by-parts of (102)'s own integral and names the four discrepancies the
+released solution carries against it, \S\ref{sec:ell-zero-row} corrects (90)'s
+$C_0$ by a factor $\tfrac{15}2$, and \S\ref{sec:kappa-ledger} is the
+structural check that flags both before they are implemented.}
 
 Three questions about the line-of-sight solution are one question, and this
 section answers it once. They are: which weight carries which source; what the
@@ -81,27 +81,50 @@ $W'=\mathcal V$, $\mathcal V'=(\kappa''+\kappa'^2)W$:
   \label{eq:byparts}
 \end{equation}
 
-\paragraph{\emph{Annals~II}'s printed form does not reproduce its own integral,
-and the gap is three specific errors.} Not a tolerance --- three substitutions,
-in order of size:
+\paragraph{What the released solution carries against
+\eqref{eq:byparts}, and it is four things, not three.} The discrepancies are
+recorded in \texttt{functions/spectra/integral\_solution.py} as findings
+\textbf{T-72} and \textbf{T-86}. In order of size:
 
 \begin{center}\small
 \begin{tabular}{@{}clll@{}}
 \toprule
- & exact & \texttt{int\_soln\_damping} as printed & \\
+ & the identity wants & the released solution carries & \\
 \midrule
-1 & $+2\mathcal VC_2'$ & $-2\mathcal VC_2$ & wrong sign, and $C_2$ where $C_2'$ belongs \\
-2 & $-\mathcal VC_1$ & $+\mathcal VC_1$ & sign reversed \\
-3 & $+\mathcal V(\eta_*)C_2(\eta_*)$ & absent & the lower-limit boundary \\
+1 & the bracket at weight $W$ & the bracket at weight $\mathcal V\mathcal D$ &
+  $\mathcal V=W\kappa'$, so \textbf{one extra power of the rate} \\
+2 & $-\mathcal VC_1+2\mathcal VC_2'+\mathcal V'C_2$ & absent &
+  (102) carries only the bracket \\
+3 & $W(\eta_\ast)$ on the boundary & $\mathcal D(\eta_0,k)$ &
+  weight and argument both \\
+4 & $+k\int W\,M\,j_\ell'$ & \emph{no counterpart at all} &
+  the by-parts onto coefficients is legal only at $W$ \\
 \bottomrule
 \end{tabular}
 \end{center}
 
 \noindent
-\texttt{tests/frame/c3\_byparts.py} evaluates both against the integral
-\eqref{eq:byparts} comes from, over fifteen $(\ell,k)$ pairs:
-\textbf{C3a}, \eqref{eq:byparts} reproduces it to $<10^{-8}$; \textbf{C3b},
-the printed form does not, worst relative error $>10^{-2}$.
+\textbf{Row 1 is the one that matters and it is now measured.} $\mathcal V$
+already supplies a $\kappa'$, so differentiating a coefficient that itself
+holds $\kappa'$ puts \emph{three} powers of the rate where the identity wants
+two. \textbf{D24} measures the consequence on the live path:
+$\kappa''\tilde v_B$ is \textbf{99.8\%} of $|C_1'|$ in the Newtonian frame and
+\textbf{109.8\%} in CDM, and suppressing it alone moves the CDM first peak from
+a spurious maximum at $\ell=8$ to $\ell=172.75$, i.e. $0.635\,\ell_A$ against
+the matched $0.757$. The $\Phi'$ driving channel is \textbf{not} dead; it is
+outvoted --- finding \textbf{T-121}.
+
+\paragraph{What \texttt{c3\_byparts.py} does and does not measure.}
+\textbf{C3a} is the load-bearing one: \eqref{eq:byparts} reproduces the
+integral it comes from to $<10^{-8}$ over fifteen $(\ell,k)$ pairs, so the
+identity is not in question. \textbf{C3b} evaluates a \emph{variant} --- it
+weights the bracket at $W$ and retains $\mathcal V(C_1-2C_2)$ --- so its
+$>10^{-2}$ bounds rows 2 and 3 and \textbf{is blind to row 1}, which is the
+one row whose weight it holds fixed. Its docstring's \emph{``evaluated as
+printed''} should be read as \emph{``evaluated against a variant that differs
+from the printed form in the partner terms''}; the released weight is the
+\texttt{weight} argument, $\mathcal V$ by default, approximation \textbf{A-2}
+and finding \textbf{T-20}.
 
 \textbf{This is a defect in the antecedent} and carries a \textbf{B-} number in
 \texttt{provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md} beside B-10 and
@@ -110,7 +133,7 @@ correction, and this supplement prints the correction beside every other defect
 it records --- B-11's sign on $C_0$, T-104's normalisation, T-103's weighting.
 A defect recorded without its correction is not a record.
 
-\paragraph{The assembly in which those three terms never arise.} They arise
+\paragraph{The assembly in which none of the four can be made.} They arise
 only because the by-parts was taken \emph{onto the coefficients}. Multiplying
 the transport equation at rank $\ell$,
 \begin{equation}
@@ -145,9 +168,9 @@ and boundary pair ``artefacts of a step the $W$-form does not take''; that
 overstates and is withdrawn.} What \eqref{eq:w-form} is:
 
 \begin{enumerate}\itemsep3pt
-\item \textbf{The assembly in which the three errors of \eqref{eq:byparts}
-      cannot be made}, because there are no coefficients to take a by-parts
-      onto. Both weights fall out of one multiplication rather than being
+\item \textbf{The assembly in which none of the four discrepancies above
+      can be made}, because there are no coefficients to take a by-parts onto,
+      and so no weight to choose for a bracket that does not exist. Both weights fall out of one multiplication rather than being
       assigned: $\mathcal V$ appears beside $\mathcal S_\ell$ because $\kappa'$
       was already there in the collision term and $W\kappa'=\mathcal V$ is an
       identity.
@@ -379,9 +402,13 @@ that is wrong in this way measures the defect faithfully and reports a number.
 % ===========================================================================
 \subsection{What this section establishes, and what it does not}
 
-\textbf{Established.} That \eqref{eq:w-form} follows from
-\eqref{eq:transport} by one multiplication; that it assigns both weights
-without a choice and leaves no $\kappa'$ in any coefficient; that (89)'s
+\textbf{Established.} That \eqref{eq:byparts} is the exact by-parts of the
+integral (102) is built from, reproducing it to $<10^{-8}$; that the released
+solution differs from it in four places, of which the bracket's weight is the
+largest and carries one surplus power of $\kappa'$, measured by \textbf{D24}
+at $99.8$--$109.8\%$ of $|C_1'|$; that \eqref{eq:w-form} follows from
+\eqref{eq:transport} by one multiplication and is the assembly in which none
+of the four can be made, without being different physics; that (89)'s
 $\ell=0$ row carries $\alpha_2$ where $\alpha_0$ belongs, with the $\ell=1$ and
 $\ell=2$ rows as unadjusted controls; that the row's right-hand side is zero by
 the $\tau_0\equiv0$ constraint, giving \eqref{eq:c0-solved}; that
