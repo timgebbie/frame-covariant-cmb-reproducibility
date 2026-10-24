@@ -1,0 +1,227 @@
+% ---------------------------------------------------------------------------
+% Step 4 of the physics chain: the acoustic oscillator.
+%
+% Written 2026-10-24T16Z by the Paper 1 stream. The supplement had deep
+% treatments of the source, the frame law and the matching, and nothing on the
+% object that supplies the matching with its two numbers.
+%
+% Equations read from the antecedent and from functions/spectra/acoustic.py,
+% potentials.py and transfer.py; gate values read from
+% tests/test_acoustic_scale.py. Findings cited, none minted.
+% ---------------------------------------------------------------------------
+\section{The acoustic oscillator}
+\label{sec:oscillator}
+
+\emph{This is what supplies $\delta T(\eta_*,k)$ and $\tau_1(\eta_*,k)$ to the
+matching. Its period is verified against the antecedent's own formula to
+$0.5\%$; its phase is not verified at all, and the distinction is the most
+useful thing this section says.}
+
+% ===========================================================================
+\subsection{The pair, and why (154) is not the object}
+
+\emph{Annals~II}~\S7.1 prints three equations. Two are the system:
+\begin{align}
+  \dot\tau_1 &\simeq -\frac{\dot R}{1+R}\,\tau_1
+               -\frac{1}{1+R}\frac ka\,\delta T-\frac ka\Phi_A,
+               \tag{152}\label{eq:152}\\
+  \dot{\delta T} &\simeq -H\Phi_A-\dot\Phi_H+\frac ka\frac{\tau_1}{3},
+               \tag{153}\label{eq:153}
+\end{align}
+with $R=3\rho_M/4\rho_R$ and $c_s^2=\tfrac13(1+R)^{-1}$. The third, (154), is
+the single second-order oscillator in $\delta T$, and the paper obtains it from
+the pair by \emph{``ignoring the expansion coupled term (i.e.\ the small scale
+approximation)''}.
+
+\textbf{The pair is implemented and (154) is derived from it, not the other way
+round.} In conformal time, multiplying through by $a$,
+\begin{equation}
+  \tau_1'=-\frac{R'}{1+R}\tau_1-\frac{k}{1+R}\delta T-k\Phi_A,
+  \qquad
+  \delta T'=-\mathcal H\Phi_A-\Phi_H'+\frac k3\tau_1 ,
+  \label{eq:pair-conformal}
+\end{equation}
+and dropping $-\mathcal H\Phi_A$ reproduces (154) exactly.
+
+\textbf{That ordering is the point and not a preference.} Implementing (154)
+directly would bake the small-scale approximation into the only object that
+exists, and no figure could ever show its cost. Implemented as a pair with a
+switch, the approximation becomes a measurement: the difference between the two
+integrations \emph{is} its size, at any $k$ and any $\eta$, and the gate asserts
+what makes it a \emph{small-scale} approximation --- that it must matter less as
+$k$ grows. \emph{This is the same move as the scale-factor rule of
+\S\emph{the generic source derivatives}: reconstruct the antecedent's general
+object, and let its printed specialisation fall out as a checkable
+consequence.}
+
+% ===========================================================================
+\subsection{What drives it, and the one place the backgrounds differ}
+
+$\Phi_A$ and $\Phi_H$ are \textbf{supplied} to the oscillator, not solved with
+it, which is what lets one routine serve every background. They come from the
+growth equation,
+\begin{equation}
+  \delta''+\mathcal H\delta'-\tfrac32\Omega_m H_0^2\,\delta/a=0,
+  \qquad
+  \Phi\propto D(a)/a ,
+  \label{eq:growth}
+\end{equation}
+integrated rather than fitted, so that $D\propto a$ in Einstein--de~Sitter is a
+\emph{result} and can be asserted as one.
+
+\textbf{And that is where the two backgrounds part company.} In
+Einstein--de~Sitter $D\propto a$ exactly, so $\Phi$ is constant and
+$\Phi_A'-\Phi_H'$ vanishes \emph{identically}: there is no integrated
+Sachs--Wolfe term at all, which is why the antecedent's standard-CDM model never
+needed one. Once $\Lambda$ dominates, growth stalls while $a$ keeps rising,
+$D/a$ falls, and $\Phi$ decays. \textbf{That decay is the late integrated
+Sachs--Wolfe effect, and it is not bolted on --- it appears by itself from
+\eqref{eq:growth} the moment $\Omega_\Lambda\neq0$.} Whether it then reaches
+the observer is a question about the weight it is carried under, which is
+approximation \textbf{A-1} and \S\ref{sec:w-form}.
+
+\textbf{Einstein--de~Sitter is therefore a null control and not a weak case.}
+A diagnostic that claims to separate the late ISW must return \emph{exactly
+zero} on it. A small number is a failure, not a pass.
+
+\paragraph{The radiation era is absent, and that absence is A-3.} The released
+$\Phi$ is the matter-dominated one and has no radiation era in it. The
+radiation-era potential is derived in closed form --- with $c_s^2=\tfrac13$ and
+$\mathcal H=1/\eta$ the evolution equation becomes
+$\Phi''+4\eta^{-1}\Phi'+\tfrac13k^2\Phi=0$, whose regular solution is
+\begin{equation}
+  \Phi(\eta)=3\Phi_i\,\frac{j_1(x)}{x}
+            =3\Phi_i\,\frac{\sin x-x\cos x}{x^3},
+  \qquad x=\frac{k\eta}{\sqrt3},
+  \label{eq:radiation-potential}
+\end{equation}
+so $\Phi\to\Phi_i$ as $x\to0$ and $\Phi\simeq-3\Phi_i\cos x/x^2$ for $x\gg1$:
+\textbf{decaying as $x^{-2}$ while oscillating}. Because it decays on the same
+timescale the mode oscillates, it drives the oscillator \emph{resonantly}, and
+that amplification is missing from every peak \emph{height} this bundle
+produces. \eqref{eq:radiation-potential} is implemented as a diagnostic and is
+not wired into the released pipeline; \textbf{D24} shows why that ordering is
+right, since A-3 is not connected to the peak \emph{position} until $C_1'$ is
+repaired.
+
+% ===========================================================================
+\subsection{Two corrections to the antecedent, both settled by a stated limit}
+
+\paragraph{B-8: (181) carries the wrong sign on its constant term.} The
+closed-form solution at last scattering is
+\begin{equation}
+  \delta T(\eta,k)+\Phi_A(\eta_*,k)
+  \simeq\big[\delta T(0,k)+(1+R)\Phi_A(0,k)\big]\cos(kr_s)-R\,\Phi_A(\eta_*,k),
+  \tag{180}\label{eq:180}
+\end{equation}
+and (181) specialises it with the adiabatic condition
+$\delta T(0,k)=-\tfrac23\Phi_A(0,k)$. Carrying that through,
+\begin{equation}
+  \big[\delta T+\Phi_A\big](\eta_*,k)
+  \simeq\tfrac13\Phi_A(0,k)\,(1+3R_*)\cos(kr_s^*)\;\boldsymbol{-}\;R_*\Phi_A(0,k),
+  \label{eq:181-corrected}
+\end{equation}
+where the printed (181) has $+R_*$. \textbf{Its own stated limit settles
+which.} At $r_s^*\to0$ the corrected form gives exactly $\tfrac13\Phi_A$, which
+is what the text asserts and what (196) descends from; the printed form gives
+$\tfrac13\Phi_A(1+6R_*)$, and the assertion would need $R_*\to0$, which is
+neither stated nor true at last scattering. The oscillating parts agree
+exactly, so this is one sign and not a different solution. \emph{Taken
+literally it costs a factor of twenty in $C_\ell$}, and the printed form is kept
+as a second function so that the difference is demonstrable rather than
+asserted.
+
+\paragraph{B-10: (J.5) is printed with the exponent of the wrong sign.} The
+Bond--Efstathiou transfer function
+$T(k)=[1+((ak)+(bk)^{3/2}+(ck)^2)^\nu]^{-1/\nu}$ is printed with $+1/\nu$. As
+printed it \emph{grows} without bound --- $6.7\times10^3$ at
+$k=10\,\mathrm{Mpc}^{-1}$ against $1.5\times10^{-4}$ --- which inverts the
+physics, since modes entering during radiation domination stagnate and the
+transfer function must suppress small scales. \textbf{The large-scale limit
+cannot see it}, because the bracket tends to~1 and $1^{\pm1/\nu}=1$, which is
+why the text's own check, \emph{``$T(k)\sim+1$ on large scales''}, passes on the
+wrong form. Only the $k^{-2}$ falloff distinguishes them, and that is what the
+fit is a fit to.
+
+\emph{Both are the same shape of error and both are caught the same way: by
+evaluating the antecedent's own stated limit on the antecedent's own printed
+expression.} Neither needed an external code.
+
+% ===========================================================================
+\subsection{The phase is the sound horizon, and the start is derived from $k$}
+
+$\delta T$ oscillates in $kr_s$, not in $k\eta$, so every number in this
+section depends on $r_s$ being the sound horizon \emph{from the big bang},
+$r_s(\eta)=\int_0^\eta c_s\,\mathrm d\eta'$ --- which is also what the
+antecedent means in its own peak formula $\ell_j\simeq|r_\theta/r_s|\,j\pi$.
+
+\textbf{Finding T-51 is that it was not.} The sound horizon was accumulated
+from the first point of the line-of-sight grid, at $z=3000$, returning between
+$36\%$ and $49\%$ of $r_s$, so $\cos(kr_s)$ carried roughly half the phase it
+should. \textbf{And criterion~5b could not see it}, because the closed-form
+route inherited the same truncation independently of the ODE route: the two
+agreed, and they agreed about what they shared. \emph{That is \textbf{T-3}'s
+rule on a third quantity --- two agreeing routes agree about what they share,
+and a shared input is not cross-checked by them.}
+
+\textbf{The repair is a derivation and not a tuned start.} A mode may be
+started where $k\,r_s(\eta_{\rm start})\le\varepsilon$ with
+$\varepsilon=0.1$~radians, one part in sixty of a cycle, because (180)'s
+initial condition is the adiabatic growing mode only while the mode is outside
+the sound horizon; starting at finite $kr_s$ \emph{imposes} a phase rather than
+inheriting one. The bundle reached $kr_s=10.7$ at $k=600$ --- nearly two full
+cycles in. The grid is derived the same way: $c_s^2\le\tfrac13$ bounds the
+period below by $2\pi\sqrt3/k$, so the sample count is arithmetic rather than a
+knob, at 24 samples per oscillation.
+
+\textbf{One number in this section is a modelling choice and is now stated
+once.} Tight coupling is held to end at
+$\eta_{\rm couple}=\min(\eta_0,\,6\,\eta_*)$. Six is not derived and is not
+claimed to be. \textbf{T-58} is what happened while it was not stated once: the
+factor lived in three places and the route criterion~5b gates integrated the
+oscillator all the way to $\eta_0$, keeping the photon--baryon fluid ringing for
+seven times the span over which it is a fluid. The mismatched window alone
+costs $1.5\times10^{-1}$ at $k=3$ and $1.6$ at $k=10$, against 5b's own
+$5\times10^{-8}$ --- and 5b could not see that either, for the same reason.
+\textbf{Q16} is the assertion that closes it: $\mathcal V(\eta_{\rm
+couple})/\mathcal V(\eta_*)$ below a stated threshold on every background.
+
+% ===========================================================================
+\subsection{Where the oscillator is gated, and the one thing no gate sees}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l >{\raggedright\arraybackslash}X l@{}}
+\toprule
+\textbf{gate} & \textbf{what it tests} & \textbf{value} \\
+\midrule
+peak spacing & $\Delta\ell=\pi r_\theta/r_s$, the antecedent's own formula,
+  read off the turning points of $\delta T+\Phi_A$ in $k$ on
+  Einstein--de~Sitter, where Appendix~G is exact & $191.7$ against $192.7$,
+  ratio $\mathbf{0.995}$ \\
+the same, \texttt{z\_max} control & what the pre-T-51 start does to it &
+  $568.7$, ratio $2.95$ \\
+pair $\to$ (154) & that dropping $-\mathcal H\Phi_A$ reproduces the printed
+  oscillator, and that the difference falls with $k$ & exact; small-scale
+  behaviour asserted \\
+ODE $\to$ (180) & that the integration converges to the closed form when $R$
+  is held constant & --- \\
+B-8 & the $r_s^*\to0$ limit of both forms of (181) & $\tfrac13\Phi_A$ against
+  $\tfrac13\Phi_A(1+6R_*)$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent
+\textbf{Every one of these measures a period, a limit or a reduction. Not one
+of them measures a phase.} The spacing gate takes differences of consecutive
+turning points, so the position of the \emph{first} one never enters: it is
+blind, by construction, to a constant offset in $kr_s$.
+
+\textbf{That is why it is worth having, and it is the sharpest localisation in
+this supplement.} The oscillator's period is right to $0.5\%$ and the
+projection at the first peak is faithful to $3\%$ (\textbf{D25},
+\S\ref{sec:w-form}), while the released first peak sits at $0.635$--$0.711$
+rather than $0.757\,\ell_A$. \textbf{Correct spacing with a displaced first peak
+is a phase offset, not a scale error}: nothing here is stretching $r_s$ or
+$r_\theta$. The defect lies between the oscillator and the projection, which is
+the transport assembly, and \S\ref{sec:w-form} is where that is itemised.

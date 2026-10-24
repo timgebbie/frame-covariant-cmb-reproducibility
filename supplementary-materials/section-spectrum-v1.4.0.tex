@@ -1,0 +1,209 @@
+% ---------------------------------------------------------------------------
+% Step 7 of the physics chain: the angular spectrum.
+%
+% Written 2026-10-24T16Z by the Paper 1 stream. The last of the three sections
+% the README's physics chain had and the supplement did not. It also defines
+% sec:spectrum, which other sections had been forward-referencing into nothing.
+%
+% Equations read from the antecedent and from functions/spectra/angular.py and
+% two_route.py. Findings cited, none minted.
+% ---------------------------------------------------------------------------
+\section{The angular spectrum}
+\label{sec:spectrum}
+
+\emph{Two things happen here that happen nowhere else: the harmonic
+normalisation has to disappear, and the quantity stops being linear in the
+transfer. Both are structural, and both have cost a finding.}
+
+% ===========================================================================
+\subsection{Two printed forms, and a cancellation that must be exact}
+
+\emph{Annals~II}~\S7.2 prints the observable twice:
+\begin{align}
+  C_\ell&=\frac2\pi\frac{\beta_\ell^2}{(2\ell+1)^2}
+          \int\frac{\mathrm dk}{k}\,k^3\big|\tau_\ell(k,\eta_0)\big|^2,
+          \tag{186}\label{eq:186}\\
+  \big\langle\tau_{A_\ell}\tau^{A_\ell}\big\rangle
+        &=\frac{\beta_\ell}{2\pi^2}\int k^2\,\mathrm dk\,\big|\tau_\ell\big|^2,
+          \qquad
+  C_\ell=\frac{\Delta_\ell}{2\ell+1}\big\langle\tau_{A_\ell}\tau^{A_\ell}\big\rangle,
+  \qquad \Delta_\ell=\frac{4\pi\beta_\ell}{2\ell+1}.
+          \tag{187, 188}\label{eq:187-188}
+\end{align}
+
+\textbf{The harmonic normalisation cancels, identically.} (176) returns
+$T_\ell(k)\equiv\beta_\ell\tau_\ell(\eta_0)/(2\ell+1)=\alpha_\ell^{-1}\tau_\ell$,
+so $\tau_\ell=\alpha_\ell T_\ell$ and \eqref{eq:186} becomes
+\begin{equation}
+  C_\ell=\frac2\pi\underbrace{\frac{\beta_\ell^2\alpha_\ell^2}{(2\ell+1)^2}}_{=\,1}
+         \int \mathrm dk\,k^2\,\big|T_\ell(k)\big|^2 ,
+  \label{eq:cl-reduced}
+\end{equation}
+because $\alpha_\ell=(2\ell+1)/\beta_\ell$. \textbf{The $\ell$-dependent
+normalisation of the harmonic expansion vanishes from the observable, which is
+what it must do} --- and the variable in which it vanishes is exactly the one
+Appendix~F's free-streaming solution is bare in (\S\ref{sec:free-streaming}).
+\eqref{eq:187-188} reaches the same~1 by a different path through the same
+weights.
+
+\textbf{That is worth more than tidiness.} It means a $\beta_\ell$ or
+$\alpha_\ell$ slip cannot hide in the spectrum: to survive, it would have to
+survive a cancellation that is an identity. Both coefficients are therefore
+formed as exact rationals and compared as rationals out to $\ell=2000$, not as
+floating point.
+
+\paragraph{Finding T-17, and it is the cautionary one.} Written in the obvious
+order --- each factor converted to a double, then multiplied --- the identity
+held only while both halves were separately representable.
+$\beta_\ell\sim6\times10^{-270}$ at $\ell=900$, so $\beta_\ell^2$ underflows to
+zero while $\alpha_\ell^2$ overflows, and their exact ratio of one came back as
+an overflow for every $\ell\ge508$. \textbf{The bundle's multipole ceiling was
+$507$, set by a quantity equal to one}, with no diagnostic and nothing in the
+physics to suggest it. The rule the weights module already stated ---
+\emph{multiply at the point of numerical use, never before a comparison} ---
+is the whole of the repair.
+
+\paragraph{And one of these really is large.} The multipole mean square
+\eqref{eq:187-188} carries $\beta_\ell\alpha_\ell^2=(2\ell+1)^2/\beta_\ell$,
+which leaves the double range near $\ell\simeq1500$. \textbf{That is the
+quantity and not an artefact of how it is written}: in a normalisation where
+$\beta_\ell$ is that small, the mean square is that big. $C_\ell$ itself stays
+finite, because the released route combines the weights in $\mathbb Q$ before
+converting and never forms the intermediate at all.
+
+% ===========================================================================
+\subsection{Which of the two is the quantity, and why every figure plots it}
+
+\eqref{eq:186} is a statement about \textbf{mode} coefficients and holds only
+for an almost-Robertson--Walker geometry. \eqref{eq:187-188} is a
+\textbf{multipole} mean square and holds generally. They are numerically
+identical here and conceptually are not interchangeable, and
+\S\ref{sec:hierarchy} is where the two objects are separated.
+
+\textbf{Every released figure plots the multipole quantity.} That is not a
+presentational preference: it is the only one of the two that survives leaving
+the almost-Robertson--Walker setting, which is the setting the nonlinear
+extension leaves. \emph{A reconstruction that will be generalised should be
+plotted in the variable that generalises, even where the two agree to machine
+precision.}
+
+% ===========================================================================
+\subsection{$C_\ell$ is quadratic, and three readings have gone wrong on it}
+
+Everything upstream of this section is linear in the perturbation.
+$C_\ell$ is not: it is quadratic in the transfer, and three consequences follow
+that have each been misread at least once in this project's record.
+
+\textbf{First, a decomposition of the transfer is not a decomposition of
+$C_\ell$.} Splitting $T_\ell$ into rank-0, rank-1 and rank-2 parts gives
+autocorrelations \emph{and} cross terms. Measured (\textbf{F5}): the autos
+together with twice the crosses reproduce $C_\ell$ to $4.7\times10^{-16}$,
+while the autos \emph{alone} are off by $0.10$. \textbf{The cross terms are not
+a correction to be neglected; they are half the statement.}
+
+\textbf{Second, a frame gap in $C_\ell$ is not a frame gap in the invariant.}
+The two released frames differ by a median of $15\%$ over $2\le\ell\le400$ and
+reach $40\%$ at some $\ell$. \textbf{That is not by itself a defect}, because
+$C_\ell$ as computed here is built from frame-dependent pieces while the
+invariance (102) satisfies is a statement about the \emph{total at fixed $k$},
+which diagnostic~D6 measures separately. \emph{What was a defect is the
+separate matter of how large the gap is}: F9's caption read \emph{``which is a
+result and not a defect''} and that reading is withdrawn --- the gap is now
+understood as the third symptom of the bare $\kappa'$ carried inside $C_1$
+(\textbf{T-101}, \textbf{T-121}), and \S\ref{sec:w-form} carries it.
+
+\textbf{Third, a ratio of two spectra is not a ratio of two amplitudes.}
+$D_\ell=\ell(\ell+1)C_\ell/2\pi$ is renormalised at $\ell=30$ in every released
+figure, because neither this bundle nor the external codes fixes the primordial
+amplitude the same way and an amplitude comparison would measure a
+normalisation. \textbf{Every percentage in this supplement comparing shapes is
+a shape comparison and nothing in it constrains $A_s$.}
+
+% ===========================================================================
+\subsection{Criterion 5b, and the two different ``two routes''}
+
+\textbf{There are two route comparisons in this bundle and they check
+different things.} Conflating them is easy and would be expensive.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l >{\raggedright\arraybackslash}X l@{}}
+\toprule
+\textbf{comparison} & \textbf{what differs between the two sides} & \textbf{value} \\
+\midrule
+\eqref{eq:186} against \eqref{eq:187-188} & the \emph{harmonic weight algebra}
+  alone & exact in $\mathbb Q$ to $\ell=2000$ \\
+\textbf{criterion 5b}: (102) against (177)--(179) & the \emph{assembly order}
+  alone --- generic-then-specialised against Newtonian-from-the-start &
+  $9.5\times10^{-6}$ against a $10^{-3}$ bar \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent
+\textbf{Criterion 5b is the audit half of the release, and it exists because a
+symbolic recovery is an argument whose arithmetic nobody has run.} The
+antecedent writes its integral solution twice and says so --- \emph{``Later we
+will explicitly recover these equations in the Newtonian frame''}, and at the
+end of that recovery, \emph{``This completes the recovery of the standard
+integral solution results using the $1+3$ CGI approach at linear order''}. The
+recovery is carried out on the page, as it should be. Evaluating both forms and
+comparing them had never been done.
+
+\paragraph{What 5b holds fixed, written out rather than left to be noticed.}
+Both routes are given the same background and $\eta$ grid, the same
+recombination history and therefore the same $\kappa'$, visibility and
+$\eta_*$, the same single acoustic solve, the same potentials, the same Bessel
+table, the same diffusion damping --- and \textbf{the same line-of-sight
+weight, $e^{-\kappa}$, on both sides}.
+
+\textbf{That last one is deliberate and it is the largest thing 5b does not
+see.} (102) prints $\mathcal V=\kappa'e^{-\kappa}$ and (98) prints
+$e^{-\kappa}$; approximations \textbf{A-1} and \textbf{A-2} record the
+difference, and at $C_\ell$ \emph{the two weightings differ by a factor of
+eighty across the Sachs--Wolfe plateau for that reason alone}. Weighting both
+sides alike removes the one thing the comparison is not about, so that what
+remains is the assembly algebra. \emph{It also means 5b's
+$9.5\times10^{-6}$ says nothing whatever about the weight question that
+\S\ref{sec:w-form} is entirely about.}
+
+\paragraph{And it says nothing about agreement with an external code.} CAMB and
+CLASS are drawn as context and are not a target (decision \textbf{S4c}). The
+distance to them is large, expected, and itemised by approximation rather than
+totalled: $97.8\%$ across the plateau, $137\%$ across the peaks, of which the
+damping coefficient alone is $17.2\%$. \textbf{A bundle gated on an external
+code would be measuring that code; this one is gated on its own two routes and
+reports the distance separately.}
+
+% ===========================================================================
+\subsection{Where the spectrum is gated, and what none of it establishes}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{gate} & \textbf{what it tests} & \textbf{what it does not} \\
+\midrule
+rational weights & that \eqref{eq:186}'s and \eqref{eq:187-188}'s prefactors are
+  both exactly~1, as rationals, to $\ell=2000$ &
+  anything about $\tau_\ell$: the weights cancel whatever multiplies them \\
+\textbf{criterion 5b} & that the generic and Newtonian assemblies agree, at
+  $9.5\times10^{-6}$ & the background, the recombination history, the acoustic
+  solve, the Bessel table, the damping, or \emph{the weight} --- every one of
+  them is shared \\
+rank decomposition & that the ranks sum to the total, $4.1\times10^{-16}$ in
+  the CDM frame & that any rank is right \\
+two-route $C_\ell$ difference & reported, now bitwise zero since \textbf{T-17}
+  & it has stopped being a test and is kept as a reported number \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent
+\textbf{No gate in this section validates the assembled spectrum.} The basic
+checks above pass, and they pass on an assembly whose first acoustic peak sits
+at $0.635$--$0.711\,\ell_A$ against a matched $0.757$. \emph{That is not a
+contradiction and it is the reason the ``does not establish'' column exists}:
+every one of these gates holds fixed, or is indifferent to, precisely the part
+that is wrong. \textbf{T-3} is the standing statement of why --- a comparison
+that holds an input fixed cannot check that input --- and the spectrum is where
+it bites hardest, because it is the last step and inherits every shared input
+above it.
