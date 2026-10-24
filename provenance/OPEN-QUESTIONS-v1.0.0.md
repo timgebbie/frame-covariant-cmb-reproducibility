@@ -112,7 +112,7 @@ choice.
 comparison is Sachs–Wolfe only: (196) descends from (181), where the acoustic
 modulation $\cos(k r_s)$ is dropped by taking $r_s^*\to0$, and §8.3.2 sets the
 transfer function to unity. The accuracy is therefore bounded by the term that was
-dropped, $1-\cos(k r_s)$ with $\ell\simeq k\,\Delta\eta_*$. Using Annals II's own
+dropped, $1-\cos(k r_s)$ with $\ell\simeq k\thinspace \Delta\eta_*$. Using Annals II's own
 §8.3.2 model the acoustic scale is $\ell_A\simeq203$, giving $\ell\le9$ at 1%,
 $\le12$ at 2%, $\le20$ at 5% and $\le29$ at 10%.
 
@@ -184,13 +184,9 @@ had it partly wrong.
 Eq. (176)**, with (187) and (188) as the covariant route to the same number.
 Equation numbers are identical in the published and arXiv editions here.
 
-$$C_\ell=\frac{2}{\pi}\frac{\beta_\ell^2}{(2\ell+1)^2}\int_0^\infty\frac{dk}{k}\,
-k^3|\tau_\ell(k,\eta_0)|^2\tag{186}$$
+$$C_\ell=\frac{2}{\pi}\frac{\beta_\ell^2}{(2\ell+1)^2}\int_0^\infty\frac{dk}{k}\thinspace  k^3|\tau_\ell(k,\eta_0)|^2\quad(186)$$
 
-$$\langle\tau_{A_\ell}\tau^{A_\ell}\rangle\simeq\frac{\beta_\ell}{2\pi^2}
-\int k^2dk\,|\tau_\ell(k,\eta_0)|^2,\qquad
-C_\ell=\Delta_\ell(2\ell+1)^{-1}\langle\tau_{A_\ell}\tau^{A_\ell}\rangle
-\tag{187, 188}$$
+$$\langle\tau_{A_\ell}\tau^{A_\ell}\rangle\simeq\frac{\beta_\ell}{2\pi^2} \int k^2dk\thinspace |\tau_\ell(k,\eta_0)|^2,\qquad C_\ell=\Delta_\ell(2\ell+1)^{-1}\langle\tau_{A_\ell}\tau^{A_\ell}\rangle \quad(187, 188)$$
 
 **The two routes are identical**, exactly, given $\Delta_\ell=4\pi\beta_\ell/
 (2\ell+1)$ — proven in `tests/`. That identity is the paper's own point stated as
@@ -287,7 +283,7 @@ by applying $i^\ell$ to them, and nothing in the chain would have objected.
 $Q_{A_\ell}=\mu^{-\ell}\mathrm D_{\langle A_\ell\rangle}Q$ rescales
 $\tau_\ell\to c^\ell\tau_\ell$ with $c=\mu'/\mu$. A recursion
 $\tau_\ell'=k[A_\ell\tau_{\ell-1}+B_\ell\tau_{\ell+1}]$ becomes
-$(A_\ell/c,\;B_\ell c)$, so **$B/A\to c^2B/A$**. At $c=i$ an opposite-sign real
+$(A_\ell/c,\thickspace B_\ell c)$, so **$B/A\to c^2B/A$**. At $c=i$ an opposite-sign real
 bracket becomes a same-sign bracket under an overall $i$. The two conventions in
 the literature are the two values of $c^2=\pm1$ and nothing else.
 
@@ -615,7 +611,7 @@ diffusion alone. Chasing why not found the cause.
 period in $\ell$ is **589.7** against CAMB's **285.5**, and a damping envelope
 multiplies — it cannot change a period. The acoustic ODE is handed a grid
 starting at `RecombinationHistory.build`'s `z_max = 3000.0`, which discards
-**50.8%** of the sound horizon $r_s(\eta_*)=\int_0^{\eta_*}c_s\,d\eta$ and so
+**50.8%** of the sound horizon $r_s(\eta_*)=\int_0^{\eta_*}c_s\thinspace d\eta$ and so
 doubles the peak spacing. Starting at $z=2\times10^5$ reproduces CAMB's 285.5
 to **1.6%**.
 
@@ -665,9 +661,9 @@ Shape, $D_\ell$ renormalised at $\ell=30$, `PLANCK_MODEL` against CAMB:
 ### Two things this exposes about the comparison, not only about the physics
 
 **The band average hides a sign change.** `compare_criterion_5b.py` reports the
-acoustic band as a single worst-case $137\%$ over $30\le\ell<1000$. That band
-contains a region where we are $130\%$ **high** and a region where we are
-$90\%$ **low**, and a worst-case magnitude cannot distinguish them. *A single
+acoustic band as a single worst-case $137$% over $30\le\ell<1000$. That band
+contains a region where we are $130$% **high** and a region where we are
+$90$% **low**, and a worst-case magnitude cannot distinguish them. *A single
 number per band was the right first instrument and is now the wrong one.*
 **Proposed:** split the acoustic band at the first peak, and report the signed
 ratio's range rather than only $\max|{\rm diff}|$.
@@ -743,11 +739,11 @@ ringing for say tensor modes?"*
 
 Appendix C's own solid-angle reduction puts the **shear** in $\mathcal B$'s
 rank-two part,
-$\int\mathrm d\Omega\,O^{A_\ell}\mathcal B\simeq\dots+\delta^\ell_2[\tfrac{8\pi}{15}\sigma^{a_1a_2}]$.
+$\int\mathrm d\Omega\thinspace O^{A_\ell}\mathcal B\simeq\dots+\delta^\ell_2[\tfrac{8\pi}{15}\sigma^{a_1a_2}]$.
 At first order $-t_c\mathcal B$ therefore reproduces \S7.1's quadrupole
 $\tau_{ab}\simeq-\dot\kappa^{-1}[\sigma_{ab}+\mathrm D_{\langle a}v^B_{b\rangle}]$,
 as it must. At second order the closed form contributes
-$+t_c^2\,\mathcal D\mathcal B$, which is $\dot\sigma_{ab}$ at rank two and
+$+t_c^2\thinspace \mathcal D\mathcal B$, which is $\dot\sigma_{ab}$ at rank two and
 $e^c\mathrm D_c\sigma_{ab}$ at rank three — and Appendix G's
 $\dot\sigma_{ab}+2H\sigma_{ab}+E_{ab}\approx0$ turns the first of those into
 
@@ -786,7 +782,7 @@ discards --- **S2**'s subject, not Appendix C's.
 
 **The high-$\ell$ sensitivity the question is reaching for is real by a
 different and cleaner route.** Each $e^a\mathrm D_a$ contributes one power of
-$k$ and rank $r$ terms carry $k^{\,r-1}$, so the expansion parameter is
+$k$ and rank $r$ terms carry $k^{\thinspace r-1}$, so the expansion parameter is
 $t_ck$ and not $t_c$. A cut in rank *is* a cut in $t_ck$, and the order at
 which the expansion may be stopped **falls as $\ell$ rises**. That is a
 statement about $t_ck$, carries no $\epsilon^2$, and is the one to take into

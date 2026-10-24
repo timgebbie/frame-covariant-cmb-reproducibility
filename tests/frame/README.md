@@ -84,6 +84,6 @@ those differ between the two lines.
 
 ## c8 — the rank-0 partner
 
-`c8_rank0_partner.py`, added 2026-10-21. **The gate acceptance condition (iv) depends on, in place of $\gamma$.** It scores the frame shift of the *bracket* $C_0-C_1'$ at rank zero, in exact rationals with a numeric confirmation and a control on each of three rows: $+13/6\,kv$ with (89)'s printed $\alpha_2$, **$0$ exactly** with $\alpha_0$ (finding **B-16**), and $-1/3\,kv$ with $a\mathcal B_0$ restored (the refuted **T-107**).
+`c8_rank0_partner.py`, added 2026-10-21. **The gate acceptance condition (iv) depends on, in place of $\gamma$.** It scores the frame shift of the *bracket* $C_0-C_1'$ at rank zero, in exact rationals with a numeric confirmation and a control on each of three rows: $+13/6\thinspace kv$ with (89)'s printed $\alpha_2$, **$0$ exactly** with $\alpha_0$ (finding **B-16**), and $-1/3\thinspace kv$ with $a\mathcal B_0$ restored (the refuted **T-107**).
 
 > **Why $\gamma$ could not settle it — M15.** $\gamma$ pairs $\Delta C_0$ against $k^2\Delta C_2$, and the partner is in $-C_1'$. *A gate built from one coefficient cannot see a cancellation distributed across the bracket.* Every measurement in `c5_monopole.py` stands; the pairing it scores is the wrong object.

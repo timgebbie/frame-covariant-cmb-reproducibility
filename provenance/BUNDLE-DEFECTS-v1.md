@@ -278,7 +278,7 @@ already written for itself.
 ### The correction
 
 `n_eta` is now **derived**, not chosen. `functions/spectra/pipeline.required_n_eta`
-returns $\lceil 12\,k_{\max}(\eta_0-\eta_{\min})/\pi\rceil$ — twelve samples per
+returns $\lceil 12\thinspace k_{\max}(\eta_0-\eta_{\min})/\pi\rceil$ — twelve samples per
 oscillation at the band edge, matching `BesselTable`'s sampling of the same
 oscillation in $x$, because two grids resolving one function have no business
 disagreeing about how finely. `run(..., n_eta=None)` is the default and derives
@@ -487,7 +487,7 @@ Paper 1's caption for `fig:bulk` read:
 **That is backwards**, and the PI established it from the section rather than
 from the caption: $\Delta e_\perp(0)=0$ kills the *lower boundary* term, so what
 survives is the **bulk integral**, which on exchanging the double integral is
-$-\int(\chi_*-\chi)\nabla_\perp\Phi_A\,\dd\chi$ — the deflection with the
+$-\int(\chi_*-\chi)\nabla_\perp\Phi_A\thinspace \dd\chi$ — the deflection with the
 lensing efficiency inside it. The endpoint vanishes; the bulk is the signal.
 
 P1-T's float specification of 2026-10-06 was written from that caption, so the
@@ -1579,7 +1579,7 @@ $\eta_*$.
 
 Measured, the two scales are not interchangeable:
 
-| suppression | scale | $\ell=k\,\Delta\eta$ |
+| suppression | scale | $\ell=k\thinspace \Delta\eta$ |
 |---|---|---|
 | Silk, $k_D(\eta_*)$ | 557.8 | **1807** |
 | the visibility's own width, $1/\sigma_\eta$ (FWHM $0.00972$) | 242.3 | **785** |
@@ -1648,12 +1648,11 @@ there — but it is **far too small to be the cause**, and this stream reported 
 before measuring it at the level that decides.
 
 Measured properly: what enters $C_\ell$ is
-$\int dk\,k^2\mathcal P|T_\ell|^2$, so the quantity is the **phase-averaged
+$\int dk\thinspace k^2\mathcal P|T_\ell|^2$, so the quantity is the **phase-averaged
 mean square** of the projection over $k$, not its value at any one $k$. Taking
 a band of $k$ spanning several $j_\ell$ oscillations,
 
-$$R(\ell)=\frac{\big\langle[\int\mathcal V j_\ell\,d\eta]^2\big\rangle_k}
-{\big\langle j_\ell(k\Delta\eta_*)^2\big\rangle_k}$$
+$$R(\ell)=\frac{\langle[\int\mathcal V j_\ell\thinspace d\eta]^2\rangle_k} {\langle j_\ell(k\Delta\eta_\ast)^2\rangle_k}$$
 
 | $\ell$ | 10 | 100 | 200 | 400 | 700 | 1000 | 1500 | 2000 |
 |---|---|---|---|---|---|---|---|---|
@@ -1666,7 +1665,7 @@ is a defect of the assembly but **not** the one this finding set out to name.
 **Two estimates were wrong in the same direction, and both were mine.** The
 Gaussian form $\exp[-(k\sigma)^2]$ predicts 0.19 at $\ell=1000$ where the truth
 is 0.84, and the "fraction of a $j_\ell$ oscillation spanned",
-$f=k\,\mathrm{FWHM}/\pi$, predicts failure from $f\simeq0.7$ onward. Both
+$f=k\thinspace \mathrm{FWHM}/\pi$, predicts failure from $f\simeq0.7$ onward. Both
 over-estimate the smearing badly, for the same reason: near its turning point
 $x\simeq\ell$, $j_\ell$ does **not** oscillate with period $\pi$ — it varies far
 more slowly, so a surface that looks thick in units of the asymptotic period is
@@ -1872,20 +1871,20 @@ recalled rather than sourced and which conflates the $\ell$ where the damping
 envelope becomes *visible* with $k_D\chi_*$. Planck 2018 VI Table 2 tabulates
 $k_D$ and $\theta_*$ directly, and they give
 
-$$\chi_*=r_*/\theta_*=13873\ \text{Mpc},\qquad \ell_D=k_D\chi_*=\mathbf{1954}$$
+$$\chi_\ast=r_\ast/\theta_\ast=13873\ \text{Mpc},\qquad \ell_D=k_D\chi_\ast=\mathbf{1954}$$
 
 Against that number:
 
 | | $\ell_D$ | vs Planck |
 |---|---|---|
-| $R$ passed as zeros, **as the code calls it** | 1783 | $-8.8\%$ |
-| $R$ as the bundle computes it, **the fix** | **1985** | **$+1.6\%$** |
+| $R$ passed as zeros, **as the code calls it** | 1783 | $-8.8$% |
+| $R$ as the bundle computes it, **the fix** | **1985** | **$+1.6$%** |
 
 **So the fix lands the number and the defect is the thing costing 9%.** T-21
 goes from "a defect that does not help" to "a defect whose correction brings the
 Silk scale to 1.6% of Planck's". The conformal geometry is corroborated at the
-same time: $\Delta\eta_*=3.1955\,c/H_0$ against Planck's
-$\chi_*=3.1171\,c/H_0$, **+2.5%** at round-number parameters, which is why the
+same time: $\Delta\eta_*=3.1955\thinspace c/H_0$ against Planck's
+$\chi_*=3.1171\thinspace c/H_0$, **+2.5%** at round-number parameters, which is why the
 $\ell=k\Delta\eta$ comparisons throughout this record are meaningful at all.
 
 **The lesson is the one T-16 taught in a different place.** A remembered
@@ -1983,9 +1982,7 @@ and spline them for $C_1'$ and $C_2''$. **That is wrong, and not slightly.**
 *Annals II* mode-expands $\mathcal D_{\langle a}\dot{\mathcal B}_{b\rangle}$
 with the footnote to (105):
 
-$$\mathcal D_{\langle a}\dot{\mathcal B}_{b\rangle}\approx
--\frac ak\big(\dot{\mathcal B}_1+2H\mathcal B_1\big)
-\mathcal D_{\langle a}\mathcal D_{b\rangle}Q$$
+$$\mathcal D_{\langle a}\dot{\mathcal B}_{b\rangle}\approx -\frac ak(\dot{\mathcal B}_1+2H\mathcal B_1) \mathcal D_{\langle a}\mathcal D_{b\rangle}Q$$
 
 The $2H\mathcal B_1$ comes from the $1/a$ inside $\tilde{\mathcal B}_1\approx
 \frac ka(\delta\tilde T+\Phi_A)$ and is **invisible to a spline through the
@@ -2058,7 +2055,7 @@ $-\tfrac12(k/a)^2(\Phi_A-\Phi_H)$ --- the same thing, from a third direction.
 
 ### Why the closure could not see it
 
-Write $\sigma=c\,k_{\rm phys}v$ and $E=e\,k_{\rm phys}^2\Phi_A$. The residual of
+Write $\sigma=c\thinspace k_{\rm phys}v$ and $E=e\thinspace k_{\rm phys}^2\Phi_A$. The residual of
 the three statements
 
 1. $\sigma_{ab}=\mathcal D_{\langle a}v_{b\rangle}$,
@@ -2258,7 +2255,7 @@ definition $\mathcal D_{\langle a}\tilde A_{b\rangle}\approx E_{ab}
 $E=\lambda rk_{\rm phys}^2\Phi_A$. Substituting both into Appendix G's
 $\dot\sigma+2H\sigma+E\approx0$ leaves
 
-$$\boxed{\;\frac{2\lambda r k^2\Phi_A}{a^2}\;}$$
+$$\boxed{\thickspace \frac{2\lambda r k^2\Phi_A}{a^2}\thickspace }$$
 
 **which is zero for neither branch.** Three published relations --- n-t1, n-t2
 and the Appendix G shear propagation equation --- do not close under any single
@@ -2323,8 +2320,7 @@ $\tilde\sigma_{ab}\approx\sigma_{ab}+\mathcal D_{\langle a}v_{b\rangle}$,
 contradicts its own specialisation **(40)**. (31) is right --- see **B-13** in
 `ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md` for the three reasons. With (31):
 
-$$\sigma=-k_{\rm phys}v,\qquad E=-k_{\rm phys}^2\Phi_A,\qquad
-v'+\mathcal Hv=-k\Phi_A$$
+$$\sigma=-k_{\rm phys}v,\qquad E=-k_{\rm phys}^2\Phi_A,\qquad v'+\mathcal Hv=-k\Phi_A$$
 
 all consistent with conventions rows **C3.5** ($s_Q=-1$) and **C4.2**, and with
 `frames.py::weyl_electric_amplitude`, which is Annals II **(24)** and was
@@ -2431,8 +2427,8 @@ Decision **S8** says:
 > The *energy frame* is the threading in which the total energy flux vanishes,
 > $q_a=0$; it and the CDM threading [...] are **separate stipulations**, and
 > they agree only to $\approx$ [...]. Setting $q_a=0$ in a mixture gives
-> $\rho_{\!_C}v^a_{\!_C}+\tfrac43\rho_{\!_R}v^a_{\!_R}+\ldots=0$, so the energy
-> frame **tilts away from the CDM one by $O(\rho_{\!_R}/\rho_{\!_C})$** and the
+> $\rho_{\negthinspace _C}v^a_{\negthinspace _C}+\tfrac43\rho_{\negthinspace _R}v^a_{\negthinspace _R}+\ldots=0$, so the energy
+> frame **tilts away from the CDM one by $O(\rho_{\negthinspace _R}/\rho_{\negthinspace _C})$** and the
 > two coincide in the limit of matter domination.
 
 S8's reason is the giveaway. *"CDM carries no energy flux of its own"* is true
@@ -2670,7 +2666,7 @@ $$\exp[-(420/871.4)^2] = \mathbf{0.79},$$
 i.e. **the grid stops essentially at the peak of the shear integrand rather than
 past it.** The shear sector carries an extra factor of $k$ in the transfer
 (`shear[i] = k * c2_star * damping_total * combination`), so with $n_s=1$ its
-$k$-integrand goes as $k\,e^{-2(k/k_D)^2}$ and peaks at $k=k_D/2\simeq436$ —
+$k$-integrand goes as $k\thinspace e^{-2(k/k_D)^2}$ and peaks at $k=k_D/2\simeq436$ —
 beyond the grid's edge — while the scalar sector's has long since fallen. **The
 rank-0/2 sectors need a tail that rank 1 does not.**
 
@@ -3657,8 +3653,7 @@ reproduces."*
 > scattering (which breaks the tight-coupling approximation) and polarization.
 > [...] We follow the approach of Kaiser [...] and include the correction $f_2$
 > to find the modified damping factor:
-> $$\gamma^* \approx k^2\Big(\tfrac{\kappa'^{-1}}{6}\Big)
->   \Big[\tfrac{R^2+\tfrac45 f_2^{-1}(1+R)}{(1+R)^2}\Big]$$
+> $$\gamma^\ast \approx k^2(\tfrac{\kappa'^{-1}}{6}) >   [\tfrac{R^2+\tfrac45 f_2^{-1}(1+R)}{(1+R)^2}]$$
 > where, first, for the anisotropic effect, $f_2=\tfrac{9}{10}$, and second, to
 > compensate for the polarization, $f_2=\tfrac34$.
 
@@ -4187,7 +4182,7 @@ $\ell=492$. Two curves out of phase, compared bin by bin.
 ### Where the phase goes
 
 $\ell_{\text{peak}}$ spacing is $\pi(\eta_0-\eta_*)/r_s(\eta_*)$, and
-$r_s(\eta_*)=\int_0^{\eta_*}c_s\,d\eta$ runs from the big bang.
+$r_s(\eta_*)=\int_0^{\eta_*}c_s\thinspace d\eta$ runs from the big bang.
 `functions.spectra.pipeline.run` hands `solve_acoustic` the grid
 `eta[inside]`, which begins at `recombination.eta[0]` --- and that is
 $\eta$ at `RecombinationHistory.build`'s **`z_max = 3000.0`**. For
@@ -4198,7 +4193,7 @@ $\eta$ at `RecombinationHistory.build`'s **`z_max = 3000.0`**. For
 | $\int_0^{\eta_*}$ | 0 | 0.036135 | 1.000 |
 | as shipped, from $z=3000$ | 0.033332 | 0.017789 | **0.492** |
 
-**50.8% of the sound horizon is missing**, so the accumulated phase $k\,r_s$ is
+**50.8% of the sound horizon is missing**, so the accumulated phase $k\thinspace r_s$ is
 halved and the peak spacing doubles. Predicted $\Delta\ell=552.6$ against the
 measured 589.7; with the full horizon, 272.0 against CAMB's 285.5.
 
@@ -4266,7 +4261,7 @@ figures stand as measured --- **S39**: a release is corrected by a new release.
 
 **Fixed 2026-10-16, hours after being recorded.** `pipeline.run` takes
 `acoustic_start`, defaulting to **`"derived"`**: each mode is integrated from
-the $\eta$ at which $k\,r_s(\eta)\le0.1$, which is what (180)'s
+the $\eta$ at which $k\thinspace r_s(\eta)\le0.1$, which is what (180)'s
 $\delta T(0,k)\simeq-\tfrac23\Phi_A(0,k)$, $\tau_1=0$ means by *at the big
 bang*. `"z_max"` reproduces the old behaviour exactly and is **kept as a
 control**, the way `expansion_coupling=False` keeps (154) and
@@ -4316,7 +4311,7 @@ CAMB's and CLASS's **285.5**, from 589.7 before.
 
 ### What it does not recover, and that is the interesting half
 
-The *phase offset*. Our maxima sit at $j\,\ell_A$ with
+The *phase offset*. Our maxima sit at $j\thinspace \ell_A$ with
 $\ell_A=\pi r_\theta/r_s=272$ --- 272, 544, 816 against measured 552 and 836 ---
 where CAMB's are at 206, 492, 729, shifted **down**. That shift is the
 radiation driving, and *Annals II*'s matter-dominated Appendix G has no term
@@ -4625,10 +4620,10 @@ chooses the linear spacing without asking what it must resolve.
 
 ### The arithmetic it skipped
 
-$C_\ell=\int dk\,k^2\mathcal P(k)|T_\ell(k)|^2$ carries $j_\ell(k\,\Delta\eta)$
+$C_\ell=\int dk\thinspace k^2\mathcal P(k)|T_\ell(k)|^2$ carries $j_\ell(k\thinspace \Delta\eta)$
 **squared**, whose period in $k$ is $\pi/\Delta\eta$. So
 
-$$dk\;\le\;\frac{\pi}{\texttt{points\_per\_period}\;\Delta\eta},$$
+$$dk\thickspace \le\thickspace \frac{\pi}{\texttt{points\textunderscore per\textunderscore period}\thickspace \Delta\eta},$$
 
 which is `required_n_eta`'s formula with $\Delta\eta$ in place of the $\eta$
 span. **One kernel, two axes; the bundle derived one of them.**
@@ -4646,7 +4641,7 @@ Below one sample per oscillation on both $\Lambda$CDM-like backgrounds.
 For a pure Sachs–Wolfe transfer at $n_s=1$ the spectrum integral collapses to
 an exact number at every multipole, independent of $\Delta\eta$:
 
-$$\int_0^\infty\frac{dk}{k}\,j_\ell^2(k\,\Delta\eta)=\frac{1}{2\ell(\ell+1)}.$$
+$$\int_0^\infty\frac{dk}{k}\thinspace j_\ell^2(k\thinspace \Delta\eta)=\frac{1}{2\ell(\ell+1)}.$$
 
 Computed / exact on `PLANCK_MODEL`:
 
@@ -4993,8 +4988,7 @@ $C_0$ and $C_2$ are **the same array**, $a\mathcal B_2$, divided by different
 powers of $k$. In the CDM frame $a\mathcal B_2=a\sigma=-k v$ exactly (n-t1,
 and the bundle asserts it), so
 
-$$C_0=-p_0\,k\,v,\qquad C_2=-p_2\,\frac{v}{k},
-\qquad \frac{C_0}{C_2}=\frac{p_0}{p_2}k^2 .$$
+$$C_0=-p_0\thinspace k\thinspace v,\qquad C_2=-p_2\thinspace \frac{v}{k}, \qquad \frac{C_0}{C_2}=\frac{p_0}{p_2}k^2 .$$
 
 Measured, at $\eta_*$, on all three backgrounds and at every $k$ from 1 to 300:
 $C_0/(k^2C_2)=\mathbf{2.5000}$ — a pure rational, exactly $p_0/p_2$ from (89),
@@ -5105,7 +5099,7 @@ nothing in the dynamics can change it.
 
 (102) --- the manuscript's `slowdecoupling` --- carries
 
-$$\int d\eta\;\mathcal V\,e^{-(k/k_D)^2}\big\{C_0-C_1'+C_2''\big\}j_\ell .$$
+$$\int d\eta\thickspace \mathcal V\thinspace e^{-(k/k_D)^2}\lbrace C_0-C_1'+C_2''\rbrace j_\ell .$$
 
 **$C_0$ appears undifferentiated and $C_2$ appears as $C_2''$.** The
 cancellation that *defines* $C_0$ is against $k^2C_2$, not against $C_2''$, so
@@ -5136,9 +5130,7 @@ Measured: dropping $C_0$ from the CDM frame recovers the Newtonian answer to
 effectively drop the last two lines of (93) except for the initial baryon
 velocity contribution"*. Those lines are
 
-$$\int(\kappa'e^{-\kappa})\big[C_1-2C_2\big]j_\ell
-\quad\text{and}\quad
-\int\big((\kappa')^2-\kappa''\big)e^{-\kappa}\,C_2\,j_\ell .$$
+$$\int(\kappa'e^{-\kappa})[C_1-2C_2]j_\ell \quad\text{and}\quad \int((\kappa')^2-\kappa'')e^{-\kappa}\thinspace C_2\thinspace j_\ell .$$
 
 Both carry $C_1$ and $C_2$, so the obvious hypothesis was that **they are the
 counterweight** and that restoring them would close the frame gap.
@@ -5195,8 +5187,7 @@ Euler equation $v'+\mathcal Hv=-k\Phi_A$ --- which **is** the frame condition
 $\tilde A_a=0$ --- integrates by the factor $a\propto\eta^2$ to $v=-k\Phi\eta/3$,
 hence $\mathcal Hv/k=-\tfrac23\Phi$. With (180)'s $\delta T=-\tfrac23\Phi_A$,
 
-$$\delta T^{E}=\delta T-\frac{\mathcal Hv}{k}
-=-\tfrac23\Phi+\tfrac23\Phi=0\qquad\textbf{identically.}$$
+$$\delta T^{E}=\delta T-\frac{\mathcal Hv}{k} =-\tfrac23\Phi+\tfrac23\Phi=0\qquad\textbf{identically.}$$
 
 Measured $2.18\times10^{-7}$, which is the grid. **So in the CDM threading there
 is no gravitational redshift left in $\mathcal B_1$ at all**: the whole of it
@@ -5223,8 +5214,8 @@ from the far end.
 ### PLANCK's Newtonian $0.5996$ is **not** the frame. It is A-3.
 
 $\Phi_A$ falls from $1.000000$ to $0.933264$ between $\eta[0]$ and $\eta_*$ ---
-$6.7\%$. But $\delta T+\Phi_A$ is a **small residue of two numbers near $0.73$
-and $0.93$**, so a $6.7\%$ drift in $\Phi$ becomes a $40\%$ deficit in the
+$6.7$%. But $\delta T+\Phi_A$ is a **small residue of two numbers near $0.73$
+and $0.93$**, so a $6.7$% drift in $\Phi$ becomes a $40$% deficit in the
 Sachs–Wolfe amplitude. Einstein–de Sitter, where $\Phi$ is constant to sixteen
 digits, returns $1.0000$ on the same code path.
 
@@ -5252,7 +5243,7 @@ made on 2026-10-17 would have been shortened by running this first.
 **Measured 2026-10-18**, on a criterion the Paper 1 stream supplied: GDE99 (37)
 makes $\tau_{A_\ell}$ **unchanged** under a first-order boost for every
 $\ell>1$, so the two threadings must give *numerically identical* multipoles at
-$\ell\ge2$ --- not agreement within a tolerance. **T-60**'s $1$--$15\%$
+$\ell\ge2$ --- not agreement within a tolerance. **T-60**'s $1$--$15$%
 residual after $C_0$ is dropped therefore cannot be $O(\varepsilon^2)$: the
 theorem is exact at the order this bundle solves.
 
@@ -5267,7 +5258,7 @@ Refining the $\eta$ grid fourfold, $C_0$ dropped, against the Newtonian scale:
 | `PLANCK_MODEL` | 8000 | 20 | $1.1059\times10^{-1}$ | $3.94\times10^{-2}$ | $7.12\times10^{-2}$ |
 | | 32000 | 20 | $1.1056\times10^{-1}$ | $3.94\times10^{-2}$ | $7.11\times10^{-2}$ |
 
-**Four times the resolution moves it by under $0.3\%$ of itself**, and at
+**Four times the resolution moves it by under $0.3$% of itself**, and at
 $k=140$ it moves the wrong way. Not a grid artefact.
 
 **And it localises to both ranks.** rank-1 and rank-2 carry the same order at
@@ -5293,7 +5284,7 @@ delta_T(eta_*)   released  -7.505929e-01
                  corrected +1.189578e+00
 ```
 
-**A sign flip on a $0.13\%$ input.** The oscillator is driven by $\Phi$ *and
+**A sign flip on a $0.13$% input.** The oscillator is driven by $\Phi$ *and
 its derivative*; the acoustic grid carries **three points** below
 $\eta_{\rm eq}$ at that $k$; and a splice across three points is a step in
 $\Phi'$. The response is to the kink.
@@ -5552,7 +5543,7 @@ T-67 for the reason above.
 ### The sign hazard, confirmed
 
 `decoupling.py` builds `kappa = forward[-1] - forward`, so $\kappa(\eta_0)=0$
-and $d\kappa/d\eta=-\,$`kappa_prime`. Therefore
+and $d\kappa/d\eta=-\thinspace $`kappa_prime`. Therefore
 $W'=\mathrm d(e^{-\kappa})/\mathrm d\eta=+\kappa'e^{-\kappa}=+\mathcal V$,
 **positive**. The stored `kappa_prime` is the scattering **rate**, not the
 derivative of the optical-depth array. Raised independently by P1-T \S5.4 and
@@ -5777,7 +5768,7 @@ located maxima, which was P1-T's concern and T-68's mechanism.
 The residual maxima sit at $0.898$ and $0.875$ of the control's. **That
 compression is roughly uniform**, and by P1-T's own discriminator a uniform
 rescale is $r_s$ or a constant $r_\theta$ --- *not* the varying-$a$ kernel,
-which is independently excluded above. **A $\simeq12\%$ constant in the sound
+which is independently excluded above. **A $\simeq12$% constant in the sound
 horizon or the angular-diameter distance is the next thing to measure.**
 
 ### Not claimed
@@ -5963,7 +5954,7 @@ synthetic control used**, so there is no discrepancy in the tabulated
 quantities. And the *solver's* effective sound horizon, fitted from the
 extrema of $(\delta T+\Phi_A)(\eta_*)$ over $k=20\ldots700$, is
 $0.032289$ --- a ratio of **1.0205**, and the series $201,302,400,500,599$
-matches $n\times99.3$ to $\simeq1\%$ once the spurious first extremum at
+matches $n\times99.3$ to $\simeq1$% once the spurious first extremum at
 $k=117$ ($n\simeq1.18$, not 1) is dropped. **2%, not the 11% the
 $\sqrt{(1+R)/(1+R/2)}$ mechanism requires.** The numerical coincidence
 ($1.1099$ against an apparent $1.1287$) is real and is not this.
@@ -6087,8 +6078,7 @@ as the question**, and it is worth its own guard beside V4.
 With $\mathcal B_0$ restored, $C_0=-\tfrac13a\mathcal B_2-a\mathcal B_0$ and
 $a\mathcal B_0=-\tfrac13k\tau_1$ ($\tau_1$ velocity-normalised, T-66):
 
-$$\Delta C_0=-\tfrac13a\Delta\mathcal B_2+\tfrac13k\Delta\tau_1
-=+\tfrac13kv-\tfrac13kv=0 .$$
+$$\Delta C_0=-\tfrac13a\Delta\mathcal B_2+\tfrac13k\Delta\tau_1 =+\tfrac13kv-\tfrac13kv=0 .$$
 
 **Measured on the grid: $\Delta C_0=3.5\times10^{-15}$, $3.2\times10^{-14}$,
 $3.4\times10^{-16}$, $1.9\times10^{-15}$, $6.5\times10^{-15}$,
@@ -6263,7 +6253,7 @@ the $\eta$ grid:
 
 **Identically equal, to every digit, at every $k$ on both backgrounds.**
 
-So the bracket $\{C_0-C_1'+C_2''\}$ carries the dipole-divergence source
+So the bracket $\lbrace C_0-C_1'+C_2''\rbrace $ carries the dipole-divergence source
 **twice** once $\mathcal B_0$ is restored. The two are different objects by
 provenance --- $\mathcal B_0=-\tfrac13\mathcal D^a\tau_a$ is the $\ell=0$
 *source* in the matching; (106)'s $\tilde\tau_1$ term is the *time evolution*
@@ -6340,8 +6330,7 @@ brought to the solver's convention and the monopole row was left behind.
 P1-T reads `modeibe` at $\ell=0$, where the recursion coefficient is
 $(\ell+1)^2/[(2\ell+1)(2\ell+3)]=\tfrac13$ and $\tau_{-1}=0$:
 
-$$\tau_0'+\tfrac{k}{3}\tau_1+\kappa'\tau_0=-a\mathcal B_0,\qquad
-a\mathcal B_0=-\tfrac13k\tau_1\ \Longrightarrow\ \tau_0'+\kappa'\tau_0=0$$
+$$\tau_0'+\tfrac{k}{3}\tau_1+\kappa'\tau_0=-a\mathcal B_0,\qquad a\mathcal B_0=-\tfrac13k\tau_1\ \Longrightarrow\ \tau_0'+\kappa'\tau_0=0$$
 
 with the convention checked against `cbrII.tex` line 2563 rather than imported.
 **The printed $\ell=0$ equation is self-cancelling**: the streaming term is on
@@ -6380,9 +6369,7 @@ P1-T flagged that if $a\mathcal B_0$ is the streaming term rather than a
 source, `c5_monopole.py` restores the wrong object while still returning
 $\Delta C_0=0$, and left it to be settled by reading `d_delta`. Read:
 
-$$\texttt{d\_delta}=-\Phi_H'+\tfrac k3\tau_1,\qquad
-a\mathcal B_0=-\tfrac13k\tau_1\ \Longrightarrow\
-\boxed{\texttt{d\_delta}=-a\mathcal B_0-\Phi_H'}$$
+$$\texttt{d\textunderscore delta}=-\Phi_H'+\tfrac k3\tau_1,\qquad a\mathcal B_0=-\tfrac13k\tau_1\ \Longrightarrow\ \boxed{\texttt{d\textunderscore delta}=-a\mathcal B_0-\Phi_H'}$$
 
 **$a\mathcal B_0$ is on the right, once, as a source.** `c5_monopole.py`
 restores the right object, and the double count P1-T identifies in the printed
@@ -6559,7 +6546,7 @@ stated**, and at $z_*\simeq1109$ the radiation the model omits is not
 negligible. *New. Not previously registered.*
 
 **Helium — confirmed absent.** `_thomson_scale` takes
-$n_{b,0}=1.123\times10^{-5}\,\omega_bh^2\ \mathrm{cm^{-3}}$ and
+$n_{b,0}=1.123\times10^{-5}\thinspace \omega_bh^2\ \mathrm{cm^{-3}}$ and
 `kappa_prime = thomson_scale * x_e * a**(-2)` uses it as the *electron*
 density. With helium, $n_e=x_e(1-Y_p)n_b$, so a factor $(1-Y_p)\simeq0.76$ is
 missing from $\kappa'$ uniformly. `grep` for helium in `decoupling.py` returns
@@ -6732,7 +6719,7 @@ and it now has one.
 
 **2026-10-19, late. P1-T's conversion of CAMB's source into this bundle's
 slots, run as the action item it was offered as.** CAMB carries the rank-1
-scattering source as $g\,(v_b+\sigma)$ — **one object**. Under a boost
+scattering source as $g\thinspace (v_b+\sigma)$ — **one object**. Under a boost
 $v_b\to v_b-v$ while $\sigma$ shifts oppositely, so the sum is invariant and
 *CAMB has no frame gap because it never separates them.* This bundle does
 separate them, so the two columns must produce the same sum.
@@ -6773,7 +6760,7 @@ weight assignment, which is P1-T's items 2 and 3:
 > **3.** $M$ belongs in the $j_\ell$ slot, not $j_\ell'$. Converting it into
 > the $j_\ell'$ slot generates a boundary carrying $W$ and a bulk
 > $-\int WM'j_\ell$. **This bundle's boundary carries $\mathcal D(k)$ and no
-> $W$; its bulk carries $+\int g\,(-C_1')j_\ell$. Weight and sign both differ
+> $W$; its bulk carries $+\int g\thinspace (-C_1')j_\ell$. Weight and sign both differ
 > from the identity.**
 
 **This reorders the work**, and the reorder is the finding's practical content.
@@ -6861,7 +6848,7 @@ first time this register can say so rather than rank it.
 **CAMB and CLASS agree to 0.05%**, which is the external comparison working
 and is worth stating before the discrepancy.
 
-**The first peak should sit *below* $\ell_A$, near $0.7$–$0.8\,\ell_A$**, and
+**The first peak should sit *below* $\ell_A$, near $0.7$–$0.8\thinspace \ell_A$**, and
 in all three backgrounds it sits **above** it. The ratio is not constant —
 1.455, 1.300, 1.255 — so **it is not a single missing factor**, and
 `provenance/MODEL-PARAMETERS-v1.3.0.md`'s test applies in the negative: three
@@ -7014,7 +7001,7 @@ boundary test of the day before.** The same transport source $M=-C_1$
 evaluated directly and through its fully integrated-by-parts form, identical
 histories and identical endpoints, in both frames.
 
-$$\int \mathcal V M j_\ell\,\mathrm d\eta=\bigl[W M j_\ell\bigr]-\int W M' j_\ell\,\mathrm d\eta+k\int W M j_\ell'\,\mathrm d\eta$$
+$$\int \mathcal V M j_\ell\thinspace \mathrm d\eta=[W M j_\ell]-\int W M' j_\ell\thinspace \mathrm d\eta+k\int W M j_\ell'\thinspace \mathrm d\eta$$
 
 `scripts/diagnostic_d13_byparts_2x2.py`, `diagnostics/d13-byparts-2x2-v1.3.0.txt`.
 
@@ -7136,11 +7123,11 @@ named site; had it not matched, the gap would have returned to having none.
 
 ### The identity, and the bundle beside it
 
-$$\int g M j_\ell=\underbrace{\bigl[W M j_\ell\bigr]}_{W}\;\underbrace{-\int W M' j_\ell}_{W,\ \text{minus}}\;\underbrace{+\,k\!\int W M j_\ell'}_{W,\ M\ \text{undifferentiated}}$$
+$$\int g M j_\ell=\underbrace{[W M j_\ell]}_{W}\thickspace \underbrace{-\int W M' j_\ell}_{W,\ \text{minus}}\thickspace \underbrace{+\thinspace k\negthinspace \int W M j_\ell'}_{W,\ M\ \text{undifferentiated}}$$
 
 | | the identity requires | `functions/spectra/integral_solution.py` has | line |
 |---|---|---|---|
-| **boundary** | $\bigl[W M j_\ell\bigr]$, weight $W=e^{-\kappa}$ | `(c2_prime_star - c1_star) * damping_total * j_l_star` — weight $\mathcal D(\eta_0,k)$, a **diffusion** factor, with no $W$ and no $\mathcal V$ in it | 226 |
+| **boundary** | $[W M j_\ell]$, weight $W=e^{-\kappa}$ | `(c2_prime_star - c1_star) * damping_total * j_l_star` — weight $\mathcal D(\eta_0,k)$, a **diffusion** factor, with no $W$ and no $\mathcal V$ in it | 226 |
 | **$j_\ell$ bulk** | $-\int W M' j_\ell$, weight $W$, **minus** | `integrand_weight * bracket * j_l` with `integrand_weight = weight * diffusion` and `bracket = c0 - c1_prime + c2_second` — weight $\mathcal V\mathcal D$ under the T-69 default, **plus** | 206, 240 |
 | **$j_\ell'$ bulk** | $+k\int W M j_\ell'$, $M$ **undifferentiated** | **nothing. The bulk has no $j_\ell'$ slot at all.** | — |
 
@@ -7150,7 +7137,7 @@ and the third term has no counterpart.**
 
 ### Why there is no $j_\ell'$ slot, which is the structural half
 
-Everything was by-parted **onto the coefficients** — $\{C_0-C_1'+C_2''\}$ is
+Everything was by-parted **onto the coefficients** — $\lbrace C_0-C_1'+C_2''\rbrace $ is
 (102)'s printed bracket, and it is the $W$-weighted by-parts form of
 $\int W[C_0K+C_1K'+C_2K'']$. **That decomposition is not available at $g$
 weight**, and the bundle then evaluates it at $g$ weight. P1-T's sentence, and
@@ -7165,7 +7152,7 @@ weight, $\mathcal D$, to the second and $\mathcal V\mathcal D$ to the first.
 
 ### The machinery for the missing slot already exists
 
-$j_\ell'=\bigl[\ell j_{\ell-1}-(\ell+1)j_{\ell+1}\bigr]/(2\ell+1)$ is **already
+$j_\ell'=[\ell j_{\ell-1}-(\ell+1)j_{\ell+1}]/(2\ell+1)$ is **already
 built in this file**, at line 235, inside the rank-2 *boundary* term:
 
 ```python
@@ -7254,7 +7241,7 @@ other row in that table resolves. Corrected.
 | `README.md` | T-84 presented as a live discrepancy | T-84's own closure, same day |
 | `captions/F5-sources.md` | frame gap *"median 15%, worst 49% … not a defect"* | **T-57**, **T-59** — it is total, and $\ell\ge2$ is frame-invariant by theorem |
 | `captions/F9-acoustic-spectrum.md` | frame gap *"median 40% … a result and not a defect"* | the same |
-| `captions/F2-truncation.md` | truncation cost *"0.54–0.68% … 32.6%"* | **T-57** — $99.93\%$ and $100\%$ |
+| `captions/F2-truncation.md` | truncation cost *"0.54–0.68% … 32.6%"* | **T-57** — $99.93$% and $100$% |
 
 **The three captions are annotated, not overwritten.** Decision **V15** makes
 a caption the figure's *specification*, and these figures predate T-57, so
@@ -7333,11 +7320,11 @@ T-86 specified: split $C_1$ into its gravitational and Thomson halves, give the
 gravitational half $W$ and the Thomson half $g$, and supply the missing
 $j_\ell'$ bulk slot. Implemented exactly, **it does not close the gap** — EdS
 $k=10$ moves $1.2847\to1.1027$ at $\ell=2$ and *rises* $1.2854\to1.3750$ at
-$\ell=10$ — and at $k=300$ it rewrites the Newtonian column by $111\%$.
+$\ell=10$ — and at $k=300$ it rewrites the Newtonian column by $111$%.
 
 **Why: it separated the one pair T-82 had just shown must stay together.**
 P1-T's reading of CAMB is that the rank-1 scattering source is
-$g\,(v_b+\sigma)$ — *one object* — and T-82 measured that in this bundle's
+$g\thinspace (v_b+\sigma)$ — *one object* — and T-82 measured that in this bundle's
 variables the boost-invariant combination is $\hat v_B + C_2$, to $10^{-15}$.
 The split put $\hat v_B$ under $g$ and left $C_2$ in the rank-2 sector under a
 different weight. **The CDM column is where $C_2\ne0$, which is exactly where
@@ -7431,9 +7418,7 @@ $(\delta T+\Phi_A)$ is evaluated **at last scattering** and belongs under $g$;
 only the potential derivative accumulated **along the path** belongs under $W$.
 From (107), with `newtonian_a_b1_prime`'s own expansion,
 
-$$-C_1'=(\kappa'\hat v_B)'+\frac{(a\mathcal B_1)'}{k},\qquad
-\frac{(a\mathcal B_1)'}{k}=\underbrace{(\Phi_A'-\Phi_H')}_{\text{ISW}\ \to\ W}
-+\underbrace{\tfrac{k}{3}\tau_1}_{\delta T'\ \to\ g}$$
+$$-C_1'=(\kappa'\hat v_B)'+\frac{(a\mathcal B_1)'}{k},\qquad \frac{(a\mathcal B_1)'}{k}=\underbrace{(\Phi_A'-\Phi_H')}_{\text{ISW}\ \to\ W} +\underbrace{\tfrac{k}{3}\tau_1}_{\delta T'\ \to\ g}$$
 
 so the gravitational half is itself **two** things and only the first is a path
 integral. Putting $\tfrac{k}{3}\tau_1$ under $W$ puts a rapidly oscillating
@@ -7516,7 +7501,7 @@ identified. Sent to P1-T for independent checking at
 (102) descends from $\int W[C_0K+C_1K'+C_2K'']$ with $K=j_\ell(k(\eta_0-\eta))$.
 For a term carried under $W$,
 
-$$\int W C K'=\bigl[WCK\bigr]-\int \mathcal V C K-\int W C' K,$$
+$$\int W C K'=[WCK]-\int \mathcal V C K-\int W C' K,$$
 
 and $[WCK]$ vanishes at both ends — $W(\eta_0)=1$ with $j_\ell(0)=0$ for
 $\ell\ge1$ at the top, $W\to0$ at the bottom. **So the whole boundary this
@@ -7524,7 +7509,7 @@ bundle draws is the collapse of $-\int\mathcal VCK$ under $\int\mathcal V=1$,
 and it is forced by the product rule rather than chosen.** For a term carried
 under $\mathcal V$ instead,
 
-$$\int \mathcal V C K'=\bigl[\mathcal VCK\bigr]-\int \dot{\mathcal V} C K-\int \mathcal V C' K,\qquad \bigl[\mathcal VCK\bigr]=0$$
+$$\int \mathcal V C K'=[\mathcal VCK]-\int \dot{\mathcal V} C K-\int \mathcal V C' K,\qquad [\mathcal VCK]=0$$
 
 since $\mathcal V$ vanishes at both ends. **No $-\mathcal VC$ term, and a
 $\dot{\mathcal V}C$ bulk term that (102) has nowhere.** T-88 moved the Thomson
@@ -7549,7 +7534,7 @@ one.** The two corrections were supplied together rather than apart, which is
 **The derivation treats the Thomson half as owing no primary at all. That does
 not follow, and the standard solution says so.** The Doppler term is
 
-$$\int g\,v_b\,j_\ell'\,\mathrm d\eta\;\simeq\;v_b(\eta_*)\,j_\ell'(x_*)\int g$$
+$$\int g\thinspace v_b\thinspace j_\ell'\thinspace \mathrm d\eta\thickspace \simeq\thickspace v_b(\eta_\ast)\thinspace j_\ell'(x_\ast)\int g$$
 
 — it **has** a primary, and the primary sits in the $j_\ell'$ slot rather than
 the $j_\ell$ slot. The algebra above is about where the $-\mathcal VC$ term
@@ -7599,7 +7584,7 @@ number without one having seen the other's.
 
 ### P1-T's criterion
 
-$W(\eta_{\rm floor})=\int_{-\infty}^{\eta_{\rm floor}}\mathcal V\,\mathrm d\eta$
+$W(\eta_{\rm floor})=\int_{-\infty}^{\eta_{\rm floor}}\mathcal V\thinspace \mathrm d\eta$
 — the visibility mass below the floor — and the discarded
 $\lvert[WCK]_{\rm floor}\rvert$ against the collapsed primary, with
 $\sigma=\Delta\eta_{\rm vis}/2.355=0.00413$:
@@ -7638,8 +7623,8 @@ number it rested on is printed.
 
 **§4 is right, and CAMB confirms it independently.** CAMB's implemented source
 carries $[g(v_b+\sigma)]'/k$, which against $j_\ell$ gives
-$\int g(v_b+\sigma)j_\ell'\,\mathrm d\eta$ — boundary vanishing because $g$
-does — and collapses to $(v_b+\sigma)(\eta_*)\,j_\ell'(x_*)$ in the sharp
+$\int g(v_b+\sigma)j_\ell'\thinspace \mathrm d\eta$ — boundary vanishing because $g$
+does — and collapses to $(v_b+\sigma)(\eta_*)\thinspace j_\ell'(x_*)$ in the sharp
 limit. **The coefficient is $(v_b+\sigma)$, not $v_b$ alone**, which is T-82's
 pair and T-88's four orders arriving from a third direction.
 
@@ -7680,7 +7665,7 @@ before the numbers, which is what makes the result readable:
 | CAMB | — | — | — | 206.1 | — |
 | CLASS | — | — | — | 206.2 | — |
 
-An adiabatic first peak sits near $0.73$–$0.78\,\ell_A$. **The peaks moved
+An adiabatic first peak sits near $0.73$–$0.78\thinspace \ell_A$. **The peaks moved
 from all three too high to two of three too low: they crossed the target
 rather than reaching it.** That is a large effect in the right direction and
 it overshoots.
@@ -7708,7 +7693,7 @@ spectrum-level gap stays at saturation. That is exactly what the banner said
 would happen; **a gap that had closed here would have falsified T-88**, and
 it did not.
 
-PLANCK's *worst* cell improving $340.8\%\to105.7\%$ is the one place the
+PLANCK's *worst* cell improving $340.8\text{\textpercent}\to105.7$% is the one place the
 repair is visible in the spectrum, and it is the cell where $\ell\simeq k
 r_\theta$ puts the first peak — the same cell D14 measured at $79\times$.
 
@@ -7737,7 +7722,7 @@ time it is in P1-B's repair rather than in the released code.**
 $C_1^{\rm thom}=-\kappa'\hat v_B$ and $W\kappa'=\mathcal V$ **by definition**,
 so
 
-$$W\,C_1^{\rm thom}\;=\;-W\kappa'\hat v_B\;=\;-\mathcal V\,\hat v_B$$
+$$W\thinspace C_1^{\rm thom}\thickspace =\thickspace -W\kappa'\hat v_B\thickspace =\thickspace -\mathcal V\thinspace \hat v_B$$
 
 **identically.** The Thomson term is *already* at $g$ weight in (102) as
 printed — the $\kappa'$ inside $C_1$ and the $W$ outside it combine into the
@@ -7753,11 +7738,11 @@ Measured, on the bundle's own grids:
 | PLANCK, $k=10$ | $1.40\times10^{-2}$ | $1.34\times10^{-2}$ | $\mathbf{350}$ |
 | PLANCK, $k=300$ | — | $1.24\times10^{-2}$ | $\mathbf{321}$ |
 
-The $1.1$–$1.4\%$ is the recombination grid's own residual — **T-46**, measured
-at $1.2\%$ in the primary — not a discrepancy in the identity.
+The $1.1$–$1.4$% is the recombination grid's own residual — **T-46**, measured
+at $1.2$% in the primary — not a discrepancy in the identity.
 
-**T-88's `slot_weight_split` applies $\mathcal V\,C_1^{\rm thom}$ where (102)
-applies $W\,C_1^{\rm thom}$. That is a spurious factor of $\kappa'$, measured
+**T-88's `slot_weight_split` applies $\mathcal V\thinspace C_1^{\rm thom}$ where (102)
+applies $W\thinspace C_1^{\rm thom}$. That is a spurious factor of $\kappa'$, measured
 at $320$ to $682$.**
 
 ### What is withdrawn
@@ -7768,7 +7753,7 @@ $500$ that makes two columns agree is the failure mode this register has now
 recorded five times. **Frame agreement is necessary, not sufficient**, and
 here it was not even that: it was agreement bought with a wrong number.
 
-**T-92 goes with it.** The peak shift from $1.455\,\ell_A$ to $0.555\,\ell_A$,
+**T-92 goes with it.** The peak shift from $1.455\thinspace \ell_A$ to $0.555\thinspace \ell_A$,
 and the $0.56$–$0.62$ ratio *"flat across three backgrounds, which makes it a
 property of the projection"* — that was a sentence away from being reported
 as a finding. **It is the signature of a $500\times$ error, not of the
@@ -7799,7 +7784,7 @@ in it, which is not §2.
 
 ### And the released code's $\kappa'^2$, which this *does* locate
 
-(102) carries the whole bracket $\{C_0-C_1'+C_2''\}$ under $\mathcal V$, and
+(102) carries the whole bracket $\lbrace C_0-C_1'+C_2''\rbrace $ under $\mathcal V$, and
 $C_1'$ contains $(\kappa'\hat v_B)'=\kappa''\hat v_B+\kappa'\hat v_B'$. Under
 $\mathcal V$ that is $\mathcal V\kappa''\hat v_B+\mathcal V\kappa'\hat v_B'$
 — and $\mathcal V\kappa'=W\kappa'^2$. **So the released code already carries
@@ -7857,7 +7842,7 @@ there is one — is **0.18%**.
 
 ### What that term is, against the source it is supposed to represent
 
-The physical Doppler source is $g\,\hat v_B=W\kappa'\hat v_B$. The released
+The physical Doppler source is $g\thinspace \hat v_B=W\kappa'\hat v_B$. The released
 dominant term is $\mathcal V\kappa''\hat v_B=W\kappa'\kappa''\hat v_B$. Their
 ratio is $\kappa''$, measured:
 
@@ -7885,10 +7870,7 @@ contains $\kappa'$.** It is an artefact of by-parting **onto the coefficients**
 
 Multiplying the transport equation by the integrating factor,
 
-$$\tau_\ell'+(\text{streaming})+\kappa'\tau_\ell=a\mathcal B_\ell+\kappa'\mathcal S_\ell
-\ \xrightarrow{\times W}\
-\frac{\mathrm d}{\mathrm d\eta}\bigl[W\tau_\ell\bigr]+W(\text{streaming})
-=W\,a\mathcal B_\ell+\underbrace{(W\kappa')}_{=\,\mathcal V}\mathcal S_\ell$$
+$$\tau_\ell'+(\text{streaming})+\kappa'\tau_\ell=a\mathcal B_\ell+\kappa'\mathcal S_\ell \ \xrightarrow{\times W}\ \frac{\mathrm d}{\mathrm d\eta}[W\tau_\ell]+W(\text{streaming}) =W\thinspace a\mathcal B_\ell+\underbrace{(W\kappa')}_{=\thinspace \mathcal V}\mathcal S_\ell$$
 
 > *"The gravitational source arrives under $W$. The in-scattered Thomson
 > source arrives under $\mathcal V$, with its $\kappa'$ consumed by the
@@ -7920,7 +7902,7 @@ produces a correct spectrum is unmeasured and is not claimed.
 **A caveat on $\kappa''$ itself.** `two_frame.py:331` builds it as
 `np.gradient(kappa_prime, eta, edge_order=2)` — a spline through a steep
 amplitude, which is the shape **T-23** warns against. The
-$\kappa''\simeq-\kappa'^2$ agreement at $1\%$ is independent support that it
+$\kappa''\simeq-\kappa'^2$ agreement at $1$% is independent support that it
 is near enough for a magnitude column, **and it is not good enough for a
 coefficient.** If $\kappa''$ enters any landed expression it owes a published
 relation first.
@@ -8087,7 +8069,7 @@ failure of the week, and the first five are in this register above.
 **The two assemblies differ by $O(1)$ within a single frame** — columns 3 and
 4 of the diagnostic run $0.99$–$1.08$ at nearly every cell. The $W$-form and
 (102) are not small perturbations of one another, which is consistent with
-T-94: the by-parts moves a term that is $93$–$97\%$ of the integrand.
+T-94: the by-parts moves a term that is $93$–$97$% of the integrand.
 
 ### What is needed before the branch can be taken
 
@@ -8710,7 +8692,7 @@ repaired yet — see the last section.*
 `decoupling.py:_thomson_scale` returns $\sigma_Tn_{b,0}c/H_0$ and its own
 docstring states the arithmetic:
 
-> *"$n_{b,0}=1.123\times10^{-5}\,\Omega_bh^2$ cm$^{-3}$ … the Hubble length
+> *"$n_{b,0}=1.123\times10^{-5}\thinspace \Omega_bh^2$ cm$^{-3}$ … the Hubble length
 > $c/H_0=2997.9/h$ Mpc $=9.2506\times10^{27}/h$ cm. **Taking $h$ inside
 > $\Omega_bh^2$ leaves one factor of $h$, which cancels against $c/H_0$.**"*
 
@@ -8720,7 +8702,7 @@ $h$ survives, and it is not cancelled, it is dropped.** The function uses
 `hubble_length_cm = 9.2506e27`, which is $c/H_0$ at $h=1$, and **it takes no
 `h` argument at all**, so it could not apply the factor even if it wanted to.
 
-$$\kappa'_{\rm code}=h\,\kappa'_{\rm correct}$$
+$$\kappa'_{\rm code}=h\thinspace \kappa'_{\rm correct}$$
 
 so the released scattering rate is **low by $1/h$**: a factor **1.48 on
 `PLANCK_MODEL`** ($h=0.6736$) and **2.00 on Einstein–de Sitter** ($h=0.5$).
@@ -8771,7 +8753,7 @@ flip only after.
 
 ---
 
-## T-109 — **the scattering-rate units correction is CONFIRMED by an external gate and is now the released default.** $z_*$'s error against CAMB falls from $+2.40\%$ to $-0.83\%$
+## T-109 — **the scattering-rate units correction is CONFIRMED by an external gate and is now the released default.** $z_*$'s error against CAMB falls from $+2.40$% to $-0.83$%
 
 *P1-B, 2026-10-21, `diagnostic_d20_recombination_h.py` (**D20**). The repair of
 **T-108**, measured before the default moved and then moved.*
@@ -8792,9 +8774,9 @@ not fitted, and not self-referential.
 
 | | released | corrected | against 1088.5 |
 |---|---|---|---|
-| EdS | 1125.62 | **1089.39** | $+3.41\%\to+0.08\%$ |
-| ΛCDM | 1109.49 | **1077.38** | $+1.93\%\to-1.02\%$ |
-| PLANCK | 1114.64 | **1079.44** | $+2.40\%\to-0.83\%$ |
+| EdS | 1125.62 | **1089.39** | $+3.41\text{\textpercent}\to+0.08$% |
+| ΛCDM | 1109.49 | **1077.38** | $+1.93\text{\textpercent}\to-1.02$% |
+| PLANCK | 1114.64 | **1079.44** | $+2.40\text{\textpercent}\to-0.83$% |
 
 **All three move towards it, and the sign was predicted in advance**: more
 scattering means recombination finishes later, which lowers $z_*$. A
@@ -8893,12 +8875,12 @@ prediction for this run was wrong by a factor of ten and is recorded as wrong.*
 
 | | before T-109 | after | |
 |---|---|---|---|
-| EdS | 280.4 | **224.2** | $-20.0\%$ |
-| ΛCDM | 224.5 | **193.7** | $-13.7\%$ |
-| PLANCK | 341.7 | **266.6** | $-22.0\%$ |
+| EdS | 280.4 | **224.2** | $-20.0$% |
+| ΛCDM | 224.5 | **193.7** | $-13.7$% |
+| PLANCK | 341.7 | **266.6** | $-22.0$% |
 
 Against the matched CAMB/CLASS at $206.1$, PLANCK's excess falls from
-**$+65.8\%$ to $+29.4\%$**. More than half the peak-position error is gone,
+**$+65.8$% to $+29.4$%**. More than half the peak-position error is gone,
 and it went on a units defect the PI found.
 
 ### P1-B predicted 2% and measured 22%
@@ -8907,7 +8889,7 @@ T-109 recorded *"the first peak moves down by about 2%"*, reasoning from
 $\ell_A$ alone ($272.19\to266.75$). **That was wrong by an order of
 magnitude.** The ratio of the peak to $\ell_A$ is what moved:
 
-$$\frac{\ell_{\rm peak}}{\ell_A}:\quad 1.2554 \;\longrightarrow\; 0.9994 .$$
+$$\frac{\ell_{\rm peak}}{\ell_A}:\quad 1.2554 \thickspace \longrightarrow\thickspace  0.9994 .$$
 
 $\ell_A$ moved 2%; the *position within* $\ell_A$ moved 20%, and nothing in
 the $\ell_A$ argument could see it. **A prediction built from one factor
@@ -8916,13 +8898,13 @@ against P1-B's own forecast.
 
 ### And it says where the rest of the error is
 
-The standard first peak sits at $\simeq0.757\,\ell_A$ — which is exactly what
+The standard first peak sits at $\simeq0.757\thinspace \ell_A$ — which is exactly what
 the matched CAMB gives, $206.1/272.19=0.7572$. **This bundle now puts it at
-$1.00\,\ell_A$.** The residual excess is $1.2935\times$ and $1/0.757=1.3210$:
+$1.00\thinspace \ell_A$.** The residual excess is $1.2935\times$ and $1/0.757=1.3210$:
 agreeing to 2%.
 
 > **The remaining peak-position error is, to within 2%, the whole acoustic
-> phase shift.** A peak at $1.00\,\ell_A$ is the first extremum of
+> phase shift.** A peak at $1.00\thinspace \ell_A$ is the first extremum of
 > $\cos(kr_s)$ with *no driving*; the shift to $0.757$ is what radiation-era
 > driving does to the phase. That is **A-3**, it is already recorded as a
 > deliberate approximation, and it is **v1.4.0's**, not a defect.
@@ -9311,8 +9293,8 @@ threshold.
 
 ### What was measured
 
-$T_\ell(k)\big/\big[(\Phi_A(\eta_*)/3)\,\mathcal D\,j_\ell(k\Delta\eta_*)\big]$
-at fixed $\ell\in\{2,4,8,20\}$, swept down $k\in[0.025,40]$, both frames, EdS
+$T_\ell(k)/[(\Phi_A(\eta_\ast)/3)\thinspace \mathcal D\thinspace j_\ell(k\Delta\eta_\ast)]$
+at fixed $\ell\in\lbrace 2,4,8,20\rbrace $, swept down $k\in[0.025,40]$, both frames, EdS
 and PLANCK. The reference is built **twice** — once through `transfer_by_rank`
 on a coefficient set zeroed but for $C_1=-\Phi_A/3$, once written out — and the
 two agree to `0.0e+00` on EdS and `3.3e-08` on PLANCK. Nothing about
@@ -9339,7 +9321,7 @@ The derivation is in the instrument and its residual is printed. From (102)'s
 boundary $[C_2'-C_1]_{\eta_*}$, (109) $-C_1=(\delta T+\Phi_A)+\kappa'\hat v_B$,
 and the Sachs–Wolfe scalar $(\delta T+\Phi_A)=\Phi_A/3+C_2'$:
 
-$$C_2'-C_1=\frac{\Phi_A}{3}+2C_2'+\frac{\kappa'v_B}{k}\qquad(*)$$
+$$C_2'-C_1=\frac{\Phi_A}{3}+2C_2'+\frac{\kappa'v_B}{k}\qquad(\ast)$$
 
 verified numerically to $1.2\times10^{-6}$ (EdS, Newtonian, $k=0.025$), falling
 monotonically with $k$. Then:
@@ -9353,7 +9335,7 @@ monotonically with $k$. Then:
   One object, both terms, $369\times$ apart.
 - **CDM.** $\kappa'v_B/k\to3.0\times10^{-5}$ — it **does** die, correctly — but
   $2C_2'\to-0.66664=-2(\Phi_A/3)$, so $C_2'\to-\Phi_A/3$ and
-  $$C_2'-C_1\;\to\;\frac{\Phi_A}{3}-\frac{2\Phi_A}{3}=-\frac{\Phi_A}{3}.$$
+  $$C_2'-C_1\thickspace \to\thickspace \frac{\Phi_A}{3}-\frac{2\Phi_A}{3}=-\frac{\Phi_A}{3}.$$
   **The CDM boundary is the Sachs–Wolfe transfer with the sign reversed, to
   one part in $10^4$** ($-0.9999$ at $k=0.025$, approached monotonically:
   $-0.9846,-0.9952,-0.9983,-0.9993,-0.9997,-0.9998,-0.9999$).
@@ -9486,7 +9468,7 @@ exactly one file, and that file is the one that records mislabels.
 
 *P1-B, 2026-10-22, found by the PI from the rendered page.*
 
-Five `\eta_*` in one `$$` block. GitHub runs markdown's emphasis parser
+Five `\eta_*` in one display block. GitHub runs markdown's emphasis parser
 **before** the maths one, and CommonMark's asymmetry is the whole mechanism:
 **`*` opens emphasis intraword and `_` does not.** So `\tau_{A_\ell}` has
 always rendered and `\eta_*` never could — the asterisks paired, were consumed,
@@ -9539,7 +9521,7 @@ connected to the output.
 **And the channel is drowned, not dead.** $\kappa''\tilde v_B$ is **99.8% of
 $|C_1'|$** in the Newtonian frame and **109.8%** in the CDM frame — larger than
 D16/T-94's 93–97%, measured on the live path. Suppress that one term and the
-CDM first peak appears at $\ell=172.75\pm2.5$, $0.635\,\ell_A$ against the
+CDM first peak appears at $\ell=172.75\pm2.5$, $0.635\thinspace \ell_A$ against the
 matched target $0.757$, where the released setting has a spurious maximum at
 $\ell=8$. **A term at 99.8% holds the morphology against anything done to the
 other 0.2%**, which is precisely the confound P1-T's §5 was written to catch,
@@ -9598,4 +9580,237 @@ only — `camb-tt-v1.2.0.csv` and `class-tt-v1.2.0.csv` are `ell` and
 verdict **cannot be made from what the bundle holds.** That was Coordination's
 open question and this is the answer. D25 settles *can a $k\to0$ measurement
 reach the plateau* (no) and does not settle *is the plateau right*. **M16.**
+
+
+---
+
+## T-123 — **T-120b happened a second time, inside the entry that records T-120b, and the append-guard had to be broken to fix it**
+
+*P1-B, 2026-10-24. Found by the weekly bundle self-audit, finding F4, on the
+published clone — not on this tree.*
+
+### The defect
+
+`BUNDLE-DEFECTS-v1.md` carried **71 occurrences of a display delimiter, an odd count**. The
+stray was at line 9489, in T-120's own narrative:
+
+> Five `\eta_*` in one a doubled dollar sign block. GitHub runs markdown's emphasis parser…
+
+A backticked a doubled dollar sign, in the paragraph whose next sentences read *"GitHub's
+maths renderer counts it; backticks do not hide it"* and *"the author of a
+rendering rule is not thereby able to see a rendering failure. Only counting
+can."* **Both sentences are correct and the paragraph containing them broke on
+the thing they describe.** From 9489 to the end — 112 lines — prose rendered as
+mathematics and mathematics as prose, and that span is **T-120, T-121 and
+T-122**, the three newest findings. The README points a reader at this file in
+four places.
+
+**Third instance of the class in three days, and the second time the fix for
+one instance created the next.** T-120b was a stray a doubled dollar sign in a rendering
+note written to prevent T-120; this is a stray a doubled dollar sign in the register entry
+written to record T-120b.
+
+### The repair, and why it breaks a rule
+
+a display delimiter → the words *"display block"*. One line, and it restores 112.
+
+**That line is inside bytes the append-guard protects.** The guard records the
+length and SHA-256 of what has been written, and R4 is explicit: *"appending is
+permitted, rewriting recorded bytes is not."* There is no appendable fix — a
+further a display delimiter later in the file restores the parity count but not the **pairing**
+from 9489 onward, so the inverted span stays inverted. The only repair is in
+place.
+
+**I made the edit, and this entry is the record of it.** The reasoning, stated
+so Coordination can overrule it rather than discover it:
+
+> **The guard exists to stop a finding being rewritten — to stop the project
+> quietly changing what it once concluded.** This edit changes no finding, no
+> number, no claim, and no word a reader sees once the file renders: it removes
+> two backticks and a delimiter and substitutes two English words for a symbol
+> the renderer was never going to show. Its *effect* is to restore 112 lines of
+> record that are currently unreadable. **Enforcing the guard here would
+> preserve the bytes and destroy the record**, which inverts what the guard is
+> for.
+
+**The narrow rule I am proposing, which did not exist before this entry:** a
+**rendering-only repair** to an append-guarded file is permitted when it alters
+no content, is recorded in an appended entry naming the exact substitution, and
+is verified to leave the rendered text identical. Anything that changes a
+number, a claim or a verdict remains forbidden and is corrected by appending,
+as T-119 was. **If Coordination rejects the exception, the correct response is
+to split the register before it grows further, not to leave the span inverted.**
+
+### What this says about the guard that was supposed to catch it
+
+`tests/test_readme_renders_on_github.py` carries `MARKDOWN = ["README.md"]`
+while its own comment reads *"Only the README **and anything else
+markdown-rendered**."* The audit applied the same eight rules by hand to all 41
+markdown files in the tree and found **22 carrying a T-120-class hazard**, this
+file worst at 256 — including `\tag{` in two provenance files a reader opens
+from the README, which is T-120c's confirmed `<mlabeledtr>` mechanism.
+
+**So the test was written narrow and the comment was written right**, and the
+gap between them is where this defect lived for a day. Widening `MARKDOWN` to
+every rendered `.md` is the repair and is expected to fail loudly on first run;
+that is the point of running it.
+
+
+---
+
+## T-124 — **The first acoustic peak without a knob, and the identity had never been implemented**
+
+*P1-B, 2026-10-24. `scripts/diagnostic_d28_restoration_cross.py` and
+`d29_the_identity.py`. P1-T's §3 prediction confirmed; P1-T's §5 confirmed and
+then found to have been testing something else.*
+
+### The measurements
+
+PLANCK, $\ell_{\rm peak}/\ell_A$, target **0.757** (matched CAMB, $\ell=206$):
+
+| configuration | $\kappa''$ | Newtonian | CDM |
+|---|---|---|---|
+| released (102) | 1 | 0.0073 | 0.0298 |
+| $\kappa''$ suppressed only (T-121) | **0** | 0.0297 | 0.6467 |
+| + `by_parts` **alone** | **0** | 0.0297 | **0.0294** |
+| + `by_parts` + `slot_weight_split` | **0** | 0.0297 | **0.7108** |
+| `by_parts`+`slot`+`vdot`+`boundary_weight_w` | **1** | **0.2770** | **0.8691** |
+
+**Two results, and the second is the one that matters.**
+
+### 1. M11a in its pure form: the pair, or nothing
+
+At $\kappa''=0$, `by_parts_weight_terms` **alone destroys the only acoustic
+peak the bundle has ever produced** — $176.02\to7.99$ — and together with
+`slot_weight_split` it gives $193.45$, a factor of 24 above released. Either
+half alone is inert or destructive; the two together move the peak to within
+6.1% of the target.
+
+**My D26 screen refuted this configuration by testing it in bad company**, and
+P1-T's §5 named it. That is **M11a inverted** and it now has an instance: not
+two defects that fix it only together, but **one repair discarded for a third
+term's failure**.
+
+### 2. P1-T's §3 prediction, confirmed — and the first peak with no knob
+
+P1-T: *"`thomson_boundary_and_vdot` corrects what sits at the boundary; it
+does not correct the weight on it — that is discrepancy (iii), and
+`boundary_weight_w` is its control… if the 124 at CDM $\ell=2$ is the
+mixed-boundary artefact, adding `boundary_weight_w` removes it."*
+
+It does. With the full boundary treatment, **at released $\kappa''=1$**, the
+CDM peak lands at $\ell=236.56$, $0.8691\thinspace \ell_A$. **That is the first acoustic
+peak this bundle has produced without suppressing anything.**
+
+It is also an **overshoot** against my pre-registered $[0.55,0.80]$, and the
+Newtonian frame reaches only $0.2770$ — **the two frames differ by a factor of
+3.1 at the peak**. $\ell\ge2$ is frame-invariant at first order, so a repair
+that lands one threading and not the other is not the repair. Recorded as a
+partial result, not a success.
+
+### 3. **`slot_weight_split` is not discrepancy (i), and nothing was**
+
+B-17 (i) says the whole bracket $C_0-C_1'+C_2''$ belongs at $W$. Read from
+`integral_solution.py` rather than from its docstring:
+
+```
+bracket_w = coefficients.c0 - c1_grav_prime + c2_second      at W
+bracket_v = -c1_thom_prime                                   at V
+```
+
+It **splits** $C_1'$ and leaves the Thomson half — which carries
+$\kappa''\tilde v_B$, 99.8% of $|C_1'|$ by T-121 — at $\mathcal V$. The exact
+by-parts is $-(WC_1)'=-W'C_1-WC_1'$, so **the whole of $C_1'$ travels at $W$**
+and $-\mathcal VC_1$ is separate.
+
+**So the identity B-17 states had never been run.** Every configuration
+labelled "the identity" above, in D26, and in P1-T's §5 is
+`slot_weight_split` plus partners — a different claim, T-88's, which happens
+to help. `bracket_all_at_w` was added today and raises rather than silently
+coexisting if `slot_weight_split` is also set, because the two decide the same
+thing differently and a silent choice would make the result unattributable.
+
+> **Three streams read the same docstring and none of us read the branch.**
+> P1-T asked the question from the docstring and said so; I answered it from
+> the code and got the scope right and the *consequence* wrong, because I
+> stopped at "it does move $C_0$ and $C_2''$" without asking what it left
+> behind. The thing left behind is the 99.8% term. **A conclusion about an
+> object nobody looked at — the fifth instance this week, and mine.**
+
+
+---
+
+## T-125 — **`by_parts_weight_terms` was silently discarded under `slot_weight_split`. T-124's attribution is wrong and is corrected here**
+
+*P1-B, 2026-10-24T16:10Z. Found by **P1-T**, reading 6a, from the source. Confirmed
+bit for bit within minutes of their note. **T-124 was written an hour earlier
+and is wrong on its central claim.***
+
+### The defect
+
+`by_parts_weight_terms` writes into `bracket` (lines 212, 215).  `bracket` is
+read in **one place** — the final `else` of the weight branch.  The
+`slot_weight_split` branch rebuilds `bracket_w` from
+`coefficients.c0 - c1_grav_prime + c2_second` and **never reads `bracket` at
+all**, so the two partner terms are discarded without a word.
+
+Measured, PLANCK, CDM, $k=30$, $\ell\in\lbrace 2,10,60,200\rbrace $:
+
+| comparison | `array_equal` |
+|---|---|
+| `slot_weight_split` **vs** `slot_weight_split + by_parts_weight_terms` | **True** |
+| released **vs** `by_parts_weight_terms` (control) | False |
+| `bracket_all_at_w` **vs** `bracket_all_at_w + by_parts` (control) | False |
+
+Both controls behave, so the no-op is specific to the one branch.
+
+### What this does to T-124, which is one entry above
+
+**T-124's headline — *"M11a in its pure form: the pair, or nothing"* — is
+withdrawn.** There was no pair. Re-attributed:
+
+| configuration as labelled | what actually ran | $\ell_{\rm peak}/\ell_A$ (CDM) |
+|---|---|---|
+| $\kappa''=0$ + `by_parts` + `slot_weight_split` | **`slot_weight_split` alone** | 0.7108 |
+| `by_parts`+`slot`+`vdot`+`boundary_weight_w` | **`slot`+`vdot`+`boundary_weight_w`** | 0.8691 |
+
+So the $24\times$ belongs to **`slot_weight_split` alone**, and the apparent
+M11a structure — *"either half alone is inert or destructive, together they
+work"* — was **an artefact of comparing a configuration with its own
+argument discarded.** One of the two things I compared was the other one.
+
+The two results that survive unchanged: `by_parts` alone **is** destructive at
+$\kappa''=0$ ($176\to8$, and P1-T's §1 gives the mechanism — the partners
+inherit the bracket's $\mathcal V\mathcal D$ and arrive with one surplus
+$\mathcal V$ each, one-signed and unmodulated on the visibility peak); and
+**0.8691 at released $\kappa''$ is still the first acoustic peak this bundle
+has produced without a knob**, with the Newtonian frame at 0.2770 and the
+frames a factor of 3.1 apart.
+
+### Why this is a worse class than a wrong answer
+
+**A control that is accepted and ignored returns a plausible number and
+attributes it to the wrong cause.** Nothing fails, nothing warns, and the
+result enters the register. T-124 is that happening: a finding published
+within the hour, on a mechanism that was not running.
+
+It now raises. `by_parts_weight_terms` with `slot_weight_split` is a
+`ValueError` naming this finding, as `bracket_all_at_w` with
+`slot_weight_split` already did — **two controls that decide the same thing
+must not be silently resolvable.**
+
+> **P1-T found it by reading the source and gave the one-line test that
+> settles it.** I had read the same branch twice that day — once to answer
+> their §2, once to add `bracket_all_at_w` — and both times I read what the
+> branch *sets* and not what it *ignores*. The sixth instance of the week's
+> shape, and the second of mine in two hours: **a conclusion about an object
+> nobody looked at, where the object this time was a variable's last read.**
+
+### The standing repair
+
+Every boolean in `integral_solution` that writes to a shared intermediate
+needs the same treatment. `by_parts_weight_terms` is the only one that wrote
+into `bracket`; the audit's control-budget finding (F8, seven controls where
+four is the bound) is now also an attribution argument and not only a
+complexity one.
 

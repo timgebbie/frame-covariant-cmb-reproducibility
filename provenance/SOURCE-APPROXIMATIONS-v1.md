@@ -196,7 +196,7 @@ fixing finding T-51; it is the residual that fix leaves behind.**
 *"the almost-Friedmann-Lemaître Einstein field equations **for matter
 domination** reduce to..."* and closes with
 
-> a $\Phi_A(k,0) = D/a\,(a\Phi_A(k,0)) = (D/a)\,\Phi_A(k,t)$ where $D$ is the
+> a $\Phi_A(k,0) = D/a\thinspace (a\Phi_A(k,0)) = (D/a)\thinspace \Phi_A(k,t)$ where $D$ is the
 > linear growth factor. The flat dust case is recovered using $D=a$.
 
 That is exactly `functions.spectra.potentials.potentials`. **There is no
@@ -204,7 +204,7 @@ radiation-era potential in the paper**, and under **S15** this bundle
 reproduces rather than supplies one.
 
 **What it costs, and it is not the acoustic scale.** Fixing T-51 — starting each
-mode where $k\,r_s(\eta)\le\varepsilon$ rather than at $z=3000$ — recovers the
+mode where $k\thinspace r_s(\eta)\le\varepsilon$ rather than at $z=3000$ — recovers the
 *period*: the peak spacing lands within **0.5%** of the antecedent's own
 $\Delta\ell=\pi r_\theta/r_s$ on all three backgrounds, and within **0.7%** of
 CAMB and CLASS for Planck parameters. What it does not recover is the *phase
@@ -214,7 +214,7 @@ offset*. Measured 2026-10-16, `PLANCK_MODEL` against CAMB:
 |---|---|---|
 | CAMB / CLASS | 206, 492, 729 | 286, 237 |
 | this bundle, derived start | — , 552, 836 | **284** |
-| $j\,\ell_A$ with $\ell_A=\pi r_\theta/r_s=272$ | 272, 544, 816 | 272 |
+| $j\thinspace \ell_A$ with $\ell_A=\pi r_\theta/r_s=272$ | 272, 544, 816 | 272 |
 
 **Our peaks sit at the idealised $j\ell_A$; CAMB's are shifted down.** That
 shift is the radiation driving: a mode entering the sound horizon before
@@ -229,7 +229,7 @@ $a_*=8.963\times10^{-4}$:
 
     rho_M / rho_R at last scattering = 5.16
 
-A matter-domination reference at $\rho_M/\rho_R=9$ lands at $\eta=1.46\,\eta_*$
+A matter-domination reference at $\rho_M/\rho_R=9$ lands at $\eta=1.46\thinspace \eta_*$
 — **after** last scattering — so there is no epoch before recombination at
 which the approximation holds in that strong a sense.
 `potentials.matter_domination_eta` therefore defaults to equality itself, and
@@ -287,7 +287,7 @@ across two of them:
 | **§5.5.1** | *Almost-Friedmann–Lemaître Linearisation*: drop $\mathcal O(\epsilon^2)$ | $\sigma_{ab}$, $A_a$, $\mathrm D_a\Theta$ are **$\mathcal O(\epsilon)$** |
 | **§5.5.3** | *Expansion in Thompson Scattering Time*, $t_c=(\sigma_Tn_e)^{-1}$, *"terms up to $\mathcal O(t_c^3)$"* | $\dot\kappa^{-1}\sim t_c$ is **first order** |
 
-So the shear coupling is $\mathcal O(t_c\,\epsilon)$ — a **cross term between two
+So the shear coupling is $\mathcal O(t_c\thinspace \epsilon)$ — a **cross term between two
 independent smallness parameters** — and both §5.5.2's *Matter Dominated Linearisation*
 ($\mathcal O(\epsilon v,\eta\epsilon,\dots)$ dropped) and §5.5.4's *Small and Large Scales* ($\mathcal O(\epsilon\epsilon_H,v\epsilon,\dots)$ dropped) discard exactly
 that shape. **The paper's one-line justification is §5.5 applied, not an
@@ -354,7 +354,7 @@ coupling is **ended at a time**, not by a rate.
 | | |
 |---|---|
 | the evolving photon quadrupole | $\tau_{ab}$ is $\mathcal O(t_c)$ in tight coupling and grows through decoupling. **A-4** drops it from the oscillator by §5.5's ordering; A-5 records that nothing restores it across the transition either |
-| polarization | not implemented anywhere in the bundle. It feeds back on the quadrupole through the Thomson source and is a $\sim10\%$ effect on the damping tail |
+| polarization | not implemented anywhere in the bundle. It feeds back on the quadrupole through the Thomson source and is a $\sim10$% effect on the damping tail |
 | baryon–photon slip | $v_B-v_\gamma$ is identically zero by construction: the oscillator carries one dipole. The slip is what makes decoupling gradual rather than instantaneous |
 
 **Why it is an envelope concern and not a frame concern, which is how it is

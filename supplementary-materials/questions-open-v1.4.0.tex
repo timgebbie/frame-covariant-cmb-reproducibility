@@ -1,98 +1,94 @@
 % ---------------------------------------------------------------------------
-% The open-questions table.  Written 2026-10-24 by the Paper 1 stream at the
-% PI's direction.
+% What is open, as physics.  Written 2026-10-24 by the Paper 1 stream.
 %
-% WHY IT EXISTS.  The supplement cites Q-numbers -- F2's caption parks a
-% question as Q5, the scattering appendix records one as Q10 -- and carries
-% NO table a reader can resolve them in.  The register is
-% provenance/OPEN-QUESTIONS-v1.0.0.md and was never surfaced here.
+% SCOPE, and it was wrong in the first draft.  This section carries open
+% PHYSICS questions and what would settle each.  It does not carry register
+% mechanics, numbering custody, or which stream owns what -- that is
+% governance and belongs in the bundle's own .md files.  The first draft of
+% this file imported all three and has been stripped.
 %
-% NUMBERS.  Q1-Q14 are read from that register, not minted here.  Q15 and Q16
-% are PROPOSED and need P1-B to assign them, provenance/ being the bundle
-% stream's custody.  A placeholder that is left in prints visibly.
-%
-% ONE COLLISION IS FLAGGED RATHER THAN RESOLVED: the register carries two
-% different Q5s.  Renumbering a public register is not this file's business.
+% The register behind it is provenance/OPEN-QUESTIONS-v1.0.0.md, cited once
+% below as a pointer and not summarised.
 % ---------------------------------------------------------------------------
-\section{Open questions}
+\section{What is open}
 \label{sec:open-questions}
 
-\emph{The register is} \texttt{provenance/OPEN-QUESTIONS-v1.0.0.md}\emph{,
-which carries each question's full history. This table exists because the
-supplement cites \textbf{Q} numbers in several places and has never given a
-reader anywhere to resolve them.} Status is quoted from the register rather
-than restated, so that this table cannot drift from it independently.
+\emph{Each row is a physics question this release does not answer, with what
+would settle it. The working history of each is in}
+\texttt{provenance/OPEN-QUESTIONS-v1.0.0.md}.
 
 \begin{center}\small
-\begin{tabularx}{\textwidth}{@{}l >{\raggedright\arraybackslash}X l@{}}
+\begin{tabularx}{\textwidth}{@{}l >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X@{}}
 \toprule
- & \textbf{the question} & \textbf{where it stands} \\
+ & \textbf{the question} & \textbf{what would settle it} \\
 \midrule
-\textbf{Q5} & does the full $1+3$ treatment predict excess power at low
-  $\ell$? & parked by the PI 2026-10-14; \textbf{F2}'s third panel is what
-  parks it \\
-\textbf{Q6} & the v1.0.0 target restated, and what it does to criterion~5 &
-  register \\
-\textbf{Q9} & the register audits discretisations; nothing audits physical
-  ranges & register \\
-\textbf{Q10} & does the second-order quadrupole ring for tensor modes? &
-  recorded rather than claimed; \S\emph{scattering expansion} \\
-\textbf{Q11} & the acoustic source has the right phase and the spectrum does
-  not & downgraded from blocker to residual, \emph{not closed} \\
-\textbf{Q12} & two implementations of (102) agree at $k=1$ and diverge above
-  $k=3$ & register \\
-\textbf{Q13} & which construction of $(\kappa'\tilde v_B)'$ is right? &
-  register \\
-\textbf{Q14} & should $C_0$ enter the line-of-sight integrand at all? &
-  register; see \S\ref{sec:ell-zero-row} \\
+\textbf{Q5} & Does the full $1+3$ treatment predict excess power at low
+  $\ell$? & A rank-0/2 share that rises at low $\ell$ rather than with it.
+  \textbf{F2}'s third panel measures it and finds the share flat at the
+  quadrupole, which parks the question rather than answering it \\
+\textbf{Q9} & The discretisations are audited; the \emph{physical} ranges are
+  not & A stated validity range per approximation, with the measurement that
+  bounds it \\
+\textbf{Q10} & Does the second-order quadrupole ring for tensor modes? & The
+  second-order source carried at rank two with a tensor initial condition ---
+  recorded as a mechanism, not claimed \\
+\textbf{Q11} & The acoustic source has the right phase and the spectrum does
+  not & Downgraded from blocker to residual, \emph{not closed}: the oscillator
+  tracks $\cos(kr_s)$ in exact phase and period, so the phase is lost between
+  the source and the transfer \\
+\textbf{Q12} & Two implementations of (102) agree at $k=1$ and diverge above
+  $k=3$ & Which of the two reproduces the integral (102) is derived from ---
+  \S\ref{sec:w-form} answers this for the bulk and not for the boundary \\
+\textbf{Q13} & Which construction of $(\kappa'\tilde v_B)'$ is right? & The
+  by-parts identity, term by term, against each construction \\
+\textbf{Q14} & Should $C_0$ enter the line-of-sight integrand at all? &
+  \S\ref{sec:ell-zero-row} settles the $\ell=0$ row; whether the resulting
+  $C_0$ belongs in the bulk is the remaining half \\
 \midrule
-\textbf{Q15}$^{\ast}$ & \textbf{is helium recombination's absence costed?}
-  \texttt{peebles.py} integrates the hydrogen Peebles equation; the external
-  comparators use \textsc{recfast}/\textsc{hyrec} \emph{with} helium, which
+\textbf{Q15} & \textbf{What does omitting helium recombination cost?} The
+  recombination history here integrates the hydrogen Peebles equation. Helium
   recombines earlier and shifts $x_e$, hence $\kappa'$, $\eta_*$, the
-  visibility width and the damping scale. \emph{Absent and, as far as this
-  stream can find, nowhere discussed.} & \textbf{raised 2026-10-24}, not
-  measured \\
-\textbf{Q16}$^{\ast}$ & \textbf{what asserts that the tight-coupling freeze is
-  late enough?} \texttt{pipeline.py} freezes $\delta T$ and $\tau_1$ at
-  $\eta_{\rm couple}=6\eta_*$; the stated condition is that the visibility be
-  negligible there, and \emph{nothing checks it} --- the only guard counts
-  grid points. \texttt{tight\_coupling\_factor~=~6.0} is a bare default across
-  three recombination histories. & \textbf{raised 2026-10-24}; one assertion
-  closes it \\
+  visibility width and the damping scale. & $\eta_*$ and $k_D$ recomputed with
+  helium, against the percent-level differences the peak comparison turns on.
+  \emph{Not measured} \\
+\textbf{Q16} & \textbf{Is the tight-coupling source frozen late enough?}
+  $\delta T$ and $\tau_1$ are held at $\eta_{\rm couple}=6\eta_*$, which is
+  correct physics --- after decoupling nothing drives the monopole --- on the
+  condition that the visibility has closed by then. & $\mathcal V(\eta_{\rm
+  couple})/\mathcal V(\eta_*)$ on every background. \emph{Nothing currently
+  measures it}, and the recombination history differs between the three \\
 \bottomrule
 \end{tabularx}
 \end{center}
 
-\noindent
-$^{\ast}$\,\emph{Numbers proposed, not minted. \textbf{Q15} and \textbf{Q16}
-need assigning in the register, which is the bundle stream's custody.}
+\paragraph{Q16 cannot move a peak, and that is worth saying so it is not
+over-read.} What is frozen is the tight-coupling pair, which after decoupling
+has no scattering to drive it; the line-of-sight integral itself runs to
+$\eta_0$ on a grid whose density is set by the Bessel kernel's own period in
+$\eta$ and gated against aliasing --- finding \textbf{T-3}. A freeze that was
+too early would cut source while the visibility was still live, which is a
+boundary effect and not a projection one.
 
-\paragraph{Q16 is the cheaper of the two and it is one line.} Assert
-$\mathcal V(\eta_{\rm couple})/\mathcal V(\eta_*)$ below a stated threshold on
-\emph{every} background and raise with the number if not --- \textbf{P7}, both
-backgrounds, every time. If $6$ is comfortable everywhere the assertion costs
-nothing and documents why; if it is marginal on one, that is a finding nobody
-currently holds. \textbf{It cannot move a peak either way}: what is frozen is
-$\delta T$ and $\tau_1$, which after decoupling have no scattering to drive
-them, and the line-of-sight integral itself runs to $\eta_0$ on a grid whose
-density is gated against the Bessel kernel's own period (finding \textbf{T-3}).
+\paragraph{One open finding belongs beside these, because the plateau depends
+on it.} \textbf{T-67} is open: $(a\mathcal B_1)'$ carries
+$-a\mathcal H\,\delta T-3a\mathcal H\,\Phi_A$ beyond the terms quoted in
+\S\ref{sec:w-form}, and whether they belong is unsettled. They are
+$O(a\mathcal H)$ and the late integrated Sachs--Wolfe effect lives where
+$k\sim a\mathcal H$, **so the reduced form is unavailable in exactly the
+regime the low-$\ell$ plateau occupies.** Every statement of
+$(a\mathcal B_1)'$ in this supplement is the expansion-terms-off form and says
+so at its own site.
 
-\paragraph{One collision in the register, flagged and not resolved here.}
-\textbf{Q5 is used twice for different questions}: \emph{``release staging''},
-closed 2026-10-05, and \emph{``does the full $1+3$ treatment predict excess
-power at low $\ell$?''}, parked 2026-10-14. The second is the one \textbf{F2}
-cites and the one tabulated above. \emph{Renumbering a public register is not
-this table's business}; it is recorded so that a reader who follows the
-citation and meets two entries knows which is meant.
-
-\paragraph{A finding, not a question, that belongs beside these.}
-\textbf{T-67} is open and is load-bearing for the low-$\ell$ plateau rather
-than a loose end. \texttt{coefficients.py} builds $(a\mathcal B_1)'$ with two
-further terms behind \texttt{A\_B1\_PRIME\_EXPANSION\_TERMS} ---
-$-a\mathcal H\,\delta T-3a\mathcal H\,\Phi_A$ after dividing through by $k$ ---
-and whether they belong is unsettled. They are $O(a\mathcal H)$, and the late
-integrated Sachs--Wolfe effect lives where $k\sim a\mathcal H$, so the reduced
-form is not available in exactly the regime the plateau occupies.
-\textbf{Any statement of $(a\mathcal B_1)'$ that omits them is the
-expansion-terms-off form and should say so.}
+\paragraph{And the late ISW is a weight question before it is a physics one.}
+The effect is already in the formalism: $\Phi'$ enters at rank one through
+$(a\mathcal B_1)'$, hence through the bulk bracket. In any line-of-sight
+assembly it rides on $W=e^{-\kappa}$ --- the photon accumulates $\int\Phi'$
+along the whole path, weighted only by the probability it has not scattered
+--- and \eqref{eq:byparts} agrees. **(102) carries that bracket at
+$\mathcal V\mathcal D$, and $\mathcal V$ has closed by the time the late ISW
+acts.** So discrepancy~(i) of \S\ref{sec:w-form} does not merely insert a
+spurious $\kappa'$; it removes the late ISW. \emph{This is testable on the
+background axis}: $\Phi$ is constant for Einstein--de~Sitter ($K=0$ dust,
+Appendix~G of the antecedent), so EdS has no late ISW to lose, while
+$\Lambda$CDM and \texttt{PLANCK\_MODEL} do. Correcting the weight should lift
+the plateau on the latter two and leave EdS alone.

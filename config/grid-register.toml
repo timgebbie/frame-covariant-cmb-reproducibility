@@ -492,3 +492,41 @@ resolution where nothing is being measured. The derivation matters more here
 than in most rows, because the quantity reported IS a property of the k
 integral --- an aliased grid would move the median and the shares directly,
 and those two numbers are the whole verdict."""
+
+[[grid]]
+key = "scripts/diagnostic_d27_gate_a.py::k_com"
+what = "the k grid gate G-a locates the first peak on"
+status = "derived"
+note = """`required_k_points(K_MAX, r_theta)` at 3 samples per j_ell^2
+oscillation --- **T-56**. `K_MAX` and the eta grid are **imported from D24**
+rather than restated, so gate G-a's number is comparable to T-121's line by
+line and the two cannot drift. That is the whole reason the import exists:
+a second copy of the grid here would make the comparison meaningless the
+first time either moved."""
+
+[[grid]]
+key = "scripts/diagnostic_d26_bulk_source_lattice.py::k_com"
+what = "the k grid the bulk-source lattice is screened on (gate G-b)"
+status = "derived"
+note = """`required_k_points(K_MAX, r_theta)` at 3 samples per j_ell^2
+oscillation --- **T-56**. `K_MAX = 200` because G-b asks only about the
+plateau, ell <= 30. The reported quantity IS a property of the k integral ---
+the median contributing k --- so an aliased grid would move the verdict
+directly rather than degrade it."""
+
+[[grid]]
+key = "scripts/diagnostic_d28_restoration_cross.py::k_com"
+what = "the k grid the restoration crosses locate the first peak on"
+status = "derived"
+note = """Same derivation as D24, whose `ELLS`, `K_MAX` and peak finder this
+instrument **imports rather than restates**, so its numbers are comparable to
+T-121's line by line. A second copy here would make the comparison meaningless
+the first time either moved."""
+
+[[grid]]
+key = "scripts/diagnostic_d29_the_identity.py::k_com"
+what = "the k grid B-17's identity is scored on at released kappa''"
+status = "derived"
+note = """Imported from D24 for the same reason as D28. This instrument is the
+first to run `bracket_all_at_w`, so it must be comparable to the configurations
+that preceded it or the comparison it exists to make cannot be read."""

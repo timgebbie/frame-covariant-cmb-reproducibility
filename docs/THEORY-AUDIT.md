@@ -85,7 +85,7 @@ Requiring $\Delta\tau_\ell=0$ at $\ell\ge2$ for arbitrary boost potential gives 
 
 ### The monopole row and the dipole shift
 
-$a\,\Delta\mathcal{B}_0=\tfrac13kv=\tfrac13k^2\Delta C_2$ exactly, and $\gamma$ -- which pairs $\Delta C_0$ against $k^2\Delta C_2$ -- vanishes only with $\mathcal{B}_0$ restored. **Both measurements stand and the conclusion drawn from them was wrong.** Finding **T-107**: the partner of $\Delta C_0$ is not in $C_2$ but in $-C_1$′, so $\gamma$ asks the wrong pairing, and the restoration that makes it vanish counts the monopole source twice -- criterion 5b doubles at $98.5\%$. See **C8**, which scores the whole rank-0 content of the bracket instead of one coefficient against another. **M15: a gate built from one coefficient cannot see a cancellation distributed across the bracket.**
+$a\thinspace \Delta\mathcal{B}_0=\tfrac13kv=\tfrac13k^2\Delta C_2$ exactly, and $\gamma$ -- which pairs $\Delta C_0$ against $k^2\Delta C_2$ -- vanishes only with $\mathcal{B}_0$ restored. **Both measurements stand and the conclusion drawn from them was wrong.** Finding **T-107**: the partner of $\Delta C_0$ is not in $C_2$ but in $-C_1$′, so $\gamma$ asks the wrong pairing, and the restoration that makes it vanish counts the monopole source twice -- criterion 5b doubles at $98.5$%. See **C8**, which scores the whole rank-0 content of the bracket instead of one coefficient against another. **M15: a gate built from one coefficient cannot see a cancellation distributed across the bracket.**
 
 | assertion | verdict |
 |---|---|
@@ -143,7 +143,7 @@ Multiplying the transport equation by $W=e^{-\kappa}$ sends the gravitational so
 
 ### The rank-0 partner, and where the monopole source enters
 
-(107) already carries the monopole source: $-C_1'=(\kappa'\hat v_B)'+(a\mathcal{B}_1)'/k$ and $(a\mathcal{B}_1)'/k=(\Phi_A'-\Phi_H')+\tfrac k3\tau_1$, with $\tfrac k3\tau_1=-a\mathcal{B}_0$. So (89)'s $\delta_{\ell0}$ row is **correctly empty** of $\mathcal{B}_0$ and only its normalisation is wrong. With $\alpha_0$ in place of $\alpha_2$, $C_0=-\tfrac13a\mathcal{B}_2$ and its frame shift $+\tfrac13kv$ is cancelled **inside the bracket**, by $\Delta[\tfrac k3\tau_1]$ in $-C_1'$. Restoring $a\mathcal{B}_0$ counts the source twice and leaves the same residual with the opposite sign -- finding T-107, which criterion 5b caught at $98.5\%$ and no frame instrument could.
+(107) already carries the monopole source: $-C_1'=(\kappa'\hat v_B)'+(a\mathcal{B}_1)'/k$ and $(a\mathcal{B}_1)'/k=(\Phi_A'-\Phi_H')+\tfrac k3\tau_1$, with $\tfrac k3\tau_1=-a\mathcal{B}_0$. So (89)'s $\delta_{\ell0}$ row is **correctly empty** of $\mathcal{B}_0$ and only its normalisation is wrong. With $\alpha_0$ in place of $\alpha_2$, $C_0=-\tfrac13a\mathcal{B}_2$ and its frame shift $+\tfrac13kv$ is cancelled **inside the bracket**, by $\Delta[\tfrac k3\tau_1]$ in $-C_1'$. Restoring $a\mathcal{B}_0$ counts the source twice and leaves the same residual with the opposite sign -- finding T-107, which criterion 5b caught at $98.5$% and no frame instrument could.
 
 | assertion | verdict |
 |---|---|

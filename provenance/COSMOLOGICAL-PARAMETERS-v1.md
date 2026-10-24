@@ -49,9 +49,7 @@ Derived, and these are the ones this bundle checks itself against:
 Derived from those, dimensionless and therefore directly comparable to this
 bundle, which works in $H_0=1$ units:
 
-$$\chi_*=\frac{r_*}{\theta_*}=13873\ \text{Mpc}=3.1171\,c/H_0,\qquad
-\ell_A=\frac{\pi}{\theta_*}=301.8,\qquad
-\ell_D=k_D\chi_*=1954.3$$
+$$\chi_\ast=\frac{r_\ast}{\theta_\ast}=13873\ \text{Mpc}=3.1171\thinspace c/H_0,\qquad \ell_A=\frac{\pi}{\theta_\ast}=301.8,\qquad \ell_D=k_D\chi_\ast=1954.3$$
 
 ## What this bundle already gets right, measured
 
@@ -60,9 +58,9 @@ $\Omega_r=0$ — against the above:
 
 | | this bundle | Planck | |
 |---|---|---|---|
-| $\Delta\eta_*$ | $3.1955\,c/H_0$ | $3.1171\,c/H_0$ | **+2.5%** |
+| $\Delta\eta_*$ | $3.1955\thinspace c/H_0$ | $3.1171\thinspace c/H_0$ | **+2.5%** |
 | $\ell_D$, $R$ included | **1985** | 1954 | **+1.6%** |
-| $\ell_D$, $R$ passed as zeros (**T-21**, as the code calls it) | 1783 | 1954 | $-8.8\%$ |
+| $\ell_D$, $R$ passed as zeros (**T-21**, as the code calls it) | 1783 | 1954 | $-8.8$% |
 
 **The conformal geometry is good to 2.5% at round-number parameters**, which is
 why the $\ell=k\Delta\eta$ comparisons in this record are meaningful at all.

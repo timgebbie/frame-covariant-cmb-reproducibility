@@ -94,14 +94,14 @@ comes out in exact rationals, including the residual
 $-1/2\ell^2$ and the opposite-sides approach that Fig. 4 draws. Also clean:
 Eq. (curvop), Eq. (factorise), Eq. (gauss-tf), App. B's $3+2(m-2)=2m-1$ count,
 App. C's kernel and all three coefficients $\frac3{16},\frac{17}{16},1$, the
-$\int\dd^2\ell\,\Delta C_\ell=0$ identity, App. D end to end, and App. F's $d/2$.
+$\int\dd^2\ell\thinspace \Delta C_\ell=0$ identity, App. D end to end, and App. F's $d/2$.
 
 ## 3. Two items left open, and they are open on purpose
 
 | | Where | What is missing |
 |---|---|---|
 | **O1** | Eq. (red-s), the rank-$n$ branch | The prefactor $(n+1)/(2n+3)$ is asserted. It matches neither C6.1 nor C6.2, and App. B produces the Eq. (detrace) counting but not this weight. **The answer is not in doubt** --- the Table I entry built on it closes the aligned-limit identity $\frac34+\frac14=1$ through Eq. (lamrec), which does not use Eq. (red-s), so there is an independent check on the result. What is missing is the intermediate step, and under §3b an audit agent's own re-derivation is not a substitute for one in the paper |
-| **O2** | Sec. VI D, *The consequence* | "The difference of the two $O(\ep^2\ell)$ sources accordingly integrates along the ray to the difference of the relabellings at its two ends." Differentiating Eq. (relabel) along the ray gives two pieces: the source difference by Eq. (dK), and $v^a_\perp\,\dd(\partial\tau/\partial e^a)/\dd t$, which is $v_\perp\!\cdot\!\nabla_\perp\tau$ by Eq. (dtau) and is itself $O(\ep^2\ell)$. The second must be absorbed by the difference of the free-streaming operators in the two frames. The step is not given, and the section's *Why not the chain rule* paragraph deliberately declines to supply it |
+| **O2** | Sec. VI D, *The consequence* | "The difference of the two $O(\ep^2\ell)$ sources accordingly integrates along the ray to the difference of the relabellings at its two ends." Differentiating Eq. (relabel) along the ray gives two pieces: the source difference by Eq. (dK), and $v^a_\perp\thinspace \dd(\partial\tau/\partial e^a)/\dd t$, which is $v_\perp\negthinspace \cdot\negthinspace \nabla_\perp\tau$ by Eq. (dtau) and is itself $O(\ep^2\ell)$. The second must be absorbed by the difference of the free-streaming operators in the two frames. The step is not given, and the section's *Why not the chain rule* paragraph deliberately declines to supply it |
 
 Neither was fixed, because fixing either means doing the algebra in the paper's
 voice and that has not been done. **O2 is the more consequential**: it is a step
@@ -123,7 +123,7 @@ The passes reached: the closed coefficient system; order bookkeeping; the
 asserted-not-shown sweep; Apps. A--F; internal cross-references against
 Table IV. They did **not** reach: Sec. I; Sec. II C and the C3/C4 harmonic block
 (C3.5, C4.3, C4.4, C4.5 and the Eq. (lower) sign conventions); Sec. IV D's
-scale-factor chain; the numerical claims in the figure captions (the $71\%$
+scale-factor chain; the numerical claims in the figure captions (the $71$%
 within $|z|<b$, the efficiency ratio $2-\chi_s/\chi_*$ --- both of which are
 recomputed and asserted by the figure scripts on every run, so they are covered
 by a different artefact); Eq. (dCl) against Lewis & Challinor, which is external;

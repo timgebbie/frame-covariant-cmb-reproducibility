@@ -37,7 +37,73 @@ README = ROOT / "README.md"
 #: Only the README and anything else markdown-rendered. **Not** the supplement:
 #: `.tex` goes to LaTeX, which has no emphasis parser, and `\eta_*` is right
 #: there. Enforcing this on the supplement would be the mirror-image mistake.
-MARKDOWN = ["README.md"]
+def _rendered_markdown() -> list[str]:
+    r"""Every ``.md`` in the tree that github.com will render.
+
+    **Widened 2026-10-24, finding F4/T-123.** This was ``["README.md"]`` while
+    the comment above it already said *"and anything else markdown-rendered"*,
+    and the gap between the two is where a stray ``$$`` lived for a day — in
+    `BUNDLE-DEFECTS-v1.md`, inverting 112 lines that the README points a reader
+    at from four places. A list that names one file is not a policy; this
+    discovers them, so a new document is covered the day it lands.
+
+    `.tex` is excluded on purpose and not by omission: LaTeX has no emphasis
+    parser, ``\eta_*`` is correct there, and enforcing these rules on the
+    supplement would be the mirror-image mistake.
+    """
+    skip = {".git", "__pycache__", "node_modules", "sources", "correction"}
+    out = []
+    for p_ in sorted(ROOT.rglob("*.md")):
+        if skip & set(p_.parts):
+            continue
+        out.append(p_.relative_to(ROOT).as_posix())
+    return out
+
+
+MARKDOWN = _rendered_markdown()
+
+#: **The two severities, and why they are not enforced the same way.**
+#:
+#: Widening the file set on 2026-10-24 produced **48 failures across 41 files**,
+#: which the audit predicted and called the point of running it. Fixing all of
+#: them before any of the guard lands would mean the guard does not land today,
+#: and the defect it exists to stop is a *daily* one. So the rules are split by
+#: what they cost a reader:
+#:
+#:   **FATAL** --- the page breaks. An odd ``$$`` count inverts every display
+#:   and every paragraph after it (T-120b, T-123); ``\tag{`` stacks an equation
+#:   atom by atom (T-120c); ``\big``/``\Big`` throw a red error box; a newline
+#:   inside a display becomes a layout break (T-120d); a bare ``*`` in a display
+#:   eats the subscripts (T-120). Each destroys content a reader cannot
+#:   reconstruct. **Zero tolerance, every file, no allowance.**
+#:
+#:   **COSMETIC** --- one expression renders as its own source. ``high-$\ell$``
+#:   shows as ``high-$\ell$``; a bare ``*`` inline loses a subscript. The reader
+#:   sees something ugly and still correct, and can read past it.
+#:
+#: Cosmetic rules are enforced as a **ratchet**: today's count is frozen below
+#: and may only fall. A new document cannot add one, the backlog cannot grow,
+#: and the number in this file is the work remaining. **A ratchet is a worse
+#: gate than zero and a far better one than an unenforced comment**, which is
+#: what this file had until today.
+#:
+#: Lower these as files are cleaned. Raising one requires saying why in the
+#: commit, which is the whole mechanism.
+COSMETIC_BASELINE = {
+    "test_no_bare_asterisk_in_inline_maths": 19,
+    "test_no_inline_maths_immediately_after_a_hyphen": 13,
+}
+
+
+def _count_failures(rule) -> tuple[int, list[str]]:
+    """How many files break `rule`, and which — for the ratchet."""
+    bad = []
+    for name in MARKDOWN:
+        try:
+            rule(name)
+        except AssertionError:
+            bad.append(name)
+    return len(bad), bad
 
 
 def _display_blocks(text: str) -> list[tuple[int, str]]:
@@ -152,9 +218,22 @@ def test_no_command_github_cannot_render(name: str) -> None:
     it was never covered.
     """
     text = (ROOT / name).read_text(encoding="utf-8")
-    found = {cmd: text.count(cmd) for cmd in BANNED if cmd in text}
+    # **Scoped to maths, 2026-10-24.** These three are hazards only where the
+    # maths renderer sees them; in prose, ``\tag`` and ``\big`` are just words,
+    # and a register that records a banned command has to be able to name it.
+    # **``$$`` parity is deliberately NOT scoped this way** — T-120b and T-123
+    # are both a backticked ``$$`` in prose, because the renderer counts
+    # delimiters before anything else and backticks do not hide them. The two
+    # rules differ because the failures differ, and that asymmetry is the
+    # finding rather than an inconsistency.
+    maths = "".join(m.group(0) for m in re.finditer(r"\$\$.*?\$\$", text, re.S))
+    body = re.sub(r"\$\$.*?\$\$", "", text, flags=re.S)
+    maths += "".join(m.group(0) for m in re.finditer(
+        r"(?<!\$)\$(?!\s)[^$\n]{1,200}?(?<!\s)\$(?!\$)", body))
+    found = {cmd: maths.count(cmd) for cmd in BANNED if cmd in maths}
     assert not found, "\n".join(
-        f"{name}: {n}x '{cmd}' — {BANNED[cmd]}" for cmd, n in found.items())
+        f"{name}: {n}x '{cmd}' inside maths — {BANNED[cmd]}"
+        for cmd, n in found.items())
 
 
 @pytest.mark.parametrize("name", MARKDOWN)
@@ -169,8 +248,7 @@ def test_no_bare_asterisk_in_a_display_block(name: str) -> None:
         f"Write \\ast. Offending blocks: {offenders}")
 
 
-@pytest.mark.parametrize("name", MARKDOWN)
-def test_no_bare_asterisk_in_inline_maths(name: str) -> None:
+def _bare_asterisk_in_inline_maths(name: str) -> None:
     r"""``$z_*=1114.5$`` is the same defect one dollar sign smaller.
 
     CommonMark's asymmetry is the whole of it: ``*`` opens emphasis
@@ -190,8 +268,7 @@ def test_no_bare_asterisk_in_inline_maths(name: str) -> None:
         f"emphasis markers. Write \\ast. Found: {hits}")
 
 
-@pytest.mark.parametrize("name", MARKDOWN)
-def test_no_inline_maths_immediately_after_a_hyphen(name: str) -> None:
+def _inline_maths_immediately_after_a_hyphen(name: str) -> None:
     """``high-$\\ell$`` renders as literal source. Reword it."""
     text = (ROOT / name).read_text(encoding="utf-8")
     bad = []
@@ -236,3 +313,92 @@ def test_display_blocks_are_delimited_on_their_own_lines(name: str) -> None:
            if ln.count("$$") == 1 and ln.strip() not in ("$$",)
            and not (ln.strip().startswith("$$") or ln.strip().endswith("$$"))]
     assert not bad, f"{name}: a $$ delimiter is buried mid-line at {bad}"
+
+
+# ---------------------------------------------------------------------------
+# the cosmetic ratchet
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize("rule_name,rule", [
+    ("test_no_bare_asterisk_in_inline_maths", _bare_asterisk_in_inline_maths),
+    ("test_no_inline_maths_immediately_after_a_hyphen",
+     _inline_maths_immediately_after_a_hyphen),
+])
+def test_cosmetic_backlog_does_not_grow(rule_name, rule) -> None:
+    """A cosmetic hazard may be removed from the tree and never added to it.
+
+    These two do not break a page; they render one expression as its own
+    source. Enforcing them at zero today would block the FATAL guards from
+    landing, and the fatal class is the one that cost three days this week.
+    So they are frozen at today's count and ratcheted down.
+
+    **If this fails because the count ROSE**, a new document added a hazard and
+    the fix is in that document. **If it fails because the count FELL**, lower
+    `COSMETIC_BASELINE` in this file — that is a cleanup landing, and recording
+    it is how the backlog stays visible instead of becoming permanent.
+    """
+    n, bad = _count_failures(rule)
+    allowed = COSMETIC_BASELINE[rule_name]
+    assert n <= allowed, (
+        f"{rule_name}: {n} files now carry this hazard, baseline {allowed}. "
+        f"New or worsened: {sorted(bad)}")
+    assert n == allowed, (
+        f"{rule_name}: down to {n} from a baseline of {allowed} — good. "
+        f"Lower COSMETIC_BASELINE['{rule_name}'] to {n} so the ratchet holds "
+        f"the gain. Remaining: {sorted(bad)}")
+
+
+#: **Backslash + ASCII punctuation, finding T-126 / P1-T 2026-10-24.**
+#: CommonMark treats a backslash before ASCII punctuation as an escape and
+#: consumes it **before** the maths renderer runs. So `\,` reaches KaTeX as a
+#: bare comma, `\{` as a grouping brace rather than a delimiter, and `\%` as
+#: a **comment** — which discards the rest of that span. The README carried 26
+#: of these across twelve lines and the PI saw the commas on the page.
+#: Alphabetic control words survive, which is why the repairs are
+#: `\thinspace`, `\negthinspace`, `\lbrace`/`\rbrace`, and for the percent
+#: sign, moving it outside the maths entirely.
+MARKDOWN_EATEN = {
+    ",": r"\thinspace",
+    "!": r"\negthinspace",
+    "{": r"\lbrace",
+    "}": r"\rbrace",
+    "%": "move the percent sign OUTSIDE the maths span",
+    "#": "avoid, or use \\mathrm",
+    "&": "avoid in a GitHub maths span",
+    "_": "only outside a subscript; a literal underscore needs \\textunderscore",
+}
+
+
+def _maths_spans(text: str) -> list[str]:
+    out = [m.group(1) for m in re.finditer(r"\$\$(.*?)\$\$", text, re.S)]
+    body = re.sub(r"\$\$.*?\$\$", "", text, flags=re.S)
+    out += [m.group(1) for m in re.finditer(
+        r"(?<!\$)\$(?!\s)([^$\n]{1,300}?)(?<!\s)\$(?!\$)", body)]
+    return out
+
+
+@pytest.mark.parametrize("name", MARKDOWN)
+def test_no_markdown_eaten_escape_inside_maths(name: str) -> None:
+    r"""The general form of the comma defect, not the twenty-six instances.
+
+    **This is the test the previous three render findings should have been.**
+    T-120, T-120b, T-120c and T-120d each banned a specific token after it had
+    already reached the published page. This one bans the *class*: any
+    backslash followed by ASCII punctuation inside a maths span, because
+    markdown will eat the backslash and leave the punctuation to mean
+    something else to KaTeX.
+
+    ``\%`` is the dangerous member and the reason the class matters more than
+    the list: stripped to a bare ``%`` it is a **comment**, so everything after
+    it in that span silently disappears. A reader sees a truncated equation
+    with no error.
+    """
+    bad = []
+    for span in _maths_spans((ROOT / name).read_text(encoding="utf-8")):
+        for ch, fix in MARKDOWN_EATEN.items():
+            tok = "\\" + ch
+            if tok in span:
+                bad.append((tok, fix, span.strip()[:60]))
+    assert not bad, (
+        f"{name}: markdown eats the backslash before ASCII punctuation inside "
+        f"maths, leaving the character to mean something else to KaTeX. "
+        + "; ".join(f"'{t}' -> {f}  in: {s}" for t, f, s in bad[:6]))

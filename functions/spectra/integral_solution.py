@@ -118,6 +118,7 @@ def integral_solution(
     c1_prime_isw: np.ndarray | None = None,
     w_half_is_isw_only: bool = False,
     thomson_boundary_and_vdot: bool = False,
+    bracket_all_at_w: bool = False,
 ) -> IntegralSolution:
     r"""Evaluate (102) at one $k$ for a set of multipoles.
 
@@ -233,7 +234,17 @@ def integral_solution(
     #
     # `slot_weight_split` separates C_1's two contents and gives each the
     # weight its physics calls for: the gravitational half under
-    # $W=e^{-\kappa}$, the Thomson half under $g=\mathcal V$. Scattering
+    # $W=e^{-\kappa}$, the Thomson half under $g=\mathcal V$.
+    #
+    # **The wording above is narrower than the code and was read as a
+    # limitation --- P1-T, 2026-10-24, correctly, from this docstring.** What
+    # the branch actually sets is
+    #     bracket_w = c0 - c1_grav_prime + c2_second      at W
+    #     bracket_v = -c1_thom_prime                      at V
+    # so **$C_0$ and $C_2''$ travel to $W$ as well**, and the control
+    # addresses B-17's discrepancy (i) for all three bracket terms rather
+    # than for $C_1$ alone. It is named for what it separates and does more
+    # than its name; that cost a stream an hour and is corrected here. Scattering
     # damping belongs to the scattering source; this is also **C6 / T-81b**,
     # which is why one change is expected to move three symptoms.
     #
@@ -339,7 +350,62 @@ def integral_solution(
     # at the boundary and omits its $\dot{\mathcal V}$ bulk term. This control
     # supplies both corrections together, because the derivation produces them
     # together and **M11a is the standing reason not to test them apart**.
-    if slot_weight_split:
+    # **`bracket_all_at_w` --- B-17 discrepancy (i), in full. Added 2026-10-24
+    # because NOTHING IMPLEMENTED IT.**
+    #
+    # The exact by-parts is -(W C_1)' = -W' C_1 - W C_1', so **the whole of
+    # C_1' travels at W** and the -V C_1 term is separate. (102) carries the
+    # whole bracket at V.D, which is discrepancy (i).
+    #
+    # `slot_weight_split` was read -- by me, in D26's labelling, and in P1-T's
+    # section 5 -- as the control for (i). **It is not.** It SPLITS C_1': the
+    # gravitational half to W, the Thomson half left at V. That is T-88's
+    # physics argument, which is a different claim, and it leaves
+    # kappa'' vhat_B -- 99.8% of |C_1'| by T-121 -- exactly where it was.
+    #
+    # So the identity B-17 states had never been run, and every configuration
+    # labelled "the identity" so far was slot_weight_split plus partners.
+    # This control is the real one: the bracket entire, at W, with nothing
+    # split out of it.
+    # **A control that is accepted and ignored is worse than one that is
+    # wrong --- finding T-125, P1-T's reading 6a, confirmed bit for bit.**
+    #
+    # `by_parts_weight_terms` writes into `bracket`, and `bracket` is read
+    # ONLY in the final `else` below: the `slot_weight_split` branch rebuilds
+    # `bracket_w` from the coefficients and the two partner terms are silently
+    # discarded. So (by_parts=True, slot=True) returned bit-identical output
+    # to (by_parts=False, slot=True), and a week of configurations labelled
+    # "the identity pair" were slot_weight_split alone.
+    #
+    # The caller got no error and attributed the result to a term that was
+    # never in it. Raising is the fix: these two decide the same thing and a
+    # silent choice makes the answer unattributable.
+    if by_parts_weight_terms and slot_weight_split:
+        raise ValueError(
+            "by_parts_weight_terms is DISCARDED under slot_weight_split: the "
+            "split branch rebuilds the bracket from the coefficients and "
+            "never reads the partner terms. This combination silently "
+            "measured slot_weight_split alone (T-125). Use "
+            "bracket_all_at_w=True with by_parts_weight_terms=True for the "
+            "B-17 identity, or drop one of these two.")
+
+    if bracket_all_at_w:
+        if W_arr is None:
+            raise ValueError(
+                "bracket_all_at_w needs `opacity` (e^-kappa) on the eta grid: "
+                "it is the weight the identity names and this function cannot "
+                "invent it from `weight`, which A-2 may have set to V")
+        if slot_weight_split:
+            raise ValueError(
+                "bracket_all_at_w and slot_weight_split both decide where the "
+                "bracket travels and they disagree: the first moves it whole "
+                "to W, the second splits C_1' and leaves the Thomson half at "
+                "V. Choosing both silently would make the result "
+                "unattributable -- pick one")
+        bracket_w = bracket
+        weight_w = W_arr * np.asarray(diffusion, dtype=float)
+        bracket_v, weight_v = None, None
+    elif slot_weight_split:
         # the gravitational half moves to W; the Thomson half keeps V
         if w_half_is_isw_only:
             # only the ISW goes to W; the dynamical remainder stays at V with

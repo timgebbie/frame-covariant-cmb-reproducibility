@@ -110,6 +110,34 @@ CONFIGS: list[tuple[str, dict]] = [
     ("+ by_parts + slot_weight_split + vdot",
      dict(by_parts_weight_terms=True, slot_weight_split=True,
           thomson_boundary_and_vdot=True)),
+
+    # --- added 2026-10-23, and the first pass SHOULD HAVE HAD THEM ----------
+    # **P1-T's section 5 is the identity stated as a column, and no row above
+    # is it.** The exact by-parts puts the BRACKET at W and the PARTNER terms
+    # -V C_1 + 2V C_2' + Vdot C_2 at V. `slot_weight_split` is the only
+    # control that moves any of the bracket to W; `by_parts_weight_terms` is
+    # the only one that supplies the rank-two partners. **Neither alone is the
+    # identity and the first pass ran them together only alongside
+    # `thomson_boundary_and_vdot`, which rows 3 and 6 show is the ingredient
+    # that sends CDM l=2 to 124.** So the one combination the derivation
+    # actually specifies was screened out by a third term, which is M11a
+    # inverted: not two defects that fix it only together, but one repair
+    # refuted by the company it was tested in.
+    ("+ by_parts + slot_weight_split  (P1-T 5: the identity)",
+     dict(by_parts_weight_terms=True, slot_weight_split=True)),
+    # The same, plus the j' bulk term -- B-17's discrepancy (iv), which "has
+    # no counterpart at all" in (102) because the by-parts onto coefficients
+    # is legal only at W. If the bracket is at W it becomes available.
+    ("+ by_parts + slot_weight_split + jprime",
+     dict(by_parts_weight_terms=True, slot_weight_split=True,
+          jprime_bulk_slot=True)),
+    # G-b's winner with the rank-two partners added. B_SLOT_REPAIR's
+    # combination closed the FRAME gap and left both frames at 1.5-1.7; the
+    # partners are rank two, so this asks whether what it left is them.
+    ("B_SLOT_REPAIR + by_parts",
+     dict(slot_weight_split=True, jprime_bulk_slot=True,
+          thomson_carries_shear=True, boundary_weight_w=False,
+          by_parts_weight_terms=True)),
 ]
 
 

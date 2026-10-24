@@ -12,9 +12,7 @@ the source for the supplement section.
 (102)'s integrand is $C_0-C_1'+C_2''$ and its boundary terms carry
 $C_2'(\eta_*)$. With (90),
 
-$$-C_0\simeq+\tfrac52a\mathcal B_2,\quad
--C_1\simeq\tfrac1k(a\mathcal B_1+\kappa'v_B),\quad
--C_2\simeq\tfrac1{k^2}a\mathcal B_2$$
+$$-C_0\simeq+\tfrac52a\mathcal B_2,\quad -C_1\simeq\tfrac1k(a\mathcal B_1+\kappa'v_B),\quad -C_2\simeq\tfrac1{k^2}a\mathcal B_2$$
 
 so the derivatives the solution needs are $(a\mathcal B_1)'$,
 $(a\mathcal B_2)'$ and $(a\mathcal B_2)''$, for **arbitrary $u^a$**.
@@ -24,8 +22,7 @@ $(a\mathcal B_2)'$ and $(a\mathcal B_2)''$, for **arbitrary $u^a$**.
 *Annals II* §4, in the integrated Boltzmann equation
 $\dot\tau+e^a\mathcal D_a\tau+\mathcal B\simeq C[x,e]$:
 
-$$\mathcal B=-\tfrac13\mathcal D^a\tau_a+(\mathcal D_a\ln T+A_a)e^a
-+\sigma_{ab}e^ae^b$$
+$$\mathcal B=-\tfrac13\mathcal D^a\tau_a+(\mathcal D_a\ln T+A_a)e^a +\sigma_{ab}e^ae^b$$
 
 Read off by rank, with **no frame choice made**:
 
@@ -44,13 +41,9 @@ as a constraint.
 
 Appendix G's linearised propagation equations carry it, with no frame choice:
 
-$$\dot\sigma_{\langle ab\rangle}+2H\sigma_{\langle ab\rangle}
--\mathcal D_{\langle a}A_{b\rangle}+E_{\langle ab\rangle}
-\simeq\tfrac12\pi_{\langle ab\rangle}$$
+$$\dot\sigma_{\langle ab\rangle}+2H\sigma_{\langle ab\rangle} -\mathcal D_{\langle a}A_{b\rangle}+E_{\langle ab\rangle} \simeq\tfrac12\pi_{\langle ab\rangle}$$
 
-$$\boxed{\;\dot{\mathcal B}_2=\dot\sigma_{\langle ab\rangle}
-=-2H\sigma_{ab}+\mathcal D_{\langle a}A_{b\rangle}-E_{ab}
-+\tfrac12\pi_{ab}\;}$$
+$$\boxed{\thickspace \dot{\mathcal B}_2=\dot\sigma_{\langle ab\rangle} =-2H\sigma_{ab}+\mathcal D_{\langle a}A_{b\rangle}-E_{ab} +\tfrac12\pi_{ab}\thickspace }$$
 
 **So the rank-two relation was never missing — it was in Appendix G, one
 specialisation away from where it was needed.** It couples the shear to the
@@ -61,8 +54,7 @@ a constraint on $A_a$, $E_{ab}$ and $\pi_{ab}$ instead of an evolution.
 For scalar perturbations in matter domination the paper also gives the
 specialised pair
 
-$$\dot\sigma_{ab}+2H\sigma_{ab}+E_{ab}\approx0
-\iff(a^2\sigma_{ab})^{\textstyle\cdot}\approx-a^2E_{ab}$$
+$$\dot\sigma_{ab}+2H\sigma_{ab}+E_{ab}\approx0 \iff(a^2\sigma_{ab})^{\textstyle\cdot}\approx-a^2E_{ab}$$
 
 and **the right-hand form is the one to implement**, for the reason in the next
 section.
@@ -106,20 +98,17 @@ and specialises it: with $\dot{\overline{\ln T}}=-H$ in the background,
 $A_a\dot{\overline{\ln T}}=-HA_a$ and the two correction terms combine into
 $\mathcal B_a$ itself,
 
-$$(\mathcal D_a\ln T)^{\textstyle\cdot}\simeq\mathcal D_a\dot{\ln T}
--H\underbrace{(\mathcal D_a\ln T+A_a)}_{\mathcal B_a}$$
+$$(\mathcal D_a\ln T)^{\textstyle\cdot}\simeq\mathcal D_a\dot{\ln T} -H\underbrace{(\mathcal D_a\ln T+A_a)}_{\mathcal B_a}$$
 
 (L009), the spatial gradient of the radiation energy-conservation equation, is
 then generic — no frame has been chosen — and its left-hand side is
 $\mathcal D_a\mathcal B_0$ by the definition of $\mathcal B_0$:
 
-$$\mathcal D_a\mathcal B_0\simeq(\mathcal D_a\ln T)^{\textstyle\cdot}
-+\tfrac13\mathcal D_a\Theta+H\mathcal B_a$$
+$$\mathcal D_a\mathcal B_0\simeq(\mathcal D_a\ln T)^{\textstyle\cdot} +\tfrac13\mathcal D_a\Theta+H\mathcal B_a$$
 
 With $\mathcal B_a=\mathcal D_a\ln T+A_a$, those two give
 
-$$\boxed{\;\dot{\mathcal B}_a\simeq\mathcal D_a\mathcal B_0
--\tfrac13\mathcal D_a\Theta-H\mathcal B_a+\dot A_a\;}$$
+$$\boxed{\thickspace \dot{\mathcal B}_a\simeq\mathcal D_a\mathcal B_0 -\tfrac13\mathcal D_a\Theta-H\mathcal B_a+\dot A_a\thickspace }$$
 
 **The rank-one source's evolution is sourced by the rank-zero one.** That is not
 an accident of this assembly — it is the same coupling the footnote to (105)
@@ -164,8 +153,7 @@ source was consulted.
 assembly can start one step earlier. **(L001)**, the radiation energy
 conservation / $\ell=0$ multipole divergence equation, is
 
-$$(\ln T)^{\textstyle\cdot}+\tfrac13\Theta\simeq-\tfrac13\mathcal D^a\tau_a
-=\mathcal B_0$$
+$$(\ln T)^{\textstyle\cdot}+\tfrac13\Theta\simeq-\tfrac13\mathcal D^a\tau_a =\mathcal B_0$$
 
 Split into background and perturbation — $\ln T=\ln\bar T(t)+\delta\tilde T$
 with $(\ln\bar T)^{\textstyle\cdot}=-H$, and $\Theta=3H+\delta\Theta$ — the
@@ -182,19 +170,11 @@ makes clear that **$\Theta$ enters only through its perturbation**.
 PSTF-projecting the generic relation and specialising with
 $\tilde A_a=\mathcal D_a\Phi_A$:
 
-$$\mathcal D_{\langle a}\dot{\mathcal B}_{b\rangle}
-=\mathcal D_{\langle a}\mathcal D_{b\rangle}\mathcal B_0
--\tfrac13\mathcal D_{\langle a}\mathcal D_{b\rangle}\delta\Theta
--H\mathcal D_{\langle a}\mathcal D_{b\rangle}\delta\tilde T
-+\mathcal D_{\langle a}\mathcal D_{b\rangle}\dot\Phi_A
--2H\mathcal D_{\langle a}\mathcal D_{b\rangle}\Phi_A$$
+$$\mathcal D_{\langle a}\dot{\mathcal B}_{b\rangle} =\mathcal D_{\langle a}\mathcal D_{b\rangle}\mathcal B_0 -\tfrac13\mathcal D_{\langle a}\mathcal D_{b\rangle}\delta\Theta -H\mathcal D_{\langle a}\mathcal D_{b\rangle}\delta\tilde T +\mathcal D_{\langle a}\mathcal D_{b\rangle}\dot\Phi_A -2H\mathcal D_{\langle a}\mathcal D_{b\rangle}\Phi_A$$
 
 against the paper's (105):
 
-$$\mathcal D_{\langle a}\dot{\tilde{\mathcal B}}_{b\rangle}
-\approx\mathcal D_{\langle a}\mathcal D_{b\rangle}(\dot\Phi_A-\dot\Phi_H)
--2H\mathcal D_{\langle a}\mathcal D_{b\rangle}\Phi_A
--\tfrac13\mathcal D_{\langle a}\mathcal D_{b\rangle}(\mathcal D^c\tilde\tau_c)$$
+$$\mathcal D_{\langle a}\dot{\tilde{\mathcal B}}_{b\rangle} \approx\mathcal D_{\langle a}\mathcal D_{b\rangle}(\dot\Phi_A-\dot\Phi_H) -2H\mathcal D_{\langle a}\mathcal D_{b\rangle}\Phi_A -\tfrac13\mathcal D_{\langle a}\mathcal D_{b\rangle}(\mathcal D^c\tilde\tau_c)$$
 
 | | |
 |---|---|
@@ -217,15 +197,9 @@ this file conflated them for an hour.
 
 §`newtg` supplies three things, all of them generic until the last step:
 
-$$\textbf{(ng-expansion)}\quad
-\tfrac13\mathcal D_{\langle a}\tilde{\mathcal D}_{b\rangle}\tilde\Theta
-\approx\mathcal D_{\langle a}\mathcal D_{b\rangle}\dot\Phi_H
--H\mathcal D_{\langle a}\mathcal D_{b\rangle}\Phi_A$$
+$$\textbf{(ng-expansion)}\quad \tfrac13\mathcal D_{\langle a}\tilde{\mathcal D}_{b\rangle}\tilde\Theta \approx\mathcal D_{\langle a}\mathcal D_{b\rangle}\dot\Phi_H -H\mathcal D_{\langle a}\mathcal D_{b\rangle}\Phi_A$$
 
-$$\textbf{(tempc)}\quad(\tilde{\mathcal D}_a\ln T)^{\textstyle\cdot}
-+H(\tilde{\mathcal D}_a\ln T+\tilde A_a)
-\approx-\tfrac13\tilde{\mathcal D}_a\tilde\Theta
--\tfrac13\mathcal D_a(\mathcal D^c\tau_c)$$
+$$\textbf{(tempc)}\quad(\tilde{\mathcal D}_a\ln T)^{\textstyle\cdot} +H(\tilde{\mathcal D}_a\ln T+\tilde A_a) \approx-\tfrac13\tilde{\mathcal D}_a\tilde\Theta -\tfrac13\mathcal D_a(\mathcal D^c\tau_c)$$
 
 and $\tilde A_a\approx\mathcal D_a\Phi_A$ from the shear evolution equation with
 $\tilde\sigma_{ab}=0$.
@@ -240,18 +214,11 @@ Substituting (ng-expansion) into the generic relation, with
 $\tilde A_b=\mathcal D_b\Phi_A$ and the scalar commutator on
 $(\mathcal D_b\Phi_A)^{\textstyle\cdot}$:
 
-$$\mathcal D_{\langle a}\dot{\tilde{\mathcal B}}_{b\rangle}
-=\mathcal D_{\langle a}\mathcal D_{b\rangle}\mathcal B_0
-+\mathcal D_{\langle a}\mathcal D_{b\rangle}(\dot\Phi_A-\dot\Phi_H)
--2H\mathcal D_{\langle a}\mathcal D_{b\rangle}\Phi_A
-\;\underbrace{-\,H\mathcal D_{\langle a}\tilde{\mathcal D}_{b\rangle}\ln T}_{\textstyle(\star)}$$
+$$\mathcal D_{\langle a}\dot{\tilde{\mathcal B}}_{b\rangle} =\mathcal D_{\langle a}\mathcal D_{b\rangle}\mathcal B_0 +\mathcal D_{\langle a}\mathcal D_{b\rangle}(\dot\Phi_A-\dot\Phi_H) -2H\mathcal D_{\langle a}\mathcal D_{b\rangle}\Phi_A \thickspace \underbrace{-\thinspace H\mathcal D_{\langle a}\tilde{\mathcal D}_{b\rangle}\ln T}_{\textstyle(\star)}$$
 
 against (105) as printed:
 
-$$\mathcal D_{\langle a}\dot{\tilde{\mathcal B}}_{b\rangle}
-\approx\mathcal D_{\langle a}\mathcal D_{b\rangle}(\dot\Phi_A-\dot\Phi_H)
--2H\mathcal D_{\langle a}\mathcal D_{b\rangle}\Phi_A
-+\mathcal D_{\langle a}\mathcal D_{b\rangle}\mathcal B_0$$
+$$\mathcal D_{\langle a}\dot{\tilde{\mathcal B}}_{b\rangle} \approx\mathcal D_{\langle a}\mathcal D_{b\rangle}(\dot\Phi_A-\dot\Phi_H) -2H\mathcal D_{\langle a}\mathcal D_{b\rangle}\Phi_A +\mathcal D_{\langle a}\mathcal D_{b\rangle}\mathcal B_0$$
 
 **Every term matches, and the generic assembly carries one more: $(\star)$.**
 Derived twice by two routes --- through (L009) and through §`newtg`'s own scalar
@@ -294,8 +261,7 @@ physics, and the previous section predicts it.
 A correction to this file's own plan. (102) needs $C_0$, $C_1$, $C_1'$, $C_2$,
 $C_2'$ and $C_2''$, and by (90)
 
-$$C_0\propto a\mathcal B_2,\qquad C_1\propto\tfrac1k(a\mathcal B_1+\kappa'v_B),
-\qquad C_2\propto a\mathcal B_2$$
+$$C_0\propto a\mathcal B_2,\qquad C_1\propto\tfrac1k(a\mathcal B_1+\kappa'v_B), \qquad C_2\propto a\mathcal B_2$$
 
 **$C_0$ carries $\mathcal B_2$, not $\mathcal B_0$, and it enters the integrand
 undifferentiated.** So $\dot{\mathcal B}_0$ is not required for the integral
@@ -312,9 +278,7 @@ plan did not say.
 Differentiating Appendix G's shear equation and substituting its $\dot E_{ab}$
 equation, with $E_{ab}$ eliminated through the first:
 
-$$\ddot\sigma=-5H\dot\sigma+\left[\tfrac12(\rho+p)-2\dot H-6H^2\right]\sigma
-+3H\Lambda+\dot\Lambda+2H\pi+\dot\pi-\mathrm{curl}\,H
-+\tfrac12\mathcal D_{\langle a}q_{b\rangle}$$
+$$\ddot\sigma=-5H\dot\sigma+\left[\tfrac12(\rho+p)-2\dot H-6H^2\right]\sigma +3H\Lambda+\dot\Lambda+2H\pi+\dot\pi-\mathrm{curl}\thinspace H +\tfrac12\mathcal D_{\langle a}q_{b\rangle}$$
 
 with $\Lambda\equiv\mathcal D_{\langle a}A_{b\rangle}$. **Generic — no frame,
 no matter model, no scalar restriction.**
@@ -323,11 +287,10 @@ no matter model, no scalar restriction.**
 
 The paper prints the scalar matter-dominated second derivative directly:
 
-$$(a^2\sigma_{ab})^{\ddot{}}+H(a^2\sigma_{ab})^{\dot{}}
-\approx+\tfrac12a^2\rho_{\!_M}\sigma_{ab}$$
+$$(a^2\sigma_{ab})^{\ddot{}}+H(a^2\sigma_{ab})^{\dot{}} \approx+\tfrac12a^2\rho_{\negthinspace _M}\sigma_{ab}$$
 
 Reducing the generic result with $A_a\approx0$, $\pi_{ab}=0$, $q_a=0$,
-$\mathrm{curl}\,H=0$, $p=0$ and solving the printed equation for
+$\mathrm{curl}\thinspace H=0$, $p=0$ and solving the printed equation for
 $\ddot\sigma$, the two are **term for term identical and their difference is
 identically zero** — before the Friedmann relation is even needed. Checked
 symbolically.
@@ -362,8 +325,7 @@ something in it.
 
 *Annals II* writes its own source as
 
-$$\mathcal S_B=-\left[a\mathcal B_0\delta_{\ell0}
-+(a\mathcal B_1+\kappa'v_B)\delta_{\ell1}+a\mathcal B_2\delta_{\ell2}\right]$$
+$$\mathcal S_B=-\left[a\mathcal B_0\delta_{\ell0} +(a\mathcal B_1+\kappa'v_B)\delta_{\ell1}+a\mathcal B_2\delta_{\ell2}\right]$$
 
 **with the $a\mathcal B_0\delta_{\ell0}$ term present**, and says beneath it that
 $\tau_0=0$ is a solution *"consistent with the definitions we introduced above
@@ -427,7 +389,7 @@ $\tilde A_a=\mathcal D_a\Phi_A$, giving $E=k_{\rm phys}^2\Phi_A$.
 
 Subtracting (2) from (1) leaves, for **arbitrary** $v$,
 
-$$\frac{k}{a^2}\big(v'+\mathcal Hv\big)+c^2E$$
+$$\frac{k}{a^2}(v'+\mathcal Hv)+c^2E$$
 
 with $c$ the rank-raising sign. Substituting (3) kills the first term and leaves
 $k^2(c^2-1)\Phi_A/a^2$, **identically zero for $c=\pm1$**. Verified symbolically

@@ -18,7 +18,7 @@ being possible.
 | status | count | means |
 |---|---|---|
 | **open** | 1 | a chosen literal whose convergence is **not** established. This status is the point of the register. |
-| **derived** | 12 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
+| **derived** | 16 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
 | **measured** | 7 | a chosen literal whose convergence has been measured, with the number stated. |
 | **described** | 11 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
 | **index** | 18 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
@@ -37,7 +37,7 @@ share this history, so a grid shift moves them together and cancels. Finding
 **T-46**, question **Q7**, decision **S33** --- derived immediately after the
 v1.2.0 tag. v1.2.0 ships it as a stated limit.
 
-## derived — 12
+## derived — 16
 
 ### `x` — the x grid j_ell(x) is tabulated on
 
@@ -146,9 +146,9 @@ oscillation --- finding **T-56**, the same derivation F9 and D4 use. `K_MAX` is
 more. An aliased k integral moves the interpolated peak, and a sweep whose
 *observable is a peak position* cannot afford a grid chosen by eye.
 
-### `k_com` — the k grid the low-ell k-decomposition is computed on
+### `k_com` — the k grid the low-ell and peak k-decomposition is computed on
 
-`scripts/diagnostic_d25_k_decomposition.py:103`, `np.linspace`
+`scripts/diagnostic_d25_k_decomposition.py:110`, `np.linspace`
 
 `required_k_points(K_MAX, r_theta)` at 3 samples per j_ell^2
 oscillation --- **T-56**. `K_MAX` is 200: this instrument asks only about the
@@ -157,6 +157,44 @@ resolution where nothing is being measured. The derivation matters more here
 than in most rows, because the quantity reported IS a property of the k
 integral --- an aliased grid would move the median and the shares directly,
 and those two numbers are the whole verdict.
+
+### `k_com` — the k grid the bulk-source lattice is screened on (gate G-b)
+
+`scripts/diagnostic_d26_bulk_source_lattice.py:182`, `np.linspace`
+
+`required_k_points(K_MAX, r_theta)` at 3 samples per j_ell^2
+oscillation --- **T-56**. `K_MAX = 200` because G-b asks only about the
+plateau, ell <= 30. The reported quantity IS a property of the k integral ---
+the median contributing k --- so an aliased grid would move the verdict
+directly rather than degrade it.
+
+### `k_com` — the k grid gate G-a locates the first peak on
+
+`scripts/diagnostic_d27_gate_a.py:83`, `np.linspace`
+
+`required_k_points(K_MAX, r_theta)` at 3 samples per j_ell^2
+oscillation --- **T-56**. `K_MAX` and the eta grid are **imported from D24**
+rather than restated, so gate G-a's number is comparable to T-121's line by
+line and the two cannot drift. That is the whole reason the import exists:
+a second copy of the grid here would make the comparison meaningless the
+first time either moved.
+
+### `k_com` — the k grid the restoration crosses locate the first peak on
+
+`scripts/diagnostic_d28_restoration_cross.py:103`, `np.linspace`
+
+Same derivation as D24, whose `ELLS`, `K_MAX` and peak finder this
+instrument **imports rather than restates**, so its numbers are comparable to
+T-121's line by line. A second copy here would make the comparison meaningless
+the first time either moved.
+
+### `k_com` — the k grid B-17's identity is scored on at released kappa''
+
+`scripts/diagnostic_d29_the_identity.py:109`, `np.linspace`
+
+Imported from D24 for the same reason as D28. This instrument is the
+first to run `bracket_all_at_w`, so it must be comparable to the configurations
+that preceded it or the comparison it exists to make cannot be read.
 
 ### `k_com` — the k grid D4 integrates C_ell by rank on
 

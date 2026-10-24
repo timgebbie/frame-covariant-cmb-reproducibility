@@ -37,7 +37,7 @@ gate as the model entry.
 
 Annals I prints
 
-$$(Q|_{\rm flat})_{\langle A_\ell\rangle} = (-1)^\ell\,O^{(k)}_{A_\ell}\,Q|_{\rm flat}$$
+$$(Q|_{\rm flat})_{\langle A_\ell\rangle} = (-1)^\ell\thinspace O^{(k)}_{A_\ell}\thinspace Q|_{\rm flat}$$
 
 where its own definition and its own preceding line give $i^\ell$. It is a real
 slip: it is the phase of the definition $Q_{A_\ell} = (+ik)^{-\ell}
@@ -81,9 +81,7 @@ the published PDF.**
 Appendix F, p. 380, states that (F.3) can be rewritten *"(on first multiplying
 through by $(2\ell+1)^{-1}$)"* as (F.4), and prints
 
-$$-(2\ell+1)\big(\alpha_\ell^{-1}\tau_\ell\big)' \simeq k\big[(\ell+1)
-\big(\alpha_{\ell+1}^{-1}\tau_{\ell+1}\big) - \ell\big(\alpha_{\ell-1}^{-1}
-\tau_{\ell-1}\big)\big],$$
+$$-(2\ell+1)(\alpha_\ell^{-1}\tau_\ell)' \simeq k[(\ell+1) (\alpha_{\ell+1}^{-1}\tau_{\ell+1}) - \ell(\alpha_{\ell-1}^{-1} \tau_{\ell-1})],$$
 
 then identifies this as the form of the $\ell>2$ free-streaming integrated
 Boltzmann equation of Ma & Bertschinger, Eqs. (49)/(50), and of Seljak &
@@ -95,9 +93,7 @@ as it stands — it follows from (F.3) exactly. The parenthetical instruction wa
 simply not applied to the display. The Ma & Bertschinger form, which carries
 $k/(2\ell+1)$ on the right-hand side, is obtained only after the stated division:
 
-$$-\big(\alpha_\ell^{-1}\tau_\ell\big)' \simeq \frac{k}{2\ell+1}\big[(\ell+1)
-\big(\alpha_{\ell+1}^{-1}\tau_{\ell+1}\big) - \ell\big(\alpha_{\ell-1}^{-1}
-\tau_{\ell-1}\big)\big].$$
+$$-(\alpha_\ell^{-1}\tau_\ell)' \simeq \frac{k}{2\ell+1}[(\ell+1) (\alpha_{\ell+1}^{-1}\tau_{\ell+1}) - \ell(\alpha_{\ell-1}^{-1} \tau_{\ell-1})].$$
 
 **Nothing downstream moves.** No result in Annals II depends on the display
 rather than on the identification, and the chain (F.1) → (F.2) → (F.3) → (F.4) is
@@ -120,10 +116,10 @@ Recorded so that later sessions do not re-derive them.
 
 | Checked | Against | Result |
 |---|---|---|
-| (F.1) → (F.2), multiplication through by $\beta_\ell$ | $\beta_\ell = \ell/(2\ell-1)\,\beta_{\ell-1}$ and $\beta_{\ell+1} = (\ell+1)/(2\ell+1)\,\beta_\ell$ | exact, both terms |
-| (F.2) → (F.3), proper to conformal time | $dt = a\,d\eta$ | exact |
+| (F.1) → (F.2), multiplication through by $\beta_\ell$ | $\beta_\ell = \ell/(2\ell-1)\thinspace \beta_{\ell-1}$ and $\beta_{\ell+1} = (\ell+1)/(2\ell+1)\thinspace \beta_\ell$ | exact, both terms |
+| (F.2) → (F.3), proper to conformal time | $dt = a\thinspace d\eta$ | exact |
 | (F.3) → (F.4), substitution of $\beta_\ell=\alpha_\ell^{-1}(2\ell+1)$ | — | exact; see B-2 for the form question |
-| (F.1) weight $(\ell+1)^2/\big[(2\ell+3)(2\ell+1)\big]$ | the mode-recursion weight $\ell^2/\big[(2\ell+1)(2\ell-1)\big]$ at $\ell\to\ell+1$ | exact — the hierarchy is the adjoint of the mode recursion |
+| (F.1) weight $(\ell+1)^2/[(2\ell+3)(2\ell+1)]$ | the mode-recursion weight $\ell^2/[(2\ell+1)(2\ell-1)]$ at $\ell\to\ell+1$ | exact — the hierarchy is the adjoint of the mode recursion |
 
 ---
 
@@ -150,9 +146,7 @@ deriving the $\ell$ range for the release's tolerance.**
 
 Appendix-free, §8.3, p. 372. Annals II prints the Bessel identity
 
-$$\int_0^\infty \frac{dz}{z^{m}}\,j_\ell^2(z)=\frac{\pi}{2^{m+2}}\,
-\frac{m!\,\left(\ell-\tfrac{m}{2}-\tfrac12\right)!}
-{\left(\tfrac{m}{2}\right)!\,\left(\ell+\tfrac{m}{2}+\tfrac12\right)!}\tag{199}$$
+$$\int_0^\infty \frac{dz}{z^{m}}\thinspace j_\ell^2(z)=\frac{\pi}{2^{m+2}}\thinspace  \frac{m!\thinspace \left(\ell-\tfrac{m}{2}-\tfrac12\right)!} {\left(\tfrac{m}{2}\right)!\thinspace \left(\ell+\tfrac{m}{2}+\tfrac12\right)!}\quad(199)$$
 
 and uses it twice: at $m=2$ for the large-scale result **(201)**, and at $m=1$ for
 the CDM horizon-scale normalisation **(204)**.
@@ -198,7 +192,7 @@ spine, which uses neither (204) nor (205).
 §8's comparison is a **Sachs–Wolfe-only** result: (196) descends from (181), where
 the acoustic modulation $\cos(k r_s)$ is dropped by taking $r_s^*\to0$, and §8.3.2
 sets the transfer function to unity. The tolerance is therefore bounded by the
-acoustic term that was dropped, $1-\cos(k r_s)$, with $\ell \simeq k\,\Delta\eta_*$.
+acoustic term that was dropped, $1-\cos(k r_s)$, with $\ell \simeq k\thinspace \Delta\eta_*$.
 
 Using Annals II's own §8.3.2 model — $n=1$, $h=0.5$, $\Omega_B=0.05$, flat
 matter-dominated, $a_0=1$, $z_*=1100$ — the acoustic scale is
@@ -389,19 +383,16 @@ footnoted.** Found 2026-10-05 while building the Sachs–Wolfe spectrum.
 
 §8.3.1, p. 372. From (198) with $P(k)=Ak^{n-1}$, Annals II writes
 
-$$C_\ell=\frac{1}{2\pi}AH_0^4\Omega_0^{1.54}\int\frac{dk}{k^2}\,k^{n-1}
-j_\ell^2(k\chi)\tag{200}$$
+$$C_\ell=\frac{1}{2\pi}AH_0^4\Omega_0^{1.54}\int\frac{dk}{k^2}\thinspace k^{n-1} j_\ell^2(k\chi)\quad(200)$$
 
 and states that "using (199) for $m=2$ ($n=1$)" gives
 
-$$C_\ell=\frac{A}{2}H_0^4\Omega_0^{1.54}\frac{1}{(2\ell+3)(2\ell+1)(2\ell-1)}.
-\tag{201}$$
+$$C_\ell=\frac{A}{2}H_0^4\Omega_0^{1.54}\frac{1}{(2\ell+3)(2\ell+1)(2\ell-1)}. \quad(201)$$
 
 **The reduction carries a factor $\chi$ that the display does not.** Substituting
 $z=k\chi$ into (200),
 
-$$\int dk\,k^{n-3}j_\ell^2(k\chi)=\chi^{2-n}\int dz\,z^{n-3}j_\ell^2(z)
-=\chi^{2-n}\,I(m=3-n),$$
+$$\int dk\thinspace k^{n-3}j_\ell^2(k\chi)=\chi^{2-n}\int dz\thinspace z^{n-3}j_\ell^2(z) =\chi^{2-n}\thinspace I(m=3-n),$$
 
 so $n=1$ carries one factor of $\chi$, and with $I(2)=\pi/[(2\ell+3)(2\ell+1)
 (2\ell-1)]$ the result is $(A\chi/2)H_0^4\Omega_0^{1.54}/[(2\ell+3)(2\ell+1)
@@ -453,8 +444,8 @@ definitions of $P(k)$**:
 
 | | $P(k)$ | reduction | at $n=1$ |
 |---|---|---|---|
-| (201), via (J.1) | $Ak^{n-1}$ | $\int dk\,k^{n-3}j_\ell^2 \to \chi^{2-n}$ | $\chi^1$ — **one factor of $\chi$** |
-| (204), via (J.3) | $BT^2(k)k^{n}$, $T=1$ | $\int dk\,k^{n-2}j_\ell^2 \to \chi^{1-n}$ | $\chi^0=1$ — **no $\chi$** |
+| (201), via (J.1) | $Ak^{n-1}$ | $\int dk\thinspace k^{n-3}j_\ell^2 \to \chi^{2-n}$ | $\chi^1$ — **one factor of $\chi$** |
+| (204), via (J.3) | $BT^2(k)k^{n}$, $T=1$ | $\int dk\thinspace k^{n-2}j_\ell^2 \to \chi^{1-n}$ | $\chi^0=1$ — **no $\chi$** |
 
 So (204) is $\chi$-free *as printed and correctly so*, while (201) should carry
 one factor. Verified by quadrature at $n=1$: the (J.3) route reproduces
@@ -476,8 +467,7 @@ distance.
 
 §7.1.1, p. 366. The integrated source of the temperature anisotropy is printed as
 
-$$S_{\rm ISW}(\eta,k)=V e^{-(k/k_D)^2}\Big[\big[\Phi_A'-\Phi_H'\big](k,\eta)
--aH\big[\tilde\delta_T+3\Phi_A\big](k,\eta)\Big]\tag{179}$$
+$$S_{\rm ISW}(\eta,k)=V e^{-(k/k_D)^2}[[\Phi_A'-\Phi_H'](k,\eta) -aH[\tilde\delta_T+3\Phi_A](k,\eta)]\quad(179)$$
 
 The thesis abstract carries the same expression with $+aH[\tilde\delta_T+3\Phi_A]$.
 
@@ -672,31 +662,23 @@ survives checking. Resolved against the accepted manuscript.
 
 (106) defines the mode coefficient in the Newtonian frame:
 
-$$\tilde{\mathcal B}_1 \approx \frac{k}{a}\big(\delta\tilde T + \Phi_A\big)
-\qquad\Longrightarrow\qquad \frac{a\tilde{\mathcal B}_1}{k}=\delta\tilde T+\Phi_A$$
+$$\tilde{\mathcal B}_1 \approx \frac{k}{a}(\delta\tilde T + \Phi_A) \qquad\Longrightarrow\qquad \frac{a\tilde{\mathcal B}_1}{k}=\delta\tilde T+\Phi_A$$
 
 (107) gives its conformal-time derivative:
 
-$$(a\tilde{\mathcal B}_1)' \approx -a^2H\tilde{\mathcal B}_1
-+ k(\Phi_A'-\Phi_H') - 2Hak\Phi_A + \tfrac13k^2\tilde\tau_1$$
+$$(a\tilde{\mathcal B}_1)' \approx -a^2H\tilde{\mathcal B}_1 + k(\Phi_A'-\Phi_H') - 2Hak\Phi_A + \tfrac13k^2\tilde\tau_1$$
 
 (108) and (109) connect it to the integral-solution coefficient:
 
-$$-\tilde C_1' - (\kappa'\tilde v_B)' \approx +\tfrac1k(a\tilde{\mathcal B}_1)',
-\qquad
--\tilde C_1 \approx \kappa'\tilde v_B + (\delta\tilde T+\Phi_A)$$
+$$-\tilde C_1' - (\kappa'\tilde v_B)' \approx +\tfrac1k(a\tilde{\mathcal B}_1)', \qquad -\tilde C_1 \approx \kappa'\tilde v_B + (\delta\tilde T+\Phi_A)$$
 
 Dividing (107) by $k$ and substituting (106) into its **first** term,
 
-$$-\frac{a^2H\tilde{\mathcal B}_1}{k}
-= -aH\left(\frac{a\tilde{\mathcal B}_1}{k}\right)
-= -aH\big(\delta\tilde T+\Phi_A\big),$$
+$$-\frac{a^2H\tilde{\mathcal B}_1}{k} = -aH\left(\frac{a\tilde{\mathcal B}_1}{k}\right) = -aH(\delta\tilde T+\Phi_A),$$
 
 so (110) reads
 
-$$-\tilde C_1' \approx (\kappa'\tilde v_B)' + \tfrac13k\tilde\tau_1
-+ (\Phi_A'-\Phi_H') \underbrace{- aH(\delta\tilde T+\Phi_A) - 2aH\Phi_A}
-_{=\;-aH(\delta\tilde T+3\Phi_A)}$$
+$$-\tilde C_1' \approx (\kappa'\tilde v_B)' + \tfrac13k\tilde\tau_1 + (\Phi_A'-\Phi_H') \underbrace{- aH(\delta\tilde T+\Phi_A) - 2aH\Phi_A} _{=\thickspace -aH(\delta\tilde T+3\Phi_A)}$$
 
 and the factor of 3 is $1+2$, exactly as (111) and hence (179) print it.
 
@@ -737,15 +719,13 @@ reimplementation, confirmed symbolically.**
 
 §7.1.2. (180) gives the acoustic solution at last scattering,
 
-$$\delta\tilde T(\eta,k)+\Phi_A(\eta_*,k)\approx\big[\delta\tilde T(0,k)+(1+R)
-\Phi_A(0,k)\big]\cos(kr_s)\;\mathbf{-}\;R\,\Phi_A(\eta_*,k)$$
+$$\delta\tilde T(\eta,k)+\Phi_A(\eta_\ast,k)\approx[\delta\tilde T(0,k)+(1+R) \Phi_A(0,k)]\cos(kr_s)\thickspace \mathbf{-}\thickspace R\thinspace \Phi_A(\eta_\ast,k)$$
 
 and (181), the same quantity after the adiabatic substitution
 $\delta\tilde T(0,k)\sim\tfrac13\Delta(0,k)\sim-\tfrac23\Phi_A(0,k)$ and
 $\Phi_A(\eta_*)\approx\Phi_A(0)$, prints
 
-$$[\delta\tilde T+\Phi_A](\eta_*,k)\approx+\tfrac13\Phi_A(0,k)(1+3R_*)
-\cos(kr^*_s)\;\mathbf{+}\;R_*\Phi_A(0,k)\;\sim\;\tfrac13\Phi_A(0,k).$$
+$$[\delta\tilde T+\Phi_A](\eta_\ast,k)\approx+\tfrac13\Phi_A(0,k)(1+3R_\ast) \cos(kr^\ast_s)\thickspace \mathbf{+}\thickspace R_\ast\Phi_A(0,k)\thickspace \sim\thickspace \tfrac13\Phi_A(0,k).$$
 
 **The oscillating parts agree exactly; the constant terms differ by
 $2R_*\Phi_A$.** Substituting the adiabatic value into (180) gives
@@ -868,7 +848,7 @@ Wilson & Silk [W83] **(eqn 7)**."* Wilson's numbered equations on pp. 3–4 are
 | (5) | $\dot\delta_0 = -\tfrac13 ikT\delta_1 + \tfrac23\dot h$ |
 | (6) | $\dot\delta_1 = -n_e\sigma_T(\delta_1-4v) - ikT[\delta_0 + \tfrac25(1-3K/k^2)\delta_2]$ |
 | **(7)** | $\dot\delta_2 = -\tfrac9{10}n_e\sigma_T\delta_2 - \tfrac43\dot H - ikT[\tfrac25\delta_1 + \tfrac37(1-8K/k^2)\delta_3]$ |
-| **(8)** | $\ell>2$: $\dot\delta_\ell = -n_e\sigma_T\delta_\ell - ikT\left\{\dfrac{\ell}{2\ell-1}\delta_{\ell-1} + \dfrac{\ell+1}{2\ell+3}\left[1-\dfrac{\ell(\ell+2)K}{k^2}\right]\delta_{\ell+1}\right\}$ |
+| **(8)** | $\ell>2$: $\dot\delta_\ell = -n_e\sigma_T\delta_\ell - ikT\left\lbrace \dfrac{\ell}{2\ell-1}\delta_{\ell-1} + \dfrac{\ell+1}{2\ell+3}\left[1-\dfrac{\ell(\ell+2)K}{k^2}\right]\delta_{\ell+1}\right\rbrace $ |
 
 (7) is the **quadrupole** equation, with its own $\tfrac9{10}n_e\sigma_T$,
 $-\tfrac43\dot H$ and the coefficients $\tfrac25$, $\tfrac37$. The $\ell>2$
@@ -920,7 +900,7 @@ power spectrum. Found 2026-10-06 by reimplementation.**
 
 Appendix J. The Bond & Efstathiou parametrised transfer function is printed as
 
-$$T(k)=\Big[1+\big(ak+(bk)^{3/2}+(ck)^2\big)^{\nu}\Big]^{\mathbf{+}1/\nu}$$
+$$T(k)=[1+(ak+(bk)^{3/2}+(ck)^2)^{\nu}]^{\mathbf{+}1/\nu}$$
 
 with $a=6.4\Gamma^{-1}$, $b=3.0\Gamma^{-1}$, $c=1.7\Gamma^{-1}$ (in $h^{-1}$ Mpc)
 and $\nu=1.13$. **The exponent should be $-1/\nu$.**
@@ -989,9 +969,7 @@ convention and not a fact, arriving from outside this project.
 
 **The scan refutes it.** W&S 1981 Eq. (7), p. 15, read from the PI-supplied scan:
 
-$$\ell>2,\qquad \dot\delta_\ell = -n_e\sigma_T c\,\delta_\ell
-- ikTc\left[\frac{\ell}{2\ell-1}\delta_{\ell-1}
-+ \frac{\ell+1}{2\ell+3}\delta_{\ell+1}\right]$$
+$$\ell>2,\qquad \dot\delta_\ell = -n_e\sigma_T c\thinspace \delta_\ell - ikTc\left[\frac{\ell}{2\ell-1}\delta_{\ell-1} + \frac{\ell+1}{2\ell+3}\delta_{\ell+1}\right]$$
 
 Same weights, same same-sign bracket, same overall $-ikTc$. **Wilson published in
 one convention, consistently, twice.** The 1983 paper is the negative-curvature
@@ -1137,17 +1115,16 @@ an **835% discrepancy that was entirely a convention mismatch**.
 
 This bundle's pipeline integrates
 
-$$C_\ell \propto \int \dd k\, k^2\, \mathcal P(k)\,|T_\ell|^2,
-  \qquad \mathcal P \propto k^{n_s-4},$$
+$$C_\ell \propto \int \dd k\thinspace  k^2\thinspace  \mathcal P(k)\thinspace |T_\ell|^2, \qquad \mathcal P \propto k^{n_s-4},$$
 
 so at $n_s=1$ the integrand is $k^{-1}j_\ell^2$, giving
-$\int\dd k\,k^{-1}j_\ell^2 = 1/[2\ell(\ell+1)]$ and a **flat
+$\int\dd k\thinspace k^{-1}j_\ell^2 = 1/[2\ell(\ell+1)]$ and a **flat
 $\ell(\ell+1)C_\ell$** — which is what scale invariance means, and is asserted
 as a test in `functions/spectra/pipeline.py` rather than assumed.
 
 *Annals II*'s (198) integrates
 
-$$C_\ell \propto \int \dd k\, A k^{n-1}\, k^{-2}\, j_\ell^2,$$
+$$C_\ell \propto \int \dd k\thinspace  A k^{n-1}\thinspace  k^{-2}\thinspace  j_\ell^2,$$
 
 so at $n=1$ the integrand is $k^{-2}j_\ell^2$, giving
 $1/[(2\ell+3)(2\ell+1)(2\ell-1)]$ — which is (201).
@@ -1189,9 +1166,7 @@ releases have not met it.
 
 (89) `find_coef` defines the three coefficients by matching rank by rank:
 
-$$C_0\delta_{\ell0}+C_1\beta_1^{-1}k\,\delta_{\ell1}
-+C_2k^2\,5\beta_2^{-1}\!\left(\tfrac2{15}\delta_{\ell2}+\tfrac13\delta_{\ell0}\right)
-= -\left[(a\mathcal B_1+\kappa'v_B)\delta_{\ell1}+a\mathcal B_2\delta_{\ell2}\right]$$
+$$C_0\delta_{\ell0}+C_1\beta_1^{-1}k\thinspace \delta_{\ell1} +C_2k^2\thinspace 5\beta_2^{-1}\negthinspace \left(\tfrac2{15}\delta_{\ell2}+\tfrac13\delta_{\ell0}\right) = -\left[(a\mathcal B_1+\kappa'v_B)\delta_{\ell1}+a\mathcal B_2\delta_{\ell2}\right]$$
 
 Solved as exact rationals with $\beta_1=1$, $\beta_2=\tfrac23$:
 
@@ -1265,8 +1240,7 @@ at all, and the thesis shows it may not be.
 `CHAPTER-FOUR.TEX`, the same hierarchy one generation earlier, writes the source
 with a term (89) does not have:
 
-$$\mathcal S_B=-\left[\,\mathbf{a\mathcal B_0\delta_{\ell0}}
-+(a\mathcal B_1+\kappa'v_B)\delta_{\ell1}+a\mathcal B_2\delta_{\ell2}\right]$$
+$$\mathcal S_B=-\left[\thinspace \mathbf{a\mathcal B_0\delta_{\ell0}} +(a\mathcal B_1+\kappa'v_B)\delta_{\ell1}+a\mathcal B_2\delta_{\ell2}\right]$$
 
 and says why, in the sentence immediately after: *"It is valid for all
 $\ell\ge0$, with $\tau_0=0$ a solution as required, consistent with the
@@ -1459,9 +1433,9 @@ carrying a citation to Maartens, Gebbie & Ellis:
 |---|---|
 | **(31)** | $\tilde\sigma_{ab}\approx\sigma_{ab}+\mathcal D_{\langle a}v_{b\rangle}$ |
 | **(32)** | $\tilde A_a\approx A_a+\dot v_a+Hv_a$ |
-| **(33)** | $\tilde\Theta\approx\Theta+\mathrm{div}\,v$ |
+| **(33)** | $\tilde\Theta\approx\Theta+\mathrm{div}\thinspace v$ |
 | **(34)** | $\tilde q_a\approx q_a-(\rho+p)v_a$ |
-| **(35)** | $\tilde\omega_a\approx\omega_a-\tfrac12\mathrm{curl}\,v$ |
+| **(35)** | $\tilde\omega_a\approx\omega_a-\tfrac12\mathrm{curl}\thinspace v$ |
 | **(37)** | $\tilde\tau_a\approx\tau_a-v_a$ |
 
 \S4.1 then specialises them to the Newtonian threading $n_a=u_a+v^N_a$, and
@@ -1470,14 +1444,14 @@ way:**
 
 | | general | specialised |
 |---|---|---|
-| shear | **(31)** $\;+\mathcal D_{\langle a}v_{b\rangle}$ | **(40)** $\;0\approx\sigma_{ab}-\mathcal D_{\langle a}v^N_{b\rangle}$ |
-| energy flux | **(34)** $\;-(\rho+p)v_a$ | **(45)** $\;\tilde q_a\approx q_a+(\rho+p)v^N_a$ |
+| shear | **(31)** $\thickspace +\mathcal D_{\langle a}v_{b\rangle}$ | **(40)** $\thickspace 0\approx\sigma_{ab}-\mathcal D_{\langle a}v^N_{b\rangle}$ |
+| energy flux | **(34)** $\thickspace -(\rho+p)v_a$ | **(45)** $\thickspace \tilde q_a\approx q_a+(\rho+p)v^N_a$ |
 
 (41), (42), (43) and (44) agree with (32), (33) and (37).
 
 ### Why (31) is the right one, three ways
 
-1. **Internal.** (33), $\tilde\Theta\approx\Theta+\mathrm{div}\,v$, is the
+1. **Internal.** (33), $\tilde\Theta\approx\Theta+\mathrm{div}\thinspace v$, is the
    **trace** of the same derivative whose trace-free part is (31). It keeps its
    plus in both the general and the specialised form, at **(44)**. A trace and
    its trace-free part cannot transform with opposite signs. (40) contradicts
@@ -1540,7 +1514,7 @@ now agree with each other and one does not:
 | | says | agrees with |
 |---|---|---|
 | **(31)** $\tilde\sigma_{ab}\approx\sigma_{ab}+\mathcal D_{\langle a}v_{b\rangle}$ | $\sigma=-\mathcal D_{\langle a}v^N_{b\rangle}$ | — |
-| **(33)**/(44) $\tilde\Theta\approx\Theta+\mathrm{div}\,v$, the trace of the same derivative | the same sign | (31) |
+| **(33)**/(44) $\tilde\Theta\approx\Theta+\mathrm{div}\thinspace v$, the trace of the same derivative | the same sign | (31) |
 | **\S4.1 item 3**, citing (31) | $\sigma_{ab}\approx-\mathcal D_{\langle a}v^N_{b\rangle}$ | (31) |
 | **(40)** $0\approx\sigma_{ab}-\mathcal D_{\langle a}v^N_{b\rangle}$ | $\sigma=+\mathcal D_{\langle a}v^N_{b\rangle}$ | **nothing** |
 
@@ -1621,8 +1595,7 @@ $\alpha_\ell$ the one in which (F.4) takes the Ma & Bertschinger form, and
 $j_0''(0)=-\tfrac13$ the ascending series — so it is a check on (89) and not a
 restatement of it. The discrepancy is exactly $\alpha_2/\alpha_0=15/2$.
 
-$$C_0 \;=\; -\tfrac13\,a\mathcal B_2 \quad\text{in place of (90)'s }
--\tfrac52\,a\mathcal B_2 .$$
+$$C_0 \thickspace =\thickspace  -\tfrac13\thinspace a\mathcal B_2 \quad\text{in place of (90)'s } -\tfrac52\thinspace a\mathcal B_2 .$$
 
 ### The row is **not** mis-sourced, and that was tested the wrong way first
 
@@ -1647,7 +1620,7 @@ $\Delta\tau_1=-v$ un-reduced (**T-66**), in units of $kv$:
 |---|---|---|
 | printed, $\alpha_2$ | $+5/2$ | $+13/6$ |
 | **corrected, $\alpha_0$** | $+1/3$ | **$0$ exactly** |
-| corrected $+\,\mathcal B_0$ | $0$ | $-1/3$ |
+| corrected $+\thinspace \mathcal B_0$ | $0$ | $-1/3$ |
 
 **$\Delta C_0$ was never without a partner — the partner was outmatched by
 $15/2$.** So the corrected normalisation is the thing that closes the rank-0
@@ -1658,7 +1631,7 @@ frame shift, and it closes it against a term in $-C_1'$.
 **Corrected in this bundle and on by default**, `coefficients.MONOPOLE_ROW`.
 It changes nothing in the Newtonian frame, where $a\mathcal B_2\equiv0$, so
 criterion 5b cannot see it either way; the CDM column's $\Delta C_0$ moves
-from $5/2\,kv$ to $kv/3$. **No separate `T-` number is filed beside it**:
+from $5/2\thinspace kv$ to $kv/3$. **No separate `T-` number is filed beside it**:
 `_solved_match()` implements (89) faithfully, so correcting (89) corrects the
 code by the same edit. One number, under `B-`.
 
@@ -1669,11 +1642,10 @@ code by the same edit. One number, under `B-`.
 *Text written by P1-T, 2026-10-22; numbered and placed by P1-B, 2026-10-23,
 with one correction from Coordination.*
 
-Integrating $\int W\big(C_0K+C_1K'+C_2K''\big)\,\mathrm d\eta$ by parts onto
+Integrating $\int W(C_0K+C_1K'+C_2K'')\thinspace \mathrm d\eta$ by parts onto
 the coefficients gives a bulk source
 
-$$WC_0-(WC_1)'+(WC_2)''
-=W\big(C_0-C_1'+C_2''\big)-\mathcal VC_1+2\mathcal VC_2'+\dot{\mathcal V}C_2$$
+$$WC_0-(WC_1)'+(WC_2)'' =W(C_0-C_1'+C_2'')-\mathcal VC_1+2\mathcal VC_2'+\dot{\mathcal V}C_2$$
 
 because the weight $W$ sits **inside** the integral and is differentiated.
 *Annals II*'s printed `int_soln_damping` carries three errors against it:
