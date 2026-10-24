@@ -466,6 +466,20 @@ the $-1$ was a coincidence of that background. The residual $0.635$ against
 $0.757$ is approximation \textbf{A-3}'s territory and D24 shows A-3 is not
 connected until $C_1'$ is repaired.
 
+\textbf{The two peak numbers are not measured the same way, and that bounds
+what their difference can carry.} \textbf{D24} reports the largest maximum
+anywhere in the plotted range; \textbf{F9} reports the first local maximum
+above $\ell=30$, read by parabolic interpolation through an $\ell$ grid that
+steps by $30$ across the acoustic band. On a spectrum whose low-$\ell$ end
+carries a spurious maximum at $\ell=8$ those two estimators need not return the
+same peak at all. \textbf{So peak positions in this section are quoted to two
+significant figures and no further}: a $6.1\%$ residual at $\ell\simeq173$ is
+$\Delta\ell\simeq10.5$, about a third of one grid step, and a comparison at
+that level is a statement about the estimator as much as about the physics.
+The repair is one estimator applied to both, with the low-$\ell$ maximum
+excluded by construction rather than by an $\ell=30$ floor that happens to
+work.
+
 \textbf{Approximation A-3 is not what closes the peak position, and neither
 is the projection. The residual has no established mechanism.}
 
@@ -492,6 +506,16 @@ closed by the peak. So \textbf{T-122} accounts for the plateau and not for the
 peak position, and the attribution is withdrawn. \emph{The projection at the
 peak is faithful.}
 
+\textbf{And the absolute level was never the diagnostic.} A median contributing
+wavenumber above $\ell/r_\theta$ is what the kernel produces on its own:
+$j_\ell(kr_\theta)$ peaks at $kr_\theta\simeq\ell+0.8\,\ell^{1/3}$ and carries a
+long tail to larger $k$, so an exactly Sachs--Wolfe spectrum returns a ratio
+above one as well. \textbf{No absolute value of this ratio establishes a
+projection defect}, and the earlier reading, which took $1.5$--$4.2$ as a
+defect on its face, was reading a property of $j_\ell$. What survives is the
+\emph{difference between the frames} at the same $\ell$ on the same kernel,
+because the kernel cancels there and nothing else in the comparison does.
+
 \textbf{One residue does survive at the peak, and it is frame-dependent.} CDM
 reads $1.17$--$1.20$ against the Newtonian $1.03$--$1.04$, on \emph{both}
 backgrounds --- a $17$--$20\%$ displacement left standing where the
@@ -500,43 +524,64 @@ route, which would need $1.57$. It is the right \emph{shape} for the candidate
 below, and it was measured for another purpose, which is the only reason to
 give it any weight at all.
 
-\emph{What that leaves, stated as a candidate and not a result.} With the
-projection faithful at $\ell=173$ and the oscillator tracking $\cos(kr_s)$ in
-exact phase and period (\textbf{T-71}, \textbf{T-74}), a peak at
-$0.635\,\ell_A$ places the first extremum at $kr_s\simeq0.635\pi$ rather than
-$\pi$ --- a phase error of about $-0.37\pi$, arising \emph{between} the
-oscillator and the transfer, which is where \eqref{eq:byparts}'s discrepancies
-sit. Two of them are phase substitutions, and the first is exactly a quarter
-cycle. Write $\theta=kr_s$ and let the coefficient oscillate,
-$C_2=A\cos\theta$; then $C_2'=-Ac_sk\sin\theta$, so
+\emph{What that leaves.} With the projection faithful at $\ell=173$ and the
+oscillator tracking $\cos(kr_s)$ in exact phase and period (\textbf{T-71},
+\textbf{T-74}), a peak at $0.635\,\ell_A$ places the first extremum at
+$kr_s\simeq0.635\pi$ rather than $\pi$ --- a phase error of about $-0.37\pi$,
+arising \emph{between} the oscillator and the transfer, which is where
+\eqref{eq:byparts}'s discrepancies sit.
+
+\paragraph{A quarter-cycle account of that was printed here and is withdrawn
+--- finding T-123.} It wrote $C_2=A\cos kr_s$, read $+2\mathcal VC_2'$ against
+the printed $-2\mathcal VC_2$ as a rotation of exactly $\pi/2$, and bounded the
+peak to $(0.5,\,1.0]\,\ell_A$ at a mixture weight $w\simeq2.2$. \textbf{$C_2$
+does not oscillate.} $\mathcal B_2$ is the shear, and in the CDM frame
+$a\mathcal B_2=a\sigma=-k_{\rm com}v$ exactly, so $C_2=v/k$ with $v$ the matter
+velocity and $v'+\mathcal Hv=-k\Phi_A$ its equation of motion --- a potential
+on the right-hand side and not an acoustic amplitude, so $v$ runs monotonically
+through matter domination. The premise fails and the bound, the $0.365\pi$ and
+the $w\simeq2.2$ fail with it. \emph{Recorded rather than deleted: two of the
+three tests it specified survive under the mechanism below, and the reason they
+survive is not the reason they were written.}
+
+\paragraph{The partner group does act on the projection, and exactly.} Project
+the three terms \eqref{eq:byparts} supplies, integrating the third by parts and
+using $\mathrm dj_\ell\big(k(\eta_0-\eta)\big)/\mathrm d\eta=-k\,j_\ell'$:
 \begin{equation}
-  \underbrace{+2\mathcal VC_2'}_{\text{identity}}\;\propto\;\cos\!\big(\theta+\tfrac\pi2\big),
-  \qquad
-  \underbrace{-2\mathcal VC_2}_{\text{as printed}}\;\propto\;\cos(\theta+\pi),
-  \label{eq:quarter-cycle}
+  \int\!\big(\!-\mathcal VC_1+2\mathcal VC_2'+\dot{\mathcal V}C_2\big)j_\ell\,\mathrm d\eta
+  \;=\;
+  \int\!\mathcal V\big(C_2'-C_1\big)\,j_\ell\,\mathrm d\eta
+  \;+\;\int\!\mathcal V\,v\;j_\ell'\,\mathrm d\eta
+  \;+\;\big[\mathcal VC_2\,j_\ell\big],
+  \label{eq:partner-projection}
 \end{equation}
-a shift of \textbf{exactly $+\pi/2$}, with the printed term larger than the
-identity's by $1/(c_sk)$ --- \emph{$k$-dependent}, so the mixture weight varies
-across the band. The reversed sign on $\mathcal VC_1$ is a half cycle by
-inspection.
+with $kC_2=v$ used in the middle term. \textbf{The partner group is a
+visibility-weighted source against $j_\ell$ plus a velocity against
+$j_\ell'$}, the second being the Doppler form of the standard line-of-sight
+solution carrying the \emph{frame} velocity in place of the baryon velocity.
+It vanishes identically in the Newtonian frame, where $\tilde C_2\equiv0$.
 
-\textbf{That bounds where such a contamination can put the peak, and the
-measurement falls inside the bound.} Adding a quarter-rotated term of weight
-$w$ to a clean $\cos\theta$ gives $R\cos(\theta+\phi)$ with $\tan\phi=w$, so
-$\phi\in[0,\tfrac\pi2)$ and the first extremum moves from $\theta=\pi$ to
-$\theta=\pi-\phi$. \textbf{The peak is therefore confined to
-$(0.5,\,1.0]\,\ell_A$} --- it cannot go below half --- and the observed
-$0.635\,\ell_A$ sits inside it, requiring $\phi=0.365\pi$ and hence
-$w=\tan(0.365\pi)\simeq\mathbf{2.2}$. \emph{A peak below $0.5\,\ell_A$ would
-have refuted this mechanism outright.}
+\textbf{That is B-17 (iv) derived rather than observed, and it carries a
+number.} At fixed $x=k(\eta_0-\eta)$ the multipole maximising $|j_\ell'|$ lies
+about $37\%$ below the one maximising $|j_\ell|$: $110$ against $173$ at
+$x=178$, $164$ against $266$ at $x=272$. A source given the wrong one of the
+two kernels is not perturbed but \emph{relocated}, by a third of the $\ell$
+axis. \textbf{T-124.}
 
-\textbf{And it is frame-discriminating, which is what makes it worth testing
-rather than believing.} $\tilde C_2\equiv0$ in the Newtonian frame, so the
-$C_2$ substitution \emph{cannot act there at all}; the $\mathcal VC_1$ sign is
-available in both. $0.635$ is the \textbf{CDM} peak. \textbf{If the Newtonian
-peak shows a different displacement, that is the signature; if both frames
-displace alike, the $C_2$ substitution is excluded and the $\mathcal VC_1$ sign
-must carry it.} Two numbers, both from runs that already exist.
+\textbf{The direction is the test.} Restoring the $j_\ell'$ term adds power
+\emph{below} the acoustic peak, so on its own it must move a peak down or leave
+it standing. The $\S5$ repair moves the CDM peak \emph{up}. \textbf{So the
+mover is the weight --- B-17 (i) --- and not this term}; if restoring the
+$j_\ell'$ slot alone moves the peak up, this account is wrong.
+
+\textbf{And the $j_\ell'$ slot is frame-discriminating, which is what makes it
+worth running.} $\tilde C_2\equiv0$ in the Newtonian frame, so
+\eqref{eq:partner-projection}'s middle term \emph{cannot act there at all};
+the $\mathcal VC_1$ sign is available in both. $0.635$ is the \textbf{CDM}
+peak. \textbf{If the Newtonian peak shows a different displacement, that is the
+signature; if both frames displace alike, the $C_2$ route is excluded and the
+$\mathcal VC_1$ sign must carry it.} Two numbers, both from runs that already
+exist.
 
 \textbf{And D24's own table already shows the frames behaving differently,
 which sharpens the test.} With $\kappa''$ suppressed the Newtonian column
@@ -546,26 +591,15 @@ structure predicts: Newtonian has $\tilde C_0\approx\tilde C_2\approx0$, so
 $\tilde C_1$ carries everything and suppressing $\kappa''\tilde v_B$, which is
 $99.8\%$ of $|C_1'|$, leaves no oscillatory source at all. CDM retains $C_0$
 and $C_2$. \textbf{So the $0.635$ peak is built from $C_0$ and $C_2$}, and
-$C_2$'s slot is exactly where \eqref{eq:quarter-cycle} sits.
+$C_2$'s slot is exactly where \eqref{eq:partner-projection} acts.
 
-\textbf{The sharpest available test follows, and the configuration is already
-built.} In that same $\kappa''$-suppressed CDM run, restore
-$+2\mathcal VC_2'$ in place of $-2\mathcal VC_2$ and read the peak. If
-\eqref{eq:quarter-cycle} is the mechanism it must move \emph{up}, from
-$0.635$ toward $1.0\,\ell_A$, and it cannot move below $0.5$. If it does not
-move, the quarter cycle is excluded and the $\mathcal VC_1$ sign is the only
-phase candidate left.
-
-\textbf{This is a candidate with a test and it is not established.} The test is
-the repair itself: if the phase substitutions are the mechanism, evaluating the
-exact four-term bulk should move the peak \emph{toward $1.00\,\ell_A$ and not
-toward $0.757$}, because A-3 remains absent. Three cheaper checks exist and none needs a repair: restore
-$+2\mathcal VC_2'$ alone and read the peak, which isolates the quarter cycle;
-measure the weight $w$ of $2\mathcal VC_2$ against the bracket's oscillatory
-part at the peak, which should be $\simeq2.2$ if \eqref{eq:quarter-cycle} is
-the mechanism; and compare the two frames' peak displacements, which the
-$C_2$ substitution requires to differ. \textbf{Until one of those runs,
-$0.635$ has no mechanism, and a repair should not be scored against $0.757$.}
+\textbf{Two tests survive the withdrawal and neither needs a repair.} Restore
+the $j_\ell'$ slot alone in the $\kappa''$-suppressed CDM run and read the
+peak: \eqref{eq:partner-projection} requires it to move \emph{down} or not at
+all, and an upward move refutes the account. Then compare the two frames'
+displacements, which the $C_2$ route requires to differ because
+$\tilde C_2\equiv0$. \textbf{Until one of those runs, $0.635$ has no
+mechanism, and a repair should not be scored against $0.757$.}
 
 \textbf{Also not established, and it is a dependency of
 \eqref{eq:c0-solved}.} \eqref{eq:c0-solved} \emph{uses}
