@@ -1,0 +1,98 @@
+% ---------------------------------------------------------------------------
+% The open-questions table.  Written 2026-10-24 by the Paper 1 stream at the
+% PI's direction.
+%
+% WHY IT EXISTS.  The supplement cites Q-numbers -- F2's caption parks a
+% question as Q5, the scattering appendix records one as Q10 -- and carries
+% NO table a reader can resolve them in.  The register is
+% provenance/OPEN-QUESTIONS-v1.0.0.md and was never surfaced here.
+%
+% NUMBERS.  Q1-Q14 are read from that register, not minted here.  Q15 and Q16
+% are PROPOSED and need P1-B to assign them, provenance/ being the bundle
+% stream's custody.  A placeholder that is left in prints visibly.
+%
+% ONE COLLISION IS FLAGGED RATHER THAN RESOLVED: the register carries two
+% different Q5s.  Renumbering a public register is not this file's business.
+% ---------------------------------------------------------------------------
+\section{Open questions}
+\label{sec:open-questions}
+
+\emph{The register is} \texttt{provenance/OPEN-QUESTIONS-v1.0.0.md}\emph{,
+which carries each question's full history. This table exists because the
+supplement cites \textbf{Q} numbers in several places and has never given a
+reader anywhere to resolve them.} Status is quoted from the register rather
+than restated, so that this table cannot drift from it independently.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l >{\raggedright\arraybackslash}X l@{}}
+\toprule
+ & \textbf{the question} & \textbf{where it stands} \\
+\midrule
+\textbf{Q5} & does the full $1+3$ treatment predict excess power at low
+  $\ell$? & parked by the PI 2026-10-14; \textbf{F2}'s third panel is what
+  parks it \\
+\textbf{Q6} & the v1.0.0 target restated, and what it does to criterion~5 &
+  register \\
+\textbf{Q9} & the register audits discretisations; nothing audits physical
+  ranges & register \\
+\textbf{Q10} & does the second-order quadrupole ring for tensor modes? &
+  recorded rather than claimed; \S\emph{scattering expansion} \\
+\textbf{Q11} & the acoustic source has the right phase and the spectrum does
+  not & downgraded from blocker to residual, \emph{not closed} \\
+\textbf{Q12} & two implementations of (102) agree at $k=1$ and diverge above
+  $k=3$ & register \\
+\textbf{Q13} & which construction of $(\kappa'\tilde v_B)'$ is right? &
+  register \\
+\textbf{Q14} & should $C_0$ enter the line-of-sight integrand at all? &
+  register; see \S\ref{sec:ell-zero-row} \\
+\midrule
+\textbf{Q15}$^{\ast}$ & \textbf{is helium recombination's absence costed?}
+  \texttt{peebles.py} integrates the hydrogen Peebles equation; the external
+  comparators use \textsc{recfast}/\textsc{hyrec} \emph{with} helium, which
+  recombines earlier and shifts $x_e$, hence $\kappa'$, $\eta_*$, the
+  visibility width and the damping scale. \emph{Absent and, as far as this
+  stream can find, nowhere discussed.} & \textbf{raised 2026-10-24}, not
+  measured \\
+\textbf{Q16}$^{\ast}$ & \textbf{what asserts that the tight-coupling freeze is
+  late enough?} \texttt{pipeline.py} freezes $\delta T$ and $\tau_1$ at
+  $\eta_{\rm couple}=6\eta_*$; the stated condition is that the visibility be
+  negligible there, and \emph{nothing checks it} --- the only guard counts
+  grid points. \texttt{tight\_coupling\_factor~=~6.0} is a bare default across
+  three recombination histories. & \textbf{raised 2026-10-24}; one assertion
+  closes it \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent
+$^{\ast}$\,\emph{Numbers proposed, not minted. \textbf{Q15} and \textbf{Q16}
+need assigning in the register, which is the bundle stream's custody.}
+
+\paragraph{Q16 is the cheaper of the two and it is one line.} Assert
+$\mathcal V(\eta_{\rm couple})/\mathcal V(\eta_*)$ below a stated threshold on
+\emph{every} background and raise with the number if not --- \textbf{P7}, both
+backgrounds, every time. If $6$ is comfortable everywhere the assertion costs
+nothing and documents why; if it is marginal on one, that is a finding nobody
+currently holds. \textbf{It cannot move a peak either way}: what is frozen is
+$\delta T$ and $\tau_1$, which after decoupling have no scattering to drive
+them, and the line-of-sight integral itself runs to $\eta_0$ on a grid whose
+density is gated against the Bessel kernel's own period (finding \textbf{T-3}).
+
+\paragraph{One collision in the register, flagged and not resolved here.}
+\textbf{Q5 is used twice for different questions}: \emph{``release staging''},
+closed 2026-10-05, and \emph{``does the full $1+3$ treatment predict excess
+power at low $\ell$?''}, parked 2026-10-14. The second is the one \textbf{F2}
+cites and the one tabulated above. \emph{Renumbering a public register is not
+this table's business}; it is recorded so that a reader who follows the
+citation and meets two entries knows which is meant.
+
+\paragraph{A finding, not a question, that belongs beside these.}
+\textbf{T-67} is open and is load-bearing for the low-$\ell$ plateau rather
+than a loose end. \texttt{coefficients.py} builds $(a\mathcal B_1)'$ with two
+further terms behind \texttt{A\_B1\_PRIME\_EXPANSION\_TERMS} ---
+$-a\mathcal H\,\delta T-3a\mathcal H\,\Phi_A$ after dividing through by $k$ ---
+and whether they belong is unsettled. They are $O(a\mathcal H)$, and the late
+integrated Sachs--Wolfe effect lives where $k\sim a\mathcal H$, so the reduced
+form is not available in exactly the regime the plateau occupies.
+\textbf{Any statement of $(a\mathcal B_1)'$ that omits them is the
+expansion-terms-off form and should say so.}
