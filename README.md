@@ -47,7 +47,7 @@ before the code if you want to know what this release does and does not claim.
 >   (δT+Φ_A)(η\*) tracks cos(k r_s) in exact phase and period, and the solver's
 >   effective sound horizon matches the tabulated one to 2% (**T-71**, **T-74**).
 > * **Peak positions are wrong, and there are two separate statements of it.**
->   *(i)* The **first peak of $D_\ell$** sits at ℓ ≃ 342 on the Planck set
+>   *(i)* The **first peak of $D_\ell$** sits at ℓ ≃ 267 on the Planck set
 >   against **206** in CAMB and CLASS run at this bundle's own N_eff = 0 — the
 >   number annotated on the figure. *(ii)* The **oscillatory residual** has
 >   maxima near 176 and 476 where **this bundle's own synthetic control** —
@@ -56,8 +56,19 @@ before the code if you want to know what this release does and does not claim.
 >   is **not** r_s, **not** r_θ and **not** the projection kernel, all three
 >   measured and excluded (**T-74**). *These are different quantities on
 >   different objects and neither is the other's target.*
-> * **There is no Sachs–Wolfe plateau.** Both weights put too much power at
->   ℓ=2 relative to 5 ≤ ℓ ≤ 30 (**T-73**).
+> * **There is no Sachs–Wolfe plateau, and as of 2026-10-25 the cause is
+>   established.** Both weights put too much power at ℓ=2 relative to
+>   5 ≤ ℓ ≤ 30 (**T-73**). The late-time share of $C_2$ — the fraction of the
+>   line-of-sight integrand accumulated after the visibility closes — is
+>   **0.0000 on Einstein–de Sitter, where exactly zero is required** because Φ
+>   is constant and there is no late integrated Sachs–Wolfe effect at all, and
+>   **0.0000 on the Planck set, where O(0.1) is required**. The null control
+>   passes and the live case fails, which leaves one cause: the bracket rides
+>   at 𝒱𝒟, 𝒱 has closed by η\*, and every late-time source is multiplied by
+>   zero. **The spectrum is finished at recombination.** That is approximation
+>   **A-1**; it is a defect in *time* rather than in $k$ or $\ell$, which is
+>   why repairs aimed at the peak never moved the plateau, and why no endpoint
+>   gate could see it. Supplement, Part I.
 > * **There is no late integrated Sachs–Wolfe term**, on either Λ background.
 >   PLANCK's ℓ=2 exceeds EdS's by 12% under 𝒱 and ΛCDM's by 0.2%; a real late
 >   ISW is a factor, not a few percent. The cause is **not** the weight —
@@ -367,11 +378,20 @@ sign defect is not yet established and **B-11** is the obvious suspect; what is
 established is that the failure lives in what the matching carries into (102)
 and nowhere else. `scripts/diagnostic_d23_superhorizon_transfer.py`.
 
-**The peak position is a different thing and it is already scheduled.** The
-peak now sits at $1.00\thinspace \ell_A$ where the standard is $0.757\thinspace \ell_A$ — the
-matched CAMB's own ratio — and $1/0.757$ accounts for the residual 29% to
-within 2%. That is the **acoustic phase shift**, which radiation-era driving
-supplies: approximation **A-3**, and **v1.4.0's**.
+**The peak position is a different thing, and the 2% agreement is not
+evidence for A-3.** The released peak sits at $0.979\thinspace \ell_A$ where the
+standard is $0.757\thinspace \ell_A$ — the matched CAMB's own ratio — and
+$1/0.757$ accounts for that 29% to within 2%. That is the **acoustic phase
+shift**, which radiation-era driving supplies: approximation **A-3**, and
+**v1.4.0's**. **But a weight change takes half of it without A-3 being wired
+in.** With `slot_weight_split` and the two boundary controls at released
+$\kappa''$ the CDM peak moves to $0.869\thinspace \ell_A$ — 30 of the 60
+multipoles A-3 was credited with. That configuration is **not** a repair: it
+puts the Newtonian peak at $0.277\thinspace \ell_A$, a factor of 3.1 from the
+CDM one, where $\ell\ge2$ multipoles are equal at first order in $v$. So
+A-3's standing is a property of the configuration and not of the project, and
+a quantity reproduced to 2% by a calculation carrying a known defect of the
+same size is not a measurement. Supplement §10.
 
 **That bare $\kappa'$ is now measured rather than inferred.** Every coefficient
 this bundle builds is affine in $\kappa'$, so scaling $\kappa'$ in the
