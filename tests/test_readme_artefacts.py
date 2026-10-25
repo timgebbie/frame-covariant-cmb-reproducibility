@@ -23,12 +23,28 @@ README = (ROOT / "README.md").read_text(encoding="utf-8")
 RUN_ALL = (ROOT / "scripts" / "run_all.py").read_text(encoding="utf-8")
 
 #: `| **F3** label | evidence | `v1.0.0` |` --- the drawn rows.
+#:
+#: **`\d+`, not `\d`, and that was a real hole.** Until 2026-10-25 this read
+#: `[FD]\d`, so `**D10**` matched `D1` and then failed on the `0` where `\*\*`
+#: was required --- and the row was **silently skipped**. Every two-digit
+#: artefact in the table, D10 through D18, was unchecked for a month while
+#: `test_the_table_is_not_empty` went on passing on the fifteen single-digit
+#: rows. That is the class of defect this file was written to catch, in this
+#: file: a gate that cannot see most of what it claims to cover, and nothing
+#: breaking to say so. The `>= 10` floor below is exactly why it stayed quiet.
+#:
+#: `CELL` is "anything up to an **unescaped** pipe", not `[^|]*`. D9's evidence
+#: cell contains the antecedent's own `\|r_θ/r_s\| jπ`, and `[^|]*` stops dead
+#: at the first `\|` --- so D9 was unchecked too, found the moment the parser
+#: was made to compare itself against a looser reading of the same table.
+CELL = r"(?:\\\||[^|])*"
 ROW = re.compile(
-    r"^\|\s*\*\*(?P<tag>[FD]\d)\*\*[^|]*\|[^|]*\|\s*`(?P<version>v[\d.]+)`\s*\|$",
+    rf"^\|\s*\*\*(?P<tag>[FD]\d+)\*\*{CELL}\|{CELL}\|\s*`(?P<version>v[\d.]+)`\s*\|$",
     re.M)
 
 #: `| *F2* label | *not yet drawn* ... | — |` --- the undrawn ones.
-DEFERRED_ROW = re.compile(r"^\|\s*\*(?P<tag>[FD]\d)\*[^|]*\|[^|]*\|\s*—\s*\|$", re.M)
+DEFERRED_ROW = re.compile(
+    rf"^\|\s*\*(?P<tag>[FD]\d+)\*{CELL}\|{CELL}\|\s*—\s*\|$", re.M)
 
 
 def _rows() -> dict[str, str]:
@@ -53,6 +69,33 @@ def test_the_table_is_not_empty():
         "been removed or its formatting changed and this file's regex is now "
         "measuring nothing.")
     assert _deferred(), "no deferred rows parsed; the same hazard"
+
+
+#: Any line that *starts a table row with a bold artefact tag*. Deliberately
+#: looser than `ROW`: it does not care what follows, so it cannot be fooled by
+#: a formatting change in the version cell.
+ANY_TAGGED_ROW = re.compile(r"^\|\s*\*\*([FD]\d+)\*\*", re.M)
+
+
+def test_the_parser_sees_every_row_the_table_has():
+    """**The floor above cannot detect a parser that sees most of the table.**
+
+    `>= 10` passed for a month over a regex that silently skipped every
+    two-digit artefact, because fifteen single-digit rows cleared the floor on
+    their own. A count threshold is the wrong instrument for *"is this reading
+    all of it?"*; the right one is a second, looser reading of the same text,
+    and the two must name the same set.
+
+    This is the same argument as **M14**, applied to this file: a gate whose
+    failure mode is invisible to itself needs an independent column.
+    """
+    strict, loose = set(_rows()), set(ANY_TAGGED_ROW.findall(README))
+    assert strict == loose, (
+        f"the artefact table has {len(loose)} rows with a bold tag and the "
+        f"version-checking parser sees {len(strict)} of them. Missed: "
+        f"{sorted(loose - strict)}. Either those rows' version cells are "
+        "malformed, or `ROW` has stopped matching the table's shape — and "
+        "either way the rows below are not being checked.")
 
 
 @pytest.mark.parametrize("tag,version", sorted(_rows().items()))

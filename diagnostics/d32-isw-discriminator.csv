@@ -1,0 +1,61 @@
+configuration,background,frame,ell,late_share,gate,utc
+released  (the T-128 baseline) || EdS   (CDM_MODEL),EdS   (CDM_MODEL),newtonian,2,0.000010,5.876e-14,2026-10-25T11:16:19Z
+released  (the T-128 baseline) || EdS   (CDM_MODEL),EdS   (CDM_MODEL),newtonian,10,0.000003,5.876e-14,2026-10-25T11:16:19Z
+released  (the T-128 baseline) || EdS   (CDM_MODEL),EdS   (CDM_MODEL),cdm,2,0.000012,5.876e-14,2026-10-25T11:16:19Z
+released  (the T-128 baseline) || EdS   (CDM_MODEL),EdS   (CDM_MODEL),cdm,10,0.000030,5.876e-14,2026-10-25T11:16:19Z
+released  (the T-128 baseline) || LCDM,LCDM,newtonian,2,0.000013,7.518e-14,2026-10-25T11:16:31Z
+released  (the T-128 baseline) || LCDM,LCDM,newtonian,10,0.000005,7.518e-14,2026-10-25T11:16:31Z
+released  (the T-128 baseline) || LCDM,LCDM,cdm,2,0.000015,7.518e-14,2026-10-25T11:16:31Z
+released  (the T-128 baseline) || LCDM,LCDM,cdm,10,0.000037,7.518e-14,2026-10-25T11:16:31Z
+released  (the T-128 baseline) || PLANCK,PLANCK,newtonian,2,-0.000012,3.981e-14,2026-10-25T11:16:50Z
+released  (the T-128 baseline) || PLANCK,PLANCK,newtonian,10,-0.000042,3.981e-14,2026-10-25T11:16:50Z
+released  (the T-128 baseline) || PLANCK,PLANCK,cdm,2,0.000020,3.981e-14,2026-10-25T11:16:50Z
+released  (the T-128 baseline) || PLANCK,PLANCK,cdm,10,0.000022,3.981e-14,2026-10-25T11:16:50Z
+A  slot_weight_split  --- P1-T's specification || EdS   (CDM_MODEL),EdS   (CDM_MODEL),newtonian,2,-0.000055,3.562e-13,2026-10-25T11:16:57Z
+A  slot_weight_split  --- P1-T's specification || EdS   (CDM_MODEL),EdS   (CDM_MODEL),newtonian,10,-0.000074,3.562e-13,2026-10-25T11:16:57Z
+A  slot_weight_split  --- P1-T's specification || EdS   (CDM_MODEL),EdS   (CDM_MODEL),cdm,2,0.001119,3.562e-13,2026-10-25T11:16:57Z
+A  slot_weight_split  --- P1-T's specification || EdS   (CDM_MODEL),EdS   (CDM_MODEL),cdm,10,0.005671,3.562e-13,2026-10-25T11:16:57Z
+A  slot_weight_split  --- P1-T's specification || LCDM,LCDM,newtonian,2,-0.000122,5.671e-12,2026-10-25T11:17:09Z
+A  slot_weight_split  --- P1-T's specification || LCDM,LCDM,newtonian,10,-0.000113,5.671e-12,2026-10-25T11:17:09Z
+A  slot_weight_split  --- P1-T's specification || LCDM,LCDM,cdm,2,0.017458,5.671e-12,2026-10-25T11:17:09Z
+A  slot_weight_split  --- P1-T's specification || LCDM,LCDM,cdm,10,0.029811,5.671e-12,2026-10-25T11:17:09Z
+A  slot_weight_split  --- P1-T's specification || PLANCK,PLANCK,newtonian,2,-0.000215,2.893e-12,2026-10-25T11:17:28Z
+A  slot_weight_split  --- P1-T's specification || PLANCK,PLANCK,newtonian,10,-0.000230,2.893e-12,2026-10-25T11:17:28Z
+A  slot_weight_split  --- P1-T's specification || PLANCK,PLANCK,cdm,2,0.010409,2.893e-12,2026-10-25T11:17:28Z
+A  slot_weight_split  --- P1-T's specification || PLANCK,PLANCK,cdm,10,0.004111,2.893e-12,2026-10-25T11:17:28Z
+B  bracket_all_at_w  --- (i) at full strength || EdS   (CDM_MODEL),EdS   (CDM_MODEL),newtonian,2,0.989498,5.145e-14,2026-10-25T11:17:35Z
+B  bracket_all_at_w  --- (i) at full strength || EdS   (CDM_MODEL),EdS   (CDM_MODEL),newtonian,10,0.998737,5.145e-14,2026-10-25T11:17:35Z
+B  bracket_all_at_w  --- (i) at full strength || EdS   (CDM_MODEL),EdS   (CDM_MODEL),cdm,2,0.999927,5.145e-14,2026-10-25T11:17:35Z
+B  bracket_all_at_w  --- (i) at full strength || EdS   (CDM_MODEL),EdS   (CDM_MODEL),cdm,10,0.999988,5.145e-14,2026-10-25T11:17:35Z
+B  bracket_all_at_w  --- (i) at full strength || LCDM,LCDM,newtonian,2,0.994204,5.481e-13,2026-10-25T11:17:48Z
+B  bracket_all_at_w  --- (i) at full strength || LCDM,LCDM,newtonian,10,0.999068,5.481e-13,2026-10-25T11:17:48Z
+B  bracket_all_at_w  --- (i) at full strength || LCDM,LCDM,cdm,2,0.999957,5.481e-13,2026-10-25T11:17:48Z
+B  bracket_all_at_w  --- (i) at full strength || LCDM,LCDM,cdm,10,0.999992,5.481e-13,2026-10-25T11:17:48Z
+B  bracket_all_at_w  --- (i) at full strength || PLANCK,PLANCK,newtonian,2,0.999852,3.552e-14,2026-10-25T11:18:08Z
+B  bracket_all_at_w  --- (i) at full strength || PLANCK,PLANCK,newtonian,10,0.999773,3.552e-14,2026-10-25T11:18:08Z
+B  bracket_all_at_w  --- (i) at full strength || PLANCK,PLANCK,cdm,2,0.999740,3.552e-14,2026-10-25T11:18:08Z
+B  bracket_all_at_w  --- (i) at full strength || PLANCK,PLANCK,cdm,10,0.999932,3.552e-14,2026-10-25T11:18:08Z
+C  the identity --- bracket at W WITH its partners || EdS   (CDM_MODEL),EdS   (CDM_MODEL),newtonian,2,0.268361,8.091e-14,2026-10-25T11:19:03Z
+C  the identity --- bracket at W WITH its partners || EdS   (CDM_MODEL),EdS   (CDM_MODEL),newtonian,10,0.786448,8.091e-14,2026-10-25T11:19:03Z
+C  the identity --- bracket at W WITH its partners || EdS   (CDM_MODEL),EdS   (CDM_MODEL),cdm,2,0.997823,8.091e-14,2026-10-25T11:19:03Z
+C  the identity --- bracket at W WITH its partners || EdS   (CDM_MODEL),EdS   (CDM_MODEL),cdm,10,0.999948,8.091e-14,2026-10-25T11:19:03Z
+C  the identity --- bracket at W WITH its partners || LCDM,LCDM,newtonian,2,0.299586,5.481e-13,2026-10-25T11:19:16Z
+C  the identity --- bracket at W WITH its partners || LCDM,LCDM,newtonian,10,0.784028,5.481e-13,2026-10-25T11:19:16Z
+C  the identity --- bracket at W WITH its partners || LCDM,LCDM,cdm,2,0.998645,5.481e-13,2026-10-25T11:19:16Z
+C  the identity --- bracket at W WITH its partners || LCDM,LCDM,cdm,10,0.999969,5.481e-13,2026-10-25T11:19:16Z
+C  the identity --- bracket at W WITH its partners || PLANCK,PLANCK,newtonian,2,0.167462,3.552e-14,2026-10-25T11:19:36Z
+C  the identity --- bracket at W WITH its partners || PLANCK,PLANCK,newtonian,10,0.833596,3.552e-14,2026-10-25T11:19:36Z
+C  the identity --- bracket at W WITH its partners || PLANCK,PLANCK,cdm,2,0.999089,3.552e-14,2026-10-25T11:19:36Z
+C  the identity --- bracket at W WITH its partners || PLANCK,PLANCK,cdm,10,0.999520,3.552e-14,2026-10-25T11:19:36Z
+D  the identity with the driving OFF  (lambda = 0) || EdS   (CDM_MODEL),EdS   (CDM_MODEL),newtonian,2,0.268361,5.711e-14,2026-10-25T11:23:32Z
+D  the identity with the driving OFF  (lambda = 0) || EdS   (CDM_MODEL),EdS   (CDM_MODEL),newtonian,10,0.786448,5.711e-14,2026-10-25T11:23:32Z
+D  the identity with the driving OFF  (lambda = 0) || EdS   (CDM_MODEL),EdS   (CDM_MODEL),cdm,2,0.997823,5.711e-14,2026-10-25T11:23:32Z
+D  the identity with the driving OFF  (lambda = 0) || EdS   (CDM_MODEL),EdS   (CDM_MODEL),cdm,10,0.999948,5.711e-14,2026-10-25T11:23:32Z
+D  the identity with the driving OFF  (lambda = 0) || LCDM,LCDM,newtonian,2,0.286679,2.159e-13,2026-10-25T11:23:45Z
+D  the identity with the driving OFF  (lambda = 0) || LCDM,LCDM,newtonian,10,0.779151,2.159e-13,2026-10-25T11:23:45Z
+D  the identity with the driving OFF  (lambda = 0) || LCDM,LCDM,cdm,2,0.998641,2.159e-13,2026-10-25T11:23:45Z
+D  the identity with the driving OFF  (lambda = 0) || LCDM,LCDM,cdm,10,0.999969,2.159e-13,2026-10-25T11:23:45Z
+D  the identity with the driving OFF  (lambda = 0) || PLANCK,PLANCK,newtonian,2,0.185008,3.102e-13,2026-10-25T11:24:03Z
+D  the identity with the driving OFF  (lambda = 0) || PLANCK,PLANCK,newtonian,10,0.821111,3.102e-13,2026-10-25T11:24:03Z
+D  the identity with the driving OFF  (lambda = 0) || PLANCK,PLANCK,cdm,2,0.998974,3.102e-13,2026-10-25T11:24:03Z
+D  the identity with the driving OFF  (lambda = 0) || PLANCK,PLANCK,cdm,10,0.999553,3.102e-13,2026-10-25T11:24:03Z

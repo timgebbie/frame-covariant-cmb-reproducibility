@@ -9814,3 +9814,751 @@ into `bracket`; the audit's control-budget finding (F8, seven controls where
 four is the bound) is now also an attribution argument and not only a
 complexity one.
 
+
+---
+
+## T-127 — **Four long runs lost to container restarts, and the defect is that a diagnostic's result existed only while its process did**
+
+*P1-B, 2026-10-24T19:20Z. Not a physics finding. A reliability one, and it is in
+the half of the bundle P1-B owns.*
+
+D24 twice and D29 twice — about forty minutes each, each relaunched from zero.
+Every result that survived was read out of a **partial log**, which is also how
+D28's four rows reached the register.
+
+**The environment restarting is a known property and I kept launching into
+ephemeral scratch anyway.** The first loss was the information; I treated the
+next three as bad luck and moved the log file instead of the problem.
+
+> **A diagnostic whose result exists only while its process does is not
+> reproducible**, and reproducibility is the bundle's entire claim. This is a
+> defect against **G3** — *one command reproduces everything* — hiding as an
+> inconvenience, because the command does reproduce everything provided
+> nothing interrupts it, and something always interrupts it.
+
+### The repair
+
+`scripts/_resumable.py`. A completed row is written and **`fsync`'d the moment
+it completes**; a rerun reads what is there and skips it. The accumulated table
+is correct whichever process computed which part of it.
+
+Three choices in it worth stating, because each is the less obvious one:
+
+- **A CSV, not a pickle.** A reader can open it, a diff shows what moved, and
+  `make_manifests` can hash it. A cache the bundle cannot inspect is a second
+  source of truth.
+- **Keyed on the configuration, not a row index.** Inserting a configuration
+  must not silently hand it another one's answer. That is the failure mode a
+  cache invites, and it is the same shape as **T-125** — a plausible number
+  attributed to the wrong cause.
+- **The flush and the `fsync` are the whole class.** A buffered write is
+  exactly as lost as no write.
+
+### What it does not excuse
+
+The partial-log readings already in the register — D28's four rows, D24's six —
+are **correct**: each was printed by a completed configuration, under `-u`, and
+each is reproducible by rerunning that configuration. What was lost was time,
+not accuracy. But a register entry whose provenance is *"read out of a log
+before the process died"* is one restart away from being a number nobody can
+regenerate, and that is the state this removes.
+
+
+## T-128 — **The late integrated Sachs–Wolfe effect is annihilated, not absent, and the Einstein–de Sitter null control is what proves it**
+
+**2026-10-25. D30, F10.** Found by the instrument the PI asked for: the
+spectrum accumulated in conformal time rather than reported at $\eta_0$.
+
+### What was measured
+
+`integral_solution` gained `eta_slices`: the bulk integrand is accumulated
+cumulatively in $\eta$ **inside the quadrature the released path already
+runs**, so there is no second definition of the integral to drift from the
+first, and it costs one pass rather than one spectrum per slice. The boundary
+terms are held out of the accumulation deliberately — they are emitted at
+$\eta_\ast$ and afterwards only projected, so they are present in full in every
+slice.
+
+**Gate 1, asserted before anything is read:** the $\eta_0$ slice must reproduce
+the released `integrated` exactly. Measured **1.15e-12** against an assertion
+at 1e-9, on all three backgrounds and both frames. If the accumulation
+disagreed with the integral it decomposes, nothing below would be evidence.
+
+### The reading
+
+Fraction of the final $C_\ell$ deposited **after the first 1% of conformal time
+past $\eta_\ast$** — that is, after the visibility has closed:
+
+| background | required at $\ell=2$ | measured |
+|---|---|---|
+| Einstein–de Sitter | **exactly 0** — $\Phi$ constant, Appendix G | 0.0000 |
+| $\Lambda$CDM | $\mathcal O(0.1)$ — the late ISW | 0.0000 |
+| Planck 2018 | $\mathcal O(0.1)$ — the late ISW | 0.0000 |
+
+Thirty-six curves, six multipoles, three backgrounds, two frames. Every one
+reaches 1.0 within 1% of the conformal span and is flat to $\eta_0$.
+
+### Why the EdS row is the finding and not the control that passed
+
+**A defect and an artefact predict different things here, and they differ on
+EdS.** A numerical fault in the accumulation — an aliased grid, a lost tail, a
+truncated integrand — would annihilate late deposition on *every* background,
+EdS included, and EdS is the one background where zero is the correct answer.
+A fault that *manufactured* late deposition would show up there as non-zero.
+Zero on EdS together with zero on both $\Lambda$ backgrounds is consistent with
+exactly one thing: **the late-time source is being multiplied by something that
+has already gone to zero.**
+
+That is **B-17 discrepancy (i)**. (102) carries the bulk bracket
+$C_0-C_1'+C_2''$ at $\mathcal V\mathcal D$ where the exact by-parts of its own
+integral wants $W$. $W=e^{-\kappa}$ survives to $\eta_0$; $\mathcal V=W\kappa'$
+is the visibility and closes at recombination. **The late ISW is not missing
+from the formalism — it is present at rank one and annihilated by the weight.**
+
+### What it supersedes
+
+**T-74 said the cause is *not* the weight**, on the reasoning that the weight
+difference at low $\ell$ is the same factor of sixteen on Einstein–de Sitter,
+which has no ISW to lose. That reasoning compared two *weights* at $\eta_0$ and
+is untouched; what it could not see is that **both** weights close at
+$\eta_\ast$, so the comparison was between two annihilations. T-74's measurement
+stands and its attribution does not. The distinction is the same one T-125
+turned on: a number can be right and its cause wrong.
+
+### What it does not establish
+
+- **Not that the plateau is now right.** One named term is annihilated and the
+  annihilation is located. The plateau's level also depends on the ordinary
+  Sachs–Wolfe term and on the frame gap, neither of which this measures.
+- **No repair is adopted.** `bracket_all_at_w` is the control for (i) and is
+  reachable from the spectrum, and the configuration that lands the first peak
+  in the CDM frame (D28) misses by a factor of 3.1 in the Newtonian frame.
+  $\ell\ge2$ is frame-invariant at first order, so that is not the repair.
+- **Sixteen slices in F10, twenty-four in D30**, and both say the same thing.
+  That agreement is the evidence the slice count is an index here; it is not a
+  convergence claim about the step itself, which neither resolves.
+
+### Why no gate found this first
+
+$\ell_{\rm peak}$ (D27) and the median contributing $k$ (D25) are scalar
+summaries of a **finished** spectrum, and three pre-registered predictions were
+scored against them in the week before this was drawn. **A defect in *when*
+power is deposited has no signature at the endpoint**, because the endpoint is
+where the accumulation has already finished. The right instrument for a defect
+that is a shape is a shape.
+
+## T-129 — **T-54's cache guard digested the code *path*, not the code, and on the reading branch it was blind to every lazily-imported module**
+
+**2026-10-25.** Found by exercising F10's new `--replot` for the first time: a
+compute immediately followed by a replot failed its own staleness check with no
+file on disk having changed.
+
+### The defect
+
+`figure_f9_acoustic_spectrum.py::source_fingerprint` — **T-54**'s instrument,
+copied into F10 — stamped a cached CSV with a digest of
+
+> every `functions.*` module **actually present in `sys.modules`**,
+
+resolved from the live process rather than from a list. That makes the digest a
+property of the branch the process took. `functions.spectra.peebles` is
+imported lazily inside `build_environment`:
+
+- the **compute** branch calls it and hashes **20** modules;
+- the **replot** branch never calls it and hashes **19** — and **peebles is not
+  in the digest at all**.
+
+Two consequences, and the second is the one that matters:
+
+1. *False invalidation.* The two digests can never agree, so every round trip
+   fails. Visible, annoying, harmless.
+2. **False validation.** On the branch that *reads* the cache, the digest was
+   silently blind to the recombination history. A changed $z_\ast$ is exactly
+   the kind of change that must invalidate a cached spectrum — it is what
+   **T-109** was — and the guard against shipping a stale figure had that hole
+   inside it.
+
+**This is the shape of M14 in a gate about gates**: a check whose own failure
+mode is invisible to itself.
+
+### The repair
+
+`scripts/_fingerprint.py`, one definition for both callers. The digest is taken
+over a **declared set walked from disk** — every `.py` under `functions/`, plus
+the calling script — so both branches ask the same question and neither can be
+blind to a module it did not happen to import. The caller's file is passed in
+rather than taken from the helper's own `__file__`, or every cached artefact in
+the tree would stamp identically and either figure could redraw the other's
+cache.
+
+`tests/test_cache_fingerprint_is_path_independent.py` holds it, with the
+negative control **T-44** requires: the superseded rule is written out in four
+lines and run against the replot branch's module set, so the hole is
+*reproduced* rather than described, and a return to the old rule fails here
+rather than going quiet.
+
+### The cost, paid rather than argued away
+
+Both cached CSVs are stamped by the superseded rule and by a `functions/` tree
+that has moved since — `bracket_all_at_w`, `eta_slices`,
+`BULK_SOURCE_CONTROLS`, `PHI_PRIME_DRIVING_LAMBDA`, `KAPPA_SECOND_LAMBDA` all
+landed this week. Every one of those is **bit-exact at released settings**, so
+the regenerated numbers are expected to be identical. They are regenerated
+anyway: F10 (four minutes) and F9 (forty-five), because **a guard that is
+waived the first time it is inconvenient is not a guard**, and T-54's own entry
+records what the alternative cost — `run_all --rerun` printing CLEAN over a
+spectrum carrying the pre-T-51 acoustic scale.
+
+## T-130 — **The supplement's figure section could not be generated at all: four committed captions do not parse, and nothing in the bundle checked that they could**
+
+**2026-10-25.** Found while registering F10's caption, by running the generator
+rather than by reading it.
+
+### What is broken
+
+`scripts/make_figure_pages.py` generates the supplement's **entire figure
+section** from `captions/*.md`, and it is a stage in `run_all.py` whose failure
+is recorded. On this tree it could not parse **four of the nine committed
+captions** — F2, F5, F6 and F9 — and `tomllib` raises on the first one, so it
+generated **nothing**, including the five that were fine.
+
+The cause is one typo made five times and copied:
+
+    $97.8\$% across the plateau
+
+The intent is LaTeX's escaped percent inside mathematics, `$97.8$%`. In a TOML
+**basic** string `\$` is not a valid escape. Fourteen instances across five
+files; one substitution, `\$percent escape, fixes every one.
+
+### Why this is a custodian's defect and not a typographical one
+
+Three separate failures stack here, and only the first is the typo:
+
+1. **The caption directory is one keystroke from unparseable.** LaTeX is stored
+   in TOML *basic* strings, where every backslash must be doubled. That is a
+   format pairing in which the common case is an escape and the error is
+   silent until a parser is run.
+2. **Nothing ran the parser.** `tests/test_readme_artefacts.py` checks that a
+   figure exists at the version the README states. Nothing checked that the
+   figure's **caption** could be read — and a caption is the figure's
+   specification (**V15**), so an unparseable caption is a figure with no
+   specification. The only thing that would have caught it is a harness stage
+   long enough that it is not run casually.
+3. **The failure mode is silent in the direction that matters.** A bare `%`
+   that *does* parse comments out the rest of the line in the generated LaTeX.
+   That does not fail a build; it deletes text from a public document.
+
+### The repair
+
+The fourteen escapes, and `tests/test_captions_are_parseable.py` — 32 tests:
+every caption parses by the generator's own parser, carries the keys the
+generator indexes without a default, names a script that exists, has **no
+unescaped percent in the parsed value** (the negative control for the silent
+direction), and the generator runs end to end on the tree it is in. The figure
+section now regenerates at **10 of 10**.
+
+### What it does not fix
+
+The underlying pairing stands: LaTeX in TOML basic strings, every backslash
+doubled. The structural repair is a **literal** string (`'''`), where
+backslashes are not escapes and the caption source reads as the LaTeX it is.
+That is a mechanical change across nine files, each verifiable by comparing the
+parsed `caption` value byte for byte before and after, and it is **not** done
+here: it does not belong in the same landing as a figure. Recorded as the
+follow-up it is rather than left as an implication.
+
+---
+
+# P1-T's rows for 23 and 24 October, landed 2026-10-25
+
+**Supplied by P1-T as `stream-P1T → P1-B`, 2026-10-25T05:41Z, with the standing
+instruction *"Numbers are proposed, not assigned … renumber freely; the text is
+what matters."* Their proposal started at T-127; T-127 through T-130 were taken
+between their stamp and this landing, so the eleven rows are assigned **T-131
+through T-141** in the date order they were written in. The physics text is
+P1-T's and is landed unedited — custodian is not author.**
+
+**Four of these rows are readings of this bundle's code rather than of the
+antecedent, so by the dividing line they are mine to adjudicate before they
+land. All four check out**, and the verification is recorded with each row
+rather than asserted in a covering note.
+
+## T-131 — **W1's surplus $\kappa'$, settled in index algebra** *(P1-T, 23 October; proposed T-127)*
+
+$-C_1=k^{-1}(a\mathcal B_1+\kappa'v_B)$, so at the visibility maximum, where
+$\dot{\mathcal V}=0$ gives $\kappa''=\kappa'^2$, the $v_B$ content of the
+by-parts slot carries two powers of $\kappa'$ in the exact form
+$-(WC_1)'=-W'C_1-WC_1'$ and three as implemented, the bracket riding at
+$\mathcal V=W\kappa'$ where the identity wants $W$. *Settled by:* analysis.
+*Does not establish:* anything away from the visibility maximum — the
+$\kappa''=\kappa'^2$ substitution is local to $\dot{\mathcal V}=0$. Supports
+B-17 (i).
+
+**P1-B:** consistent with T-128 measured independently. The surplus $\kappa'$
+this identifies at the maximum is the same weight that annihilates the late
+ISW away from it, and the two arrive at (i) from opposite ends of the
+visibility.
+
+## T-132 — **D24's $\kappa''=0$ column is a diagnostic and not a preview of W1** *(P1-T, 23 October; proposed T-128)*
+
+W1 changes the weight, $\mathcal V\mathcal D\to W$, removing one $\kappa'$ and
+keeping $\kappa''$. D24's column deletes $\kappa''$ and keeps the weight. Two
+different interventions, so $\ell_{\rm peak}=172.75$ does not predict what W1
+produces, and reading it as a 16% residual treats a knob setting as a physical
+configuration. *Settled by:* analysis. *Origin:* my own over-read first; M16
+governs coefficient-to-spectrum inference and says nothing about
+knob-to-physics inference.
+
+**P1-B:** accepted, and it applies to a row of mine. D29's header table lists
+`kappa''=0 only (knob) 0.6467` beside configurations that are physical. The
+column heading must distinguish the two and does not. Correcting the header is
+mine and is queued behind W1; the number itself is unaffected.
+
+## T-133 — **T-20 is what a mixed-weight identity looks like when tested as a single-weight choice** *(P1-T, 23 October; proposed T-129)*
+
+The exact by-parts puts the bracket at $W$ and the partner terms
+$-\mathcal VC_1+2\mathcal VC_2'+\dot{\mathcal V}C_2$ at $\mathcal V$. Neither
+"all $W$" nor "all $\mathcal V$" is the identity, so T-20's result — each right
+in one regime, neither in both — confirms the by-parts reading rather than
+obstructing it. *Consequence:* a B-slot column needs **the bracket at $W$ and
+the partners present in the same run**. *Settled by:* analysis.
+
+**P1-B:** that configuration exists and is D29's first row —
+`bracket_all_at_w=True, by_parts_weight_terms=True, boundary_weight_w=True`.
+It is pre-registered and has not completed; two long runs were lost to
+container restarts and it is now checkpointed (T-127). **This row is the
+derivation that says D29's first configuration is the right one to run**, and
+it arrived after the run was specified rather than before, which is the better
+order for it.
+
+## T-134 — **The quarter-cycle account of the peak, withdrawn** *(P1-T, 24 October; proposed T-123, already in print in their notes)*
+
+It assumed $C_2=A\cos kr_s$. $\mathcal B_2$ is the shear and in the CDM frame
+$a\mathcal B_2=-k_{\rm com}v$ exactly, so $C_2=v/k$ with
+$v'+\mathcal Hv=-k\Phi_A$ — a potential on the right-hand side, not an acoustic
+amplitude. **$C_2$ does not oscillate.** The $(0.5,1.0]\thinspace\ell_A$ bound, the
+$0.365\pi$ and the $w\simeq2.2$ go with it. *Settled by:* reading
+`coefficients.py` at the derivation (32) and the evaluation
+`c2, c2_prime, c2_second = v/k, vp/k, vpp/k`.
+
+## T-135 — **B-17 (iv) derived rather than observed** *(P1-T, 24 October; proposed T-124)*
+
+One integration by parts on the partner group, using
+$\mathrm dj_\ell/\mathrm d\eta=-kj_\ell'$:
+
+$$\int(-\mathcal VC_1+2\mathcal VC_2'+\dot{\mathcal V}C_2)j_\ell=\int\mathcal V(C_2'-C_1)j_\ell+\int\mathcal V v j_\ell'+[\mathcal VC_2j_\ell],$$
+
+with $kC_2=v$. The missing counterpart is a **velocity against $j_\ell'$** —
+the Doppler form of the line-of-sight solution carrying the frame velocity,
+identically zero in the Newtonian frame. *Number:* at fixed
+$x=k(\eta_0-\eta)$ the $\ell$ maximising $|j_\ell'|$ is **37% below** the one
+maximising $|j_\ell|$ — 110 against 173 at $x=178$, 164 against 266 at
+$x=272$. *Does not establish:* that it moves the peak up; it adds power below
+the peak.
+
+## T-136 — **The displaced $k\to\ell$ map account of $0.635$, withdrawn by its own test** *(P1-T, 24 October; proposed T-130)*
+
+T-131's sibling reading of 23 October attributed $0.635$ to D25's
+$1.5$–$4.2\times$ median-$k$ displacement and pre-registered a ratio
+$\simeq1.57$ at $\ell=173$. **D25 extended to $\ell=173$ returns $1.032$ and
+$1.039$ Newtonian, $1.171$ and $1.201$ CDM.** The displacement is a low-$\ell$
+phenomenon, closed by the peak. *Settled by:* test, pre-registered. *Note:* the
+pre-registration's second outcome said "A-3 comes back into play", which their
+§3 independently rules out — **a pre-registration that cannot express the
+outcome is not a pre-registration**, and that is the reusable part.
+
+## T-137 — **The oscillator's acceptance gate is blind to a constant phase** *(P1-T, 24 October; proposed T-131)*
+
+It takes differences of consecutive turning points of $\delta T+\Phi_A$ in $k$,
+so the position of the first one never enters the number. Period verified to
+$0.5$% ($191.7$ against the antecedent's $192.7$ on Einstein–de Sitter, where
+Appendix G is exact); projection faithful to $3$% at the peak; peak displaced.
+**Correct spacing with a displaced first peak is a phase offset, not a scale
+error** — nothing is stretching $r_s$ or $r_\theta$, and the defect lies
+between the oscillator and the projection. *Settled by:* inspection of
+`tests/test_acoustic_scale.py`.
+
+**P1-B — verified, and the reading is exact.**
+`test_the_derived_start_reproduces_the_antecedents_peak_spacing` computes
+
+```python
+slope = np.diff(y)
+turning = ks[1:-1][np.sign(slope[:-1]) != np.sign(slope[1:])]
+measured = 0.5 * (2.0 * float(np.mean(np.diff(turning)))) * r_theta
+```
+
+`np.mean(np.diff(turning))` is translation-invariant in $k$, so the gate's
+number is unchanged by any constant offset applied to every turning point.
+**This is M14's class in my own test suite** — a gate built from differences,
+unable to see what the differences have in common — and the repair is a second
+assertion on the first turning point's absolute position against $\pi/r_s$.
+Mine, queued behind W1, recorded here so the gate is not cited as covering
+what it does not.
+
+## T-138 — **The two peak numbers use different estimators** *(P1-T, 24 October; proposed T-132)*
+
+D24 reports the largest maximum anywhere in the plotted range; F9 reports the
+first local maximum above $\ell=30$, by parabolic interpolation on an $\ell$
+grid stepping by 30. On a spectrum with a spurious maximum at $\ell=8$ these
+need not return the same peak. **A $6.1$% residual at $\ell\simeq173$ is
+$\Delta\ell\simeq10.5$, about a third of one grid step.** *Consequence:* peak
+positions quoted to two significant figures and no further until one estimator
+is applied to both.
+
+**P1-B — verified, and the consequence is larger than the row states. See
+T-142**, which is the measurement and is mine.
+
+## T-139 — **A-3's standing is a property of the configuration, not of the project** *(P1-T, 24 October; proposed T-133)*
+
+Supersedes the general form of the 23 October statement. Driving moves a peak
+down; whether that helps depends on which side of $0.757\thinspace\ell_A$ the
+configuration sits. Released $0.979$: A-3 accounts for the whole excess to
+$2$%. $\kappa''$-suppressed $0.635$: ruled out, wrong direction. A candidate
+at $0.869$: right sign, $2.2\times$ too large. And **the $2$% agreement is not
+evidence for A-3**, because a weight change supplies $30$ of the $60.5$
+multipoles with A-3 still absent.
+
+## T-140 — **`CDM` is a frame label and `CDM_MODEL` is an Einstein–de Sitter background** *(P1-T, 24 October; proposed T-134)*
+
+$\ell_A=272.177$ on `PLANCK_MODEL` and $\pi r_\theta/r_s=192.7$ on
+Einstein–de Sitter, a factor 1.412 apart. **A peak ratio quoted without naming
+its background and its $\ell_A$ cannot be checked by a reader.** Every ratio
+quoted this week is PLANCK and none said so. *Settled by:* inspection of
+`flrw.py` and `tests/test_acoustic_scale.py`. With Coordination under rule 3a.
+
+**P1-B:** applies to this register and to the README. Every ratio I have
+written this week is PLANCK, CDM frame, against $\ell_A=272.177$. D29's header
+says so; D27's and D28's rows do not, and the README's D27 and D28 entries now
+do. Fixing the remaining sites is mine.
+
+## T-141 — **Conformity, not a defect: Maartens et al. 2024 use this project's multipole normalisation** *(P1-T, 24 October; proposed T-135)*
+
+Their (A.7) inversion coefficient $(2\ell+1)!/[4\pi(\ell!)^2 2^\ell]$ reduces in
+closed form to $(2\ell+1)!!/(4\pi\ell!)=\alpha_\ell/4\pi$, **exactly, for every
+$\ell$**. Their (A.9) carries $\ell!/(2\ell-1)!!=\beta_\ell$. Their (A.7) cites
+Annals I (`GebbieEllis1998`) and MGE1999 among its four sources, so the
+agreement is lineage and not coincidence. Their $H_{ab}=\sigma_{ab}$ is our
+rank-two source. *Caution, theirs not ours:* their ref. [51] prints Ann. Phys.
+**282 (2006) 285**; the year is **2000**.
+
+**P1-B:** landed here because this register is the project's finding index and
+the alternative is a new file for one row. It is explicitly **not** a defect in
+this bundle and must not be cited as one.
+
+## T-142 — **G-a has been scoring the global maximum, and on this bundle's broken spectrum that is the spurious plateau feature rather than the acoustic peak**
+
+**2026-10-25, P1-B.** The measurement behind P1-T's T-138, taken because a
+number that comes out of a run is mine.
+
+`diagnostic_d24_phi_prime_sweep.py::peak_position` opens with
+`i = int(np.argmax(d))` and interpolates a parabola through that sample's
+neighbours. That is **the global maximum of $D_\ell$ over the whole grid**.
+`figure_f9_acoustic_spectrum.py::first_peak` walks upward from $\ell=30$ and
+returns **the first interior local maximum**. The two agree on a spectrum whose
+largest feature *is* its first acoustic peak. **This bundle's spectrum is not
+one.**
+
+On the released configuration, PLANCK, CDM frame, $\ell_A=272.177$:
+
+| estimator | reports | $/\ell_A$ |
+|---|---|---|
+| D24/D27, global argmax | $\ell\simeq8.1$ | **0.0298** |
+| F9, first interior maximum above 30 | $\ell=266.6$ | 0.979 |
+
+**A factor of 33, not a third of a grid step.** The released G-a baseline of
+0.0298 does not say *the acoustic peak is at $\ell=8$*; it says **the spurious
+low-$\ell$ maximum is still the largest feature in the spectrum**. Those are
+different statements and the gate's name asserts the first.
+
+### What this does and does not cost
+
+- **It does not invalidate the comparisons between configurations.** Every row
+  in D26, D27, D28 and D29 is the same estimator on the same grid, so the
+  ordering between them stands, and so does the statement that cross B at
+  0.8691 is the first configuration in which an acoustic feature is the
+  largest thing in the spectrum.
+- **It does invalidate reading a low value as a peak position.** 0.0073 and
+  0.0298 are statements about the plateau's spurious maximum. Three
+  pre-registered predictions were scored against a quantity whose low-value
+  branch answers a different question than its name, and **the predictions
+  still failed** — this neither rescues them nor makes them worse, and it is
+  recorded now rather than when it would be convenient.
+- **The frame spread at cross B survives it intact.** 0.8691 against 0.2770 is
+  a comparison between two global maxima on the same configuration, and
+  $\ell\ge2$ is frame-invariant at first order whichever estimator is used.
+
+### The repair, and it is one estimator
+
+`first_peak` is the correct one for a quantity called $\ell_{\rm peak}$, and
+D24's grid is denser than F9's where it matters. Moving D24, D27, D28 and D29
+onto `first_peak` and reporting **both** — the first interior maximum and the
+global maximum, with the plateau's own maximum named when it is the larger —
+is the honest form, because the second number is the one that says whether the
+plateau defect is still dominant. Mine, and it goes with W1 rather than ahead
+of it: changing the estimator mid-stage would make W1's result incomparable
+with the pre-registrations already scored.
+
+## T-143 — **Moving the bracket to $W$ exposes a growing mode. P1-T's discriminator cannot settle (i) as specified, and the reason is a number rather than an argument**
+
+**2026-10-25. D32.** P1-T specified a one-run discriminator for B-17 (i): move
+the gravitational half of $C_1'$ to $W$ and the late ISW must return on the
+$\Lambda$ backgrounds while Einstein–de Sitter stays at exactly zero.
+
+**All three columns fail the EdS null control, and the third one fails it
+worst.** Late share at $\ell=2$, CDM frame, the fraction of $C_\ell$ deposited
+after the visibility has closed:
+
+| configuration | EdS — must stay 0 | $\Lambda$CDM | PLANCK |
+|---|---|---|---|
+| released | 0.0000 | 0.0000 | 0.0000 |
+| A `slot_weight_split` | **+0.0011** | +0.0175 | +0.0104 |
+| B `bracket_all_at_w` | **+0.9999** | +1.0000 | — |
+| C the identity, bracket at $W$ **with** its partners | **+0.9978** | +0.9986 | +0.9991 |
+
+Two readings make it a measurement rather than a disappointment:
+
+1. **EdS and PLANCK differ by 0.0013 in column C.** If the late ISW were being
+   restored they would differ by $\mathcal O(0.1)$, because one background has
+   one and the other provably does not. **The columns are not moving the ISW.**
+2. **$\ell=10$ is lifted *more* than $\ell=2$** in every column on every
+   background — 0.9999 against 0.9978 on EdS, 0.7864 against 0.2684 in the
+   Newtonian frame. The late ISW is a superhorizon effect and must be
+   strongest at the quadrupole. Whatever is arriving late is not it.
+
+### What is arriving late, measured on Einstein–de Sitter
+
+$\Phi$ is exactly constant on EdS (Appendix G), so nothing in the ISW channel
+can move. The growing mode can, and does. From $\eta_\ast$ to $\eta_0$, CDM
+frame, `CDM_MODEL`:
+
+| | $\eta_\ast$ | $\eta_0$ | factor |
+|---|---|---|---|
+| $\lvert C_2\rvert$, $k=3$ | 2.005e-02 | 6.620e-01 | **33×** |
+| $\lvert C_0\rvert$, $k=3$ | 6.015e-02 | 1.986e+00 | **33×** |
+| $W=e^{-\kappa}$ | 1 | **0.368** | — |
+| $\kappa'/\kappa'(\eta_\ast)$ | 1 | 1.6e-09 | — |
+
+$C_2=v/k$ and $v'+\mathcal Hv=-k\Phi_A$ with $\Phi_A$ constant, so $v$ grows
+through matter domination; $C_0$ follows. **The visibility is what was holding
+them at recombination**: $\kappa'$ falls by nine orders of magnitude while
+$W$ falls only to $0.368$. Replace $\mathcal V\mathcal D$ by $W$ on the whole
+bracket and a quantity that grows by 33 is weighted by one that falls by 2.7 —
+so the integral is dominated by the present day, on every background, and the
+$\ell$ ordering inverts because the growing mode is not superhorizon-weighted.
+
+### What this does and does not establish
+
+- **It does not refute (i).** T-128's measurement stands, P1-T's
+  pre-registration of it stands, and the annihilation of the late ISW by
+  $\mathcal V$ is untouched. What is refuted is that **this family of columns
+  can test it**: a configuration that drowns the ISW channel in a growing mode
+  33 times larger cannot be read for the ISW channel.
+- **It does not establish that the by-parts identity is wrong.** It
+  establishes that *the bracket at $W$, as the three controls implement it*,
+  exposes a growing mode — which is either a missing cancellation among the
+  partner terms, a statement that $C_0$ and $C_2''$ do not belong at $W$, or
+  both. **That is a question about which terms the identity places where, and
+  it is P1-T's.**
+- **It is a result about W1 and not only about the discriminator.** W1 changes
+  the weight $\mathcal V\mathcal D\to W$. These are the first numbers from
+  doing that at $\ell=2$ on three backgrounds, and they say the change cannot
+  be made to the bracket alone.
+
+### What would settle (i) instead
+
+The ISW channel has to be isolated from the growing mode rather than weighted
+alongside it. The cheapest form: run column C **with the driving scaled**,
+`PHI_PRIME_DRIVING_LAMBDA` at 0 and 1, and difference the two late shares. The
+growing-mode contamination is common to both and cancels; what remains is the
+$(\Phi_A'-\Phi_H')$ content alone, and it must be **zero on EdS by
+construction** — the knob multiplies a term that is identically zero there —
+which makes the null control structural rather than numerical. Queued, and it
+is one run of the instrument that now exists.
+
+## T-144 — **The late ISW comes back, in the Newtonian frame, on exactly the two backgrounds that should have one — and the contaminant is $C_0$ and $C_2''$ sitting at $W$**
+
+**2026-10-25. D32, columns C and D.** T-143 established that the bracket at $W$
+exposes a growing mode 33 times larger than the channel being looked for. This
+subtracts it.
+
+### The method, and the null is structural rather than numerical
+
+`PHI_PRIME_DRIVING_LAMBDA` scales $(\Phi_A'-\Phi_H')$ **and nothing else**.
+Running the identity twice, at $\lambda=1$ and $\lambda=0$, and differencing
+the late shares removes everything common to both — the growing mode included,
+since it does not depend on the driving. What survives is the ISW channel
+alone.
+
+**And on Einstein–de Sitter that difference is zero by construction**, because
+the knob multiplies a term identically zero where $\Phi$ is constant. The
+control is no longer a numerical coincidence that could be reproduced by an
+unrelated defect; it is a structural identity the instrument must satisfy.
+
+**It does.** EdS, CDM frame, $\ell=2$: $-4.7\times10^{-7}$. **PASS.**
+
+### The measurement
+
+$(\lambda=1)-(\lambda=0)$, late share, after the visibility has closed:
+
+| background | frame | $\ell=2$ | $\ell=10$ |
+|---|---|---|---|
+| **EdS** | newtonian | **0.000000** | $-0.000000$ |
+| **EdS** | cdm | $-0.000000$ | 0.000000 |
+| $\Lambda$CDM | **newtonian** | **+0.012907** | +0.004877 |
+| $\Lambda$CDM | cdm | +0.000004 | +0.000000 |
+| PLANCK | **newtonian** | **$-0.017546$** | +0.012485 |
+| PLANCK | cdm | +0.000115 | $-0.000033$ |
+
+**Three things are in that table and they are of different weights.**
+
+1. **The ISW channel is no longer annihilated.** It is zero to $5\times10^{-7}$
+   where it must be zero, and $1$–$2\times10^{-2}$ where it must not be. That
+   is the first configuration in this bundle in which late-time power exists at
+   all, and it is the direction T-128 said it would be.
+2. **It is an order of magnitude small.** $\mathcal O(10^{-2})$ against the
+   $\mathcal O(10^{-1})$ a correct late ISW deposits at $\ell=2$. **Not
+   claimed as a repair**: presence against exact zero is what the instrument
+   measures, and $\mathcal O(0.01)$ is presence, not correctness.
+3. **The CDM frame shows nothing** — $4\times10^{-6}$ and $1\times10^{-4}$
+   against the Newtonian frame's $1.3\times10^{-2}$ and $1.8\times10^{-2}$, a
+   factor of 150 to 3000. **$\ell\ge2$ is frame-invariant at first order**, so
+   this is the frame gap again, now visible in the ISW channel specifically
+   rather than in the total. It is the sharpest form T-85's question has
+   taken.
+
+The PLANCK Newtonian $\ell=2$ entry is **negative**, and $\ell=10$ positive.
+A late share is a normalised fraction, so a channel that also deposits early
+can lower it; the sign is not read here as the ISW having the wrong sign, and
+it is not read as anything else either. **Recorded, not interpreted.**
+
+### What it says about the repair, and this is the part that moves W1
+
+T-143 measured that $C_0$ and $C_2$ grow by $33\times$ to the present while
+$W$ falls only to $0.368$. This measures that the $\Phi'$ content of the same
+bracket behaves **correctly** at $W$ — zero where it must be, non-zero where
+it must be, superhorizon-weighted on $\Lambda$CDM.
+
+**So the two halves of the bracket do not want the same weight.** The standard
+line-of-sight integrand carries $W(\Phi_A'-\Phi_H')$ — the *derivative* of the
+potential — and carries no bare $C_0$ or $C_2$ at $W$ at all. On Einstein–de
+Sitter that is exactly why there is no late term: $\Phi'=0$, while $v$ and
+$\delta$ grow regardless.
+
+**The hypothesis this makes, stated so it can fail:** the by-parts identity
+puts the **$\Phi'$ content** of $C_0-C_1'+C_2''$ at $W$ and the remainder
+stays at $\mathcal V$. A control that splits the bracket that way should show
+the late ISW at $\mathcal O(0.1)$ **and** leave the spectrum localised at
+recombination, which no configuration has yet done together. If instead it
+reproduces column C's drowning, the split is not along the driving and the
+growing mode belongs at $W$ for a reason not yet understood.
+
+That control does not exist. **It is the next thing to build, and it is the
+time-domain transfer question in its narrowest form.**
+
+## T-145 — **The tight-coupling window freezes $\tau_1$ at 15.6% of the conformal span while $C_0$ grows to the end. The cancellation that should hold the bracket together is structurally unavailable, and $\mathcal V$ has been hiding it**
+
+**2026-10-25, P1-B.** Found by measuring P1-T's cancellation instead of
+assuming it, after their derivation of 2026-10-25T11:26Z.
+
+### P1-T's three arithmetic claims, verified first
+
+| claim | measured |
+|---|---|
+| the $33\times$ is $\sqrt{1+z_\ast}$, the EdS growing mode over the span | $\eta_0/\eta_\ast=\mathbf{33.021}$ against a measured growth of $\mathbf{33.02}$ |
+| $C_0=+\tfrac13kv$, i.e. $C_0=k^2C_2/3$ | agrees to **0.00e+00**, bit-exact, at every $k$ |
+| $C_2''$ decays rather than grows | growth factor **1e-04** — and it is *stronger* than their $\eta^{-1}$: $-\mathcal H'v$ and $-\mathcal Hv'$ cancel **exactly** on EdS, leaving $C_2''=-\Phi_A'\equiv0$ |
+
+**All three stand, and the third is sharper than stated.** My T-143 table
+reported $\lvert C_2\rvert$ growing, which is true and is not what enters the
+bracket. $C_2''$ is, and it behaves. **T-143's attribution of the growth to
+$C_2$ is corrected here; its measurement of the growth is not.**
+
+### The cancellation does not occur
+
+P1-T: $C_0$'s partner is $+\tfrac k3\tau_1$ inside $-C_1'$, and at late times
+$\tau_1\to-v$ in the CDM frame, so $C_0+\tfrac k3\tau_1\to\tfrac13kv-\tfrac13kv=0$
+**provided both halves ride at the same weight**. Under `bracket_all_at_w`
+they do — the whole bracket goes to $W$ together. So it should cancel.
+
+It does not. EdS, CDM frame, growth from $\eta_\ast$ to $\eta_0$:
+
+| $k$ | $\lvert C_0\rvert$ | $\lvert -C_1'\rvert$ | $\lvert$ bracket $\rvert$ | bracket$/C_0$ at $\eta_0$ |
+|---|---|---|---|---|
+| 3 | **33.02** | 0.09 | 0.58 | **1.181** |
+| 10 | **33.02** | 0.01 | 0.03 | **1.176** |
+| 30 | **33.02** | 0.05 | 0.43 | **1.141** |
+| 100 | **33.02** | 0.03 | 0.83 | **1.042** |
+
+**$C_0$'s growing mode survives whole** — the bracket at $\eta_0$ is $1.04$ to
+$1.18$ times $C_0$, not zero. And $-C_1'$ **decays** by one to two orders of
+magnitude where the partner it carries must grow like $v$.
+
+### Why: the partner is frozen and $C_0$ is not
+
+$\eta_\ast=0.0606$, $\eta_{\rm couple}=6\eta_\ast=0.3634$, $\eta_0=2.0000$.
+**The tight-coupling window closes at 15.6% of the conformal span.** EdS, CDM
+frame, $k=10$:
+
+| | $\eta_\ast$ | $6\eta_\ast$ | midpoint | $\eta_0$ | after the window |
+|---|---|---|---|---|---|
+| $C_0=+\tfrac13kv$ | $-6.545$e-01 | $-3.927$e+00 | $-1.277$e+01 | $-2.161$e+01 | **×5.50** |
+| $(a\mathcal B_1)'$ — holds $\tfrac k3\tau_1$ | $-5.290$e+00 | $-3.8048$e+01 | $-3.8052$e+01 | $-3.8052$e+01 | **×1.0001** |
+| $v_B$ | $+3.768$e-02 | $+3.661$e-02 | $+2.689$e+00 | $+5.342$e+00 | ×145.9 |
+
+**$(a\mathcal B_1)'$ is dead flat from $6\eta_\ast$ to $\eta_0$ — four
+significant figures unchanged across 84% of the conformal span.** It is frozen
+at the tight-coupling boundary. $C_0$, built from $v$, is integrated to
+$\eta_0$ and grows by 5.5 after the freeze.
+
+**So the two halves of a cancellation that is exact in the physics are
+evaluated on two different time domains.** One stops at $0.3634$; the other
+runs to $2.0000$.
+
+### Why nothing has ever seen it
+
+Under the released weight the bulk rides at $\mathcal V\mathcal D$, and
+$\mathcal V$ is zero after recombination. **Everything past $\eta_\ast$ is
+multiplied by zero, so the freeze is invisible** — the frozen partner and the
+growing $C_0$ are both annihilated before they can disagree. B-17 (i) and
+Q16's undeclared window are therefore **not two defects but one coupled pair**:
+the weight hides the freeze, and removing the weight exposes it. Every
+configuration that moved the bracket to $W$ this week — B, C, and
+`w_half_is_isw_only` before them — was reading the freeze and calling it the
+growing mode.
+
+**This is why no repair has been adoptable.** $\mathcal V\to W$ is the right
+direction and it cannot be taken while $\tau_1$ stops at $6\eta_\ast$.
+
+### What it is, stated as the defect
+
+**After decoupling the hierarchy is frozen where it must free-stream.** The
+freeze is correct physics *inside* the window — the photons stop being a
+fluid, which is what `tight_coupling_factor` is for — and the continuation is
+not "hold the last value". It is free-streaming, and in the CDM frame a
+free-streaming $\tau_1$ at superhorizon $k$ is dominated by the frame velocity,
+$\tau_1\to-v$. **That is exactly P1-T's limit.** Their physics is right; the
+implementation freezes instead of free-streaming, so the limit it predicts is
+never reached.
+
+### What this does not establish
+
+- **Not that extending $\tau_1$ repairs the spectrum.** It removes one
+  structural obstruction. The frame gap, the peak position and the plateau's
+  level are each separately open.
+- **Not a value for the window.** Q16 asks for an assertion on
+  $\mathcal V(\eta_{\rm couple})/\mathcal V(\eta_\ast)$ and that is still the
+  right gate for where the *fluid* description ends. This says the window is
+  additionally load-bearing for a cancellation nobody scored it against, which
+  makes it a stronger requirement and not a different one.
+- **Not measured on $\Lambda$ backgrounds.** EdS is where the arithmetic is
+  clean because $\Phi$ is constant. The freeze is a property of the solver and
+  not of the background, so it is expected to hold; it is not measured.
+
+### Next, and it is one change
+
+Continue the rank-one hierarchy past $\eta_{\rm couple}$ by free-streaming
+rather than by holding the last value, then re-run column C. **Pre-registered:
+the EdS late share collapses from $0.9978$ toward zero**, because the partner
+can reach $-v$ and the cancellation becomes available. If it does not collapse,
+the $\tau_1\to-v$ limit is wrong in this implementation for a second reason and
+P1-T asked to be told at which $k$ it breaks.

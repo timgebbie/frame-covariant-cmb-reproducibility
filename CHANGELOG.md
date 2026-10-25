@@ -7,6 +7,34 @@ All notable changes to this bundle are recorded here. The version policy is in
 
 ### Added
 
+- `scripts/figure_f10_formation_surface.py` — **F10**, and it is the release's
+  new key figure. The fraction of today's $C_\ell$ already in place at each
+  conformal time, six multipoles, three backgrounds, both frames. **Every curve
+  is complete at recombination and the late share is 0.0000 everywhere**, where
+  $\Lambda$CDM and Planck require $\mathcal O(0.1)$ at $\ell=2$ — the late
+  integrated Sachs–Wolfe effect — and Einstein–de Sitter requires exactly zero.
+  The EdS null control is what makes it a defect rather than a numerical
+  artefact. Mechanism: **B-17 (i)**, the bulk bracket carried at
+  $\mathcal V\mathcal D$ where the by-parts wants $W$. Finding **T-128**.
+  **F9 is not deprecated by it** and moves down one section: F9 says *where*
+  the power lands in $\ell$, F10 says *when* it was laid down.
+- `scripts/diagnostic_d30_formation_surface.py` — **D30**, F10's instrument,
+  at twenty-four slices against the figure's sixteen. Two gates: the $\eta_0$
+  slice must equal the released quadrature it decomposes (**1.15e-12**), and
+  non-monotonicity is reported rather than assumed.
+- `captions/F10-formation-surface.md` — F10's caption, which is its
+  specification (**V15**), including what the figure does *not* establish.
+- `scripts/_fingerprint.py` — one definition of the cached-artefact digest,
+  shared by F9 and F10. Finding **T-129**.
+- `tests/test_cache_fingerprint_is_path_independent.py` — eight tests holding
+  T-129 shut, with the negative control **T-44** requires: the superseded rule
+  is reproduced in four lines and shown to be blind to a lazily-imported
+  module.
+- `functions/spectra/integral_solution.py` gained `eta_slices` and
+  `IntegralSolution.partial_bulk` — the bulk accumulated cumulatively in
+  $\eta$ **inside the released quadrature**, one pass rather than one spectrum
+  per slice, so there is no second definition of the integral to drift.
+
 - `scripts/_versions.py` — the one module that says what version this tree is.
   `CITATION.cff` states the **released** version, `README.md`'s header states
   the **tree** version, and all three supplement filenames derive from them.
@@ -74,6 +102,29 @@ All notable changes to this bundle are recorded here. The version policy is in
   context, is the only instrument in the bundle that could detect it.
 
 ### Fixed
+
+- **T-129 — the cached-figure guard digested the code *path*, not the code.**
+  `source_fingerprint` hashed every `functions.*` module *present in
+  `sys.modules`*, which differs between the compute branch and the `--replot`
+  branch: `peebles` is imported lazily, so on the branch that **reads** the
+  cache it was not in the digest at all. That is a false-validation hole inside
+  T-54's own instrument — a changed recombination history would not have
+  invalidated a cached spectrum there. Both callers now digest a declared set
+  walked from disk. F9 and F10 are regenerated rather than waived.
+- **The README artefact table was not being checked above one digit.**
+  `tests/test_readme_artefacts.py`'s row regex read `[FD]\d`, so `**D10**`
+  through `**D18**` matched nothing and were silently skipped while
+  `test_the_table_is_not_empty`'s `>= 10` floor went on passing on the
+  single-digit rows. Fixed to `\d+`, and a second, looser reading of the same
+  table is now compared against the strict one — a count threshold cannot
+  detect a parser that sees most of a table. That comparison immediately found
+  a thirty-ninth row, **D9**, whose evidence cell contains an escaped pipe the
+  cell pattern stopped dead at.
+- **The README's diagnostic table was twelve diagnostics behind the tree.**
+  D19 through D30 — the whole of the current line of investigation — were in
+  the repository and not in the public table. Added, and the prose count
+  corrected from "nine figures and eighteen diagnostics" to ten and
+  twenty-nine.
 
 - Three files entered the v1.2.0 release archive that nothing in the bundle can
   read or rebuild: a **UTF-16LE** `SUPPLEMENTARY-MATERIAL-v1.0.0.tex`, a

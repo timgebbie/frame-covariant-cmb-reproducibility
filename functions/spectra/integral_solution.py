@@ -78,6 +78,15 @@ class IntegralSolution:
     boundary_shear: np.ndarray     # k C_2(eta_*) D [ ... j_{l-1} ... j_{l+1} ]
     integrated: np.ndarray         # Int V e^{-(k/k_D)^2} {C_0 - C_1' + C_2''} j_l
     total: np.ndarray
+    #: `(n_ell, n_slices)` --- the BULK accumulated up to each requested eta,
+    #: or `None` when `eta_slices` was not asked for. **The boundary terms are
+    #: not in it**: they are emitted at eta_* and are present in full in every
+    #: slice, so a caller forming the observed spectrum at eta adds
+    #: `boundary_scalar + boundary_shear` to the column it wants. Keeping them
+    #: apart is the point -- a boundary source is laid down once and
+    #: afterwards only projected, a bulk source accumulates, and telling those
+    #: two apart is what the surface exists for.
+    partial_bulk: np.ndarray | None = None
 
     @property
     def shear_boundary_is_empty(self) -> bool:
@@ -117,8 +126,10 @@ def integral_solution(
     thomson_carries_shear: bool = False,
     c1_prime_isw: np.ndarray | None = None,
     w_half_is_isw_only: bool = False,
+    isw_only_at_w: bool = False,
     thomson_boundary_and_vdot: bool = False,
     bracket_all_at_w: bool = False,
+    eta_slices: np.ndarray | None = None,
 ) -> IntegralSolution:
     r"""Evaluate (102) at one $k$ for a set of multipoles.
 
@@ -260,7 +271,8 @@ def integral_solution(
     # measuring script walks the full 2^3 lattice for that reason, and no
     # single column licenses a conclusion.
     W_arr = None if opacity is None else np.asarray(opacity, dtype=float)
-    if (slot_weight_split or jprime_bulk_slot or boundary_weight_w) and W_arr is None:
+    if (slot_weight_split or jprime_bulk_slot or boundary_weight_w
+            or isw_only_at_w) and W_arr is None:
         raise ValueError(
             "the B-slot controls need `opacity` (e^-kappa) on the eta grid: "
             "the identity they implement is written at W weight and this "
@@ -389,6 +401,16 @@ def integral_solution(
             "bracket_all_at_w=True with by_parts_weight_terms=True for the "
             "B-17 identity, or drop one of these two.")
 
+    if isw_only_at_w and (bracket_all_at_w or slot_weight_split):
+        raise ValueError(
+            "isw_only_at_w decides where the bracket travels and so do "
+            "bracket_all_at_w and slot_weight_split; choosing two silently "
+            "would make the result unattributable (T-125). Pick one.")
+    if isw_only_at_w and W_arr is None:
+        raise ValueError(
+            "isw_only_at_w needs `opacity` (e^-kappa) on the eta grid: W is "
+            "the weight the ISW channel rides, and this function cannot "
+            "invent it from `weight`, which A-2 may have set to V")
     if bracket_all_at_w:
         if W_arr is None:
             raise ValueError(
@@ -405,6 +427,44 @@ def integral_solution(
         bracket_w = bracket
         weight_w = W_arr * np.asarray(diffusion, dtype=float)
         bracket_v, weight_v = None, None
+    elif isw_only_at_w:
+        # **`isw_only_at_w` --- findings T-143 and T-144, added 2026-10-25.**
+        #
+        # T-143 measured why `bracket_all_at_w` cannot be the repair: on
+        # Einstein-de Sitter, where Phi is exactly constant and there is no
+        # late ISW to have, C_0 and C_2 grow by **33x** from eta_* to eta_0
+        # while W falls only to 0.368. The whole bracket at W is therefore
+        # dominated by the present day on EVERY background, which is what
+        # drowned P1-T's discriminator at a late share of 0.998.
+        #
+        # T-144 measured the complement: isolate the (Phi_A' - Phi_H')
+        # content of the SAME bracket with the driving knob and it behaves
+        # correctly at W -- zero to 5e-07 on EdS, 1-2e-02 on the Lambda
+        # backgrounds, superhorizon-weighted.
+        #
+        # **So the two halves of the bracket do not want the same weight**,
+        # and this is that split, narrower than `w_half_is_isw_only`: THAT
+        # one still sends C_0 and C_2'' to W, which is the contaminant
+        # itself. Here **only the driving travels at W**; C_0, C_2'' and the
+        # whole of C_1' bar its ISW content stay at V, where (102) had them
+        # and where the visibility holds them at recombination.
+        #
+        # The standard line-of-sight integrand is W(Phi_A' - Phi_H') and
+        # carries no bare C_0 or C_2 at W at all, which is exactly why EdS
+        # has no late term while v and delta grow regardless. This control
+        # asks whether the by-parts identity says the same thing.
+        if c1_prime_isw is None:
+            raise ValueError(
+                "isw_only_at_w needs `c1_prime_isw` -- the (Phi_A' - Phi_H') "
+                "content of C_1' on the eta grid. Without it the control has "
+                "nothing to move and would silently reduce to the released "
+                "weighting, which is the T-125 failure mode.")
+        bracket_w = -c1_isw
+        bracket_v = coefficients.c0 - (c1_grav_prime - c1_isw) \
+            - c1_thom_prime + c2_second
+        weight_w = W_arr * np.asarray(diffusion, dtype=float)
+        weight_v = (visibility if visibility is not None else weight) \
+            * np.asarray(diffusion, dtype=float)
     elif slot_weight_split:
         # the gravitational half moves to W; the Thomson half keeps V
         if w_half_is_isw_only:
@@ -441,6 +501,8 @@ def integral_solution(
     scalar = np.empty(ells.size)
     shear = np.empty(ells.size)
     integrated = np.empty(ells.size)
+    partial = (np.empty((ells.size, len(eta_slices)))
+               if eta_slices is not None else None)
     for i, ell in enumerate(ells):
         l = int(ell)
         j_l_star = float(table(l, np.array([x_star]))[0])
@@ -483,8 +545,30 @@ def integral_solution(
                                            * (-c1_grav) * j_l_prime)
         integrated[i] = float(np.trapezoid(total_bulk[inside], eta[inside]))
 
+        # **`eta_slices` --- the formation surface's one pass. 2026-10-24.**
+        #
+        # How much of today's C_l had been laid down by eta. The coefficients
+        # and the kernel do not depend on the observer, so this is a CUMULATIVE
+        # integral of the same integrand and costs one pass, not one spectrum
+        # per slice. **It is computed HERE rather than by a caller re-running
+        # this function with a moving upper limit** --- that would be a second
+        # definition of the quadrature, which is S8, and it would be ~30x the
+        # cost for the same numbers.
+        #
+        # The boundary terms are laid down AT eta_* and are therefore present
+        # in every slice, which is the physical statement: a boundary source is
+        # emitted once and afterwards only projected, while the bulk
+        # accumulates. Separating those two is the whole point of the surface.
+        if eta_slices is not None:
+            seg = eta[inside]
+            cum = np.concatenate([[0.0], np.cumsum(
+                0.5 * (total_bulk[inside][1:] + total_bulk[inside][:-1])
+                * np.diff(seg))])
+            partial[i, :] = np.interp(np.asarray(eta_slices, dtype=float),
+                                      seg, cum)
+
     return IntegralSolution(
         ell=ells, k_com=k,
         boundary_scalar=scalar, boundary_shear=shear, integrated=integrated,
-        total=scalar + shear + integrated,
+        total=scalar + shear + integrated, partial_bulk=partial,
     )

@@ -14,8 +14,8 @@ frames, and the two panels answer two different questions that a single
 $\\ell\\simeq k\\thinspace \\Delta\\eta$: above the cliff there is nothing left to keep, and
 the tail above $\\ell=600$ is identically zero at every probe mode. \\textbf{What
 it \\emph{destroys}} has no $\\ell_{\\max}$ in it at all. Setting $\\sigma_{ab}\\to0$
-costs $0.54$--$0.68\$% out to $\\ell\\simeq20$, rises monotonically above
-$\\ell=20$, and reaches $32.6\$% by $\\ell=600$ --- a cost that grows with the
+costs $0.54$--$0.68\\%$ out to $\\ell\\simeq20$, rises monotonically above
+$\\ell=20$, and reaches $32.6\\%$ by $\\ell=600$ --- a cost that grows with the
 multipole rather than being bounded by it, which is why a truncation argument
 cannot retire the shear.\\\\[2pt]
 \\textbf{Footnote~29 (p.~365) is checked and upheld.} In the Newtonian frame the
@@ -25,7 +25,7 @@ Newtonian specialisation removes the truncation problem. The script raises
 rather than draws if the Newtonian rank-0/2 sectors are ever non-empty, so the
 claim is a gate and not a caption.\\\\[2pt]
 \\textbf{The third panel is the one that reports a negative result.} The
-rank-0/2 share is flat at the quadrupole ($0.54\$%) and rises only with $\\ell$:
+rank-0/2 share is flat at the quadrupole ($0.54\\%$) and rises only with $\\ell$:
 a $1+3$ excess at low $\\ell$ would appear here, and does not. That question is
 parked as \\textbf{Q5}, and this panel is what parks it honestly.\\\\[2pt]$^{\\dagger}$\\,\\emph{Superseded by finding} \\textbf{T-57}\\emph{; see} \\texttt{provenance/BUNDLE-DEFECTS-v1.md}.
 \\textbf{Its $k$ grid runs to 1900, not 420} --- finding \\textbf{T-32}, where

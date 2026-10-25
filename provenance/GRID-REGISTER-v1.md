@@ -18,10 +18,10 @@ being possible.
 | status | count | means |
 |---|---|---|
 | **open** | 1 | a chosen literal whose convergence is **not** established. This status is the point of the register. |
-| **derived** | 16 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
+| **derived** | 19 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
 | **measured** | 7 | a chosen literal whose convergence has been measured, with the number stated. |
 | **described** | 11 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
-| **index** | 18 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
+| **index** | 21 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
 
 ## open — 1
 
@@ -37,7 +37,7 @@ share this history, so a grid shift moves them together and cancels. Finding
 **T-46**, question **Q7**, decision **S33** --- derived immediately after the
 v1.2.0 tag. v1.2.0 ships it as a stated limit.
 
-## derived — 16
+## derived — 19
 
 ### `x` — the x grid j_ell(x) is tabulated on
 
@@ -51,7 +51,7 @@ finely.
 
 ### `eta` — the line-of-sight integration grid for C_ell
 
-`functions/spectra/pipeline.py:422`, `np.linspace`
+`functions/spectra/pipeline.py:499`, `np.linspace`
 
 `required_n_eta(k_max, span)` at 12 samples per j_ell oscillation, and
 `run` RAISES rather than accepting an n_eta below it --- *"Pass n_eta=None to
@@ -60,7 +60,7 @@ template the other rows are measured against.
 
 ### `mode_eta` — one acoustic mode's own integration grid, from its derived start
 
-`functions/spectra/pipeline.py:506`, `np.linspace`
+`functions/spectra/pipeline.py:583`, `np.linspace`
 
 `required_acoustic_points(k, eta_couple - start)` at 24 samples per
 acoustic oscillation, on a floor of 512. Arithmetic, not a knob: delta_T goes
@@ -190,11 +190,34 @@ the first time either moved.
 
 ### `k_com` — the k grid B-17's identity is scored on at released kappa''
 
-`scripts/diagnostic_d29_the_identity.py:109`, `np.linspace`
+`scripts/diagnostic_d29_the_identity.py:113`, `np.linspace`
 
 Imported from D24 for the same reason as D28. This instrument is the
 first to run `bracket_all_at_w`, so it must be comparable to the configurations
 that preceded it or the comparison it exists to make cannot be read.
+
+### `k_com` — the k grid the accumulated C_ell is integrated over
+
+`scripts/diagnostic_d30_formation_surface.py:119`, `np.linspace`
+
+`required_k_points(K_MAX, r_theta)` at 3 samples per j_ell^2
+oscillation --- T-56's derivation, as everywhere else. K_MAX = 300 rather than
+F9's 1500: nothing above the first peak is being asked about and the grid
+would spend its resolution there. **This one is NOT free.** Gate 1 is that the
+eta_0 slice reproduces the released quadrature, and it is computed on this
+grid, so an aliased grid here would void the comparison rather than loosen
+it.
+
+### `k_com` — the k grid the ISW discriminator integrates the late share over
+
+`scripts/diagnostic_d32_isw_discriminator.py:199`, `np.linspace`
+
+`required_k_points(K_MAX, r_theta)` at 3 samples per j_ell^2
+oscillation, K_MAX = 120 rather than D30's 300: this instrument asks only
+about ell = 2 and 10, the late ISW is superhorizon, and nothing above the
+first peak is being looked at. **The gate is on this grid** --- the eta_0
+slice against the released quadrature --- so an aliased grid would void the
+columns rather than loosen them.
 
 ### `k_com` — the k grid D4 integrates C_ell by rank on
 
@@ -206,9 +229,20 @@ hand-set dk. D4 measures which RANK carries C_ell, and an aliased k integral
 mixes ranks by mixing scales, so a diagnostic about the rank decomposition is
 the last place a grid may be chosen by eye.
 
+### `k_com` — the k grid F10's accumulation is integrated over
+
+`scripts/figure_f10_formation_surface.py:134`, `np.linspace`
+
+`required_k_points(K_MAX, r_theta)`, K_MAX = 300, matching D30
+exactly so the figure and the diagnostic behind it are the same measurement.
+The figure carries D30's gate 1 too --- the eta_0 column against the released
+quadrature, 1.2e-12 --- and refuses to write either the CSV or the picture if
+it fails, so an aliased grid stops the artefact rather than appearing in
+it.
+
 ### `k_com` — the k grid the released angular spectrum is integrated on
 
-`scripts/figure_f9_acoustic_spectrum.py:134`, `np.linspace`
+`scripts/figure_f9_acoustic_spectrum.py:137`, `np.linspace`
 
 `required_k_points(1500, r_theta)`, per background because r_theta is.
 **Was `np.arange(0.05, 1500.0, np.pi/3)` until 2026-10-17** --- 0.96 samples
@@ -387,7 +421,7 @@ As F3, and deliberately the same grid: F6 reports RATIOS against the F3 configur
 
 As F2, raised to 1900 by finding T-32, with `check_k` guarding the probe modes after T-34.
 
-## index — 18
+## index — 21
 
 ### `phase` — the i^ell phase factor
 
@@ -409,7 +443,7 @@ Set by the transform length, not chosen. The FFT's own grid is the k grid of its
 
 ### `master` — the grid Phi_A and Phi_H are splined on, shared by every mode
 
-`functions/spectra/pipeline.py:497`, `np.logspace`
+`functions/spectra/pipeline.py:574`, `np.logspace`
 
 16384 logarithmic samples from the earliest acoustic start to
 eta_couple. **It carries no physical scale of its own**: it resamples a
@@ -442,11 +476,47 @@ a logarithmic grid samples the first peak twenty times and the third twice. Each
 ell is computed independently, so this selects which points are drawn and
 changes no value.
 
+### `sl` — the conformal times the accumulated C_ell is reported at
+
+`scripts/diagnostic_d30_formation_surface.py:107`, `np.geomspace`
+
+`eta_* + geomspace(span*1e-4, span, N_SLICES-1)` with a zero
+prepended, 24 slices. **It selects and it does not compute.** The bulk is
+accumulated cumulatively inside the released quadrature in ONE pass and then
+interpolated onto these abscissae, so the slice count sets how finely the
+curve is read and changes no value on it --- which is also why doubling it
+does not make the late share less zero. Geometric because the visibility is
+narrow: a linear grid of 24 would put 23 points in the free-streaming era,
+where by construction nothing is laid down, and one point across the whole of
+recombination.
+
+### `sl` — the conformal times the ISW discriminator reports the late share at
+
+`scripts/diagnostic_d32_isw_discriminator.py:198`, `np.geomspace`
+
+Same construction as D30's, at 12 slices. The question is only
+"before or after the visibility closed", and the answer is read at a single
+abscissa (1% of the span past eta_*), so the slice count sets how finely the
+curve is interpolated there and nothing else. D30 runs 24 and F10 16 on the
+same object.
+
 ### `ELLS` — the multipoles criterion 5a is stated over
 
 `scripts/diagnostic_d5_sachs_wolfe.py:56`, `np.arange`
 
 `arange(2, 21)` --- the criterion's own range, derived by `derive_ell_range.py` rather than chosen here.
+
+### `sl` — the conformal times F10 draws the accumulation at
+
+`scripts/figure_f10_formation_surface.py:133`, `np.geomspace`
+
+Same construction as D30's, at **16 slices rather than 24** --- the
+PI's specification, 'initially at low granulation in time'. Sixteen is enough
+to establish that every curve is a step at eta_* followed by a flat, which is
+the whole of the claim; it is NOT enough to resolve the shape of the step, and
+the caption says so rather than letting the picture imply otherwise. D30 runs
+24 and reports the same thing, which is the evidence that the count is an
+index here.
 
 ### `ell` — the multipoles F1 compares
 
@@ -498,7 +568,7 @@ Selection only, with the dipole prepended so the probe is on the figure.
 
 ### `ELLS` — the multipoles F9 is drawn at
 
-`scripts/figure_f9_acoustic_spectrum.py:81`, `np.arange`
+`scripts/figure_f9_acoustic_spectrum.py:84`, `np.arange`
 
 Linear at 30 across the acoustic band. Each ell is an independent
 quadrature, so this selects which points are drawn and changes no value ---

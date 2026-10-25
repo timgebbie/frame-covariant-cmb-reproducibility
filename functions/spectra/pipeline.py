@@ -217,6 +217,83 @@ def required_k_points(
     return int(np.ceil(points_per_period * k_max * eta_span / np.pi))
 
 
+#: **How the rank-one hierarchy continues past the tight-coupling window.**
+#: Released value `"freeze"`, which is what `np.interp` does beyond
+#: `eta_couple` and is **bit-identical** to every result before 2026-10-25 ---
+#: S43's rule, a control is a named branch with the released default.
+#:
+#: **Finding T-145, and it is the reason this exists.** The freeze holds
+#: `tau_1` at its value at $6\eta_*$ --- **15.6% of the conformal span** ---
+#: while $C_0=+\tfrac13kv$ is integrated to $\eta_0$ and grows by
+#: $\sqrt{1+z_*}=33$. Those two are the halves of an exact cancellation:
+#: $C_0+\tfrac k3\tau_1\to\tfrac13kv-\tfrac13kv=0$ once $\tau_1\to-v$. Frozen,
+#: $\tau_1$ never reaches $-v$, the cancellation is **structurally
+#: unavailable**, and the bracket carries a growing mode that is an artefact
+#: of the solver rather than physics. Measured: the bracket at $\eta_0$ is
+#: 1.04--1.18 times $C_0$ on EdS at every $k$, where it should be zero.
+#:
+#: **It has been invisible since v1.0.0** because the released bulk rides at
+#: $\mathcal V\mathcal D$ and $\mathcal V$ is zero after recombination, so the
+#: frozen partner and the growing $C_0$ are both annihilated before they can
+#: disagree. B-17 (i) and this are therefore one coupled pair: the weight
+#: hides the freeze and removing the weight exposes it. **That is why no
+#: weight repair has been adoptable.**
+#:
+#: `"free_stream"` is the physics the freeze stands in for. Inside the window
+#: the photons are a fluid and the tight-coupling solution is right; outside
+#: it they **free-stream**, and the continuation of a free-streaming hierarchy
+#: is not "hold the last value" --- it is (F.3), which this bundle already
+#: integrates and `F1` validates against four external hierarchies to
+#: $10^{-13}$.
+TAU_CONTINUATION: str = "freeze"
+
+#: How many multipoles the continuation carries. The handover injects power
+#: only at $\ell\le1$ and (F.3) cascades it upward, so this bounds how far the
+#: cascade may run before it is truncated --- the same quantity F2 measures
+#: the cost of. 32 is well above the $\ell\simeq k\Delta\eta$ cliff for the
+#: $k$ that reach the multipoles this continuation matters for, and it is
+#: cheap because the solve is one ODE per mode rather than one per $\ell$.
+TAU_CONTINUATION_ELL_MAX: int = 32
+
+
+def _continue_by_free_streaming(k, eta, eta_couple, delta_T, tau_1):
+    r"""Replace the clamp beyond `eta_couple` with a free-streaming solve.
+
+    **The handover state is $(\tau_0,\tau_1,0,0,\dots)$ and the zeros are the
+    physics, not a convenience.** Tight coupling suppresses $\ell\ge2$ --- that
+    is what makes it tight coupling, and it is the same statement Appendix E
+    makes when it truncates --- so the fluid hands over a monopole and a dipole
+    and (F.3) builds the rest. Injecting a shear that the fluid solution does
+    not contain would be inventing initial data.
+
+    $\tau_0=\delta_T$ and $\tau_1$ is in the **velocity** normalisation that
+    `solve_acoustic` returns (finding T-66), which is `covariant` here: (F.1)'s
+    $\tau_\ell$, the normalisation `free_stream` takes its `initial` in and
+    returns through `.covariant()`. No rescale is applied, and that is a
+    statement rather than an omission --- if the two ever diverge this comment
+    is where it is wrong.
+
+    Returns the two arrays with everything at or below `eta_couple` untouched,
+    so the tight-coupling era is bit-identical to the released path and only
+    the continuation differs.
+    """
+    from functions.harmonics.free_streaming import free_stream
+
+    after = np.asarray(eta, dtype=float) > float(eta_couple)
+    if not after.any():
+        return delta_T, tau_1
+    grid = np.concatenate([[float(eta_couple)], np.asarray(eta)[after]])
+    initial = np.zeros(TAU_CONTINUATION_ELL_MAX + 1)
+    initial[0] = float(np.interp(eta_couple, eta, delta_T))
+    initial[1] = float(np.interp(eta_couple, eta, tau_1))
+    sol = free_stream(float(k), grid, ell_max=TAU_CONTINUATION_ELL_MAX,
+                      normalisation="covariant", initial=initial)
+    out_t, out_1 = np.array(delta_T, dtype=float), np.array(tau_1, dtype=float)
+    out_t[after] = sol.values[1:, 0]
+    out_1[after] = sol.values[1:, 1]
+    return out_t, out_1
+
+
 def primordial_power(
     k_com: np.ndarray, *, n_s: float = 1.0, amplitude: float = 1.0
 ) -> np.ndarray:
@@ -516,6 +593,9 @@ def run(
             # not a coincidence worth leaving unremarked.
             delta_T = np.interp(eta, mode_eta, acoustic.delta_T)
             tau_1 = np.interp(eta, mode_eta, acoustic.tau_1)
+            if TAU_CONTINUATION == "free_stream":
+                delta_T, tau_1 = _continue_by_free_streaming(
+                    float(k), eta, eta_couple, delta_T, tau_1)
         else:
             acoustic = solve_acoustic(
                 float(k), eta[inside], background=background,

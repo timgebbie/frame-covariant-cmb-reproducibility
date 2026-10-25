@@ -530,3 +530,82 @@ status = "derived"
 note = """Imported from D24 for the same reason as D28. This instrument is the
 first to run `bracket_all_at_w`, so it must be comparable to the configurations
 that preceded it or the comparison it exists to make cannot be read."""
+
+# ---------------------------------------------------------------------------
+# Added at v1.3.0 with D30 and F10 --- the accumulation in conformal time. The
+# slice grids are the new kind here: every other row in this file registers a
+# grid an integral is EVALUATED on, and these two register where a completed
+# integral is SAMPLED. That distinction is the reason both are `index` and the
+# reason it has to be said out loud: a reader who assumed the slice count set
+# the quadrature would read a convergence claim into a figure that makes none.
+# ---------------------------------------------------------------------------
+
+[[grid]]
+key = "scripts/diagnostic_d30_formation_surface.py::sl"
+what = "the conformal times the accumulated C_ell is reported at"
+status = "index"
+note = """`eta_* + geomspace(span*1e-4, span, N_SLICES-1)` with a zero
+prepended, 24 slices. **It selects and it does not compute.** The bulk is
+accumulated cumulatively inside the released quadrature in ONE pass and then
+interpolated onto these abscissae, so the slice count sets how finely the
+curve is read and changes no value on it --- which is also why doubling it
+does not make the late share less zero. Geometric because the visibility is
+narrow: a linear grid of 24 would put 23 points in the free-streaming era,
+where by construction nothing is laid down, and one point across the whole of
+recombination."""
+
+[[grid]]
+key = "scripts/diagnostic_d30_formation_surface.py::k_com"
+what = "the k grid the accumulated C_ell is integrated over"
+status = "derived"
+note = """`required_k_points(K_MAX, r_theta)` at 3 samples per j_ell^2
+oscillation --- T-56's derivation, as everywhere else. K_MAX = 300 rather than
+F9's 1500: nothing above the first peak is being asked about and the grid
+would spend its resolution there. **This one is NOT free.** Gate 1 is that the
+eta_0 slice reproduces the released quadrature, and it is computed on this
+grid, so an aliased grid here would void the comparison rather than loosen
+it."""
+
+[[grid]]
+key = "scripts/figure_f10_formation_surface.py::sl"
+what = "the conformal times F10 draws the accumulation at"
+status = "index"
+note = """Same construction as D30's, at **16 slices rather than 24** --- the
+PI's specification, 'initially at low granulation in time'. Sixteen is enough
+to establish that every curve is a step at eta_* followed by a flat, which is
+the whole of the claim; it is NOT enough to resolve the shape of the step, and
+the caption says so rather than letting the picture imply otherwise. D30 runs
+24 and reports the same thing, which is the evidence that the count is an
+index here."""
+
+[[grid]]
+key = "scripts/figure_f10_formation_surface.py::k_com"
+what = "the k grid F10's accumulation is integrated over"
+status = "derived"
+note = """`required_k_points(K_MAX, r_theta)`, K_MAX = 300, matching D30
+exactly so the figure and the diagnostic behind it are the same measurement.
+The figure carries D30's gate 1 too --- the eta_0 column against the released
+quadrature, 1.2e-12 --- and refuses to write either the CSV or the picture if
+it fails, so an aliased grid stops the artefact rather than appearing in
+it."""
+
+[[grid]]
+key = "scripts/diagnostic_d32_isw_discriminator.py::sl"
+what = "the conformal times the ISW discriminator reports the late share at"
+status = "index"
+note = """Same construction as D30's, at 12 slices. The question is only
+"before or after the visibility closed", and the answer is read at a single
+abscissa (1% of the span past eta_*), so the slice count sets how finely the
+curve is interpolated there and nothing else. D30 runs 24 and F10 16 on the
+same object."""
+
+[[grid]]
+key = "scripts/diagnostic_d32_isw_discriminator.py::k_com"
+what = "the k grid the ISW discriminator integrates the late share over"
+status = "derived"
+note = """`required_k_points(K_MAX, r_theta)` at 3 samples per j_ell^2
+oscillation, K_MAX = 120 rather than D30's 300: this instrument asks only
+about ell = 2 and 10, the late ISW is superhorizon, and nothing above the
+first peak is being looked at. **The gate is on this grid** --- the eta_0
+slice against the released quadrature --- so an aliased grid would void the
+columns rather than loosen them."""

@@ -49,6 +49,16 @@ STAGES: list[tuple[str, str]] = [
     # demand, not run by default.
     ("F9  angular spectrum with the acoustic peaks",
      "scripts/figure_f9_acoustic_spectrum.py --replot"),
+    # **F10 is split for F9's reason and carries F9's guard.** The
+    # accumulation is four minutes of quadrature across three backgrounds and
+    # two frames; it lands in outputs/f10-formation-surface.csv, which is
+    # committed, and the harness redraws from it. The CSV is stamped with a
+    # digest of the code that made it and `--replot` refuses to redraw numbers
+    # this tree did not compute, so T-54's failure mode --- a cache that
+    # cannot say WHO made this, printing CLEAN over a stale figure --- cannot
+    # repeat here.
+    ("F10 formation surface: when the spectrum is laid down",
+     "scripts/figure_f10_formation_surface.py --replot"),
 ]
 
 #: Deferred to v1.1.0. A control is not evidence, so the diagnostics here are
@@ -266,6 +276,44 @@ DIAGNOSTICS: list[tuple[str, str]] = [
     # Finding T-122.
     ("D25 the k-decomposition of the low-ell spectrum",
      "scripts/diagnostic_d25_k_decomposition.py"),
+    # D26 is the control lattice screened on G-b (median contributing k), the
+    # cheap gate, so that the expensive one is spent only on what survives.
+    # **It is registered despite being a screen rather than a result**, for
+    # D14's reason: a lattice that cannot be regenerated cannot be checked,
+    # and this one carries the seven bulk-source controls that
+    # BULK_SOURCE_CONTROLS made reachable from the spectrum at all.
+    ("D26 the bulk-source lattice, screened on G-b",
+     "scripts/diagnostic_d26_bulk_source_lattice.py"),
+    # D27 is gate G-a: ell_peak / ell_A against 0.757, the spectrum-level
+    # quantity M16 requires. **It scored a pre-registered prediction and the
+    # prediction FAILED** --- [0.55, 0.80] predicted, 0.0073 measured --- and
+    # it is in the harness so that the failure stays reproducible rather than
+    # becoming a remembered one.
+    ("D27 gate G-a: the peak position against ell_A",
+     "scripts/diagnostic_d27_gate_a.py"),
+    # D28 is the restoration crosses: the configurations that survived D26,
+    # run at RELEASED kappa'' rather than with the knob. Cross B is the first
+    # peak this bundle has produced without a knob (0.8691 in CDM) and it is
+    # ALSO the row that refuses adoption, because the Newtonian frame reads
+    # 0.2770 and ell >= 2 is frame-invariant at first order.
+    ("D28 the restoration crosses, at released kappa''",
+     "scripts/diagnostic_d28_restoration_cross.py"),
+    # D29 is B-17's identity itself, at released kappa'', and it is the first
+    # instrument to implement it: `slot_weight_split` was taken for the
+    # control for discrepancy (i) by both streams and is a different claim
+    # (T-125). Checkpointed row-at-a-time --- T-127, four long runs lost to
+    # container restarts.
+    ("D29 B-17's identity, at released kappa''",
+     "scripts/diagnostic_d29_the_identity.py"),
+    # D30 is the instrument behind F10 and the one that found T-128. Every
+    # other gate here is a scalar summary of a FINISHED spectrum; this
+    # accumulates C_ell in conformal time, which is the only shape in which a
+    # defect in WHEN power is laid down can appear. Gated on the eta_0 slice
+    # reproducing the released quadrature, so a disagreement between the
+    # accumulation and the integral it decomposes voids it rather than being
+    # reported as physics.
+    ("D30 when the spectrum is laid down",
+     "scripts/diagnostic_d30_formation_surface.py"),
 ]
 
 

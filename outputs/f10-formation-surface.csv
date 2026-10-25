@@ -1,0 +1,578 @@
+# sources: e821f8959af62406
+background,frame,ell,eta_frac,fraction
+CDM (Einstein–de Sitter),newtonian,2,0.000000e+00,0.464564
+CDM (Einstein–de Sitter),newtonian,2,1.000000e-04,0.511784
+CDM (Einstein–de Sitter),newtonian,2,1.930698e-04,0.554588
+CDM (Einstein–de Sitter),newtonian,2,3.727594e-04,0.633543
+CDM (Einstein–de Sitter),newtonian,2,7.196857e-04,0.759735
+CDM (Einstein–de Sitter),newtonian,2,1.389495e-03,0.908443
+CDM (Einstein–de Sitter),newtonian,2,2.682696e-03,0.988928
+CDM (Einstein–de Sitter),newtonian,2,5.179475e-03,0.999710
+CDM (Einstein–de Sitter),newtonian,2,1.000000e-02,0.999990
+CDM (Einstein–de Sitter),newtonian,2,1.930698e-02,1.000000
+CDM (Einstein–de Sitter),newtonian,2,3.727594e-02,1.000000
+CDM (Einstein–de Sitter),newtonian,2,7.196857e-02,1.000000
+CDM (Einstein–de Sitter),newtonian,2,1.389495e-01,1.000000
+CDM (Einstein–de Sitter),newtonian,2,2.682696e-01,1.000000
+CDM (Einstein–de Sitter),newtonian,2,5.179475e-01,1.000000
+CDM (Einstein–de Sitter),newtonian,2,1.000000e+00,1.000000
+CDM (Einstein–de Sitter),newtonian,5,0.000000e+00,0.458947
+CDM (Einstein–de Sitter),newtonian,5,1.000000e-04,0.506126
+CDM (Einstein–de Sitter),newtonian,5,1.930698e-04,0.548964
+CDM (Einstein–de Sitter),newtonian,5,3.727594e-04,0.628148
+CDM (Einstein–de Sitter),newtonian,5,7.196857e-04,0.755254
+CDM (Einstein–de Sitter),newtonian,5,1.389495e-03,0.906080
+CDM (Einstein–de Sitter),newtonian,5,2.682696e-03,0.988528
+CDM (Einstein–de Sitter),newtonian,5,5.179475e-03,0.999701
+CDM (Einstein–de Sitter),newtonian,5,1.000000e-02,0.999992
+CDM (Einstein–de Sitter),newtonian,5,1.930698e-02,1.000000
+CDM (Einstein–de Sitter),newtonian,5,3.727594e-02,1.000000
+CDM (Einstein–de Sitter),newtonian,5,7.196857e-02,1.000000
+CDM (Einstein–de Sitter),newtonian,5,1.389495e-01,1.000000
+CDM (Einstein–de Sitter),newtonian,5,2.682696e-01,1.000000
+CDM (Einstein–de Sitter),newtonian,5,5.179475e-01,1.000000
+CDM (Einstein–de Sitter),newtonian,5,1.000000e+00,1.000000
+CDM (Einstein–de Sitter),newtonian,10,0.000000e+00,0.451019
+CDM (Einstein–de Sitter),newtonian,10,1.000000e-04,0.498250
+CDM (Einstein–de Sitter),newtonian,10,1.930698e-04,0.541224
+CDM (Einstein–de Sitter),newtonian,10,3.727594e-04,0.620875
+CDM (Einstein–de Sitter),newtonian,10,7.196857e-04,0.749403
+CDM (Einstein–de Sitter),newtonian,10,1.389495e-03,0.903112
+CDM (Einstein–de Sitter),newtonian,10,2.682696e-03,0.988045
+CDM (Einstein–de Sitter),newtonian,10,5.179475e-03,0.999698
+CDM (Einstein–de Sitter),newtonian,10,1.000000e-02,0.999997
+CDM (Einstein–de Sitter),newtonian,10,1.930698e-02,1.000002
+CDM (Einstein–de Sitter),newtonian,10,3.727594e-02,1.000001
+CDM (Einstein–de Sitter),newtonian,10,7.196857e-02,1.000000
+CDM (Einstein–de Sitter),newtonian,10,1.389495e-01,1.000000
+CDM (Einstein–de Sitter),newtonian,10,2.682696e-01,1.000000
+CDM (Einstein–de Sitter),newtonian,10,5.179475e-01,1.000000
+CDM (Einstein–de Sitter),newtonian,10,1.000000e+00,1.000000
+CDM (Einstein–de Sitter),newtonian,30,0.000000e+00,0.463525
+CDM (Einstein–de Sitter),newtonian,30,1.000000e-04,0.510797
+CDM (Einstein–de Sitter),newtonian,30,1.930698e-04,0.553663
+CDM (Einstein–de Sitter),newtonian,30,3.727594e-04,0.632766
+CDM (Einstein–de Sitter),newtonian,30,7.196857e-04,0.759283
+CDM (Einstein–de Sitter),newtonian,30,1.389495e-03,0.908473
+CDM (Einstein–de Sitter),newtonian,30,2.682696e-03,0.989135
+CDM (Einstein–de Sitter),newtonian,30,5.179475e-03,0.999800
+CDM (Einstein–de Sitter),newtonian,30,1.000000e-02,1.000022
+CDM (Einstein–de Sitter),newtonian,30,1.930698e-02,1.000009
+CDM (Einstein–de Sitter),newtonian,30,3.727594e-02,1.000001
+CDM (Einstein–de Sitter),newtonian,30,7.196857e-02,1.000000
+CDM (Einstein–de Sitter),newtonian,30,1.389495e-01,1.000000
+CDM (Einstein–de Sitter),newtonian,30,2.682696e-01,1.000000
+CDM (Einstein–de Sitter),newtonian,30,5.179475e-01,1.000000
+CDM (Einstein–de Sitter),newtonian,30,1.000000e+00,1.000000
+CDM (Einstein–de Sitter),newtonian,100,0.000000e+00,0.478350
+CDM (Einstein–de Sitter),newtonian,100,1.000000e-04,0.525817
+CDM (Einstein–de Sitter),newtonian,100,1.930698e-04,0.568698
+CDM (Einstein–de Sitter),newtonian,100,3.727594e-04,0.647435
+CDM (Einstein–de Sitter),newtonian,100,7.196857e-04,0.772035
+CDM (Einstein–de Sitter),newtonian,100,1.389495e-03,0.916250
+CDM (Einstein–de Sitter),newtonian,100,2.682696e-03,0.991394
+CDM (Einstein–de Sitter),newtonian,100,5.179475e-03,1.000235
+CDM (Einstein–de Sitter),newtonian,100,1.000000e-02,1.000134
+CDM (Einstein–de Sitter),newtonian,100,1.930698e-02,1.000025
+CDM (Einstein–de Sitter),newtonian,100,3.727594e-02,1.000001
+CDM (Einstein–de Sitter),newtonian,100,7.196857e-02,1.000000
+CDM (Einstein–de Sitter),newtonian,100,1.389495e-01,1.000000
+CDM (Einstein–de Sitter),newtonian,100,2.682696e-01,1.000000
+CDM (Einstein–de Sitter),newtonian,100,5.179475e-01,1.000000
+CDM (Einstein–de Sitter),newtonian,100,1.000000e+00,1.000000
+CDM (Einstein–de Sitter),newtonian,200,0.000000e+00,0.516640
+CDM (Einstein–de Sitter),newtonian,200,1.000000e-04,0.564219
+CDM (Einstein–de Sitter),newtonian,200,1.930698e-04,0.606779
+CDM (Einstein–de Sitter),newtonian,200,3.727594e-04,0.683912
+CDM (Einstein–de Sitter),newtonian,200,7.196857e-04,0.802654
+CDM (Einstein–de Sitter),newtonian,200,1.389495e-03,0.933690
+CDM (Einstein–de Sitter),newtonian,200,2.682696e-03,0.995840
+CDM (Einstein–de Sitter),newtonian,200,5.179475e-03,1.000978
+CDM (Einstein–de Sitter),newtonian,200,1.000000e-02,1.000330
+CDM (Einstein–de Sitter),newtonian,200,1.930698e-02,1.000040
+CDM (Einstein–de Sitter),newtonian,200,3.727594e-02,1.000000
+CDM (Einstein–de Sitter),newtonian,200,7.196857e-02,1.000000
+CDM (Einstein–de Sitter),newtonian,200,1.389495e-01,1.000000
+CDM (Einstein–de Sitter),newtonian,200,2.682696e-01,1.000000
+CDM (Einstein–de Sitter),newtonian,200,5.179475e-01,1.000000
+CDM (Einstein–de Sitter),newtonian,200,1.000000e+00,1.000000
+CDM (Einstein–de Sitter),cdm,2,0.000000e+00,0.496667
+CDM (Einstein–de Sitter),cdm,2,1.000000e-04,0.543817
+CDM (Einstein–de Sitter),cdm,2,1.930698e-04,0.586185
+CDM (Einstein–de Sitter),cdm,2,3.727594e-04,0.663446
+CDM (Einstein–de Sitter),cdm,2,7.196857e-04,0.784086
+CDM (Einstein–de Sitter),cdm,2,1.389495e-03,0.921061
+CDM (Einstein–de Sitter),cdm,2,2.682696e-03,0.991104
+CDM (Einstein–de Sitter),cdm,2,5.179475e-03,0.999780
+CDM (Einstein–de Sitter),cdm,2,1.000000e-02,0.999989
+CDM (Einstein–de Sitter),cdm,2,1.930698e-02,0.999997
+CDM (Einstein–de Sitter),cdm,2,3.727594e-02,0.999999
+CDM (Einstein–de Sitter),cdm,2,7.196857e-02,1.000000
+CDM (Einstein–de Sitter),cdm,2,1.389495e-01,1.000000
+CDM (Einstein–de Sitter),cdm,2,2.682696e-01,1.000000
+CDM (Einstein–de Sitter),cdm,2,5.179475e-01,1.000000
+CDM (Einstein–de Sitter),cdm,2,1.000000e+00,1.000000
+CDM (Einstein–de Sitter),cdm,5,0.000000e+00,0.495500
+CDM (Einstein–de Sitter),cdm,5,1.000000e-04,0.542658
+CDM (Einstein–de Sitter),cdm,5,1.930698e-04,0.585048
+CDM (Einstein–de Sitter),cdm,5,3.727594e-04,0.662380
+CDM (Einstein–de Sitter),cdm,5,7.196857e-04,0.783230
+CDM (Einstein–de Sitter),cdm,5,1.389495e-03,0.920628
+CDM (Einstein–de Sitter),cdm,5,2.682696e-03,0.991035
+CDM (Einstein–de Sitter),cdm,5,5.179475e-03,0.999780
+CDM (Einstein–de Sitter),cdm,5,1.000000e-02,0.999989
+CDM (Einstein–de Sitter),cdm,5,1.930698e-02,0.999998
+CDM (Einstein–de Sitter),cdm,5,3.727594e-02,0.999999
+CDM (Einstein–de Sitter),cdm,5,7.196857e-02,1.000000
+CDM (Einstein–de Sitter),cdm,5,1.389495e-01,1.000000
+CDM (Einstein–de Sitter),cdm,5,2.682696e-01,1.000000
+CDM (Einstein–de Sitter),cdm,5,5.179475e-01,1.000000
+CDM (Einstein–de Sitter),cdm,5,1.000000e+00,1.000000
+CDM (Einstein–de Sitter),cdm,10,0.000000e+00,0.495619
+CDM (Einstein–de Sitter),cdm,10,1.000000e-04,0.542746
+CDM (Einstein–de Sitter),cdm,10,1.930698e-04,0.585106
+CDM (Einstein–de Sitter),cdm,10,3.727594e-04,0.662381
+CDM (Einstein–de Sitter),cdm,10,7.196857e-04,0.783145
+CDM (Einstein–de Sitter),cdm,10,1.389495e-03,0.920469
+CDM (Einstein–de Sitter),cdm,10,2.682696e-03,0.990915
+CDM (Einstein–de Sitter),cdm,10,5.179475e-03,0.999733
+CDM (Einstein–de Sitter),cdm,10,1.000000e-02,0.999970
+CDM (Einstein–de Sitter),cdm,10,1.930698e-02,0.999989
+CDM (Einstein–de Sitter),cdm,10,3.727594e-02,0.999996
+CDM (Einstein–de Sitter),cdm,10,7.196857e-02,0.999999
+CDM (Einstein–de Sitter),cdm,10,1.389495e-01,1.000000
+CDM (Einstein–de Sitter),cdm,10,2.682696e-01,1.000000
+CDM (Einstein–de Sitter),cdm,10,5.179475e-01,1.000000
+CDM (Einstein–de Sitter),cdm,10,1.000000e+00,1.000000
+CDM (Einstein–de Sitter),cdm,30,0.000000e+00,0.467167
+CDM (Einstein–de Sitter),cdm,30,1.000000e-04,0.514045
+CDM (Einstein–de Sitter),cdm,30,1.930698e-04,0.556493
+CDM (Einstein–de Sitter),cdm,30,3.727594e-04,0.634695
+CDM (Einstein–de Sitter),cdm,30,7.196857e-04,0.759423
+CDM (Einstein–de Sitter),cdm,30,1.389495e-03,0.906318
+CDM (Einstein–de Sitter),cdm,30,2.682696e-03,0.986867
+CDM (Einstein–de Sitter),cdm,30,5.179475e-03,0.999073
+CDM (Einstein–de Sitter),cdm,30,1.000000e-02,0.999837
+CDM (Einstein–de Sitter),cdm,30,1.930698e-02,0.999950
+CDM (Einstein–de Sitter),cdm,30,3.727594e-02,0.999987
+CDM (Einstein–de Sitter),cdm,30,7.196857e-02,0.999998
+CDM (Einstein–de Sitter),cdm,30,1.389495e-01,1.000000
+CDM (Einstein–de Sitter),cdm,30,2.682696e-01,1.000000
+CDM (Einstein–de Sitter),cdm,30,5.179475e-01,1.000000
+CDM (Einstein–de Sitter),cdm,30,1.000000e+00,1.000000
+CDM (Einstein–de Sitter),cdm,100,0.000000e+00,0.445241
+CDM (Einstein–de Sitter),cdm,100,1.000000e-04,0.491978
+CDM (Einstein–de Sitter),cdm,100,1.930698e-04,0.534545
+CDM (Einstein–de Sitter),cdm,100,3.727594e-04,0.613560
+CDM (Einstein–de Sitter),cdm,100,7.196857e-04,0.741508
+CDM (Einstein–de Sitter),cdm,100,1.389495e-03,0.895951
+CDM (Einstein–de Sitter),cdm,100,2.682696e-03,0.984250
+CDM (Einstein–de Sitter),cdm,100,5.179475e-03,0.998903
+CDM (Einstein–de Sitter),cdm,100,1.000000e-02,0.999919
+CDM (Einstein–de Sitter),cdm,100,1.930698e-02,0.999995
+CDM (Einstein–de Sitter),cdm,100,3.727594e-02,1.000000
+CDM (Einstein–de Sitter),cdm,100,7.196857e-02,1.000000
+CDM (Einstein–de Sitter),cdm,100,1.389495e-01,1.000000
+CDM (Einstein–de Sitter),cdm,100,2.682696e-01,1.000000
+CDM (Einstein–de Sitter),cdm,100,5.179475e-01,1.000000
+CDM (Einstein–de Sitter),cdm,100,1.000000e+00,1.000000
+CDM (Einstein–de Sitter),cdm,200,0.000000e+00,0.450236
+CDM (Einstein–de Sitter),cdm,200,1.000000e-04,0.496924
+CDM (Einstein–de Sitter),cdm,200,1.930698e-04,0.539381
+CDM (Einstein–de Sitter),cdm,200,3.727594e-04,0.618040
+CDM (Einstein–de Sitter),cdm,200,7.196857e-04,0.744947
+CDM (Einstein–de Sitter),cdm,200,1.389495e-03,0.897399
+CDM (Einstein–de Sitter),cdm,200,2.682696e-03,0.984335
+CDM (Einstein–de Sitter),cdm,200,5.179475e-03,0.998968
+CDM (Einstein–de Sitter),cdm,200,1.000000e-02,0.999956
+CDM (Einstein–de Sitter),cdm,200,1.930698e-02,1.000001
+CDM (Einstein–de Sitter),cdm,200,3.727594e-02,1.000000
+CDM (Einstein–de Sitter),cdm,200,7.196857e-02,1.000000
+CDM (Einstein–de Sitter),cdm,200,1.389495e-01,1.000000
+CDM (Einstein–de Sitter),cdm,200,2.682696e-01,1.000000
+CDM (Einstein–de Sitter),cdm,200,5.179475e-01,1.000000
+CDM (Einstein–de Sitter),cdm,200,1.000000e+00,1.000000
+ΛCDM,newtonian,2,0.000000e+00,0.496761
+ΛCDM,newtonian,2,1.000000e-04,0.540750
+ΛCDM,newtonian,2,1.930698e-04,0.580288
+ΛCDM,newtonian,2,3.727594e-04,0.652579
+ΛCDM,newtonian,2,7.196857e-04,0.767362
+ΛCDM,newtonian,2,1.389495e-03,0.904879
+ΛCDM,newtonian,2,2.682696e-03,0.986193
+ΛCDM,newtonian,2,5.179475e-03,0.999570
+ΛCDM,newtonian,2,1.000000e-02,0.999987
+ΛCDM,newtonian,2,1.930698e-02,0.999999
+ΛCDM,newtonian,2,3.727594e-02,1.000000
+ΛCDM,newtonian,2,7.196857e-02,1.000000
+ΛCDM,newtonian,2,1.389495e-01,1.000000
+ΛCDM,newtonian,2,2.682696e-01,1.000000
+ΛCDM,newtonian,2,5.179475e-01,1.000000
+ΛCDM,newtonian,2,1.000000e+00,1.000000
+ΛCDM,newtonian,5,0.000000e+00,0.489380
+ΛCDM,newtonian,5,1.000000e-04,0.533400
+ΛCDM,newtonian,5,1.930698e-04,0.573042
+ΛCDM,newtonian,5,3.727594e-04,0.645704
+ΛCDM,newtonian,5,7.196857e-04,0.761664
+ΛCDM,newtonian,5,1.389495e-03,0.901721
+ΛCDM,newtonian,5,2.682696e-03,0.985545
+ΛCDM,newtonian,5,5.179475e-03,0.999548
+ΛCDM,newtonian,5,1.000000e-02,0.999988
+ΛCDM,newtonian,5,1.930698e-02,1.000000
+ΛCDM,newtonian,5,3.727594e-02,1.000000
+ΛCDM,newtonian,5,7.196857e-02,1.000000
+ΛCDM,newtonian,5,1.389495e-01,1.000000
+ΛCDM,newtonian,5,2.682696e-01,1.000000
+ΛCDM,newtonian,5,5.179475e-01,1.000000
+ΛCDM,newtonian,5,1.000000e+00,1.000000
+ΛCDM,newtonian,10,0.000000e+00,0.487059
+ΛCDM,newtonian,10,1.000000e-04,0.531115
+ΛCDM,newtonian,10,1.930698e-04,0.570812
+ΛCDM,newtonian,10,3.727594e-04,0.643629
+ΛCDM,newtonian,10,7.196857e-04,0.760002
+ΛCDM,newtonian,10,1.389495e-03,0.900857
+ΛCDM,newtonian,10,2.682696e-03,0.985399
+ΛCDM,newtonian,10,5.179475e-03,0.999557
+ΛCDM,newtonian,10,1.000000e-02,0.999995
+ΛCDM,newtonian,10,1.930698e-02,1.000002
+ΛCDM,newtonian,10,3.727594e-02,1.000001
+ΛCDM,newtonian,10,7.196857e-02,1.000000
+ΛCDM,newtonian,10,1.389495e-01,1.000000
+ΛCDM,newtonian,10,2.682696e-01,1.000000
+ΛCDM,newtonian,10,5.179475e-01,1.000000
+ΛCDM,newtonian,10,1.000000e+00,1.000000
+ΛCDM,newtonian,30,0.000000e+00,0.496761
+ΛCDM,newtonian,30,1.000000e-04,0.540800
+ΛCDM,newtonian,30,1.930698e-04,0.580387
+ΛCDM,newtonian,30,3.727594e-04,0.652771
+ΛCDM,newtonian,30,7.196857e-04,0.767700
+ΛCDM,newtonian,30,1.389495e-03,0.905330
+ΛCDM,newtonian,30,2.682696e-03,0.986505
+ΛCDM,newtonian,30,5.179475e-03,0.999677
+ΛCDM,newtonian,30,1.000000e-02,1.000023
+ΛCDM,newtonian,30,1.930698e-02,1.000010
+ΛCDM,newtonian,30,3.727594e-02,1.000002
+ΛCDM,newtonian,30,7.196857e-02,1.000000
+ΛCDM,newtonian,30,1.389495e-01,1.000000
+ΛCDM,newtonian,30,2.682696e-01,1.000000
+ΛCDM,newtonian,30,5.179475e-01,1.000000
+ΛCDM,newtonian,30,1.000000e+00,1.000000
+ΛCDM,newtonian,100,0.000000e+00,0.512147
+ΛCDM,newtonian,100,1.000000e-04,0.556292
+ΛCDM,newtonian,100,1.930698e-04,0.595829
+ΛCDM,newtonian,100,3.727594e-04,0.667773
+ΛCDM,newtonian,100,7.196857e-04,0.780815
+ΛCDM,newtonian,100,1.389495e-03,0.913691
+ΛCDM,newtonian,100,2.682696e-03,0.989200
+ΛCDM,newtonian,100,5.179475e-03,1.000190
+ΛCDM,newtonian,100,1.000000e-02,1.000150
+ΛCDM,newtonian,100,1.930698e-02,1.000030
+ΛCDM,newtonian,100,3.727594e-02,1.000002
+ΛCDM,newtonian,100,7.196857e-02,1.000000
+ΛCDM,newtonian,100,1.389495e-01,1.000000
+ΛCDM,newtonian,100,2.682696e-01,1.000000
+ΛCDM,newtonian,100,5.179475e-01,1.000000
+ΛCDM,newtonian,100,1.000000e+00,1.000000
+ΛCDM,newtonian,200,0.000000e+00,0.554357
+ΛCDM,newtonian,200,1.000000e-04,0.598443
+ΛCDM,newtonian,200,1.930698e-04,0.637527
+ΛCDM,newtonian,200,3.727594e-04,0.707690
+ΛCDM,newtonian,200,7.196857e-04,0.814741
+ΛCDM,newtonian,200,1.389495e-03,0.934106
+ΛCDM,newtonian,200,2.682696e-03,0.994923
+ΛCDM,newtonian,200,5.179475e-03,1.001096
+ΛCDM,newtonian,200,1.000000e-02,1.000512
+ΛCDM,newtonian,200,1.930698e-02,1.000104
+ΛCDM,newtonian,200,3.727594e-02,0.999998
+ΛCDM,newtonian,200,7.196857e-02,1.000000
+ΛCDM,newtonian,200,1.389495e-01,1.000000
+ΛCDM,newtonian,200,2.682696e-01,1.000000
+ΛCDM,newtonian,200,5.179475e-01,1.000000
+ΛCDM,newtonian,200,1.000000e+00,1.000000
+ΛCDM,cdm,2,0.000000e+00,0.525469
+ΛCDM,cdm,2,1.000000e-04,0.569232
+ΛCDM,cdm,2,1.930698e-04,0.608284
+ΛCDM,cdm,2,3.727594e-04,0.679004
+ΛCDM,cdm,2,7.196857e-04,0.789104
+ΛCDM,cdm,2,1.389495e-03,0.916850
+ΛCDM,cdm,2,2.682696e-03,0.988668
+ΛCDM,cdm,2,5.179475e-03,0.999666
+ΛCDM,cdm,2,1.000000e-02,0.999984
+ΛCDM,cdm,2,1.930698e-02,0.999996
+ΛCDM,cdm,2,3.727594e-02,0.999999
+ΛCDM,cdm,2,7.196857e-02,1.000000
+ΛCDM,cdm,2,1.389495e-01,1.000000
+ΛCDM,cdm,2,2.682696e-01,1.000000
+ΛCDM,cdm,2,5.179475e-01,1.000000
+ΛCDM,cdm,2,1.000000e+00,1.000000
+ΛCDM,cdm,5,0.000000e+00,0.524431
+ΛCDM,cdm,5,1.000000e-04,0.568207
+ΛCDM,cdm,5,1.930698e-04,0.607279
+ΛCDM,cdm,5,3.727594e-04,0.678061
+ΛCDM,cdm,5,7.196857e-04,0.788337
+ΛCDM,cdm,5,1.389495e-03,0.916437
+ΛCDM,cdm,5,2.682696e-03,0.988589
+ΛCDM,cdm,5,5.179475e-03,0.999666
+ΛCDM,cdm,5,1.000000e-02,0.999985
+ΛCDM,cdm,5,1.930698e-02,0.999997
+ΛCDM,cdm,5,3.727594e-02,0.999999
+ΛCDM,cdm,5,7.196857e-02,1.000000
+ΛCDM,cdm,5,1.389495e-01,1.000000
+ΛCDM,cdm,5,2.682696e-01,1.000000
+ΛCDM,cdm,5,5.179475e-01,1.000000
+ΛCDM,cdm,5,1.000000e+00,1.000000
+ΛCDM,cdm,10,0.000000e+00,0.524001
+ΛCDM,cdm,10,1.000000e-04,0.567754
+ΛCDM,cdm,10,1.930698e-04,0.606810
+ΛCDM,cdm,10,3.727594e-04,0.677572
+ΛCDM,cdm,10,7.196857e-04,0.787855
+ΛCDM,cdm,10,1.389495e-03,0.916054
+ΛCDM,cdm,10,2.682696e-03,0.988400
+ΛCDM,cdm,10,5.179475e-03,0.999605
+ΛCDM,cdm,10,1.000000e-02,0.999963
+ΛCDM,cdm,10,1.930698e-02,0.999986
+ΛCDM,cdm,10,3.727594e-02,0.999995
+ΛCDM,cdm,10,7.196857e-02,0.999999
+ΛCDM,cdm,10,1.389495e-01,1.000000
+ΛCDM,cdm,10,2.682696e-01,1.000000
+ΛCDM,cdm,10,5.179475e-01,1.000000
+ΛCDM,cdm,10,1.000000e+00,1.000000
+ΛCDM,cdm,30,0.000000e+00,0.495231
+ΛCDM,cdm,30,1.000000e-04,0.539007
+ΛCDM,cdm,30,1.930698e-04,0.578364
+ΛCDM,cdm,30,3.727594e-04,0.650356
+ΛCDM,cdm,30,7.196857e-04,0.764759
+ΛCDM,cdm,30,1.389495e-03,0.902195
+ΛCDM,cdm,30,2.682696e-03,0.984408
+ΛCDM,cdm,30,5.179475e-03,0.999050
+ΛCDM,cdm,30,1.000000e-02,0.999897
+ΛCDM,cdm,30,1.930698e-02,0.999965
+ΛCDM,cdm,30,3.727594e-02,0.999990
+ΛCDM,cdm,30,7.196857e-02,0.999999
+ΛCDM,cdm,30,1.389495e-01,1.000000
+ΛCDM,cdm,30,2.682696e-01,1.000000
+ΛCDM,cdm,30,5.179475e-01,1.000000
+ΛCDM,cdm,30,1.000000e+00,1.000000
+ΛCDM,cdm,100,0.000000e+00,0.482497
+ΛCDM,cdm,100,1.000000e-04,0.526303
+ΛCDM,cdm,100,1.930698e-04,0.565811
+ΛCDM,cdm,100,3.727594e-04,0.638379
+ΛCDM,cdm,100,7.196857e-04,0.754657
+ΛCDM,cdm,100,1.389495e-03,0.896242
+ΛCDM,cdm,100,2.682696e-03,0.982842
+ΛCDM,cdm,100,5.179475e-03,0.998949
+ΛCDM,cdm,100,1.000000e-02,0.999955
+ΛCDM,cdm,100,1.930698e-02,0.999996
+ΛCDM,cdm,100,3.727594e-02,1.000000
+ΛCDM,cdm,100,7.196857e-02,1.000000
+ΛCDM,cdm,100,1.389495e-01,1.000000
+ΛCDM,cdm,100,2.682696e-01,1.000000
+ΛCDM,cdm,100,5.179475e-01,1.000000
+ΛCDM,cdm,100,1.000000e+00,1.000000
+ΛCDM,cdm,200,0.000000e+00,0.487601
+ΛCDM,cdm,200,1.000000e-04,0.531318
+ΛCDM,cdm,200,1.930698e-04,0.570691
+ΛCDM,cdm,200,3.727594e-04,0.642884
+ΛCDM,cdm,200,7.196857e-04,0.758164
+ΛCDM,cdm,200,1.389495e-03,0.897881
+ΛCDM,cdm,200,2.682696e-03,0.983021
+ΛCDM,cdm,200,5.179475e-03,0.998951
+ΛCDM,cdm,200,1.000000e-02,0.999970
+ΛCDM,cdm,200,1.930698e-02,1.000004
+ΛCDM,cdm,200,3.727594e-02,1.000000
+ΛCDM,cdm,200,7.196857e-02,1.000000
+ΛCDM,cdm,200,1.389495e-01,1.000000
+ΛCDM,cdm,200,2.682696e-01,1.000000
+ΛCDM,cdm,200,5.179475e-01,1.000000
+ΛCDM,cdm,200,1.000000e+00,1.000000
+Planck 2018,newtonian,2,0.000000e+00,0.511352
+Planck 2018,newtonian,2,1.000000e-04,0.557391
+Planck 2018,newtonian,2,1.930698e-04,0.598572
+Planck 2018,newtonian,2,3.727594e-04,0.673281
+Planck 2018,newtonian,2,7.196857e-04,0.789178
+Planck 2018,newtonian,2,1.389495e-03,0.920918
+Planck 2018,newtonian,2,2.682696e-03,0.990401
+Planck 2018,newtonian,2,5.179475e-03,0.999801
+Planck 2018,newtonian,2,1.000000e-02,1.000012
+Planck 2018,newtonian,2,1.930698e-02,1.000004
+Planck 2018,newtonian,2,3.727594e-02,1.000001
+Planck 2018,newtonian,2,7.196857e-02,1.000000
+Planck 2018,newtonian,2,1.389495e-01,1.000000
+Planck 2018,newtonian,2,2.682696e-01,1.000000
+Planck 2018,newtonian,2,5.179475e-01,1.000000
+Planck 2018,newtonian,2,1.000000e+00,1.000000
+Planck 2018,newtonian,5,0.000000e+00,0.510588
+Planck 2018,newtonian,5,1.000000e-04,0.556643
+Planck 2018,newtonian,5,1.930698e-04,0.597847
+Planck 2018,newtonian,5,3.727594e-04,0.672618
+Planck 2018,newtonian,5,7.196857e-04,0.788668
+Planck 2018,newtonian,5,1.389495e-03,0.920681
+Planck 2018,newtonian,5,2.682696e-03,0.990374
+Planck 2018,newtonian,5,5.179475e-03,0.999805
+Planck 2018,newtonian,5,1.000000e-02,1.000014
+Planck 2018,newtonian,5,1.930698e-02,1.000005
+Planck 2018,newtonian,5,3.727594e-02,1.000001
+Planck 2018,newtonian,5,7.196857e-02,1.000000
+Planck 2018,newtonian,5,1.389495e-01,1.000000
+Planck 2018,newtonian,5,2.682696e-01,1.000000
+Planck 2018,newtonian,5,5.179475e-01,1.000000
+Planck 2018,newtonian,5,1.000000e+00,1.000000
+Planck 2018,newtonian,10,0.000000e+00,0.480540
+Planck 2018,newtonian,10,1.000000e-04,0.526982
+Planck 2018,newtonian,10,1.930698e-04,0.568868
+Planck 2018,newtonian,10,3.727594e-04,0.645675
+Planck 2018,newtonian,10,7.196857e-04,0.767359
+Planck 2018,newtonian,10,1.389495e-03,0.910148
+Planck 2018,newtonian,10,2.682696e-03,0.988764
+Planck 2018,newtonian,10,5.179475e-03,0.999837
+Planck 2018,newtonian,10,1.000000e-02,1.000042
+Planck 2018,newtonian,10,1.930698e-02,1.000012
+Planck 2018,newtonian,10,3.727594e-02,1.000002
+Planck 2018,newtonian,10,7.196857e-02,1.000000
+Planck 2018,newtonian,10,1.389495e-01,1.000000
+Planck 2018,newtonian,10,2.682696e-01,1.000000
+Planck 2018,newtonian,10,5.179475e-01,1.000000
+Planck 2018,newtonian,10,1.000000e+00,1.000000
+Planck 2018,newtonian,30,0.000000e+00,0.507656
+Planck 2018,newtonian,30,1.000000e-04,0.553817
+Planck 2018,newtonian,30,1.930698e-04,0.595150
+Planck 2018,newtonian,30,3.727594e-04,0.670235
+Planck 2018,newtonian,30,7.196857e-04,0.787002
+Planck 2018,newtonian,30,1.389495e-03,0.920154
+Planck 2018,newtonian,30,2.682696e-03,0.990517
+Planck 2018,newtonian,30,5.179475e-03,0.999905
+Planck 2018,newtonian,30,1.000000e-02,1.000048
+Planck 2018,newtonian,30,1.930698e-02,1.000013
+Planck 2018,newtonian,30,3.727594e-02,1.000002
+Planck 2018,newtonian,30,7.196857e-02,1.000000
+Planck 2018,newtonian,30,1.389495e-01,1.000000
+Planck 2018,newtonian,30,2.682696e-01,1.000000
+Planck 2018,newtonian,30,5.179475e-01,1.000000
+Planck 2018,newtonian,30,1.000000e+00,1.000000
+Planck 2018,newtonian,100,0.000000e+00,0.524900
+Planck 2018,newtonian,100,1.000000e-04,0.571087
+Planck 2018,newtonian,100,1.930698e-04,0.612266
+Planck 2018,newtonian,100,3.727594e-04,0.686649
+Planck 2018,newtonian,100,7.196857e-04,0.800913
+Planck 2018,newtonian,100,1.389495e-03,0.928410
+Planck 2018,newtonian,100,2.682696e-03,0.992874
+Planck 2018,newtonian,100,5.179475e-03,1.000326
+Planck 2018,newtonian,100,1.000000e-02,1.000142
+Planck 2018,newtonian,100,1.930698e-02,1.000024
+Planck 2018,newtonian,100,3.727594e-02,1.000001
+Planck 2018,newtonian,100,7.196857e-02,1.000000
+Planck 2018,newtonian,100,1.389495e-01,1.000000
+Planck 2018,newtonian,100,2.682696e-01,1.000000
+Planck 2018,newtonian,100,5.179475e-01,1.000000
+Planck 2018,newtonian,100,1.000000e+00,1.000000
+Planck 2018,newtonian,200,0.000000e+00,0.564873
+Planck 2018,newtonian,200,1.000000e-04,0.610854
+Planck 2018,newtonian,200,1.930698e-04,0.651431
+Planck 2018,newtonian,200,3.727594e-04,0.723729
+Planck 2018,newtonian,200,7.196857e-04,0.831539
+Planck 2018,newtonian,200,1.389495e-03,0.945567
+Planck 2018,newtonian,200,2.682696e-03,0.997059
+Planck 2018,newtonian,200,5.179475e-03,1.000791
+Planck 2018,newtonian,200,1.000000e-02,1.000175
+Planck 2018,newtonian,200,1.930698e-02,1.000017
+Planck 2018,newtonian,200,3.727594e-02,1.000000
+Planck 2018,newtonian,200,7.196857e-02,1.000000
+Planck 2018,newtonian,200,1.389495e-01,1.000000
+Planck 2018,newtonian,200,2.682696e-01,1.000000
+Planck 2018,newtonian,200,5.179475e-01,1.000000
+Planck 2018,newtonian,200,1.000000e+00,1.000000
+Planck 2018,cdm,2,0.000000e+00,0.516393
+Planck 2018,cdm,2,1.000000e-04,0.562489
+Planck 2018,cdm,2,1.930698e-04,0.603655
+Planck 2018,cdm,2,3.727594e-04,0.678181
+Planck 2018,cdm,2,7.196857e-04,0.793270
+Planck 2018,cdm,2,1.389495e-03,0.923115
+Planck 2018,cdm,2,2.682696e-03,0.990763
+Planck 2018,cdm,2,5.179475e-03,0.999759
+Planck 2018,cdm,2,1.000000e-02,0.999980
+Planck 2018,cdm,2,1.930698e-02,0.999992
+Planck 2018,cdm,2,3.727594e-02,0.999998
+Planck 2018,cdm,2,7.196857e-02,1.000000
+Planck 2018,cdm,2,1.389495e-01,1.000000
+Planck 2018,cdm,2,2.682696e-01,1.000000
+Planck 2018,cdm,2,5.179475e-01,1.000000
+Planck 2018,cdm,2,1.000000e+00,1.000000
+Planck 2018,cdm,5,0.000000e+00,0.527605
+Planck 2018,cdm,5,1.000000e-04,0.573717
+Planck 2018,cdm,5,1.930698e-04,0.614753
+Planck 2018,cdm,5,3.727594e-04,0.688698
+Planck 2018,cdm,5,7.196857e-04,0.801792
+Planck 2018,cdm,5,1.389495e-03,0.927435
+Planck 2018,cdm,5,2.682696e-03,0.991442
+Planck 2018,cdm,5,5.179475e-03,0.999763
+Planck 2018,cdm,5,1.000000e-02,0.999980
+Planck 2018,cdm,5,1.930698e-02,0.999993
+Planck 2018,cdm,5,3.727594e-02,0.999998
+Planck 2018,cdm,5,7.196857e-02,1.000000
+Planck 2018,cdm,5,1.389495e-01,1.000000
+Planck 2018,cdm,5,2.682696e-01,1.000000
+Planck 2018,cdm,5,5.179475e-01,1.000000
+Planck 2018,cdm,5,1.000000e+00,1.000000
+Planck 2018,cdm,10,0.000000e+00,0.536878
+Planck 2018,cdm,10,1.000000e-04,0.582538
+Planck 2018,cdm,10,1.930698e-04,0.623099
+Planck 2018,cdm,10,3.727594e-04,0.696025
+Planck 2018,cdm,10,7.196857e-04,0.807104
+Planck 2018,cdm,10,1.389495e-03,0.929781
+Planck 2018,cdm,10,2.682696e-03,0.991778
+Planck 2018,cdm,10,5.179475e-03,0.999767
+Planck 2018,cdm,10,1.000000e-02,0.999978
+Planck 2018,cdm,10,1.930698e-02,0.999992
+Planck 2018,cdm,10,3.727594e-02,0.999997
+Planck 2018,cdm,10,7.196857e-02,0.999999
+Planck 2018,cdm,10,1.389495e-01,1.000000
+Planck 2018,cdm,10,2.682696e-01,1.000000
+Planck 2018,cdm,10,5.179475e-01,1.000000
+Planck 2018,cdm,10,1.000000e+00,1.000000
+Planck 2018,cdm,30,0.000000e+00,0.512909
+Planck 2018,cdm,30,1.000000e-04,0.558720
+Planck 2018,cdm,30,1.930698e-04,0.599672
+Planck 2018,cdm,30,3.727594e-04,0.673915
+Planck 2018,cdm,30,7.196857e-04,0.788964
+Planck 2018,cdm,30,1.389495e-03,0.919711
+Planck 2018,cdm,30,2.682696e-03,0.989180
+Planck 2018,cdm,30,5.179475e-03,0.999274
+Planck 2018,cdm,30,1.000000e-02,0.999818
+Planck 2018,cdm,30,1.930698e-02,0.999942
+Planck 2018,cdm,30,3.727594e-02,0.999987
+Planck 2018,cdm,30,7.196857e-02,0.999999
+Planck 2018,cdm,30,1.389495e-01,1.000000
+Planck 2018,cdm,30,2.682696e-01,1.000000
+Planck 2018,cdm,30,5.179475e-01,1.000000
+Planck 2018,cdm,30,1.000000e+00,1.000000
+Planck 2018,cdm,100,0.000000e+00,0.476812
+Planck 2018,cdm,100,1.000000e-04,0.522502
+Planck 2018,cdm,100,1.930698e-04,0.563714
+Planck 2018,cdm,100,3.727594e-04,0.639327
+Planck 2018,cdm,100,7.196857e-04,0.759397
+Planck 2018,cdm,100,1.389495e-03,0.901687
+Planck 2018,cdm,100,2.682696e-03,0.983609
+Planck 2018,cdm,100,5.179475e-03,0.998391
+Planck 2018,cdm,100,1.000000e-02,0.999747
+Planck 2018,cdm,100,1.930698e-02,0.999970
+Planck 2018,cdm,100,3.727594e-02,0.999999
+Planck 2018,cdm,100,7.196857e-02,1.000000
+Planck 2018,cdm,100,1.389495e-01,1.000000
+Planck 2018,cdm,100,2.682696e-01,1.000000
+Planck 2018,cdm,100,5.179475e-01,1.000000
+Planck 2018,cdm,100,1.000000e+00,1.000000
+Planck 2018,cdm,200,0.000000e+00,0.475976
+Planck 2018,cdm,200,1.000000e-04,0.521672
+Planck 2018,cdm,200,1.930698e-04,0.562901
+Planck 2018,cdm,200,3.727594e-04,0.638571
+Planck 2018,cdm,200,7.196857e-04,0.758799
+Planck 2018,cdm,200,1.389495e-03,0.901444
+Planck 2018,cdm,200,2.682696e-03,0.983817
+Planck 2018,cdm,200,5.179475e-03,0.998719
+Planck 2018,cdm,200,1.000000e-02,0.999890
+Planck 2018,cdm,200,1.930698e-02,0.999992
+Planck 2018,cdm,200,3.727594e-02,1.000000
+Planck 2018,cdm,200,7.196857e-02,1.000000
+Planck 2018,cdm,200,1.389495e-01,1.000000
+Planck 2018,cdm,200,2.682696e-01,1.000000
+Planck 2018,cdm,200,5.179475e-01,1.000000
+Planck 2018,cdm,200,1.000000e+00,1.000000

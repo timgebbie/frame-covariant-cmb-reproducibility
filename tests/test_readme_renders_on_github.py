@@ -90,8 +90,13 @@ MARKDOWN = _rendered_markdown()
 #: Lower these as files are cleaned. Raising one requires saying why in the
 #: commit, which is the whole mechanism.
 COSMETIC_BASELINE = {
-    "test_no_bare_asterisk_in_inline_maths": 19,
-    "test_no_inline_maths_immediately_after_a_hyphen": 13,
+    "test_no_bare_asterisk_in_inline_maths": 18,
+    "test_no_inline_maths_immediately_after_a_hyphen": 12,
+#: **Both lowered by one on 2026-10-25**, and not by a cleanup: `_prose`
+#: stopped judging `captions/*.md` front matter --- which is LaTeX stored
+#: for the build and was never going to render as prose --- by markdown
+#: rules. The ratchet caught the fall itself and refused to pass until the
+#: gain was recorded, which is the behaviour it exists for.
 }
 
 
@@ -104,6 +109,40 @@ def _count_failures(rule) -> tuple[int, list[str]]:
         except AssertionError:
             bad.append(name)
     return len(bad), bad
+
+
+def _prose(name: str) -> str:
+    r"""The part of a ``.md`` file that is **prose**, with TOML front matter cut.
+
+    **Scoped 2026-10-25, with T-130.** `captions/*.md` open with a ``+++``
+    block that is not markdown: it is the LaTeX caption, stored for
+    `scripts/make_figure_pages.py`, where ``\%`` is *required* and every
+    backslash is doubled for TOML. Judging that block by GitHub's markdown
+    rules asks two incompatible things of the same bytes — valid LaTeX needs
+    ``$97.8\%$``, and GitHub's parser eats ``\%`` inside ``$…$`` before
+    KaTeX sees it.
+
+    The resolution is **scope, not exemption**. The rules below are about what
+    a reader sees as prose; the front matter has never rendered as prose
+    (``\\textbf{…}`` throughout) and no rule here could make it. The markdown
+    body underneath — the standalone long-form caption, which *is* read on
+    github.com — is checked in full, as is every other file, because nothing
+    else in the tree carries front matter.
+
+    The delimiter must be a ``+++`` line of its own at the very start, so a
+    ``+++`` appearing mid-document cuts nothing.
+    """
+    text = (ROOT / name).read_text(encoding="utf-8")
+    if not text.startswith("+++"):
+        return text
+    end = text.find("\n+++", 3)
+    if end < 0:
+        return text
+    # Blank the block rather than deleting it, so every line number this file
+    # reports still matches the file on disk. A rule that points at line 32 of
+    # a file whose line 32 is elsewhere is worse than no rule.
+    head = text[: end + 5]
+    return "\n" * head.count("\n") + text[end + 5:]
 
 
 def _display_blocks(text: str) -> list[tuple[int, str]]:
@@ -134,7 +173,7 @@ def test_the_display_delimiters_pair(name: str) -> None:
     no well-defined display blocks at all, so every other result in this module
     would be measured against the wrong spans.
     """
-    text = (ROOT / name).read_text(encoding="utf-8")
+    text = _prose(name)
     n = text.count("$$")
     assert n % 2 == 0, (
         f"{name}: {n} occurrences of '$$' — an odd count. One of them is "
@@ -165,7 +204,7 @@ def test_display_blocks_are_one_source_line(name: str) -> None:
     release step and is not an accident**; this test narrows what the look has
     to catch, it does not replace it.
     """
-    text = (ROOT / name).read_text(encoding="utf-8")
+    text = _prose(name)
     bad = [(text[: m.start()].count("\n") + 1, m.group(1).count("\n"))
            for m in re.finditer(r"\$\$(.*?)\$\$", text, re.S)
            if "\n" in m.group(1)]
@@ -217,7 +256,7 @@ def test_no_command_github_cannot_render(name: str) -> None:
     already says this about figures; prose is what a colleague reads first and
     it was never covered.
     """
-    text = (ROOT / name).read_text(encoding="utf-8")
+    text = _prose(name)
     # **Scoped to maths, 2026-10-24.** These three are hazards only where the
     # maths renderer sees them; in prose, ``\tag`` and ``\big`` are just words,
     # and a register that records a banned command has to be able to name it.
@@ -239,7 +278,7 @@ def test_no_command_github_cannot_render(name: str) -> None:
 @pytest.mark.parametrize("name", MARKDOWN)
 def test_no_bare_asterisk_in_a_display_block(name: str) -> None:
     """``\\eta_*`` in a ``$$`` block is eaten by markdown. Use ``\\eta_\\ast``."""
-    text = (ROOT / name).read_text(encoding="utf-8")
+    text = _prose(name)
     offenders = [(line, block.strip()[:70])
                  for line, block in _display_blocks(text) if "*" in block]
     assert not offenders, (
@@ -257,7 +296,7 @@ def _bare_asterisk_in_inline_maths(name: str) -> None:
     never did. One bare ``*`` is enough, because the ``**bold**`` markers
     elsewhere in the same paragraph supply its partner.
     """
-    text = (ROOT / name).read_text(encoding="utf-8")
+    text = _prose(name)
     body = re.sub(r"\$\$.*?\$\$", "", text, flags=re.S)   # displays covered above
     hits = [(body[: m.start()].count("\n") + 1, m.group(0))
             for m in re.finditer(r"(?<!\$)\$(?!\s)([^$\n]{1,80}?)(?<!\s)\$(?!\$)",
@@ -270,7 +309,7 @@ def _bare_asterisk_in_inline_maths(name: str) -> None:
 
 def _inline_maths_immediately_after_a_hyphen(name: str) -> None:
     """``high-$\\ell$`` renders as literal source. Reword it."""
-    text = (ROOT / name).read_text(encoding="utf-8")
+    text = _prose(name)
     bad = []
     for m in re.finditer(r"[A-Za-z0-9]-(\$[^$\n]{1,60}\$)", text):
         bad.append((text[: m.start()].count("\n") + 1, m.group(0)))
@@ -282,7 +321,7 @@ def _inline_maths_immediately_after_a_hyphen(name: str) -> None:
 @pytest.mark.parametrize("name", MARKDOWN)
 def test_every_display_block_has_balanced_braces(name: str) -> None:
     """A brace that markdown ate is a block that renders as an error message."""
-    text = (ROOT / name).read_text(encoding="utf-8")
+    text = _prose(name)
     bad = []
     for line, block in _display_blocks(text):
         depth = 0
@@ -308,7 +347,7 @@ def test_display_blocks_are_delimited_on_their_own_lines(name: str) -> None:
     repository page and the mobile view. The README's own grammar already puts
     displays on their own lines; this keeps it that way.
     """
-    text = (ROOT / name).read_text(encoding="utf-8")
+    text = _prose(name)
     bad = [i + 1 for i, ln in enumerate(text.splitlines())
            if ln.count("$$") == 1 and ln.strip() not in ("$$",)
            and not (ln.strip().startswith("$$") or ln.strip().endswith("$$"))]
@@ -393,7 +432,7 @@ def test_no_markdown_eaten_escape_inside_maths(name: str) -> None:
     with no error.
     """
     bad = []
-    for span in _maths_spans((ROOT / name).read_text(encoding="utf-8")):
+    for span in _maths_spans(_prose(name)):
         for ch, fix in MARKDOWN_EATEN.items():
             tok = "\\" + ch
             if tok in span:

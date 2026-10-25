@@ -66,6 +66,13 @@ PLANNED = [
     # CDM and LambdaCDM, with the peaks"; F9 is that figure, and until it
     # existed the promise was a sentence rather than an artefact.
     ("F9", "angular spectrum with the acoustic peaks, both frames"),
+    # Added at v1.3.0, and it is the PI's figure rather than the roadmap's.
+    # Every other artefact in this set measures a FINISHED spectrum, and the
+    # missing plateau power is a defect in WHEN power is laid down, which no
+    # summary of the endpoint can see. F10 is that shape, and it carries the
+    # Einstein--de Sitter null control that makes the reading a defect rather
+    # than a numerical artefact. Finding T-128.
+    ("F10", "formation surface: when the spectrum is laid down"),
 ]
 
 

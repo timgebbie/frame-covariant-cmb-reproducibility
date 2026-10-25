@@ -392,6 +392,19 @@ def coefficient_sets(
         # freeze the tight-coupling window calls for.
         delta_t = np.interp(eta, mode_eta, acoustic.delta_T)
         tau_1 = np.interp(eta, mode_eta, acoustic.tau_1)
+        # **The continuation past the window is ONE definition, in
+        # `pipeline`.** It was two: this block and `pipeline`'s were the same
+        # four lines written twice, and on 2026-10-25 the control for T-145
+        # was added to one of them --- so the two-frame path, which is what
+        # every instrument this week uses, silently kept freezing while the
+        # knob read `free_stream`. That is T-125's shape a third time, and a
+        # second copy of a physics choice is how it keeps happening.
+        # Imported at call time: `pipeline` imports this module.
+        from functions.spectra.pipeline import (
+            TAU_CONTINUATION, _continue_by_free_streaming)
+        if TAU_CONTINUATION == "free_stream":
+            delta_t, tau_1 = _continue_by_free_streaming(
+                float(k_com), eta, eta_couple, delta_t, tau_1)
     else:
         acoustic = solve_acoustic(
             float(k_com), eta[inside], background=bg,
@@ -472,6 +485,40 @@ B_SLOT_REPAIR: bool = False
 BULK_SOURCE_CONTROLS: dict[str, bool] = {}
 
 
+def bulk_source_primitives(k_com, env, coefficients) -> dict:
+    r"""The four arrays `integral_solution`'s bulk-source controls require.
+
+    **Extracted 2026-10-25, finding T-131.** Every one of the seven controls
+    raises without these, and they were built inline in `transfer_by_rank`
+    alone. A diagnostic that calls `integral_solution` **directly** --- D30,
+    F10 and D32 all do, because they need `eta_slices`, which the spectrum
+    path does not carry --- therefore set `BULK_SOURCE_CONTROLS`, saw it
+    ignored, and measured the released configuration under another name.
+
+    D32 did exactly that and would have reported P1-T's discriminator
+    **refuted** on three no-op columns. It was caught because the quadrature
+    gate came back *bit-identical* across configurations that should have
+    moved it, which is the only signature a silent no-op leaves. **That is
+    T-125 a second time**, in a different place, which is why the repair is
+    one definition both callers share rather than a second copy of the block.
+
+    $-C_1=(\delta T+\Phi_A)+\kappa'\hat v_B$ with $\hat v_B=v_B/k$, and `v_b`
+    is the **un-reduced** $v_B$ (T-66). The derivative is taken from (107),
+    $-C_1'=(\kappa'\hat v_B)'+(a\mathcal B_1)'/k$, and **never** by
+    differentiating a stored amplitude --- finding T-23.
+    """
+    kp = np.asarray(env.kappa_prime, dtype=float)
+    v_b = np.asarray(coefficients.v_b, dtype=float)
+    a_b1_prime = np.asarray(coefficients.a_b1_prime, dtype=float)
+    return dict(
+        opacity=env.opacity,
+        c1_thomson=-(kp * v_b / float(k_com)),
+        c1_thomson_prime=np.asarray(coefficients.c1_prime, dtype=float)
+        + a_b1_prime / float(k_com),
+        c1_thomson_kappa=kp,
+    )
+
+
 def transfer_by_rank(
     ells: np.ndarray,
     k_com: float,
@@ -515,23 +562,10 @@ def transfer_by_rank(
                   visibility=env.visibility,
                   eta_0=float(env.background.eta_0))
     if B_SLOT_REPAIR or BULK_SOURCE_CONTROLS:
-        # C_1's Thomson half and its derivative, from the stored primitives:
-        # -C_1 = (dT + Phi_A) + kappa' vhat_B with vhat_B = v_B / k, and
-        # `v_b` is the UN-reduced v_B (T-66). The derivative comes from (107),
-        # -C_1' = (kappa' vhat_B)' + (a B_1)'/k, never from differentiating a
-        # stored amplitude -- finding T-23.
-        kp = np.asarray(env.kappa_prime, dtype=float)
-        v_b = np.asarray(coefficients.v_b, dtype=float)
-        a_b1_prime = np.asarray(coefficients.a_b1_prime, dtype=float)
-        common.update(
-            opacity=env.opacity,
-            c1_thomson=-(kp * v_b / float(k_com)),
-            c1_thomson_prime=np.asarray(coefficients.c1_prime, dtype=float)
-            + a_b1_prime / float(k_com),
-            c1_thomson_kappa=kp,
-            **(dict(slot_weight_split=True, jprime_bulk_slot=True,
-                    thomson_carries_shear=True, boundary_weight_w=False)
-               if B_SLOT_REPAIR else {}))
+        common.update(bulk_source_primitives(k_com, env, coefficients))
+        if B_SLOT_REPAIR:
+            common.update(slot_weight_split=True, jprime_bulk_slot=True,
+                          thomson_carries_shear=True, boundary_weight_w=False)
     # **The lattice hook --- W1, 2026-10-23.** `integral_solution` carries
     # seven boolean controls and `transfer_by_rank` could reach exactly one
     # combination of them, the one `B_SLOT_REPAIR` names. So the lattice

@@ -35,6 +35,9 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from _fingerprint import source_fingerprint as _digest  # noqa: E402
 
 import matplotlib  # noqa: E402
 
@@ -207,25 +210,25 @@ def source_fingerprint() -> str:
     answers *"is this file what it was?"*, and the question here is *"was this
     file made by this code?"* --- so the code's identity goes into the file.
 
-    The digest covers every `functions.*` module actually imported, resolved
-    from `sys.modules` rather than listed, plus this script. **Deliberately
-    conservative**: a docstring change invalidates the cache, because bytes
-    cannot say whether a change was semantic. The cost of a false invalidation
-    is one rerun; the cost of a false validation is shipping a stale spectrum
-    under a CLEAN banner, which is what happened.
-    """
-    import hashlib
+    **Corrected 2026-10-25, finding T-129.** This hashed *every `functions.*`
+    module actually in `sys.modules`*, resolved from the live process rather
+    than listed --- which made the digest a property of **the path the process
+    took** and not of the tree. `functions.spectra.peebles` is imported lazily
+    inside `build_environment`: the compute branch hashed it and **the replot
+    branch, which never calls that function, did not hash it at all**. So the
+    reading side of the guard was blind to the recombination history, which is
+    precisely the sort of change that must invalidate a cached spectrum. The
+    digest now comes from `scripts/_fingerprint.py`, which walks a **declared**
+    set from disk --- every `.py` under `functions/`, plus this script --- so
+    both branches ask the same question. The reasoning is unchanged and only
+    the set it is applied to is.
 
-    digest = hashlib.sha256()
-    loaded = sorted(
-        (name, Path(module.__file__))
-        for name, module in sys.modules.items()
-        if name.startswith("functions.") and getattr(module, "__file__", None))
-    for name, path in loaded:
-        digest.update(name.encode("utf-8"))
-        digest.update(path.read_bytes())
-    digest.update(Path(__file__).read_bytes())
-    return digest.hexdigest()[:16]
+    **Deliberately conservative**: a docstring change invalidates the cache,
+    because bytes cannot say whether a change was semantic. The cost of a false
+    invalidation is one rerun; the cost of a false validation is shipping a
+    stale spectrum under a CLEAN banner, which is what happened.
+    """
+    return _digest(__file__)
 
 
 def first_peak(ell: np.ndarray, s: np.ndarray, *, floor: float = 30.0) -> float:
@@ -414,6 +417,35 @@ def main() -> int:
     #
     # The figure this produces is a control and does not enter `figures/` as a
     # release artefact --- decision **V14**, a control is not evidence.
+    # **`--candidate`, 2026-10-24. The missing step, and it is why F9 has not
+    # moved since 21 October.**
+    #
+    # Everything measured since then sits behind a control that is OFF in the
+    # released path, so F9 draws a configuration none of the week's work has
+    # touched. D24-D29 report ell_peak and median k; **no instrument reports
+    # the PLATEAU or the SECONDARY PEAKS**, and those are two of the three
+    # morphology failures. Only the figure shows them.
+    #
+    # This draws the best configuration measured at RELEASED kappa'' --- CDM
+    # first peak 0.869 ell_A against the released 0.030 --- across the full
+    # k = 1500 grid, so the plateau and the tail are in the picture.
+    #
+    # **It is a control and does not enter `figures/`** (V14). The frames
+    # disagree by 3.1x at the peak in this configuration, so it is not a
+    # repair and must not be drawn as one.
+    if "--candidate" in sys.argv:
+        from functions.spectra import two_frame as _tf
+        _tf.BULK_SOURCE_CONTROLS = dict(
+            slot_weight_split=True, thomson_boundary_and_vdot=True,
+            boundary_weight_w=True)
+        STEM = "d31-f9-candidate"
+        CSV_PATH_REL = ("diagnostics", "d31-f9-candidate.csv")
+        print("    **CANDIDATE CONFIGURATION** -- slot_weight_split + "
+              "thomson_boundary_and_vdot + boundary_weight_w, at released "
+              "kappa''. Diagnostic run; not a release artefact.")
+        print("    Watch the PLATEAU and the SECONDARY PEAKS: no gate "
+              "measures either, and they are two of the three failures.")
+
     if "--b-slot-repair" in sys.argv:
         from functions.spectra import two_frame as _tf
         _tf.B_SLOT_REPAIR = True

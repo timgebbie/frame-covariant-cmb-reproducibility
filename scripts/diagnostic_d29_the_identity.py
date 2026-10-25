@@ -77,6 +77,7 @@ from functions.spectra.bessel_table import BesselTable  # noqa: E402
 from functions.spectra.integral_solution import required_multipoles  # noqa: E402
 from functions.spectra.pipeline import primordial_power, required_k_points  # noqa: E402
 
+from _resumable import Checkpoint  # noqa: E402
 from diagnostic_d24_phi_prime_sweep import (  # noqa: E402
     ELL_A, ELLS, FRAMES, K_MAX, _env, peak_position, spectra_both_frames)
 
@@ -86,15 +87,18 @@ TARGET = 206.0 / ELL_A
 #: All at RELEASED kappa'' = 1. The knob is finished with; what is left is
 #: whether the identity stands on its own.
 CONFIGS: list[tuple[str, dict]] = [
-    ("cross B, for comparison  (slot split)",
-     dict(by_parts_weight_terms=True, slot_weight_split=True,
-          thomson_boundary_and_vdot=True, boundary_weight_w=True)),
+    # **Trimmed 2026-10-24.** The comparison rows are dropped: cross B's
+    # 0.8691/0.2770 is already measured in D28 and re-running it costs twenty
+    # minutes to reproduce a number I have. What is NOT measured is the
+    # identity, and three long runs have now been lost to container restarts
+    # part-way. Two configurations is what completes.
+    #
+    # Cross B as labelled is also WRONG under T-125 -- `by_parts` was
+    # discarded there -- so re-running it here would have reproduced
+    # slot+vdot+boundary_weight_w under a name that no longer means that.
     ("THE IDENTITY  (i)+(ii)+(iii)",
      dict(bracket_all_at_w=True, by_parts_weight_terms=True,
           boundary_weight_w=True)),
-    ("THE IDENTITY + vdot  (T-88's boundary pair too)",
-     dict(bracket_all_at_w=True, by_parts_weight_terms=True,
-          boundary_weight_w=True, thomson_boundary_and_vdot=True)),
     ("(i) alone  --- the bracket at W, nothing else",
      dict(bracket_all_at_w=True)),
 ]
@@ -120,10 +124,26 @@ def main() -> int:
     print(f"  {'configuration':<48} {'frame':<10} {'l_peak':>9} {'/ell_A':>8}")
     print("  " + "-" * 80)
 
+    # **Checkpointed --- finding T-127.** Four long runs were lost part-way to
+    # container restarts and relaunched from zero. A row is written and
+    # fsync'd the moment it completes, and a rerun skips what is already
+    # there, so the table completes whichever process computed which part.
+    rows = Checkpoint(ROOT / "diagnostics" / "d29-the-identity.csv",
+                      ("frame", "l_peak", "ratio"))
     keep = dict(_tf.BULK_SOURCE_CONTROLS)
     got: dict[str, dict[str, float]] = {}
     try:
         for label, cfg in CONFIGS:
+            if rows.has(label):
+                for r in rows.all():
+                    if r["configuration"] == label:
+                        got.setdefault(label, {})[r["frame"]] = float(r["ratio"])
+                        print(f"  {label:<48} {r['frame']:<10} "
+                              f"{float(r['l_peak']):9.2f} "
+                              f"{float(r['ratio']):8.4f}   [resumed]",
+                              flush=True)
+                print("  " + "-" * 80, flush=True)
+                continue
             _tf.BULK_SOURCE_CONTROLS = dict(cfg)
             try:
                 d = spectra_both_frames(env, table, k_com, power)
@@ -135,6 +155,8 @@ def main() -> int:
             for f in FRAMES:
                 pos, _ = peak_position(ELLS, d[f])
                 got[label][f] = pos / ELL_A
+                rows.add(label, frame=f, l_peak=f"{pos:.4f}",
+                         ratio=f"{pos / ELL_A:.6f}")
                 print(f"  {label if f == FRAMES[0] else '':<48} {f:<10} "
                       f"{pos:9.2f} {pos/ELL_A:8.4f}", flush=True)
             print("  " + "-" * 80, flush=True)
