@@ -26,9 +26,14 @@ Gravitation* 2026-10-16, CC BY 4.0.
 
 The supplementary-materials document is included here:
 
-> [supplement-v1.3.0.pdf](supplementary-materials/supplement-v1.3.0.pdf)
+> [SUPPLEMENTARY-MATERIAL-v1.3.14.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.14.pdf)
 
-Built from `SUPPLEMENTARY-MATERIAL-v1.3.0.tex` by `scripts/build_supplement.py`.
+Its source is `SUPPLEMENTARY-MATERIAL-v1.3.14.tex`, **one consolidated file in
+the repository root**, which builds with `pdflatex` alone: the prose carries no
+`\input`, the bibliography is inline, and the only external files are the
+generated assets in `tables/`, `tikz/` and `figures/`. The prose fragments that
+`scripts/build_supplement.py` used to assemble are gone, and that script needs
+retargeting at the consolidated source.
 It carries the scope, the theory-to-computation map, the acceptance spine, the
 conventions and translations tables, and the interpretive limits — read it
 before the code if you want to know what this release does and does not claim.
@@ -761,13 +766,22 @@ one rule applied loosely.
 that last regenerated them: F6 and F8 carry `-v1.1.0` while the figures
 specified at v1.0.0 keep theirs, and `tables/equations-v1.0.0.tex` keeps its
 suffix through every regeneration. **The supplement carries the release it
-*belongs to*** — decision **S36**. Each release freezes its own
-`SUPPLEMENTARY-MATERIAL-vX.Y.Z.tex` and the previous ones are kept beside it,
-exactly as one `RELEASE-NOTES-vX.Y.Z.md` is kept per release. Its *build
-outputs* are not kept: there is one `supplement-vX.Y.Z.pdf` and one
-`figures-vX.Y.Z.tex` in the tree at any time, named for the source the build is
-pointed at, because the rendering of record for an earlier release is its
-release asset and its archived DOI. `scripts/check_release_hygiene.py` is the
+*belongs to*** — decision **S36**, **amended at v1.3.14 to conform to the
+house exemplar** (`github.com/timgebbie/correlation-emergence-reproducibility`).
+Each *release* freezes its own `SUPPLEMENTARY-MATERIAL-vX.Y.Z.tex` in the root
+and the previous ones are kept beside it, exactly as one
+`RELEASE-NOTES-vX.Y.Z.md` is kept per release; a development revision between
+releases **replaces** its predecessor rather than accumulating beside it, which
+is why `SUPPLEMENTARY-MATERIAL-v1.3.0.tex` left the tree when v1.3.14 entered
+it and `SUPPLEMENTARY-MATERIAL-v1.2.0.tex` did not. Its *build output* is not
+kept: there is **one**
+`supplementary-materials/SUPPLEMENTARY-MATERIAL-vX.Y.Z.pdf` in the tree at any
+time, named for the source the build is pointed at, because the rendering of
+record for an earlier release is its release asset and its archived DOI.
+**The document is a single file from v1.3.14**, so there is no
+`figures-vX.Y.Z.tex` and no fragment set: the figure pages are inline, and
+`scripts/make_figure_pages.py` and `scripts/build_supplement.py` both need
+retargeting at the consolidated source. `scripts/check_release_hygiene.py` is the
 gate; finding **T-50** is what happens without it. Public tags and their
 release assets remain unchanged in every case.
 
@@ -853,7 +867,7 @@ are in `provenance/DECISIONS-v1.0.0.md`.
 | Item | Value |
 |---|---|
 | **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMBR lensing in the exact 1+3 covariant radiation hierarchy* — **Paper 1**, University of Cape Town. **arXiv:astro-ph/9912072v4**, [doi:10.48550/arXiv.astro-ph/9912072](https://doi.org/10.48550/arXiv.astro-ph/9912072). Submitted to *General Relativity and Gravitation*, 2026-10-16. CC BY 4.0. **The version suffix is not optional** — the bare identifier has carried three documents: `v2` the legacy 1999 work, `v3` the correction, `v4` this paper |
-| **Supplementary PDF** | [supplement-v1.3.0.pdf](supplementary-materials/supplement-v1.3.0.pdf) |
+| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.3.14.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.14.pdf) |
 | **GitHub repository** | [timgebbie/frame-covariant-cmb-reproducibility](https://github.com/timgebbie/frame-covariant-cmb-reproducibility) |
 | **ZivaHub/Figshare DOI** | [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509) — **live**. The **concept** DOI: it always resolves to the latest version, so it is the one to cite |
 | **Associated antecedent** | Gebbie, T.; Dunsby, P. K. S.; Ellis, G. F. R. (2000). *1+3 covariant cosmic microwave background anisotropies II: the almost-Friedmann–Lemaître model*. Annals of Physics **282**, 321–394. [doi:10.1006/aphy.2000.6034](https://doi.org/10.1006/aphy.2000.6034) |
