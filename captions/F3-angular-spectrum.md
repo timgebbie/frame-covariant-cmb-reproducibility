@@ -59,8 +59,8 @@ stated rather than discovered later:
    where $\exp[-(k/k_D)^2]$ is still $0.89$ for CDM and $0.78$ for
    $\Lambda$CDM: the integral ends while the source is still contributing
    nearly its full weight. Measured against a grid four times longer, that
-   costs $0.1\%$ at $\ell=2$, $5\%$ at $\ell=50$, $11\%$ at $\ell=200$ and
-   $24\%$ at $\ell=400$. Reaching the cut-off needs $k_{\max}\gtrsim3100$ and
+   costs $0.1$% at $\ell=2$, $5$% at $\ell=50$, $11$% at $\ell=200$ and
+   $24$% at $\ell=400$. Reaching the cut-off needs $k_{\max}\gtrsim3100$ and
    a correspondingly finer $\eta$ grid, which this line-of-sight implementation
    cannot do in reasonable time --- an architecture problem, named in **T-3**
    and owned by v1.2.0, not a parameter to be nudged.
