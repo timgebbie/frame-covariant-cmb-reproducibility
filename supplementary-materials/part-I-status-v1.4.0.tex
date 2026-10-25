@@ -1,0 +1,154 @@
+% ---------------------------------------------------------------------------
+% PART I -- Where this stands. The reading order the PI set: current
+% situation, then future situation, then the physics (Part II), then the
+% qualification provisions (Part III).
+%
+% THE SEAM IS DECLARED, per Coordination 2026-10-24 and the Part I
+% specification. Two regions:
+%   * PART-I GENERATED -- nothing but \input lines, from gate results.
+%   * PART-I ASSERTED  -- the claim inventory, which a gate-driven generator
+%     structurally cannot produce, because it lists claims that have no gate.
+% The check is structural: the generated region contains only \input, the
+% asserted region contains no \input.
+%
+% Until P1-B's generator exists the status table is carried in the asserted
+% region and is re-verified at the weekly theory audit, section by section.
+% Every row names its instrument; a row without one sits below the table.
+% ---------------------------------------------------------------------------
+\part{Where this stands}
+\label{part:status}
+
+% >>> PART-I GENERATED -- do not type in this region
+% (empty until scripts/make_status_tables.py lands tables/status-v1.4.0.tex
+%  and tables/open-v1.4.0.tex; see the Part I specification)
+% <<< PART-I GENERATED
+
+% >>> PART-I ASSERTED -- claim inventory and its frame only
+\section{Current situation}
+\label{sec:current-situation}
+
+\emph{One row per load-bearing claim, grouped by the seven steps of the physics
+chain, so that a gate with no claim and a claim with no gate are both visible.
+Standings are} established \emph{,} measured, failing \emph{and} ungated
+\emph{; those three words are Part~I's and do not appear as verdicts in
+Part~II.}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}c >{\raggedright\arraybackslash}X l l >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{\S} & \textbf{claim} & \textbf{standing} & \textbf{instrument} &
+  \textbf{does not establish} \\
+\midrule
+1 & the transport equation is exact in the $1+3$ split: no expansion
+  parameter, no background subtracted, no gauge fixed & established &
+  inspection, (68) & that the \emph{solution} computed here is exact \\
+2 & the gravitational source closes at rank two & established & analysis &
+  that the closure is implemented, which is \S6 \\
+3 & $\ell\ge2$ multipoles are frame invariant at first order in $v$ &
+  established & analysis, GDE99~(37) & invariance beyond first order \\
+4 & the oscillator's period is the antecedent's own, on Einstein--de~Sitter
+  where Appendix~G is exact & established & peak spacing, $191.7$ vs $192.7$ &
+  \textbf{the phase}: it differences consecutive turning points, so the first
+  one's position never enters \\
+5 & free streaming is reconstructed faithfully & established & \textbf{G1},
+  four external hierarchies, $\lesssim10^{-13}$ & anything about the spectrum;
+  the source is switched off \\
+6 & (102) is not the exact by-parts of its own integral & measured, failing &
+  \textbf{c3}, C3b, $2.55227$ & the weight error, which c3 holds fixed ---
+  B-17~(i) \\
+6 & the identity's $j_\ell'$ counterpart is absent from (102) & measured,
+  failing & analysis, \textbf{T-124} & that it moves the peak: it adds power
+  \emph{below} it \\
+7 & the two routes to $C_\ell$ agree & established & criterion 5b,
+  $9.5\times10^{-6}$ & the weight: both sides carry $e^{-\kappa}$, and A-1/A-2
+  are a factor of eighty apart across the plateau \\
+7 & the first acoustic peak sits where a matched spectrum puts it &
+  measured, failing & \textbf{D24}, $0.635$ vs $0.757\,\ell_A$ & its
+  mechanism; and the two numbers use different peak estimators \\
+7 & the Sachs--Wolfe plateau is present & measured, failing & the late-share
+  diagnostic, $0.0000$ on both backgrounds & \emph{nothing: the cause is
+  established} --- see \S\ref{sec:current-situation} below \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\paragraph{The plateau defect is the one thing this release can now name
+exactly.} The late-time share of $C_2$ --- the fraction of the line-of-sight
+integrand accumulated after the visibility closes --- is \textbf{$0.0000$ on
+Einstein--de~Sitter, where exactly zero is required because $\Phi$ is constant
+and there is no late integrated Sachs--Wolfe effect at all; and $0.0000$ on
+\texttt{PLANCK\_MODEL}, where $O(0.1)$ is required.} The null control passes
+and the live case fails, which isolates the cause to one thing: \textbf{the
+bracket rides at $\mathcal V\mathcal D$, $\mathcal V$ has closed by $\eta_*$,
+and every late-time source is multiplied by zero.} \emph{The spectrum is
+finished at recombination.} That is approximation \textbf{A-1}, it is a defect
+in \emph{time} rather than in $k$ or $\ell$, and no endpoint gate could see it
+--- which is why repairs aimed at the peak never moved the plateau.
+
+\section{Future situation}
+\label{sec:future-situation}
+
+\emph{Ordered by dependency, not by age: the first row is the next thing that
+happens. Owner follows the standing rule --- a derivation is P1-T's, a run is
+P1-B's.}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X l c@{}}
+\toprule
+\textbf{open item} & \textbf{what would close it} & \textbf{blocked by} &
+  \textbf{owner} \\
+\midrule
+carry the late-time sources to the observer under $W$ rather than
+  $\mathcal V\mathcal D$ & the late share at $\ell=2$ becomes $O(0.1)$ on
+  \texttt{PLANCK\_MODEL} and stays exactly $0$ on Einstein--de~Sitter & --- &
+  P1-B \\
+a peak repair that holds the two frames together & CDM and Newtonian peaks
+  within the released $15\%$, not $3.1\times$ apart & --- & P1-B \\
+whether A-3 is the remainder once such a repair exists & wire A-3 in: it must
+  move the peak down and must land short of $0.757\,\ell_A$ & the row above &
+  both \\
+whether the $j_\ell'$ counterpart moves the peak & restore that slot alone; it
+  must move the peak down or not at all & --- & P1-B \\
+the rank-one extra term $(\star)$ & two readings exist and this bundle chooses
+  neither & --- & P1-T \\
+helium, \textbf{Q15} & $\lesssim0.5\%$ at the first peak; material only in the
+  damping tail & scoped to v1.2.0 & P1-B \\
+the tight-coupling window, \textbf{Q16} & assert
+  $\mathcal V(\eta_{\rm couple})/\mathcal V(\eta_*)$ below a stated threshold
+  on every background & --- & P1-B \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{Asserted, not gated}
+\label{sec:asserted-not-gated}
+
+\emph{A claim with no instrument does not appear in the table above. It appears
+here, with the reason. This is MIL-STD-498's rule that a requirement which
+cannot be verified is not a requirement, and it is the half of} every gate has
+a claim and every claim has a gate \emph{that a gate-driven generator cannot
+supply.}
+
+\begin{itemize}\itemsep2pt
+\item \textbf{That the solution computed here is exact.} It is not claimed. The
+  approximations entering after the transport equation are named --- the
+  scattering-time expansion, \textbf{A-1}, \textbf{A-3}, \textbf{A-5}, the
+  diffusion treatment --- and \S\ref{sec:open-questions} carries what is not
+  costed.
+\item \textbf{The rank-one extra term} $(\star)=-H\mathrm D_{\langle
+  a}\tilde{\mathrm D}_{b\rangle}\ln T$: two readings, and this bundle chooses
+  neither.
+\item \textbf{The residual peak displacement has no established mechanism.}
+  A-3 is ruled out for the $\kappa''$-suppressed configuration and its standing
+  elsewhere is a property of the configuration, not of the project.
+\item \textbf{The plateau and the secondary peaks have no gate.} Two of the
+  three morphology failures are visible only in a figure. The late-share
+  diagnostic above is the first instrument to touch either.
+\item \textbf{Six is a modelling choice.} $\eta_{\rm couple}=\min(\eta_0,
+  6\eta_*)$ is not derived and is not claimed to be; \textbf{Q16} is what would
+  close it.
+\end{itemize}
+% <<< PART-I ASSERTED
+
+\part{The physics, staged and tested}
+\label{part:physics}
