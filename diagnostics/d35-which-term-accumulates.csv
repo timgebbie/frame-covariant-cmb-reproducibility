@@ -1,0 +1,31 @@
+configuration,background,ell,late_share,utc
+"split by-parts, untouched || EdS",EdS,2,0.998805,2026-10-26T11:03:20Z
+"split by-parts, untouched || EdS",EdS,7,0.999621,2026-10-26T11:03:20Z
+"split by-parts, untouched || EdS",EdS,30,0.999910,2026-10-26T11:03:20Z
+"split by-parts, untouched || LCDM",LCDM,2,0.999203,2026-10-26T11:03:44Z
+"split by-parts, untouched || LCDM",LCDM,7,0.999764,2026-10-26T11:03:44Z
+"split by-parts, untouched || LCDM",LCDM,30,0.999955,2026-10-26T11:03:44Z
+C_0 suppressed || EdS,EdS,2,0.801439,2026-10-26T11:03:56Z
+C_0 suppressed || EdS,EdS,7,0.931001,2026-10-26T11:03:56Z
+C_0 suppressed || EdS,EdS,30,0.984338,2026-10-26T11:03:56Z
+C_0 suppressed || LCDM,LCDM,2,0.805858,2026-10-26T11:04:19Z
+C_0 suppressed || LCDM,LCDM,7,0.934632,2026-10-26T11:04:19Z
+C_0 suppressed || LCDM,LCDM,30,0.985039,2026-10-26T11:04:19Z
+C_2'' suppressed || EdS,EdS,2,0.998805,2026-10-26T11:04:30Z
+C_2'' suppressed || EdS,EdS,7,0.999621,2026-10-26T11:04:30Z
+C_2'' suppressed || EdS,EdS,30,0.999910,2026-10-26T11:04:30Z
+C_2'' suppressed || LCDM,LCDM,2,0.999205,2026-10-26T11:04:54Z
+C_2'' suppressed || LCDM,LCDM,7,0.999764,2026-10-26T11:04:54Z
+C_2'' suppressed || LCDM,LCDM,30,0.999955,2026-10-26T11:04:54Z
+C_1^grav' suppressed || EdS,EdS,2,0.998653,2026-10-26T11:05:06Z
+C_1^grav' suppressed || EdS,EdS,7,0.999570,2026-10-26T11:05:06Z
+C_1^grav' suppressed || EdS,EdS,30,0.999890,2026-10-26T11:05:06Z
+C_1^grav' suppressed || LCDM,LCDM,2,0.999132,2026-10-26T11:05:31Z
+C_1^grav' suppressed || LCDM,LCDM,7,0.999741,2026-10-26T11:05:31Z
+C_1^grav' suppressed || LCDM,LCDM,30,0.999948,2026-10-26T11:05:31Z
+partners suppressed || EdS,EdS,2,0.999945,2026-10-26T11:05:43Z
+partners suppressed || EdS,EdS,7,0.999980,2026-10-26T11:05:43Z
+partners suppressed || EdS,EdS,30,0.999983,2026-10-26T11:05:43Z
+partners suppressed || LCDM,LCDM,2,0.999967,2026-10-26T11:06:07Z
+partners suppressed || LCDM,LCDM,7,0.999988,2026-10-26T11:06:07Z
+partners suppressed || LCDM,LCDM,30,0.999991,2026-10-26T11:06:07Z

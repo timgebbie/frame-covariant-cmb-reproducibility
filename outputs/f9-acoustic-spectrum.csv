@@ -1,5 +1,5 @@
 # shape, D_l renormalised at l=30, both frames. CAMB and CLASS are context (S4c).
-# sources: 44c5a9c21179f68c
+# sources: 1fdaf8351aa2b25d
 ell,CDM (Einstein-de Sitter)|cdm,CDM (Einstein-de Sitter)|newtonian,$\Lambda$CDM|cdm,$\Lambda$CDM|newtonian,PLANCK_MODEL|cdm,PLANCK_MODEL|newtonian,CAMB,CLASS
 2,1.700345314e+00,1.606713868e+00,1.262188829e+00,1.712615358e+00,5.744373294e-01,1.922650493e+00,8.813123113e-01,8.806244858e-01
 4,1.110455914e+01,1.098812191e+00,7.334903443e+00,1.227382554e+00,1.513900425e+00,1.683428934e+00,8.217001244e-01,8.214768805e-01

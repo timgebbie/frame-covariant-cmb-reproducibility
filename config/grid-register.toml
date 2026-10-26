@@ -567,16 +567,27 @@ grid, so an aliased grid here would void the comparison rather than loosen
 it."""
 
 [[grid]]
-key = "scripts/figure_f10_formation_surface.py::sl"
-what = "the conformal times F10 draws the accumulation at"
+key = "scripts/figure_f10_formation_surface.py::pre"
+what = "the conformal times F10 samples ACROSS recombination"
 status = "index"
-note = """Same construction as D30's, at **16 slices rather than 24** --- the
-PI's specification, 'initially at low granulation in time'. Sixteen is enough
-to establish that every curve is a step at eta_* followed by a flat, which is
-the whole of the claim; it is NOT enough to resolve the shape of the step, and
-the caption says so rather than letting the picture imply otherwise. D30 runs
-24 and reports the same thing, which is the evidence that the count is an
-index here."""
+note = """`linspace(eta_floor, eta_star, 4)`. **Linear, not geometric, and
+deliberately so**: the PI asked for the autocorrelation *just before
+decoupling, at decoupling, and after*, and those three are only separable if
+the grid resolves the interval they live in. The lower limit is the
+recombination START (T-58), not eta_*, so "before decoupling" is a real epoch
+with real accumulation rather than an empty panel. It SELECTS and does not
+compute --- the bulk is accumulated inside the released quadrature in one pass
+and interpolated onto these abscissae."""
+
+[[grid]]
+key = "scripts/figure_f10_formation_surface.py::post"
+what = "the conformal times F10 samples AFTER recombination"
+status = "index"
+note = """`eta_* + geomspace(span*1e-4, span, N_SLICES-4)`, ten slices.
+Geometric because the visibility is narrow and a linear grid would put every
+point in the free-streaming era. With `pre` this is the PI's "low granulation
+in time" --- fourteen epochs, few enough that each curve in panel (a) is
+distinguishable and enough to read a progression."""
 
 [[grid]]
 key = "scripts/figure_f10_formation_surface.py::k_com"
@@ -609,3 +620,15 @@ about ell = 2 and 10, the late ISW is superhorizon, and nothing above the
 first peak is being looked at. **The gate is on this grid** --- the eta_0
 slice against the released quadrature --- so an aliased grid would void the
 columns rather than loosen them."""
+
+[[grid]]
+key = "scripts/figure_f10_formation_surface.py::ELLS"
+what = "the multipoles F10's surface is drawn over"
+status = "index"
+note = """Dense below 30, then stepping by 20 to 300. **This is the axis the
+first version of F10 threw away**, and the reason the rebuild exists: the
+plateau is a statement about ell-dependence at fixed eta, so a figure that
+samples six multipoles and normalises each one cannot show it. Dense at low
+ell because that is where the plateau's shape is; to 300 because the first
+acoustic peak must be on the picture for the frozen shape to be legible. The
+damping tail is F9's and is not drawn."""

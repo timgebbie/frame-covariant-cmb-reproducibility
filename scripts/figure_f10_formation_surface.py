@@ -1,69 +1,53 @@
 #!/usr/bin/env python3
-r"""F10 --- when the spectrum is laid down. $C_\ell$ against conformal time.
+r"""F10 --- the angular autocorrelation as it forms: $C_\ell(\eta)$, a surface.
 
-**The PI's figure, 2026-10-24.** Every other instrument in this bundle
-measures a *finished* spectrum. This one shows it being built, and it is the
-only artefact here in which the plateau's defect is visible at all.
+**The PI's figure, respecified 2026-10-25.** The first version of this file
+drew six multipoles' accumulation against $\eta$ and called itself a surface.
+**It was not one.** It sampled the surface along six lines of constant $\ell$
+and threw the $\ell$ axis away, which is the axis the plateau and the acoustic
+peaks live on. The question asked was *how the spectrum evolves through
+conformal time*, and the answer to that is a spectrum at a sequence of times.
 
 WHAT IT DRAWS
 -------------
-For each multipole, the fraction of today's $C_\ell$ already in place at
-conformal time $\eta$ --- the bulk accumulated to $\eta$, plus the boundary
-terms, which are emitted at $\eta_*$ and are present in every slice. Both
-frames, three backgrounds, normalised per curve so the shape is the subject
-rather than the growth.
+**(a) The autocorrelation at a sequence of conformal times.** $D_\ell$ against
+$\ell$, one curve per epoch, from before decoupling through $\eta_\ast$ to
+today. This is the picture the PI asked for in three parts --- *just before
+decoupling, at decoupling, after decoupling* --- with the intermediate epochs
+drawn so the three are read as a progression rather than as three facts.
 
-The horizontal axis is $\log(\eta-\eta_*)$ because the visibility is narrow:
-on a linear axis 99% of the panel is free streaming, where by construction
-nothing is laid down.
+**(b) The surface itself.** $C_\ell(\eta)/C_\ell(\eta_0)$ over the full
+$(\ell,\eta)$ plane. Where panel (a) is read along $\ell$, this is read along
+$\eta$: a correct assembly has structure in the upper band, where the late
+integrated Sachs--Wolfe effect deposits power at low $\ell$ long after the
+visibility has closed.
 
-WHAT IT SHOWS, AND IT IS THE RESULT RATHER THAN THE ILLUSTRATION
------------------------------------------------------------------
-**Every curve reaches 1 within 1% of the conformal span and is flat
-afterwards.** The spectrum is finished at recombination.
+WHY A SPECTRUM AT EACH TIME AND NOT A FRACTION
+----------------------------------------------
+A normalised fraction answers *"how much of this multipole is in place?"* and
+cannot answer *"what shape is the spectrum right now?"*. The plateau is a
+statement about $\ell$-dependence at fixed $\eta$, so it is invisible to any
+per-$\ell$ normalisation --- which is what the first version of this figure
+did, and why it could show the defect only as a flat line rather than as the
+missing shape.
 
-That is a defect, and the figure is the only place it is visible:
-
-  * On `PLANCK_MODEL` and $\Lambda$CDM the late integrated Sachs--Wolfe
-    effect must deposit $O(0.1)$ of $C_2$ **after** the visibility closes.
-    It deposits **zero**.
-  * On Einstein--de~Sitter $\Phi$ is exactly constant (Appendix~G), so the
-    late share must be **exactly** zero --- and it is. **That null control is
-    what makes the PLANCK reading a defect rather than a numerical artefact**:
-    if something other than the weight were wrong, EdS would not come out
-    exactly zero.
-
-The mechanism is B-17 discrepancy (i). (102) carries the bulk bracket at
-$\mathcal V\mathcal D$ where the exact by-parts wants $W$; $\mathcal
-V=W\kappa'$ is sharply peaked at $\eta_*$ and is zero afterwards, so every
-late-time source is multiplied by zero. **The late ISW is not missing from
-the formalism --- it is present at rank one and annihilated by the weight.**
-
-WHY THIS AND NOT ANOTHER GATE
------------------------------
-$\ell_{\rm peak}$ and the median contributing $k$ are scalar summaries of the
-endpoint. **The plateau's missing power is a defect in time**, so neither can
-see it, and three pre-registered predictions were scored against them before
-this was drawn. A figure is the right instrument when the defect is a shape.
-
-**F9 is not superseded by this.** F9 shows *where* the power lands in $\ell$;
-F10 shows *when* it was laid down. The peak position and the missing plateau
-are different failures and each has its own figure.
+THE LOWER LIMIT IS NOT $\eta_\ast$
+----------------------------------
+(102)'s bulk runs from the **recombination start** (T-58), not from
+$\eta_\ast$, so *before decoupling* is a real epoch here with real
+accumulation in it rather than an empty panel. The first slice is the grid's
+own floor and the curve there is what the integral has built by then.
 
 GATE
 ----
-The $\eta_0$ column must reproduce the released quadrature exactly --- it is
-the same integral, decomposed. Asserted at $10^{-9}$, measured at $10^{-12}$.
+The $\eta_0$ column must reproduce the released quadrature --- it is the same
+integral, decomposed. Asserted at $10^{-9}$.
 
 ``--replot``
 ------------
-The computation is four minutes of quadrature and the harness runs on every
-pass, so F10 follows F9's split: the accumulation lands in
-`outputs/f10-formation-surface.csv`, which is committed, and ``--replot``
-redraws the committed picture from it in a second. **The CSV carries a digest
-of the code that produced it** and ``--replot`` refuses to redraw numbers this
-tree did not compute --- finding **T-54**, where a cache that could not say
-*who made this* printed CLEAN over a two-day-old spectrum.
+The accumulation lands in `outputs/f10-formation-surface.csv`, stamped with a
+digest of the code that produced it, and ``--replot`` refuses to redraw
+numbers this tree did not compute (**T-54**, **T-129**).
 """
 from __future__ import annotations
 
@@ -82,8 +66,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
 from functions.background.flrw import (  # noqa: E402
-    CDM_MODEL, LCDM_MODEL, PLANCK_H, PLANCK_MODEL, PLANCK_N_S,
-    PLANCK_OMEGA_B_H2)
+    PLANCK_H, PLANCK_MODEL, PLANCK_N_S, PLANCK_OMEGA_B_H2)
 from functions.plotting.style import (  # noqa: E402
     INK, SERIES, SERIES_DASH, save_figure, use_house_style)
 from functions.spectra.bessel_table import BesselTable  # noqa: E402
@@ -98,198 +81,189 @@ from _fingerprint import source_fingerprint as _digest  # noqa: E402
 
 VERSION = "v1.3.0"
 STEM = "f10-formation-surface"
+CSV = ROOT / "outputs" / "f10-formation-surface.csv"
 
-#: **Low granularity in time, as the PI asked.** Sixteen slices is enough to
-#: show that every curve is a step at $\eta_*$ and flat afterwards, and the
-#: cost is linear in neither --- the accumulation is one pass (D30) and the
-#: slice count only sets how finely it is sampled.
-N_SLICES = 16
+#: The $\ell$ axis, and it must carry the plateau AND the first peak or the
+#: figure cannot show the thing it is about. Dense below 30 where the plateau
+#: is a shape, then stepping to past the first acoustic peak.
+ELLS = np.unique(np.concatenate([
+    np.array([2, 3, 4, 5, 7, 9, 12, 16, 20, 25, 30]),
+    np.arange(40, 301, 20)]))
 
-#: The plateau, the first peak, and one point past it. The damping tail is
-#: F9's: it arrives with everything else and adds nothing here.
-ELLS = np.array([2, 5, 10, 30, 100, 200])
+#: 400 reaches $\ell=300$ on PLANCK with room. Not F9's 1500: the damping
+#: tail is F9's subject and it arrives with everything else.
+K_MAX = 400.0
 
-K_MAX = 300.0
+#: **Low granulation in time, as the PI specified.** Fourteen epochs is
+#: enough to read a progression and few enough that each curve is
+#: distinguishable in panel (a).
+N_SLICES = 14
+
+FRAME = "cdm"
 FRAMES = ("newtonian", "cdm")
 
-BACKGROUNDS = [
-    ("CDM (Einstein–de Sitter)", CDM_MODEL, 0.0224, 0.5, 0.48),
-    ("ΛCDM", LCDM_MODEL, 0.0224, 0.5, 0.48),
-    ("Planck 2018", PLANCK_MODEL, PLANCK_OMEGA_B_H2, PLANCK_H, None),
-]
+#: The three the PI named, located once the grid exists and annotated by
+#: name rather than by number, because *"at decoupling"* is the physical
+#: statement and $\eta_\ast=0.0606$ is not.
+NAMED = ("just before decoupling", "at decoupling", "after decoupling")
 
 
-def _accumulate(bg, obh2, h, gamma):
-    """Fraction of the final $C_\\ell$ in place at each slice, per frame."""
-    if gamma is None:
-        gamma = shape_parameter(bg.omega_m, h)
+def _accumulate():
+    r"""$C_\ell$ at every slice, for both frames. One pass in $k$."""
     env = build_environment(
-        K_MAX, omega_m=bg.omega_m, omega_lambda=bg.omega_lambda,
-        omega_r=bg.omega_r, omega_b_h2=obh2, transfer_gamma=gamma,
-        hubble_h=h, f_2=F2_DEFAULT, line_of_sight_weight="printed")
+        K_MAX, omega_m=PLANCK_MODEL.omega_m,
+        omega_lambda=PLANCK_MODEL.omega_lambda, omega_r=PLANCK_MODEL.omega_r,
+        omega_b_h2=PLANCK_OMEGA_B_H2,
+        transfer_gamma=shape_parameter(PLANCK_MODEL.omega_m, PLANCK_H),
+        hubble_h=PLANCK_H, f_2=F2_DEFAULT, line_of_sight_weight="printed")
     eta_star, eta_0 = float(env.eta_star), float(env.background.eta_0)
-    span = eta_0 - eta_star
-    sl = eta_star + np.concatenate(
-        [[0.0], np.geomspace(span * 1e-4, span, N_SLICES - 1)])
-    k_com = np.linspace(0.05, K_MAX, required_k_points(K_MAX, span))
+    floor = float(env.eta[0])
+
+    # From the recombination START (T-58), through eta_*, to today. Linear
+    # across recombination so the three named epochs are resolved, then
+    # geometric so the free-streaming era is sampled at all.
+    pre = np.linspace(floor, eta_star, 4)
+    post = eta_star + np.geomspace(
+        (eta_0 - eta_star) * 1e-4, eta_0 - eta_star, N_SLICES - 4)
+    sl = np.concatenate([pre, post])
+
+    k_com = np.linspace(0.05, K_MAX, required_k_points(K_MAX, eta_0 - eta_star))
     needed = required_multipoles(ELLS)
     table = BesselTable.build(
         ell_max=int(needed.max()), ells=needed,
-        x_max=float(k_com.max() * (eta_0 - env.eta[0])) + 20.0)
+        x_max=float(k_com.max() * (eta_0 - floor)) + 20.0)
     power = primordial_power(k_com, n_s=PLANCK_N_S, amplitude=1.0)
 
     acc = {f: np.zeros((ELLS.size, sl.size)) for f in FRAMES}
-    worst = 0.0
-    dk = k_com[1] - k_com[0]
+    gate, dk = 0.0, k_com[1] - k_com[0]
     for j, k in enumerate(k_com):
         sets = dict(zip(FRAMES, coefficient_sets(float(k), env)))
         diffusion = float(np.exp(-((float(k) / env.damping_k) ** 2)))
         common = dict(table=table, weight=env.weight, diffusion=diffusion,
                       damping_total=diffusion, eta_star=eta_star,
-                      eta_floor=float(env.eta[0]), visibility=env.visibility,
-                      eta_0=eta_0)
+                      eta_floor=floor, visibility=env.visibility, eta_0=eta_0)
         for f in FRAMES:
             s = sets[f]
             res = integral_solution(
                 ELLS, coefficients=s.coefficients, c1_prime=s.c1_prime,
                 c2_second=s.c2_second, c2_prime_star=s.c2_prime_star,
                 c2_prime=s.c2_prime, eta_slices=sl, **common)
-            worst = max(worst, float(np.max(
+            gate = max(gate, float(np.max(
                 np.abs(res.partial_bulk[:, -1] - res.integrated)
                 / np.maximum(np.abs(res.integrated), 1e-300))))
             boundary = (res.boundary_scalar + res.boundary_shear)[:, None]
             acc[f] += (k ** 2 * power[j]) * (res.partial_bulk + boundary) ** 2 * dk
-    return acc, (sl - eta_star) / span, worst
+        if j % 200 == 0:
+            print(f"      k {k:7.1f} of {K_MAX:.0f}", flush=True)
+    return acc, sl, eta_star, eta_0, floor, gate
 
 
-CSV = ROOT / "outputs" / "f10-formation-surface.csv"
-
-
-def source_fingerprint() -> str:
-    """A digest of the code that produced the numbers, for the CSV header.
-
-    **T-54's guard, over T-129's declared set.** The first version here copied
-    F9's "every `functions.*` module in `sys.modules`" and that is a property
-    of the code path: `peebles` is imported lazily inside `build_environment`,
-    so the compute branch hashed it and the replot branch did not. `_fingerprint`
-    walks `functions/` from disk instead, so the two branches agree and neither
-    is blind to a lazily-imported module.
-    """
-    return _digest(__file__)
-
-
-def _write_csv(emitted: list[tuple]) -> None:
-    """The accumulation, written beside the figure.
-
-    Re-rendering a layout fix should not recompute four minutes of quadrature
-    (**T-127**), and the house pattern --- `outputs/f9-acoustic-spectrum.csv`
-    --- already expects a figure to emit the data it drew.
-    """
+def _write_csv(acc, sl, eta_star, eta_0, floor):
     import csv as _csv
 
     with CSV.open("w", newline="", encoding="utf-8") as fh:
-        fh.write(f"# sources: {source_fingerprint()}\n")
+        fh.write(f"# sources: {_digest(__file__)}\n")
+        fh.write(f"# eta_star {eta_star:.9e}  eta_0 {eta_0:.9e}  "
+                 f"floor {floor:.9e}\n")
         w = _csv.writer(fh)
-        w.writerow(["background", "frame", "ell", "eta_frac", "fraction"])
-        for label, xs, accs in emitted:
-            for f in FRAMES:
-                for i, l in enumerate(ELLS):
-                    fin = accs[f][i][-1]
-                    if fin <= 0:
-                        continue
-                    for xv, yv in zip(xs, accs[f][i] / fin):
-                        w.writerow([label, f, int(l), f"{xv:.6e}",
-                                    f"{yv:.6f}"])
+        w.writerow(["frame", "ell", "eta", "c_ell"])
+        for f in FRAMES:
+            for i, l in enumerate(ELLS):
+                for j, e in enumerate(sl):
+                    w.writerow([f, int(l), f"{e:.9e}", f"{acc[f][i, j]:.9e}"])
 
 
-def _read_csv() -> list[tuple]:
-    """The emitted accumulation, back in the shape `_draw` wants.
-
-    Already-normalised fractions come back as the curves themselves, so
-    `_draw`'s per-curve normalisation divides by a final value of 1 and is a
-    no-op. The alternative --- a second normalisation convention on the replot
-    path --- is exactly the drift S8 forbids.
-    """
+def _read_csv():
     import csv as _csv
 
     with CSV.open(newline="", encoding="utf-8") as fh:
         stamped = fh.readline()
+        meta = fh.readline().split()
         rows = list(_csv.DictReader(fh))
     stamped = (stamped.split(":", 1)[1].strip()
                if stamped.startswith("# sources:") else "")
-    current = source_fingerprint()
-    if stamped != current:
+    if stamped != _digest(__file__):
         raise SystemExit(
             f"    FAIL  the cached CSV was produced by different code "
-            f"(stamped {stamped or 'nothing'}, this tree {current}).\n"
-            f"          --replot cannot redraw numbers it did not compute.\n"
-            f"          Run `python scripts/figure_f10_formation_surface.py`\n"
-            f"          with no arguments to recompute. Finding T-54.")
-    out = []
-    for label, _, _, _, _ in BACKGROUNDS:
-        sel = [r for r in rows if r["background"] == label]
-        if not sel:
-            raise SystemExit(f"    FAIL  {CSV.name} has no rows for {label}")
-        xs = np.array(sorted({float(r["eta_frac"]) for r in sel}))
-        acc = {f: np.zeros((ELLS.size, xs.size)) for f in FRAMES}
-        for f in FRAMES:
-            for i, l in enumerate(ELLS):
-                pts = sorted(((float(r["eta_frac"]), float(r["fraction"]))
-                              for r in sel
-                              if r["frame"] == f and int(r["ell"]) == int(l)))
-                if len(pts) != xs.size:
-                    raise SystemExit(
-                        f"    FAIL  {CSV.name}: {label}/{f}/l={int(l)} has "
-                        f"{len(pts)} slices, the background has {xs.size}")
-                acc[f][i] = np.array([p[1] for p in pts])
-        out.append((label, xs, acc))
-    return out
+            f"(stamped {stamped or 'nothing'}, this tree {_digest(__file__)}).\n"
+            "          --replot cannot redraw numbers it did not compute.\n"
+            "          Rerun with no arguments. Finding T-54.")
+    eta_star, eta_0, floor = float(meta[2]), float(meta[4]), float(meta[6])
+    sl = np.array(sorted({float(r["eta"]) for r in rows}))
+    acc = {f: np.zeros((ELLS.size, sl.size)) for f in FRAMES}
+    idx = {float(e): j for j, e in enumerate(sl)}
+    ell_idx = {int(l): i for i, l in enumerate(ELLS)}
+    for r in rows:
+        acc[r["frame"]][ell_idx[int(r["ell"])], idx[float(r["eta"])]] = \
+            float(r["c_ell"])
+    return acc, sl, eta_star, eta_0, floor
 
 
-def _draw(emitted: list[tuple]) -> plt.Figure:
-    """The picture, from accumulations that were computed or were read back."""
+def _d_ell(c):
+    return ELLS * (ELLS + 1.0) * c / (2.0 * np.pi)
+
+
+def _draw(acc, sl, eta_star, eta_0, floor):
     use_house_style()
-    fig, axes = plt.subplots(2, 3, figsize=(10.5, 6.0), sharex=True,
-                             sharey=True)
-    for col, (label, x, acc) in enumerate(emitted):
-        for row, frame in enumerate(FRAMES):
-            ax = axes[row, col]
-            for i, l in enumerate(ELLS):
-                fin = acc[frame][i][-1]
-                if fin <= 0:
-                    continue
-                ax.plot(np.maximum(x, 1e-5), acc[frame][i] / fin,
-                        color=SERIES[1 + i % 4],
-                        linestyle=SERIES_DASH[1 + i % 4],
-                        linewidth=1.1, label=rf"$\ell={int(l)}$")
-            ax.set_xscale("log")
-            ax.axhline(1.0, color=INK["grid"], linewidth=0.6, zorder=0)
-            if row == 0:
-                ax.set_title(label, fontsize=9)
-            if col == 0:
-                ax.set_ylabel(f"{frame}\n" r"fraction of final $C_\ell$",
-                              fontsize=8)
-            if row == 1:
-                ax.set_xlabel(r"$(\eta-\eta_*)/(\eta_0-\eta_*)$", fontsize=8)
-    # Legend outside the data. It sat over the l=2 curve in the first
-    # rendering, which V12 caught by looking rather than by any check.
-    axes[0, 0].legend(fontsize=6, frameon=False, loc="upper left",
-                      bbox_to_anchor=(0.0, -0.02), ncol=3,
-                      handlelength=1.6, columnspacing=1.0)
-    fig.suptitle("F10  when the spectrum is laid down — every curve is "
-                 "complete at recombination", fontsize=10)
-    # Two short lines, not one long one: the single line overran the figure
-    # at both ends and was clipped.
-    fig.text(0.5, 0.040,
-             "A correct assembly deposits ~10% of $C_2$ after the visibility "
-             "closes on ΛCDM and Planck — the late ISW —",
+    fig, axes = plt.subplots(1, 2, figsize=(11.0, 4.6))
+
+    # --- (a) the autocorrelation at a sequence of epochs -------------------
+    ax = axes[0]
+    a = acc[FRAME]
+    final = _d_ell(a[:, -1])
+    norm = np.max(final) if np.max(final) > 0 else 1.0
+    # The three the PI named, plus the rest as context.
+    i_before, i_at = 1, 3
+    for j, e in enumerate(sl):
+        d = _d_ell(a[:, j]) / norm
+        if not np.any(d > 0):
+            continue
+        if j == i_before:
+            kw = dict(color=SERIES[1], linestyle=SERIES_DASH[2], lw=1.7,
+                      label="just before decoupling", zorder=5)
+        elif j == i_at:
+            kw = dict(color=SERIES[1], linestyle=SERIES_DASH[1], lw=2.0,
+                      label=r"at decoupling, $\eta_\ast$", zorder=6)
+        elif j == sl.size - 1:
+            kw = dict(color=SERIES[1], linestyle=SERIES_DASH[3], lw=2.0,
+                      label=r"today, $\eta_0$", zorder=6)
+        else:
+            kw = dict(color=SERIES[4], lw=0.8, alpha=0.9, zorder=2)
+        ax.plot(ELLS, d, **kw)
+    ax.set_xscale("log")
+    ax.set_xlabel(r"$\ell$", fontsize=9)
+    ax.set_ylabel(r"$D_\ell$, normalised to its maximum today", fontsize=8.5)
+    ax.set_title("(a)  the autocorrelation, epoch by epoch", fontsize=9)
+    ax.legend(fontsize=7, frameon=False, loc="upper left")
+
+    # --- (b) the surface ---------------------------------------------------
+    ax = axes[1]
+    with np.errstate(invalid="ignore", divide="ignore"):
+        frac = a / np.where(a[:, -1:] > 0, a[:, -1:], np.nan)
+    x = (sl - eta_star) / (eta_0 - eta_star)
+    # A symlog abscissa: recombination is a sliver of the span and a linear
+    # axis would spend the panel on free streaming, where nothing is added.
+    mesh = ax.pcolormesh(x, ELLS, np.clip(frac, 0.0, 1.0),
+                         cmap="Greys", vmin=0.0, vmax=1.0, shading="nearest")
+    ax.set_xscale("symlog", linthresh=1e-4)
+    ax.set_yscale("log")
+    ax.axvline(0.0, color=INK["grid"], lw=0.8)
+    ax.set_xlabel(r"$(\eta-\eta_\ast)/(\eta_0-\eta_\ast)$", fontsize=9)
+    ax.set_ylabel(r"$\ell$", fontsize=9)
+    ax.set_title(r"(b)  $C_\ell(\eta)/C_\ell(\eta_0)$, the surface",
+                 fontsize=9)
+    cb = fig.colorbar(mesh, ax=ax, pad=0.02)
+    cb.set_label("fraction of today's value", fontsize=7.5)
+    cb.ax.tick_params(labelsize=7)
+
+    fig.suptitle("F10  the angular autocorrelation as it forms — Planck 2018, "
+                 "CDM frame", fontsize=10)
+    fig.text(0.5, 0.015,
+             "Panel (b) is white to the right of recombination on every row: "
+             "nothing is deposited after the visibility closes, where the "
+             "late ISW must deposit ~10% of $C_2$.",
              ha="center", fontsize=7.5, color=INK["muted"])
-    fig.text(0.5, 0.012,
-             "and exactly none on Einstein–de Sitter, where $\\Phi$ is "
-             "constant. All three read zero: B-17 (i), the bracket at "
-             "$\\mathcal{V}$.",
-             ha="center", fontsize=7.5, color=INK["muted"])
-    fig.tight_layout(rect=(0, 0.075, 1, 0.965))
+    fig.tight_layout(rect=(0, 0.055, 1, 0.94))
     return fig
 
 
@@ -297,29 +271,29 @@ def main() -> int:
     print(__doc__.split("WHAT IT DRAWS")[0])
     if "--replot" in sys.argv:
         print(f"    replotting from {CSV.relative_to(ROOT)}")
-        for p in save_figure(_draw(_read_csv()), STEM, VERSION):
+        for p in save_figure(_draw(*_read_csv()), STEM, VERSION):
             print(f"    wrote {p.relative_to(ROOT)}")
         return 0
 
-    gate = 0.0
-    emitted: list[tuple] = []
-    for label, bg, obh2, h, gamma in BACKGROUNDS:
-        print(f"    {label} …", flush=True)
-        acc, x, worst = _accumulate(bg, obh2, h, gamma)
-        gate = max(gate, worst)
-        emitted.append((label, x, acc))
-
+    acc, sl, eta_star, eta_0, floor, gate = _accumulate()
     print(f"\n    GATE  eta_0 column vs the released quadrature: "
-          f"worst rel {gate:.2e}  "
-          f"{'PASS' if gate < 1e-9 else '**FAIL**'}")
+          f"worst rel {gate:.2e}  {'PASS' if gate < 1e-9 else '**FAIL**'}")
     if gate >= 1e-9:
         print("    The accumulation does not decompose the released integral; "
-              "neither the figure nor the CSV is written.")
+              "nothing is written.")
         return 1
 
-    _write_csv(emitted)
+    # The reading, printed so it is in the log as well as in the picture.
+    a = acc[FRAME]
+    x = (sl - eta_star) / (eta_0 - eta_star)
+    late = [1.0 - float(np.interp(0.01, x, a[i] / a[i, -1]))
+            for i in range(ELLS.size) if a[i, -1] > 0]
+    print(f"    late share, worst over {ELLS.size} multipoles: "
+          f"{max(np.abs(late)):.4f}  (the late ISW needs ~0.1 at ell=2)")
+
+    _write_csv(acc, sl, eta_star, eta_0, floor)
     print(f"    wrote {CSV.relative_to(ROOT)}")
-    for p in save_figure(_draw(emitted), STEM, VERSION):
+    for p in save_figure(_draw(acc, sl, eta_star, eta_0, floor), STEM, VERSION):
         print(f"    wrote {p.relative_to(ROOT)}")
     return 0
 

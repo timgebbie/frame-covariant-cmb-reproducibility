@@ -10562,3 +10562,621 @@ the EdS late share collapses from $0.9978$ toward zero**, because the partner
 can reach $-v$ and the cancellation becomes available. If it does not collapse,
 the $\tau_1\to-v$ limit is wrong in this implementation for a second reason and
 P1-T asked to be told at which $k$ it breaks.
+
+## T-146 — **The frame boost on $(a\mathcal B_1)'$ vanishes identically on Einstein–de Sitter, and only there. P1-T's cancellation cannot operate on the one background where the growing mode is largest**
+
+**2026-10-25, P1-B.** Reached through **two** wrong readings of mine, each
+refuted by the next check. Both are stated, because a register that prints
+only the surviving reading teaches nothing about how it was reached.
+
+### Reading 1, wrong: "the boost is dropped from $(a\mathcal B_1)'$"
+
+$C_1$ differs between the frames and $C_1'$ does not, to machine zero. At
+$k=10$, EdS, $\eta_0$: $\Delta C_1=+3.242$e-01 against
+$\Delta C_1'=+6.93$e-07, and $\Delta(a\mathcal B_1)'=-7.19$e-08 where a
+time-dependently boosted $\tau_1$ would give $-(k^2/3)v=+2.161$e+02. **I had
+this written as the root of the frame gap.**
+
+### Reading 2, also wrong: "the boost on $a\mathcal B_1$ is constant in $\eta$"
+
+The frame difference in $a\mathcal B_1$ is flat to five figures across the
+span — $-3.24151$, $-3.24154$, $-3.24154$ — and the derivative of a constant
+is zero, so a frame-identical $(a\mathcal B_1)'$ looked like what the
+implementation *should* produce. **That check was on the wrong quantity.**
+$a\mathcal B_1=k(\delta T+\Phi_A)$ contains no $\tau_1$, so its frame
+difference says nothing about whether $\tau_1$'s boost arrives.
+
+### What is actually true
+
+`cdm_set` **does** boost, at line 107, `tau_1_E = tau_1 - boost`, and it
+builds $(a\mathcal B_1)'_E$ from the boosted $\delta\tilde T'$. The boost to
+$\delta T'$ is $-(\mathcal H'v+\mathcal Hv')/k$ — and on Einstein–de Sitter,
+with $\mathcal H=2/\eta$ and $v\propto\eta$,
+
+$$-\mathcal H'v=+\frac{2C}{\eta},\qquad -\mathcal Hv'=-\frac{2C}{\eta}\qquad\Longrightarrow\qquad \text{the boost is }\mathbf{0}\text{, exactly.}$$
+
+**It is the same cancellation that makes $C_2''\equiv0$ on EdS**, and the
+measurement says so:
+
+| background | $k$ | $\lvert\Delta(a\mathcal B_1)'\rvert/\lvert(a\mathcal B_1)'\rvert$ | $\lvert\Delta C_1'\rvert/\lvert C_1'\rvert$ |
+|---|---|---|---|
+| **EdS** | 10 | **1.9e-09** | **1.8e-07** |
+| **EdS** | 30 | **2.6e-10** | **2.5e-08** |
+| $\Lambda$CDM | 10 | 1.016e-01 | 1.016e-01 |
+| $\Lambda$CDM | 30 | 2.217e-02 | 2.217e-02 |
+| PLANCK | 10 | 1.396e-01 | 1.396e-01 |
+| PLANCK | 30 | 3.025e-02 | 3.025e-02 |
+
+**The implementation boosts correctly. The frame-identity is an Einstein–de
+Sitter property of the background, not a defect in the code.** Both of my
+readings are withdrawn.
+
+### The finding, which survives all of it
+
+> **On Einstein–de Sitter the frame boost to $(a\mathcal B_1)'$ is identically
+> zero, so $\tfrac k3\tau_1$ has no frame content there at all — and EdS is
+> precisely the background on which $C_0=+\tfrac13kv$ grows maximally, because
+> $\Phi$ is constant and the growing mode is undamped.**
+
+So P1-T's $\tilde\tau_1\to-v$ cancellation, which requires the boost to carry
+$-v$ into the partner, **cannot operate on EdS by the background's own
+arithmetic**. It is available on the $\Lambda$ backgrounds at the 2–14% level
+and not at all where it is most needed.
+
+### What this costs the measurements already taken
+
+**T-143, T-145 and the EdS columns of T-144 were all taken on the one
+background where the cancellation is structurally absent.** Their numbers
+stand — the growth is $\sqrt{1+z_\ast}$, the freeze is real, the bracket does
+carry the growing mode whole — and **their generality does not**. The
+inference *"the cancellation does not occur"* is sound for EdS and is not
+established anywhere else.
+
+**This also re-reads T-145's failed prediction.** Free-streaming $\tau_1$ past
+$\eta_{\rm couple}$ could not produce the cancellation on EdS because there is
+no frame content for it to produce it with. The prediction failed for a reason
+the instrument could not have revealed, and **the right place to score it is
+$\Lambda$CDM**, where the boost is non-zero. That run has not been made.
+
+### What is referred, and what is mine
+
+**P1-T's**: whether a cancellation that vanishes identically on EdS is the
+right account of a bracket whose growing mode is largest on EdS. The $C_0$
+versus $\tfrac k3\tau_1$ pairing is their derivation and this is a question
+about its domain of validity, not about its algebra.
+
+**Mine, and queued**: re-run T-145's free-streaming prediction on $\Lambda$CDM
+and PLANCK rather than EdS. Pre-registered: bracket$/C_0$ falls further there
+than the 15% it moved on EdS, because the boost is non-zero. If it does not,
+the cancellation is not the obstruction on any background and T-145's
+mechanism is wrong rather than merely untested.
+
+## T-147 — **T-145's mechanism is refuted by its own re-scoring. The freeze is a real defect and it is not what prevents the cancellation**
+
+**2026-10-25, P1-B.** T-146 said T-145's prediction had been scored on the one
+background where the boost vanishes, and that the right place to score it is
+$\Lambda$CDM. Done, pre-registered, and it comes back against me.
+
+bracket$/C_0$ at $\eta_0$, CDM frame:
+
+| background | $k$ | `"freeze"` | `"free_stream"` | change |
+|---|---|---|---|---|
+| EdS | 10 | 1.1761 | 1.0056 | $-14.5$% |
+| EdS | 30 | 1.1408 | 0.9849 | $-13.7$% |
+| $\Lambda$CDM | 10 | 1.2012 | 0.9888 | **$-17.7$%** |
+| $\Lambda$CDM | 30 | 1.1229 | 0.8402 | **$-25.2$%** |
+| PLANCK | 10 | 1.1314 | 1.0036 | $-11.3$% |
+| PLANCK | 30 | 1.0878 | 0.9907 | $-8.9$% |
+
+**Against the pre-registration as written** — *bracket$/C_0$ falls further on
+$\Lambda$CDM and PLANCK than the 15% it moved on EdS* — the result is **split**:
+$\Lambda$CDM falls further at both $k$ and **PLANCK falls less at both**. A
+prediction that holds on one $\Lambda$ background and fails on the other is
+not confirmed, and the splitting is not a detail to be averaged away.
+
+**And the statement that matters is the one both halves agree on.** On **no**
+background, at **no** $k$, with or without the freeze, does bracket$/C_0$
+collapse toward zero. It moves from $\simeq1.15$ to $\simeq0.84$–$1.00$.
+**The cancellation $C_0+\tfrac k3\tau_1\to0$ does not occur anywhere.**
+
+### The conclusion, and it goes against the finding that proposed it
+
+**T-145's mechanism is not supported.** The freeze is real — measured, four
+significant figures flat across 84% of the span — and it is **not what
+prevents the cancellation**. Removing it changes the bracket by 9–25% and
+never produces the cancellation on any background. Something else is
+obstructing it, or the pairing itself does not hold in this implementation.
+
+**What T-145 keeps:**
+
+- the freeze is a genuine defect in its own right — a hierarchy held at its
+  last value where it must free-stream — and `TAU_CONTINUATION` remains the
+  control for it, released default `"freeze"`, bit-identical;
+- the two-halves-on-two-time-domains observation stands as a description;
+- the coupling to B-17 (i) stands: $\mathcal V$ hides the freeze and removing
+  the weight exposes it.
+
+**What T-145 loses:** the claim that the freeze is *why* the weight repair has
+been unadoptable. That was an inference from one background and it does not
+survive three.
+
+### What is now open, stated as the question rather than as a plan
+
+$C_0$ grows by $\sqrt{1+z_\ast}$ and its putative partner does not cancel it
+on any background, frozen or free-streaming. Either $\tfrac k3\tau_1$ is not
+the partner, or the partner is present and something downstream of (107)
+is not delivering it to the bracket. **The first is P1-T's and the second is
+mine**, and nothing measured today separates them. The next instrument has to
+be a direct evaluation of $C_0+\tfrac k3\tau_1$ against zero on the live
+arrays, term by term, rather than an inference from the bracket's ratio —
+which is the same lesson as **M15**, a cancellation scored on the wrong
+object.
+
+**Four readings of mine were withdrawn today — the no-op discriminator,
+"the boost is dropped", "the boost is constant", and now this mechanism.**
+Each was refuted by the next check rather than by someone else, which is the
+system working; and four in a day is a rate worth naming rather than
+absorbing. The common cause is inference from a single background where a
+background-specific cancellation was doing the work.
+
+## T-148 — **The pair does not cancel because the two terms have the same sign. $\tau_1$ is nowhere near $-v$: wrong sign and 5.7 times too small**
+
+**2026-10-25, P1-B.** T-147 ended on **M15** — a cancellation scored on the
+bracket's ratio is scored on the wrong object. This scores it on the object it
+lives in, with the ISW isolated by the driving knob so that what is left is
+the partner alone.
+
+$(a\mathcal B_1)'/k=(\Phi_A'-\Phi_H')+\tfrac k3\tau_1$, and the bracket
+carries $C_0-C_1'+C_2''$ with $-C_1'\ni+(a\mathcal B_1)'/k$. So the pair in
+the bracket is $C_0+(a\mathcal B_1)'/k$, and with $\lambda=0$ the second term
+is $\tfrac k3\tau_1$ alone. At $\eta_0$, CDM frame:
+
+| background | $k$ | $C_0$ | $\tfrac k3\tau_1$ | sum | $\lvert$sum$\rvert/\lvert C_0\rvert$ |
+|---|---|---|---|---|---|
+| EdS | 10 | $-2.1610$e+01 | $-3.8052$e+00 | $-2.5415$e+01 | 1.176 |
+| EdS | 30 | $-1.8127$e+02 | $-2.5521$e+01 | $-2.0679$e+02 | 1.141 |
+| $\Lambda$CDM | 10 | $-2.8775$e+01 | $-6.5267$e+00 | $-3.5301$e+01 | 1.227 |
+| $\Lambda$CDM | 30 | $-2.4137$e+02 | $-3.0341$e+01 | $-2.7171$e+02 | 1.126 |
+| PLANCK | 10 | $-2.2872$e+01 | $-3.5878$e+00 | $-2.6460$e+01 | 1.157 |
+| PLANCK | 30 | $-1.7317$e+02 | $-1.5700$e+01 | $-1.8887$e+02 | 1.091 |
+
+**The two terms have the same sign on every background at every $k$, and the
+sum is larger than $C_0$, not smaller.** A cancellation requires opposite
+signs. There is nothing here to cancel with.
+
+### Against P1-T's values, which is the sharp form
+
+P1-T: $C_0=+\tfrac13kv$ and $\tau_1\to-v$, so $\tfrac k3\tau_1\to-\tfrac13kv$
+and the pair vanishes. On EdS at $k=10$:
+
+| quantity | required | measured | |
+|---|---|---|---|
+| $C_0$ | $+\tfrac13kv=-2.161$e+01 | $-2.161$e+01 | **exact** |
+| $\tfrac k3\tau_1$ | $-\tfrac13kv=+2.161$e+01 | $-3.805$e+00 | **wrong sign, 5.7× too small** |
+
+**The first row is bit-exact and the second is not close.** $C_0=+\tfrac13kv$
+is confirmed; $\tau_1\to-v$ is not, in any frame, on any background, with the
+freeze or without it.
+
+### What this settles, and what it hands back
+
+**It settles that the obstruction is not in the time domain.** T-145 proposed
+the freeze, T-146 proposed the boost, and T-147 refuted the first; this says
+neither could ever have been it, because the partner is the wrong sign before
+any question of *when* it is evaluated arises. **Three findings' worth of
+mechanism, correctly withdrawn, and this is the instrument that should have
+been built first** — M15 was in the register the whole time and I scored the
+ratio anyway.
+
+**What it hands back, and the split is clean:**
+
+- **P1-T's:** is $\tfrac k3\tau_1$ $C_0$'s partner at all? The sign says not
+  as implemented. Either the pairing is wrong, or (107)'s $(a\mathcal B_1)'$
+  enters the bracket with the opposite sign to the one assumed, or
+  $\tau_1\to-v$ is not the free-streaming limit of *this* $\tau_1$ — which is
+  the velocity-normalised mode coefficient (T-66), not the covariant dipole.
+- **Mine:** the magnitude. $\tfrac k3\tau_1$ is $5.7\times$ smaller than
+  $\tfrac13kv$ at $k=10$ and $7.1\times$ at $k=30$ on EdS, and the ratio moves
+  with $k$ — which is a normalisation or a power of $k$, and **this project
+  has lost a power of $k$ three times** (T-27, T-66, T-96 run 1). That is
+  mine to check against (107) on the live arrays and it is the next run.
+
+**No claim is made here about which.** The measurement is that they do not
+cancel and by how much they miss.
+
+### T-148, addendum — the miss is not a power of $k$, and at superhorizon scales it is a clean number
+
+Taken because *"this project has lost a power of $k$ three times"* is the
+first thing to exclude, and excluding it is one run. EdS, $\eta_0$, CDM frame,
+ratio = the partner divided by $-\tfrac13kv$, which is $-\tau_1/v$:
+
+| $k$ | ratio | log-slope |
+|---|---|---|
+| 5 | $-0.1795$ | — |
+| 10 | $-0.1761$ | $-0.028$ |
+| 20 | $-0.1614$ | $-0.126$ |
+| 40 | $-0.1189$ | $-0.440$ |
+| 80 | $-0.0595$ | $-1.000$ |
+| 160 | $-0.0193$ | $-1.623$ |
+
+**Not a power of $k$** — the log-slope runs from $-0.03$ to $-1.62$, so it is
+not a lost factor and not a normalisation. **It is scale-dependent, and it
+plateaus.** As $k\to0$ the ratio tends to $\simeq-0.18$, so
+
+$$\tau_1\;\to\;+0.18\thinspace v\qquad\text{at superhorizon scales, where P1-T's limit requires }\tau_1\to-v.$$
+
+**Opposite sign, and 5.5 times too small.** The roll-off above $k\simeq20$ is
+the dipole decaying inside the horizon and is expected; the plateau below it
+is the number that has to be explained.
+
+**And it closes the loop with T-146.** On EdS the frame boost to
+$(a\mathcal B_1)'$ is identically zero, so the partner sitting in the bracket
+there *is the Newtonian $\tau_1$* — the photon dipole, which has no reason to
+equal $-v$. P1-T's $\tilde\tau_1\to-v$ is a statement about the **CDM-frame**
+dipole, and on EdS the CDM-frame boost never reaches this term. On the
+$\Lambda$ backgrounds the boost does reach it, at 2–14%, which is far too
+little to flip a sign — consistent with the same-sign result measured there.
+
+**So the question is now single and it is P1-T's:** the bracket's partner is
+$(a\mathcal B_1)'/k$, whose $\tau_1$ arrives **unboosted on EdS by the
+background's own arithmetic**. Is the pairing $C_0$ against $\tfrac k3\tau_1$
+stated for the covariant dipole $\tilde\tau_1$, which would need the boost
+that cannot arrive, or for the velocity-normalised mode coefficient this
+bundle carries (T-66), which is $+0.18v$ and not $-v$? **Those are different
+objects and the pairing is right for at most one of them.**
+
+## T-149 — **The committed manifest asserted a hash no file in the repository had, for sixteen days, and the gate that exists to catch it was run on the wrong tree**
+
+**2026-10-25.** Found by the PI running the verification block on **their**
+machine, where `captions/F3-angular-spectrum.md` failed a render rule that
+passes here.
+
+### What was wrong
+
+| | hash |
+|---|---|
+| `FILE-MANIFEST-SHA256.txt`, committed | `bf6a07b3f58b268eca7fa70dd93d3fe3fef0371f47ba23bfc5692f43efe8d222` |
+| the working copy | `bf6a07b3…` — **matches** |
+| **the file in the repository** | `0d54c559f950378e58a8b486c1d695b781aef9e594690e8353b7590e8dab0cb1` |
+
+The repository's F3 was last written **9 October** and still carried
+a backslash-escaped percent inside `$…$` — a backslash-escaped percent **inside** a maths span, which GitHub
+eats before KaTeX, truncating the equation on the published page. The fix,
+moving the percent outside (percent outside the span), was made in a working copy, **entered
+the manifest when `make_manifests.py` ran there, and the file itself was never
+committed.**
+
+So the manifest has been publishing a hash for a file that does not exist in
+the repository, since **9 October**, through three releases of the register.
+
+### Why nothing caught it, and this is the part worth keeping
+
+`scripts/make_manifests.py --check` exists exactly for this and **passes in
+the working copy**, because the working copy is where both the manifest and
+the file agree. The check was never run against the repository.
+
+**The failure is in how I verified, not in the gate.** My pre-commit diff
+compared *my working copy* against *the committed manifest* and found them
+consistent — which is the one comparison that cannot detect this, because the
+manifest is **generated from** the working copy and **committed to** the
+repository. Two of the three objects were checked against each other and the
+third was never looked at.
+
+> **A manifest is generated from one tree and asserted about another. It has
+> to be checked against the one it is asserted about.**
+
+That is the same shape as **T-129** (a digest that measured the code path
+instead of the code) and **T-125** (a control measured against itself), and it
+is the third instance this month of a check whose own failure mode is
+invisible to it.
+
+### The repair
+
+The corrected F3 is committed. The standing change is to the verification
+step rather than to any file: **`python scripts/make_manifests.py --check` is
+run on the repository, by the PI, as part of the commit block** — not in the
+working copy, where it cannot fail for this reason. One command, and it lists
+every file whose content disagrees with the manifest rather than the one the
+render tests happened to notice.
+
+**And there may be more.** F3 surfaced only because a render rule fired on it.
+A file whose drift carries no render hazard would still be silent. The
+`--check` run on the repository is what enumerates them, and it has not been
+done; **no claim is made here that F3 is the only one.**
+
+## T-150 — **I committed manifests generated from a working copy that is not the repository. They assert eleven files that do not exist in it and miss nine that do**
+
+**2026-10-25.** The repair for T-149 was *"run `make_manifests.py --check` on
+the repository"*. The PI ran it. It fails, and it fails on manifests **I
+generated and committed two hours earlier**.
+
+### What it reports
+
+`FILE-MANIFEST-SHA256.txt` and `PORTABLE-MANIFEST-SHA256.txt` both disagree
+with the tree:
+
+- **Nine `supplementary-materials/*-v1.4.0.tex` files are `added`** — they
+  exist in the repository and are absent from the manifest. They are P1-T's
+  restructured supplement sections, landed 24–25 October, and **my working
+  copy does not contain them at all.**
+- `provenance/ANNALS-II-SOURCE-ASSEMBLY-EXTRACT.md` and
+  `diagnostics/d15-f9-b-slot-repair.csv`, likewise absent from my copy.
+- Three `.tex` files `changed` — P1-T's edits, which my copy predates.
+- Eight `outputs/*.csv` and nineteen `figures/*` entries `changed`, which is
+  cross-platform float and rasteriser noise between a Linux working copy and
+  a Windows repository.
+
+Both append-guarded registers **PASS**, so the appends are sound. The failure
+is entirely in the manifests.
+
+### The cause, and it is one sentence
+
+**A manifest is a statement about a tree, and I generated it from the wrong
+tree.** My working copy is a Linux container holding P1-B's files; the
+repository is on the PI's machine and holds P1-T's as well. The two are not
+the same tree and never were. Generating the manifest where I work and
+committing it where the files live asserts the hashes of **my** tree about
+**theirs**.
+
+The `[rendered]` and `[numeric]` rows make it structural rather than
+accidental: `FILE-MANIFEST` records exact byte hashes of figures and CSVs,
+and those **cannot** agree across platforms — matplotlib's rasteriser and the
+last digits of a quadrature differ. **The exact manifest can only ever be
+generated on the machine that commits it.** That is why `PORTABLE-MANIFEST`
+exists with numeric canonicalisation, and I had read that reasoning in the
+file and still generated both in the wrong place.
+
+### The repair, and it is a rule rather than a fix
+
+**The manifests are generated by the PI, on the repository, immediately
+before the commit, and never by me.** Everything else in a batch may be built
+in a working copy; the manifests may not, because they are the one artefact
+whose content is a function of the tree they are committed to.
+
+This also corrects T-149's repair, which said to *check* on the repository.
+Checking there was right and insufficient: the generation has to move too.
+
+### What it does not mean
+
+**No content is wrong.** The nine `added` files are P1-T's and are in the
+repository where they belong; the `changed` figures are float noise, which is
+the `[rendered]` class and is why that class is labelled. Nothing is lost and
+nothing needs rebuilding. One command on the PI's machine reconciles all of
+it, and the batch is otherwise sound.
+
+**Three manifest findings in one day — T-149, T-150 — are one defect seen
+twice**: I verified artefacts against the wrong object both times, first the
+manifest against my copy, then the manifest generated from my copy. The
+common correction is that **the repository is the object, and I do not have
+it.**
+
+## T-151 — **`w_half_is_isw_only` has been moving an array of zeros since it was added. `c1_prime_isw` had no supplier anywhere in the tree**
+
+**2026-10-25, P1-B.** Found while wiring P1-T's reading 1 as a control.
+
+`integral_solution` takes `c1_prime_isw` — the $(\Phi_A'-\Phi_H')$ content of
+$C_1'$ — and defaults it to `None`, which becomes
+`c1_isw = np.zeros_like(eta)`. **A grep of the whole tree returns no caller
+that passes it.** So every run of `w_half_is_isw_only`, whose entire purpose
+is to send *only the ISW* to $W$, sent **zero** to $W$ and left the whole
+bracket where it was.
+
+**That is the T-125 class for the third time** — a control that reads as live,
+raises nothing, and measures the released configuration. `D26`'s lattice
+carries it, so any row of that screen labelled with the flag is mislabelled;
+the screen's *verdicts* are unaffected only because the flag was never the
+thing that moved them, which is exactly what could not have been known from
+the output.
+
+### The repair, and the sign is measured rather than asserted
+
+`bulk_source_primitives` now supplies it:
+`c1_prime_isw = -(phi_a_prime - phi_h_prime)`.
+
+The sign was taken by differencing `c1_prime` at
+`PHI_PRIME_DRIVING_LAMBDA` 1 and 0 on $\Lambda$CDM, which gives
+$-(\Phi_A'-\Phi_H')$ to **2.8%** — the same $\simeq3$% quadrature residual
+the frame-closure test shows, not a sign ambiguity. **Einstein–de Sitter
+cannot settle it**: both sides are identically zero there (Appendix G), and
+an earlier attempt to verify the sign on EdS returned $0/0$ and was discarded
+for that reason.
+
+### The scale, which is why this is a correction and not an opportunity
+
+$$\frac{\lvert c_1'^{\rm ISW}\rvert}{\lvert C_1'\rvert}=9.1\times10^{-5}.$$
+
+**One part in eleven thousand.** That is **T-121** read from the other side —
+$\kappa''\tilde v_B$ is 99.8% of $|C_1'|$ — and it settles what
+`isw_only_at_w` can be expected to do before it is run: it restores a late
+integrated Sachs–Wolfe term and **cannot** move the acoustic peak or build a
+plateau, because it moves $10^{-4}$ of one coefficient.
+
+**Recorded before running it rather than after.** The control is now correct
+and usable; the arithmetic says what its null will look like, and a null
+measured against a stated expectation is worth more than one explained
+afterwards.
+
+## T-152 — **F9 was the one long run never made resumable, and a container restart cost five hours of it**
+
+**2026-10-25, P1-B.** The fifth long run lost this week, and the first one
+lost *after* the repair for losing them was built.
+
+**T-127** recorded four diagnostics lost to container restarts and produced
+`scripts/_resumable.py`: a row is written and `fsync`'d the moment it
+completes, and a rerun skips what is already there. It was applied to D29,
+D32 and the diagnostics that followed.
+
+**It was never applied to F9**, which is the longest run in the bundle —
+three backgrounds at 45–80 minutes each, 1433 modes in two frames — and which
+wrote its CSV **only at the end**. On 2026-10-25 the container restarted
+roughly five hours into a recompute forced by T-129's corrected cache guard,
+partway through the second background. Everything was lost.
+
+**The irony is the finding.** T-127's own entry says *"a diagnostic whose
+result exists only while its process does is not reproducible"*, and the
+repair was fitted to the instruments that had failed rather than to the class
+they belonged to. **The longest-running artefact in the tree was the one left
+out**, because it was a figure rather than a diagnostic and the repair was
+scoped by the label instead of by the runtime.
+
+### The repair
+
+Per-background checkpointing, keyed on the background label **and the source
+fingerprint**, so a rerun after a code change recomputes rather than resuming
+onto numbers a different tree produced — **T-54's rule applied to the partial
+file as well as to the finished one**, which is the part that would otherwise
+reintroduce the staleness T-129 just closed.
+
+A restart now costs at most one background. The partial file is removed once
+the real CSV is written, so it cannot sit in `diagnostics/` as an unproduced
+build artefact for `check_release_hygiene` to flag.
+
+### What it does not fix
+
+**The run is still 2–4 hours** and nothing here makes it shorter. What
+changes is that an interruption costs 45–80 minutes instead of all of it, and
+that the bundle's longest artefact is now covered by the same rule as its
+cheapest diagnostic. **Scoping a reliability repair by what failed rather
+than by what could fail is the defect; this is the instance that shows it.**
+
+## T-153 — **Audit, 2026-10-25: two more silently-ignored controls, and the suite was spending 27 seconds running the same three instruments twice**
+
+**P1-B's weekly audit, brought forward by the PI.** Two findings, one a defect
+class and one a cost.
+
+### 1. Two more controls accepted and ignored — T-125's fourth and fifth instances
+
+T-125 (`by_parts_weight_terms` discarded under `slot_weight_split`), the D32
+no-op, and T-151 (`w_half_is_isw_only` moving zeros) were each found **by
+accident**. So the class was turned into a gate:
+`tests/test_every_control_moves_something.py`. For every boolean control on
+`integral_solution`, discovered **from the signature rather than from a list**
+so a new control is covered the day it lands, exactly one of these must hold:
+
+1. it moves the transfer by more than quadrature noise; or
+2. it raises, because its required inputs are absent.
+
+**Silently returning the released answer is the one forbidden outcome**, and
+it is what all three earlier defects produced.
+
+**It fired immediately on two more.** `w_half_is_isw_only` and
+`thomson_carries_shear` are read **only inside the `slot_weight_split`
+branch**, so setting either alone was accepted, ignored, and returned the
+released configuration. Both now raise, with a message naming the parent flag.
+D26's lattice always pairs them with `slot_weight_split`, so no recorded row
+moves.
+
+**And the gate caught the author making the week's own mistake inside it.**
+The first fixture was Einstein–de Sitter, where $\Phi$ is constant and
+$(\Phi_A'-\Phi_H')\equiv0$ — so it reported `isw_only_at_w` and
+`w_half_is_isw_only` as dead when they had nothing to act on. **That is T-146
+reproduced inside the test written to stop that class**, within an hour of
+recording T-146. The fixture is $\Lambda$CDM and the docstring says why.
+
+### 2. The suite was running three instruments twice
+
+`tests/test_frame_checks.py` was **58 s of a 105 s suite** from 105 lines.
+`test_the_thomson_floor_is_the_same_number_in_three_instruments` re-ran `c4`,
+`c5` and `c6` as fresh subprocesses that `test_frame_instrument` had already
+run — the same command, twice, **27 s of pure duplication**.
+
+Each instrument is now run **once per session** and its record cached. **The
+independence that file exists to protect is untouched**: still a subprocess,
+still under `-I`, still `cwd=FRAME`, still importing no project code. What was
+removed is the second invocation of an identical command.
+
+**Suite: 105 s → 75 s, 874 passing.** No assertion was weakened and none was
+removed.
+
+### What the audit did not find
+
+**No stale numbers in the register and no withdrawn finding cited as live** —
+the append-guard passes on both provenance files, and the withdrawals of
+2026-10-25 (T-143's attribution, T-145's mechanism, T-146's two readings)
+each carry their correction in place rather than by deletion.
+
+## T-154 — **The split by-parts removes the plateau bump and moves the peak, and fails the Einstein–de Sitter null because $W$ does not close. No bracket term explains it**
+
+**2026-10-26, P1-B. D34, D35, and the profile.** P1-T's split by-parts
+(v1.3.15) built as `split_by_parts` and scored on their four predictions.
+
+### What it does
+
+| | EdS | $\Lambda$CDM | Planck |
+|---|---|---|---|
+| peak, released → split | 222.5 → 147.1 | 216.1 → 235.6 | **265.9 → 183.4** |
+| bump $D_7/D_{30}$ | 14.04 → **0.293** | 7.95 → **0.253** | 8.82 → **0.266** |
+| late share at $\ell=2$ | 0.0000 → **1.0000** | 0.0000 → **1.0000** | 0.0000 → **0.9998** |
+
+**Prediction 3 holds in direction and falls short in size** — the bump drops
+30–50× against a predicted $10^2$, and this is the first configuration in the
+project to remove that feature at all. **Prediction 2 overshoots**: the Planck
+peak was to stop at $236.6\pm5$ and ran to $183.4$, through CAMB's 206.
+**Prediction 4 fails outright**, and by the outcome fixed before the run that
+makes the other two unusable: *EdS non-zero → nothing here is evidence.*
+
+### D35 — and it refutes T-143's attribution, which was mine
+
+Suppressing one bracket term at a time, EdS, late share at $\ell=2$:
+
+| suppressed | late share |
+|---|---|
+| nothing | 0.9988 |
+| **$C_0$** | **0.8014** |
+| $C_2''$ | 0.9988 — unchanged |
+| $C_1^{\rm grav\prime}$ | 0.9987 — unchanged |
+| partners | 0.9999 — slightly worse |
+
+**Pre-registered:** *if $C_0$'s removal does not clear the null, the growing
+mode is not the mechanism and T-143's attribution is wrong as well as its
+scoring.* **It does not. $C_0$ is worth 20%.** $C_2''$ and $C_1^{\rm
+grav\prime}$ are exonerated exactly as predicted, both being identically zero
+where $\Phi$ is constant. **T-143's attribution is withdrawn.**
+
+### The profile, which is what should have been looked at first
+
+EdS, $k=10$, $\ell=2$ — the numbers, not the quotient:
+
+| $(\eta-\eta_\ast)/$span | released bulk | split bulk |
+|---|---|---|
+| 0 | $+15.43$ | $+0.0107$ |
+| $10^{-2}$  | $+21.71$ | $-0.0587$ |
+| $6\times10^{-2}$ | $+21.715$ | $-0.0603$ |
+| $1.0$ | $+21.715$ — **flat** | $\mathbf{-1.8555}$ |
+
+**The released bulk is flat from 1% of the span to today. The split bulk grows
+by $31\times$ over the last 94% of it.** Boundary: $+0.0186$. The late
+accumulation is 97% of the final value.
+
+**And the cause is not a term. It is the weight.** $\mathcal V$ closes at
+recombination and $W=e^{-\kappa}$ falls only to $0.368$, so **anything at $W$
+integrates over the whole path**. The standard line-of-sight solution has
+exactly one bulk term at $W$ — the integrated Sachs–Wolfe term
+$\int W(\Phi_A'-\Phi_H')j_\ell$ — which is **identically zero on
+Einstein–de Sitter**. A correct assembly therefore has *nothing* at $W$ on
+that background, and the null control is structural rather than numerical.
+
+**$C_0$ at $W$ is not zero on EdS**, and P1-T's rank-0 answer
+(2026-10-26T06:21Z) places it there unchanged.
+
+### The question, and it is the whole of what blocks
+
+> **With every bracket term removed, what is left in the $W$-form that still
+> accumulates to today on a background where $\Phi$ is constant — and what
+> cancels it?**
+
+That is a question about the assembly's shape rather than about any term in
+it. It is P1-T's, it is sharper than the rank-0 question it replaces, and it
+is answerable against a background where the correct answer is known before
+anything is computed.
+
+### And a fourth instance of T-125, in the branch written to supersede T-125
+
+`split_by_parts` first rebuilt the bracket from raw coefficients and therefore
+**discarded `by_parts_weight_terms`**; running with and without the partners
+returned bit-identical numbers. The guard added for `slot_weight_split` did
+not cover it **because it was written for a combination rather than for the
+hazard**, and `tests/test_every_control_moves_something.py` could not see it
+because it exercises each control alone. The bracket is now built from
+`bracket`, so the partners carry through. **The gate must walk pairs, and
+that is the open item.**

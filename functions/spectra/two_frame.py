@@ -516,6 +516,24 @@ def bulk_source_primitives(k_com, env, coefficients) -> dict:
         c1_thomson_prime=np.asarray(coefficients.c1_prime, dtype=float)
         + a_b1_prime / float(k_com),
         c1_thomson_kappa=kp,
+        # **The ISW content of $C_1'$, supplied for the first time.**
+        # `c1_prime_isw` has had **no supplier anywhere in the tree** since it
+        # was added, so `w_half_is_isw_only` has been moving an array of
+        # zeros -- the T-125 class, in a control that reads as live.
+        #
+        # Sign verified against the driving knob rather than asserted:
+        # differencing `c1_prime` at `PHI_PRIME_DRIVING_LAMBDA` 1 and 0 on
+        # LambdaCDM gives $-(\Phi_A'-\Phi_H')$ to 2.8%, which is the same ~3%
+        # quadrature residual the frame-closure test shows, not a sign
+        # ambiguity. On Einstein-de Sitter both sides are identically zero
+        # (Appendix G), so EdS cannot settle the sign and LambdaCDM was used.
+        #
+        # **Scale, so no caller mistakes this for a large handle:** this term
+        # is $8.9\times10^{-5}$ of $C_1'$. T-121 measured the same fact from
+        # the other side --- $\kappa''\tilde v_B$ is 99.8% of $|C_1'|$ --- so
+        # a control that moves only this moves one part in eleven thousand.
+        c1_prime_isw=-(np.asarray(env.phi_a_prime, dtype=float)
+                       - np.asarray(env.phi_h_prime, dtype=float)),
     )
 
 

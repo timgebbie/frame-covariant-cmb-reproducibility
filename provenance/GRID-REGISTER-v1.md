@@ -21,7 +21,7 @@ being possible.
 | **derived** | 19 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
 | **measured** | 7 | a chosen literal whose convergence has been measured, with the number stated. |
 | **described** | 11 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
-| **index** | 21 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
+| **index** | 23 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
 
 ## open — 1
 
@@ -231,7 +231,7 @@ the last place a grid may be chosen by eye.
 
 ### `k_com` — the k grid F10's accumulation is integrated over
 
-`scripts/figure_f10_formation_surface.py:134`, `np.linspace`
+`scripts/figure_f10_formation_surface.py:130`, `np.linspace`
 
 `required_k_points(K_MAX, r_theta)`, K_MAX = 300, matching D30
 exactly so the figure and the diagnostic behind it are the same measurement.
@@ -421,7 +421,7 @@ As F3, and deliberately the same grid: F6 reports RATIOS against the F3 configur
 
 As F2, raised to 1900 by finding T-32, with `check_k` guarding the probe modes after T-34.
 
-## index — 21
+## index — 23
 
 ### `phase` — the i^ell phase factor
 
@@ -506,17 +506,40 @@ same object.
 
 `arange(2, 21)` --- the criterion's own range, derived by `derive_ell_range.py` rather than chosen here.
 
-### `sl` — the conformal times F10 draws the accumulation at
+### `ELLS` — the multipoles F10's surface is drawn over
 
-`scripts/figure_f10_formation_surface.py:133`, `np.geomspace`
+`scripts/figure_f10_formation_surface.py:91`, `np.arange`
 
-Same construction as D30's, at **16 slices rather than 24** --- the
-PI's specification, 'initially at low granulation in time'. Sixteen is enough
-to establish that every curve is a step at eta_* followed by a flat, which is
-the whole of the claim; it is NOT enough to resolve the shape of the step, and
-the caption says so rather than letting the picture imply otherwise. D30 runs
-24 and reports the same thing, which is the evidence that the count is an
-index here.
+Dense below 30, then stepping by 20 to 300. **This is the axis the
+first version of F10 threw away**, and the reason the rebuild exists: the
+plateau is a statement about ell-dependence at fixed eta, so a figure that
+samples six multipoles and normalises each one cannot show it. Dense at low
+ell because that is where the plateau's shape is; to 300 because the first
+acoustic peak must be on the picture for the frozen shape to be legible. The
+damping tail is F9's and is not drawn.
+
+### `post` — the conformal times F10 samples AFTER recombination
+
+`scripts/figure_f10_formation_surface.py:126`, `np.geomspace`
+
+`eta_* + geomspace(span*1e-4, span, N_SLICES-4)`, ten slices.
+Geometric because the visibility is narrow and a linear grid would put every
+point in the free-streaming era. With `pre` this is the PI's "low granulation
+in time" --- fourteen epochs, few enough that each curve in panel (a) is
+distinguishable and enough to read a progression.
+
+### `pre` — the conformal times F10 samples ACROSS recombination
+
+`scripts/figure_f10_formation_surface.py:125`, `np.linspace`
+
+`linspace(eta_floor, eta_star, 4)`. **Linear, not geometric, and
+deliberately so**: the PI asked for the autocorrelation *just before
+decoupling, at decoupling, and after*, and those three are only separable if
+the grid resolves the interval they live in. The lower limit is the
+recombination START (T-58), not eta_*, so "before decoupling" is a real epoch
+with real accumulation rather than an empty panel. It SELECTS and does not
+compute --- the bulk is accumulated inside the released quadrature in one pass
+and interpolated onto these abscissae.
 
 ### `ell` — the multipoles F1 compares
 

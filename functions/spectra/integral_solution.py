@@ -127,6 +127,7 @@ def integral_solution(
     c1_prime_isw: np.ndarray | None = None,
     w_half_is_isw_only: bool = False,
     isw_only_at_w: bool = False,
+    split_by_parts: bool = False,
     thomson_boundary_and_vdot: bool = False,
     bracket_all_at_w: bool = False,
     eta_slices: np.ndarray | None = None,
@@ -401,6 +402,40 @@ def integral_solution(
             "bracket_all_at_w=True with by_parts_weight_terms=True for the "
             "B-17 identity, or drop one of these two.")
 
+    # **Sub-flags must refuse to be set alone --- T-153.** Both of these are
+    # read ONLY inside the `slot_weight_split` branch, so setting either
+    # without it was accepted, ignored, and returned the released answer.
+    # That is T-125's class and these are its fourth and fifth instances; the
+    # repair is the same one T-125 got, which is to say so rather than to
+    # quietly do nothing.
+    if w_half_is_isw_only and not slot_weight_split:
+        raise ValueError(
+            "w_half_is_isw_only is read only inside the slot_weight_split "
+            "branch and does nothing on its own: it chooses WHICH HALF of "
+            "C_1' travels at W once the split is in force. Set "
+            "slot_weight_split=True as well, or drop it -- a flag that is "
+            "accepted and ignored measures the released configuration under "
+            "another name (T-125).")
+    if thomson_carries_shear and not slot_weight_split:
+        raise ValueError(
+            "thomson_carries_shear is read only inside the slot_weight_split "
+            "branch and does nothing on its own: it pairs vhat_B with C_2 in "
+            "the Thomson slot, which exists only once the split has made a "
+            "Thomson slot. Set slot_weight_split=True as well, or drop it "
+            "(T-125).")
+    if split_by_parts and (bracket_all_at_w or slot_weight_split
+                           or isw_only_at_w):
+        raise ValueError(
+            "split_by_parts decides where every piece of C_1 travels and so "
+            "do bracket_all_at_w, slot_weight_split and isw_only_at_w; "
+            "choosing two silently would make the result unattributable "
+            "(T-125). Pick one.")
+    if split_by_parts and (W_arr is None or c1_thomson is None):
+        raise ValueError(
+            "split_by_parts needs `opacity` (e^-kappa) and `c1_thomson`: it "
+            "splits C_1 into its gravitational and scattering halves BEFORE "
+            "the by-parts, and cannot identify the scattering half without "
+            "being given it.")
     if isw_only_at_w and (bracket_all_at_w or slot_weight_split):
         raise ValueError(
             "isw_only_at_w decides where the bracket travels and so do "
@@ -411,7 +446,66 @@ def integral_solution(
             "isw_only_at_w needs `opacity` (e^-kappa) on the eta grid: W is "
             "the weight the ISW channel rides, and this function cannot "
             "invent it from `weight`, which A-2 may have set to V")
-    if bracket_all_at_w:
+    if split_by_parts:
+        # **P1-T's split by-parts --- the assembly re-derived, 2026-10-25.**
+        #
+        # **(90) is not the defect.** $C_1$ carries $\kappa'v_B$ *on purpose*,
+        # so that $WC_1^{\rm scatt}=-\mathcal V\hat v_B$ is the standard
+        # Doppler source --- bounded, with $\int\mathcal V=1$ --- sitting at
+        # the standard Doppler kernel $K'=-kj_\ell'$. The rate belongs in the
+        # amplitude.
+        #
+        # **The defect is ONE OPERATION**: (102) by-parts *all* of $C_1$. The
+        # gravitational half is a gradient and must be; the scattering half
+        # was already in final form at $K'$ and must not be. Doing both at
+        # once:
+        #
+        #   * differentiates $\kappa'$ into $\kappa''$ and then weights it by
+        #     $\mathcal V$ instead of $W$ --- **T-94**, measured at
+        #     $1.8\times10^5$ times the Doppler source it stands for, and the
+        #     magnitude is just $\kappa''$;
+        #   * moves the Doppler term out of the $j_\ell'$ slot --- **B-17
+        #     (iv)**, which is therefore a term (102) *removed* rather than
+        #     one it lacks;
+        #   * and carries $\kappa'\hat v_B$ into the boundary beside the
+        #     Sachs--Wolfe term --- **T-101**, **T-121**, where at $k=2$--$5$
+        #     the $\kappa'$ share of $C_1(\eta_*)$ is $1.046$--$1.088$.
+        #
+        # **Three findings, one operation**, and they must not be repaired
+        # separately. Here the split is made *before* the by-parts:
+        #
+        #   gravitational   by-parted -> SW boundary at $j_\ell$ from the
+        #                   $\int\mathcal V=1$ collapse, and the ISW at $W$
+        #                   **automatically**, as $-\int WC_1^{\rm grav}{}'K$
+        #   scattering      left alone at $K'$ -> the Doppler at $j_\ell'$
+        #
+        # No $\kappa''$ is created, so none has to be suppressed afterwards.
+        #
+        # **The admissibility condition this needed and did not have:** a
+        # coefficient may be carried through an integration by parts only if
+        # it is free of rates.
+        # **Built from `bracket`, not from the raw coefficients.** The first
+        # version of this branch wrote
+        # `c0 - c1_grav_prime + c2_second` directly and therefore **discarded
+        # `by_parts_weight_terms`** --- the $2\mathcal VC_2'+\dot{\mathcal
+        # V}C_2$ partners that the double by-parts of $C_2K''$ owes. Running
+        # it with and without them returned bit-identical numbers, which is
+        # **T-125 reintroduced by the very branch written to supersede the
+        # controls T-125 was about**. The guard added for
+        # `slot_weight_split` did not cover this one, because it was written
+        # for a combination rather than for the hazard.
+        #
+        # `bracket` is $C_0-C_1'+C_2''$ **plus those partners**, so adding
+        # back $C_1^{\rm thom}{}'$ converts $-C_1'$ into $-C_1^{\rm grav}{}'$
+        # and keeps everything else the caller asked for:
+        #     bracket + c1_thom' = C_0 - C_1^grav' + C_2'' + partners.
+        # $-\mathcal VC_1^{\rm grav}$, the third partner, is not added here:
+        # it is the $\int\mathcal V=1$ collapse and is already the
+        # Sachs--Wolfe boundary term below.
+        bracket_w = bracket + c1_thom_prime
+        weight_w = W_arr * np.asarray(diffusion, dtype=float)
+        bracket_v, weight_v = None, None
+    elif bracket_all_at_w:
         if W_arr is None:
             raise ValueError(
                 "bracket_all_at_w needs `opacity` (e^-kappa) on the eta grid: "
@@ -509,7 +603,9 @@ def integral_solution(
         boundary_weight = damping_total * (
             float(np.interp(eta_star, eta, W_arr)) if boundary_weight_w
             else 1.0)
-        c1_at_star = (c1_grav_star if thomson_boundary_and_vdot else c1_star)
+        c1_at_star = (c1_grav_star
+                      if (thomson_boundary_and_vdot or split_by_parts)
+                      else c1_star)
         scalar[i] = (c2_prime_star - c1_at_star) * boundary_weight * j_l_star
 
         # The rank-two boundary term. Zero wherever C_2 is, which is every
@@ -532,6 +628,20 @@ def integral_solution(
             total_bulk = total_bulk - (vis_dot_arr
                                        * np.asarray(diffusion, dtype=float)
                                        * c1_thom * j_l)
+        if split_by_parts:
+            # $\int WC_1^{\rm scatt}K'$ with $K'=-kj_\ell'$ and
+            # $WC_1^{\rm scatt}=-\mathcal V\hat v_B$: the Doppler term, at
+            # the weight and kernel the standard assembly puts it at, with no
+            # derivative taken of it anywhere. Same sign convention and same
+            # published recurrence as `jprime_bulk_slot` below (T-23: a
+            # derivative comes from a relation, never from differentiating a
+            # table).
+            j_lm1_g = table(l - 1, x)
+            j_lp1_g = table(l + 1, x)
+            j_l_p = ((l / (2 * l + 1)) * j_lm1_g
+                     - ((l + 1) / (2 * l + 1)) * j_lp1_g)
+            total_bulk = total_bulk - k * (
+                W_arr * np.asarray(diffusion, dtype=float) * c1_thom * j_l_p)
         if jprime_bulk_slot:
             # j_l' = [ l j_{l-1} - (l+1) j_{l+1} ] / (2l+1) -- the SAME
             # recurrence the rank-two boundary uses twenty lines above, and

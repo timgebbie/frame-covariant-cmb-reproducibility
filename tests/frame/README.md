@@ -7,9 +7,24 @@ frame-covariance conditions, plus the generator that turns them into
 
 ```
 python3 run_all.py                                     # exit 0 only if all pass
-python3 gen_theory_audit.py > ../../docs/THEORY-AUDIT.md
+python3 gen_theory_audit.py                            # writes the document itself
 python3 -I c6_thomson.py                               # or run one
 ```
+
+**Do not redirect the generator.** It writes `docs/THEORY-AUDIT.md` itself —
+P1-B added the write on 2026-10-21 for exactly this reason, and its source says
+so: *"An artefact whose generation depends on a human remembering a redirection
+is not generated."* The printed copy on stdout is a convenience and is not the
+document.
+
+**This line carried `> ../../docs/THEORY-AUDIT.md` until 2026-10-26, five days
+after the redirection stopped being needed, and on 2026-10-26 it destroyed the
+file.** Under PowerShell `>` truncates the target before the command runs, so
+the shell's handle emptied the document the generator had just written to the
+same path. The committed file went to zero bytes. **A usage line that
+contradicts the code it documents is a defect in the document, and this one was
+copied forward into a landing script without being read against the generator.**
+§3c, a third time.
 
 They also run under the bundle's own harness as `tests/test_frame_checks.py`,
 which invokes each one as a **subprocess with `-I`** rather than importing it,

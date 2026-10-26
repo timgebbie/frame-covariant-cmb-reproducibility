@@ -44,14 +44,36 @@ CHECKS = [
 ]
 
 
+#: **Each instrument is run ONCE per session and its record cached here.**
+#:
+#: **Streamlined 2026-10-25, and it is a cost finding rather than a
+#: correctness one.** This file was 58 s of a 105 s suite because the
+#: Thomson-floor test re-ran `c4`, `c5` and `c6` as fresh subprocesses that
+#: `test_frame_instrument` had already run — the same three instruments,
+#: twice, 27 s of pure duplication.
+#:
+#: **Nothing about the independence changes.** Each instrument is still a
+#: subprocess under `-I`, still with `cwd=FRAME`, still importing no project
+#: code — which is the whole argument of this file and must not be traded for
+#: speed. What is removed is the second invocation of an identical command,
+#: not the isolation of the first.
+_RUNS: dict[str, subprocess.CompletedProcess] = {}
+
+
+def _run(check: str) -> subprocess.CompletedProcess:
+    """The instrument's completed run, computed once and reused."""
+    if check not in _RUNS:
+        _RUNS[check] = subprocess.run(
+            [sys.executable, "-I", str(FRAME / check)],
+            cwd=FRAME, capture_output=True, text=True)
+    return _RUNS[check]
+
+
 @pytest.mark.verification
 @pytest.mark.parametrize("check", CHECKS)
 def test_frame_instrument(check):
     """Each instrument exits 0 only if every assertion in it holds."""
-    run = subprocess.run(
-        [sys.executable, "-I", str(FRAME / check)],
-        cwd=FRAME, capture_output=True, text=True,
-    )
+    run = _run(check)
     assert run.returncode == 0, (
         f"{check} failed.\n"
         f"--- stdout ---\n{run.stdout}\n--- stderr ---\n{run.stderr}"
@@ -85,9 +107,10 @@ def test_the_thomson_floor_is_the_same_number_in_three_instruments():
     import re
 
     def metrics(check):
-        run = subprocess.run([sys.executable, "-I", str(FRAME / check)],
-                             cwd=FRAME, capture_output=True, text=True)
-        rec = re.search(r"^##RESULT## (.*)$", run.stdout, re.M)
+        # `_run` is the cache: these three have already been run by
+        # `test_frame_instrument` in any full-suite pass, and are run on
+        # demand when this test is selected alone.
+        rec = re.search(r"^##RESULT## (.*)$", _run(check).stdout, re.M)
         assert rec, f"{check} produced no record"
         return json.loads(rec.group(1))["metrics"]
 

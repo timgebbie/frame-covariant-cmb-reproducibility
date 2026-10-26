@@ -1,141 +1,111 @@
 +++
 id = "F10"
 order = 10
-title = "When the spectrum is laid down: $C_\\ell$ accumulated in conformal time"
+title = "The angular autocorrelation as it forms: $C_\\ell(\\eta)$"
 script = "scripts/figure_f10_formation_surface.py"
 artefact = "figures/f10-formation-surface-v1.3.0.pdf"
 category = "diagnostic"
 caption = """
-\\textbf{The fraction of today's $C_\\ell$ already in place at conformal time
-$\\eta$}, for $\\ell=2,5,10,30,100,200$. Columns are the three backgrounds this
-bundle ships --- CDM (Einstein--de~Sitter), $\\Lambda$CDM, and the stamped
-Planck~2018 set; rows are the Newtonian and CDM frames, from \\emph{one} solve.
-The abscissa is $(\\eta-\\eta_\\ast)/(\\eta_0-\\eta_\\ast)$ on a logarithm,
-because the visibility is narrow and a linear axis spends almost all of itself
-on the free-streaming era where by construction nothing is laid
-down.\\\\[2pt]
-\\textbf{What is accumulated, and it is one pass rather than one spectrum per
-slice.} \\texttt{integral\\_solution} accumulates the bulk integrand
-cumulatively in $\\eta$ \\emph{inside the quadrature the released path already
-runs}, so there is no second definition of the integral to drift from the
-first. The boundary terms are held out of the accumulation deliberately: they
-are emitted at $\\eta_\\ast$ and afterwards only projected, so they are present
-in full in every slice, and telling those two apart is what the instrument is
-for.\\\\[2pt]
-\\textbf{The gate, and it is what makes the rest of the figure evidence.} The
-$\\eta_0$ column must reproduce the released spectrum exactly --- it is the
-same integral, decomposed. Asserted at $10^{-9}$, measured at
-$1.2\\times10^{-12}$. If the accumulation disagreed with the quadrature it
-decomposes, nothing read off the panels would be about the
-physics.\\\\[2pt]
-\\textbf{What it shows, and it is the result rather than the illustration.}
-Every curve reaches $1$ within $1\\%$ of the conformal span past
-$\\eta_\\ast$ and is flat afterwards: \\emph{the spectrum is finished at
-recombination}, on all three backgrounds and in both frames. The late share ---
-everything deposited after the visibility has closed --- reads $0.0000$ in all
-thirty-six curves. On $\\Lambda$CDM and the Planck set that is wrong by
-construction, because the late integrated Sachs--Wolfe effect must deposit
-$\\mathcal{O}(0.1)$ of $C_2$ there. On Einstein--de~Sitter it is right by
-construction, because $\\Phi$ is exactly constant (Appendix~G) and there is no
-late ISW to have. \\textbf{That null control is what makes the first two
-readings a defect rather than a numerical artefact}: were something other than
-the weight wrong, the EdS column would not come out exactly
-zero.\\\\[2pt]
-\\textbf{The mechanism, and it is B-17 discrepancy~(i).} (102) carries the bulk
-bracket at $\\mathcal{V}\\mathcal{D}$ where the exact by-parts of its own
-integral wants $W$; $\\mathcal{V}=W\\kappa'$ is sharply peaked at $\\eta_\\ast$
-and is zero afterwards, so every late-time source is multiplied by zero.
-\\textbf{The late ISW is not missing from the formalism --- it is present at
-rank one and annihilated by the weight.} No repair has been adopted into the
-released path, and \\texttt{provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md}
-carries B-17 with all four of its discrepancies.\\\\[2pt]
-\\textbf{Why a figure and not a gate.} $\\ell_{\\rm peak}$ (D27) and the median
-contributing $k$ (D25) are scalar summaries of the \\emph{endpoint}, and three
-pre-registered predictions were scored against them before this was drawn. The
-missing plateau power is a defect \\emph{in time}, so no summary of the
-endpoint can see it. \\textbf{F10 does not supersede F9}: F9 says \\emph{where}
-the power lands in $\\ell$, F10 says \\emph{when} it was laid down, and those
-are different failures with different causes.
+\\textbf{The angular autocorrelation at a sequence of conformal times, and the
+surface it sweeps.} Planck~2018, CDM frame, 25 multipoles from $\\ell=2$ to
+$\\ell=300$, fourteen epochs from the start of recombination to
+today.\\\\[2pt]
+\\textbf{(a) The autocorrelation, epoch by epoch.} $D_\\ell$ against $\\ell$,
+one curve per epoch, with the three the PI named drawn heavy --- just before
+decoupling, at $\\eta_\\ast$, and today --- and the rest as context so the
+three read as a progression. \\textbf{The lower limit is the recombination
+start and not $\\eta_\\ast$} (T-58), so \\emph{before decoupling} is a real
+epoch with accumulation in it.\\\\[2pt]
+\\textbf{(b) The surface.} $C_\\ell(\\eta)/C_\\ell(\\eta_0)$ over the whole
+$(\\ell,\\eta)$ plane. Panel~(a) is read along $\\ell$; this is read along
+$\\eta$, and a correct assembly has structure in the band to the right of
+recombination, where the late integrated Sachs--Wolfe effect deposits power at
+low $\\ell$ long after the visibility has closed.\\\\[2pt]
+\\textbf{What it shows, and it is a measurement rather than an illustration.}
+Every row of panel~(b) changes colour at the same abscissa and is uniform to
+the right of it. \\textbf{The spread across all 25 multipoles, at every epoch,
+is at most $0.063$}: every multipole fills at the same rate, the shape in
+$\\ell$ is laid down once at recombination, and \\emph{no power moves between
+multipoles at any time}. Gated --- the $\\eta_0$ column reproduces the
+released quadrature at $4.6\\times10^{-13}$, so the accumulation is that
+integral decomposed and not a second definition of it.\\\\[2pt]
+\\textbf{What that does and does not establish.} It is a \\emph{fourth}
+independent measurement of the annihilation recorded as \\textbf{A-1} and
+\\textbf{T-128}, and it adds one thing the other three could not: whatever
+annihilates the late integrated Sachs--Wolfe effect does so \\textbf{with no
+$\\ell$-dependence at all}, which excludes every candidate mechanism whose
+strength varies with the multipole. \\textbf{It does not establish that the
+collapse causes the missing plateau or the displaced peak.} Those have
+separate causes already localised --- the bare $\\kappa'$ inside $C_1$
+(\\textbf{T-101}, \\textbf{T-121}) and the by-parts taken onto the
+coefficients (\\textbf{T-94}) --- and a collapsed (102) has been measured in
+this bundle producing acoustic maxima and a surviving plateau, so the collapse
+cannot be the cause of their absence.\\\\[2pt]
+\\textbf{Why a spectrum at each time and not a fraction per multipole.} The
+first version of this figure drew six multipoles' accumulation against $\\eta$
+and normalised each one. A per $\\ell$ normalisation answers \\emph{how much
+of this multipole is in place} and cannot answer \\emph{what shape is the
+spectrum now} --- and the plateau is a statement about $\\ell$-dependence at
+fixed $\\eta$. It was not a surface, and it could show the defect only as a
+flat line rather than as the frozen shape.
 """
 +++
 
-# F10 — when the spectrum is laid down
+# F10 — the angular autocorrelation as it forms
 
-**The standalone caption.** This is the figure a reader should open first if
-they want to know what is wrong with this release's spectrum, because it is the
-only artefact in the bundle in which the plateau's defect is visible at all.
+**The standalone caption.** Open this one to see *when* the spectrum is built,
+and in particular to see that its shape in $\ell$ is settled at recombination
+and never changes afterwards.
 
 ## The question it answers
 
-Every other instrument here measures a *finished* spectrum. F9 draws $C_\ell$
-at $\eta_0$; D27 reduces that spectrum to a peak position; D25 reduces it to a
-median contributing $k$. Those refute, and they refuted three pre-registered
-predictions over the week before this was drawn — but **a defect in *when*
-power is deposited has no signature in any summary of the endpoint**, because
-the endpoint is the one place where the accumulation has already finished.
+Every other instrument in this bundle measures a *finished* spectrum. F9 draws
+$C_\ell$ at $\eta_0$; D27 reduces that to a peak position; D25 reduces it to a
+median contributing $k$. None of them can see a defect in *when* power is
+deposited, because the endpoint is where the accumulation has already
+finished.
 
-So the instrument is the accumulation itself: for each multipole, what fraction
-of today's $C_\ell$ is already in place at conformal time $\eta$.
+So the instrument is the spectrum itself, at a sequence of times.
 
-## How to read the panels
+## How to read the two panels
 
-Each panel is one background and one frame. Each curve is one multipole,
-normalised by its own final value, so the subject is the **shape in $\eta$**
-rather than the growth. The abscissa is the fraction of the conformal span past
-recombination, logarithmically, because the visibility is narrow: on a linear
-axis, ninety-nine percent of the panel would be free streaming.
+**(a)** is the autocorrelation you would measure at each epoch, normalised
+once — by the maximum of the final curve — so the panel shows growth and shape
+together rather than six separately-scaled curves.
 
-A correct assembly on $\Lambda$CDM or the Planck set shows two features: a step
-at $\eta_\ast$ as the visibility deposits the acoustic and Doppler terms, and
-then a **second rise at late times** at low $\ell$, as the decaying potential
-deposits the late integrated Sachs–Wolfe contribution along the line of sight.
-Einstein–de Sitter shows only the first, because $\Phi$ is constant there.
+**(b)** is the same data as a surface: multipole up the side, conformal time
+across, shade the fraction of today's value. A correct assembly is *not*
+uniform here. The late ISW is a low $\ell$, late-time effect, so the bottom
+rows should keep filling well to the right of recombination.
 
 ## What it reads
 
-All six panels show the step and **none shows the second rise**. The late
-share — the fraction deposited after the first one percent of conformal time
-past $\eta_\ast$, which is after the visibility has closed — is `0.0000` in
-every one of the thirty-six curves.
+| | |
+|---|---|
+| spread across 25 multipoles, worst over all epochs | **0.063** |
+| late share, worst multipole | **0.0007** |
+| $\eta_0$ column against the released quadrature | $4.6\times10^{-13}$ |
 
-| background | required late share at $\ell=2$ | measured |
-|---|---|---|
-| Einstein–de Sitter | exactly 0 — $\Phi$ constant, Appendix G | 0.0000 |
-| $\Lambda$CDM | $\mathcal O(0.1)$ — the late ISW | 0.0000 |
-| Planck 2018 | $\mathcal O(0.1)$ — the late ISW | 0.0000 |
-
-**The first row is the falsifier.** A numerical defect that annihilated late
-accumulation would have to annihilate it on EdS too, and EdS is the one
-background where zero is the right answer. A defect that produced spurious late
-accumulation would show up there as a non-zero share. Zero on EdS and zero on
-the Λ backgrounds together say: *the late-time source is being multiplied by
-something that has already gone to zero*, and not that the integration is
-wrong.
-
-That something is $\mathcal V = W\kappa'$. B-17 discrepancy (i): (102) carries
-the bulk bracket $C_0 - C_1' + C_2''$ at $\mathcal{V}\mathcal{D}$ where the
-exact by-parts of its own integral wants $W$. $W=e^{-\kappa}$ survives to
-$\eta_0$; $\mathcal V$ is the visibility and closes at recombination.
+**Every multipole fills at the same rate.** The shape is frozen at
+recombination; only the amplitude moves.
 
 ## What it does not say
 
-* **It does not say the plateau is now right.** It says one named term is
-  annihilated, and locates the annihilation. The plateau's level also depends
-  on the ordinary Sachs–Wolfe term and on the frame gap, neither of which this
-  figure measures.
-* **It does not adopt a repair.** `bracket_all_at_w` is the control for
-  discrepancy (i) and is reachable from the spectrum, but no configuration has
-  been adopted into the released path: the one that lands the first peak in the
-  CDM frame (D28) misses it by a factor of 3.1 in the Newtonian frame, and
-  $\ell\ge2$ is frame-invariant at first order.
-* **It is sixteen slices**, which is enough to establish that the curves are a
-  step followed by a flat, and not enough to resolve the shape of the step
-  itself. D30 runs twenty-four and reports the same thing.
+* **It does not say the collapse causes the missing plateau.** It does not. A
+  collapsed (102) was measured in this bundle on 19 October producing three
+  acoustic maxima and a surviving plateau, and the argument
+  $j_\ell(k\Delta\eta_\ast)$ has $k$ integrated over it — which is where
+  $\ell_A=\pi r_\theta/r_s$ comes from. The peak series survives a collapse in
+  $\eta$; that is why instantaneous recombination is the textbook route to it.
+* **It does not identify a mechanism**, only exclude a class: anything whose
+  strength varies with $\ell$.
+* **One background, one frame.** Planck, CDM. D30 carries three backgrounds
+  and both frames on the same object and agrees.
 
 ## Provenance
 
-Diagnostic **D30**, finding **T-128**. Generated by
-`scripts/figure_f10_formation_surface.py`; the accumulation is committed as
-`outputs/f10-formation-surface.csv`, stamped with a digest of the code that
-produced it, and `--replot` refuses to redraw numbers this tree did not compute
-(**T-54**).
+Diagnostic **D30**; findings **T-128** (the annihilation) and the uniformity
+recorded with it. Generated by `scripts/figure_f10_formation_surface.py`; the
+accumulation is committed as `outputs/f10-formation-surface.csv`, stamped with
+a digest of the code that produced it, and `--replot` refuses to redraw
+numbers this tree did not compute (**T-54**, **T-129**).

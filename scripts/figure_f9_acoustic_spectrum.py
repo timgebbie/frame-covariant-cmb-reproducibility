@@ -485,9 +485,43 @@ def main() -> int:
         print("    replotting from outputs/f9-acoustic-spectrum.csv")
         return draw(curves, peaks, frames, gaps)
 
+    # **Per-background resumption --- finding T-152.** F9 is three
+    # backgrounds at 45-80 minutes each and wrote its CSV only at the end, so
+    # a container restart at any point cost the whole run. It did, on
+    # 2026-10-25, five hours in. `_resumable.Checkpoint` was built for exactly
+    # this (T-127) and had been applied to the diagnostics and not to the one
+    # run long enough to need it most.
+    #
+    # Each background's two frames are flushed and fsync'd the moment that
+    # background completes, keyed on the background label AND the source
+    # fingerprint, so a rerun after a code change recomputes rather than
+    # resuming onto numbers a different tree produced --- T-54's rule applied
+    # to the partial file as well as to the finished one.
+    from _resumable import Checkpoint
+
+    part = Checkpoint(ROOT / "diagnostics" / f"{STEM}-partial.csv",
+                      ("fingerprint", "ell", "cdm", "newtonian"))
+    stamp = source_fingerprint()
+    done: dict[str, dict[str, np.ndarray]] = {}
+    for row in part.all():
+        if row.get("fingerprint") != stamp:
+            continue
+        d = done.setdefault(row["configuration"], {"cdm": [], "newtonian": []})
+        d["cdm"].append(float(row["cdm"]))
+        d["newtonian"].append(float(row["newtonian"]))
+
     curves, peaks, frames, gaps = {}, {}, {}, {}
     for label, background, omega_b_h2, hubble_h in BACKGROUNDS:
-        both = spectrum(background, omega_b_h2, hubble_h)
+        if label in done and len(done[label]["cdm"]) == ELLS.size:
+            both = {n: np.array(done[label][n]) for n in ("cdm", "newtonian")}
+            print(f"    {label:26s} [resumed from "
+                  f"{STEM}-partial.csv]", flush=True)
+        else:
+            both = spectrum(background, omega_b_h2, hubble_h)
+            for i, l in enumerate(ELLS):
+                part.add(label, fingerprint=stamp, ell=int(l),
+                         cdm=f"{both['cdm'][i]:.9e}",
+                         newtonian=f"{both['newtonian'][i]:.9e}")
         frames[label] = {n: shape(ELLS, cl) for n, cl in both.items()}
         curves[label] = frames[label]["cdm"]
         # **Peaks are found on D_l, drawn on C_l.** The acoustic peak
@@ -530,6 +564,11 @@ def main() -> int:
         for i, l in enumerate(ELLS):
             fh.write(f"{int(l)}," + ",".join(f"{v[i]:.9e}" for _, v in cols) + "\n")
     print(f"wrote {out.relative_to(ROOT)}")
+    # The partial is scratch and its job is done the moment the real CSV
+    # exists. Leaving it would put a second, stale copy of the spectrum in
+    # `diagnostics/` for `check_release_hygiene` to flag as an unproduced
+    # build artefact -- which is what it would be.
+    part.path.unlink(missing_ok=True)
 
     return draw(curves, peaks, frames, gaps)
 
