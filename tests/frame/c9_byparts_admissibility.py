@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""C9 -- the admissibility of the by-parts, and the cancellation it protects.
+"""C9 -- the admissibility of the by-parts.  COMPANION TO C6, NOT A REPLACEMENT.
 
 WRITTEN 2026-10-26 BY THE PAPER 1 THEORY STREAM, after the first-peak budget
 showed that half the peak displacement was an artefact of this one operation.
-It is the gate that B-17 (iv), T-94 and T-101 each needed and none had.
+CORRECTED THE SAME DAY against C6 and C7, which had both said more than I had
+read.  What survives of the first draft is below; what does not is named.
 
 THE STATEMENT.  (90) gives
 
@@ -16,19 +17,39 @@ and C1s (scattering, ALREADY a rate times an amplitude).
     W . C1s  =  V . vhat_B / k                    <-- the Doppler source.
                                                       Bounded.  int V = 1.
 
-SO (90) IS NOT A DEFECT.  The rate is inside the coefficient precisely so that
-W.C1 delivers V, and C1 sits at K' = -k j_l', which is the Doppler kernel.
-The construction is correct.  WHAT IS WRONG IS ONE OPERATION.
+WHAT I WITHDREW.  The first draft of this file said "SO (90) IS NOT A DEFECT",
+on the ground that W.C1s is the Doppler source at the Doppler kernel.  THAT IS
+TRUE OF THE MAGNITUDE AND FALSE OF THE FRAME RESPONSE, and C6 had already
+measured the difference.  Under a boost Dv_B = -v = -k s, the bundled C_1
+shifts by -sdot + kappa' s, so the Thomson piece lands in the SAME alpha C_1 K'
+slot as the gravitational piece and the K' coefficient becomes 2 alpha V, which
+no (alpha,beta,gamma) can cancel.  Carried as its OWN undifferentiated term the
+coefficient is free and invariance fixes it at c = alpha, residual machine
+zero.  SO THE BUNDLING IS ITSELF A DEFECT, measured by C6, and this file does
+not say otherwise.  C6 and C9 measure two consequences of one bundling:
+C6 the frame obstruction it creates, C9 the kappa'' artefact that
+DIFFERENTIATING it creates.  THE REMEDY IS THE SAME IN BOTH -- carry it
+separately, undifferentiated, reduced -- which is why C9d builds exactly that.
 
-THE CANCELLATION.  The exact rank-1 bulk is -(W C1)' = -(W' C1 + W C1').  On
-the scattering half the two terms carry, with r = V/W the scattering rate:
+AND THIS FILE DOES NOT REINSTATE C7's WITHDRAWN RULE.  C7 read "kappa' may
+never live in a coefficient" and was softened on 2026-10-21 (T-113, S48)
+because W(kappa' S) = V S is exact.  THE CONDITION HERE IS NARROWER: not that a
+coefficient may not hold a rate, but that a coefficient holding a rate may not
+be carried through an integration by parts.
+
+THE TWO HALVES, AND THEY DO NOT CANCEL POINTWISE.  The exact rank-1 bulk is
+-(W C1)' = -(W' C1 + W C1').  On the scattering half, with r = V/W the rate:
 
     W' C1s  ~  r^2        (differentiating the WEIGHT)
     W C1s'  ~  r'         (differentiating the COEFFICIENT)
 
-and they are the two halves of d(V.vhat_B)/d-eta, which is bounded and
-integrates to a boundary difference.  INDIVIDUALLY THEY ARE ENORMOUS AND THEY
-CANCEL.
+and their sum is d(V.vhat_B)/d-eta, A TOTAL DERIVATIVE of a bounded normalised
+object, so it integrates to a boundary difference.  THE SUM IS BOUNDED BECAUSE
+IT IS A TOTAL DERIVATIVE, NOT BECAUSE THE TWO TERMS CANCEL: C9a measures the
+largest ratio of either piece to the sum at only ~8 in this configuration, and
+C7 records that kappa'' = -kappa'^2 holds AT THE VISIBILITY MAXIMUM ONLY, so
+any statement about powers of kappa' is local.  The first draft of this file
+said "INDIVIDUALLY THEY ARE ENORMOUS AND THEY CANCEL".  Withdrawn.
 
 WHAT (102) DOES.  It carries V(C_0 - C_1' + C_2'') -- the weight OUTSIDE, the
 derivative INSIDE -- and drops W'C_1 entirely.  Against the exact form that is
@@ -37,8 +58,9 @@ two departures on one slot:
     W C1s'   ->   V C1s'      a factor of EXACTLY r too large
     W' C1s   ->   absent      the partner that would have cancelled it
 
-THE CANCELLATION IS DESTROYED FROM BOTH SIDES IN ONE OPERATION.  One half is
-scaled so it can no longer cancel; the other is deleted so it cannot try.
+SO (102) CARRIES NEITHER THE TOTAL DERIVATIVE NOR EITHER OF ITS HALVES.  One
+half is rescaled by r and the other is deleted, and what remains is a term the
+exact form does not contain at all.
 
 AND THE SAME OPERATION DOES TWO MORE THINGS.  By-parting C1s at all moves the
 Doppler term out of the j_l' slot (B-17 (iv) -- not a term missing from (102)
@@ -47,8 +69,9 @@ Sachs-Wolfe combination (T-101, T-121 -- the l~7 plateau bump).
 
 THE ADMISSIBILITY CONDITION, which is what this check asserts:
 
-    A COEFFICIENT MAY BE CARRIED THROUGH AN INTEGRATION BY PARTS ONLY IF IT
-    IS FREE OF RATES.
+    A COEFFICIENT HOLDING A RATE MAY NOT BE CARRIED THROUGH AN INTEGRATION
+    BY PARTS.  (It may hold one -- C7, T-113, S48.  It may not be
+    differentiated while holding one -- C6's remedy, and this check.)
 
 C_1 is not, by (90).  Therefore the by-parts may be applied to C1g and may
 not be applied to C1s.  C9d is that condition evaluated: the SPLIT assembly
@@ -60,19 +83,21 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 #: The one source for this check's wording in docs/THEORY-AUDIT.md.
 #: The generator reads it from here and holds no copy, so correcting
 #: the instrument corrects the audit by construction.
-AUDIT_TITLE = 'The admissibility of the by-parts, and the cancellation it protects'
+AUDIT_TITLE = 'The admissibility of the by-parts, and what (102) replaces it with'
 AUDIT_PROSE = (
-  "Equation~(90) places the Thomson rate inside $C_1$ so that $WC_1$ is the "
-  "bounded Doppler source $\\mathcal{V}\\hat v_B/k$ at the kernel $K'=-kj_\\ell'$; "
-  "the construction is correct. The exact rank-one bulk $-(WC_1)'$ splits into "
-  "$W'C_1\\sim\\kappa'^2$ and $WC_1'\\sim\\kappa''$, which are the two halves of "
-  "$\\mathrm{d}(\\mathcal{V}\\hat v_B)/\\mathrm{d}\\eta$ and cancel. (102) carries "
+  "Equation~(90) bundles the Thomson rate into $C_1$. The bundling is itself a "
+  "defect --- **C6** measures the frame obstruction it creates --- and this check "
+  "measures the second consequence, which is what happens when the bundled "
+  "coefficient is then differentiated. The exact rank-one bulk $-(WC_1)'$ splits "
+  "into $W'C_1\\sim\\kappa'^2$ and $WC_1'\\sim\\kappa''$, whose sum is the total "
+  "derivative $\\mathrm{d}(\\mathcal{V}\\hat v_B)/\\mathrm{d}\\eta$ and is therefore "
+  "bounded --- not because the two cancel pointwise, which they do not. (102) carries "
   "$\\mathcal{V}C_1'$ in place of $WC_1'$ --- larger by exactly $\\kappa'$ --- and "
   "drops $W'C_1$ altogether, destroying the cancellation from both sides in one "
   "operation; the same operation empties the $j_\\ell'$ slot and carries "
   "$\\kappa'\\hat v_B$ into the boundary. The admissibility condition is that a "
-  "coefficient may be carried through an integration by parts only if it is free "
-  "of rates."
+  "coefficient holding a rate may not be carried through an integration by parts. It "
+  "may hold one --- **C7**, T-113, S48 --- but it may not be differentiated while it does."
 )
 
 import math
@@ -117,10 +142,9 @@ for e in SAMPLE:
     worst_ratio = max(worst_ratio, cancel)
     print(f'  {e:7.4f} {r(e):13.4e} {a:13.4e} {b:13.4e} {a+b:13.4e} {cancel:10.2e}')
 
-ok_a = report('C9a  W\'C1s and W C1s\' are the two halves of d(V.vhat_B)/d-eta '
-              'and cancel', worst_sum < 1e-9,
-              f'worst residual {worst_sum:.1e}; largest cancellation '
-              f'{worst_ratio:.1e}x')
+ok_a = report('C9a  W\'C1s and W C1s\' sum to the total derivative d(V.vhat_B)/d-eta', worst_sum < 1e-9,
+              f'worst residual {worst_sum:.1e}; largest piece/sum ratio '
+              f'{worst_ratio:.1e} -- they do not cancel pointwise')
 
 # --------------------------------------------------------------------------
 # C9b  (102) carries V C1s' where the exact form carries W C1s'.

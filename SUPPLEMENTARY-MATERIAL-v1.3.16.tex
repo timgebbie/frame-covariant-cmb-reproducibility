@@ -1,5 +1,5 @@
 % Computational supplement to the associated paper.
-% Build: latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.3.15.tex  (only after locked
+% Build: latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.3.16.tex  (only after locked
 % assets have passed hash checks). THIS FILE IS THE WHOLE DOCUMENT: the prose
 % carries no \input, and every former supplementary-materials/ fragment is
 % expanded inline between its own BEGIN/END provenance comments. The only
@@ -43,7 +43,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.3.15 --- 25 October 2026\\
+\date{Supplement v1.3.16 --- 26 October 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.3.0-dev}
 
 \begin{document}
@@ -190,7 +190,7 @@ independent, claim-facing Python instruments that are \emph{absent}
 from the \texttt{v1.0.0}, \texttt{v1.1.0} and \texttt{v1.2.0} tags.
 This is part of the \emph{current} repository situation, not a
 future Lean deliverable and not an increment in the physics-release
-sequence. The eight instruments in \texttt{tests/frame/} use
+sequence. The nine instruments in \texttt{tests/frame/} use
 self-contained kernel, visibility and frame constructions rather than
 importing the spectral solver; \path{tests/test_frame_checks.py}
 invokes them in isolated subprocesses. The file\textendash{}to\textendash{}claim
@@ -239,7 +239,21 @@ scattering; distinguishes legitimate from spurious opacity-rate terms.\\[3pt]
 \texttt{c8\_rank0\_partner.py} & Complete rank-zero integrand
 partner, correcting the C5 interpretation
 & Includes the \(-C_1'\) partner and records the double-counting
-negative control; does not itself demonstrate the correct spectrum.\\
+negative control; does not itself demonstrate the correct spectrum.\\[3pt]
+\texttt{c9\_byparts\_admissibility.py} & \textbf{Added 2026-10-26.} The
+condition under which the integration by parts of C6 is admissible at all.
+\(W'C_1\) and \(WC_1'\) sum to the total derivative
+\(\mathrm d(\mathcal V\hat v_B)/\mathrm d\eta\); (102) carries
+\(\mathcal VC_1'\) in place of \(WC_1'\), larger by exactly \(\kappa'\),
+and drops \(W'C_1\). The split assembly --- gravitational half by-parted,
+scattering half left at \(K'\) --- reproduces the ancestor
+& \textbf{Companion to C6, not a replacement}: C6 measures the frame
+obstruction the bundling in (90) creates, C9 the \(\kappa''\) artefact that
+\emph{differentiating} it creates, and the remedy is the same in both. It does
+\emph{not} reinstate the rule C7 withdrew at T-113/S48: a coefficient may hold
+a rate; it may not be differentiated while it does. The two pieces do
+\emph{not} cancel pointwise --- the measured ratio of either to their sum is
+\(\simeq8\) --- and the sum is bounded because it is a total derivative.\\
 \end{longtable}
 \endgroup
 
@@ -254,6 +268,102 @@ with any claim about how many checks ``pass''. Implementation tests,
 including the evolving two-frame and spectrum pipelines, remain part
 of the \emph{physics} release progression rather than this
 Paper~1 claim-verification inventory.
+
+\paragraph{Three suites, three objects, and they do not substitute for one
+another.} The inventory above is one of three, and conflating them would
+overstate what any of them establishes:
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l l >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{suite} & \textbf{object under test} & \textbf{what it is allowed to read} \\
+\midrule
+\path{tests/frame/c1}--\path{c9} & \textbf{the physics functional} &
+  nothing from the project: each instrument builds its own visibility, kernel
+  and boost potential, so it cannot agree with the solver by construction \\
+\path{tests/test_*.py} & \textbf{the implementation} &
+  the project's own code --- it is the only one of the three that can \\
+\path{paper/checks/*.py} & \textbf{the manuscript} &
+  Paper~1's \LaTeX{} source and its build, in the paper repository, not this
+  bundle \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\paragraph{And within the third there is one instrument that reads structure
+rather than content.} Seven of the eight files in \path{paper/checks/} test
+\emph{claims}: \texttt{build\_gate.py} tests \TeX{} errors, undefined
+references, floats, boxes and the bundle pointers, while
+\texttt{aligned\_check}, \texttt{curvhalf\_check},
+\texttt{enumeration\_check}, \texttt{quartic\_remainder},
+\texttt{relabel\_check}, \texttt{tableI\_check} and \texttt{gauss\_probe}
+each re-derive something the paper asserts. \textbf{The eighth,
+\texttt{coherence\_gate.py}, tests whether each heading describes its own body
+and whether each cross-reference says something true about its target.}
+
+\paragraph{Its scope is deliberate, and Table~\ref{tab:dev-claim-tests} is
+what it is scoped \emph{against}.} It is \textbf{one file of 210 lines that
+imports only \texttt{sys}, \texttt{re}, \texttt{os}, \texttt{glob} and
+\texttt{collections}} --- the standard library, no third-party package, and no
+sibling module. It can therefore be \emph{circulated with the manuscript}: a
+referee who has the \verb|.tex| and a Python interpreter has everything needed
+to run it. \textbf{It is a minimal reproducibility bundle of its own, inside
+the broader one.} Every instrument in Table~\ref{tab:dev-claim-tests}, by
+contrast, imports \path{_common.py}, and through it \texttt{scipy}; most also
+import \texttt{sympy} or \texttt{numpy}, and the suite needs its runner and
+its generator besides. \textbf{The suite does not travel; the gate does.}
+
+\emph{The two scopes are opposite by design and neither may absorb the other.}
+The suite's virtue is isolation --- nine instruments, each building its own
+visibility, kernel and boost potential, so that no two can agree by
+construction --- and that virtue cannot survive being compressed into one
+file. The gate's virtue is that it is \emph{streamlined and sufficient}, small
+enough to be read in one sitting by someone who has only the paper, and that
+virtue cannot survive being grown into a suite. \textbf{This is the one place
+in this project where streamlining is the correct engineering choice}, because
+the artefact's purpose is to travel alone; everywhere else in this document the
+standing rule is the opposite. Recording that here is what keeps a later editor
+from ``improving'' either one into the other.
+
+\emph{It exists because of a defect none of the others could see.} On
+2026-10-16 the GRG line was submitted with three subsection titles attached to
+the wrong bodies, and Sec.~V~C carrying no \verb|\label| at all --- so every
+later reference to its content drifted to the subsection whose \emph{title}
+described that content, and a sentence inside Sec.~VI~A ended up telling the
+reader that an independent derivation shared no step with ``the derivation in
+Sec.~VI~A''. \textbf{A heading is not a \TeX{} error, a reference, a float or a
+box}, so \texttt{build\_gate.py} was blind to all of it; and re-reading does
+not catch it either, because a reader who knows what a paragraph says stops
+reading the heading above it.
+
+\textbf{That is the complement to the frame checks, and it is why both are
+needed.} The frame instruments catch a \emph{false statement}, measured
+against the algebra. The coherence gate catches a \emph{true statement in the
+wrong place}, measured against the document's own structure. A frozen
+manuscript can be wrong in either way and no instrument in one class can see
+the other.
+
+\paragraph{Its qualification, which is the same shape as C5's.}
+\textbf{\texttt{coherence\_gate.py} has never run as part of any gate.} From
+2026-10-16 it sat in a directory the paper repository's \texttt{.gitignore}
+excludes, so it was never committed, never reached GitHub, and no stage of the
+build script called it; it was placed in \path{paper/checks/} on 2026-10-26.
+Run then against both frozen sources it was written for --- the arXiv line at
+\texttt{v1.1.6}, 47~headings, and the GRG line at \texttt{v1.4.4},
+46~headings --- \textbf{it passes both with zero failures}: every heading
+carries a label, no heading has every word absent from its body, no section
+refers to itself, and every locating claim names the right section.
+\emph{The defect it was written for was repaired before the freeze.} That is a
+retrospective reading and not a gate that was standing, and the distinction
+matters for the same reason C5's supersession does.
+
+Three warnings are raised on each line, identically. Twelve labels echo their
+own headings and eighteen section labels are never referenced; both are
+cosmetic. \textbf{The third is not}: two headings each carry two section
+labels --- \texttt{sec:hierarchy} with \texttt{sec:formulation}, and
+\texttt{sec:content} with \texttt{sec:physics}. That is the precise ambiguity
+the 2026-10-16 defect exploited, it is present in both frozen lines, and it
+belongs in the revision queue rather than in a change to a frozen manuscript.
 
 \paragraph{Late-time weighting and the low-$\ell$ spectrum.}
 The late-time share diagnostic is $0.0000$ on the Einstein--de~Sitter and
@@ -2308,16 +2418,31 @@ carried in $(\delta\tilde T+\Phi_A)'\supset\Phi_A'$. Nothing has to be added
 for it; the exact by-parts produces it.
 
 \paragraph{The scattering half, and this is where everything is decided.}
-With $C_1^{\rm scatt}=-\kappa'\hat v_B$, the weighted coefficient is already
-the standard Doppler source:
+With $C_1^{\rm scatt}=-\kappa'\hat v_B$, the weighted coefficient has the
+magnitude and the kernel of the standard Doppler source:
 \begin{equation}
   W C_1^{\rm scatt}=-\,\mathcal V\,\hat v_B
   \qquad\text{(up to the sign convention), with }\int\mathcal V=1 .
   \label{eq:doppler-source}
 \end{equation}
-\textbf{It is bounded and normalised, and its derivative is a total
-derivative that integrates to zero.} Split \eqref{eq:byparts-rank1}'s bulk on
-this half and the two pieces are, verified symbolically:
+\textbf{It is bounded and normalised, and its derivative is a total derivative
+that integrates to a boundary difference.}
+
+\emph{That is a statement about the magnitude, and it is not a statement that
+the bundling in (90) is harmless.} \textbf{It is not}: the instrument
+\textbf{c6} measures the frame obstruction the bundling creates. Under a boost
+$\Delta v_B=-v$, the bundled $C_1$ shifts by $-\dot s+\kappa's$, so the Thomson
+piece lands in the \emph{same} $\alpha C_1K'$ slot as the gravitational piece
+and the $K'$ coefficient becomes $2\alpha\mathcal V$, which no
+$(\alpha,\beta,\gamma)$ can cancel. Carried as its own undifferentiated term
+the coefficient is free, invariance fixes it at $c=\alpha$, and the residual
+goes to machine zero. \textbf{c6 and this section measure two consequences of
+one bundling} --- c6 the frame obstruction, this section the $\kappa''$
+artefact that \emph{differentiating} it creates --- \textbf{and the remedy is
+the same in both.}
+
+Split \eqref{eq:byparts-rank1}'s bulk on this half and the two pieces are,
+verified symbolically:
 
 \begin{center}\small
 \begin{tabularx}{\textwidth}{@{}l c c >{\raggedright\arraybackslash}X@{}}
@@ -2332,20 +2457,24 @@ $W\,C_1^{\rm scatt\prime}$ & $-\hat v_Be^{-\kappa}/k$ & $0$ &
 \midrule
 $\big(WC_1^{\rm scatt}\big)'$ \textbf{(exact)} & $-\hat v_Be^{-\kappa}/k$ &
   $+\hat v_Be^{-\kappa}/k$ &
-  \textbf{equal and opposite}: the two halves of
-  $\mathrm d(-\mathcal V\hat v_B)/\mathrm d\eta$ \\
+  the two halves of
+  $\mathrm d(-\mathcal V\hat v_B)/\mathrm d\eta$: their \emph{coefficients} are
+  equal and opposite, so the sum goes as $\kappa'^2-\kappa''$ \\
 \bottomrule
 \end{tabularx}
 \end{center}
 
 \noindent
-\textbf{The $\kappa'^2$ and $\kappa''$ terms are individually enormous and
-they cancel.} They are not two approximations to be costed separately; they
-are the two halves of one total derivative, and the sum is bounded because
-$\mathcal V\hat v_B$ is bounded. \emph{That cancellation is the only thing
-standing between this assembly and a $\kappa'^2$-sized integrand, and it is
-protected by one thing: the derivative being taken of the weighted
-coefficient, $(WC_1)'$, and not of the bare one.}
+\textbf{The sum is bounded because it is a total derivative, not because the
+two terms cancel pointwise.} \emph{An earlier form of this paragraph said they
+were ``individually enormous and they cancel''; that is withdrawn.} The gate
+measures the largest ratio of either piece to their sum at only $\simeq8$, and
+\textbf{c7} records that $\kappa''=-\kappa'^2$ holds \emph{at the visibility
+maximum alone}, where $\dot{\mathcal V}=0$ --- so any statement about powers of
+$\kappa'$ is local and not general. What is true without qualification is the
+structural statement: \textbf{the two are the halves of one total derivative of
+a bounded, normalised object, and that is what is protected by taking the
+derivative of the weighted coefficient $(WC_1)'$ rather than of the bare one.}
 
 % ===========================================================================
 \subsection{What (102) does, and it is one operation}
@@ -2370,12 +2499,12 @@ $WC_1'$ --- $\kappa''$ at one power of $e^{-\kappa}$ &
 \noindent
 The ratio of what (102) carries on the $\kappa''$ term to what the exact form
 carries is \textbf{exactly $\kappa'$}, verified symbolically. And the partner
-that would have cancelled it is gone.
+it should have been summed with is gone.
 
 \begin{quote}
-\textbf{The cancellation is destroyed from both sides in one operation.} One
-side is scaled by $\kappa'$ so it can no longer cancel; the other is deleted
-so it cannot try.
+\textbf{So (102) carries neither the total derivative nor either of its
+halves.} One half is rescaled by $\kappa'$ and the other is deleted, and what
+remains is a term the exact form does not contain at all.
 \end{quote}
 
 \paragraph{The magnitude follows, and it is the measured one.} What survives
@@ -2436,9 +2565,12 @@ from the covariant ancestor rather than imported.
 
 \paragraph{The admissibility condition, which is one assertion.}
 \begin{quote}
-\emph{A coefficient may be carried through an integration by parts only if it
-is free of rates. $C_1$ is not, by (90). Therefore the by-parts may be applied
-to $C_1^{\rm grav}$ and may not be applied to $C_1^{\rm scatt}$.}
+\emph{A coefficient holding a rate may not be carried through an integration by
+parts. It may hold one --- \textbf{c7}'s rule to the contrary was softened on
+2026-10-21, finding \textbf{T-113} and decision \textbf{S48}, because
+$W(\kappa'S)=\mathcal VS$ is exact --- but it may not be differentiated while it
+does. $C_1$ holds one, by (90), so the by-parts may be applied to
+$C_1^{\rm grav}$ and may not be applied to $C_1^{\rm scatt}$.}
 \end{quote}
 That is checkable in the tree --- a coefficient entering a derivative must not
 contain $\kappa'$ --- and it is the gate this defect needed and did not have.
