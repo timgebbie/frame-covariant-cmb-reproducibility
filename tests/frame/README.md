@@ -1,6 +1,6 @@
-# Frame checks — six instruments, for `tests/`
+# Frame checks — nine instruments, for `tests/`
 
-**P1-T, 2026-10-19.** Six self-contained instruments behind the frame-covariance
+**P1-T, 2026-10-19; count corrected and `c9` added 2026-10-26.** Nine self-contained instruments behind the frame-covariance
 conditions, plus the generator that turns them into `docs/THEORY-AUDIT.md`.
 
 ```
@@ -41,6 +41,7 @@ construction. Requires `numpy`, `scipy`, `sympy`.
 | `c4_rank_slot.py` | frame invariance forces `β = −α`, `γ = 0` |
 | `c5_monopole.py` | `a·Δℬ₀ = ⅓k²ΔC₂` exactly, so `γ = 0` closes **only with ℬ₀ restored** |
 | `c6_thomson.py` | `κ′v_B` inside `C₁` **and differentiated** breaks invariance; carried as its own undifferentiated term it needs `c = α` and the reduced `v̂_B = v_B/k`. **Not a weight change** — `Wκ′ = 𝒱` is an identity, so the Thomson term is already at visibility weight; the defect is the differentiation (P1-T, 2026-10-20; measured at **T-93**/**T-94**) |
+| `c9_byparts_admissibility.py` | **the condition under which the by-parts of `c6` is legitimate at all.** `(WC₁)'` splits into `W'C₁ ~ κ'²` and `WC₁' ~ κ''`, which are the two halves of `d(𝒱v̂_B)/dη` and **cancel**; (102) carries `𝒱C₁'` in place of `WC₁'` — larger by **exactly κ'** — and drops `W'C₁`, destroying the cancellation from both sides in one operation. The **split** by-parts, gravitational half by-parted and scattering half left at `K'`, reproduces the ancestor to 1e-13 and contains no `κ''` term at all (P1-T, 2026-10-26) |
 
 ## Three things to read before trusting the output
 
@@ -87,3 +88,16 @@ those differ between the two lines.
 `c8_rank0_partner.py`, added 2026-10-21. **The gate acceptance condition (iv) depends on, in place of $\gamma$.** It scores the frame shift of the *bracket* $C_0-C_1'$ at rank zero, in exact rationals with a numeric confirmation and a control on each of three rows: $+13/6\thinspace kv$ with (89)'s printed $\alpha_2$, **$0$ exactly** with $\alpha_0$ (finding **B-16**), and $-1/3\thinspace kv$ with $a\mathcal B_0$ restored (the refuted **T-107**).
 
 > **Why $\gamma$ could not settle it — M15.** $\gamma$ pairs $\Delta C_0$ against $k^2\Delta C_2$, and the partner is in $-C_1'$. *A gate built from one coefficient cannot see a cancellation distributed across the bracket.* Every measurement in `c5_monopole.py` stands; the pairing it scores is the wrong object.
+
+## `c6` said this on 2026-10-20 and I did not read it
+
+`c6_thomson.py`'s row above already states the finding: *"Not a weight change —
+`Wκ′ = 𝒱` is an identity, so the Thomson term is already at visibility weight;
+the defect is the differentiation."* **That is the conclusion the whole of
+25 October was spent re-deriving.** `c9` adds what `c6` does not — the
+cancellation, the factor of exactly `κ′`, and the split assembly as a
+constructive repair — but the direction was in this file for five days.
+
+**The rule this breaks is §3c, applied to my own tree**: a finding is not a
+finding until someone has looked at the thing it names, and that includes
+looking at the instrument one wrote oneself before deriving its content again.
