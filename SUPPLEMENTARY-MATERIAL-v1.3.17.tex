@@ -1,5 +1,5 @@
 % Computational supplement to the associated paper.
-% Build: latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.3.16.tex  (only after locked
+% Build: latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.3.17.tex  (only after locked
 % assets have passed hash checks). THIS FILE IS THE WHOLE DOCUMENT: the prose
 % carries no \input, and every former supplementary-materials/ fragment is
 % expanded inline between its own BEGIN/END provenance comments. The only
@@ -43,7 +43,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.3.16 --- 26 October 2026\\
+\date{Supplement v1.3.17 --- 26 October 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.3.0-dev}
 
 \begin{document}
@@ -182,9 +182,71 @@ statements, numerical measurements and unresolved implementation tests.
 
 \input{tables/status-layout-v1.3.4.tex}
 
+\subsection{Verification layers}
+\label{sec:verification-layers}
 
-\subsection{Additional Paper~1 verification in v1.3.0-dev}
+The checks behind Table~\ref{tab:status} sit at four layers, and the layers
+differ in what kind of physical statement they are able to carry at all.
+Keeping them apart is not administrative bookkeeping. A count of checks that
+pass, taken across layers, is not a statement about the spectrum, and the
+clearest way to overstate this work is to report one as though it were.
+
+A build or portability gate carries no physical claim whatever. It reads a
+build log and a file set and it fails on an undefined reference, a float that
+could not be placed, an overfull box, or a path that cannot be resolved on the
+machine that owns the repository. It exists because a green build that was
+never asked the question will be just as green next time. It settles nothing
+about a sign, a weight or a coefficient, and it is not represented in
+Table~\ref{tab:status} at all.
+
+A check that imports the project's own code can establish that the
+implementation does what the theory says. It cannot establish that the theory
+is right, and it is not independent of what it tests: it inherits the solver's
+conventions, its grids and its normalisations by construction, so a convention
+that is wrong in the code is wrong in the check as well. These are the
+repository's implementation tests. They belong to the physics release
+progression, and the two-frame and spectrum pipelines are still moving within
+them.
+
+An instrument that imports no project code can establish a condition on the
+functional --- a sign, an $\ell$-weight, a matching row, the exactness of an
+integration by parts --- precisely because it builds its own kernel, visibility
+and boost potential and therefore cannot agree with the solver by
+construction. What it cannot establish is anything about the assembled
+spectrum. Each condition is verified in isolation, and a functional that
+satisfies every one of them separately may still be assembled wrongly.
+Table~\ref{tab:status}'s step-six and step-seven rows record exactly that. \S\ref{sec:dev-claim-verification} is this layer.
+
+A manuscript check can establish that a paper states its own results
+correctly: that a column of a table follows from the algebra the paper cites
+for it, that a heading describes the body beneath it, that a cross-reference
+says something true about its target. It cannot establish the result.
+\S\ref{sec:manuscript-verification} is this layer, and it is the only one whose
+object is a document rather than a calculation.
+
+None of the four, in any combination, reaches the observed sky. The sky is the
+subject of Part~II; what is open in it is \S\ref{sec:remaining-problems}; and
+Table~\ref{tab:status} above is the record of which steps of the chain are
+established, which are measured and failing, and what each piece of evidence
+does not reach.
+
+\subsection{Testing the physics}
 \label{sec:dev-claim-verification}
+
+The statements these instruments carry are the steps of the chain
+Table~\ref{tab:status} records, and the correspondence is not one instrument to
+one step. Steps one to three are settled by inspection and index algebra and
+have no instrument in this directory at all. Step four is gated by the
+oscillator's peak spacing and step five by \textbf{G1} against four external
+hierarchies, both of them repository diagnostics rather than frame checks.
+Exactly one row of Table~\ref{tab:status} names an instrument from the set
+below --- step six, where \textbf{c3} measures that (102) is not the exact
+integration by parts of its own integral. What the remaining eight establish
+sits beneath the table rather than in it: the conditions the matching
+coefficients must satisfy for the frame law to hold, which are prior to every
+row and are the reason a failing row can be localised at all. The inventory
+below should be read in that light, and not as a count of certified steps.
+
 The source tree at the pinned \texttt{v1.3.0-dev} commit also contains
 independent, claim-facing Python instruments that are \emph{absent}
 from the \texttt{v1.0.0}, \texttt{v1.1.0} and \texttt{v1.2.0} tags.
@@ -240,14 +302,14 @@ scattering; distinguishes legitimate from spurious opacity-rate terms.\\[3pt]
 partner, correcting the C5 interpretation
 & Includes the \(-C_1'\) partner and records the double-counting
 negative control; does not itself demonstrate the correct spectrum.\\[3pt]
-\texttt{c9\_byparts\_admissibility.py} & \textbf{Added 2026-10-26.} The
+\texttt{c9\_byparts\_admissibility.py} & Added 2026-10-26. The
 condition under which the integration by parts of C6 is admissible at all.
 \(W'C_1\) and \(WC_1'\) sum to the total derivative
 \(\mathrm d(\mathcal V\hat v_B)/\mathrm d\eta\); (102) carries
 \(\mathcal VC_1'\) in place of \(WC_1'\), larger by exactly \(\kappa'\),
 and drops \(W'C_1\). The split assembly --- gravitational half by-parted,
 scattering half left at \(K'\) --- reproduces the ancestor
-& \textbf{Companion to C6, not a replacement}: C6 measures the frame
+& \textbf{Companion to C6, not a replacement}. C6 measures the frame
 obstruction the bundling in (90) creates, C9 the \(\kappa''\) artefact that
 \emph{differentiating} it creates, and the remedy is the same in both. It does
 \emph{not} reinstate the rule C7 withdrew at T-113/S48: a coefficient may hold
@@ -267,103 +329,155 @@ proof. In particular, the supersession recorded inside C5 must travel
 with any claim about how many checks ``pass''. Implementation tests,
 including the evolving two-frame and spectrum pipelines, remain part
 of the \emph{physics} release progression rather than this
-Paper~1 claim-verification inventory.
+inventory.
 
-\paragraph{Three suites, three objects, and they do not substitute for one
-another.} The inventory above is one of three, and conflating them would
-overstate what any of them establishes:
 
-\begin{center}\small
-\begin{tabularx}{\textwidth}{@{}l l >{\raggedright\arraybackslash}X@{}}
+\subsection{Verifying the manuscripts}
+\label{sec:manuscript-verification}
+
+A paper can be wrong in two ways that no check of the reconstruction
+reaches, because the reconstruction and the manuscript are independent accounts
+of the same physics and neither is evidence about the other. Its algebra can be
+wrong where the bundle's is right. And its algebra can be correct while the
+document misstates it: a heading attached to the wrong body,
+a label absent so that every later reference to a section drifts to the
+subsection whose title happens to describe that content, a sentence that ends
+by telling the reader an independent derivation shares no step with itself. On
+2026-10-16 the submitted version of Paper~1 was found to carry all three, with
+Sec.~V~C holding no label at all. A heading is not a
+\TeX{} error, a reference, a float or a box, so the build gate of the layer
+above was blind to every part of it; and re-reading does not catch it either,
+because a reader who already knows what a paragraph says stops reading the
+heading above it.
+
+Each paper in this project therefore carries two standalone checks of its
+own, one for each failure, and their object is that paper and no other.
+Paper~1's are \path{paper/checks/independent_checks_v1.1.6.py} for the algebra
+and \path{paper/checks/coherence_gate.py} for the structure. Paper~2 is
+expected to carry its pair, written to the same scope rather than extended to
+cover both papers.
+
+\paragraph{What the algebra check re-derives, and what it only records.}
+\path{independent_checks_v1.1.6.py} takes Paper~1's coefficients and identities
+and re-establishes them in sympy from constructions of its own, rather than
+reading them back from the paper. Most of what it does is angular algebra: the
+non-aligned Cartesian PSTF identities of Eqs.~(27)--(29) to rank six, evaluated
+off any symmetry axis and with no spatial harmonics anywhere in the
+construction; the $\Lambda$ recursion and the aligned generators to rank
+fourteen; the residuals of Eqs.~(83)--(85) with their $\ell\to\infty$ weights;
+and the harmonic normalisations, the orthogonality relation and the $2\ell+1$
+dimension of the symmetric trace-free projector. Beneath that sit 1485 exact
+rational comparisons of five coefficient identities at every rank from
+$\ell=4$ to $\ell=300$, in \texttt{Fraction} arithmetic rather than in floating
+point.
+
+The physical steps are fewer and each stands alone. The boost generator is
+decomposed from the kinematics and the $+Hv$ acceleration term derived from the
+expansion of $\nabla_bu_a$, which is the coefficient the frame law turns on.
+The conformal normalisation cancellation and the Gauss step (65)$\to$(66) are
+carried through; so is the growth factor (49)$\to$(50) and the two efficiency
+figures; and the quartic power expansion of Appendix~C is reproduced in a
+flat-sky average whose convention the file now asserts, because the same symbol
+carries the three-dimensional polar cosine three sections earlier.
+
+Section~A can fail on the physics rather than on the bookkeeping. This is
+because Section~A's general-rank energy integration by parts is scored against
+a direct integral arbiter evaluated at $\ell=2,4,9$ --- an explicit integration
+that does not use the symbolic rule it is testing. Sections~B and~I cannot.
+Table~I's coefficients are transcribed from the paper, so Section~B establishes
+that the table is internally consistent under the $4+\text{rank}$ rule and does
+not derive it; and Section~I is four counterexamples and qualifications, which
+bound the reading of a result rather than verify one.
+
+\emph{What makes it usable as evidence is that it does not report all of that
+as one number.} Its verdicts are four kinds and they are counted apart, which
+they were not before 2026-10-21:
+
+\begingroup\footnotesize
+\setlength\LTleft{0pt}\setlength\LTright{0pt}
+\begin{longtable}{@{}p{0.20\textwidth}r>{\raggedright\arraybackslash}p{0.60\textwidth}@{}}
+\caption{Verdict classes in \texttt{independent\_checks\_v1.1.6.py}, run
+2026-10-26 under sympy 1.14.0 and Python 3.11.15, exit~0.}\label{tab:independent-checks}\\
 \toprule
-\textbf{suite} & \textbf{object under test} & \textbf{what it is allowed to read} \\
+\textbf{Verdict} & \textbf{n} & \textbf{What it means}\\\midrule
+\endfirsthead
+\toprule
+\textbf{Verdict} & \textbf{n} & \textbf{What it means}\\\midrule
+\endhead
+\bottomrule\endfoot
+\textsc{pass} & 187 & an identity re-derived here and found to hold, residual
+exactly zero in sympy or in exact rational arithmetic\\[3pt]
+\textsc{failed as required} & 3 & a deliberately wrong expectation that the
+suite must reject. Without these nothing would demonstrate that the comparison
+can fail at all, and a suite with no failing control cannot distinguish
+\emph{every identity holds} from \emph{the comparison is vacuous}\\[3pt]
+\textsc{finding} & 1 & a discrepancy against the paper. Not a pass, and not a
+note\\[3pt]
+\textsc{recorded} & 8 & a statement the file carries but does not verify ---
+a qualification, a counterexample, or a summary of comparisons made
+elsewhere in it\\[3pt]
 \midrule
-\path{tests/frame/c1}--\path{c9} & \textbf{the physics functional} &
-  nothing from the project: each instrument builds its own visibility, kernel
-  and boost potential, so it cannot agree with the solver by construction \\
-\path{tests/test_*.py} & \textbf{the implementation} &
-  the project's own code --- it is the only one of the three that can \\
-\path{paper/checks/*.py} & \textbf{the manuscript} &
-  Paper~1's \LaTeX{} source and its build, in the paper repository, not this
-  bundle \\
-\bottomrule
-\end{tabularx}
-\end{center}
+total records & 199 & \emph{of which 187 are verified checks.} The file
+reported all 199 as passes until 2026-10-21; a recorded statement is not a
+verified check, and reporting both as \textsc{pass} overstates what ran\\
+\end{longtable}
+\endgroup
 
-\paragraph{And within the third there is one instrument that reads structure
-rather than content.} Seven of the eight files in \path{paper/checks/} test
-\emph{claims}: \texttt{build\_gate.py} tests \TeX{} errors, undefined
-references, floats, boxes and the bundle pointers, while
-\texttt{aligned\_check}, \texttt{curvhalf\_check},
-\texttt{enumeration\_check}, \texttt{quartic\_remainder},
-\texttt{relabel\_check}, \texttt{tableI\_check} and \texttt{gauss\_probe}
-each re-derive something the paper asserts. \textbf{The eighth,
-\texttt{coherence\_gate.py}, tests whether each heading describes its own body
-and whether each cross-reference says something true about its target.}
+\paragraph{Open finding: Figure~3's signed residual.} The signed residual
+(83)$-$(84)$-$(85) tends to $-1/(2\ell^2)$. If Figure~3 or its caption prints
+$+1/(2\ell^2)$ as the signed value rather than as the magnitude, that is a
+discrepancy against the paper. Sec.~6.3's text states $O(\ell^{-2})$ without a
+sign, so the text is unaffected. The figure itself has not been checked.
 
-\paragraph{Its scope is deliberate, and Table~\ref{tab:dev-claim-tests} is
-what it is scoped \emph{against}.} It is \textbf{one file of 210 lines that
-imports only \texttt{sys}, \texttt{re}, \texttt{os}, \texttt{glob} and
-\texttt{collections}} --- the standard library, no third-party package, and no
-sibling module. It can therefore be \emph{circulated with the manuscript}: a
-referee who has the \verb|.tex| and a Python interpreter has everything needed
-to run it. \textbf{It is a minimal reproducibility bundle of its own, inside
-the broader one.} Every instrument in Table~\ref{tab:dev-claim-tests}, by
-contrast, imports \path{_common.py}, and through it \texttt{scipy}; most also
-import \texttt{sympy} or \texttt{numpy}, and the suite needs its runner and
-its generator besides. \textbf{The suite does not travel; the gate does.}
+\paragraph{Withdrawn 2026-10-21: the variance-conservation check.} It read
+$A\!\cdot\!B/2=(B/2)\!\cdot\!A$, which is commutativity of multiplication and
+cannot fail. Conservation requires the lensed spectrum's full second moment,
+including the linear--quadratic cross term, which this file does not compute.
 
-\emph{The two scopes are opposite by design and neither may absorb the other.}
-The suite's virtue is isolation --- nine instruments, each building its own
-visibility, kernel and boost potential, so that no two can agree by
-construction --- and that virtue cannot survive being compressed into one
-file. The gate's virtue is that it is \emph{streamlined and sufficient}, small
-enough to be read in one sitting by someone who has only the paper, and that
-virtue cannot survive being grown into a suite. \textbf{This is the one place
-in this project where streamlining is the correct engineering choice}, because
-the artefact's purpose is to travel alone; everywhere else in this document the
-standing rule is the opposite. Recording that here is what keeps a later editor
-from ``improving'' either one into the other.
+\paragraph{The structure check reads the document rather than the algebra.}
+\path{paper/checks/coherence_gate.py} reads the \LaTeX{}
+source only and makes no claim about the rendered page. It tests two things:
+that every heading's own words appear somewhere in the body beneath it, and
+that every locating cross-reference --- one whose sentence carries a verb such
+as \emph{derived}, \emph{obtained}, \emph{stated} or \emph{settled} --- names
+the section that actually carries what the sentence claims for it. Exemptions
+are declared in the file with a reason, never passed silently, so a heading
+that legitimately does not repeat its own words is visible as a decision rather
+than as a gap. Paper~2 is expected to carry its counterpart, written to the
+same scope rather than extended to cover both papers.
 
-\emph{It exists because of a defect none of the others could see.} On
-2026-10-16 the GRG line was submitted with three subsection titles attached to
-the wrong bodies, and Sec.~V~C carrying no \verb|\label| at all --- so every
-later reference to its content drifted to the subsection whose \emph{title}
-described that content, and a sentence inside Sec.~VI~A ended up telling the
-reader that an independent derivation shared no step with ``the derivation in
-Sec.~VI~A''. \textbf{A heading is not a \TeX{} error, a reference, a float or a
-box}, so \texttt{build\_gate.py} was blind to all of it; and re-reading does
-not catch it either, because a reader who knows what a paragraph says stops
-reading the heading above it.
+\paragraph{The coherence gate's qualification, which is the same shape as
+C5's.} The file was
+written on 2026-10-16 and then placed in a directory the Paper~1 repository's
+\texttt{.gitignore} excludes, where it remained until 2026-10-26. It was never
+committed, never reached the public repository, and no stage of the build
+script called it. Run on placement against both frozen sources --- the arXiv
+line at \texttt{v1.1.6}, 47~headings, and the submitted version at
+\texttt{v1.4.4}, 46~headings --- it reports no failures on
+either. Every heading carries a label, no heading has every word absent from
+its body, no section refers to itself, and every locating claim names the right
+section. The defect it was written for was therefore repaired before the
+freeze. That is a retrospective reading of a frozen document and not a gate
+that stood over it while it was being written, and the distinction must travel
+with the result in the same way C5's supersession does. Three warnings are
+raised on each line, identically. Twelve labels echo their own headings and
+eighteen section labels are never referenced, both cosmetic. Two headings each
+carry two section labels --- \texttt{sec:hierarchy} with
+\texttt{sec:formulation}, and \texttt{sec:content} with \texttt{sec:physics}
+--- which is the ambiguity the 2026-10-16 defect exploited, is present in both
+frozen lines, and belongs in the Paper~1 revision queue rather than in any
+change to a frozen manuscript.
 
-\textbf{That is the complement to the frame checks, and it is why both are
-needed.} The frame instruments catch a \emph{false statement}, measured
-against the algebra. The coherence gate catches a \emph{true statement in the
-wrong place}, measured against the document's own structure. A frozen
-manuscript can be wrong in either way and no instrument in one class can see
-the other.
 
-\paragraph{Its qualification, which is the same shape as C5's.}
-\textbf{\texttt{coherence\_gate.py} has never run as part of any gate.} From
-2026-10-16 it sat in a directory the paper repository's \texttt{.gitignore}
-excludes, so it was never committed, never reached GitHub, and no stage of the
-build script called it; it was placed in \path{paper/checks/} on 2026-10-26.
-Run then against both frozen sources it was written for --- the arXiv line at
-\texttt{v1.1.6}, 47~headings, and the GRG line at \texttt{v1.4.4},
-46~headings --- \textbf{it passes both with zero failures}: every heading
-carries a label, no heading has every word absent from its body, no section
-refers to itself, and every locating claim names the right section.
-\emph{The defect it was written for was repaired before the freeze.} That is a
-retrospective reading and not a gate that was standing, and the distinction
-matters for the same reason C5's supersession does.
+\subsection{Remaining problems}
+\label{sec:remaining-problems}
 
-Three warnings are raised on each line, identically. Twelve labels echo their
-own headings and eighteen section labels are never referenced; both are
-cosmetic. \textbf{The third is not}: two headings each carry two section
-labels --- \texttt{sec:hierarchy} with \texttt{sec:formulation}, and
-\texttt{sec:content} with \texttt{sec:physics}. That is the precise ambiguity
-the 2026-10-16 defect exploited, it is present in both frozen lines, and it
-belongs in the revision queue rather than in a change to a frozen manuscript.
+Two kinds of thing are open, and they are recorded together because they fail
+in the same place. The first is a physical question with an instrument pointed
+at it and an answer that does not satisfy it. The second is a claim with no
+instrument at all. Neither belongs in Table~\ref{tab:status}, which pairs a
+claim with its evidence and has no row shape for a claim whose evidence does
+not exist.
 
 \paragraph{Late-time weighting and the low-$\ell$ spectrum.}
 The late-time share diagnostic is $0.0000$ on the Einstein--de~Sitter and
@@ -407,8 +521,16 @@ plateau remains a separate spectrum-level finding. Approximation A-1 is
 established as the missing late-time weight; its contribution to the total
 low-$\ell$ morphology still requires a separate test.
 
-\subsection{Asserted, not gated}
+
+\paragraph{Asserted, not gated.}
 \label{sec:asserted-not-gated}
+This list is the half of \emph{every gate has a claim and every claim has a
+gate} that a gate-driven generator cannot supply, because it enumerates
+precisely the claims no gate reaches. It is MIL-STD-498's rule that a
+requirement which cannot be verified is not a requirement: a statement that
+cannot be scored does not become established by being repeated, and it is
+recorded here, with the reason, rather than in the table above.
+
 
 The following statements are not independently established by a completed
 acceptance test. They remain in the scientific record, with the qualification
@@ -546,7 +668,7 @@ Paper~1 mapping. A reference or mathematical error found in Paper~1 is
 reported explicitly and left traceable, never silently repaired by
 substituting an antecedent or an alternative gauge description.
 
-This supplement records the analytical companion to \emph{Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}, Gebbie, Paper~1, University of Cape Town, 2026, \texttt{arXiv:astro-ph/9912072v4}, \href{https://doi.org/10.48550/arXiv.astro-ph/9912072}{doi:10.48550/arXiv.astro-ph/9912072}, submitted to \emph{General Relativity and Gravitation} 2026-10-16, CC BY 4.0. Cited versioned throughout: the bare identifier has carried three documents --- \texttt{v3} is the correction and \texttt{v1}/\texttt{v2} the legacy 1999 work, neither of them this paper. The
+This supplement records the analytical companion to \emph{Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}, Gebbie, Paper~1, University of Cape Town, 2026, \texttt{arXiv:astro-ph/9912072v4}, \href{https://doi.org/10.48550/arXiv.astro-ph/9912072}{doi:10.48550/arXiv.astro-ph/9912072}, submitted 2026-10-16, CC BY 4.0. Cited versioned throughout: the bare identifier has carried three documents --- \texttt{v3} is the correction and \texttt{v1}/\texttt{v2} the legacy 1999 work, neither of them this paper. The
 bundle is an independent Python reconstruction, from first $1+3$ covariant
 principles, of the almost-Friedmann--Lema\^itre results of Gebbie, Dunsby \&
 Ellis, \emph{Annals of Physics} 282, 321--394 (2000),
@@ -1909,10 +2031,9 @@ the transport assembly, and \S\ref{sec:w-form} is where that is itemised.
 \section{The first acoustic peak, predicted}
 \label{sec:first-peak}
 
-\emph{The peak position is analytically known, and the knowing of it is worth
-more than the measuring. It turns a displacement into a budget with named
-contributors, and it closes two candidate mechanisms that no amount of further
-measurement would have closed.}
+\emph{The peak position is analytically known. Knowing it turns a displacement
+into a budget with named contributors, and closes two candidate mechanisms that
+further measurement would not have closed.}
 
 % ===========================================================================
 \subsection{The sound speed is the antecedent's own, derived and not assumed}
@@ -3088,8 +3209,8 @@ transformation already closes without them: machine zero on
 Einstein--de~Sitter, ratio $0.9725$ on $\Lambda$CDM and $0.9309$ on
 \texttt{PLANCK\_MODEL}.
 
-\emph{The Einstein--de~Sitter row of that comparison is a null and not a
-confirmation, and it is worth saying which.} On $K=0$ dust $\mathcal H=2/\eta$,
+\emph{The Einstein--de~Sitter row of that comparison is a null, not a
+confirmation.} On $K=0$ dust $\mathcal H=2/\eta$,
 and the regular branch of $v'+\mathcal Hv=-k\Phi_A$ with $\Phi_A$ constant is
 $v=-k\Phi_A\eta/3$, so
 \begin{equation}
