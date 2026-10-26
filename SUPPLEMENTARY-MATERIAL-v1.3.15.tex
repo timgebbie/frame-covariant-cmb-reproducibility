@@ -1,5 +1,5 @@
 % Computational supplement to the associated paper.
-% Build: latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.3.14.tex  (only after locked
+% Build: latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.3.15.tex  (only after locked
 % assets have passed hash checks). THIS FILE IS THE WHOLE DOCUMENT: the prose
 % carries no \input, and every former supplementary-materials/ fragment is
 % expanded inline between its own BEGIN/END provenance comments. The only
@@ -43,7 +43,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.3.14 --- 25 October 2026\\
+\date{Supplement v1.3.15 --- 25 October 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.3.0-dev}
 
 \begin{document}
@@ -1779,6 +1779,239 @@ the transport assembly, and \S\ref{sec:w-form} is where that is itemised.
 
 % === END source expansion: supplementary-materials/section-oscillator-v1.4.0.tex ===
 
+% === BEGIN exact source expansion: supplementary-materials/section-first-peak-v1.3.15.tex ===
+% ---------------------------------------------------------------------------
+% THE FIRST ACOUSTIC PEAK, PREDICTED.
+%
+% Written 2026-10-25 by the Paper 1 stream, at the PI's direction: confirm the
+% analytic peak position first, derive it in the covariant setting, then state
+% the boundary requirements, and only then compare with what the numerics do.
+%
+% Placement: immediately after the acoustic oscillator section and before free
+% streaming. It uses the oscillator's result and states what the projection
+% must do with it; the assembly sections then say why this bundle does not.
+%
+% Evidence categories are named per row. The sound speed is ANALYSIS (index
+% algebra from (152)-(153), residual zero). The projection budget is a
+% DEMONSTRATION with its configuration stated. The four configurations are
+% TESTS, measured in this bundle.
+% ---------------------------------------------------------------------------
+\section{The first acoustic peak, predicted}
+\label{sec:first-peak}
+
+\emph{The peak position is analytically known, and the knowing of it is worth
+more than the measuring. It turns a displacement into a budget with named
+contributors, and it closes two candidate mechanisms that no amount of further
+measurement would have closed.}
+
+% ===========================================================================
+\subsection{The sound speed is the antecedent's own, derived and not assumed}
+
+\emph{Annals~II}~(152) and (153) are the covariant acoustic pair:
+\begin{align}
+  \tilde\tau_1'&=-\frac{R'}{1+R}\,\tilde\tau_1-\frac{k}{1+R}\,\delta\tilde T-k\Phi_A,
+    \tag{152}\label{eq:152-peak}\\
+  \delta\tilde T'&=-a\mathcal H\Phi_A-\Phi_H'+\frac k3\,\tilde\tau_1 .
+    \tag{153}\label{eq:153-peak}
+\end{align}
+
+\textbf{Eliminate $\tilde\tau_1$ between them.} \eqref{eq:153-peak} gives
+$\tilde\tau_1=\frac3k\big(\delta\tilde T'+a\mathcal H\Phi_A+\Phi_H'\big)$;
+substituting into \eqref{eq:152-peak} and multiplying by $k/3$ returns
+\begin{equation}
+  \delta\tilde T''+\frac{R'}{1+R}\,\delta\tilde T'+k^2c_s^2\,\delta\tilde T
+  \;=\;-\frac{k^2}{3}\Phi_A-\mathcal F,
+  \qquad
+  \boxed{\;c_s^2=\frac{1}{3(1+R)}\;}
+  \label{eq:covariant-oscillator}
+\end{equation}
+with $\mathcal F$ the forcing carried by the potentials. \textbf{The standard
+sound speed and the standard baryon-drag coefficient $R'/(1+R)$, with nothing
+imported.} The coefficient of $\delta\tilde T$ in the eliminated equation is
+$k^2/[3(1+R)]$ exactly; the residual of the elimination is zero symbolically.
+\emph{This is analysis in the sense the acceptance spine uses the word, and
+it is the one step in this section that needs no measurement.}
+
+The sound horizon and the angular scale follow:
+\begin{equation}
+  r_s(\eta_*)=\int_0^{\eta_*}\!c_s\,\mathrm d\eta,
+  \qquad
+  r_\theta=\eta_0-\eta_*,
+  \qquad
+  \ell_A\equiv\frac{\pi r_\theta}{r_s(\eta_*)} .
+  \label{eq:ell-A}
+\end{equation}
+In the undriven, undamped limit \eqref{eq:covariant-oscillator} has
+$\delta\tilde T\propto\cos\!\big(kr_s\big)$, whose extrema are at
+$kr_s=m\pi$. \textbf{That the oscillator does this is measured, not assumed}:
+$(\delta\tilde T+\Phi_A)(\eta_*)$ tracks $\cos(kr_s)$ in exact phase and
+period, with a contrast better than the antecedent's own closed form~(181),
+and the period is right to $0.5\%$ (\S\ref{sec:oscillator}).
+
+% ===========================================================================
+\subsection{But $\ell_1\neq\ell_A$, and the difference is not all physics}
+
+\textbf{It is tempting, and wrong, to read $kr_s=\pi$ as $\ell=\ell_A$.} That
+step converts a statement about the source into a statement about the
+multipole, and \S3b of the project's own standing rule exists for exactly that
+class of step. The observable is
+\begin{equation}
+  C_\ell=\frac2\pi\int\frac{\mathrm dk}{k}\,\big[k^3P_\Phi(k)\big]
+         \big|S(k)\,j_\ell(kr_\theta)\big|^2 ,
+  \label{eq:peak-projection}
+\end{equation}
+and $k$ is integrated. Write the displacement as
+\begin{equation}
+  \ell_1=\ell_A\,(1-\varphi_1),\qquad\text{so}\qquad
+  \varphi_1\equiv1-\frac{\ell_1}{\ell_A},
+  \label{eq:phi-definition}
+\end{equation}
+which is the first row of the standard peak parametrisation and is the form in
+which Hu \& Sugiyama --- this bundle's declared analytic comparator, decision
+\textbf{S37} --- organise the same quantity.
+
+\paragraph{The projection alone supplies a $\varphi_1$, and it is not small.}
+\eqref{eq:peak-projection} evaluated on an \emph{undriven} monopole
+$S=\cos(kr_s)\,e^{-(k/k_D)^2}$, at this bundle's own diffusion scale
+$k_D=754.6$, with $n_s=1$ and $D_\ell=\ell(\ell+1)C_\ell/2\pi$:
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}X r r@{}}
+\toprule
+\textbf{undriven source} & $\ell_1/\ell_A$ & $\varphi_1$ \\
+\midrule
+$\cos(kr_s)$, $R=0$ & $0.8524$ & $+0.1476$ \\
+$(1+R)^{-1/4}\cos(kr_s)-R$, $R=0.3$ & $0.8303$ & $+0.1697$ \\
+$(1+R)^{-1/4}\cos(kr_s)-R$, $R=0.6$ & $0.8083$ & $+0.1917$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent
+\textbf{So roughly $0.15$ of $\varphi_1$ is the projection and is present in
+any assembly whatsoever.} It is the $\mathrm dk/k$ measure, the $\ell(\ell+1)$
+weighting and the kernel's own structure, and no physics is responsible for
+it. \emph{This row is a demonstration and its configuration is stated so that
+it can be re-run; it is not a gate and nothing is scored against it.}
+
+% ===========================================================================
+\subsection{The budget, and it comes out in two equal halves}
+
+Against $\ell_A=272.177$ for \texttt{PLANCK\_MODEL}, four configurations
+measured in this bundle:
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}X r r r@{}}
+\toprule
+\textbf{configuration} & $\ell_1$ & $\ell_1/\ell_A$ & $\varphi_1$ \\
+\midrule
+released v1.3.0 & $266.6$ & $0.9795$ & $+0.0205$ \\
+artefact suppressed, undriven & $236.6$ & $0.8693$ & $+0.1307$ \\
+matched CAMB/CLASS, $N_{\rm eff}=0$ & $206.0$ & $0.7569$ & $+0.2431$ \\
+\textbf{D24}, $\kappa''$-suppressed & $172.75$ & $0.6347$ & $+0.3653$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent
+\textbf{The matched comparator is the analytic first peak}, $\varphi_1=0.243$.
+It is not an arbitrary target and it is not a fit: it is where the standard
+treatment puts the peak in this bundle's own cosmology, with $N_{\rm eff}=0$
+carried on both sides.
+
+And the displacement splits into two pieces of the same size:
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}X c r@{}}
+\toprule
+\textbf{step} & $\ell_1$ & $\Delta\varphi_1$ \\
+\midrule
+remove the $\kappa'\kappa''\hat v_B$ artefact & $266.6\to236.6$ & $+0.1102$ \\
+supply the radiation-era driving & $236.6\to206.0$ & $+0.1124$ \\
+\midrule
+\textbf{total} & $266.6\to206.0$ & $\mathbf{+0.2226}$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent
+\textbf{The two halves agree to $2.0\%$ of their mean, and neither was tuned.}
+
+\paragraph{And the undriven row is confirmed independently.} The projection
+demonstration above, run at this bundle's own $k_D$ with nothing fitted,
+predicts the undriven monopole peaks at $\ell_1=232$. \textbf{The bundle's
+artefact-suppressed configuration measured $236.6$} --- agreement to
+$\mathbf{1.9\%}$, untuned, between a closed-form projection and a released
+run. That is what licenses reading the middle row as \emph{undriven} rather
+than as \emph{a different wrong answer}.
+
+% ===========================================================================
+\subsection{What this closes, and it closes two things}
+
+\paragraph{The peak is not displaced by one mechanism. It is undriven, and it
+is then displaced further by an artefact, and the two are equal.} Both push
+$\ell_1$ \emph{up}. Being undriven costs $0.112$; the artefact costs $0.110$.
+\emph{Any repair that addresses one and reports the peak will appear to
+overshoot or undershoot by half the distance}, which is what the two candidate
+configurations above do on opposite sides.
+
+\paragraph{The $j_\ell'$ slot is not a peak repair, and that is now settled.}
+Restoring the Doppler term at its own kernel --- discrepancy B-17~(iv),
+derived in \S\ref{sec:w-form} --- moves $\varphi_1$ by $\mathbf{-0.015}$ at
+full amplitude, and \emph{in the wrong direction}. It fills troughs and adds
+power below the peak, which is what its $\ell$-leverage already said: at fixed
+$x$ the $\ell$ maximising $|j_\ell'|$ sits about $37\%$ below the one
+maximising $|j_\ell|$. \textbf{B-17~(iv) remains a correctness defect and is
+withdrawn as a peak mechanism.}
+
+\paragraph{The late integrated Sachs--Wolfe weight is not a peak repair
+either, and that is measured.} Carrying the bulk at $W$ rather than
+$\mathcal V\mathcal D$ --- the (98) branch --- moves the late share from
+$0.0000$ to $10^{-4}$ and \textbf{does not move the peak at all}. The
+prediction that it would not was stated before the run.
+
+% ===========================================================================
+\subsection{The boundary requirement, and it is now a single statement}
+
+Two of the three candidate carriers of the missing $0.112$ are closed by the
+rows above. \textbf{What remains is the boundary value itself.}
+
+\begin{quote}
+\textbf{The driving half of $\varphi_1$ does not live in the line-of-sight
+integral. It lives in $(\delta\tilde T+\Phi_A)(\eta_*)$.} The oscillator
+\eqref{eq:covariant-oscillator} must be integrated \emph{through the radiation
+era}, where $\Phi$ decays inside the sound horizon and forces
+$\mathcal F\neq0$ resonantly, rather than started from a matter-era initial
+condition in which $\Phi$ is already constant.
+\end{quote}
+
+That is approximation \textbf{A-3}. It is derived in closed form in this
+bundle as $\Phi=3\Phi_i\,j_1(x)/x$ with $x=k\eta/\sqrt3$, it is gated by
+\texttt{tests/test\_radiation\_potential.py}, and \textbf{it is not wired into
+\texttt{solve\_acoustic}}. It enters \eqref{eq:covariant-oscillator}'s forcing
+and therefore the boundary value, and it does not enter the transport assembly
+at all.
+
+\paragraph{The test, stated before it is run.} Suppress the artefact and wire
+A-3 together. \textbf{The first peak must land at $206\pm6$} --- that is
+$\varphi_1=0.243$ --- on \texttt{PLANCK\_MODEL}. Either alone must land near
+$236.6$, from opposite sides. \emph{And on Einstein--de~Sitter, where
+$\Omega_r=0$ by construction and A-3 cannot act at all, the peak must stay at
+the undriven position and must not move when A-3 is enabled.} That null
+control is what distinguishes a driving mechanism from a fit.
+
+\paragraph{One number is not yet reconciled and is named rather than used.}
+The released Einstein--de~Sitter first peak is reported at $\ell_1=220$ against
+$\ell_A=192.7$, which is $1.142\,\ell_A$ --- above $\ell_A$ rather than below
+it, and inconsistent with both the undriven prediction ($0.852\,\ell_A$) and
+the \texttt{PLANCK\_MODEL} released ratio ($0.980$). Either $\ell_A=192.7$ is
+being read against a different model --- the \texttt{CDM}/\texttt{CDM\_MODEL}
+identifier collision, finding \textbf{T-134} --- or the two peaks are located
+by different estimators. \textbf{Nothing in this section rests on it}, and it
+is a lookup rather than a question.
+% === END source expansion: supplementary-materials/section-first-peak-v1.3.15.tex ===
+
+
 
 
 % === BEGIN exact v1.3.0 source expansion: supplementary-materials/section-free-streaming-v1.4.0.tex ===
@@ -1973,6 +2206,253 @@ the wrong source.
 % release whose work it specifies, the ell=0 row and the W-form --- and ships
 % here because the theory has to be on the page before the implementation
 % moves. The name is P1-T's and is kept so their references resolve.
+
+
+% === BEGIN exact source expansion: supplementary-materials/section-assembly-rederived-v1.3.15.tex ===
+% ---------------------------------------------------------------------------
+% THE LINE-OF-SIGHT ASSEMBLY, RE-DERIVED.
+%
+% Written 2026-10-25 by the Paper 1 stream at the PI's direction, after the
+% first-peak budget showed half the displacement was an artefact and half was
+% undriven physics. This section derives where the artefact comes from, and it
+% comes from one operation.
+%
+% Everything here is ANALYSIS: index algebra, residual zero, verified
+% symbolically. No run is scored against it and no measurement establishes it.
+% The measured numbers it accounts for (T-94's 1.8e5, T-101's plateau bump,
+% B-17 (iv)'s empty slot) are cited, not derived from.
+%
+% Placement: immediately before the transport assembly section, which it
+% supersedes in its account of WHY (102) fails rather than THAT it fails.
+% ---------------------------------------------------------------------------
+\section{The line-of-sight assembly, re-derived}
+\label{sec:assembly-rederived}
+
+\emph{Three findings in this bundle -- the plateau standing on a scattering
+rate, the bulk carrying a term $1.8\times10^5$ times too large, and the
+$j_\ell'$ slot standing empty -- have been carried as three. They are one
+operation, and this section is the derivation that shows it.}
+
+% ===========================================================================
+\subsection{Conventions, so that no sign is assumed}
+
+Write $W(\eta)=e^{-\kappa}$ for the opacity weight and
+\begin{equation}
+  \mathcal V\equiv\big|W'\big|,\qquad \int\mathcal V\,\mathrm d\eta=1 ,
+  \label{eq:visibility-normalised}
+\end{equation}
+the visibility, which is a normalised probability density. \textbf{Everything
+below is written in $W$ and its derivatives, so that it carries no sign
+convention}; the bundle's own sign for $\kappa'$ is fixed at
+\texttt{integral\_solution.py:205} and none of the structure here depends on
+it. The free-streaming kernel is $K(\eta)=j_\ell\big(k(\eta_0-\eta)\big)$, and
+the only two kernel identities needed are
+\begin{equation}
+  K'=-k\,j_\ell'\big(k(\eta_0-\eta)\big),
+  \qquad
+  K''=+k^2\,j_\ell''\big(k(\eta_0-\eta)\big).
+  \label{eq:kernel-derivatives}
+\end{equation}
+\textbf{A derivative taken on the kernel is a Bessel derivative and costs
+nothing. A derivative taken on a coefficient is a derivative of whatever that
+coefficient contains.} That distinction is the whole of this section.
+
+% ===========================================================================
+\subsection{The ancestor, and why a by-parts is required at all}
+
+The hierarchy's integrating-factor solution is the ancestor form
+\begin{equation}
+  \tau(\eta_0)=\int\!\mathrm d\eta\;W\big[\,C_0K+C_1K'+C_2K''\,\big],
+  \label{eq:ancestor}
+\end{equation}
+with \eqref{eq:kernel-derivatives} placing rank~0 at $j_\ell$, rank~1 at
+$j_\ell'$ and rank~2 at $j_\ell''$. \textbf{In this form no coefficient is
+differentiated and $\kappa''$ cannot arise anywhere.}
+
+\textbf{But \eqref{eq:ancestor} does not display the Sachs--Wolfe term}, and
+that is why a by-parts is taken. In the $1+3$ formulation the rank-one source
+is a \emph{gradient}: $\mathcal B_a=\mathrm D_a\ln T+A_a$, so
+$a\mathcal B_1=k(\delta\tilde T+\Phi_A)$ and (90) returns
+\begin{equation}
+  -C_1=\frac1k\big(a\mathcal B_1+\kappa'v_B\big)
+      =(\delta\tilde T+\Phi_A)+\kappa'\hat v_B .
+  \label{eq:c1-ninety}
+\end{equation}
+The Sachs--Wolfe combination sits at $K'$, not at $K$, because covariantly it
+enters as the gradient of the temperature plus the acceleration. Integrating
+by parts moves it to $K$:
+\begin{equation}
+  \int\! W C_1K'\,\mathrm d\eta=\Big[W C_1K\Big]-\int\!\big(WC_1\big)'K\,\mathrm d\eta .
+  \label{eq:byparts-rank1}
+\end{equation}
+\textbf{The boundary term is the Sachs--Wolfe term at $j_\ell$.} That is what
+(102)'s ``two boundary terms and one integrated term'' are, and the structure
+is correct. \emph{The by-parts is not optional and it is not the error.}
+
+% ===========================================================================
+\subsection{What the exact by-parts protects, and it is a cancellation}
+
+\eqref{eq:c1-ninety} carries two objects of different kinds, and they behave
+differently under \eqref{eq:byparts-rank1}.
+
+\paragraph{The gravitational half.} With $C_1^{\rm grav}=-(\delta\tilde
+T+\Phi_A)$,
+\begin{equation}
+  -\big(WC_1^{\rm grav}\big)'
+   =\underbrace{W'\,(\delta\tilde T+\Phi_A)}_{\text{at }\mathcal V}
+   \;+\;\underbrace{W\,(\delta\tilde T+\Phi_A)'}_{\text{at }W}.
+  \label{eq:grav-half}
+\end{equation}
+\textbf{The integrated Sachs--Wolfe channel arrives at $W$ automatically},
+carried in $(\delta\tilde T+\Phi_A)'\supset\Phi_A'$. Nothing has to be added
+for it; the exact by-parts produces it.
+
+\paragraph{The scattering half, and this is where everything is decided.}
+With $C_1^{\rm scatt}=-\kappa'\hat v_B$, the weighted coefficient is already
+the standard Doppler source:
+\begin{equation}
+  W C_1^{\rm scatt}=-\,\mathcal V\,\hat v_B
+  \qquad\text{(up to the sign convention), with }\int\mathcal V=1 .
+  \label{eq:doppler-source}
+\end{equation}
+\textbf{It is bounded and normalised, and its derivative is a total
+derivative that integrates to zero.} Split \eqref{eq:byparts-rank1}'s bulk on
+this half and the two pieces are, verified symbolically:
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l c c >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{piece} & \textbf{coefficient of $\kappa''$} &
+  \textbf{coefficient of $\kappa'^2$} & \textbf{what it is} \\
+\midrule
+$W'\,C_1^{\rm scatt}$ & $0$ & $+\hat v_Be^{-\kappa}/k$ &
+  the partner, from differentiating the \emph{weight} \\
+$W\,C_1^{\rm scatt\prime}$ & $-\hat v_Be^{-\kappa}/k$ & $0$ &
+  from differentiating the \emph{coefficient} \\
+\midrule
+$\big(WC_1^{\rm scatt}\big)'$ \textbf{(exact)} & $-\hat v_Be^{-\kappa}/k$ &
+  $+\hat v_Be^{-\kappa}/k$ &
+  \textbf{equal and opposite}: the two halves of
+  $\mathrm d(-\mathcal V\hat v_B)/\mathrm d\eta$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent
+\textbf{The $\kappa'^2$ and $\kappa''$ terms are individually enormous and
+they cancel.} They are not two approximations to be costed separately; they
+are the two halves of one total derivative, and the sum is bounded because
+$\mathcal V\hat v_B$ is bounded. \emph{That cancellation is the only thing
+standing between this assembly and a $\kappa'^2$-sized integrand, and it is
+protected by one thing: the derivative being taken of the weighted
+coefficient, $(WC_1)'$, and not of the bare one.}
+
+% ===========================================================================
+\subsection{What (102) does, and it is one operation}
+
+The released bulk is $\mathcal V\big(C_0-C_1'+C_2''\big)$: \textbf{the weight
+outside, the derivative inside}. Against the exact
+$(WC_1)'=W'C_1+WC_1'$ that is two departures at once, on the same slot:
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{exact} & \textbf{(102)} \\
+\midrule
+$W'C_1$ --- the partner & \textbf{absent}. Dropped entirely \\
+$WC_1'$ --- $\kappa''$ at one power of $e^{-\kappa}$ &
+  replaced by $\mathcal VC_1'$ --- $\kappa''$ at
+  $\kappa'e^{-\kappa}$, \textbf{one extra factor of $\kappa'$} \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent
+The ratio of what (102) carries on the $\kappa''$ term to what the exact form
+carries is \textbf{exactly $\kappa'$}, verified symbolically. And the partner
+that would have cancelled it is gone.
+
+\begin{quote}
+\textbf{The cancellation is destroyed from both sides in one operation.} One
+side is scaled by $\kappa'$ so it can no longer cancel; the other is deleted
+so it cannot try.
+\end{quote}
+
+\paragraph{The magnitude follows, and it is the measured one.} What survives
+is $\mathcal V\kappa''\hat v_B$ against a physical Doppler source
+$\mathcal V\hat v_B$, so the ratio is $\kappa''$. With
+$\kappa'(\eta_*)=3.82\times10^2$ on Einstein--de~Sitter and a recombination
+width of order $10^{-2}\eta_*$, $\kappa''\sim2\times10^5$. \textbf{T-94
+measures $1.8\times10^5$}, and that number is no longer an anomaly to be
+explained: it is $\kappa''$.
+
+\paragraph{And the same operation empties the $j_\ell'$ slot and poisons the
+boundary.} \eqref{eq:byparts-rank1} was applied to \emph{all} of $C_1$.
+\eqref{eq:doppler-source} shows the scattering half was already in final form
+at $K'$ --- it is $\mathcal V\hat v_B$ projected through $j_\ell'$, which is
+the standard Doppler term and needs no by-parts at all. By-parting it anyway
+does two further things:
+
+\begin{itemize}\itemsep2pt
+\item \textbf{it moves the Doppler term out of $j_\ell'$}, which is
+  discrepancy B-17~(iv) --- \emph{not a term missing from (102) but a term
+  (102) removed}; and
+\item \textbf{it carries $\kappa'\hat v_B$ into the boundary term}, where the
+  Sachs--Wolfe combination belongs alone. At $k=2$--$5$ the $\kappa'$ share of
+  $C_1(\eta_*)$ is measured at $1.046$--$1.088$, so at the modes that set the
+  plateau \emph{what stands where the Sachs--Wolfe monopole should be is a
+  Doppler term multiplied by a scattering rate of $3.8\times10^2$}. That is
+  findings \textbf{T-101} and \textbf{T-121}, and it is the $\ell\simeq7$
+  bump.
+\end{itemize}
+
+\textbf{Three findings, one operation.} B-17~(iv), T-94 and T-101 are not
+independent defects to be repaired separately. They are what happens when a
+by-parts is applied to a sum whose two halves require different treatment.
+
+% ===========================================================================
+\subsection{The repair, and the condition that makes it a gate}
+
+\begin{quote}
+\textbf{Split $C_1$ before the by-parts.} The gravitational half is a gradient
+and must be by-parted, which produces the Sachs--Wolfe boundary term and the
+integrated Sachs--Wolfe channel at $W$. The scattering half is already
+$\mathcal V\hat v_B$ and must be left at $K'$, where it is the Doppler term at
+$j_\ell'$.
+\end{quote}
+
+Written out, the rank-one assembly is
+\begin{equation}
+  \int\! WC_1K'
+  \;=\;\Big[\underbrace{WC_1^{\rm grav}K}_{\text{Sachs--Wolfe},\ j_\ell}\Big]
+  -\int\!\Big(\underbrace{W'C_1^{\rm grav}}_{\mathcal V,\ j_\ell}
+            +\underbrace{WC_1^{\rm grav\prime}}_{W,\ \text{ISW},\ j_\ell}\Big)K
+  \;+\;\int\!\underbrace{WC_1^{\rm scatt}}_{\mathcal V\hat v_B}K' .
+  \label{eq:assembly-repaired}
+\end{equation}
+\textbf{No $\kappa''$ appears. No $\kappa'^2$ appears. Every channel is at the
+weight and the kernel the standard assembly puts it at}, and it was derived
+from the covariant ancestor rather than imported.
+
+\paragraph{The admissibility condition, which is one assertion.}
+\begin{quote}
+\emph{A coefficient may be carried through an integration by parts only if it
+is free of rates. $C_1$ is not, by (90). Therefore the by-parts may be applied
+to $C_1^{\rm grav}$ and may not be applied to $C_1^{\rm scatt}$.}
+\end{quote}
+That is checkable in the tree --- a coefficient entering a derivative must not
+contain $\kappa'$ --- and it is the gate this defect needed and did not have.
+It is the same shape as M15: a condition that, left unstated, lets an exact
+identity be truncated in a way that discards its largest term.
+
+\paragraph{What it does not repair.} \textbf{Nothing here moves the driving.}
+\eqref{eq:assembly-repaired} is the transport assembly; the radiation-era
+driving enters the \emph{boundary value} $(\delta\tilde T+\Phi_A)(\eta_*)$
+through the oscillator's forcing, which is approximation \textbf{A-3} and is
+\S\ref{sec:first-peak}'s subject. The first-peak budget there puts the two
+contributions at $+0.1102$ and $+0.1124$ in $\varphi_1$ --- \textbf{equal to
+$2.0\%$}, and this section accounts for the first of them only.
+% === END source expansion: supplementary-materials/section-assembly-rederived-v1.3.15.tex ===
 
 % === BEGIN exact v1.3.0 source expansion: supplementary-materials/section-w-form-and-ell-zero-v1.4.0.tex ===
 % ---------------------------------------------------------------------------
