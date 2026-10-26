@@ -13,9 +13,17 @@ cannot produce a document.
 import ast, hashlib, json, pathlib, re, subprocess, sys, datetime
 
 HERE = pathlib.Path(__file__).resolve().parent
+#: **This list is a registry and it had drifted.** `c9` landed on 2026-10-26
+#: and was absent here, so the generated `docs/THEORY-AUDIT.md` carried no
+#: by-parts admissibility result at all. `c10` is added with it. Three
+#: registries run over this one directory -- this list, `run_all.py`, and
+#: `tests/test_frame_checks.py` -- and committing an instrument updates none
+#: of them. Adding an instrument means adding it to all three.
 CHECKS = ['c1_identity.py', 'c2_weight.py', 'c3_byparts.py',
           'c4_rank_slot.py', 'c5_monopole.py', 'c6_thomson.py',
-          'c7_kappa_ledger.py', 'c8_rank0_partner.py']
+          'c7_kappa_ledger.py', 'c8_rank0_partner.py',
+          'c9_byparts_admissibility.py', 'c10_oscillator_phase.py',
+          'c11_kernel_partner.py']
 
 def audit_prose(check):
     """Read AUDIT_TITLE and AUDIT_PROSE from the instrument's SOURCE TEXT.
