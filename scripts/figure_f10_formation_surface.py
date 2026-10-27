@@ -308,7 +308,19 @@ def _draw(acc, sl, eta_star, eta_0, floor):
     fig.suptitle("F10  the angular autocorrelation as it forms — Planck 2018, "
                  "CDM frame", fontsize=10)
     fig.text(0.5, 0.015,
-             "Panel (b) is white to the right of recombination on every row: "
+             # **The colour word was inverted --- finding T-161.** `cmap` is
+             # `Greys` with `vmin=0, vmax=1`, so the fraction of today's value
+             # reads **1.0 as BLACK**. The band to the right of recombination
+             # is therefore black, meaning every multipole is already at its
+             # final value; the caption said *white*, which on this colourbar
+             # means the opposite — nothing accumulated at all. The physical
+             # claim after the colon was correct throughout, which is why it
+             # survived every reading: a reader who trusted the sentence got
+             # the right physics and a reader who trusted the picture got the
+             # right physics, and only someone checking one against the other
+             # would see them disagree.
+             "Panel (b) is uniformly black to the right of recombination on "
+             "every row — every multipole already at today's value — so "
              "nothing is deposited after the visibility closes, where the "
              "late ISW must deposit ~10% of $C_2$.",
              ha="center", fontsize=7.5, color=INK["muted"])

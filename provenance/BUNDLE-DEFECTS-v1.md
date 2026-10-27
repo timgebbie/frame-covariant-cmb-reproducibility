@@ -11631,3 +11631,58 @@ A second defect was found with it: the half was being blanked in the split arm
 alone, which makes $\Delta S$ a mixture of *the half* and *the repair* and
 cannot say which it responded to. Both are corrected; the numbers above are
 from the corrected branch.
+
+---
+
+## T-161 — **F10's sub-caption names the wrong colour, on a released artefact, and has since the figure was made**
+
+**2026-10-27, P1-B. Severity: material — it is in `figures/`.**
+
+### What it says and what the picture shows
+
+`figures/f10-formation-surface-v1.3.0.png` carries, under both panels:
+
+> *"Panel (b) is **white** to the right of recombination on every row: nothing
+> is deposited after the visibility closes…"*
+
+Panel (b) is drawn with `cmap="Greys"`, `vmin=0.0`, `vmax=1.0`, over
+$C_\ell(\eta)/C_\ell(\eta_0)$. On that colourbar **1.0 is black**. The band to
+the right of recombination is black, because every multipole is already at its
+final value — and *white* on the same colourbar means the opposite, that
+nothing has accumulated at all.
+
+### Why it survived every reading
+
+**The claim after the colon is correct**, and it is the claim the figure
+exists to make. A reader who trusted the sentence came away with the right
+physics; a reader who read the picture came away with the right physics. Only
+someone checking one against the other would find them disagreeing — and the
+release rule that would have caught it, **V12, every figure rendered and
+looked at**, is satisfied by looking at the panel, not by reading the panel
+*against* its caption.
+
+So this is not a missing gate so much as a gate aimed one step short. The
+rendered page is checked; the rendered page *against its own description* is
+not.
+
+### Where it is
+
+Both the released F10 and the high-resolution run carry it, because both come
+from the same line of the same script. The high-resolution figures were
+committed with the superseded caption rather than held: the physics in them is
+correct, the error is a colour word in a sub-caption, and holding two figures
+and an hour of somebody's machine for it would have been out of proportion.
+**The code is corrected, so the next regeneration of either figure carries the
+right word.**
+
+### The cost of fixing it, stated rather than hidden
+
+Changing the script changes `source_fingerprint`, which covers
+`functions/**/*.py` plus the calling script. So `--replot` now **refuses** the
+committed `outputs/f10-formation-surface-high-res.csv`, and redrawing either
+figure requires a full recompute.
+
+That is **T-54**'s gate working exactly as designed — it cannot know that a
+change was cosmetic, and the alternative is a gate that redraws numbers the
+tree did not compute, which is the defect T-54 records. The cost is real and
+it is the right cost.
