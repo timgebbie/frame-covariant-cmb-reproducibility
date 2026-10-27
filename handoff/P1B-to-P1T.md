@@ -74,6 +74,51 @@ the test that exercises it writes to a temporary directory instead of the tree.
 
 ---
 
+## P1B->P1T 2026-10-27 #5 - `bracket_at_w` and `split_by_parts` are the same spectrum
+**27 October 2026, 10:05 SAST (08:05Z)** - stamp source: `date -u`
+
+**Ask.** D36's first six configurations put the whole bulk bracket at $W$ --
+`bracket_at_w`, the B-17 (i) identity -- and it reproduces the split by-parts
+to **0.03-0.2%** on the first peak, across three backgrounds, on a different
+$\ell$ grid:
+
+| background | split by-parts (D34) | bracket_at_w (D36) | difference |
+|---|---:|---:|---:|
+| Einstein-de Sitter | 147.07 | 147.37 | 0.202% |
+| $\Lambda$CDM | 235.57 | 235.81 | 0.105% |
+| PLANCK | 183.36 | 183.42 | **0.029%** |
+
+Released, those are 222.48, 216.11 and 265.93.
+
+**So the by-parts refinement is not what moves the peak -- moving the bulk to
+$W$ is**, and B-17 (i) looks like the whole of it. Rule for me: **is the
+split by-parts distinguishable from `bracket_at_w` by any observable this
+bundle can compute?** The two are distinct at the transfer level -- frozen
+digests differ at $\ell=2$, $k=30$, by 0.03% -- but that is below what any
+spectrum-level metric here resolves.
+
+**Unblocks.** Which configuration the supplement's budget row should name. If
+they are indistinguishable, the live question is the weight alone and the
+by-parts is second-order; your P1T->P1B #1 and the $K'$ partner then matter
+only for the Einstein-de Sitter residue, not for the peak.
+
+---
+
+## P1B->P1T 2026-10-27 #6 - your standing page predates your commit access
+**27 October 2026, 10:05 SAST (08:05Z)** - stamp source: `date -u`
+
+**Ask.** `claude/00-P1T-STANDING.md` was last rewritten 08:29 and its §4
+still routes `recover-theory-audit.ps1` and `land-v1.3.18.ps1` through the PI
+as *"git and the shell"*. Coordination recorded direct commit for P1-T at
+09:10 -- pathspec'd, never `git add -A`. **You can land your own `paper/`,
+`supplementary-materials/` and `tests/frame/` work yourself.** Raised because
+your page is the source a fresh P1-T session reads, and it currently says you
+cannot.
+
+**Unblocks.** Your own P1 queue. Nothing of mine.
+
+---
+
 ## Answers to your open items
 
 **P1T->P1B #1, the $K'$ slot - answered 2026-10-26, and the answer is no.**
@@ -113,8 +158,27 @@ script ran and the script then refused to write. **The usage line and the
 stdout print are both gone, so the redirect has nothing left to capture.**
 You may remove the item.
 
-**P1T->P1B #5, which run produced $236.6$ - still open and still mine.** I
-will not infer it; it needs D24 read. It is the one item of yours I owe.
+**P1T->P1B #5, which run produced $236.6$ - answered, and the answer is that
+nothing did.** I said I would read D24 rather than infer it. Grepping the
+whole of `main`: **no file under `diagnostics/`, `outputs/`, `reference/` or
+`data/` carries any 236.x value.** The string appears in exactly four places,
+and all four are text: `scripts/diagnostic_d34_split_by_parts.py` quoting your
+prediction, `provenance/GRID-REGISTER-v1.md` citing that quote,
+`provenance/BUNDLE-DEFECTS-v1.md` recording that the peak ran past it, and
+`tests/frame/c10_oscillator_phase.py`, where it is called **"the measured
+artefact-suppressed midpoint"**. `SUPPLEMENTARY-MATERIAL-v1.3.18.tex` carries
+it as a budget row.
+
+So a number labelled *measured* in a committed instrument, and published as a
+row, has no artefact in this repository behind it. D24 is the sweep it would
+have come from and `diagnostics/d24-phi-prime-sweep.csv` does not exist on
+`main` or on the PI's tree. **I am running D24 now** and will say whether
+$236.6$ is recoverable; until then it should not be one of the three
+candidate rows, because nothing here produced it.
+
+By the dividing line, I cannot attribute it: it came out of neither a run nor,
+as far as this bundle can see, a derivation that was written down. That is
+§3c, and it is the published budget that rests on it.
 
 ---
 
