@@ -18,10 +18,10 @@ being possible.
 | status | count | means |
 |---|---|---|
 | **open** | 1 | a chosen literal whose convergence is **not** established. This status is the point of the register. |
-| **derived** | 23 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
+| **derived** | 24 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
 | **measured** | 7 | a chosen literal whose convergence has been measured, with the number stated. |
 | **described** | 11 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
-| **index** | 29 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
+| **index** | 30 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
 
 ## open — 1
 
@@ -37,7 +37,7 @@ share this history, so a grid shift moves them together and cancels. Finding
 **T-46**, question **Q7**, decision **S33** --- derived immediately after the
 v1.2.0 tag. v1.2.0 ships it as a stated limit.
 
-## derived — 23
+## derived — 24
 
 ### `x` — the x grid j_ell(x) is tabulated on
 
@@ -265,6 +265,18 @@ disagreement between them is a finding rather than a grid artefact. Derived at
 quadrature, measured at 3.8e-14 up to k = 1500 --- so aliasing voids the
 columns rather than loosening them.
 
+### `k_com` — the k grid D38 integrates Delta S over
+
+`scripts/diagnostic_d38_which_half_carries_the_residue.py:124`, `np.linspace`
+
+`required_k_points(K_MAX, span)`, K_MAX = 160, matching D35 exactly
+so the two instruments' residue numbers are comparable and a disagreement
+between them is a finding rather than a grid artefact. 160 and not D34's 460
+for D35's reason: this scores no peak and no position, only a ratio of an
+integral to itself, and carrying 460 would cost three times the k loop to
+sharpen a number the instrument does not read. Derived nonetheless, so the
+reduction is a stated choice rather than a truncation.
+
 ### `k_com` — the k grid D4 integrates C_ell by rank on
 
 `scripts/diagnostic_d4_monopole.py:102`, `np.linspace`
@@ -467,7 +479,7 @@ As F3, and deliberately the same grid: F6 reports RATIOS against the F3 configur
 
 As F2, raised to 1900 by finding T-32, with `check_k` guarding the probe modes after T-34.
 
-## index — 29
+## index — 30
 
 ### `phase` — the i^ell phase factor
 
@@ -613,6 +625,20 @@ else --- a frame gap of order unity does not need resolving to a multipole.
 To 340 so the first peak is on the axis for every background, because the
 Newtonian peak's existence (or absence, which is T-157's finding) is read
 from the same grid.
+
+### `sl` — the conformal times D38 reports Delta S's support at
+
+`scripts/diagnostic_d38_which_half_carries_the_residue.py:123`, `np.geomspace`
+
+`eta_* + geomspace(span*1e-4, span, 23)` with a zero prepended, **24
+slices and not D35's 12**. The extra resolution is load-bearing here and is
+not elsewhere: D35 reads a single abscissa, while this one asks WHERE the
+support of |Delta S| lies and so integrates the curve's shape across the
+visibility. The reported quantity is `max |Delta S| inside` against
+`|Delta S| total`, which needs the interior resolved rather than one point
+interpolated. Geometric for the usual reason --- the visibility is narrow and
+a linear grid would put every slice in the free-streaming era, which is
+exactly the region T-155 showed the movement is NOT in.
 
 ### `ELLS` — the multipoles criterion 5a is stated over
 

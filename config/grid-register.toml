@@ -746,3 +746,29 @@ disagreement between them is a finding rather than a grid artefact. Derived at
 **The gate rides on this grid** --- the eta_0 slice against the released
 quadrature, measured at 3.8e-14 up to k = 1500 --- so aliasing voids the
 columns rather than loosening them."""
+
+[[grid]]
+key = "scripts/diagnostic_d38_which_half_carries_the_residue.py::sl"
+what = "the conformal times D38 reports Delta S's support at"
+status = "index"
+note = """`eta_* + geomspace(span*1e-4, span, 23)` with a zero prepended, **24
+slices and not D35's 12**. The extra resolution is load-bearing here and is
+not elsewhere: D35 reads a single abscissa, while this one asks WHERE the
+support of |Delta S| lies and so integrates the curve's shape across the
+visibility. The reported quantity is `max |Delta S| inside` against
+`|Delta S| total`, which needs the interior resolved rather than one point
+interpolated. Geometric for the usual reason --- the visibility is narrow and
+a linear grid would put every slice in the free-streaming era, which is
+exactly the region T-155 showed the movement is NOT in."""
+
+[[grid]]
+key = "scripts/diagnostic_d38_which_half_carries_the_residue.py::k_com"
+what = "the k grid D38 integrates Delta S over"
+status = "derived"
+note = """`required_k_points(K_MAX, span)`, K_MAX = 160, matching D35 exactly
+so the two instruments' residue numbers are comparable and a disagreement
+between them is a finding rather than a grid artefact. 160 and not D34's 460
+for D35's reason: this scores no peak and no position, only a ratio of an
+integral to itself, and carrying 460 would cost three times the k loop to
+sharpen a number the instrument does not read. Derived nonetheless, so the
+reduction is a stated choice rather than a truncation."""

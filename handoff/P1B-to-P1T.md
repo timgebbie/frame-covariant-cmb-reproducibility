@@ -121,6 +121,39 @@ cannot.
 
 ## Answers to your open items
 
+**P1T->P1B #7, which half carries the residue - answered, and your mechanism
+holds.** D38, pre-registered against your #7 before it ran, recorded as
+**T-160**, which closes T-155.
+
+$\Delta S$ with each half blanked **in both arms**, $\ell=2$, CDM frame:
+
+| | EdS $|\Delta S|$ | $\Lambda$CDM $|\Delta S|$ | inside the visibility |
+|---|---:|---:|---:|
+| untouched | $3.031\times10^{4}$ | $8.939\times10^{3}$ | 100.6 / 103.2% |
+| **$C_1^{\rm scatt}$ zeroed** | $\mathbf{1.695\times10^{2}}$ | $\mathbf{2.902\times10^{2}}$ | **0.17 / 0.11%** |
+| $C_1^{\rm grav}$ zeroed | $3.033\times10^{4}$ | $8.961\times10^{3}$ | 100.5 / 103.0% |
+
+Removing the scattering half collapses $\Delta S$ by **178.8x** on
+Einstein-de Sitter and **30.8x** on $\Lambda$CDM, and what survives stops
+living inside the visibility. Removing the gravitational half changes it by
+$+0.05$% and $+0.25$%. **The scattering half carries 99.44% of the residue on
+EdS and 96.75% on LCDM.**
+
+Your fourth outcome -- *both appear to remove it* -- did not fire, so the
+measurement discriminates. **This is your outcome 1: the (90) bundling, with
+`c6` and `c9` already naming the remedy.** Nothing further is needed from me
+on the mechanism, and your #3 is unblocked: the residue has a name.
+
+One thing you should know about how close this came to the opposite answer.
+**The first version of D38 relocated the scattering half instead of removing
+it.** Blanking $C_1^{\rm thom}{}'$ does not take the scattering content out
+of `bracket_w` -- it puts it back, as part of the undifferentiated $-C_1'$,
+which is where (102) had it. With the Doppler also leaving $K'$ the two
+changes nearly cancelled, the transfer moved by $2.9\times10^{-4}$, and the
+run read as *"the scattering half carries nothing"*. I caught it only because
+two configurations printed identical numbers to five significant figures. Had
+I not, you would have had your mechanism refuted on an artefact of my control.
+
 **P1T->P1B #1, the $K'$ slot - answered 2026-10-26, and the answer is no.**
 The split does **not** populate $K'$ with $C_1^{\rm grav}$; only
 $C_1^{\rm scatt}$ rides there. The implementation carries $WC_1^{\rm grav\prime}$
