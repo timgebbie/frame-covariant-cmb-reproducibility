@@ -11552,3 +11552,82 @@ Whether the split is distinguishable from `bracket_at_w` by **any** observable
 — not merely by the ones this bundle computes — is a derivation and belongs to
 the theory. Asked as `P1B→P1T 2026-10-27 #5`. Until it is answered the budget
 row should name the weight rather than the operation.
+
+---
+
+## T-160 — **The Einstein–de Sitter residue is in $C_1$'s scattering half. The gravitational half is exonerated to 0.05\%**
+
+**2026-10-27, P1-B. D38, pre-registered against P1-T's `P1T→P1B #7` before it
+ran. This closes T-155.**
+
+### The hypothesis was P1-T's and it predicted the measurement in advance
+
+**T-155** left two properties of the residue unexplained: $\Delta S$ is
+confined to the visibility, and $\Lambda$CDM tracks Einstein–de Sitter to
+$4\times10^{-4}$. P1-T's reading, 2026-10-27 13:26 SAST, is one line:
+$\kappa'$ is set by recombination and not by the background, so a defect
+carried in $C_1^{\rm scatt}$ is **background-independent by construction** and
+lives **exactly where the visibility is**. The gravitational half carries
+$(\Phi_A'-\Phi_H')$, identically zero on Einstein–de Sitter, and cannot be
+background-independent at all.
+
+Both measured properties follow from the mechanism rather than being
+accommodated after it.
+
+### The measurement
+
+$\Delta S=S_{\rm split}-S_{\rm released}$, each half blanked **in both arms**,
+$\ell=2$, CDM frame:
+
+| configuration | EdS $\lvert\Delta S\rvert$ | $\Lambda$CDM $\lvert\Delta S\rvert$ | EdS inside visibility | $\Lambda$CDM inside visibility |
+|---|---:|---:|---:|---:|
+| untouched | $3.0309\times10^{4}$ | $8.9386\times10^{3}$ | 100.56\% | 103.24\% |
+| **$C_1^{\rm scatt}$ zeroed** | $\mathbf{1.6950\times10^{2}}$ | $\mathbf{2.9023\times10^{2}}$ | **0.17\%** | **0.11\%** |
+| $C_1^{\rm grav}$ zeroed | $3.0325\times10^{4}$ | $8.9607\times10^{3}$ | 100.49\% | 102.97\% |
+
+**Removing the scattering half collapses $\Delta S$ by $178.8\times$ on
+Einstein–de Sitter and $30.8\times$ on $\Lambda$CDM**, and what survives stops
+living inside the visibility. **Removing the gravitational half changes
+$\Delta S$ by $+0.05$% and $+0.25$%** — nothing.
+
+The scattering half carries **99.44\%** of the residue on Einstein–de Sitter
+and **96.75\%** on $\Lambda$CDM.
+
+### The discriminating control passed
+
+The fourth pre-registered outcome was *both halves appear to remove it*, which
+would have meant the suppression was not isolating anything. It did not fire:
+one half collapses $\Delta S$ by two orders and the other leaves it where it
+was. The measurement discriminates.
+
+### So the defect is the (90) bundling, and the remedy is already named
+
+(90) bundles the Thomson rate into $C_1$. `tests/frame/c6_thomson.py` measures
+the frame obstruction that creates and `c9_byparts_admissibility.py` the
+$\kappa''$ artefact that *differentiating* it creates. **Nothing new is needed
+from P1-B on the mechanism** — this is P1-T's pre-registered outcome 1, and
+their own instruments carry the remedy: carry the Thomson term separately,
+undifferentiated, reduced.
+
+### The near miss, recorded because it is the method and not the physics
+
+**The first version of this diagnostic relocated the scattering half instead
+of removing it, and would have refuted P1-T on an artefact of its own
+control.** `bracket_w = (C_0-C_1'+C_2''+{\rm partners})+C_1^{\rm thom}{}'`, so
+blanking $C_1^{\rm thom}{}'$ does not take the scattering content out of the
+bracket — it puts it **back**, as part of the undifferentiated $-C_1'$, which
+is where (102) had it. Together with the Doppler leaving $K'$, the two changes
+very nearly cancelled: the transfer moved by $2.9\times10^{-4}$, against
+$1.3\times10^{-1}$ for the gravitational half.
+
+Read as written, that says *the scattering half carries nothing* — **the exact
+opposite of the result above**. It was caught only because two configurations
+printed identical numbers to five significant figures, which is the one
+signature a mis-specified control leaves, and because the bundle has five
+recorded instances of that signature already.
+
+**M15, a true number about the wrong object, and this is its sixth instance.**
+A second defect was found with it: the half was being blanked in the split arm
+alone, which makes $\Delta S$ a mixture of *the half* and *the repair* and
+cannot say which it responded to. Both are corrected; the numbers above are
+from the corrected branch.

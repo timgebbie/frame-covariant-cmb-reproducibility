@@ -1,0 +1,55 @@
+configuration,background,metric,value,utc
+untouched || EdS,EdS,late/2,9.988053e-01,2026-10-27T11:56:16Z
+untouched || EdS,EdS,late/7,9.996208e-01,2026-10-27T11:56:16Z
+untouched || EdS,EdS,late/30,9.999099e-01,2026-10-27T11:56:16Z
+untouched || EdS,EdS,vis_share/2,1.005564e+00,2026-10-27T11:56:16Z
+untouched || EdS,EdS,absdelta/2,3.030911e+04,2026-10-27T11:56:16Z
+untouched || EdS,EdS,vis_share/7,1.001986e+00,2026-10-27T11:56:16Z
+untouched || EdS,EdS,absdelta/7,2.656827e+04,2026-10-27T11:56:16Z
+untouched || EdS,EdS,vis_share/30,1.092037e+00,2026-10-27T11:56:16Z
+untouched || EdS,EdS,absdelta/30,1.016047e+02,2026-10-27T11:56:16Z
+untouched || LCDM,LCDM,late/2,9.992033e-01,2026-10-27T11:58:10Z
+untouched || LCDM,LCDM,late/7,9.997637e-01,2026-10-27T11:58:10Z
+untouched || LCDM,LCDM,late/30,9.999550e-01,2026-10-27T11:58:10Z
+untouched || LCDM,LCDM,vis_share/2,1.032396e+00,2026-10-27T11:58:10Z
+untouched || LCDM,LCDM,absdelta/2,8.938620e+03,2026-10-27T11:58:10Z
+untouched || LCDM,LCDM,vis_share/7,1.012168e+00,2026-10-27T11:58:10Z
+untouched || LCDM,LCDM,absdelta/7,8.062079e+03,2026-10-27T11:58:10Z
+untouched || LCDM,LCDM,vis_share/30,1.569612e+00,2026-10-27T11:58:10Z
+untouched || LCDM,LCDM,absdelta/30,3.917339e+01,2026-10-27T11:58:10Z
+C_1^scatt zeroed || EdS,EdS,late/2,9.969994e-01,2026-10-27T11:59:06Z
+C_1^scatt zeroed || EdS,EdS,late/7,9.943033e-01,2026-10-27T11:59:06Z
+C_1^scatt zeroed || EdS,EdS,late/30,9.996786e-01,2026-10-27T11:59:06Z
+C_1^scatt zeroed || EdS,EdS,vis_share/2,1.700129e-03,2026-10-27T11:59:06Z
+C_1^scatt zeroed || EdS,EdS,absdelta/2,1.695014e+02,2026-10-27T11:59:06Z
+C_1^scatt zeroed || EdS,EdS,vis_share/7,2.274102e-03,2026-10-27T11:59:06Z
+C_1^scatt zeroed || EdS,EdS,absdelta/7,5.324142e+01,2026-10-27T11:59:06Z
+C_1^scatt zeroed || EdS,EdS,vis_share/30,4.920813e-03,2026-10-27T11:59:06Z
+C_1^scatt zeroed || EdS,EdS,absdelta/30,9.322728e+00,2026-10-27T11:59:06Z
+C_1^scatt zeroed || LCDM,LCDM,late/2,9.982891e-01,2026-10-27T12:00:50Z
+C_1^scatt zeroed || LCDM,LCDM,late/7,9.972316e-01,2026-10-27T12:00:50Z
+C_1^scatt zeroed || LCDM,LCDM,late/30,9.998263e-01,2026-10-27T12:00:50Z
+C_1^scatt zeroed || LCDM,LCDM,vis_share/2,1.110015e-03,2026-10-27T12:00:50Z
+C_1^scatt zeroed || LCDM,LCDM,absdelta/2,2.902269e+02,2026-10-27T12:00:50Z
+C_1^scatt zeroed || LCDM,LCDM,vis_share/7,1.300966e-03,2026-10-27T12:00:50Z
+C_1^scatt zeroed || LCDM,LCDM,absdelta/7,9.835459e+01,2026-10-27T12:00:50Z
+C_1^scatt zeroed || LCDM,LCDM,vis_share/30,1.380951e-03,2026-10-27T12:00:50Z
+C_1^scatt zeroed || LCDM,LCDM,absdelta/30,2.228914e+01,2026-10-27T12:00:50Z
+C_1^grav zeroed || EdS,EdS,late/2,9.986528e-01,2026-10-27T12:01:39Z
+C_1^grav zeroed || EdS,EdS,late/7,9.995695e-01,2026-10-27T12:01:39Z
+C_1^grav zeroed || EdS,EdS,late/30,9.998898e-01,2026-10-27T12:01:39Z
+C_1^grav zeroed || EdS,EdS,vis_share/2,1.004937e+00,2026-10-27T12:01:39Z
+C_1^grav zeroed || EdS,EdS,absdelta/2,3.032511e+04,2026-10-27T12:01:39Z
+C_1^grav zeroed || EdS,EdS,vis_share/7,1.001762e+00,2026-10-27T12:01:39Z
+C_1^grav zeroed || EdS,EdS,absdelta/7,2.657072e+04,2026-10-27T12:01:39Z
+C_1^grav zeroed || EdS,EdS,vis_share/30,1.081662e+00,2026-10-27T12:01:39Z
+C_1^grav zeroed || EdS,EdS,absdelta/30,1.012080e+02,2026-10-27T12:01:39Z
+C_1^grav zeroed || LCDM,LCDM,late/2,9.991321e-01,2026-10-27T12:03:22Z
+C_1^grav zeroed || LCDM,LCDM,late/7,9.997415e-01,2026-10-27T12:03:22Z
+C_1^grav zeroed || LCDM,LCDM,late/30,9.999475e-01,2026-10-27T12:03:22Z
+C_1^grav zeroed || LCDM,LCDM,vis_share/2,1.029696e+00,2026-10-27T12:03:22Z
+C_1^grav zeroed || LCDM,LCDM,absdelta/2,8.960673e+03,2026-10-27T12:03:22Z
+C_1^grav zeroed || LCDM,LCDM,vis_share/7,1.011189e+00,2026-10-27T12:03:22Z
+C_1^grav zeroed || LCDM,LCDM,absdelta/7,8.068249e+03,2026-10-27T12:03:22Z
+C_1^grav zeroed || LCDM,LCDM,vis_share/30,1.517036e+00,2026-10-27T12:03:22Z
+C_1^grav zeroed || LCDM,LCDM,absdelta/30,4.002407e+01,2026-10-27T12:03:22Z
