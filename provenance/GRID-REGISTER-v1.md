@@ -21,7 +21,7 @@ being possible.
 | **derived** | 24 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
 | **measured** | 7 | a chosen literal whose convergence has been measured, with the number stated. |
 | **described** | 11 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
-| **index** | 30 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
+| **index** | 31 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
 
 ## open — 1
 
@@ -138,7 +138,7 @@ plausible grid change reaches. Finding **T-79**.
 
 ### `k_com` — the k grid the Phi' sweep integrates C_ell on
 
-`scripts/diagnostic_d24_phi_prime_sweep.py:287`, `np.linspace`
+`scripts/diagnostic_d24_phi_prime_sweep.py:295`, `np.linspace`
 
 `required_k_points(K_MAX, r_theta)` at 3 samples per j_ell^2
 oscillation --- finding **T-56**, the same derivation F9 and D4 use. `K_MAX` is
@@ -289,7 +289,7 @@ the last place a grid may be chosen by eye.
 
 ### `k_com` — the k grid F10's accumulation is integrated over
 
-`scripts/figure_f10_formation_surface.py:156`, `np.linspace`
+`scripts/figure_f10_formation_surface.py:166`, `np.linspace`
 
 `required_k_points(K_MAX, r_theta)`, K_MAX = 300, matching D30
 exactly so the figure and the diagnostic behind it are the same measurement.
@@ -417,7 +417,7 @@ Linear at `DK`. This script's entire output IS a convergence measurement, so its
 
 ### `ELLS` — the multipole grid the Phi' sweep locates the first peak on
 
-`scripts/diagnostic_d24_phi_prime_sweep.py:90`, `np.arange`
+`scripts/diagnostic_d24_phi_prime_sweep.py:98`, `np.arange`
 
 Dense at spacing 5 through `arange(100, 421, 5)` and sparse below,
 because the sweep reports **ell_peak by parabolic interpolation on three
@@ -479,7 +479,7 @@ As F3, and deliberately the same grid: F6 reports RATIOS against the F3 configur
 
 As F2, raised to 1900 by finding T-32, with `check_k` guarding the probe modes after T-34.
 
-## index — 30
+## index — 31
 
 ### `phase` — the i^ell phase factor
 
@@ -658,9 +658,26 @@ ell because that is where the plateau's shape is; to 300 because the first
 acoustic peak must be on the picture for the frozen shape to be legible. The
 damping tail is F9's and is not drawn.
 
+### `LEVELS` — the filled contour levels of F10's panel (b)
+
+`scripts/figure_f10_formation_surface.py:135`, `np.linspace`
+
+`linspace(0.0, 1.0, 21)` --- **a set of drawing levels, not a
+discretisation of anything continuous**, which is what `index` is for. It is
+registered because the AST walk caught it the moment the panel became a
+contour plot, and that is the register working rather than a false positive:
+a rule that exempts arrays which "obviously" do not matter is a rule somebody
+has to adjudicate, and T-3 is what happens when they adjudicate wrongly.
+
+Twenty-one levels, and `LABELLED` draws lines at 0.25, 0.50, 0.75, 0.90 and
+**0.99**. The last is deliberate: the whole question panel (b) answers is
+whether anything arrives after the visibility closes, and the difference
+between 0.99 and 1.00 is the entire late integrated Sachs--Wolfe budget. A
+level set that stopped at 0.90 could not show the thing the figure is for.
+
 ### `post` — the conformal times F10 samples AFTER recombination
 
-`scripts/figure_f10_formation_surface.py:152`, `np.geomspace`
+`scripts/figure_f10_formation_surface.py:162`, `np.geomspace`
 
 `eta_* + geomspace(span*1e-4, span, N_SLICES-4)`, ten slices.
 Geometric because the visibility is narrow and a linear grid would put every
@@ -670,7 +687,7 @@ distinguishable and enough to read a progression.
 
 ### `pre` — the conformal times F10 samples ACROSS recombination
 
-`scripts/figure_f10_formation_surface.py:151`, `np.linspace`
+`scripts/figure_f10_formation_surface.py:161`, `np.linspace`
 
 `linspace(eta_floor, eta_star, 4)`. **Linear, not geometric, and
 deliberately so**: the PI asked for the autocorrelation *just before

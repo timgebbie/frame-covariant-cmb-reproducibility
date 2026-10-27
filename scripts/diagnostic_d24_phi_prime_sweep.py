@@ -65,6 +65,7 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 SLUG = "d24-phi-prime-sweep"
 VERSION = "v1.3.0"
@@ -81,6 +82,13 @@ from functions.spectra.pipeline import primordial_power, required_k_points  # no
 from functions.spectra.transfer import shape_parameter  # noqa: E402
 from functions.spectra.two_frame import (  # noqa: E402
     build_environment, coefficient_sets, transfer_by_rank)
+
+from _resumable import Checkpoint  # noqa: E402
+
+#: Rows this instrument writes per configuration: one per frame.
+#: Passed to `Checkpoint.has` so a run killed mid-write is recomputed rather
+#: than resumed as complete --- finding **T-162**.
+ROWS_PER_CONFIG = 2
 
 #: Dense through the first peak so the parabolic interpolation has three real
 #: samples bracketing it, sparse elsewhere. **argmax on the released grid
@@ -299,11 +307,29 @@ def main() -> int:
     print(f"\n  {'kappa2':>7} {'lambda':>7} {'frame':<10} "
           f"{'ell_peak':>10} {'+-':>5} {'/ell_A':>8} {'k2 share':>10}")
     print("  " + "-" * 62)
+    # **Checkpointed, 2026-10-27.** D24 was the one long diagnostic in the
+    # bundle that was not. Its first run reached three of four blocks and was
+    # then killed by its own timeout, losing all three -- including the
+    # 172.75 row the supplement's budget cites. Every block here costs a full
+    # spectrum in both frames, so recomputing one that already succeeded is
+    # the most expensive kind of nothing.
+    rows = Checkpoint(ROOT / "diagnostics" / f"{SLUG}.csv",
+                      ("kappa2", "lam", "frame", "ell_peak", "unc", "ratio",
+                       "k2_share"))
+    for r in rows.all():
+        print(f"  {float(r['kappa2']):7.1f} {float(r['lam']):7.2f} "
+              f"{r['frame']:<10} {float(r['ell_peak']):10.2f} "
+              f"{float(r['unc']):5.1f} {float(r['ratio']):8.4f} "
+              f"{float(r['k2_share']):10.3f}   [resumed]", flush=True)
+
     keep_p, keep_k = _co.PHI_PRIME_DRIVING_LAMBDA, _co.KAPPA_SECOND_LAMBDA
     try:
         for k2 in (1.0, 0.0):
             _co.KAPPA_SECOND_LAMBDA = k2
             for lam in lams:
+                key = f"kappa2={k2:g} lambda={lam:g}"
+                if rows.has(key, expect=ROWS_PER_CONFIG):
+                    continue
                 _co.PHI_PRIME_DRIVING_LAMBDA = lam
                 d_both = spectra_both_frames(env, table, k_com, power)
                 for frame in FRAMES:
@@ -311,6 +337,10 @@ def main() -> int:
                     _co.KAPPA_SECOND_LAMBDA = 1.0
                     share = kappa_second_share(env, 60.0, frame)
                     _co.KAPPA_SECOND_LAMBDA = k2
+                    rows.add(key, kappa2=f"{k2:g}", lam=f"{lam:g}",
+                             frame=frame, ell_peak=f"{pos:.6f}",
+                             unc=f"{unc:.6f}", ratio=f"{pos/ELL_A:.6f}",
+                             k2_share=f"{share:.6f}")
                     print(f"  {k2:7.1f} {lam:7.2f} {frame:<10} "
                           f"{pos:10.2f} {unc:5.1f} {pos/ELL_A:8.4f} "
                           f"{share:10.3f}", flush=True)

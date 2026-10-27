@@ -772,3 +772,20 @@ for D35's reason: this scores no peak and no position, only a ratio of an
 integral to itself, and carrying 460 would cost three times the k loop to
 sharpen a number the instrument does not read. Derived nonetheless, so the
 reduction is a stated choice rather than a truncation."""
+
+[[grid]]
+key = "scripts/figure_f10_formation_surface.py::LEVELS"
+what = "the filled contour levels of F10's panel (b)"
+status = "index"
+note = """`linspace(0.0, 1.0, 21)` --- **a set of drawing levels, not a
+discretisation of anything continuous**, which is what `index` is for. It is
+registered because the AST walk caught it the moment the panel became a
+contour plot, and that is the register working rather than a false positive:
+a rule that exempts arrays which "obviously" do not matter is a rule somebody
+has to adjudicate, and T-3 is what happens when they adjudicate wrongly.
+
+Twenty-one levels, and `LABELLED` draws lines at 0.25, 0.50, 0.75, 0.90 and
+**0.99**. The last is deliberate: the whole question panel (b) answers is
+whether anything arrives after the visibility closes, and the difference
+between 0.99 and 1.00 is the entire late integrated Sachs--Wolfe budget. A
+level set that stopped at 0.90 could not show the thing the figure is for."""
