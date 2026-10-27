@@ -2,10 +2,24 @@
 """Run every frame check.  Exit 0 only if all pass."""
 import subprocess, sys, pathlib
 HERE = pathlib.Path(__file__).resolve().parent
-CHECKS = ['c1_identity.py', 'c2_weight.py', 'c3_byparts.py',
-          'c4_rank_slot.py', 'c5_monopole.py', 'c6_thomson.py', 'c7_kappa_ledger.py',
-          'c8_rank0_partner.py', 'c9_byparts_admissibility.py',
-          'c10_oscillator_phase.py', 'c11_kernel_partner.py']
+#: **The registry is the directory.** Converted from a hand-maintained list
+#: 2026-10-27, after P1-B made `gen_theory_audit.py` and
+#: `tests/test_frame_checks.py` globs on the 26th and put the argument to
+#: P1-T. The argument is accepted and it is the better repair: the note this
+#: replaces concluded that adding an instrument means adding it to all three
+#: lists, which is a rule kept only by somebody remembering, and that note was
+#: itself the evidence that nobody does --- it was written *because* the
+#: remembering had already failed, and `c10` and `c11` landed hours later.
+#: Leaving one hand-maintained list of the three would have been the same
+#: defect with a smaller surface.
+#:
+#: Sorted numerically rather than lexically so `c10` follows `c9`.
+CHECKS = sorted((p.name for p in HERE.glob('c*.py') if p.name[1:2].isdigit()),
+                key=lambda n: int(n[1:].split('_', 1)[0]))
+if len(CHECKS) < 8:
+    sys.exit(f'only {len(CHECKS)} instruments found under {HERE}: the glob is '
+             'measuring nothing and an empty suite would report ALL FRAME '
+             'CHECKS PASS, which is the failure it was converted to prevent')
 
 NEEDED = ('numpy', 'scipy', 'sympy')
 PROBE = 'import ' + ', '.join(NEEDED)

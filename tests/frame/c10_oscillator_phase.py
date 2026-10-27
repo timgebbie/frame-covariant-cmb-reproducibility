@@ -14,12 +14,22 @@ That is C10d below, and it is the point of the file.  The first-peak budget
 puts the driving at d(phi_1) = +0.1124, the same size as the artefact half, so
 this is not a small omission.
 
-THE TWO HALVES AGREE TO 2.0 PER CENT ONLY AGAINST THE MEASURED artefact-
-suppressed midpoint l = 236.6.  Against the PREDICTED undriven position
-0.852 l_A = 231.9 they are +0.1275 and +0.0951 and agree to 29 per cent.  The
-equality is a measured coincidence at one midpoint and not a derived result,
-and this file asserts neither number -- the budget is cited here only for the
-size of what the criterion cannot see.
+CORRECTION 2026-10-27, AND IT IS A CORRECTION OF THIS FILE'S OWN WORDING.
+Earlier text here called l = 236.6 "the MEASURED artefact-suppressed
+midpoint".  P1-B grepped the whole of `main` for it: no file under
+`diagnostics/`, `outputs/`, `reference/` or `data/` carries any 236.x value,
+and the four places the string occurs are all prose -- two of them quoting
+this file.  SO THE WORD "MEASURED" HERE WAS THE ONLY AUTHORITY THE NUMBER HAD,
+and it was written by P1-T rather than read off a run.  That is CLAUDE.md 3c
+applied to its author: a finding is not a finding until someone has looked at
+the thing it names, and nobody had looked.
+
+The number is therefore withdrawn as a measurement and is not restated here.
+The 2.0 per cent agreement of the two halves rested on it and goes with it.
+What survives, and is all this file needs, is the SIZE of the driving half:
+d(phi_1) = +0.1124 between the artefact-suppressed and matched positions,
+which is of order the artefact half however the midpoint is finally named.
+P1-B is re-running D24 to say whether 236.6 is recoverable.
 
 WHAT IS ASSERTED HERE, AND WHAT IS NOT.
 

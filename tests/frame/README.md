@@ -6,10 +6,16 @@ frame-covariance conditions, plus the generator that turns them into
 `docs/THEORY-AUDIT.md`.
 
 ```
+python3 doctor.py                                      # why the suite will or will not run here
 python3 run_all.py                                     # exit 0 only if all pass
 python3 gen_theory_audit.py                            # writes the document itself
 python3 -I c6_thomson.py                               # or run one
 ```
+
+**Start with `doctor.py` when anything fails.** It imports nothing outside the
+standard library, so it runs where the suite does not, and it reports the
+interpreter, the flags, where each dependency lives or why it does not, and
+whether the independence condition holds.
 
 **Do not redirect the generator.** It writes `docs/THEORY-AUDIT.md` itself —
 P1-B added the write on 2026-10-21 for exactly this reason, and its source says
