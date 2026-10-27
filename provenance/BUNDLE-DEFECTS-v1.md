@@ -11686,3 +11686,88 @@ That is **T-54**'s gate working exactly as designed — it cannot know that a
 change was cosmetic, and the alternative is a gate that redraws numbers the
 tree did not compute, which is the defect T-54 records. The cost is real and
 it is the right cost.
+
+---
+
+## T-162 — **A configuration half-written resumed as complete, and the gap was permanent**
+
+**2026-10-27, P1-B. Severity: material — it silently lost a measurement.**
+
+### What happened
+
+`scripts/_resumable.Checkpoint` lets a long diagnostic survive a crash: each
+completed row is flushed as it is produced and a resumed run skips what is
+already on disk. The skip was decided by
+
+```python
+return any(r["configuration"] == configuration for r in self._rows)
+```
+
+and a caller writes **one row per metric**. So a run killed between the first
+row and the last leaves a configuration that is *present but short* — and
+`any()` calls it done.
+
+D36 died on an `fsync` partway through `bracket_at_w || PLANCK`, leaving
+three of its six metrics. The resumed run skipped it. The summary table then
+carried `nan` for the frame gap and the bump ratio **on `PLANCK_MODEL`, the
+one background that matters most**, in the instrument built to rule on which
+weighting is admissible.
+
+### Why it is worse than a crash
+
+A crash stops you. **This does not**: the instrument reports success, prints a
+table, and will never recompute the missing cell, because it believes it
+already has it. The only thing standing between that and a published number is
+somebody reading a `nan` out of a table — which is the weakest check in the
+bundle and is not a gate at all.
+
+It is the **T-125** shape once more: a mechanism that reads as live, raises
+nothing, and is silently measuring less than it claims.
+
+### Corrected
+
+`has()` takes an optional `expect` — the number of rows an instrument writes
+per configuration — and a short configuration is recomputed rather than
+trusted, with a line saying so. Five diagnostics now declare their count.
+
+**A caller that passes nothing keeps the old behaviour**, deliberately:
+changing the meaning of `has` for every caller at once, including those whose
+row count nobody has checked, would be a worse defect than the one being
+fixed. D29 and D32 are named as exemptions in the test rather than quietly
+excluded, so the exemption is visible and can shrink.
+
+`tests/test_checkpoint_resume_is_not_fooled_by_a_partial_row.py` asserts the
+repair, that the untaught caller is unchanged, and — **T-44**'s requirement —
+that the assertion which catches a short row stops firing on a complete one.
+Without that last control the class would reject every resume, which is
+useless rather than wrong, and the suite would not tell them apart. The sixth
+test discovers checkpointed diagnostics from the tree rather than from a list,
+for the reason every registry in this bundle is discovered: a list drifts the
+day a sixth instrument starts checkpointing.
+
+### What it does not establish
+
+That no measurement already in `provenance/` was taken from a partial
+configuration. The defect has existed as long as the class has. D36's was
+found because `nan` is conspicuous; a configuration short of a metric that
+merely *looks* plausible would not be. **Every checkpointed CSV predating this
+commit is suspect to exactly that degree**, and the cheap check is row counts
+per configuration rather than a rerun.
+
+**So the check was run rather than recommended.** Every checkpointed CSV on
+`main`:
+
+| file | configurations | rows per configuration |
+|---|---:|---|
+| `d32-isw-discriminator.csv` | 15 | 4 |
+| `d33-w-path-integral.csv` | 7 | 6 |
+| `d34-split-by-parts.csv` | 6 | 8 |
+| `d35-which-term-accumulates.csv` | 14 | 3 |
+| `d36-frame-invariance-by-weighting.csv` | 6 | **3 and 6** |
+| `d38-which-half-carries-the-residue.csv` | 6 | 9 |
+
+**One short configuration in the bundle, and it is the known one** —
+`bracket_at_w || PLANCK`, already recomputing. Every other instrument is
+uniform. The defect was live for as long as the class has existed and cost
+exactly one measurement, which is the most that can be said for it and is
+better than the entry above was entitled to assume.

@@ -222,6 +222,14 @@ def _score(bg, zero):
     return out
 
 
+#: Rows this instrument writes per configuration: three multipoles x (late, vis_share, absdelta).
+#: Passed to `Checkpoint.has` so a run killed mid-write is
+#: **recomputed rather than resumed as complete** --- D36 lost
+#: `bracket_at_w || PLANCK` to exactly that on 2026-10-27, and the
+#: gap was found only by reading a `nan` out of the summary table.
+ROWS_PER_CONFIG = 9
+
+
 def main() -> int:
     print(__doc__)
     rows = Checkpoint(ROOT / "diagnostics" / f"{SLUG}.csv",
@@ -230,7 +238,7 @@ def main() -> int:
     for label, zero in HALVES:
         for bl, bg in BACKGROUNDS:
             key = f"{label} || {bl}"
-            if rows.has(key):
+            if rows.has(key, expect=ROWS_PER_CONFIG):
                 for r in rows.all():
                     if r["configuration"] == key:
                         seen[(label, bl, r["metric"])] = float(r["value"])

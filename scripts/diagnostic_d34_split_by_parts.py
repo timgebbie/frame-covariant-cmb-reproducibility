@@ -175,6 +175,14 @@ def _measure(bg, obh2, h, gamma, controls):
     return out, gate
 
 
+#: Rows this instrument writes per configuration: two frames x (late2, bump7, D2_D30, peak).
+#: Passed to `Checkpoint.has` so a run killed mid-write is
+#: **recomputed rather than resumed as complete** --- D36 lost
+#: `bracket_at_w || PLANCK` to exactly that on 2026-10-27, and the
+#: gap was found only by reading a `nan` out of the summary table.
+ROWS_PER_CONFIG = 8
+
+
 def main() -> int:
     print(__doc__)
     rows = Checkpoint(ROOT / "diagnostics" / f"{SLUG}.csv",
@@ -183,7 +191,7 @@ def main() -> int:
     for label, controls in CONFIGS:
         for bl, bg, obh2, h, gamma in BACKGROUNDS:
             key = f"{label} || {bl}"
-            if rows.has(key):
+            if rows.has(key, expect=ROWS_PER_CONFIG):
                 for r in rows.all():
                     if r["configuration"] == key:
                         seen.setdefault(label, {})[(bl, r["metric"])] = \

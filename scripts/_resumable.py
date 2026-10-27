@@ -59,9 +59,36 @@ class Checkpoint:
             with self.path.open("w", newline="", encoding="utf-8") as fh:
                 csv.DictWriter(fh, self.fields).writeheader()
 
-    def has(self, configuration: str) -> bool:
-        """True when this configuration completed in this or a previous run."""
-        return any(r["configuration"] == configuration for r in self._rows)
+    def has(self, configuration: str, *, expect: int | None = None) -> bool:
+        """True when this configuration completed in this or a previous run.
+
+        **`expect` exists because `any()` is not completion --- 2026-10-27.**
+        A caller writes one row per metric, so a run killed between the first
+        row and the last leaves a *partial* configuration on disk. `any()`
+        then reports it done, the resume skips it, and the gap is permanent:
+        the instrument will never recompute it because it believes it already
+        has.
+
+        That is not hypothetical. D36 died on an `fsync` partway through
+        `bracket_at_w || PLANCK`, leaving three of its six metrics; the
+        resumed run skipped it and the summary table carried `nan` in the one
+        cell on the background that matters most. It was noticed only by
+        reading the table, which is the weakest check there is.
+
+        Callers that write a known number of rows pass it, and a short
+        configuration is then recomputed rather than trusted. Callers that do
+        not pass it keep the old behaviour, so this cannot break an instrument
+        that has not been taught the count.
+        """
+        n = sum(1 for r in self._rows if r["configuration"] == configuration)
+        if n == 0:
+            return False
+        if expect is not None and n < expect:
+            print(f"  [partial] {configuration}: {n} of {expect} rows on disk "
+                  "— recomputing rather than resuming an incomplete row",
+                  flush=True)
+            return False
+        return True
 
     def add(self, configuration: str, **values) -> None:
         """Append one completed row and **flush it to disk immediately**.
