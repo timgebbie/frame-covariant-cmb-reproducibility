@@ -11480,3 +11480,75 @@ F10 stayed inside its own grid.
 **The shape is M15 again**: a true number about the wrong object. The gate
 measured a real quantity, reported it honestly, and that quantity was not the
 one the gate is for.
+
+---
+
+## T-159 — **Two named weightings produce the same spectrum, and one of them is about to be published as a budget row**
+
+**2026-10-27, P1-B.** From D36's first six configurations, read against D34.
+
+### The measurement
+
+`bracket_at_w` carries the **whole** bulk bracket at $W$ — the **B-17 (i)**
+identity, the transcription defect between (98) and (102). `split_by_parts`
+is P1-T's repair: split $C_1$ into its gravitational and scattering halves
+*before* the by-parts, leave the scattering half at $K'$. They are different
+operations and different code paths.
+
+They produce the same first peak.
+
+| background | `split_by_parts` (D34) | `bracket_at_w` (D36) | difference |
+|---|---:|---:|---:|
+| Einstein–de Sitter | 147.07 | 147.37 | 0.202\% |
+| $\Lambda$CDM | 235.57 | 235.81 | 0.105\% |
+| `PLANCK_MODEL` | 183.36 | 183.42 | **0.029\%** |
+
+**Measured on different $\ell$ grids** — D36 steps by 15 above $\ell=40$,
+D34 by 10 — so this is not one cached number read twice. And it is not both
+sitting near the released value, which is $222.48$, $216.11$ and $265.93$:
+each has moved 20–30\% and landed in the same place.
+
+The frame numbers agree. The plateau bump ratio between frames, which
+first-order covariance requires to be $1$:
+
+| | EdS | $\Lambda$CDM | PLANCK |
+|---|---:|---:|---:|
+| released | 0.031 | 0.066 | 0.072 |
+| `bracket_at_w` | **0.960** | **1.158** | — |
+
+From a factor of 14–32 to within 4–16\% of unity, which is **T-157**'s
+convergence reproduced by a weighting T-157 did not test.
+
+### What it means, stated as narrowly as the measurement allows
+
+**The by-parts refinement is not what moves the peak.** Moving the bulk to
+$W$ is, and B-17 (i) accounts for the whole of the movement this bundle can
+see. The split by-parts is a more careful route to the same destination.
+
+**They are not the same configuration.** The frozen digests in
+`tests/test_weighting_modes_are_frozen.py` differ at $\ell=2$, $k=30$ by
+0.03\% — distinct transfers, distinct code paths. The claim here is only that
+**no spectrum-level metric in this bundle resolves the difference**, which is
+a statement about the instruments and not about the physics.
+
+### Why it is recorded as a defect and not as a result
+
+The published budget in `SUPPLEMENTARY-MATERIAL-v1.3.18.tex` names a
+configuration against a peak position. If two configurations give that
+position to 0.03\%, **the row cannot identify which one it came from**, and a
+reader who reproduces it from the named configuration would not detect having
+reproduced the other. That is the register's own criterion: a defect is
+recorded when it affects a published number, even when no physics is wrong.
+
+It is also the **T-125** class seen from the far side. T-125 is a control
+that cannot be distinguished from the released default; this is two controls
+that cannot be distinguished from each other. The repair is the same in kind
+— say so, rather than let a difference be reported that no instrument here
+can see.
+
+### Open, and it is P1-T's
+
+Whether the split is distinguishable from `bracket_at_w` by **any** observable
+— not merely by the ones this bundle computes — is a derivation and belongs to
+the theory. Asked as `P1B→P1T 2026-10-27 #5`. Until it is answered the budget
+row should name the weight rather than the operation.
