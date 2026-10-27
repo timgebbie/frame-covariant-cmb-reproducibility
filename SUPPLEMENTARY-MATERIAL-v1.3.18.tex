@@ -1,5 +1,5 @@
 % Computational supplement to the associated paper.
-% Build: latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.3.17.tex  (only after locked
+% Build: latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.3.18.tex  (only after locked
 % assets have passed hash checks). THIS FILE IS THE WHOLE DOCUMENT: the prose
 % carries no \input, and every former supplementary-materials/ fragment is
 % expanded inline between its own BEGIN/END provenance comments. The only
@@ -43,7 +43,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.3.17 --- 26 October 2026\\
+\date{Supplement v1.3.18 --- 27 October 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.3.0-dev}
 
 \begin{document}
@@ -252,10 +252,15 @@ independent, claim-facing Python instruments that are \emph{absent}
 from the \texttt{v1.0.0}, \texttt{v1.1.0} and \texttt{v1.2.0} tags.
 This is part of the \emph{current} repository situation, not a
 future Lean deliverable and not an increment in the physics-release
-sequence. The nine instruments in \texttt{tests/frame/} use
+sequence. The eleven instruments in \texttt{tests/frame/} use
 self-contained kernel, visibility and frame constructions rather than
-importing the spectral solver; \path{tests/test_frame_checks.py}
-invokes them in isolated subprocesses. The file\textendash{}to\textendash{}claim
+importing the spectral solver, and \path{tests/frame/run_all.py} invokes each
+in an isolated subprocess under \texttt{-I}.
+\path{tests/test_frame_checks.py}, which is the bundle's own harness, invokes
+seven of the eleven: \texttt{c8} through \texttt{c11} are reproducible and
+documented but are not gated there, so a regression in any of them would not
+fail the suite. That gap is recorded in \path{tests/frame/README.md} and is
+open. The file\textendash{}to\textendash{}claim
 mapping below is an inspected \emph{source inventory}; this document
 has not rerun the pinned repository suite as part of this editorial gate.
 
@@ -315,7 +320,39 @@ obstruction the bundling in (90) creates, C9 the \(\kappa''\) artefact that
 \emph{not} reinstate the rule C7 withdrew at T-113/S48: a coefficient may hold
 a rate; it may not be differentiated while it does. The two pieces do
 \emph{not} cancel pointwise --- the measured ratio of either to their sum is
-\(\simeq8\) --- and the sum is bounded because it is a total derivative.\\
+\(\simeq8\) --- and the sum is bounded because it is a total derivative.\\[3pt]
+\texttt{c10\_oscillator\_phase.py} & Added 2026-10-26. The acceptance
+criterion for the acoustic step, scored against the driving it was meant to
+gate. Eliminating \(\tilde\tau_1\) between \emph{Annals~II} (152) and (153)
+returns the oscillator with \(c_s^2=1/[3(1+R)]\) exactly and the standard
+baryon-drag coefficient. With \(\Phi\) constant the boundary value
+\((\delta\tilde T+\Phi_A)(\eta_*)\) is a pure cosine of amplitude \(\Phi/3\)
+and its phase is zero; with \(\Phi\) time-dependent the phase is non-zero
+& A criterion asking that the oscillator track \(\cos(kr_s)\) in exact phase
+\emph{accepts} the undriven solution and \emph{rejects} the driven one, so the
+step that should have caught \textbf{A-3} certifies its absence. The decaying
+potential here is \emph{not} a model of the radiation era: it falls at
+\(x=k\eta/\sqrt3\), so the measured phase falls as \(1/k\) where the real decay
+is tied to equality. What is established is the mechanism and its sign, not the
+magnitude in this bundle.\\[3pt]
+\texttt{c11\_kernel\_partner.py} & Added 2026-10-26. A by-parts taken against
+the kernel has three terms, not two:
+\(\mathrm d(WCK)/\mathrm d\eta=\mathcal VCK+WC'K+WCK'\), whose integral is a
+pure boundary term. The boundary at \(\eta_0\) is exactly zero for
+\(\ell\ge1\) because \(j_\ell(0)=0\), and the boundary at \(\eta_i\) is
+bounded by \(e^{-\kappa}(\eta_i)\), so
+\(\int WC'K=-\int\mathcal VCK-\int WCK'\) to \(5.4\times10^{-8}\) across
+\(2\le\ell\le600\)
+& \textbf{Generalises C9, which holds the kernel fixed.} The Sachs--Wolfe term
+\(\mathcal VCK\) places \(5.5\times10^{-7}\) of its mass outside the
+visibility; the differentiated term \(WC'K\) places \(0.75\) to \(0.99\) of its
+mass outside it. Keeping \(WC'K\) without its \(WCK'\) partner replaces a
+recombination-confined source with one that accumulates to today, and the
+discarded partner is \(2.7\) to \(1.9\times10^3\) times the Sachs--Wolfe term
+it leaves behind. A constant \(\Phi\) does not exempt this, which is why the
+Einstein--de~Sitter null is the control that sees it. The monopole is a
+stand-in and the late fractions state where the terms live in \(\eta\), not
+their amplitude in this bundle.\\
 \end{longtable}
 \endgroup
 
@@ -575,16 +612,21 @@ equations subject to the corrections documented here;
 supplement. The scheduling rule is physical: an envelope correction is
 not advanced while the source assembly it depends on remains disputed.
 
-\paragraph{Subsidiary Lean verification in the v1.3.0 stream.}
-A \texttt{lean/} directory with Lean definitions, theorem statements
-and formal proof sources is planned as an additional verification layer
-within the v1.3.0 workstream. It supplements, and does not replace,
-the existing Python checks or the Paper~1-to-antecedent provenance
-network. Lean is \emph{not a separate physics milestone} and cannot
-change the repository's version sequence. A claim is recorded as
-machine-certified only after its exact theorem statement, hypotheses,
-compilation and correspondence to Paper~1 have been checked. Proposed
-certificates and unverified pilot accounts confer no certification.
+\paragraph{The Lean certification is a separate repository and is not yet
+public.}
+The machine-checked certification of Paper~1 is being prepared at
+\texttt{timgebbie/frame-covariant-cmb-lean}, which is a repository in its own
+right and not a directory of this bundle. It is private as this edition is
+written, so no address is given, nothing in this document cites it, and no
+claim here rests on it. Editions before v1.3.18 described a \texttt{lean/}
+directory inside the v1.3.0 workstream; the sources are not there. The
+certification supplements, and does not replace, the Python instruments or the
+Paper~1-to-antecedent provenance network. Lean is \emph{not a separate physics
+milestone} and cannot change the repository's version sequence. A claim is
+recorded as machine-certified only after its exact theorem statement,
+hypotheses, compilation and correspondence to Paper~1 have been checked.
+Proposed certificates and unverified pilot accounts confer no certification,
+and a repository a reader cannot open is a proposed certificate.
 
 \paragraph{Final editorial verification, after scientific closure.}
 After the scientific and provenance gates, a separate final review of
