@@ -632,3 +632,117 @@ samples six multipoles and normalises each one cannot show it. Dense at low
 ell because that is where the plateau's shape is; to 300 because the first
 acoustic peak must be on the picture for the frozen shape to be legible. The
 damping tail is F9's and is not drawn."""
+
+[[grid]]
+key = "scripts/diagnostic_d33_w_path_integral.py::ELLS"
+what = "the multipoles the (98) W-weighted path integral is scored on"
+status = "index"
+note = """Dense below 30, then `arange(40, 321, 20)`. The pre-registration
+asks three questions of three different parts of this axis: the late share at
+the quadrupole, the plateau as `D_2/D_30`, and whether the first peak moves.
+Prediction 3 is the one the step size constrains --- at 20 the peak is located
+to half a step, which is enough to say *moved* or *did not move* but not
+enough to quote a position. D34 steps by 10 for precisely that reason."""
+
+[[grid]]
+key = "scripts/diagnostic_d33_w_path_integral.py::sl"
+what = "the conformal times D33 reports the late share at"
+status = "index"
+note = """Same construction as D30's at 12 slices --- `eta_* +
+geomspace(span*1e-4, span, 11)` with a zero prepended. It SELECTS and does not
+compute: the accumulation is the released quadrature in one pass, read at one
+abscissa (1% of the span past eta_*), so the slice count sets how finely that
+single interpolation is resolved and nothing else. Geometric because the
+visibility is narrow and a linear grid would put every slice in the
+free-streaming era."""
+
+[[grid]]
+key = "scripts/diagnostic_d33_w_path_integral.py::k_com"
+what = "the k grid D33 integrates the plateau and the peak over"
+status = "derived"
+note = """`required_k_points(K_MAX, span)`, K_MAX = 420. Derived at 3 samples
+per `j_ell^2` oscillation and raising if the scale cannot be met. K_MAX is
+above the first peak because prediction 3 is a statement about the peak's
+position, and a k grid truncated below it would answer that question by
+construction. **The gate rides on this grid** --- the eta_0 slice against the
+released quadrature --- so aliasing voids the columns rather than loosening
+them."""
+
+[[grid]]
+key = "scripts/diagnostic_d34_split_by_parts.py::ELLS"
+what = "the multipoles P1-T's split by-parts is scored on"
+status = "index"
+note = """Dense at the plateau (2--30) then `arange(40, 341, 10)`.
+**The step is 10 and not 20 because prediction 2 is `236.6 +/- 5`**: a grid
+that cannot resolve 5 multipoles cannot score it, and the peak is read by
+parabolic interpolation through three samples rather than by argmax, so the
+quoted position is finer than the step. Dense below 30 because prediction 3 is
+the `ell ~ 7` bump against `D_30`, which needs both ends present. To 340 so
+that a peak which ran PAST 236.6 --- the outcome fixed as a different finding
+--- would still be on the grid rather than falling off it."""
+
+[[grid]]
+key = "scripts/diagnostic_d34_split_by_parts.py::sl"
+what = "the conformal times D34 reports the late share at"
+status = "index"
+note = """As D33's, 12 slices, same construction and the same argument. The
+late share is the EdS null control, read at one abscissa; the slice count sets
+the interpolation there. It is worth saying plainly that this grid is not what
+made the null read 1.0000 --- T-155 measured the share to be a quotient whose
+denominator the repair collapsed, which is an arithmetic property of the
+metric and not of the abscissae it is read at."""
+
+[[grid]]
+key = "scripts/diagnostic_d34_split_by_parts.py::k_com"
+what = "the k grid D34 integrates the bump, the plateau and the peak over"
+status = "derived"
+note = """`required_k_points(K_MAX, span)`, K_MAX = 460 --- the largest in the
+bundle, and higher than D33's 420 because the peak is predicted to MOVE here
+and a truncation that clipped its new position would be indistinguishable from
+the prediction failing. Derived, raising if 3 samples per oscillation cannot
+be met."""
+
+[[grid]]
+key = "scripts/diagnostic_d35_which_term_accumulates.py::sl"
+what = "the conformal times D35 reports the late share at"
+status = "index"
+note = """As D33's and D34's, 12 slices. D35 asks only which bracket term
+survives to the right of the visibility, so the abscissa is the same single
+one and the grid carries no more weight here than in the two instruments it
+suppresses terms inside of."""
+
+[[grid]]
+key = "scripts/diagnostic_d35_which_term_accumulates.py::k_com"
+what = "the k grid D35 integrates the term-by-term late share over"
+status = "derived"
+note = """`required_k_points(K_MAX, span)`, K_MAX = 160 --- far below D34's
+460, and deliberately. D35 scores NO peak and NO position: it reports the late
+share at three multipoles with one bracket term blanked at a time, and the
+late share is a ratio of the same integral to itself. Carrying 460 would cost
+three times the k loop to sharpen a number the instrument does not read.
+Derived nonetheless, so the reduction is a stated choice rather than a
+truncation."""
+
+[[grid]]
+key = "scripts/diagnostic_d36_frame_invariance_by_weighting.py::ELLS"
+what = "the multipoles the frame gap is scored over"
+status = "index"
+note = """Dense through the plateau (2--30), then `arange(40, 341, 15)`. The
+scored quantity is the MEDIAN frame gap over this axis, so the step sets how
+the median is weighted between the plateau and the acoustic band and nothing
+else --- a frame gap of order unity does not need resolving to a multipole.
+To 340 so the first peak is on the axis for every background, because the
+Newtonian peak's existence (or absence, which is T-157's finding) is read
+from the same grid."""
+
+[[grid]]
+key = "scripts/diagnostic_d36_frame_invariance_by_weighting.py::k_com"
+what = "the k grid the frame gap is integrated over"
+status = "derived"
+note = """`required_k_points(K_MAX, span)`, K_MAX = 460, matching D34 so the
+two instruments measure the same configurations on the same quadrature and a
+disagreement between them is a finding rather than a grid artefact. Derived at
+3 samples per `j_ell^2` oscillation and raising if the scale cannot be met.
+**The gate rides on this grid** --- the eta_0 slice against the released
+quadrature, measured at 3.8e-14 up to k = 1500 --- so aliasing voids the
+columns rather than loosening them."""

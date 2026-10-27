@@ -5645,6 +5645,168 @@ member of the pair that the Newtonian specialisation sets to zero.
 % The register behind it is provenance/OPEN-QUESTIONS-v1.0.0.md, cited once
 % below as a pointer and not summarised.
 % ---------------------------------------------------------------------------
+% ---------------------------------------------------------------------------
+% IMPLICATIONS.  Added v1.3.18, 2026-10-27, P1-T.
+%
+% Every quantitative statement here is read from an instrument or from a
+% derivation in this document, and every reference was verified against the
+% arXiv record on 2026-10-27 before it was entered.  Two claims put to P1-T
+% were weakened against what the instruments support and the weakening is
+% stated at the point of use rather than in a footnote.
+% ---------------------------------------------------------------------------
+\section{Implications}
+\label{sec:implications}
+
+\subsection{Coupling growth against the Rees--Sciama bound}
+\label{sec:implications-rs}
+
+\citet{Seljak1996} places the Rees--Sciama contribution at
+\(\Delta T/T\sim10^{-7}\)--\(10^{-6}\), peaking at \(\ell\sim100\)--\(300\),
+at least an order of magnitude below the COBE-normalised primary signal, and
+dominant only near \(\ell\approx5000\). The basis is N-body simulation
+combined with second-order perturbation theory rather than a scaling argument
+alone. \citet{Sanz1996} reach a compatible bound by second-order perturbation
+theory in open and flat models, putting the secondary contribution at
+\(0.1\)--\(10\%\) of the radiation power spectrum in a flat universe,
+depending on reionisation history and normalisation.
+
+The exact hierarchy carries couplings explicitly linear in \(\ell\). Read
+directly as power, they would grow where those bounds say the secondary
+contribution does not, and the apparent conflict is what
+\S\ref{sec:spectrum} resolves.
+
+\paragraph{The couplings are a remapping operator, and the response enters at
+fourth order.} Expanding the lensed spectrum in the deflection amplitude
+\(L\), with \(C_0\), \(C_1\) and \(C_2\) the unlensed spectrum and its first
+two derivatives, the flat-sky average of the order-\(L^2\) coefficient is
+\(\tfrac12\ell^2C_0\). The deflection response does not enter there: what
+survives at \(L^2\) is the unlensed spectrum carried through the kernel, not a
+new term. \(C_1\) and \(C_2\) first appear at order \(L^4\), where the
+residual is
+
+\begin{equation}
+  \tfrac{3}{16}\,\ell^2C_2+\tfrac{17}{16}\,\ell\,C_1+C_0 ,
+  \label{eq:quartic-residual}
+\end{equation}
+
+\noindent
+which for a power-law spectrum of index \(\nu\) factorises as
+\((\nu-2)(3\nu-8)/16\) and vanishes at \(\nu=2\) and \(\nu=8/3\). Both
+statements are asserted in \path{paper/checks/independent_checks_v1.1.6.py},
+section~H, in exact rationals.
+
+\paragraph{What this establishes, and what it does not.} It establishes that
+the linear source does not produce a term growing as \(\ell^2\) beyond the
+unlensed spectrum, which is what the coupling question asks. It does
+\emph{not} establish that the remapping conserves the total variance. The
+gain-and-loss comparison that appeared to establish conservation was withdrawn
+on 2026-10-21 as a tautology --- it compared \(AB/2\) against \((B/2)A\) ---
+and the instrument now carries the record in its place:
+\emph{quartic scaling alone proves neither conservation nor redistribution.}
+Conservation needs the lensed spectrum's full second moment including the
+linear--quadratic cross term, which is not computed in this bundle.
+
+\subsection{The lensing efficiency kernel of a secondary source}
+\label{sec:implications-kernel}
+
+A single remapping of the whole sky carries one efficiency kernel,
+\(W(\chi;\chi_*)=1-\chi/\chi_*\), the kernel appropriate to a source at last
+scattering \citep{LewisChallinor2006}. A secondary anisotropy generated at
+\(\chi_s<\chi_*\) --- integrated Sachs--Wolfe, Rees--Sciama, Doppler --- is
+lensed only by the matter between the observer and \(\chi_s\), so its kernel
+is \(W(\chi;\chi_s)=1-\chi/\chi_s\).
+
+The ratio of the two is not a constant:
+
+\begin{equation}
+  \frac{W(\chi;\chi_*)}{W(\chi;\chi_s)}
+  =\frac{\chi_s(\chi-\chi_*)}{\chi_*(\chi-\chi_s)} ,
+  \label{eq:kernel-ratio}
+\end{equation}
+
+\noindent
+which depends on \(\chi\). Two reductions of it are well defined. At the peak
+of the efficiency \(\chi(1-\chi/\chi_s)\), which is \(\chi=\chi_s/2\),
+\eqref{eq:kernel-ratio} is exactly \(2-\chi_s/\chi_*\). Weighted along the ray
+by that same efficiency and integrated over \([0,\chi_s]\), it is
+\(3-2\chi_s/\chi_*\).
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}X r r@{}}
+\toprule
+\textbf{source distance} & \textbf{at the efficiency peak} & \textbf{integrated along the ray} \\
+\midrule
+\(\chi_s=\chi_*/2\)     & \(1.50\) & \(2.00\) \\
+\(\chi_s=\chi_*/3\)     & \(1.67\) & \(2.33\) \\
+\(\chi_s\to0\)          & \(2.00\) & \(3.00\) \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent
+So a secondary generated halfway to last scattering is over-weighted by
+\(50\%\) at the peak of its own efficiency and by a factor of two when the
+weighting is carried along the ray. \emph{The single-kernel statement is
+therefore conservative at the peak and understates the integrated effect by a
+further factor of two.}
+
+\paragraph{The scope of this statement, which is the kernels and not any
+solver.} \eqref{eq:kernel-ratio} follows from the two definitions and nothing
+else. Whether a particular Einstein--Boltzmann code inserts the single kernel
+is a property of that code's implementation, and this bundle does not score
+it: criterion~5b compares against CAMB and CLASS at the level of the spectrum
+and does not port either. The bearing is on cross-correlations where a
+secondary is lensed and the lensing weight is carried explicitly ---
+integrated Sachs--Wolfe to lensing cross-power, and lensing tomography ---
+rather than on the primary acoustic peaks, where \(\chi_s=\chi_*\) and
+\eqref{eq:kernel-ratio} is unity.
+
+\subsection{What the covariant route supplies, and what is not claimed}
+\label{sec:implications-novelty}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.26\textwidth}XX@{}}
+\toprule
+& \textbf{what it supplies} & \textbf{what it does not claim} \\
+\midrule
+Lensing inside the hierarchy
+& The deflection is obtained within the non-truncated \(1+3\) covariant
+  Boltzmann hierarchy rather than imported as an external remapping
+  \citep{LewisChallinor2006} or derived in second-order cosmological
+  perturbation theory \citep{BenekeFidler2010,Pettinari2013}.
+& Priority. The claim is that the route differs from the three named above,
+  not that no other covariant derivation exists. \\[3pt]
+The second half of the deflection
+& The kinematic couplings supply \(2GM/b\). The remaining \(2GM/b\), which
+  completes the Einstein value \(4GM/b\), is carried by the perturbed
+  connection inside the free-streaming operator \(e^a\mathrm{D}_a\Pi\) rather
+  than being absent.
+& That the split is new. What is supplied is the location of the second half
+  in this formulation. \\[3pt]
+Frame covariance without second-order gauge machinery
+& Stewart--Walker invariance holds at the background level and the threading
+  change is an exact pointwise relabelling of direction phase space, so no
+  second-order gauge-invariant variable is constructed and no coordinate gauge
+  is changed \citep{BruniEtAl1997}.
+& That the metric route is wrong. The two are different routes to the same
+  invariants; this one has fewer constructions in it. \\[3pt]
+Deflection and aberration as one operator
+& The bulk gravitational deflection and the observer's local kinematic
+  aberration are the same operator evaluated at different points along the
+  ray.
+& A measurement. The observer-end evaluation is the aberration dipole
+  convention and is not fitted here. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent
+Rows one, two and four are statements about the derivation in Paper~1 and are
+carried by it. Row three is gated in this bundle: \path{tests/frame/c1} scores
+the threading invariant equal in both threadings, independent of \(k\) and
+\(\eta\), and \path{tests/frame/c4} and \path{c5} score the matching
+coefficients the invariance forces.
+
 \section{What is open}
 \label{sec:open-questions}
 
@@ -5956,7 +6118,7 @@ the author retains responsibility for the scientific content.
 % and Annals II at 282, 321--394 (2000) -- the 2006 year printed for Annals I
 % in some secondary literature is a misprint.
 % ---------------------------------------------------------------------------
-\begin{thebibliography}{6}
+\begin{thebibliography}{12}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -6006,6 +6168,55 @@ Uro\v{s} Seljak and Matias Zaldarriaga.
 \newblock A line-of-sight approach to cosmic microwave background anisotropies.
 \newblock \emph{Astrophysical Journal}, 469:\penalty0 437--444, 1996.
 \newblock \doi{10.1086/177793}.
+
+\bibitem[Seljak(1996)]{Seljak1996}
+Uro\v{s} Seljak.
+\newblock Rees-Sciama effect in a cold dark matter universe.
+\newblock \emph{Astrophysical Journal}, 460:\penalty0 549--555, 1996.
+\newblock \doi{10.1086/176991}.
+\newblock arXiv:astro-ph/9506048.
+
+\bibitem[Sanz et~al.(1996)Sanz, Mart\'inez-Gonz\'alez, Cay\'on, Silk, and
+  Sugiyama]{Sanz1996}
+Jos\'e~L. Sanz, Enrique Mart\'inez-Gonz\'alez, Laura Cay\'on, Joseph Silk, and
+  Naoshi Sugiyama.
+\newblock {CMB} radiation power spectrum in {CDM} open universes up to second
+  order perturbations.
+\newblock arXiv:astro-ph/9602148, 1996.
+
+\bibitem[Lewis and Challinor(2006)]{LewisChallinor2006}
+Antony Lewis and Anthony Challinor.
+\newblock Weak gravitational lensing of the {CMB}.
+\newblock \emph{Physics Reports}, 429:\penalty0 1--65, 2006.
+\newblock \doi{10.1016/j.physrep.2006.03.002}.
+\newblock arXiv:astro-ph/0601594.
+
+\bibitem[Bruni et~al.(1997)Bruni, Matarrese, Mollerach, and
+  Sonego]{BruniEtAl1997}
+Marco Bruni, Sabino Matarrese, Silvia Mollerach, and Sebastiano Sonego.
+\newblock Perturbations of spacetime: gauge transformations and gauge
+  invariance at second order and beyond.
+\newblock \emph{Classical and Quantum Gravity}, 14:\penalty0 2585--2606, 1997.
+\newblock \doi{10.1088/0264-9381/14/9/014}.
+\newblock arXiv:gr-qc/9609040.
+
+\bibitem[Beneke and Fidler(2010)]{BenekeFidler2010}
+Martin Beneke and Christian Fidler.
+\newblock Boltzmann hierarchy for the cosmic microwave background at second
+  order including photon polarization.
+\newblock \emph{Physical Review D}, 82:\penalty0 063509, 2010.
+\newblock \doi{10.1103/PhysRevD.82.063509}.
+\newblock arXiv:1003.1834.
+
+\bibitem[Pettinari et~al.(2013)Pettinari, Fidler, Crittenden, Koyama, and
+  Wands]{Pettinari2013}
+Guido~W. Pettinari, Christian Fidler, Robert Crittenden, Kazuya Koyama, and
+  David Wands.
+\newblock The intrinsic bispectrum of the cosmic microwave background.
+\newblock \emph{Journal of Cosmology and Astroparticle Physics}, 2013\penalty0
+  (04):\penalty0 003, 2013.
+\newblock \doi{10.1088/1475-7516/2013/04/003}.
+\newblock arXiv:1302.0832.
 
 \end{thebibliography}
 

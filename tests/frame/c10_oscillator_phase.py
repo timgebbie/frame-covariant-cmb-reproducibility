@@ -61,7 +61,7 @@ AUDIT_PROSE = (
   "Eliminating $\\tilde\\tau_1$ between \\emph{Annals~II} (152) and (153) returns "
   "$\\delta\\tilde T''+\\frac{R'}{1+R}\\delta\\tilde T'+k^2c_s^2\\delta\\tilde T="
   "-\\frac{k^2}{3}\\Phi_A-\\mathcal F$ with $c_s^2=1/[3(1+R)]$ exactly. With "
-  "$\\Phi$ constant the boundary value $(\\delta\\tilde T+\\Phi_A)(\\eta_*)$ is a "
+  "$\\Phi$ constant the boundary value $(\\delta\\tilde T+\\Phi_A)(\\eta_\\ast)$ is a "
   "pure cosine of amplitude $\\Phi/3$ and its phase is zero; with $\\Phi$ "
   "time-dependent the phase is non-zero. The released acceptance criterion "
   "asks that the oscillator track $\\cos(kr_s)$ in exact phase, so it accepts "

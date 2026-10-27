@@ -1,7 +1,17 @@
 #!/usr/bin/env python3
 """Generate docs/THEORY-AUDIT.md from the instruments under tests/frame/.
 
-    python3 gen_theory_audit.py > ../../docs/THEORY-AUDIT.md
+    python3 gen_theory_audit.py
+
+**No redirection, and the usage line said otherwise until 2026-10-26.** This
+script writes `docs/THEORY-AUDIT.md` itself (see the end of the file). A shell
+redirect on top of that is not merely redundant, it is destructive: the shell
+truncates the target *before* the script runs, so a generator that then
+refuses to write -- because an instrument failed, or because `sympy` is not
+installed for this interpreter -- leaves the audit at **zero bytes**. That is
+what happened on the PI's machine on 2026-10-26, and the release gate reported
+it as "0 instruments" against the eleven on disk. Nothing is printed to stdout
+any more, so the redirect has nothing left to capture.
 
 Every number in the output is read from a check's own machine-readable
 record, and **every word of prose is read from the instrument it describes**
@@ -13,17 +23,30 @@ cannot produce a document.
 import ast, hashlib, json, pathlib, re, subprocess, sys, datetime
 
 HERE = pathlib.Path(__file__).resolve().parent
-#: **This list is a registry and it had drifted.** `c9` landed on 2026-10-26
-#: and was absent here, so the generated `docs/THEORY-AUDIT.md` carried no
-#: by-parts admissibility result at all. `c10` is added with it. Three
-#: registries run over this one directory -- this list, `run_all.py`, and
-#: `tests/test_frame_checks.py` -- and committing an instrument updates none
-#: of them. Adding an instrument means adding it to all three.
-CHECKS = ['c1_identity.py', 'c2_weight.py', 'c3_byparts.py',
-          'c4_rank_slot.py', 'c5_monopole.py', 'c6_thomson.py',
-          'c7_kappa_ledger.py', 'c8_rank0_partner.py',
-          'c9_byparts_admissibility.py', 'c10_oscillator_phase.py',
-          'c11_kernel_partner.py']
+#: **Discovered, not listed --- changed by P1-B 2026-10-26.**
+#:
+#: This was a literal list, and the note that stood here recorded that it had
+#: drifted: `c9` landed and was absent, so `docs/THEORY-AUDIT.md` carried no
+#: by-parts admissibility result at all. The conclusion drawn was *"three
+#: registries run over this one directory, so adding an instrument means
+#: adding it to all three"*.
+#:
+#: **That is a correct description of the defect and the wrong repair.** A
+#: rule that three lists be updated together is kept only by somebody
+#: remembering, and the note was itself the evidence that nobody does --- it
+#: was written *because* the remembering had already failed once.
+#: `tests/test_frame_checks.py` became a glob the same morning for the same
+#: reason, and `c10` and `c11` landed hours after the note was written.
+#:
+#: So the registry is the directory. Sorted numerically rather than lexically
+#: so that `c10` follows `c9` and the audit reads in the order the instruments
+#: were written.
+CHECKS = sorted((p.name for p in HERE.glob('c*.py') if p.name[1:2].isdigit()),
+                key=lambda n: int(n[1:].split('_', 1)[0]))
+if len(CHECKS) < 8:
+    sys.exit(f'only {len(CHECKS)} instruments found under {HERE}: the glob is '
+             'measuring nothing and this document would under-report in '
+             'silence, which is the failure it was converted to prevent')
 
 def audit_prose(check):
     """Read AUDIT_TITLE and AUDIT_PROSE from the instrument's SOURCE TEXT.
@@ -55,7 +78,58 @@ def audit_prose(check):
         if name not in found:
             print(f'{check} carries no {name}', file=sys.stderr)
             sys.exit(2)
-    return found['AUDIT_TITLE'], found['AUDIT_PROSE']
+    return (_render_safe(found['AUDIT_TITLE'], check),
+            _render_safe(found['AUDIT_PROSE'], check))
+
+
+#: Every normalisation this run applied, `(instrument, from, to)`, so the
+#: report names the file to fix rather than leaving the author to find it.
+NORMALISED = []
+
+#: **Three hazards GitHub's renderer has already caught this bundle with, and
+#: they arrive here through somebody else's prose --- added by P1-B
+#: 2026-10-26.**
+#:
+#: The audit is *generated from the instruments' own wording*, which is the
+#: property that keeps it from drifting. The cost of that property is that an
+#: instrument author can break the rendered document without ever opening it,
+#: and on 2026-10-26 three of them did: `c9`--`c11` landed carrying `\,`,
+#: `\%` and `\eta_*` inside maths, and `docs/THEORY-AUDIT.md` went red on
+#: three render tests the moment it was regenerated.
+#:
+#: Each is **typographic and not semantic**, so this normalises rather than
+#: refusing --- a generator that will not run until another stream fixes its
+#: spacing blocks the wrong person. What it must not do is normalise in
+#: silence, so every substitution is reported at the end of the run.
+#:
+#:   `_*`   the emphasis parser eats the asterisk (**T-120**, the first of
+#:          the three). `\ast` is the house spelling.
+#:   `\,`   markdown eats the backslash before ASCII punctuation, leaving a
+#:          bare comma inside the maths.
+#:   `\%`   same mechanism; the house rule is to put the percent sign outside
+#:          the span. Only the trailing case is mechanical, so a `\%` anywhere
+#:          else is refused rather than guessed at.
+_MATHS = re.compile(r'\$\$.*?\$\$|(?<!\$)\$(?!\s)[^$\n]{1,400}?(?<!\s)\$(?!\$)',
+                    re.S)
+
+
+def _render_safe(text, check):
+    def fix(m):
+        span = was = m.group(0)
+        span = span.replace('_*', r'_\ast')
+        span = span.replace(r'\,', '')
+        # `$...98.5\%$` -> `$...98.5$%`: close the span before the sign.
+        span = re.sub(r'\\%\$$', '$%', span)
+        if r'\%' in span:
+            print(f'{check}: `\\%` inside maths and not at the end of the '
+                  f'span, which cannot be moved out mechanically: {was[:80]}\n'
+                  '  Put the percent sign outside the $...$ in the '
+                  'instrument itself.', file=sys.stderr)
+            sys.exit(2)
+        if span != was:
+            NORMALISED.append((check, was[:60], span[:60]))
+        return span
+    return _MATHS.sub(fix, text)
 
 
 
@@ -140,7 +214,6 @@ o.append('Annals II is read from `sources/annals/cbrII.tex` and referred to by '
          'differ between the two lines.\n')
 
 text = '\n'.join(o)
-print(text)
 
 # **The generator WRITES the document.  Added 2026-10-21 by P1-B.**
 #
@@ -158,6 +231,13 @@ if allok:
     out.parent.mkdir(exist_ok=True)
     out.write_text(text + '\n', encoding='utf-8', newline='\n')
     print(f'\nwrote {out.relative_to(HERE.parents[1])}', file=sys.stderr)
+    if NORMALISED:
+        print(f'\n  {len(NORMALISED)} render normalisation(s) applied to '
+              'instrument prose on the way in. These are typographic and the\n'
+              '  document is correct; FIX THEM AT SOURCE so the next author '
+              'does not inherit them:', file=sys.stderr)
+        for c, was, now in NORMALISED:
+            print(f'    {c}\n      {was}\n   -> {now}', file=sys.stderr)
 else:
     print('\nFAILING SUITE -- document NOT written', file=sys.stderr)
 sys.exit(0 if allok else 1)

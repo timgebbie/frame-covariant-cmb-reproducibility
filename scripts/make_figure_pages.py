@@ -155,7 +155,14 @@ def main() -> int:
 
     OUT.parent.mkdir(exist_ok=True)
     OUT.write_text("\n".join(lines), encoding="utf-8", newline="\n")
-    print(f"wrote {OUT.relative_to(ROOT)}  —  {len(entries)} of {len(PLANNED)} figures included")
+    # `relative_to` raises when OUT is not under ROOT, which it is not when a
+    # caller retargets the generator --- as `tests/test_captions_are_parseable.py`
+    # does so that exercising it cannot write into the released tree.
+    try:
+        where = OUT.relative_to(ROOT)
+    except ValueError:
+        where = OUT
+    print(f"wrote {where}  —  {len(entries)} of {len(PLANNED)} figures included")
     return 0
 
 

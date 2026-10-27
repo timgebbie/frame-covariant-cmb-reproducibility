@@ -78,7 +78,19 @@ class Checkpoint:
             csv.DictWriter(fh, self.fields).writerow(
                 {k: row.get(k, "") for k in self.fields})
             fh.flush()
-            os.fsync(fh.fileno())
+            # **Best-effort, and it must be --- 2026-10-26.** `os.fsync` raised
+            # `OSError: [Errno 9] Bad file descriptor` partway through D36 on
+            # the PI's Windows machine and **took the run down with it**, five
+            # configurations into fifteen. The flush above is what makes the
+            # row survive a crash of this process; the fsync only adds survival
+            # of a power cut, and **a durability guarantee that can abort a
+            # four-hour run costs more than it buys.** The checkpoint's whole
+            # purpose is that no run is lost, so the line that enforces
+            # durability must not be the line that loses one.
+            try:
+                os.fsync(fh.fileno())
+            except OSError:
+                pass
 
     def all(self) -> list[dict[str, str]]:
         """Every row, this run's and every earlier one's, in order written."""

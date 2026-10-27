@@ -33,15 +33,30 @@ from pathlib import Path
 import pytest
 
 FRAME = Path(__file__).resolve().parent / "frame"
-CHECKS = [
-    "c1_identity.py",
-    "c2_weight.py",
-    "c3_byparts.py",
-    "c4_rank_slot.py",
-    "c5_monopole.py",
-    "c6_thomson.py",
-    "c7_kappa_ledger.py",
-]
+
+#: **Discovered from disk, not listed. Finding T-155.**
+#:
+#: This was a hand-written list holding `c1`–`c7`. P1-T's audit of
+#: 2026-10-26 found **three** hand-maintained registries of `tests/frame/`
+#: holding **three different suites**: their `run_all.py` had `c1`–`c9`,
+#: their `gen_theory_audit.py` had `c1`–`c8` — so `docs/THEORY-AUDIT.md`
+#: carried no by-parts admissibility result for five days after `c9` landed —
+#: and this one had `c1`–`c7`, so **neither `c8` nor `c9` was gated by the
+#: bundle's harness at all**. An instrument that is committed and not
+#: registered is a file, not a gate.
+#:
+#: A list is the wrong shape for this. Globbing means a new instrument is
+#: gated **the day it lands**, with nothing to remember — the same reason
+#: `tests/test_every_control_moves_something.py` discovers its controls from
+#: the signature and `tests/test_readme_renders_on_github.py` discovers its
+#: markdown from the tree. **Every registry in this bundle that is a literal
+#: list has drifted at least once; none of the discovered ones has.**
+#:
+#: Sorted numerically rather than lexically, so `c10` follows `c9` and the
+#: parametrised test ids read in the order the instruments were written.
+CHECKS = sorted(
+    (p.name for p in FRAME.glob("c*.py") if p.name[1:2].isdigit()),
+    key=lambda n: int(n[1:].split("_", 1)[0]))
 
 
 #: **Each instrument is run ONCE per session and its record cached here.**
@@ -69,6 +84,60 @@ def _run(check: str) -> subprocess.CompletedProcess:
     return _RUNS[check]
 
 
+#: **A missing `sympy` is an absent toolchain, not a failed instrument.**
+#:
+#: On 2026-10-26 the PI's run reported six of these red on a clean Python
+#: 3.13 --- `c1`, `c4`, `c5`, `c6`, `c7` and the Thomson-floor comparison ---
+#: every one of them `ModuleNotFoundError: No module named 'sympy'`. Nothing
+#: was wrong with the algebra; the interpreter simply could not do any.
+#:
+#: **Six red on a clean machine is worse than six skips**, because it teaches
+#: whoever runs the suite next that red is the normal colour here, and the
+#: finding that then goes unread is the real one. The instruments are run
+#: under `-I`, so they see the *subprocess* interpreter's packages and not
+#: pytest's: the import is probed in that same interpreter rather than here.
+#:
+#: **The glob floor below stays a hard failure.** An instrument that has gone
+#: missing is a defect in the bundle whatever the toolchain can do, and a
+#: skip must never be able to hide one.
+def _sympy_is_absent() -> bool:
+    probe = subprocess.run([sys.executable, "-I", "-c", "import sympy"],
+                           capture_output=True, text=True)
+    return probe.returncode != 0
+
+
+_NO_SYMPY = _sympy_is_absent()
+_SYMPY_REASON = (
+    "sympy cannot be imported by the interpreter these instruments run under, "
+    f"which is `{sys.executable} -I`. **`-I` implies `-s`, so a `pip install "
+    "--user sympy` is invisible to it** -- on Windows that is pip's default "
+    "when the system site-packages is not writable, so `Requirement already "
+    "satisfied` and this skip are both true at once. Install into the "
+    "interpreter itself (an elevated shell, or a virtualenv), or run "
+    "`tests/frame/run_all.py` directly, which does not isolate. This is a "
+    "SKIP and not a pass: nothing in tests/frame/ has been verified here, and "
+    "scripts/check_release_hygiene.py will still refuse the release because "
+    "docs/THEORY-AUDIT.md cannot be regenerated without these.")
+
+
+def test_the_glob_found_the_instruments():
+    """**A glob that matches nothing passes every test below it.**
+
+    The floor is the one thing a discovered registry needs that a literal
+    list does not: a list fails loudly when its files vanish, a glob goes
+    quiet. Eight is what `tests/frame/` held when discovery replaced the
+    list, so a drop below it means instruments left the tree rather than
+    that the pattern stopped matching -- and either way it should be said
+    out loud.
+    """
+    assert len(CHECKS) >= 8, (
+        f"only {len(CHECKS)} frame instruments discovered in {FRAME}; the "
+        "glob is matching less than the tree held when it was written")
+    assert CHECKS[0].startswith("c1_"), (
+        f"the numeric sort is wrong: first entry is {CHECKS[0]}")
+
+
+@pytest.mark.skipif(_NO_SYMPY, reason=_SYMPY_REASON)
 @pytest.mark.verification
 @pytest.mark.parametrize("check", CHECKS)
 def test_frame_instrument(check):
@@ -84,6 +153,7 @@ def test_frame_instrument(check):
     )
 
 
+@pytest.mark.skipif(_NO_SYMPY, reason=_SYMPY_REASON)
 @pytest.mark.verification
 def test_the_thomson_floor_is_the_same_number_in_three_instruments():
     r"""**M11a, as a worked instance rather than a maxim.**

@@ -18,10 +18,10 @@ being possible.
 | status | count | means |
 |---|---|---|
 | **open** | 1 | a chosen literal whose convergence is **not** established. This status is the point of the register. |
-| **derived** | 19 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
+| **derived** | 23 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
 | **measured** | 7 | a chosen literal whose convergence has been measured, with the number stated. |
 | **described** | 11 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
-| **index** | 23 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
+| **index** | 29 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
 
 ## open — 1
 
@@ -37,7 +37,7 @@ share this history, so a grid shift moves them together and cancels. Finding
 **T-46**, question **Q7**, decision **S33** --- derived immediately after the
 v1.2.0 tag. v1.2.0 ships it as a stated limit.
 
-## derived — 19
+## derived — 23
 
 ### `x` — the x grid j_ell(x) is tabulated on
 
@@ -219,6 +219,52 @@ first peak is being looked at. **The gate is on this grid** --- the eta_0
 slice against the released quadrature --- so an aliased grid would void the
 columns rather than loosen them.
 
+### `k_com` — the k grid D33 integrates the plateau and the peak over
+
+`scripts/diagnostic_d33_w_path_integral.py:123`, `np.linspace`
+
+`required_k_points(K_MAX, span)`, K_MAX = 420. Derived at 3 samples
+per `j_ell^2` oscillation and raising if the scale cannot be met. K_MAX is
+above the first peak because prediction 3 is a statement about the peak's
+position, and a k grid truncated below it would answer that question by
+construction. **The gate rides on this grid** --- the eta_0 slice against the
+released quadrature --- so aliasing voids the columns rather than loosening
+them.
+
+### `k_com` — the k grid D34 integrates the bump, the plateau and the peak over
+
+`scripts/diagnostic_d34_split_by_parts.py:128`, `np.linspace`
+
+`required_k_points(K_MAX, span)`, K_MAX = 460 --- the largest in the
+bundle, and higher than D33's 420 because the peak is predicted to MOVE here
+and a truncation that clipped its new position would be indistinguishable from
+the prediction failing. Derived, raising if 3 samples per oscillation cannot
+be met.
+
+### `k_com` — the k grid D35 integrates the term-by-term late share over
+
+`scripts/diagnostic_d35_which_term_accumulates.py:117`, `np.linspace`
+
+`required_k_points(K_MAX, span)`, K_MAX = 160 --- far below D34's
+460, and deliberately. D35 scores NO peak and NO position: it reports the late
+share at three multipoles with one bracket term blanked at a time, and the
+late share is a ratio of the same integral to itself. Carrying 460 would cost
+three times the k loop to sharpen a number the instrument does not read.
+Derived nonetheless, so the reduction is a stated choice rather than a
+truncation.
+
+### `k_com` — the k grid the frame gap is integrated over
+
+`scripts/diagnostic_d36_frame_invariance_by_weighting.py:162`, `np.linspace`
+
+`required_k_points(K_MAX, span)`, K_MAX = 460, matching D34 so the
+two instruments measure the same configurations on the same quadrature and a
+disagreement between them is a finding rather than a grid artefact. Derived at
+3 samples per `j_ell^2` oscillation and raising if the scale cannot be met.
+**The gate rides on this grid** --- the eta_0 slice against the released
+quadrature, measured at 3.8e-14 up to k = 1500 --- so aliasing voids the
+columns rather than loosening them.
+
 ### `k_com` — the k grid D4 integrates C_ell by rank on
 
 `scripts/diagnostic_d4_monopole.py:102`, `np.linspace`
@@ -231,7 +277,7 @@ the last place a grid may be chosen by eye.
 
 ### `k_com` — the k grid F10's accumulation is integrated over
 
-`scripts/figure_f10_formation_surface.py:130`, `np.linspace`
+`scripts/figure_f10_formation_surface.py:156`, `np.linspace`
 
 `required_k_points(K_MAX, r_theta)`, K_MAX = 300, matching D30
 exactly so the figure and the diagnostic behind it are the same measurement.
@@ -339,7 +385,7 @@ under-resolved grid produces.
 
 ### `K_COM` — the k grid the cost benchmark is measured on
 
-`scripts/benchmark_single_run.py:64`, `np.arange`
+`scripts/benchmark_single_run.py:126`, `np.linspace`
 
 The release grid, matching F9 exactly. A benchmark run on a grid nobody ships measures a calculation nobody performs.
 
@@ -421,7 +467,7 @@ As F3, and deliberately the same grid: F6 reports RATIOS against the F3 configur
 
 As F2, raised to 1900 by finding T-32, with `check_k` guarding the probe modes after T-34.
 
-## index — 23
+## index — 29
 
 ### `phase` — the i^ell phase factor
 
@@ -456,13 +502,13 @@ grids spanning three decades in their lower limit.
 
 ### `ELLS` — the multipoles the cost benchmark projects onto
 
-`scripts/benchmark_single_run.py:63`, `np.arange`
+`scripts/benchmark_single_run.py:81`, `np.arange`
 
 The release selection, matching F9. The per-mode projection cost scales with how many multipoles are asked for, so this is the number the 98.3% share is a share of.
 
 ### `THETA_DEG` — the angular abscissa the benchmark transforms onto
 
-`scripts/benchmark_single_run.py:65`, `np.linspace`
+`scripts/benchmark_single_run.py:83`, `np.linspace`
 
 `linspace(0, 180, 721)`, a quarter-degree abscissa matching F4. It is in the benchmark because C(theta) is the deliverable a reader asks for; it costs 0.01 s, which is the point.
 
@@ -500,6 +546,74 @@ abscissa (1% of the span past eta_*), so the slice count sets how finely the
 curve is interpolated there and nothing else. D30 runs 24 and F10 16 on the
 same object.
 
+### `ELLS` — the multipoles the (98) W-weighted path integral is scored on
+
+`scripts/diagnostic_d33_w_path_integral.py:90`, `np.arange`
+
+Dense below 30, then `arange(40, 321, 20)`. The pre-registration
+asks three questions of three different parts of this axis: the late share at
+the quadrupole, the plateau as `D_2/D_30`, and whether the first peak moves.
+Prediction 3 is the one the step size constrains --- at 20 the peak is located
+to half a step, which is enough to say *moved* or *did not move* but not
+enough to quote a position. D34 steps by 10 for precisely that reason.
+
+### `sl` — the conformal times D33 reports the late share at
+
+`scripts/diagnostic_d33_w_path_integral.py:122`, `np.geomspace`
+
+Same construction as D30's at 12 slices --- `eta_* +
+geomspace(span*1e-4, span, 11)` with a zero prepended. It SELECTS and does not
+compute: the accumulation is the released quadrature in one pass, read at one
+abscissa (1% of the span past eta_*), so the slice count sets how finely that
+single interpolation is resolved and nothing else. Geometric because the
+visibility is narrow and a linear grid would put every slice in the
+free-streaming era.
+
+### `ELLS` — the multipoles P1-T's split by-parts is scored on
+
+`scripts/diagnostic_d34_split_by_parts.py:85`, `np.arange`
+
+Dense at the plateau (2--30) then `arange(40, 341, 10)`.
+**The step is 10 and not 20 because prediction 2 is `236.6 +/- 5`**: a grid
+that cannot resolve 5 multipoles cannot score it, and the peak is read by
+parabolic interpolation through three samples rather than by argmax, so the
+quoted position is finer than the step. Dense below 30 because prediction 3 is
+the `ell ~ 7` bump against `D_30`, which needs both ends present. To 340 so
+that a peak which ran PAST 236.6 --- the outcome fixed as a different finding
+--- would still be on the grid rather than falling off it.
+
+### `sl` — the conformal times D34 reports the late share at
+
+`scripts/diagnostic_d34_split_by_parts.py:127`, `np.geomspace`
+
+As D33's, 12 slices, same construction and the same argument. The
+late share is the EdS null control, read at one abscissa; the slice count sets
+the interpolation there. It is worth saying plainly that this grid is not what
+made the null read 1.0000 --- T-155 measured the share to be a quotient whose
+denominator the repair collapsed, which is an arithmetic property of the
+metric and not of the abscissae it is read at.
+
+### `sl` — the conformal times D35 reports the late share at
+
+`scripts/diagnostic_d35_which_term_accumulates.py:116`, `np.geomspace`
+
+As D33's and D34's, 12 slices. D35 asks only which bracket term
+survives to the right of the visibility, so the abscissa is the same single
+one and the grid carries no more weight here than in the two instruments it
+suppresses terms inside of.
+
+### `ELLS` — the multipoles the frame gap is scored over
+
+`scripts/diagnostic_d36_frame_invariance_by_weighting.py:113`, `np.arange`
+
+Dense through the plateau (2--30), then `arange(40, 341, 15)`. The
+scored quantity is the MEDIAN frame gap over this axis, so the step sets how
+the median is weighted between the plateau and the acoustic band and nothing
+else --- a frame gap of order unity does not need resolving to a multipole.
+To 340 so the first peak is on the axis for every background, because the
+Newtonian peak's existence (or absence, which is T-157's finding) is read
+from the same grid.
+
 ### `ELLS` — the multipoles criterion 5a is stated over
 
 `scripts/diagnostic_d5_sachs_wolfe.py:56`, `np.arange`
@@ -508,7 +622,7 @@ same object.
 
 ### `ELLS` — the multipoles F10's surface is drawn over
 
-`scripts/figure_f10_formation_surface.py:91`, `np.arange`
+`scripts/figure_f10_formation_surface.py:118`, `np.arange`
 
 Dense below 30, then stepping by 20 to 300. **This is the axis the
 first version of F10 threw away**, and the reason the rebuild exists: the
@@ -520,7 +634,7 @@ damping tail is F9's and is not drawn.
 
 ### `post` — the conformal times F10 samples AFTER recombination
 
-`scripts/figure_f10_formation_surface.py:126`, `np.geomspace`
+`scripts/figure_f10_formation_surface.py:152`, `np.geomspace`
 
 `eta_* + geomspace(span*1e-4, span, N_SLICES-4)`, ten slices.
 Geometric because the visibility is narrow and a linear grid would put every
@@ -530,7 +644,7 @@ distinguishable and enough to read a progression.
 
 ### `pre` — the conformal times F10 samples ACROSS recombination
 
-`scripts/figure_f10_formation_surface.py:125`, `np.linspace`
+`scripts/figure_f10_formation_surface.py:151`, `np.linspace`
 
 `linspace(eta_floor, eta_star, 4)`. **Linear, not geometric, and
 deliberately so**: the PI asked for the autocorrelation *just before

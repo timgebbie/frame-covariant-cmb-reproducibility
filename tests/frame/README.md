@@ -159,7 +159,7 @@ zero; that is what separates a driving mechanism from a fit.
 stated for two terms and the kernel moves too.** Taken against $K$, the product
 rule has three:
 
-$$\frac{\mathrm d}{\mathrm d\eta}\bigl[WCK\bigr]=\mathcal VCK+WC'K+WCK' .$$
+$$\frac{\mathrm d}{\mathrm d\eta}[WCK]=\mathcal VCK+WC'K+WCK' .$$
 
 Its integral is a pure boundary term, and both boundaries vanish for
 $\ell\ge1$. So $\int WC'K=-\int\mathcal VCK-\int WCK'$, exactly.

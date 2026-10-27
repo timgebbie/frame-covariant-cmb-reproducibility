@@ -446,6 +446,32 @@ def main() -> int:
         print("    Watch the PLATEAU and the SECONDARY PEAKS: no gate "
               "measures either, and they are two of the three failures.")
 
+    # **`--split-by-parts`, 2026-10-26. P1-T's repair at F9's resolution, and
+    # it has never been drawn.**
+    #
+    # D34 scored the repair on four scalars at K_MAX = 460 and ELLS to 340.
+    # That is enough to say the peak moved and the bump fell; it cannot show
+    # the PLATEAU, the SECONDARY PEAKS or the DAMPING TAIL, which are the
+    # morphology. **T-157** then found that the repair takes the Newtonian
+    # frame from having no acoustic maximum at all to having one, and brings
+    # the two frames' plateau bump from a factor of 14--33 apart to 4--16%
+    # --- measured on D34's coarse grid and never seen as a picture.
+    #
+    # This draws it across the full k = 1500 grid in both frames. **It is a
+    # control and does not enter `figures/`** (V14): the Einstein--de Sitter
+    # null control of D34 still fails and T-155's 8% residue is open, so this
+    # is what the repair looks like, not a claim that it is right.
+    if "--split-by-parts" in sys.argv:
+        from functions.spectra import two_frame as _tf
+        _tf.BULK_SOURCE_CONTROLS = dict(split_by_parts=True,
+                                        by_parts_weight_terms=True)
+        STEM = "d37-f9-split-by-parts"
+        CSV_PATH_REL = ("diagnostics", "d37-f9-split-by-parts.csv")
+        print("    **SPLIT BY-PARTS (P1-T, T-154)** with the C_2 partners "
+              "carried. Diagnostic run; not a release artefact.")
+        print("    Watch the NEWTONIAN column: released it has no acoustic "
+              "maximum at all (T-157).")
+
     if "--b-slot-repair" in sys.argv:
         from functions.spectra import two_frame as _tf
         _tf.B_SLOT_REPAIR = True

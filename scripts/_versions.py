@@ -37,6 +37,7 @@ import re
 from pathlib import Path
 
 __all__ = [
+    "release_line",
     "released_version",
     "supplement_figures",
     "supplement_pdf",
@@ -80,20 +81,61 @@ def tree_version(root: Path) -> str:
     return found.group(1)
 
 
-def supplement_version(root: Path) -> str:
-    r"""The version the **live** supplement is named for, e.g. ``"1.3.0"``.
+def release_line(root: Path) -> str:
+    """The **computational** release this tree is on, e.g. ``"1.3.0"``.
 
-    The tree version with any ``-dev`` removed. A supplement in preparation for
-    v1.3.0 is `SUPPLEMENTARY-MATERIAL-v1.3.0.tex` from the day the line opens:
-    under decision **S36** each release freezes its own supplement, so the name
-    is settled when the work starts and the `\date` line carries the ``-dev``
-    until the release flips it.
+    The tree version with any ``-dev`` removed. It names the artefacts the
+    *code* produces, and it is **not** the supplement's version --- see below.
     """
     return tree_version(root).removesuffix("-dev")
 
 
+def supplement_version(root: Path) -> str:
+    r"""The version the **live supplement** is named for, e.g. ``"1.3.17"``.
+
+    **Read from the README's own `Supplement:` line, which is a second version
+    statement and not a restatement of the first.**
+
+    It used to be `tree_version()` with the ``-dev`` removed, on the reading
+    that a supplement belongs to a release and therefore shares its number.
+    That held while the two happened to agree and stopped holding the moment
+    they did not: by 2026-10-26 the computational line was still ``v1.3.0-dev``
+    --- the physics had not shipped --- while the supplement had been through
+    **seventeen** editions, because a document under daily revision earns a
+    number per revision and a release does not. The constructed name then
+    pointed at `SUPPLEMENTARY-MATERIAL-v1.3.0.tex`, which had left the tree,
+    and **eight tests failed on one cause**: six could not open the file, and
+    the two that checked the README's link were comparing it against a name
+    nothing had ever written.
+
+    **Neither convention was wrong; coupling them was.** A supplement edition
+    records a documentation gate and asserts nothing about whether the physics
+    release has advanced, so the two lines are declared separately in the
+    README and read separately here.
+
+    This is the third repair of one shape in two days --- `tests/frame/` held a
+    hand-written registry of instruments, `scripts/_fingerprint.py` digested
+    the path rather than the code, and this constructed a filename it could
+    have read. Each time the fix is the same: **take the fact from the one
+    place entitled to state it, rather than deriving it from something that
+    usually agrees.**
+    """
+    text = (root / "README.md").read_text(encoding="utf-8")
+    found = re.search(r"^Supplement:\s+\*\*v([0-9]+\.[0-9]+\.[0-9]+)\*\*",
+                      text, re.MULTILINE)
+    if not found:
+        raise RuntimeError(
+            "README.md has no `Supplement: **vX.Y.Z**` line. That line is "
+            "where the live supplement's edition is declared, and it is a "
+            "separate statement from the `Version:` header: the computational "
+            "release and the supplement edition advance independently and "
+            "deriving one from the other is the defect this function was "
+            "rewritten to remove.")
+    return found.group(1)
+
+
 def supplement_source(root: Path) -> Path:
-    """The `.tex` this release is written in. Previous ones are frozen beside it."""
+    """The `.tex` the live edition is written in, named for that edition."""
     return root / f"SUPPLEMENTARY-MATERIAL-v{supplement_version(root)}.tex"
 
 
@@ -102,11 +144,23 @@ def supplement_pdf(root: Path) -> Path:
 
     Under **S36** the frozen artefact is the `.tex`; the build outputs are not
     kept, because the PDF of record for a previous release is its release asset
-    and its archived DOI rather than a stale file in the working tree.
+    and its archived DOI rather than a stale file in the working tree. The name
+    follows the source it was built from, which from v1.3.14 is the full
+    `SUPPLEMENTARY-MATERIAL-` stem rather than the old `supplement-` one.
     """
-    return root / "supplementary-materials" / f"supplement-v{supplement_version(root)}.pdf"
+    return (root / "supplementary-materials"
+            / f"SUPPLEMENTARY-MATERIAL-v{supplement_version(root)}.pdf")
 
 
 def supplement_figures(root: Path) -> Path:
-    """The generated figure pages `scripts/make_figure_pages.py` writes."""
-    return root / "supplementary-materials" / f"figures-v{supplement_version(root)}.tex"
+    """The generated figure pages, named for the **computational** release.
+
+    **Retired at v1.3.14 and kept as a path so the gate can refuse it.** The
+    supplement became a single file carrying its figure pages inline, so
+    nothing inputs this any more --- and `scripts/make_figure_pages.py` went on
+    writing it, which is how `figures-v1.3.0.tex` entered the released archive
+    on 2026-10-26 and then made the supplement's own PDF read as stale against
+    a source it does not have. It is named from `release_line()` and not from
+    the supplement edition because it was always an output of the *code*.
+    """
+    return root / "supplementary-materials" / f"figures-v{release_line(root)}.tex"

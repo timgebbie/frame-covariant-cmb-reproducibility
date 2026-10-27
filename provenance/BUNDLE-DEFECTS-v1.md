@@ -11180,3 +11180,303 @@ hazard**, and `tests/test_every_control_moves_something.py` could not see it
 because it exercises each control alone. The bracket is now built from
 `bracket`, so the partners carry through. **The gate must walk pairs, and
 that is the open item.**
+
+## T-155 — **The EdS null control was a ratio whose denominator the repair shrank. $\Delta S$ is 92% confined to the visibility, and P1-T's predicted support is refuted**
+
+**2026-10-26, P1-B.** P1-T's §2.5 diagnostic, run on Einstein–de Sitter,
+$k=10$, $\ell=2$. They predicted row 1 — *"after $\eta_\ast$, growing toward
+$\eta_0$"* — and stated it before the run so it could fail. **It fails.**
+
+$\Delta S(\eta)=S_{\rm split}-S_{\rm released}$:
+
+| $(\eta-\eta_\ast)/$span | released | split | $\Delta$ |
+|---|---|---|---|
+| 0 | $+15.43$ | $+0.0107$ | $-15.42$ |
+| $10^{-2}$ | $+21.714$ | $-0.0587$ | $-21.77$ |
+| $0.60$ | $+21.715$ | $-0.0972$ | $-21.81$ |
+| $1.0$ | $+21.715$ | $-1.8555$ | $-23.57$ |
+
+> **92.4% of $\Delta S$ is in place at 1% of the span. 7.6% accumulates
+> afterwards.**
+
+That is **row 2** of their table: *the residue is at $\eta_\ast$, confined to
+the visibility*. The split removes a large visibility-era source — the
+$\kappa''$ artefact, which is the intended repair — and what runs late is a
+small remainder.
+
+### And this corrects my own void, which was too strong
+
+T-154 recorded the EdS late share at $1.0000$ and voided D34's peak and bump
+on it. **The late share is a fraction, and the repair legitimately collapsed
+its denominator.** Released bulk: $+21.71$, flat. Split bulk: $-0.059$ at 1%,
+$-1.856$ at $\eta_0$. The late accumulation is $-1.80$ — which against the
+released magnitude is
+
+$$\frac{1.80}{21.71}= \mathbf{8.3}\ \text{per cent, not}\ 100.$$
+
+**So there is a real EdS residue and it is 8%, not everything.** The null
+still fails — it must be zero — but by a twelfth of what the share reported.
+
+**This is M15 for the fourth time this week, and this time inside the control
+itself.** T-147 and T-148 scored cancellations on the wrong object; T-154
+scored a null on a quotient. **A null control expressed as a fraction cannot
+survive a repair that changes the total**, and that is a property of the
+control rather than of the repair. The EdS control is restated here in
+absolute units, against the released magnitude, and D34's bump and peak are
+**no longer void** — they are measurements carrying an 8% EdS residue, which
+is a stated limit rather than a disqualification.
+
+### What is still wrong, and it is smaller than it looked
+
+An 8% late accumulation on a background where $\Phi$ is constant is still a
+defect, and P1-T's §2.2 three-term identity is where it lives: the by-parts
+replaces $\int WC_1^{\rm grav}K'$ by $-\int\mathcal VC_1^{\rm grav}K
+-\int WC_1^{\rm grav\prime}K$, and this implementation carries the latter two
+and not the former — **which is correct for a by-parts and is not double
+counting** (P1-T's Q1: the split does *not* populate $K'$ with
+$C_1^{\rm grav}$; only $C_1^{\rm scatt}$ rides there). So the residue is not
+a doubled term. Where the remaining 8% comes from is open.
+
+---
+
+## T-156 — **The cost benchmark that S24 and S30 were decided on has been timing the $k$ grid T-56 refuted**
+
+**2026-10-26, P1-B. Severity: material.** Not a wrong number in a figure — a
+wrong number under two scope decisions and one published snapshot.
+
+`scripts/benchmark_single_run.py` carried
+
+```python
+K_COM = np.arange(0.05, 1500.0, np.pi / 3.0)
+```
+
+under a comment reading *"The release configuration, not a reduced one. A
+benchmark run on a grid nobody ships measures a calculation nobody
+performs."*
+
+That spacing **is** the one finding **T-56** refuted. At
+$\Delta\eta\simeq3.13$ it gives 0.94–0.96 samples per $j_\ell^2$ oscillation
+— below one — and the figures were converted to `required_k_points` the day
+T-56 landed. This file was not, so for eleven days the benchmark timed the
+aliased grid while asserting in its own prose that it did not.
+
+### What it cost
+
+| | modes to $k=1500$ |
+|---|---|
+| as benchmarked | 1433 |
+| as shipped, derived | 4480 |
+
+A factor of **3.13 in the stage that is 98.33\% of the run.** Decision **S24**
+deferred the factorised interface to v1.5.0 on a cost argument taken from this
+total; decision **S30** deferred run-time optimisation to v2.0.0 on the same
+total; and the README publishes the snapshot. All three were reasoning about a
+run a third the size of the one the bundle performs.
+
+### The shape, which is the point
+
+This is the same defect as **T-129** (a fingerprint that digested the code's
+*path* rather than the code), as the three drifted registries of
+`tests/frame/`, and as `_versions.py` constructing the supplement's filename
+instead of reading it: **a fact derived from something that usually agrees,
+rather than taken from the one place entitled to state it.** Four instances
+in two days, each found by accident and none by a gate.
+
+### Corrected
+
+The grid is derived from `required_k_points(K_MAX, span)` inside `main()`,
+after the environment exists — which is *why* it was a literal in the first
+place, since the rule needs the conformal lever arm. The comment claiming the
+release configuration is now true.
+
+**What this does not establish.** Nothing about whether S24 or S30 were the
+right decisions. It establishes only that they were taken on a number that
+understated the cost by three, and that they are worth retaking against the
+corrected one.
+
+---
+
+## T-157 — **The Newtonian frame has no acoustic peak at all, the split by-parts gives it one, and the plateau bump converges between frames by a factor of thirty**
+
+**2026-10-26, P1-B. This was computed by D34, stored in its CSV, and read by
+nobody** — both streams scored D34 on its four pre-registered predictions and
+every one of them is about the CDM frame.
+
+### How it surfaced
+
+F9's released run reports a frame gap of **100.0\% median** on Einstein–de
+Sitter and $\Lambda$CDM and **234.7\% worst** on `PLANCK_MODEL`. Since
+$\ell\ge2$ is frame-invariant at first order, that is not a disagreement
+between two spectra. Reading F9's own CSV says what it is:
+
+| $\ell$ | CDM | Newtonian | gap |
+|---|---|---|---|
+| 30 | 1.0000 | 1.0000 | 0.0\% (both renormalised here) |
+| 210 | $+1.91$ | $+5.12\times10^{-2}$ | 97.3\% |
+| 900 | $+0.248$ | $+7.55\times10^{-6}$ | 100.0\% |
+
+**The Newtonian spectrum falls monotonically from the plateau and never
+turns.** It is five orders down at $\ell=900$. One frame has a spectrum; the
+other has only a plateau.
+
+### Why that frame and not the other
+
+`newtonian_set` states it: $\tilde{\mathcal B}_2=0$ makes $C_0$, $C_2$,
+$C_2'$ and $C_2''$ **identically zero**, so (102) collapses to (110). Measured
+at $\eta_\ast$ on `PLANCK_MODEL`, confirming it is exact and not small:
+
+| $k$ | $C_0^{\rm newt}$ | $C_0^{\rm cdm}$ | $C_1'^{\rm newt}/C_1'^{\rm cdm}$ |
+|---|---|---|---|
+| 5 | $0$ | $-2.26\times10^{-1}$ | $-0.956$ |
+| 60 | $0$ | $-2.04\times10^{1}$ | $-0.851$ |
+| 200 | $0$ | $-9.41\times10^{1}$ | $-0.034$ |
+
+So **$C_1$ is the only live coefficient in that frame**, and its derivative
+loses 97\% of its CDM-frame magnitude between $k=60$ and $k=200$ — the band
+that builds $\ell\simeq200$–600, which is exactly where the gap reaches
+100\%.
+
+**That makes the Newtonian frame the cleanest probe of the $C_1$
+slot-and-weight structure this bundle has**, because there is nothing else in
+it. **B-17 (iv)** and **T-94** — $C_1$'s scattering half by-parted when it was
+already in final form, turning $\kappa'$ into $\kappa''$ and moving the
+Doppler out of the $j_\ell'$ slot — are therefore *total* in this frame and
+merely **masked** in the CDM frame, where $C_0$ carries the oscillation
+regardless.
+
+### The test, which D34 had already run
+
+| configuration | Newtonian peak | CDM peak |
+|---|---|---|
+| released, EdS | **none** | 222.48 |
+| released, $\Lambda$CDM | **none** | 216.11 |
+| released, PLANCK | **none** | 265.93 |
+| split by-parts, EdS | 67.95 | 147.07 |
+| split by-parts, $\Lambda$CDM | 67.66 | 235.57 |
+| split by-parts, PLANCK | 60.46 | 183.36 |
+
+**Released, the peak finder returns `nan` in the Newtonian frame on all three
+backgrounds** — no interior maximum above $\ell=30$ exists to find. Under the
+split, one appears.
+
+And the plateau bump, $D_7/D_{30}$:
+
+| configuration | Newtonian | CDM | ratio |
+|---|---|---|---|
+| released, EdS | 0.4282 | 14.0357 | **32.8** |
+| released, $\Lambda$CDM | 0.5216 | 7.9472 | **15.2** |
+| released, PLANCK | 0.6336 | 8.8198 | **13.9** |
+| split, EdS | 0.2824 | 0.2933 | **1.04** |
+| split, $\Lambda$CDM | 0.2934 | 0.2528 | 0.86 |
+| split, PLANCK | 0.3020 | 0.2662 | 0.88 |
+
+**Two frames that disagreed by a factor of 14–33 on the plateau bump agree to
+4–16\% under the repair.** That is a quantitative frame-invariance
+improvement of roughly thirty, on an object first-order covariance requires to
+be frame-independent, and it is the first such convergence this bundle has
+measured.
+
+### What this does and does not establish
+
+**It does not establish that the split is right.** The peak *positions* do not
+converge — 60–68 against 147–236 — so frame invariance is improved and not
+restored, and the Newtonian maximum at $\ell\simeq60$ may be a plateau
+shoulder rather than a first acoustic peak, since the finder takes the first
+interior maximum above $\ell=30$. D34's Einstein–de Sitter null control still
+fails and **T-155**'s 8\% residue is still unexplained.
+
+**It does establish that the released assembly is frame-dependent at
+$\ell\ge2$ at the order of unity**, which is a defect by the antecedent's own
+first-order covariance, and that P1-T's repair moves it decisively in the
+required direction by a mechanism — $C_1$'s scattering half restored to
+$K'$ — that predicts exactly this frame asymmetry in advance.
+
+**It also establishes a method failure, M14 again.** Four pre-registered
+predictions, every one scored on the CDM frame, while the instrument stored
+the other frame's columns at no extra cost. The strongest result in D34 was
+not among the things it was built to look at.
+
+---
+
+## T-158 — **F10's decomposition gate divided by a transfer passing through zero, and only said so above $\ell=300$**
+
+**2026-10-26, P1-B. Severity: material — it blocked a correct run and would
+have blocked every high-resolution one.**
+
+### How it surfaced
+
+The first high-resolution F10 — $\ell$ to 920, $K_{\max}=1500$ — ran the full
+$k$ loop and then refused to write anything:
+
+```
+GATE  eta_0 column vs the released quadrature: worst rel 1.75e-08  **FAIL**
+The accumulation does not decompose the released integral; nothing is written.
+```
+
+At the released grid, $K_{\max}=400$ and $\ell\le300$, the same gate reads
+$4.6\times10^{-13}$.
+
+### It is not a resolution limit, and that is what identifies it
+
+The obvious reading is that the $\eta$ slicing cannot follow a faster
+integrand. It cannot be: holding everything else fixed and varying only the
+slice count gives the **same** answer to three significant figures.
+
+| `N_SLICES` | $k=200$ | $k=800$ | $k=1500$ |
+|---|---|---|---|
+| 14 | $2.0\times10^{-14}$ | $1.2\times10^{-14}$ | $1.1\times10^{-13}$ |
+| 24 | $2.0\times10^{-14}$ | $1.2\times10^{-14}$ | $1.1\times10^{-13}$ |
+| 40 | $2.0\times10^{-14}$ | $1.2\times10^{-14}$ | $1.1\times10^{-13}$ |
+| 64 | $2.0\times10^{-14}$ | $1.2\times10^{-14}$ | $1.1\times10^{-13}$ |
+
+**Sixty-four slices and fourteen agree exactly.** The decomposition is not
+degrading, so the number that grew is not measuring it.
+
+### What it was measuring
+
+The gate read
+
+```python
+|partial_bulk[:, -1] - integrated| / max(|integrated|, 1e-300)
+```
+
+element by element. **The transfer has zeros**, and above $\ell\simeq300$ at
+high $k$ they are deep. Scanning 140 modes against the high-resolution
+$\ell$ axis locates the worst case at $\ell=40$, $k=1176.3$:
+
+| | |
+|---|---|
+| absolute difference | $1.41\times10^{-20}$ |
+| $|{\rm integrated}|$ there — **the denominator** | $6.12\times10^{-10}$ |
+| relative, as the gate computed it | $2.31\times10^{-11}$ |
+| **against the largest transfer at that $k$** | $\mathbf{3.45\times10^{-13}}$ |
+
+Machine precision on numbers of order $10^{-10}$, divided by a quantity
+passing through zero. The full $4480$-mode run simply found a deeper crossing
+than a 140-mode scan does, which is why it reported $1.75\times10^{-8}$ and a
+sample reports $10^{-11}$.
+
+### Corrected, and the threshold is untouched
+
+The denominator is now the largest $|{\rm integrated}|$ over $\ell$ at the
+same $k$ — a scale that cannot vanish — and the threshold stays where it was.
+That is deliberate: **loosening a gate so that one's own run passes is the
+failure mode this bundle exists to prevent**, and the test that this is not
+that is the last row of the table. The same worst case reads
+$3.45\times10^{-13}$ under the corrected metric, which is the gate's own
+released number at $K_{\max}=400$. Nothing has been let through that was
+previously refused; a denominator that could be zero has been replaced by one
+that cannot.
+
+### What this does and does not establish
+
+**It does not establish that the high-resolution surface is correct.** It
+establishes that the gate's refusal carried no information about the
+accumulation, and that the released configuration's $4.6\times10^{-13}$ was
+luck rather than evidence — the released $\ell$ axis stops at 300 and does
+not reach the deep zeros, so the defect was unobservable there for as long as
+F10 stayed inside its own grid.
+
+**The shape is M15 again**: a true number about the wrong object. The gate
+measured a real quantity, reported it honestly, and that quantity was not the
+one the gate is for.

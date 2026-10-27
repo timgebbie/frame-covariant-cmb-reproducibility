@@ -128,23 +128,42 @@ def check_supplement_set(failures: list[str]) -> str:
 
     if not source.exists():
         failures.append(
-            f"{source.relative_to(ROOT).as_posix()}: the README header says this "
-            f"tree is v{live} and the supplement it names does not exist. Open "
-            "the release line with `bump_release.py --open`, which copies the "
-            "previous one forward rather than leaving the build pointed at a "
-            "frozen document.")
+            f"{source.relative_to(ROOT).as_posix()}: the README's `Supplement:` "
+            f"line declares edition v{live} and the file it names does not "
+            "exist. That line and the `Version:` header are separate "
+            "statements -- the supplement edition and the computational "
+            "release advance independently -- so correct whichever of the two "
+            "is wrong rather than assuming they must agree.")
 
     directory = ROOT / "supplementary-materials"
-    for pattern, expected in ((f"supplement-v*.pdf", supplement_pdf(ROOT)),
-                              (f"figures-v*.tex", supplement_figures(ROOT))):
-        for found in sorted(directory.glob(pattern)):
-            if found != expected:
-                failures.append(
-                    f"{found.relative_to(ROOT).as_posix()}: a build output left "
-                    f"behind when the build was repointed at v{live}. Under S36 "
-                    "the frozen artefact is the `.tex`; the rendering of record "
-                    "for an earlier release is its release asset and archived "
-                    "DOI, not a stale file in this tree. Remove it.")
+    # **Every PDF here, not a stem-matched subset.** The glob used to be
+    # `supplement-v*.pdf`, which stopped matching anything the day the build
+    # output took the `SUPPLEMENTARY-MATERIAL-` stem: a gate that can only see
+    # the old name cannot refuse a stale file under the new one. Listing the
+    # whole directory and refusing all but the expected file is the form that
+    # survives a rename, and it is the same argument the grid register and the
+    # frame registry make.
+    for found in sorted(directory.glob("*.pdf")):
+        if found != supplement_pdf(ROOT):
+            failures.append(
+                f"{found.relative_to(ROOT).as_posix()}: a build output left "
+                f"behind when the build was repointed at v{live}. Under S36 "
+                "the frozen artefact is the `.tex`; the rendering of record "
+                "for an earlier release is its release asset and archived "
+                "DOI, not a stale file in this tree. Remove it.")
+
+    # **The fragment set is retired and the gate says so rather than tracking
+    # a live name.** From v1.3.14 the supplement is one file carrying its
+    # figure pages inline, so *any* `figures-v*.tex` is an output of a
+    # generator pointed at a document that no longer inputs it --- which is
+    # how `figures-v1.3.0.tex` entered the archive on 2026-10-26 and then made
+    # the supplement's own PDF read as stale against a source it does not have.
+    for found in sorted(directory.glob("figures-v*.tex")):
+        failures.append(
+            f"{found.relative_to(ROOT).as_posix()}: the supplement has carried "
+            "its figure pages inline since v1.3.14 and inputs no fragment set, "
+            "so this is written by a generator nothing reads. Remove the file "
+            "and the step in `run_all.py` that writes it.")
     return f"      supplement set is v{live}, and only v{live}."
 
 
@@ -400,14 +419,35 @@ def check_built_artefacts_are_not_stale(failures: list[str]) -> str:
     stopped. `make_manifests.py --check` already owns the content comparison.
     """
     notes, pdfs = [], sorted((ROOT / "supplementary-materials").glob("*.pdf"))
-    #: Everything the supplement is built from. `tables/` and the generated
-    #: figure pages are inputs as much as the master is --- the recurrence
-    #: has come through a regenerated table at least once.
-    sources = [p for p in (
-        list(ROOT.glob("SUPPLEMENTARY-MATERIAL-*.tex"))
-        + list((ROOT / "tables").glob("*.tex"))
-        + list((ROOT / "supplementary-materials").glob("*.tex")))
-        if p.is_file()]
+    #: **The sources are what the document `\input`s, read from the document
+    #: --- corrected 2026-10-26 by P1-B.**
+    #:
+    #: This used to be *every* `.tex` under `tables/` and
+    #: `supplementary-materials/` plus the master, on the reasoning that a
+    #: regenerated table is an input as much as the master is. True while the
+    #: supplement was a fragment set; **false since v1.3.14**, when it became
+    #: one consolidated file that inputs the tables and nothing else.
+    #:
+    #: The cost was a false dependency. `supplementary-materials/figures-v1.3.0.tex`
+    #: is written by `scripts/make_figure_pages.py` and inputted by nothing,
+    #: so regenerating it made the supplement's PDF report as **1.1 h stale
+    #: against a source it does not have** --- a release-blocking failure
+    #: pointing at a file that could not have changed the document. Worse, a
+    #: *test* regenerates it, so the gate and the suite were refuting each
+    #: other on every run.
+    #:
+    #: Parsing the master's own `\input{...}` lines makes the dependency set
+    #: the document's rather than the directory's, which is the same argument
+    #: the grid register makes about discretisations: read the fact from the
+    #: thing that states it.
+    master = supplement_source(ROOT)
+    sources = [master] if master.is_file() else []
+    if master.is_file():
+        for rel in re.findall(r"\\input\{([^}]+)\}",
+                              master.read_text(encoding="utf-8")):
+            p = ROOT / (rel if rel.endswith(".tex") else rel + ".tex")
+            if p.is_file():
+                sources.append(p)
     for pdf in pdfs:
         t_pdf = pdf.stat().st_mtime
         newer = sorted(p.relative_to(ROOT).as_posix() for p in sources

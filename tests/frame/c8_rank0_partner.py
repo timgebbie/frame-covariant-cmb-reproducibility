@@ -75,7 +75,7 @@ AUDIT_PROSE = (
   'cancelled **inside the bracket**, by $\\Delta[\\tfrac k3\\tau_1]$ in '
   '$-C_1\'$. Restoring $a\\mathcal{B}_0$ counts the source twice and leaves '
   'the same residual with the opposite sign -- finding T-107, which criterion '
-  '5b caught at $98.5\\%$ and no frame instrument could. '
+  '5b caught at $98.5$\\% and no frame instrument could. '
   '**Addendum 2026-10-26.** Finding T-148 scored $C_0$ against $\\tfrac k3\\tau_1$ '
   'and found they do not cancel; both halves of that measurement are right and '
   'the pairing is not this one. What cancels is $\\Delta C_0+\\Delta[\\tfrac k3\\tau_1]$, '

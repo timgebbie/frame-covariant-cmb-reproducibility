@@ -49,13 +49,13 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 #: the instrument corrects the audit by construction.
 AUDIT_TITLE = 'The monopole row and the dipole shift'
 AUDIT_PROSE = (
-  '$a\\,\\Delta\\mathcal{B}_0=\\tfrac13kv=\\tfrac13k^2\\Delta C_2$ exactly, and '
+  '$a\\Delta\\mathcal{B}_0=\\tfrac13kv=\\tfrac13k^2\\Delta C_2$ exactly, and '
   '$\\gamma$ -- which pairs $\\Delta C_0$ against $k^2\\Delta C_2$ -- vanishes '
   'only with $\\mathcal{B}_0$ restored. **Both measurements stand and the '
   'conclusion drawn from them was wrong.** Finding **T-107**: the partner of '
   '$\\Delta C_0$ is not in $C_2$ but in $-C_1$\u2032, so $\\gamma$ asks the wrong '
   'pairing, and the restoration that makes it vanish counts the monopole '
-  'source twice -- criterion 5b doubles at $98.5\\%$. See **C8**, which scores '
+  'source twice -- criterion 5b doubles at $98.5$\\%. See **C8**, which scores '
   'the whole rank-0 content of the bracket instead of one coefficient against '
   'another. **M15: a gate built from one coefficient cannot see a '
   'cancellation distributed across the bracket.**')

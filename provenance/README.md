@@ -10,6 +10,7 @@ Theory-to-code traceability for this bundle.
 | `SOURCE-APPROXIMATIONS-v1.md` | deliberate approximations in the antecedent — choices, **not** defects, and kept apart so the corrections record is not padded with things that were never wrong |
 | `BUNDLE-DEFECTS-v1.md` | defects in **this bundle's own** machinery, kept apart for the same reason in the other direction |
 | `EQUATION-NUMBERS-ANNALS-II-v1.md` | the published equation numbers, resolved from the accepted manuscript rather than from memory or from arXiv |
+| `ANNALS-II-SOURCE-ASSEMBLY-EXTRACT.md` | the antecedent's source-assembly chain quoted **verbatim** from `sources/annals/cbrII.tex`, each block with its `\label` and line number. Extracted by Coordination 2026-10-18 because this bundle cannot reach that repository, and it carries no physics of its own: the quoted text is the evidence and the verdict on it is P1-B's. It is why **B-17 (i)** could be settled as a transcription defect between (98) and (102) rather than argued from the printed paper alone |
 | `DECISIONS-v1.0.0.md` | the numbered decisions `S-n`, each with what was decided, when, and why the alternative was rejected |
 | `OPEN-QUESTIONS-v1.0.0.md` | specification questions raised before code was written, each with a proposed resolution and a status |
 | `EXTERNAL-CODE-COMPARISON-v1.md` | the canonical CAMB/CLASS comparison: parameter set, bands, and what their mutual difference does and does not license |

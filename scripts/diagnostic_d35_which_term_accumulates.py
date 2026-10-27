@@ -84,6 +84,21 @@ TERMS = [
     ("C_2'' suppressed", "c2_second"),
     ("C_1^grav' suppressed", "c1_grav"),
     ("partners suppressed", "partners"),
+    # **The metric's own null, added 2026-10-26 after the first four returned
+    # 0.9988 / 0.8014 / 0.9988 / 0.9987 --- that is, after NO single term
+    # accounted for the EdS residue.** If the bracket is emptied ENTIRELY and
+    # the late share is still ~1, then this metric is not reading the bracket:
+    # it is reading the ratio of a bulk that grows all the way to eta_0 under
+    # $W$ against a boundary that is fixed at $\eta_\ast$, and prediction 4 of
+    # D34 was never a test of the integrated Sachs--Wolfe effect.
+    #
+    # **This is the control the first version of D35 lacked**, and its absence
+    # is M14: four difference-gates, all blind to a defect common to all four.
+    ("bracket emptied entirely", "everything"),
+    # And the complement, because "C_0 is 20%" and "C_0 plus the partners are
+    # 20%" are different statements and the four rows above cannot separate
+    # them.
+    ("C_0 and partners suppressed", "c0_and_partners"),
 ]
 
 BACKGROUNDS = [("EdS", CDM_MODEL, 0.0224, 0.5, 0.48),
@@ -112,17 +127,27 @@ def _late(bg, obh2, h, gamma, zero):
         s = coefficient_sets(float(k), env)[1]          # CDM frame
         diffusion = float(np.exp(-((float(k) / env.damping_k) ** 2)))
         extra = dict(split_by_parts=True,
-                     by_parts_weight_terms=(zero != "partners"))
+                     by_parts_weight_terms=zero not in (
+                         "partners", "everything", "c0_and_partners"))
         extra.update(bulk_source_primitives(float(k), env, s))
         coeffs = s.coefficients
         c2s = np.asarray(s.c2_second, dtype=float)
         # **Suppression is by zeroing the array the bracket reads**, never by
         # a second code path: the branch under test must be the released one
         # with one input blanked, or the comparison is between two programs.
-        if zero == "c0":
+        if zero in ("c0", "everything", "c0_and_partners"):
             coeffs = replace(coeffs, c0=np.zeros_like(np.asarray(coeffs.c0)))
-        elif zero == "c2_second":
+        if zero in ("c2_second", "everything"):
             c2s = np.zeros_like(c2s)
+        if zero == "everything":
+            # `bracket_w = (C_0 - C_1' + C_2'' + partners) + C_1^thom'`. With
+            # C_0 and C_2'' blanked above, the partners dropped by
+            # `by_parts_weight_terms=False`, and the WHOLE of C_1' handed to
+            # the Thomson slot, the two C_1' terms cancel and `bracket_w` is
+            # **exactly zero**. The BOUNDARY is deliberately left untouched:
+            # the question is what the late share reads when the thing it is
+            # supposed to be measuring is not there at all.
+            extra["c1_thomson_prime"] = np.asarray(s.c1_prime, dtype=float)
         elif zero == "c1_grav":
             # zero the gravitational half by handing the whole of C_1' to the
             # Thomson slot, which split_by_parts then leaves at K'.

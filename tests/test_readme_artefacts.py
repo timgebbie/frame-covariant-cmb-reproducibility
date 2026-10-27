@@ -251,13 +251,30 @@ def test_the_readme_and_the_supplement_name_the_same_tree_version():
         readme, r"^Version:\s+\*\*(v\d+\.\d+\.\d+(?:-dev)?)\*\*")
     status = _tree_version_from(
         readme, r"this tree is (v\d+\.\d+\.\d+(?:-dev)?)")
-    dated = _tree_version_from(
-        supplement, r"\\date\{\\textbf\{(v\d+\.\d+\.\d+(?:-dev)?)\}")
 
-    assert header == status == dated, (
-        f"version labels disagree: README header {header!r}, README verification "
-        f"status {status!r}, supplement date line {dated!r}. The supplement moves "
-        f"once, at the release, so all three flip together or none do."
+    assert header == status, (
+        f"the two statements of the COMPUTATIONAL version disagree: README "
+        f"header {header!r}, README verification status {status!r}."
+    )
+
+    # **The supplement's date line is checked against the README's
+    # `Supplement:` line and NOT against the header, since 2026-10-26.** This
+    # assertion used to run `header == status == dated`, on the reading that a
+    # supplement belongs to a release and carries its number. The two lines
+    # came apart as soon as the document started moving faster than the
+    # physics: seventeen supplement editions against one unreleased
+    # computational line. Chaining them made a *document* revision look like a
+    # false claim that the *code* had advanced, which is the opposite of what
+    # this test is for.
+    declared = _tree_version_from(readme, r"^Supplement:\s+\*\*v(\d+\.\d+\.\d+)\*\*")
+    dated = _tree_version_from(supplement, r"\\date\{[^}]*?v(\d+\.\d+\.\d+)")
+
+    assert declared == dated, (
+        f"the supplement's own edition is stated twice and the two disagree: "
+        f"the README's `Supplement:` line says v{declared}, the document's "
+        f"\\date line says v{dated}. These are the supplement edition and are "
+        f"a separate fact from the computational release ({header}), which is "
+        "why they are compared here and not chained to it."
     )
 
 

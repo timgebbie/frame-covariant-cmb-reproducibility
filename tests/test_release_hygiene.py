@@ -145,7 +145,17 @@ def test_the_two_version_statements_are_distinct_and_both_readable():
     """
     assert released_version(ROOT), "CITATION.cff states no released version"
     assert tree_version(ROOT), "the README header states no tree version"
-    assert supplement_version(ROOT) == tree_version(ROOT).removesuffix("-dev")
+    # **Three facts, and the third is NOT derived from the second.** This line
+    # used to read `supplement_version == tree_version minus -dev`, which was
+    # not a check: it restated how `supplement_version` was computed, so it
+    # could only ever pass. It passed every day until 2026-10-26, when the
+    # computational line stood at v1.3.0-dev and the supplement had reached
+    # its seventeenth edition, and eight tests failed on a filename nothing
+    # had written. A tautology is the one assertion that cannot warn you.
+    assert supplement_version(ROOT), "the README declares no supplement edition"
+    assert supplement_source(ROOT).exists(), (
+        f"the README declares supplement edition v{supplement_version(ROOT)} "
+        f"and {supplement_source(ROOT).name} is not in the tree")
 
 
 def test_the_live_supplement_exists_and_the_frozen_ones_are_kept():

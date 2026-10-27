@@ -182,8 +182,16 @@ def test_the_supplement_prints_the_table_rather_than_describing_it():
     from _versions import supplement_source
 
     tex = supplement_source(ROOT).read_text(encoding="utf-8")
-    assert "tables/translations-v1.0.0.tex" in tex, (
-        "the supplement does not input the translations table"
+    # **Matched on the stem, not the versioned filename.** It read
+    # `"tables/translations-v1.0.0.tex" in tex` and went red when the table was
+    # re-laid-out as `translations-layout-v1.3.5.tex` --- a change to how the
+    # table is typeset, which is P1-T's to make and says nothing about whether
+    # the supplement prints it. The substance asserted here is that the
+    # document *prints the table rather than explaining its absence*, so the
+    # pattern is the one that survives a relayout.
+    assert re.search(r"\\input\{tables/translations[^}]*\.tex\}", tex), (
+        "the supplement inputs no tables/translations*.tex, so it does not "
+        "print the translations table"
     )
     assert "does not yet exist" not in tex, (
         "the supplement still explains the absence of a table it now prints"

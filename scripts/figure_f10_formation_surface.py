@@ -82,6 +82,7 @@ from _fingerprint import source_fingerprint as _digest  # noqa: E402
 VERSION = "v1.3.0"
 STEM = "f10-formation-surface"
 CSV = ROOT / "outputs" / "f10-formation-surface.csv"
+# placeholder; --high-res retargets both below once ELLS is settled
 
 #: The $\ell$ axis, and it must carry the plateau AND the first peak or the
 #: figure cannot show the thing it is about. Dense below 30 where the plateau
@@ -93,6 +94,31 @@ ELLS = np.unique(np.concatenate([
 #: 400 reaches $\ell=300$ on PLANCK with room. Not F9's 1500: the damping
 #: tail is F9's subject and it arrives with everything else.
 K_MAX = 400.0
+
+#: **`--high-res`, 2026-10-26, at the PI's request.** The released axis stops
+#: at $\ell=300$, and on `PLANCK_MODEL` the released first peak is at
+#: $\ell=266.6$ --- so the primary is the *last point on the axis* and the
+#: secondaries are not on the picture at all. From $\ell_A=272.18$ they fall
+#: at $\ell\simeq539$ and $\ell\simeq811$.
+#:
+#: This extends the axis past both and raises $k_{\max}$ to F9's 1500 so the
+#: modes that build them are present. It is **not** the released F10: the
+#: released grid stays exactly as it is, so the committed artefact and its
+#: gate are untouched, and this writes to its own stem.
+#:
+#: **What it will show, said before it runs.** A peak series at the
+#: *displaced* spacing, not CAMB's --- the released primary sits at
+#: $0.980\,\ell_A$ against CAMB's $0.757$, because the radiation driving
+#: (**A-3**) is not wired. Three maxima at the wrong spacing is the first
+#: acoustic series this bundle has drawn and is **not** agreement.
+if "--high-res" in sys.argv:
+    ELLS = np.unique(np.concatenate([
+        np.array([2, 3, 4, 5, 7, 9, 12, 16, 20, 25, 30]),
+        np.arange(40, 301, 10),
+        np.arange(310, 921, 15)]))
+    K_MAX = 1500.0
+    STEM = STEM + "-high-res"
+    CSV = ROOT / "outputs" / "f10-formation-surface-high-res.csv"
 
 #: **Low granulation in time, as the PI specified.** Fourteen epochs is
 #: enough to read a progression and few enough that each curve is
@@ -148,9 +174,32 @@ def _accumulate():
                 ELLS, coefficients=s.coefficients, c1_prime=s.c1_prime,
                 c2_second=s.c2_second, c2_prime_star=s.c2_prime_star,
                 c2_prime=s.c2_prime, eta_slices=sl, **common)
+            # **Normalised by the largest transfer at this $k$, not pointwise
+            # --- finding T-158, 2026-10-26.**
+            #
+            # This read `|difference| / |integrated|` element by element, and
+            # at $K_{\max}=400$ with $\ell\le300$ it returned $4.6\times
+            # 10^{-13}$ and looked exact. The first high-resolution run failed
+            # it at $1.75\times10^{-8}$ --- and the decomposition had not
+            # degraded at all. **The transfer has zeros**, and above
+            # $\ell\simeq300$ at high $k$ they are deep: the worst case found
+            # is $\ell=40$, $k=1176$, where the absolute difference is
+            # $1.4\times10^{-20}$ against an $|{\rm integrated}|$ of
+            # $6.1\times10^{-10}$. Machine precision divided by a number
+            # passing through zero.
+            #
+            # Raising the slice count changes nothing --- 14, 24, 40 and 64
+            # all return the same $10^{-13}$ --- which is what rules out a
+            # resolution limit and leaves the metric.
+            #
+            # Measured against the largest transfer at the same $k$, that same
+            # worst case is $3.5\times10^{-13}$: **the gate's own number at
+            # $K_{\max}=400$, unchanged.** So this is not a loosened threshold,
+            # it is a denominator that cannot vanish. The threshold is
+            # untouched.
+            scale = max(float(np.max(np.abs(res.integrated))), 1e-300)
             gate = max(gate, float(np.max(
-                np.abs(res.partial_bulk[:, -1] - res.integrated)
-                / np.maximum(np.abs(res.integrated), 1e-300))))
+                np.abs(res.partial_bulk[:, -1] - res.integrated))) / scale)
             boundary = (res.boundary_scalar + res.boundary_shear)[:, None]
             acc[f] += (k ** 2 * power[j]) * (res.partial_bulk + boundary) ** 2 * dk
         if j % 200 == 0:

@@ -49,7 +49,8 @@ from functions.spectra.angular import cl_covariant_route  # noqa: E402
 from functions.spectra.bessel_table import BesselTable  # noqa: E402
 from functions.spectra.decoupling import F2_DEFAULT, RecombinationHistory  # noqa: E402
 from functions.spectra.integral_solution import required_multipoles  # noqa: E402
-from functions.spectra.pipeline import primordial_power  # noqa: E402
+from functions.spectra.pipeline import (  # noqa: E402
+    primordial_power, required_k_points)
 from functions.spectra.transfer import shape_parameter  # noqa: E402
 from functions.spectra.two_frame import (  # noqa: E402
     build_environment,
@@ -59,9 +60,26 @@ from functions.spectra.two_frame import (  # noqa: E402
 
 #: The release configuration, not a reduced one. A benchmark run on a grid
 #: nobody ships measures a calculation nobody performs.
+#:
+#: **And for eleven days this file did exactly that --- finding T-156.** The
+#: $k$ grid read `np.arange(0.05, 1500.0, np.pi/3)`, which is the hand-chosen
+#: spacing **finding T-56 refuted**: at $\Delta\eta\simeq3.13$ it is 0.94--0.96
+#: samples per $j_\ell^2$ oscillation, below one, and it was replaced in the
+#: figures the day T-56 landed. It was not replaced here, so the benchmark went
+#: on timing the aliased grid under a comment asserting it was the shipped one.
+#:
+#: **The consequence is not a slow number, it is a wrong decision.** 1433 modes
+#: against the 4480 the derived rule gives is a factor of 3.13 in the stage
+#: that is 98% of the run, and decisions **S24** (the factorised interface
+#: deferred to v1.5.0 on a cost argument) and **S30** (run-time optimisation
+#: deferred to v2.0.0) were both taken on this total, as was the snapshot the
+#: README publishes.
+#:
+#: Derived now, from the same function the figures use, so the grid cannot
+#: diverge from the shipped one again.
 ELLS = np.unique(np.concatenate([np.array([2, 4, 7, 11, 16, 22]),
                                  np.arange(30, 1001, 30)]))
-K_COM = np.arange(0.05, 1500.0, np.pi / 3.0)
+K_MAX = 1500.0
 THETA_DEG = np.linspace(0.0, 180.0, 721)
 
 STAGES: list[tuple[str, float, str]] = []
@@ -76,8 +94,6 @@ def stage(name: str, why: str):
 
 def main() -> int:
     print("benchmark: one angular correlation function, all the physics")
-    print(f"  {len(ELLS)} multipoles to {ELLS.max()}, {K_COM.size} modes to "
-          f"{K_COM.max():.0f}, PLANCK_MODEL, f_2 = {F2_DEFAULT}")
     print(f"  {platform.python_implementation()} {platform.python_version()} on "
           f"{platform.system()} {platform.machine()}, numpy {np.__version__}")
 
@@ -96,17 +112,27 @@ def main() -> int:
                "the eta grid, the potentials and the Bond-Efstathiou shape"):
         gamma = shape_parameter(background.omega_m, PLANCK_H)
         env = build_environment(
-            float(K_COM.max()), omega_m=background.omega_m,
+            K_MAX, omega_m=background.omega_m,
             omega_lambda=background.omega_lambda, omega_r=background.omega_r,
             omega_b_h2=PLANCK_OMEGA_B_H2, transfer_gamma=gamma,
             hubble_h=PLANCK_H, f_2=F2_DEFAULT, line_of_sight_weight="printed")
+
+    # **Derived here and not at module scope, because the rule needs the
+    # environment.** `required_k_points` resolves the j_ell^2 period from the
+    # conformal lever arm eta_0 - eta_*, which only exists once the background
+    # is integrated -- which is precisely why the grid was a literal `arange`
+    # for eleven days and why it went on being the refuted one (T-156).
+    span = float(env.background.eta_0) - float(env.eta_star)
+    K_COM = np.linspace(0.05, K_MAX, required_k_points(K_MAX, span))
+    print(f"  {len(ELLS)} multipoles to {ELLS.max()}, {K_COM.size} modes to "
+          f"{K_MAX:.0f} (derived, T-56), PLANCK_MODEL, f_2 = {F2_DEFAULT}")
 
     with stage("Bessel table",
                "j_l(x) tabulated once, 12 samples per oscillation, reused by every mode"):
         needed = required_multipoles(ELLS)
         table = BesselTable.build(
             ell_max=int(needed.max()), ells=needed,
-            x_max=float(K_COM.max() * (env.background.eta_0 - env.eta[0])) + 20.0)
+            x_max=float(K_MAX * (env.background.eta_0 - env.eta[0])) + 20.0)
 
     coefficient_time = 0.0
     projection_time = 0.0
@@ -157,7 +183,7 @@ def main() -> int:
                  f"on {platform.system()} {platform.machine()}, "
                  f"numpy {np.__version__}, {date.today().isoformat()}\n")
         fh.write(f"# {len(ELLS)} multipoles to {ELLS.max()}, {K_COM.size} modes "
-                 f"to {K_COM.max():.0f}\n")
+                 f"to {K_MAX:.0f}\n")
         fh.write("stage,seconds,share_percent,why\n")
         for name, seconds, share, why in rows:
             fh.write(f'"{name}",{seconds:.4f},{share:.2f},"{why}"\n')

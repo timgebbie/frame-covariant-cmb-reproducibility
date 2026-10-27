@@ -314,6 +314,41 @@ DIAGNOSTICS: list[tuple[str, str]] = [
     # reported as physics.
     ("D30 when the spectrum is laid down",
      "scripts/diagnostic_d30_formation_surface.py"),
+    # D32 is the discriminator T-128 needed and D30 could not be: D30 measured
+    # that the late share is 7e-04 and that the annihilation has no
+    # ell-dependence, which excludes a class of mechanism but names none. This
+    # separates the two surviving candidates --- the late ISW arriving at
+    # `V = W kappa'` and dying with the visibility, against the ISW being
+    # absent from the source altogether --- by running them against each other
+    # on the same quadrature.
+    ("D32 the ISW discriminator",
+     "scripts/diagnostic_d32_isw_discriminator.py"),
+    # D33 is (98) as the antecedent prints it: e^{-kappa} on gravitational
+    # sources where (102) carries V on everything. SUPERSEDED in its (98)
+    # branch by D34 --- P1-T withdrew the separate ISW-at-W change when the
+    # split by-parts turned out to put the ISW at W as a by-product --- and
+    # kept because T-144 cites its numbers and because its third prediction,
+    # that the peak does not move under a weight change alone, is the control
+    # D34's moving peak is read against.
+    ("D33 (98)'s W-weighted path integral",
+     "scripts/diagnostic_d33_w_path_integral.py"),
+    # D34 is P1-T's repair scored on their four pre-registered predictions,
+    # and it is the first instrument in this bundle to move the plateau bump
+    # (down 30--50x) and the Planck peak (266 -> 183) at once. It FAILS its
+    # own EdS null control, which by the outcome fixed before it ran makes
+    # nothing in it evidence --- and T-155 then measured that the failing
+    # number is a ratio whose denominator the repair collapsed, so the
+    # absolute residue is 8.3% and the bump and the peak are live again.
+    ("D34 the split by-parts, on P1-T's four predictions",
+     "scripts/diagnostic_d34_split_by_parts.py"),
+    # D35 asks the one question D34's null control raised: which term in the
+    # W-bracket accumulates on Einstein-de Sitter, where Phi is constant and
+    # nothing should. It suppresses one term at a time inside the released
+    # branch --- by blanking the array the bracket reads, never by a second
+    # code path --- and scores on the late share rather than on the bracket's
+    # ratio, which is M15 and the lesson of T-147 and T-148.
+    ("D35 which bracket term accumulates",
+     "scripts/diagnostic_d35_which_term_accumulates.py"),
 ]
 
 
@@ -451,8 +486,14 @@ def main() -> int:
     print("\n--- tables " + "-" * 50)
     if run([sys.executable, "scripts/make_tables.py"], "audit tables"):
         failures.append("tables")
-    if run([sys.executable, "scripts/make_figure_pages.py"], "figure pages"):
-        failures.append("figure pages")
+    # **The figure-pages step is retired, not skipped.** From v1.3.14 the
+    # supplement is one consolidated file carrying its figure pages inline and
+    # inputting no fragment set, so this generator wrote
+    # `supplementary-materials/figures-v1.3.0.tex` for a document that does not
+    # read it. Nothing noticed until the file entered the released archive on
+    # 2026-10-26 and the release gate reported the supplement's own PDF as
+    # stale against a source it does not have. `check_release_hygiene.py` now
+    # refuses any `figures-v*.tex`, so the generator cannot quietly come back.
 
     # R3. The supplement is the document this bundle is *for*, and it was the
     # one released artefact nothing here generated. Built and gated now, which
