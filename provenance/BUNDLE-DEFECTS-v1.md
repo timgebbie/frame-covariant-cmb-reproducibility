@@ -11771,3 +11771,86 @@ per configuration rather than a rerun.
 uniform. The defect was live for as long as the class has existed and cost
 exactly one measurement, which is the most that can be said for it and is
 better than the entry above was entitled to assume.
+
+---
+
+## T-163 — **Three of five weightings are refuted by first-order covariance. The surviving two cannot be told apart**
+
+**2026-10-27, P1-B. D36 complete: five weightings, three backgrounds, both
+frames, 15 configurations, pre-registered with its outcomes fixed before it
+ran.** Scored under P1-T's ruling of the same day that **frame agreement at
+$\ell\ge2$ is an admissibility criterion a weighting must meet**, independently
+of the Einstein–de Sitter null.
+
+### Frame gap, median over $\ell$ — covariance requires $\simeq0$
+
+| weighting | EdS | $\Lambda$CDM | PLANCK |
+|---|---:|---:|---:|
+| released | 97.32\% | 97.97\% | 86.95\% |
+| `slot_split` | 96.77\% | 97.02\% | 86.55\% |
+| `isw_at_w` | 97.32\% | 97.97\% | 86.93\% |
+| **`bracket_at_w`** | **48.50\%** | **63.52\%** | **63.00\%** |
+| **`split_by_parts`** | **48.49\%** | **63.50\%** | **62.99\%** |
+
+### The Newtonian frame's first maximum above $\ell=30$
+
+| weighting | EdS | $\Lambda$CDM | PLANCK |
+|---|---:|---:|---:|
+| released, `slot_split`, `isw_at_w` | **none** | **none** | **none** |
+| `bracket_at_w` | 68.68 | 68.41 | 60.66 |
+| `split_by_parts` | 68.67 | 68.40 | 60.65 |
+
+### Plateau bump $D_7/D_{30}$, Newtonian $\div$ CDM — covariance requires 1
+
+| weighting | EdS | $\Lambda$CDM | PLANCK |
+|---|---:|---:|---:|
+| released | 0.031 | 0.066 | 0.072 |
+| `slot_split` | 0.036 | 0.110 | 0.079 |
+| `isw_at_w` | 0.031 | 0.066 | 0.071 |
+| **`bracket_at_w`** | **0.960** | **1.158** | **1.136** |
+| **`split_by_parts`** | **0.963** | **1.161** | **1.135** |
+
+### Three are struck
+
+`released`, `slot_split` and `isw_at_w` fail on all three counts and on all
+three backgrounds: **no Newtonian acoustic maximum exists anywhere**, the
+frame gap stays between 86.5\% and 98.0\%, and the bump ratio sits 9 to 32
+times from the unity covariance demands. `isw_at_w` reproduces `released` to
+the digit on every background including `PLANCK_MODEL`, where there *is* a
+late integrated Sachs–Wolfe effect to move — consistent with **T-151**'s
+$9.1\times10^{-5}$, and it means that control cannot be the repair whatever
+else is true of it.
+
+### Two survive, and **T-159 now holds across the complete run**
+
+`bracket_at_w` and `split_by_parts` agree on **every one of the twelve cells**
+above: the largest relative disagreement anywhere is 0.31\% (the
+Einstein–de Sitter bump, 0.960 against 0.963) and every other cell agrees to
+0.03\% or better. The CDM first peak is identical to five figures on all three
+backgrounds — $147.37$, $235.81$, $183.42$.
+
+**So the live question is the weight and not the operation.** Putting the bulk
+bracket at $W$ is what moves the spectrum; the by-parts refinement is
+second-order against everything measurable here. That is **B-17 (i)**, the
+transcription defect between (98) and (102), and the supplement's budget row
+should name the weight rather than the operation until P1-T rules whether any
+observable distinguishes them (`P1B→P1T 2026-10-27 #5`).
+
+### What it does not establish
+
+**Not that either survivor is right.** A halved frame gap is still a frame gap
+of 48–63\% where covariance requires zero, so neither weighting restores
+first-order frame invariance — they improve it by roughly thirty on the bump
+and leave the peak positions apart (68 against 147 on Einstein–de Sitter).
+D36 can **refute**; it cannot confirm.
+
+**And not the peak position.** A-3 is not wired, so every column here is
+undriven and the peaks sit near $\ell_A$ rather than at CAMB's
+$0.757\ell_A$. Frame agreement and peak position are separate questions and
+this instrument answers only the first.
+
+### Provenance note
+
+`bracket_at_w || PLANCK` was recomputed rather than resumed: the original run
+died mid-write and left three of its six metrics, which **T-162** records. The
+table above is 15 configurations at 6 rows each, verified uniform.
