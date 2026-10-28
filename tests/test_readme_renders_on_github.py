@@ -92,6 +92,14 @@ MARKDOWN = _rendered_markdown()
 COSMETIC_BASELINE = {
     "test_no_bare_asterisk_in_inline_maths": 18,
     "test_no_inline_maths_immediately_after_a_hyphen": 12,
+    #: **P1-T's #9, 2026-10-27.** Frozen at 11 files rather than enforced at
+    #: zero, and the reason is not timidity: **163 of the 218 instances are in
+    #: `provenance/BUNDLE-DEFECTS-v1.md`, which is append-only and cannot be
+    #: rewritten.** The guard that makes the register trustworthy is the same
+    #: guard that makes this class permanent in it. The root `README.md` and
+    #: `handoff/P1B-to-P1T.md` were cleared in the landing that added this, so
+    #: the public face carries none.
+    "test_no_maths_span_butted_against_a_word_or_dash": 11,
 #: **Both lowered by one on 2026-10-25**, and not by a cleanup: `_prose`
 #: stopped judging `captions/*.md` front matter --- which is LaTeX stored
 #: for the build and was never going to render as prose --- by markdown
@@ -318,6 +326,46 @@ def _inline_maths_immediately_after_a_hyphen(name: str) -> None:
         f"GitHub. Reword so the maths is not hyphen-adjacent. Found: {bad}")
 
 
+def _maths_span_butted_against_a_word_or_dash(name: str) -> None:
+    r"""``$\Lambda$CDM`` renders as literal source. **P1-T, 2026-10-27, #9.**
+
+    GitHub's parser wants the delimiters free. A span immediately followed by
+    a **letter or digit**, or touching an **en/em dash**, is not recognised as
+    maths and prints as `$\Lambda$CDM`.
+
+    **The rule is narrower than "any adjacency", deliberately.** P1-T named
+    three sites: `$\Lambda$CDM`, an en-dash against `$10^{-14}$`, and `$1+3$`
+    inside a quoted title. They did **not** name `$\ell$-dependent`, which
+    this bundle's prose uses everywhere and which renders. Widening the rule to
+    every adjacent character would have condemned 448 sites on the strength of
+    evidence for 218, and most of the extra would have been a construction
+    nobody has seen fail. That is the §3c failure in the direction nobody
+    checks: generalising a confirmed observation past what was observed.
+
+    **P1-B has not reproduced this.** `WebFetch` requires the URL in the
+    conversation's provenance set and web search is disabled for the
+    organisation, so the rendered page could not be loaded from here. The
+    class is acted on because P1-T confirmed it on the page and because the
+    repair is safe either way --- `$\Lambda\mathrm{CDM}$` renders correctly
+    whether or not the original did.
+    """
+    text = re.sub(r"\$\$.*?\$\$", "", _prose(name), flags=re.S)
+    bad = []
+    for s in re.finditer(r"(?<!\$)\$(?!\s)[^$\n]{1,200}?(?<!\s)\$(?!\$)", text):
+        before = text[s.start() - 1] if s.start() > 0 else "\n"
+        after = text[s.end()] if s.end() < len(text) else "\n"
+        if (re.match(r"[A-Za-z0-9]", after)
+                or re.match(r"[\u2010-\u2015]", before)
+                or re.match(r"[\u2010-\u2015]", after)):
+            bad.append((text[: s.start()].count("\n") + 1,
+                        f"{before}{s.group(0)}{after}"))
+    assert not bad, (
+        f"{name}: a maths span butted against a word character or an en-dash "
+        f"does not render on GitHub. Put the whole token in one span "
+        f"(`$\\Lambda\\mathrm{{CDM}}$`) or separate it with a word. "
+        f"Found: {bad[:6]}")
+
+
 @pytest.mark.parametrize("name", MARKDOWN)
 def test_every_display_block_has_balanced_braces(name: str) -> None:
     """A brace that markdown ate is a block that renders as an error message."""
@@ -361,6 +409,8 @@ def test_display_blocks_are_delimited_on_their_own_lines(name: str) -> None:
     ("test_no_bare_asterisk_in_inline_maths", _bare_asterisk_in_inline_maths),
     ("test_no_inline_maths_immediately_after_a_hyphen",
      _inline_maths_immediately_after_a_hyphen),
+    ("test_no_maths_span_butted_against_a_word_or_dash",
+     _maths_span_butted_against_a_word_or_dash),
 ])
 def test_cosmetic_backlog_does_not_grow(rule_name, rule) -> None:
     """A cosmetic hazard may be removed from the tree and never added to it.

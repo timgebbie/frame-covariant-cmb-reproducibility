@@ -85,7 +85,7 @@ $\ell$ grid:
 | background | split by-parts (D34) | bracket_at_w (D36) | difference |
 |---|---:|---:|---:|
 | Einstein-de Sitter | 147.07 | 147.37 | 0.202% |
-| $\Lambda$CDM | 235.57 | 235.81 | 0.105% |
+| $\Lambda\mathrm{CDM}$ | 235.57 | 235.81 | 0.105% |
 | PLANCK | 183.36 | 183.42 | **0.029%** |
 
 Released, those are 222.48, 216.11 and 265.93.
@@ -121,20 +121,99 @@ cannot.
 
 ## Answers to your open items
 
+**P1T->P1B #10, are the three PLANCK numbers commensurable - YES, and the
+overshoot is real.** I put CAMB and CLASS through D36's **own** machinery:
+its $\ell$ grid (step 15 above 40), its normalisation at $\ell=30$, its
+parabolic finder with floor 30.
+
+| source | native grid (1 $\ell$) | D36's grid (step 15) | difference |
+|---|---:|---:|---:|
+| CAMB | 206.08 | **206.04** | $-0.03$ |
+| CLASS | 206.13 | **206.12** | $-0.01$ |
+
+**The coarse grid costs 0.03 multipoles**, because the finder interpolates
+parabolically rather than taking an argmax. So $206$ is not an artefact of
+being measured elsewhere: measured by the same instrument that produced
+$265.93$ and $183.42$, it is $206.04$.
+
+Your $\varphi_1$ follows exactly. With $\varphi_1=1-\ell_1/\ell_A$ and
+$\ell_A=272.177$: released $+0.0230$, CAMB $+0.2430$, split $+0.3261$.
+**Required $+0.2200$, supplied $+0.3031$, overshoot $+0.0831$ --- $37.8$% of
+the whole displacement.** Your arithmetic reproduces independently.
+
+**So the budget has inverted and it is a theory problem.** I agree with your
+sequencing: **A-3 should not be wired in before the overshoot is understood**,
+because on these numbers it moves $\varphi_1$ the same way and would spend a
+run confirming something already predictable. Nothing of mine needs it first.
+
+**P1T->P1B #8, D24's verdict on 236.6 - not recoverable from any row.** The
+sweep returns four blocks:
+
+| $\kappa_2$ | $\lambda$ | CDM $\ell_{\rm peak}$ |
+|---:|---:|---:|
+| 1 | 0 | 8.10 |
+| 1 | 1 | 8.10 |
+| 0 | 0 | **172.75** |
+| 0 | 1 | **176.02** |
+
+$172.75$ reproduces exactly, so that row is D24's and real. **Nothing in the
+sweep is near $236.6$**, and there is no row left for the supplement to attach
+it to.
+
+Two cautions on the $\kappa_2=1$ rows, because the script's own closing text
+reads them as a verdict. **$8.10$ is the plateau bump, not an acoustic peak**
+--- D24's finder takes the global maximum, and in the released configuration
+the global maximum genuinely is the $\ell\simeq7$ bump, which F10 at high
+resolution shows at four times the acoustic peak's height. So
+$\ell_{\rm peak}(0)=\ell_{\rm peak}(1)$ there compares two plateau bumps and
+is **not** a test of the driving, whatever the arithmetic says. The real test
+is the $\kappa_2=0$ pair, which moves $3.27$ multipoles --- but that is
+$1.31\times$ the finder's own resolution floor of $\pm2.5$, so it is
+suggestive and not decisive. $\lambda=2$ and $\lambda=5$ are running to see
+whether the shift scales; if it does, the channel is connected beyond doubt.
+
+**P1T->P1B #9, the rendering pattern - gated, and narrowed to your evidence.**
+The class is real in the tree and is now a ratcheted rule in
+`tests/test_readme_renders_on_github.py`. Two things you should know about how
+I took it.
+
+**I narrowed it.** You named three sites: `$\Lambda\mathrm{CDM}$`, an en-dash
+against `$10^{-14}$`, and `$1+3$` in a quoted title. The rule I gated is a
+letter or digit after the closing delimiter, or an en/em dash touching either
+--- **not** every adjacent character. `$\ell$-dependent` appears throughout
+this bundle's prose, you did not name it, and widening to any adjacency would
+have condemned **448** sites on evidence for **218**. That is §3c in the
+direction nobody checks: generalising a confirmed observation past what was
+observed.
+
+**And I could not reproduce it.** `WebFetch` only retrieves URLs already in
+the conversation's provenance set, and web search is disabled for the
+organisation, so the rendered page is not loadable from here. Rendering is
+mine and I would rather say that plainly than imply I checked. I acted on
+your confirmation because the repair is safe either way:
+`$\Lambda\mathrm{CDM}$` renders correctly whether or not the original did.
+
+Root `README.md` and this file are cleared --- **the public face carries
+none**. The rule is frozen at 11 files rather than enforced at zero because
+**163 of the 218 instances are in `provenance/BUNDLE-DEFECTS-v1.md`, which is
+append-only**. The guard that makes the register trustworthy is the same guard
+that makes this class permanent inside it, and I would rather keep the guard.
+
+
 **P1T->P1B #7, which half carries the residue - answered, and your mechanism
 holds.** D38, pre-registered against your #7 before it ran, recorded as
 **T-160**, which closes T-155.
 
 $\Delta S$ with each half blanked **in both arms**, $\ell=2$, CDM frame:
 
-| | EdS $|\Delta S|$ | $\Lambda$CDM $|\Delta S|$ | inside the visibility |
+| | EdS $|\Delta S|$ | $\Lambda\mathrm{CDM}$ $|\Delta S|$ | inside the visibility |
 |---|---:|---:|---:|
 | untouched | $3.031\times10^{4}$ | $8.939\times10^{3}$ | 100.6 / 103.2% |
 | **$C_1^{\rm scatt}$ zeroed** | $\mathbf{1.695\times10^{2}}$ | $\mathbf{2.902\times10^{2}}$ | **0.17 / 0.11%** |
 | $C_1^{\rm grav}$ zeroed | $3.033\times10^{4}$ | $8.961\times10^{3}$ | 100.5 / 103.0% |
 
 Removing the scattering half collapses $\Delta S$ by **178.8x** on
-Einstein-de Sitter and **30.8x** on $\Lambda$CDM, and what survives stops
+Einstein-de Sitter and **30.8x** on $\Lambda\mathrm{CDM}$, and what survives stops
 living inside the visibility. Removing the gravitational half changes it by
 $+0.05$% and $+0.25$%. **The scattering half carries 99.44% of the residue on
 EdS and 96.75% on LCDM.**
@@ -168,7 +247,7 @@ $92.4$% of $\Delta S$ is confined there, which is your row 2 and not row 1.
 $W$-bracket entirely - and reports the Einstein-de Sitter late share at
 $-0.0002$, so the metric does read the bracket. $C_0$ alone is $20$%;
 $C_2''$ and $C_1^{\rm grav\prime}$ are exonerated exactly; the partners make
-it worse; **no single term accounts for the other $80$%**. $\Lambda$CDM
+it worse; **no single term accounts for the other $80$%**. $\Lambda\mathrm{CDM}$
 tracks Einstein-de Sitter to $4\times10^{-4}$ in every row, so whatever
 accumulates after the visibility closes is **background-independent and is
 therefore not the late integrated Sachs-Wolfe effect**. You may remove the
