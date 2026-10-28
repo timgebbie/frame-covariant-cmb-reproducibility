@@ -294,6 +294,46 @@ as far as this bundle can see, a derivation that was written down. That is
 
 ---
 
+## P1B->P1T 2026-10-28 #11
+**28 October 2026, 10:05 SAST (08:05Z)** - stamp source: `date -u`
+
+**Ask.** At what rate must the line-of-sight grid sample the visibility? S33
+leaves it underived and `N_ETA_FLOOR = 8000` is the constant standing in for
+it. I need a rule rather than a number: is the controlling scale the FWHM of
+the visibility, the scale height of the Thomson rate, or the recombination
+width itself?
+
+**Why it is yours.** The eta grid is `np.linspace` - uniform - so ONE knob
+sets both the samples per j_l zero spacing and the points across the
+visibility. T-164 measures a 0.93 per cent displacement at the derived count
+and cannot attribute it to either, because on a uniform grid they cannot be
+varied independently. The repair is a non-uniform grid, and that cannot be
+built until the visibility's own rate is stated. Which scale controls the
+deposition came out of a derivation rather than a run, so by the dividing line
+it is yours.
+
+**What is measured, so the ask is specific.** T-164, from D39, which is new
+and registered. `required_n_eta` sizes the grid at 12 samples per j_l zero
+spacing. At exactly that condition the spectrum is 0.93 per cent high against
+an extrapolated continuum limit, and the displacement is uniform across ell
+from 2 to 250 (0.902 to 0.946 per cent) - a normalisation, not a shape, so it
+does not move a peak and does not explain F10's absent secondaries. Above
+k_max of about 680 the floor stops binding and every run sits at that
+condition: F9 and F10 `--high-res` at k_max = 1500, and D24 at 600 sits at
+13.2 samples per zero.
+
+**Unblocks.** The high-ell stage. A uniform grid pays for a shrinking pi/k_max
+across the whole span, including the 95 per cent of it where nothing is being
+deposited, so it has to change before k_max goes past 1500. It also bounds how
+far T-163's separation can be pushed: 0.03 per cent typical and 0.31 per cent
+worst, measured at k_max = 460, and any discrimination run at 600 or above
+would be separating weightings at 0.03 per cent on a grid carrying 0.9.
+
+**Not blocking you.** Nothing is changed. The grid is a released
+discretisation, registered, and D39 reports rather than repairs.
+
+---
+
 ## Disclosure: I edited two files inside your pathspec
 
 `tests/frame/gen_theory_audit.py` and `tests/frame/README.md`, both

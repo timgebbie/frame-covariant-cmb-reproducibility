@@ -119,6 +119,22 @@ def _count_failures(rule) -> tuple[int, list[str]]:
     return len(bad), bad
 
 
+def _without_code(text: str) -> str:
+    r"""Fenced blocks and inline code blanked, with the line numbering kept.
+
+    A code span renders **literally**. Whatever delimiters it contains are not
+    delimiters, so no rendering hazard in this file applies inside one, and a
+    gate that reads code spans cannot be documented in the repository it
+    guards --- **T-165**. Each run is replaced by spaces rather than removed
+    so the line numbers in a failure message still point at the file.
+    """
+    def blank(match: re.Match) -> str:
+        return re.sub(r"[^\n]", " ", match.group(0))
+
+    text = re.sub(r"```.*?```", blank, text, flags=re.S)
+    return re.sub(r"(`+)[^\n]*?\1", blank, text)
+
+
 def _prose(name: str) -> str:
     r"""The part of a ``.md`` file that is **prose**, with TOML front matter cut.
 
@@ -329,6 +345,16 @@ def _inline_maths_immediately_after_a_hyphen(name: str) -> None:
 def _maths_span_butted_against_a_word_or_dash(name: str) -> None:
     r"""``$\Lambda$CDM`` renders as literal source. **P1-T, 2026-10-27, #9.**
 
+    **Code spans are blanked first --- finding T-165, 2026-10-28.** Without
+    that, this gate fired twice on `handoff/P1T-to-P1B.md`: at the exact two
+    places where P1-T *names the defect*, inside backticks, in the very item
+    that asked for this rule. A code span renders literally by definition, so
+    ``` `$\Lambda$CDM` ``` is not a maths span and cannot mis-render --- the
+    hit was a false positive of the gate rather than a hazard in the file, and
+    the only ways to satisfy it were to delete the documentation or to exempt
+    the file. **A rule that cannot be written about is a rule nobody can
+    document**, and this one was authored a day earlier by P1-B.
+
     GitHub's parser wants the delimiters free. A span immediately followed by
     a **letter or digit**, or touching an **en/em dash**, is not recognised as
     maths and prints as `$\Lambda$CDM`.
@@ -349,7 +375,7 @@ def _maths_span_butted_against_a_word_or_dash(name: str) -> None:
     repair is safe either way --- `$\Lambda\mathrm{CDM}$` renders correctly
     whether or not the original did.
     """
-    text = re.sub(r"\$\$.*?\$\$", "", _prose(name), flags=re.S)
+    text = re.sub(r"\$\$.*?\$\$", "", _without_code(_prose(name)), flags=re.S)
     bad = []
     for s in re.finditer(r"(?<!\$)\$(?!\s)[^$\n]{1,200}?(?<!\s)\$(?!\$)", text):
         before = text[s.start() - 1] if s.start() > 0 else "\n"

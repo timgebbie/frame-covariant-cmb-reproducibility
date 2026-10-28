@@ -125,6 +125,16 @@ if "--high-res" in sys.argv:
 #: distinguishable in panel (a).
 N_SLICES = 14
 
+#: The filled levels and the subset that carries a labelled line.
+#: **Twenty-one filled levels and five labelled**, chosen so the eye reads
+#: *when each fifth of the power arrives* rather than estimating a grey ramp
+#: against a colourbar. 0.99 is included deliberately: the whole question the
+#: panel answers is whether anything arrives after the visibility closes, and
+#: the difference between 0.99 and 1.00 is the entire late integrated
+#: Sachs--Wolfe budget.
+LEVELS = np.linspace(0.0, 1.0, 21)
+LABELLED = (0.25, 0.50, 0.75, 0.90, 0.99)
+
 FRAME = "cdm"
 FRAMES = ("newtonian", "cdm")
 
@@ -292,8 +302,26 @@ def _draw(acc, sl, eta_star, eta_0, floor):
     x = (sl - eta_star) / (eta_0 - eta_star)
     # A symlog abscissa: recombination is a sliver of the span and a linear
     # axis would spend the panel on free streaming, where nothing is added.
-    mesh = ax.pcolormesh(x, ELLS, np.clip(frac, 0.0, 1.0),
-                         cmap="Greys", vmin=0.0, vmax=1.0, shading="nearest")
+    #
+    # **Filled contours, not `pcolormesh` --- the PI's respecification,
+    # 2026-10-27.** The top-down mesh spent most of its area rendering a
+    # plateau at $1.0$, with every gradient the figure is about crammed into
+    # one narrow band beside $\eta_\ast$. A grey ramp also makes *when* each
+    # fraction arrives something the reader has to estimate against a
+    # colourbar.
+    #
+    # Contours put ink where the gradient is and nowhere else, and the
+    # labelled lines let the panel **state** its fractions instead of
+    # requiring them to be read off a scale. A 3-D surface was considered and
+    # rejected for the same reason the mesh failed: a flat tabletop with a
+    # cliff at one edge spends the plot on the region where nothing happens,
+    # and any viewing angle that shows the cliff hides part of it.
+    field = np.clip(frac, 0.0, 1.0)
+    mesh = ax.contourf(x, ELLS, field, levels=LEVELS,
+                       cmap="Greys", vmin=0.0, vmax=1.0, extend="neither")
+    lines = ax.contour(x, ELLS, field, levels=LABELLED,
+                       colors=INK["primary"], linewidths=0.7)
+    ax.clabel(lines, fmt=lambda v: f"{v:.2f}", fontsize=6.5, inline=True)
     ax.set_xscale("symlog", linthresh=1e-4)
     ax.set_yscale("log")
     ax.axvline(0.0, color=INK["grid"], lw=0.8)

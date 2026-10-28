@@ -18,7 +18,7 @@ being possible.
 | status | count | means |
 |---|---|---|
 | **open** | 1 | a chosen literal whose convergence is **not** established. This status is the point of the register. |
-| **derived** | 24 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
+| **derived** | 25 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
 | **measured** | 7 | a chosen literal whose convergence has been measured, with the number stated. |
 | **described** | 11 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
 | **index** | 31 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
@@ -37,7 +37,7 @@ share this history, so a grid shift moves them together and cancels. Finding
 **T-46**, question **Q7**, decision **S33** --- derived immediately after the
 v1.2.0 tag. v1.2.0 ships it as a stated limit.
 
-## derived — 24
+## derived — 25
 
 ### `x` — the x grid j_ell(x) is tabulated on
 
@@ -276,6 +276,17 @@ for D35's reason: this scores no peak and no position, only a ratio of an
 integral to itself, and carrying 460 would cost three times the k loop to
 sharpen a number the instrument does not read. Derived nonetheless, so the
 reduction is a stated choice rather than a truncation.
+
+### `k_com` — the k grid D39 integrates over
+
+`scripts/diagnostic_d39_eta_grid_convergence.py:120`, `np.linspace`
+
+`required_k_points(K_MAX, span)` at K_MAX = 300, held fixed across
+every refinement so the only thing moving is n_eta. 300 and not 1500 because
+the DERIVED count at 300 reproduces 12.0 samples per j_l zero spacing exactly
+--- the band-edge condition a k_max = 1500 run sits at --- so the question is
+answered for the price of a 300 pass. Raising K_MAX here would change what is
+being measured, not sharpen it.
 
 ### `k_com` — the k grid D4 integrates C_ell by rank on
 

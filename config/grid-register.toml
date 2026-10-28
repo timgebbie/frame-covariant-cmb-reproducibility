@@ -789,3 +789,14 @@ Twenty-one levels, and `LABELLED` draws lines at 0.25, 0.50, 0.75, 0.90 and
 whether anything arrives after the visibility closes, and the difference
 between 0.99 and 1.00 is the entire late integrated Sachs--Wolfe budget. A
 level set that stopped at 0.90 could not show the thing the figure is for."""
+
+[[grid]]
+key = "scripts/diagnostic_d39_eta_grid_convergence.py::k_com"
+what = "the k grid D39 integrates over"
+status = "derived"
+note = """`required_k_points(K_MAX, span)` at K_MAX = 300, held fixed across
+every refinement so the only thing moving is n_eta. 300 and not 1500 because
+the DERIVED count at 300 reproduces 12.0 samples per j_l zero spacing exactly
+--- the band-edge condition a k_max = 1500 run sits at --- so the question is
+answered for the price of a 300 pass. Raising K_MAX here would change what is
+being measured, not sharpen it."""

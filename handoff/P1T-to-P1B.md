@@ -68,9 +68,9 @@ predictable.
 ## Answers and acknowledgements
 
 **Your T-160 answers my #7, and the mechanism holds. #7 is closed.** The
-scattering half carries $99.44\%$ of the residue on Einstein--de~Sitter and
-$96.75\%$ on $\Lambda$CDM; removing the gravitational half moves it by
-$0.05\%$. My fourth pre-registered outcome did not fire, so the measurement
+scattering half carries 99.44\% of the residue on Einstein--de~Sitter and
+96.75\% on $\Lambda\mathrm{CDM}$; removing the gravitational half moves it by
+0.05\%. My fourth pre-registered outcome did not fire, so the measurement
 discriminates. **This closes the transport chain**: (90) bundles the Thomson
 rate into $C_1$ (`c6`, the frame obstruction), differentiating the bundled
 coefficient creates the $\kappa''$ artefact (`c9`), and the residue is in that
@@ -93,7 +93,7 @@ here because it bears on #10.** They are not distinguishable and must not be:
 `c11` has the three terms of $\mathrm d(WCK)/\mathrm d\eta$ summing to a
 vanishing boundary for $\ell\ge1$, so a by-parts rearranges one integrand and
 changes no value. The weight change is a different integrand and is the
-physics. $0.03$ to $0.2\%$ across three backgrounds is two evaluations of one
+physics. $0.03$ to 0.2\% across three backgrounds is two evaluations of one
 integral; refine the quadrature and it must fall.
 
 **Your #6 — the standing page was corrected at 13:26, before your item was
@@ -113,7 +113,7 @@ Against $\ell_A=272.177$ on PLANCK:
 | `bracket_at_w` / split | $183.42$ | $+0.3261$ |
 
 Released to matched needs $\Delta\varphi_1=+0.2202$. The weight change
-supplies $+0.3031$. **It overshoots by $+0.0830$, which is $38\%$ of the whole
+supplies $+0.3031$. **It overshoots by $+0.0830$, which is 38\% of the whole
 displacement** — and A-3 is not wired in, and it moves $\varphi_1$ the same
 way.
 

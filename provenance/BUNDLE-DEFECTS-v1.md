@@ -11854,3 +11854,155 @@ this instrument answers only the first.
 `bracket_at_w || PLANCK` was recomputed rather than resumed: the original run
 died mid-write and left three of its six metrics, which **T-162** records. The
 table above is 15 configurations at 6 rows each, verified uniform.
+
+---
+
+## T-164 — **The $\eta$ grid has never been convergence-tested, and at the derived rule's own condition the spectrum is 0.95\% high**
+
+**2026-10-28.** The PI asked whether the simulation's time resolution is
+adequate against the characteristic physical scales. It is a question no gate
+in this bundle can answer, and no run has ever asked it.
+
+### The two time grids are derived, not tuned
+
+| grid | rule | constant |
+|---|---|---|
+| line-of-sight $\eta$ | `required_n_eta` — samples per $j_\ell$ zero spacing $\pi/k_{\max}$ | `ETA_POINTS_PER_PERIOD = 12` |
+| acoustic, per mode | `required_acoustic_points` — samples per $2\pi\sqrt3/k$, the shortest possible sound period | `ACOUSTIC_POINTS_PER_PERIOD = 24` |
+
+Both are arithmetic against the physics, which is why they are computed rather
+than configured. **That is not the same as being converged.** A derived rule
+carries a constant, and the constant was never tested.
+
+The acoustic grid is not the suspect. `ACOUSTIC_POINTS_FLOOR = 512` binds
+below $k\simeq543$, so every mode below that is finer than its own rule
+demands, and above it the rule gives 24 samples per sound oscillation.
+
+### Why no existing gate can see it
+
+F10's gate asserts that the sliced accumulation reproduces the released
+quadrature to $10^{-9}$ — **on the same grid**. It is an identity between two
+decompositions of one sum, so an under-resolved grid passes it exactly. This
+is the **M14** shape again: a difference-gate blind to a defect common to both
+sides of the difference.
+
+### The measurement
+
+PLANCK, CDM frame, $k_{\max}=300$, released everything else, $n_\eta$ refined
+at fixed $k$-grid. `RecombinationHistory.build` carries its own grid, so
+$\eta_\ast$, $\kappa'$ and $\mathcal V$ do not move with $n_\eta$ and the
+attribution is to the quadrature grid alone.
+
+| $n_\eta$ | samples per $j_\ell$ zero | $D_{200}$ | vs Richardson limit |
+|---|---|---|---|
+| 3628 (the rule's own) | 12.0 | $2.5517\times10^{4}$ | +0.927\% |
+| 8000 (released, floor) | 26.5 | $2.5303\times10^{4}$ | +0.080\% |
+| 16000 | 52.9 | $2.5289\times10^{4}$ | +0.023\% |
+| 32000 | 105.9 | $2.5285\times10^{4}$ | +0.007\% |
+
+From 26.5 upward the sequence converges at order 1.78 — second order, as a
+trapezoid should. **Between 12 and 26.5 the error falls by 11.6 for a
+resolution ratio of 2.21, which is order 3.1**: that is not superconvergence,
+it is the signature of 12 being *outside the asymptotic regime altogether*.
+The rule's own constant sits below where its method converges.
+
+### Which runs are affected
+
+`N_ETA_FLOOR = 8000` lifts every modest-$k$ run clear of the rule. The floor
+stops binding at $k_{\max}\simeq680$, and above that the grid is sized purely
+by the Bessel rule:
+
+| run | $k_{\max}$ | samples per zero |
+|---|---|---|
+| D38 | 160 | 49.6 |
+| F10 released | 400 | 19.8 |
+| D36 | 460 | 17.3 |
+| D24 | 600 | 13.2 |
+| **F9, F10 `--high-res`** | **1500** | **12.0** |
+
+So the runs carrying the defect are exactly the high-resolution ones the
+figures are moving towards.
+
+### What it does and does not move
+
+The displacement is **uniform in $\ell$** — D39 returns 0.909\% to 0.953\%
+across $\ell = 2, 30, 100, 200, 250$, a **spread of 0.044\%** against a
+displacement of 0.95 — so it reads as a normalisation and **not** as
+a shape. It does not move a peak position and it does not explain F10's
+absent secondaries (**T-128**, reproduced at $4\times$ range).
+
+It is still larger than differences this bundle has treated as decisive.
+**T-163** separates `bracket_at_w` from `split_by_parts` at a worst cell of
+0.31\% and a typical cell of 0.03\%. Those were measured at $k_{\max}=460$
+(17.3 samples per zero), where the grid error is smaller — but the margin is
+not comfortable, and any future discrimination run at $k_{\max}\ge600$ would
+be comparing weightings at 0.03\% on a grid carrying 0.9\%.
+
+### What this does NOT establish, and why the probe cannot
+
+**The 0.95\% is not yet attributed to Bessel sampling.** The $\eta$ grid is
+`np.linspace` — *uniform* — so one knob sets both the samples per $j_\ell$ zero
+and the number of points across the visibility, and the two cannot be varied
+independently. At $n_\eta=3628$ the visibility FWHM ($8.31\times10^{-3}$)
+carries only **9.5 points**; at the released 8000 it carries 21. Either scale
+could own the 0.95\%, and on a uniform grid no refinement separates them.
+
+That is **S33**, still open, and `two_frame.build_environment` says so in
+comment: *`N_ETA_FLOOR` is what the recombination structure demands near
+$\eta_\ast$, which no function in this bundle yet derives.* **T-58** put the
+floor there after measuring $2.4\times10^{-1}$ without it against
+$5.9\times10^{-3}$ with it — a factor of forty from a grid that looked derived.
+The floor was a patch over an underived scale, and it has now been outgrown by
+$k_{\max}$.
+
+### The repair, and why it is not a bigger constant
+
+Raising `ETA_POINTS_PER_PERIOD` from 12 to ~27 would buy the released floor's
+accuracy at every $k_{\max}$, at $2.25\times$ the projection cost
+($n_\eta$ 18137 → 40808 at $k_{\max}=1500$, against a projection stage already
+measured at 889 s of a 2208 s run — **T-156**).
+
+**A non-uniform grid is the better repair and the cheaper one.** Dense across
+recombination at the rate the visibility demands, at the Bessel rate outside
+it. That decouples the two scales, closes S33 by deriving the first of them
+instead of flooring it, and costs fewer points than 40808 rather than more.
+It is also what the high-$\ell$ stage needs regardless, since $\pi/k_{\max}$
+keeps shrinking and a uniform grid pays for that shrinkage across the whole
+span including the 95\% of it where nothing is being deposited.
+
+**Not acted on in this entry.** The grid is a released discretisation; changing
+it moves every number in the bundle, and it is registered in
+`config/grid-register.toml`. Recorded, scoped, and put to P1-T as
+`P1B→P1T 2026-10-28 #11`, because whether the visibility rate is derived from
+$\mathcal V$'s width or from $\kappa'$'s scale height is a theory question.
+
+---
+
+## T-165 — **The rendering rule could not be written about. It fired on the item that asked for it**
+
+**2026-10-28.** `test_no_maths_span_butted_against_a_word_or_dash` landed on
+2026-10-27 (b682800) as a ratcheted rule, narrowed deliberately to the
+evidence P1-T supplied. The next morning it failed on
+`handoff/P1T-to-P1B.md` — **twice, at the two places where P1-T names the
+defect**, inside backticks, in `P1T→P1B #9`, the item that asked for the rule.
+
+A code span renders **literally**. Whatever delimiters it contains are not
+delimiters, so ``` `$\Lambda$CDM` ``` is not a maths span and cannot
+mis-render. The hit was a false positive of the gate, not a hazard in the
+file, and the only two ways to clear it were to **delete the documentation of
+the defect** or to **exempt the file** — both of which would have left the
+bundle unable to describe its own rendering rules in its own prose.
+
+Repaired in the helper and not in the file: `_without_code` blanks fenced
+blocks and inline code before the scan, replacing each run with spaces so a
+failure message still points at the right line. The same false positive is
+reachable by `test_no_markdown_eaten_escape_inside_maths`, which has not
+fired; it is **left alone** rather than widened pre-emptively, which is the
+discipline T-159's narrowing established — fix what fired, on the evidence
+that fired it.
+
+**The class.** A gate written to forbid a construction will forbid the
+sentence that names the construction, unless the gate knows the difference
+between prose and quotation. That is not specific to rendering: every
+`FORBIDDEN`-token check in this bundle has the same shape, and the register
+entry for each of them is written in the prose those checks read.
