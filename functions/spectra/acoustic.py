@@ -335,6 +335,7 @@ def solve_acoustic_batch(
     omega_gamma_h2: float = 2.47e-5,
     expansion_coupling: bool = True,
     initial: tuple[float, float] | None = None,
+    start_eta: np.ndarray | None = None,
 ) -> list[AcousticSolution]:
     r"""Every mode in **one** integration. Same system, same tolerances.
 
@@ -403,8 +404,29 @@ def solve_acoustic_batch(
         d_delta = -float(phi_h_prime(t)) + k / 3.0 * tau_1
         if expansion_coupling:
             d_delta = d_delta - float(aH(t)) * pa_t
+        if start is not None:
+            # **Each mode held at its own initial condition until its own
+            # start --- finding T-166.** A common grid is NOT a free choice:
+            # measured on PLANCK at k_max = 1500, starting a mode earlier than
+            # `acoustic_start_eta` moves it by up to 1.4e-02 at eta_couple
+            # against an integrator running at rtol = 1e-10, because (152) and
+            # (153) do **not** freeze a super-horizon mode --- tau_1 starts at
+            # zero and accumulates -k Int Phi_A, which grows outside the sound
+            # horizon as well as inside it. So T-51/S40's per-mode start is
+            # load-bearing physics and not an efficiency device.
+            #
+            # Zeroing the derivative before `start_eta[i]` makes this the SAME
+            # initial-value problem the per-mode solve poses --- same equation,
+            # same initial condition, applied at the same time --- while still
+            # evaluating the k-independent splines once per step for all modes.
+            live = t >= start
+            d_delta = np.where(live, d_delta, 0.0)
+            d_tau = np.where(live, d_tau, 0.0)
         return np.concatenate([d_delta, d_tau])
 
+    start = None if start_eta is None else np.asarray(start_eta, dtype=float)
+    if start is not None and start.shape != k.shape:
+        raise ValueError("start_eta must carry one start per mode")
     d0, t0 = (initial if initial is not None
               else (ADIABATIC_MONOPOLE * float(phi_a[0]), 0.0))
     y0 = np.concatenate([np.full(n, d0, dtype=float),

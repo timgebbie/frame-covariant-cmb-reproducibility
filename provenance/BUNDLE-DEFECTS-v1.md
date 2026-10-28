@@ -12006,3 +12006,145 @@ sentence that names the construction, unless the gate knows the difference
 between prose and quotation. That is not specific to rendering: every
 `FORBIDDEN`-token check in this bundle has the same shape, and the register
 entry for each of them is written in the prose those checks read.
+
+---
+
+## T-166 — **A super-horizon mode is not frozen: it is driven. The per-mode acoustic start is physics, not an optimisation**
+
+**2026-10-28.** The batched acoustic solve (**T-156**, 12–20$\times$ on the
+single largest cost in the bundle) cannot be wired into the released path
+without a common $\eta$ grid, because `solve_ivp` integrates one $t$-span and
+`coefficient_sets` gives every mode its own — **T-51/S40**, *"the start is
+$k$'s"*. A common grid moves each mode's initial condition to a different
+time, so the question was put as a measurement.
+
+### What was expected, written down before the run
+
+That starting **earlier** than horizon entry is harmless. Below
+`md_reference` the potential is held at its constant super-horizon value
+(`potentials(..., constant_below=)`, the antecedent's own result for $K=0$
+dust), and a mode outside its sound horizon has nothing to oscillate about
+yet. The common-start solution should therefore **meet** the own-start one by
+$\eta_{\rm couple}$ at the integrator's tolerance.
+
+### What was measured
+
+PLANCK, $k_{\max}=1500$, `expansion_coupling=False`, released everything else.
+Common start $10^{-9}$ against each mode's own `acoustic_start_eta`:
+
+| $k$ | own start | $\delta_T$ at $\eta_{\rm couple}$ | $\tau_1$ at $\eta_{\rm couple}$ |
+|---:|---:|---:|---:|
+| 0.05 | $10^{-9}$ | 4.9e-09 | 3.8e-09 |
+| 10 | 1.77e-02 | **1.37e-02** | 4.97e-04 |
+| 60 | 2.90e-03 | 2.09e-03 | 5.74e-05 |
+| 600 | 2.89e-04 | 2.24e-04 | **1.41e-02** |
+| 1500 | 1.15e-04 | 1.46e-03 | 6.23e-03 |
+
+The integrator runs at `rtol=1e-10`. The two modes whose own start **is** the
+common start agree at $10^{-9}$; every mode started earlier than its own start
+disagrees by three to seven orders more than that.
+
+### Why — and it is in the equations, not in the code
+
+$\tau_1$ starts at zero and accumulates $-k\int\Phi_A \mathrm{d}\eta$,
+which **grows outside the sound horizon as well as inside it**. (152)/(153)
+do not freeze a super-horizon mode; they drive it. The initial condition is
+identical either way — $\Phi_A$ is constant below `md_reference` and every
+start is below it, so `ADIABATIC_MONOPOLE * phi_a[0]` does not move — and the
+whole displacement is the extra interval of driving.
+
+**So `acoustic_start_eta` decides how much pre-horizon driving each mode
+carries**, and `ACOUSTIC_START_EPSILON = 0.1` decides the start. That is a
+physical constant nobody has derived, feeding a quantity that moves the
+spectrum. Put to P1-T as `P1B→P1T 2026-10-28 #12`, alongside the standing
+overshoot of $+0.0831$ — not as a claim that it *is* the overshoot, which
+would be a peak-position assertion made from a $\tau_1$ displacement and is
+exactly the kind of inference **M15** punishes, but as a budget entry nobody
+has counted.
+
+---
+
+## T-167 — **The per-mode start carried as a mask: the batch reproduces the released solve at 2.5e-08, and 7.1× flat**
+
+**2026-10-28, the repair for T-166.** `solve_acoustic_batch` takes
+`start_eta`, one start per mode, and zeroes each mode's derivative until its
+own start is reached. That makes it the **same initial-value problem** the
+per-mode solve poses — same equation, same initial condition, applied at the
+same time — while still evaluating the five $k$-independent splines once per
+step for all modes.
+
+| | worst, identical times | worst at $\eta_{\rm couple}$ |
+|---|---|---|
+| common start | — | 1.41e-02 |
+| **masked start** | **2.46e-08** | 1.67e-07 |
+
+### The number that was nearly reported instead
+
+The first measurement gave a *"worst overlap"* of **6.1e-02** at $k=1500$ and
+would have been read as the mask failing. It was the probe's own linear
+interpolation: the common grid carries 24 points per sound period there, and
+linear interpolation of a sinusoid at that density errs by
+$\sim\tfrac12(2\pi/24)^2=3.4\times10^{-2}$ of the amplitude — the order of the
+number reported. Re-asked with the per-mode solve evaluated **on the common
+grid's own abscissae**, so that nothing is interpolated at all, the same
+comparison reads 2.46e-08. **M15 again**, and this time on the instrument
+rather than on the subject.
+
+### Cost
+
+The mask puts a step discontinuity in the right-hand side at every mode's
+start, and the adaptive controller must step over each one. That is why this
+is timed at scale rather than on a handful:
+
+| modes | released | masked batch | speedup |
+|---:|---:|---:|---:|
+| 8 | 1.61 s | 0.54 s | 3.0$\times$ |
+| 64 | 11.68 s | 1.64 s | 7.1$\times$ |
+| 256 | 42.50 s | 5.99 s | 7.1$\times$ |
+
+**Flat from 64 to 256**, so the discontinuities cost a constant factor rather
+than one that grows with the mode count. 7.1$\times$ and not T-156's
+12–20$\times$ — the mask is what the difference buys, and it buys the released
+physics unchanged.
+
+**Wired to nothing.** On the released grid the coefficients stage is 1311 s of
+a 2208 s run (**T-156**); at 7.1$\times$ that is ~185 s, and the run falls to
+roughly 1080 s. Swapping the hot path on the commit that introduces the
+capability is how a speedup becomes an unattributable change in every number
+downstream of it.
+
+---
+
+## T-168 — **The one-writer rule was enforced by discipline, and the discipline failed the same day it was restated**
+
+**2026-10-28.** P1-B edited `handoff/P1T-to-P1B.md` — P1-T's queue, one writer
+by the channel's own rule — to repair six rendering defects, and disclosed it
+**in a commit message rather than in the channel P1-T reads**. Nothing caught
+it, because nothing was watching.
+
+The reasoning at the time was that rendering is P1-B's by Coordination's page.
+That justifies the repair being P1-B's to *make*; it does not justify making
+it **in someone else's file**, and the distinction is the whole rule.
+
+Two days earlier the same stream had replaced a three-list registry in
+`tests/frame/gen_theory_audit.py` with a glob, arguing that *a rule three
+lists be kept in step is kept only by someone remembering, and the note was
+written because the remembering had already failed*. That argument is correct
+and it applies here.
+
+`scripts/check_stream_pathspec.py` is the gate. It reads the working tree and
+refuses a commit that writes another stream's file; `--allow <path>` names a
+deliberate crossing, one path at a time, and there is **no `--force`** — a
+flag passed once for a good reason stays in the command, whereas a path is a
+second argument and a second decision. Its own tests assert the table is
+symmetric on the handoff pair (a table letting both streams write one file
+would pass every enforcement test while enforcing nothing), that the crossing
+which actually happened is refused, and — **T-44** — that it refuses rather
+than passes when it cannot read a repository.
+
+**The T-44 control earned its place immediately.** Its first version ran the
+script with `cwd` set to a temporary directory and expected a refusal; the
+script reads `git -C ROOT`, so `cwd` is irrelevant and it passed on the
+bundle's own clean tree. A negative control that fails for the wrong reason is
+worth no more than one that does not fail at all, and this one was blind on
+the first try.
