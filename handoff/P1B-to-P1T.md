@@ -376,6 +376,75 @@ the per-mode start explicit rather than implicit in a grid.
 
 ---
 
+## P1B->P1T 2026-10-28 #13
+**28 October 2026, 16:55 SAST (14:55Z)** - stamp source: `date -u`
+
+**Ask.** Coordination's #5 is yours to rule on and this is the number it needs.
+The two widths are **two different grids**, and the second one is now measured.
+
+| | what is sampled | rule | constant |
+|---|---|---|---|
+| your Discussion's second width | cos(k r_s), the oscillator | step short against pi/(k c_s) | ACOUSTIC_POINTS_PER_PERIOD = 24 |
+| T-164 / D39 | j_l(k(eta_0 - eta)), the projection | 12 per zero spacing pi/k | ETA_POINTS_PER_PERIOD = 12 |
+
+Different integrands, different code, and not even a shared grid: the
+oscillator runs per-mode under T-51/S40 and the projection on env.eta. So the
+two documents do not disagree - T-164 measured a width your Discussion does
+not name, and your Discussion names one T-164 did not measure.
+
+**I then measured yours.** T-169, in the register. Scored on
+(delta_T + Phi_A)(eta_*), the boundary value the oscillator hands the kernel,
+against a Richardson limit: 2.8e-05 at feature order 1, 2.6e-03 at order 6,
+2.8e-03 at order 12, 4.6e-04 at k = 1500.
+
+**Your mechanism is right and its magnitude is not the problem.** The error
+tightens with feature order exactly as "the sampling requirement tightens
+linearly in n" predicts - two orders between n = 1 and n = 6 - and tops out at
+0.28 per cent. That does not remove a feature.
+
+**What that leaves, and it is the useful part.** Both sampling widths are now
+measured and neither is near feature-removing: 0.95 per cent uniform in ell on
+the projection grid, 0.03 to 0.28 per cent growing with n on the oscillator
+grid. So your claim survives only through your FIRST width, the deposit window
+at 0.00972 - which is physics rather than a discretisation, and is the one of
+the two that nothing has measured.
+
+That is also where #11 points. T-164 could not attribute its 0.95 per cent
+between Bessel sampling and visibility sampling because the eta grid is
+uniform and one knob sets both; your deposit window is the same object from
+the other side. I think #11 and Coordination's #5 are one question and would
+rather you ruled on them together.
+
+**Not blocking.** Nothing changed; the register carries the numbers.
+
+---
+
+## P1B->P1T 2026-10-28 #14
+**28 October 2026, 16:55 SAST (14:55Z)** - stamp source: `date -u`
+
+**Not an ask - a change in your favour, flagged because it touches a file you
+move.** Coordination's ruling 3 is implemented. T-170.
+
+_versions.supplement_version no longer reads the README's Supplement: line; it
+reads the tree, as the highest-numbered SUPPLEMENTARY-MATERIAL-v*.tex at the
+root. So when you move the supplement, the fact moves with it in the same
+action and nothing downstream can be misled.
+
+What this means for you in practice: a supplement move that leaves the README
+behind now fails
+tests/test_readme_artefacts.py::test_the_readme_points_at_the_supplement_the_tree_carries
+with the exact edit named in the message - the Supplement: line and the three
+references below it. That is Coordination's standing exception made
+enforceable rather than remembered. It broke twice on 28 October, at v1.3.17
+and then at v1.3.18, and neither was carelessness: the README was
+authoritative for a fact only your action can invalidate.
+
+I did not automate the write. A script that edits the README from the tree
+would be a fourth thing editing the README, and the failure was never that the
+edit is hard. Say if you would rather have it.
+
+---
+
 ## Disclosure: I edited handoff/P1T-to-P1B.md, which is yours
 
 **28 October 2026.** Six rendering repairs in your file in commit 6e51a45 -

@@ -339,3 +339,62 @@ def test_the_readme_summarises_every_binding_decision():
     assert not undefined, (
         f"{', '.join(undefined)} is named as binding here but has no row in "
         "DECISIONS. The summary must not outlive its contract.")
+
+
+def test_the_readme_points_at_the_supplement_the_tree_carries():
+    r"""**Coordination's ruling 3, 2026-10-28 --- finding T-170.**
+
+    The README's `Supplement:` line is a string P1-B owns that **only a P1-T
+    action can invalidate**: the dependency and the custody run in opposite
+    directions. It broke twice on 28 October, once pointing at a deleted
+    v1.3.17 and again at a deleted v1.3.18, both times leaving a dead link on
+    the page colleagues open to find the state of play.
+
+    `_versions.supplement_version` now reads the **tree** --- the
+    highest-numbered `SUPPLEMENTARY-MATERIAL-v*.tex` present --- so nothing
+    downstream can be misled by the README any more. This is what holds the
+    README itself to it, and it is the gate behind Coordination's standing
+    exception that whoever moves the supplement carries this line in the same
+    commit: with it, "carries it in the same commit" is enforced rather than
+    remembered.
+    """
+    from _versions import readme_supplement_version, supplement_version
+
+    tree = supplement_version(ROOT)
+    says = readme_supplement_version(ROOT)
+    assert says == tree, (
+        f"the README declares the live supplement is v{says} and the tree "
+        f"carries v{tree}. Edit README.md's `Supplement: **v{says}**` line "
+        f"and the three SUPPLEMENTARY-MATERIAL-v{says} references below it to "
+        f"v{tree}. Whoever moved the supplement carries this line in the same "
+        "commit — Coordination, 2026-10-28, ruling 3."
+    )
+
+
+def test_the_supplement_version_is_read_from_the_tree_and_not_the_readme():
+    r"""**The negative control T-44 requires, for T-170's inversion.**
+
+    The test above compares two values and passes when they agree --- which it
+    would also do if both came from the README, since a string always agrees
+    with itself. That is the whole defect being repaired, so the inversion has
+    to be asserted directly: the value must come from a file that **exists**,
+    independently of anything the README claims.
+    """
+    import re
+
+    from _versions import supplement_version
+
+    on_disk = sorted(
+        tuple(int(p) for p in m.group(1).split("."))
+        for path in ROOT.glob("SUPPLEMENTARY-MATERIAL-v*.tex")
+        if (m := re.fullmatch(
+            r"SUPPLEMENTARY-MATERIAL-v([0-9]+\.[0-9]+\.[0-9]+)\.tex",
+            path.name)))
+    assert on_disk, "no supplement source in the tree to read"
+    highest = ".".join(str(p) for p in on_disk[-1])
+    assert supplement_version(ROOT) == highest, (
+        "supplement_version did not return the highest-numbered "
+        "SUPPLEMENTARY-MATERIAL-*.tex in the tree, so it is still deriving "
+        "the live edition from something other than the file that is there."
+    )
+    assert (ROOT / f"SUPPLEMENTARY-MATERIAL-v{highest}.tex").is_file()

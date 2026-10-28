@@ -37,6 +37,7 @@ import re
 from pathlib import Path
 
 __all__ = [
+    "readme_supplement_version",
     "release_line",
     "released_version",
     "supplement_figures",
@@ -119,6 +120,43 @@ def supplement_version(root: Path) -> str:
     have read. Each time the fix is the same: **take the fact from the one
     place entitled to state it, rather than deriving it from something that
     usually agrees.**
+
+    **INVERTED 2026-10-28, Coordination's ruling 3 --- finding T-170.** The
+    paragraphs above are kept because their reasoning is still right and only
+    their conclusion was wrong. Reading the README *was* better than
+    constructing the name from `tree_version`; it was still the wrong place,
+    and the README's supplement line broke **twice on 28 October** --- once
+    pointing at a deleted v1.3.17 and again at a deleted v1.3.18 --- because
+    it is a string P1-B owns that **only a P1-T action can invalidate**. The
+    dependency and the custody run in opposite directions, so no amount of
+    care on either side closes it.
+
+    The tree states this fact by **carrying the file**. The live edition is
+    the highest-numbered `SUPPLEMENTARY-MATERIAL-v*.tex` at the root, which
+    cannot disagree with what is on disk because it *is* what is on disk, and
+    moving the supplement now moves this with it in the same action.
+    `tests/test_readme_artefacts.py` holds the README to it.
+    """
+    found = sorted(
+        (tuple(int(p) for p in m.group(1).split(".")), m.group(1))
+        for path in root.glob("SUPPLEMENTARY-MATERIAL-v*.tex")
+        if (m := re.fullmatch(
+            r"SUPPLEMENTARY-MATERIAL-v([0-9]+\.[0-9]+\.[0-9]+)\.tex",
+            path.name)))
+    if not found:
+        raise RuntimeError(
+            "no SUPPLEMENTARY-MATERIAL-vX.Y.Z.tex at the bundle root. The "
+            "live supplement is the highest-numbered one that is present, so "
+            "an absent file is not a version this code may guess at.")
+    return found[-1][1]
+
+
+def readme_supplement_version(root: Path) -> str:
+    r"""What the **README says** the live edition is. It may be wrong.
+
+    Kept as its own function precisely so that the README's claim and the
+    tree's fact are two readable things that a test can compare, rather than
+    one value that silently takes whichever side the code happened to read.
     """
     text = (root / "README.md").read_text(encoding="utf-8")
     found = re.search(r"^Supplement:\s+\*\*v([0-9]+\.[0-9]+\.[0-9]+)\*\*",
@@ -126,11 +164,10 @@ def supplement_version(root: Path) -> str:
     if not found:
         raise RuntimeError(
             "README.md has no `Supplement: **vX.Y.Z**` line. That line is "
-            "where the live supplement's edition is declared, and it is a "
-            "separate statement from the `Version:` header: the computational "
-            "release and the supplement edition advance independently and "
-            "deriving one from the other is the defect this function was "
-            "rewritten to remove.")
+            "where the README declares which edition it is pointing at, and "
+            "it is a separate statement from the `Version:` header: the "
+            "computational release and the supplement edition advance "
+            "independently.")
     return found.group(1)
 
 

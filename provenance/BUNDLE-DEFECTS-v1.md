@@ -12148,3 +12148,101 @@ script reads `git -C ROOT`, so `cwd` is irrelevant and it passed on the
 bundle's own clean tree. A negative control that fails for the wrong reason is
 worth no more than one that does not fail at all, and this one was blind on
 the first try.
+
+---
+
+## T-169 — **The two widths are two different grids. Both are now measured and neither removes a feature**
+
+**2026-10-28, for Coordination's consistency question #5.** Supplement
+v1.3.19's Discussion closes on two widths bounding how many acoustic features
+survive, and T-164 landed 27 minutes later measuring a grid defect of 0.95\%
+and concluding it does not explain F10's absent secondaries. Coordination
+asked whether the two documents are talking about the same width. **They are
+not**, and the distinction is sharp:
+
+| | what is sampled | rule | constant |
+|---|---|---|---|
+| **Discussion's second width** | $\cos(kr_s)$, the oscillator | step short against $\pi/(kc_s)$ | `ACOUSTIC_POINTS_PER_PERIOD = 24` |
+| **T-164 / D39** | $j_\ell(k(\eta_0-\eta))$, the projection | 12 per zero spacing $\pi/k$ | `ETA_POINTS_PER_PERIOD = 12` |
+
+Different integrands, different grids, different code. $c_s\le1/\sqrt3$ makes
+the acoustic period *longer* than the Bessel zero spacing, so on a shared
+grid the Bessel requirement would be the tighter of the two — but they are
+not on a shared grid: the oscillator runs on its own per-mode grid
+(**T-51/S40**) and the projection on `env.eta`.
+
+### The Discussion's width, measured
+
+The acoustic grid had never been convergence-tested either. Refined by the
+same method D39 used on the other one, scored on
+$(\delta\tilde T+\Phi_A)(\eta_\ast)$ — the boundary value the oscillator hands
+the kernel, which is exactly what that paragraph is about — against a
+Richardson limit:
+
+| $k$ | feature order $n$ | released grid vs continuum |
+|---:|---:|---:|
+| 86 | 1 | 2.8e-05 |
+| 172 | 2 | 2.7e-04 |
+| 258 | 3 | 4.3e-04 |
+| 516 | 6 | 2.6e-03 |
+| 1032 | 12 | 2.8e-03 |
+| 1500 | 17.4 | 4.6e-04 |
+
+**The Discussion's mechanism is right and its magnitude is not the problem.**
+The error does tighten with feature order exactly as *"the sampling
+requirement tightens linearly in $n$"* predicts — two orders between $n=1$ and
+$n=6$ — and it tops out at **0.28\%**, which is not a quantity that removes a
+feature.
+
+### What that leaves
+
+Both sampling widths are now measured: 0.95\% uniform in $\ell$ on the
+projection grid (**T-164**), 0.03--0.28\% growing with $n$ on the oscillator
+grid. Neither is near feature-removing, so **the Discussion's claim survives
+only through its FIRST width — the deposit window $\Delta\eta=0.00972$** —
+which is physics rather than a discretisation, and which is the one of the two
+that nothing has yet measured.
+
+That is also where **S33** points. T-164 could not attribute its 0.95\%
+between Bessel sampling and visibility sampling because the $\eta$ grid is
+uniform and one knob sets both; the deposit window is the same object from the
+other side. The two open questions are one question.
+
+**Adjudication is P1-T's** — Coordination addressed #5 to them and this entry
+carries only the numbers, by the dividing line.
+
+---
+
+## T-170 — **The README's supplement line is owned by P1-B and invalidated only by P1-T. The dependency is inverted**
+
+**2026-10-28, Coordination's ruling 3.** The line broke **twice in one
+morning**: pointing at a deleted `SUPPLEMENTARY-MATERIAL-v1.3.17.pdf`, then,
+within the hour and one rebase later, at a deleted v1.3.18. Both times it left
+a dead link on the page colleagues open to find the state of play, and both
+times three tests were red on `main` about it.
+
+Neither break was carelessness. `_versions.supplement_version` **read the
+README**, so the README was authoritative for a fact it does not control: P1-B
+owns the string, a P1-T action invalidates it, and the dependency and the
+custody run in opposite directions. No amount of care on either side closes
+that.
+
+**The fix is which way the arrow points.** The tree states this fact by
+*carrying the file*: the live edition is the highest-numbered
+`SUPPLEMENTARY-MATERIAL-v*.tex` at the root, which cannot disagree with what
+is on disk because it **is** what is on disk, and moving the supplement now
+moves the fact with it in the same action.
+`test_the_readme_points_at_the_supplement_the_tree_carries` holds the README
+to that, with the exact edit named in the failure message — which is what
+makes Coordination's standing exception (*whoever moves the supplement carries
+the README line in the same commit*) enforced rather than remembered.
+
+The earlier docstring is **kept rather than rewritten**. Its reasoning was
+right — *take the fact from the one place entitled to state it* — and only its
+conclusion was wrong, because the README is entitled to state the tree version
+and is not entitled to state the supplement's. A repair that deletes the
+reasoning that led to the previous repair loses why both were made.
+
+**Not automated, deliberately.** A writer that edits the README from the tree
+would be a fourth thing editing the README, and the failure here was never
+that the edit is hard. Offered to Coordination if they want it.
