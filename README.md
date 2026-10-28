@@ -10,7 +10,7 @@ the full linear spectrum with the acoustic peaks and the Silk damping tail
 (F9), in both frames; the integral solution (102) carried with a generic
 4-velocity and specialised back; acceptance criterion 5b closed.
 
-Supplement: **v1.3.17** — `SUPPLEMENTARY-MATERIAL-v1.3.17.tex`. **This is a
+Supplement: **v1.3.19** — `SUPPLEMENTARY-MATERIAL-v1.3.19.tex`. **This is a
 separate version line from the one above and is declared separately on
 purpose.** The line above is the *computational* release; a supplement edition
 records a documentation gate and is **not** an assertion that the repository
@@ -33,9 +33,9 @@ University of Cape Town, 2026, **arXiv:astro-ph/9912072v4**
 
 The supplementary-materials document is included here:
 
-> [SUPPLEMENTARY-MATERIAL-v1.3.17.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.17.pdf)
+> [SUPPLEMENTARY-MATERIAL-v1.3.19.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.19.pdf)
 
-Its source is `SUPPLEMENTARY-MATERIAL-v1.3.17.tex`, **one consolidated file in
+Its source is `SUPPLEMENTARY-MATERIAL-v1.3.19.tex`, **one consolidated file in
 the repository root**, which builds with `pdflatex` alone: the prose carries no
 `\input`, the bibliography is inline, and the only external files are the
 generated assets in `tables/`, `tikz/` and `figures/`. The prose fragments that
@@ -754,6 +754,7 @@ functions/spectra/       Sources, recombination, the acoustic pair, the spectrum
 functions/plotting/      House visual style, shared by every figure
 scripts/                 Active reproduction and verification commands
 tests/                   Compact claim-bearing regression suite
+tests/frame/             Frame instruments, importing nothing else here
 data/                    No empirical data are required at v1.0.0
 outputs/                 Machine-readable curve and summary evidence
 figures/                 Versioned PDF/PNG figure pairs
@@ -820,6 +821,18 @@ python scripts/sync_conventions.py     # regenerate provenance/conventions.md
 pytest -q                              # the claim-bearing regression suite
 ```
 
+The frame instruments are a second suite and run on their own:
+
+```bash
+python tests/frame/run_all.py          # every frame instrument, in order
+python tests/frame/doctor.py           # why the suite will or will not run
+```
+
+`tests/frame/run_all.py` and `scripts/run_all.py` share a name and do
+different things: the first runs the frame instruments and writes
+`docs/THEORY-AUDIT.md`, the second regenerates the bundle's artefacts. Run
+both from the repository root, where the path says which one you meant.
+
 ## Verification status
 
 **Released as v1.2.0; this tree is v1.3.0-dev.** Every artefact carries a
@@ -831,10 +844,27 @@ entry is missing fails the run.
 | what is checked | where |
 |---|---|
 | the physics, against four external hierarchies and two independent routes | `pytest -q`; `tests/` |
-| the frame conditions, from seven instruments that import no project code | `docs/THEORY-AUDIT.md` |
+| the frame conditions, from instruments whose independence is checked rather than asserted | `python tests/frame/run_all.py`; `docs/THEORY-AUDIT.md` |
 | acceptance criteria, with criterion 5b itemised | `RELEASE-NOTES-v1.0.0.md`; `provenance/CRITERION-5B-v1.md` |
 | every discretisation in the tree, by walking the AST | `provenance/GRID-REGISTER-v1.md` |
 | the measured defects, including repairs attempted and withdrawn | `provenance/BUNDLE-DEFECTS-v1.md` |
+
+The frame instruments import no project code, and since v1.3.18 that is a
+property the suite enforces rather than a claim this file makes.
+`tests/frame/_common.py` refuses any `sys.path` entry resolving to a bundle
+directory outside `tests/frame`, and any imported module whose file lies
+under the bundle outside it. It names violations by path rather than by
+module name, exits 2 without emitting a result line, and every record
+carries `independent` and `isolated_interpreter`.
+`FRAME_ALLOW_PROJECT_IMPORTS` opens the gate for a deliberate experiment and
+the record then says so: an escape hatch is allowed, a silent one is not.
+`python tests/frame/doctor.py` reports why the suite will or will not run on
+a given interpreter, using the standard library alone.
+
+How many instruments there are is in `tests/frame/README.md` and not here.
+That file reads its registry as a glob over the directory, so it cannot
+disagree with what the directory holds; a count repeated in this file could,
+and did.
 
 **A green harness is not a correct spectrum.** `run_all.py --strict` reporting
 `CLEAN` says every registered artefact regenerated, nothing more — finding
@@ -874,7 +904,7 @@ are in `provenance/DECISIONS-v1.0.0.md`.
 | Item | Value |
 |---|---|
 | **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMBR lensing in the exact 1+3 covariant radiation hierarchy* — **Paper 1**, University of Cape Town. **arXiv:astro-ph/9912072v4**, [doi:10.48550/arXiv.astro-ph/9912072](https://doi.org/10.48550/arXiv.astro-ph/9912072). Submitted 2026-10-16. CC BY 4.0. **The version suffix is not optional** — the bare identifier has carried three documents: `v2` the legacy 1999 work, `v3` the correction, `v4` this paper |
-| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.3.17.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.17.pdf) |
+| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.3.19.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.19.pdf) |
 | **GitHub repository** | [timgebbie/frame-covariant-cmb-reproducibility](https://github.com/timgebbie/frame-covariant-cmb-reproducibility) |
 | **ZivaHub/Figshare DOI** | [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509) — **live**. The **concept** DOI: it always resolves to the latest version, so it is the one to cite |
 | **Associated antecedent** | Gebbie, T.; Dunsby, P. K. S.; Ellis, G. F. R. (2000). *1+3 covariant cosmic microwave background anisotropies II: the almost-Friedmann–Lemaître model*. Annals of Physics **282**, 321–394. [doi:10.1006/aphy.2000.6034](https://doi.org/10.1006/aphy.2000.6034) |
