@@ -1,5 +1,5 @@
 % Computational supplement to the associated paper.
-% Build: latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.3.18.tex  (only after locked
+% Build: latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.3.19.tex  (only after locked
 % assets have passed hash checks). THIS FILE IS THE WHOLE DOCUMENT: the prose
 % carries no \input, and every former supplementary-materials/ fragment is
 % expanded inline between its own BEGIN/END provenance comments. The only
@@ -43,7 +43,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.3.18 --- 27 October 2026\\
+\date{Supplement v1.3.19 --- 28 October 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.3.0-dev}
 
 \begin{document}
@@ -618,7 +618,7 @@ The machine-checked certification of Paper~1 is being prepared at
 \texttt{timgebbie/frame-covariant-cmb-lean}, which is a repository in its own
 right and not a directory of this bundle. It is private as this edition is
 written, so no address is given, nothing in this document cites it, and no
-claim here rests on it. Editions before v1.3.18 described a \texttt{lean/}
+claim here rests on it. Editions before v1.3.19 described a \texttt{lean/}
 directory inside the v1.3.0 workstream; the sources are not there. The
 certification supplements, and does not replace, the Python instruments or the
 Paper~1-to-antecedent provenance network. Lean is \emph{not a separate physics
@@ -5646,7 +5646,7 @@ member of the pair that the Newtonian specialisation sets to zero.
 % below as a pointer and not summarised.
 % ---------------------------------------------------------------------------
 % ---------------------------------------------------------------------------
-% IMPLICATIONS.  Added v1.3.18, 2026-10-27, P1-T.
+% IMPLICATIONS.  Added v1.3.19, 2026-10-27, P1-T.
 %
 % Every quantitative statement here is read from an instrument or from a
 % derivation in this document, and every reference was verified against the
@@ -5654,6 +5654,180 @@ member of the pair that the Newtonian specialisation sets to zero.
 % were weakened against what the instruments support and the weakening is
 % stated at the point of use rather than in a footnote.
 % ---------------------------------------------------------------------------
+% ---------------------------------------------------------------------------
+% DISCUSSION.  Added v1.3.19, P1-T.
+%
+% The structural logic of the transport, stated once, so that the sections
+% above read as instances of it rather than as separate results.  No finding
+% numbers and no repository history: this is the physics as it stands.
+% ---------------------------------------------------------------------------
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Suppression, not truncation}
+\label{sec:discussion-suppression}
+
+Thomson scattering damps every multipole of rank two and above at the rate
+\(\kappa'\), leaves the monopole untouched because scattering conserves photon
+number, and couples the dipole to the baryons. The free-streaming operator
+moves power between neighbouring ranks at the rate \(k\). When
+\(\kappa'\gg k\) the hierarchy therefore slaves itself: each rank is driven by
+the one below it and damped before it can act, so that
+
+\begin{equation}
+  \tau_\ell \;\sim\; \left(\frac{k}{\kappa'}\right)^{\ell-1}\tau_1 ,
+  \qquad \ell\ge2 .
+  \label{eq:tight-coupling-slaving}
+\end{equation}
+
+\paragraph{The monopole and the dipole carry the dynamics, and the quadrupole
+is not negligible.} Figure~\ref{fig:history-flow} states the same thing for
+the tight-coupling panel. At \(O(k/\kappa')\) the quadrupole is the smallest rank
+that survives tight coupling, and it is what produces diffusion damping and
+the whole of the polarisation. Ranks three and above are smaller again by
+further powers of \(k/\kappa'\).
+
+\paragraph{The distinction between a suppressed rank and a truncated one is
+not cosmetic.} A truncation is a modelling choice, made outside the equations,
+which can be made wrongly and which must be justified. A suppression is a
+limit the hierarchy takes on its own, with
+\eqref{eq:tight-coupling-slaving} as its statement, and nothing is set to
+zero. The exact hierarchy is carried throughout this bundle for that reason:
+the tight-coupling behaviour is a consequence to be derived rather than an
+approximation to be imposed.
+
+\subsection{The kernel is the cascade}
+\label{sec:discussion-cascade}
+
+Once \(\kappa'\) falls below \(k\) nothing damps the higher ranks and power
+cascades upward without limit. That cascade is not computed by integrating the
+hierarchy to high \(\ell\). The free-streaming operator is linear and
+collisionless in that regime, and its solution is known in closed form:
+
+\begin{equation}
+  j_\ell\bigl(k(\eta_0-\eta)\bigr)\ \ \text{\emph{is} the free-streaming
+  cascade, solved exactly.}
+  \label{eq:kernel-is-cascade}
+\end{equation}
+
+\paragraph{A source computed at rank two suffices for every observed
+multipole.} The line-of-sight assembly evaluates the source where the
+hierarchy is slaved, at ranks zero, one and two, and hands it to
+\eqref{eq:kernel-is-cascade}. The kernel performs the transfer to
+\(\ell=2000\) and beyond. The depth of the hierarchy and the range of the
+spectrum are therefore unrelated quantities, and extending one does not
+extend the other.
+
+\paragraph{The kernel slot carries physical content, and it is the quantity
+to get right.} A coefficient placed against \(j_\ell\), against
+\(j_\ell'\) or against \(j_\ell''\) enters the cascade at a different rank and
+produces a different angular dependence. \S\ref{sec:w-form} is an accounting
+of which coefficient belongs at which slot, and the \(\ell\)-leverage of the
+three slots differs: at fixed argument the multipole maximising
+\(|j_\ell'|\) sits about \(37\%\) below the one maximising \(|j_\ell|\). A
+term in the wrong slot is therefore not a small error of magnitude but a
+contribution at the wrong angular scale.
+
+\subsection{Two weights, two jobs}
+\label{sec:discussion-weights}
+
+The transport carries two weights and they are not interchangeable.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.18\textwidth}XX@{}}
+\toprule
+& \textbf{what it is} & \textbf{what it controls} \\
+\midrule
+\(\mathcal V=\kappa'e^{-\kappa}\)
+& the visibility, sharply peaked at recombination
+& \emph{when} a source is handed to the kernel \\[3pt]
+\(W=e^{-\kappa}\)
+& the optical-depth transfer, rising to unity and staying there
+& \emph{what continues to accumulate} along the ray afterwards \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\paragraph{Scattering-generated sources ride at the visibility and
+ray-long gravitational sources ride at the transfer.} The Sachs--Wolfe
+monopole and the Doppler dipole exist because scattering put them there, so
+they are deposited in the narrow window where \(\mathcal V\) is non-zero. The
+integrated Sachs--Wolfe contribution exists because the potentials evolve
+along the whole ray, so it accumulates wherever \(W\simeq1\), which is the
+\(82\%\) of the conformal span lying after recombination.
+
+\paragraph{The two weights are related by an identity and are not
+alternatives.} \(W\kappa'=\mathcal V\) holds everywhere, so a term already
+carrying an explicit factor of the scattering rate is at visibility weight
+whatever it is multiplied by. Reading that identity as a licence to exchange
+the weights removes the late-time contribution entirely, because
+\(\mathcal V\) vanishes once recombination is complete and \(W\) does not.
+
+\subsection{One equation, three regimes, and without matching}
+\label{sec:discussion-regimes}
+
+Metric-perturbation treatments commonly solve the tight-coupling problem and
+the free-streaming problem separately and join the two across recombination.
+\emph{The \(1+3\) covariant formulation never joins anything.} There is one
+hierarchy, valid at every epoch, and three regimes in which different terms
+dominate it.
+
+Figure~\ref{fig:history-flow} draws them along \(\eta\), together with the
+two weights. Its second, third and fourth panels are the three regimes below;
+its first, the radiation-era evolution of \(\Phi\), is upstream of all three
+and supplies the forcing the oscillator inherits.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.16\textwidth}XX@{}}
+\toprule
+\textbf{regime} & \textbf{what dominates} & \textbf{what the hierarchy becomes} \\
+\midrule
+\(\kappa'\gg k\)
+& the collision term
+& the acoustic oscillator, obtained by eliminating the dipole between the
+  monopole and dipole equations, with \(c_s^2=1/[3(1+R)]\) exactly and the
+  baryon drag \(R'/(1+R)\) \\[3pt]
+\(\kappa'\sim k\)
+& neither
+& recombination. The visibility peaks and the sources are deposited \\[3pt]
+\(\kappa'\ll k\)
+& free streaming
+& the projection \eqref{eq:kernel-is-cascade} \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\paragraph{The line-of-sight integral performs the matching exactly, rather
+than by joining.} Its two weights select, for each source, the regime that
+source belongs to, and the integral is taken once over the whole span. No
+boundary conditions are imposed at recombination and no solutions are
+continued across it, so the questions that attend a junction condition --- how
+sharp it is, which quantities are continuous there, what is discarded in the
+transition --- do not arise. What replaces them is the requirement that each
+coefficient carry its own weight and its own kernel slot, which is a
+requirement on the assembly rather than on a boundary.
+
+\paragraph{The acoustic oscillator and the projection are therefore one
+calculation and not two.} The oscillator supplies the boundary value
+\((\delta\tilde T+\Phi_A)(\eta_*)\) and the kernel supplies its angular
+dependence; the phase of the first carries into the position of the features
+of the second, and the width of the visibility sets how much of that phase
+survives the deposit. An acoustic feature of order \(n\) requires the phase
+\(kr_s\) to be coherent across the deposit window, so successive features are
+lost from the highest order downwards as that window broadens --- a statement
+about the transport, and one that holds whatever the oscillator does.
+
+\paragraph{Two widths bound how many acoustic features survive, and neither
+belongs to the oscillator.} The first is the deposit window itself, drawn in
+Figure~\ref{fig:history-flow} and recorded there at \(\Delta\eta=0.00972\) in
+the code normalisation. The second is the resolution at which the transport is
+sampled: representing \(\cos(kr_s)\) faithfully requires a conformal-time step
+short against \(\pi/(kc_s)\), and the feature of order \(n\) sits at
+\(k\simeq nk_1\), so the sampling requirement tightens linearly in \(n\). Each
+bound removes features from the highest order downwards and leaves the first
+in place, so a spectrum carrying a primary feature and no secondaries is
+reporting one of the two rather than anything about the acoustic physics.
+
 \section{Implications}
 \label{sec:implications}
 
