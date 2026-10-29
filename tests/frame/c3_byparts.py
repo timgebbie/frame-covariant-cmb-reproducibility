@@ -17,7 +17,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 #: The generator reads it from here and holds no copy, so correcting
 #: the instrument corrects the audit by construction.
 AUDIT_TITLE = 'The bulk source, against the integral it comes from'
-AUDIT_PROSE = "The exact bulk source is $W(C_0-C_1'+C_2'')-\\mathcal{V}C_1+2\\mathcal{V}C_2'+\\dot{\\mathcal{V}}C_2$. Annals II's printed `int_soln_damping` does not reproduce its own integral: $+2\\mathcal{V}C_2'$ is printed as $-2\\mathcal{V}C_2$, the sign on $\\mathcal{V}C_1$ is reversed, and a lower-limit boundary $\\mathcal{V}(\\eta_*)C_2(\\eta_*)$ is absent."
+AUDIT_PROSE = "The exact bulk source is $W(C_0-C_1'+C_2'')-\\mathcal{V}C_1+2\\mathcal{V}C_2'+\\dot{\\mathcal{V}}C_2$. Annals II's printed `int_soln_damping` does not reproduce its own integral: $+2\\mathcal{V}C_2'$ is printed as $-2\\mathcal{V}C_2$, the sign on $\\mathcal{V}C_1$ is reversed, and a lower-limit boundary $\\mathcal{V}(\\eta_\\ast)C_2(\\eta_\\ast)$ is absent."
 import math
 from _common import (finish, ETA_STAR as ES, ETA_0 as E0, V, W, Vdot, j, jp, jpp,
                      integrate, report)
