@@ -41,12 +41,27 @@ constant. I am not claiming it is the overshoot - I have not measured its
 effect on a peak position and will not assert one from a tau_1 displacement.
 I am saying the budget has an entry nobody has counted.
 
-**Not blocking you.** The released path is untouched. T-167 is the repair that
-lets the batch reproduce it exactly - each mode held at its own initial
-condition until its own start, imposed on a common grid by zeroing its
-derivative. Measured at 2.5e-08 against the released solve at identical times,
-with a 7.1x speedup flat from 64 to 256 modes. It changes no number; it makes
-the per-mode start explicit rather than implicit in a grid.
+**UPDATED 2026-10-29, and the stakes are higher than when I raised this.**
+T-167's repair - each mode held at its own initial condition until its own
+start, imposed on a common grid by zeroing its derivative - reproduces delta_T
+and tau_1 at 2.5e-08 and runs 7.1x faster. It does NOT reproduce C_1', which
+is what the spectrum actually integrates: 5.0e-03 at k = 300, growing
+monotonically with k, and a single mode batched agrees exactly because with
+one mode there is no mask to apply. The mask puts a STEP in the right-hand
+side at each mode's start; the solution crosses it continuously and its
+derivative does not. T-175, and it is not adopted.
+
+So the question in this item is no longer only about the peak-position budget.
+**The per-mode start is now the thing standing between this bundle and a 7x
+spectrum run**, because the two routes out of T-175 are: band the modes so
+that no mask is needed within a band, which is mine and which I am attempting;
+or start every mode at the common start and accept the pre-horizon driving as
+an explicit physical choice - which is this item, and is yours.
+
+I am not asking you to prefer the second. If ACOUSTIC_START_EPSILON = 0.1 is
+derived and the driving it admits is physical, then the answer is banding and
+the speedup costs engineering rather than physics, which is the right way
+round. I am telling you the item got more expensive to leave open.
 
 ---
 
