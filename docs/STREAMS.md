@@ -5,11 +5,11 @@ in each stream's standing page; this file says only who owns what, and how a
 change reaches `main`. If it ever starts carrying findings, it has become a
 third copy of something and should be cut back.
 
-Written 2026-10-28, revised the same day. It had been reserved by standing
-rule since 2026-10-22 and did not exist until then — which is the project's
-own §3c, applied to a rule: *a finding is not a finding until someone has
-looked at the thing it names.* Two of its own claims were wrong within hours
-and are corrected below, which is the rule applied to this file in turn.
+Written 2026-10-28, revised 2026-10-29. It had been reserved by standing rule
+since 2026-10-22 and did not exist until then — which is the project's own §3c,
+applied to a rule: *a finding is not a finding until someone has looked at the
+thing it names.* Three of its own claims have since been wrong and are
+corrected below, which is the rule applied to this file in turn.
 
 ---
 
@@ -29,9 +29,7 @@ run, and P1-T's if it came out of a derivation.**
 reason is worth keeping. It had been P1-B's, while the line in it that
 declares the live supplement edition can be invalidated only by a P1-T action
 — so the dependency and the custody ran in opposite directions, and the
-download link died twice in one morning. The grant makes them coincide. It is
-the one file where the stream that adjudicates the content also holds the
-path, and it is that way because the alternative was measured and failed.
+download link died twice in one morning. The grant makes them coincide.
 
 Anyone may prod any stream; the stream that owns the question rules on it.
 Coordination names collisions and never allocates.
@@ -75,27 +73,40 @@ governor is narrow.
 
 ## Routes to `main`
 
-| route | carries | cannot |
+| route | carries | needs |
 |---|---|---|
-| **GitHub MCP connector** | any text-only file, from any session | **run a script** |
-| **shell on the PI's machine** | everything, with its generators in the same commit | — |
-| **the PI's own hands** | the fallback | — |
+| **the GitHub connector** | any text file, from any session | nothing |
+| **a cloud clone** | everything a script produces | `git clone --depth 1` of this public repository |
+| ~~the PI's machine~~ | — | **not a route** |
 
-**Try the connector first for text; anything with a generated dependent needs
-a shell.** `FILE-MANIFEST-SHA256.txt` and `PORTABLE-MANIFEST` hash the whole
-tree, `docs/THEORY-AUDIT.md` is generated from the instruments, and the
-supplement needs a build. An API commit refreshes none of them, so one that
-leaves an artefact stale **says so in its commit message**.
+**Measured 2026-10-29, because this table previously asserted a dependency
+nobody had tested.** On a fresh shallow clone in the cloud workspace:
+`pdflatex` and `latexmk` are present, so the supplement builds; numpy 2.4.4,
+scipy 1.17.1 and sympy 1.14.0 are present, so the instruments run;
+`tests/frame/run_all.py` reports ALL FRAME CHECKS PASS over twelve instruments,
+independent and isolated; `make_manifests.py --check` passes all five
+manifests; `check_portability.py` passes over 319 files with git agreeing on
+the set.
 
-**That debt has a ceiling.** The sweep is the first item of the next
-shell-capable run, not a background intention, and **it must be zero at a
-tag.** It reached 64 files on `FILE-MANIFEST` and 40 on `PORTABLE-MANIFEST`
-inside a single day, with three gates red on `main`, which is what deferring
-it to "the next run" amounts to in practice.
+**So the pattern for anything with a generated dependent is: clone, run the
+generator, push the generated files through the connector.** The repository is
+public, so the clone needs no credential and no session is privileged over any
+other. Nothing here requires the PI's shell, which has been unavailable since
+2026-10-27.
 
-Commits made through a shell name their files with a pathspec on the commit as
-well as the add — never `git add -A`, because the PI's index often holds
-another stream's staged work.
+A connector commit still cannot refresh a manifest in the same breath, so one
+that leaves an artefact stale **says so in its commit message**. The sweep is
+the first item of the next run that takes a clone, and **it must be zero at a
+tag.**
+
+**Writing to the PI's working tree is withdrawn as a route.** It caused two
+failures in two days: `tests/frame/conformity.py` was written there on
+2026-10-28 and sat nineteen hours invisible to every session, including the
+scheduled run its own standing page instructs to execute it first; and about
+1,600 characters of P1-T prose were swept into `6e51a458` when P1-B rebased
+while that tree held a file P1-T had just written into it. **A file on the
+PI's disk is not in the repository, and what is not in the repository cannot
+be read by the next session.**
 
 **No change to a rendered artefact is complete until the rendered artefact has
 been loaded and read** — the built PDF for the supplement, the page and its DOM
@@ -103,14 +114,26 @@ for GitHub-rendered markdown, each against its own caption. A source-pattern
 test catches the failures already known; the rendered page catches the next
 one.
 
+## Recovery
+
+This repository is the only complete copy of the bundle, and as of 2026-10-29
+it is a sufficient one: the measurements above are a recovery test, not a
+claim. A clone plus the cloud toolchain reconstitutes every generated artefact.
+
+Two things are **not** covered by it and are the project's live exposure: the
+paper repository, which is on one disk and not on GitHub; and the Claude
+project documents, including both standing pages, whose only copy outside
+Claude is a nightly backup. Neither is Coordination's to fix and both are
+named here so that the gap is not discovered during the emergency.
+
 ## Adding a stream
 
 A new stream needs four things settled before it writes anything here, in this
 order: **what it adjudicates**, stated so that a disputed item can be assigned
 to exactly one stream; **which paths it writes**, disjoint from every existing
-stream's; **which of the three routes it may use**; and **its own standing
-page**, rewritten rather than appended to, which is the only document of that
-stream anyone else is required to read.
+stream's; **which of the routes it may use**; and **its own standing page**,
+rewritten rather than appended to, which is the only document of that stream
+anyone else is required to read.
 
 A stream that adjudicates nothing is a reviewer and does not need write access.
 Two streams that adjudicate the same thing is the failure this table exists to
