@@ -22,6 +22,7 @@ It gates five things that have each already cost this bundle something:
   B  every item P1-T writes carries an identifier, a clock-sourced stamp, what
      is asked and what it unblocks  (Coordination's queue contract)
   D  no maths span in a P1-T file is butted against a letter, a digit or a dash
+  F  the supplement's own voice, on the sections P1-T wrote and only those
   E  the D check's own regex cannot straddle two spans -- the control, which is
      T-44's requirement and the defect that produced a false 91 on 2026-10-28
 
@@ -90,7 +91,7 @@ def strip_code(text):
     return '\n'.join(out)
 
 
-DASHES = '–—'          # en dash, em dash
+DASHES = '\u2013\u2014'          # en dash, em dash
 
 
 def blank_display_math(text):
@@ -158,8 +159,8 @@ def rendering_violations(text):
 # ---------------------------------------------------------------------------
 # A  the channel is read, and running this check is the reading
 # ---------------------------------------------------------------------------
-THEIR_ITEM = re.compile(r'^##\s+P1B\s*(?:->|→)\s*P1T\s+(\d{4}-\d{2}-\d{2})\s+#(\d+)(.*)$', re.M)
-MY_ITEM    = re.compile(r'^###\s+P1T\s*(?:->|→)\s*P1B\s+(\d{4}-\d{2}-\d{2})\s+#(\d+)\s*(.*)$', re.M)
+THEIR_ITEM = re.compile(r'^##\s+P1B\s*(?:->|\u2192)\s*P1T\s+(\d{4}-\d{2}-\d{2})\s+#(\d+)(.*)$', re.M)
+MY_ITEM    = re.compile(r'^###\s+P1T\s*(?:->|\u2192)\s*P1B\s+(\d{4}-\d{2}-\d{2})\s+#(\d+)\s*(.*)$', re.M)
 CITATION   = re.compile(r'[Yy]our\s+#(\d+)')
 
 
@@ -171,7 +172,7 @@ def check_channel(quiet=False):
     theirs = THEIRS.read_text(encoding='utf-8')
     mine = MINE.read_text(encoding='utf-8') if MINE.exists() else ''
 
-    items = [(d, int(n), t.strip(' -—')) for d, n, t in THEIR_ITEM.findall(theirs)]
+    items = [(d, int(n), t.strip(' -\u2014')) for d, n, t in THEIR_ITEM.findall(theirs)]
     cited = {int(n) for n in CITATION.findall(mine)}
     uncited = [i for i in items if i[1] not in cited]
 
@@ -262,6 +263,132 @@ def check_control():
                   not problems, '\n'.join(problems))
 
 
+# ---------------------------------------------------------------------------
+# F  THE SUPPLEMENT'S VOICE, which is the failure mode that keeps coming back.
+#
+# `claude/style-supplementary-materials-voice.md` is thorough, has mechanical
+# tests, and ends by naming its own cause: "The count that predicts the drift
+# is the one nobody was running."  The rule was never missing.  The running
+# was.  So the counts run here, and they run on the section being edited.
+#
+# SCOPE IS THE WHOLE POINT.  Section 5 of that document: "correct mine, not
+# his."  The released prose uses some of the same words and is not in scope --
+# the RC's own `Current situation` carries 18 bold spans in prose and is
+# correct.  Only sections P1-T wrote are gated, and a section nobody has
+# classified is reported rather than guessed at.
+# ---------------------------------------------------------------------------
+SUPPLEMENT = sorted(ROOT.glob('SUPPLEMENTARY-MATERIAL-v*.tex'))
+
+#: Sections P1-T wrote.  Adding a section here is what puts it under the gate.
+P1T_SECTIONS = ('Discussion', 'Implications')
+
+BANNED = ('worth naming', 'worth saying', 'worth stating', 'and that is the point',
+          'not a hypothetical', 'There is one', 'and it is the one')
+
+#: Titles already landed and not yet repaired.  Each needs a reason, and the
+#: list is meant to shrink.  An empty entry is not allowed.
+TITLE_DEBT = {
+    # empty, and it is meant to stay empty: a title is repaired, not recorded.
+}
+
+
+def title_failures(title):
+    """The three patterns of style section 6, and only those.
+
+    Pattern 1 is NOT "opens with an interrogative".  It is "opens with an
+    interrogative THAT THE TITLE THEN ANSWERS" -- a label with no assertion in
+    it.  A cleft names its subject at once and is correct: the document's own
+    exemplar of a GOOD title is "What cancels is the deflection response, and
+    variance conservation is not established."  A first reading of the rule
+    condemned that sentence, which would have enforced the opposite of the
+    rule, so the exemplars below are the control.
+    """
+    bad = []
+    if re.match(r'(What|Why|Where|How)\b', title) and \
+       not re.search(r'\b(is|are|was|were)\b', title):
+        bad.append('interrogative label with no assertion in it')
+    if re.search(r',\s*(which is|and it is)\b', title):
+        bad.append('"which is" / "and it is" supplying a withheld subject')
+    if re.match(r'(The scope of|The nature of|A note on|The question of|On the)\b', title):
+        bad.append('names a category instead of making a claim')
+    return bad
+
+
+#: Every verdict the style document states, as the control for the test above.
+TITLE_EXEMPLARS = (
+    ('What this establishes, and what it does not.', False),
+    ('What cancels is the deflection response, and variance conservation is not established.', True),
+    ('The scope of this statement, which is the kernels and not any solver.', False),
+    ('This is a statement about the kernels and not about any solver.', True),
+    ('Criterion 5b compares against CAMB and CLASS. It does not port them.', True),
+    ('A note on the damping coefficient.', False),
+    ('Why the peak moves.', False),
+)
+
+_TABLE = re.compile(r'\\begin\{(tabularx|longtable|tabular)\}.*?\\end\{\1\}', re.S)
+_PARA  = re.compile(r'\\paragraph\{((?:[^{}]|\{[^{}]*\})*)\}')
+
+
+def _regions(text):
+    """Each P1-T section's body, by \\section title."""
+    heads = [(m.start(), m.group(1)) for m in re.finditer(r'\\section\{([^}]*)\}', text)]
+    out = {}
+    for i, (pos, title) in enumerate(heads):
+        end = heads[i + 1][0] if i + 1 < len(heads) else len(text)
+        if title in P1T_SECTIONS:
+            out[title] = text[pos:end]
+    return out
+
+
+def check_voice():
+    if not SUPPLEMENT:
+        return report('F  the supplement keeps its own voice', True,
+                      'no SUPPLEMENTARY-MATERIAL-v*.tex in the tree; nothing to gate')
+    tex = SUPPLEMENT[-1]
+    text = tex.read_text(encoding='utf-8')
+    regions = _regions(text)
+
+    bad = []
+    missing = [s for s in P1T_SECTIONS if s not in regions]
+    if missing:
+        bad.append('declared P1-T section(s) not found in %s: %s'
+                   % (tex.name, ', '.join(missing)))
+
+    for name, body in sorted(regions.items()):
+        prose = _TABLE.sub('', body)
+        n_bold = prose.count('\\textbf{')
+        if n_bold:
+            bad.append('%s: %d bold span(s) in prose, and the baseline is 0 -- '
+                       'inline bold as a heading substitute is the named failure mode'
+                       % (name, n_bold))
+        for b in BANNED:
+            if b in body:
+                bad.append('%s: banned construction %r' % (name, b))
+        grammars = {m.group(1) for m in re.finditer(r'\\begin\{(tabularx|longtable)\}', body)}
+        if len(grammars) > 1:
+            bad.append('%s: %d table grammars in one section (%s); one per section'
+                       % (name, len(grammars), ', '.join(sorted(grammars))))
+        for m in _PARA.finditer(body):
+            title = re.sub(r'\s+', ' ', m.group(1)).strip()
+            why = title_failures(title)
+            if not why:
+                continue
+            if title in TITLE_DEBT:
+                print('       debt  %s: %s  [%s]' % (name, title[:56], TITLE_DEBT[title]))
+                continue
+            bad.append('%s: paragraph title -- %s\n         %s' % (name, '; '.join(why), title))
+
+    # the control: the test must reproduce every verdict the style document states
+    wrong = [tl for tl, good in TITLE_EXEMPLARS if bool(title_failures(tl)) == good]
+    if wrong:
+        bad.append('CONTROL FAILED -- the title test no longer reproduces the style '
+                   'document\'s own verdicts on %d exemplar(s). It is measuring '
+                   'something else and must not be trusted:\n         %s'
+                   % (len(wrong), '\n         '.join(t[:76] for t in wrong)))
+
+    return report('F  the supplement keeps its own voice', not bad, '\n'.join(bad))
+
+
 def main():
     queue_only = '--queue' in sys.argv
     print('P1-T conformity gate -- %s' % ROOT)
@@ -272,6 +399,7 @@ def main():
     check_queue_contract()
     check_rendering()
     check_control()
+    check_voice()
 
     if ROOT.joinpath('docs', 'STREAMS.md').exists():
         streams = ROOT.joinpath('docs', 'STREAMS.md').read_text(encoding='utf-8')
