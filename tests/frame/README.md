@@ -1,16 +1,37 @@
-# Frame checks — eleven instruments, for `tests/`
+# Frame checks — twelve instruments, for `tests/`
 
 **P1-T, 2026-10-19; count corrected and `c9` added 2026-10-26; `c10` and `c11`
-added 2026-10-26.** Eleven self-contained instruments behind the
+added 2026-10-26; `c12` added 2026-10-29.** Twelve self-contained instruments behind the
 frame-covariance conditions, plus the generator that turns them into
 `docs/THEORY-AUDIT.md`.
 
 ```
 python3 doctor.py                                      # why the suite will or will not run here
+python3 conformity.py                                  # the channel, and the stream's own conformity
 python3 run_all.py                                     # exit 0 only if all pass
 python3 gen_theory_audit.py                            # writes the document itself
 python3 -I c6_thomson.py                               # or run one
 ```
+
+**Run `conformity.py` first, every run, before reading anything else.** It is
+not a physics instrument and `run_all.py` does not collect it — the glob takes
+`c` followed by a digit, and the instrument count is a count of physics. What it
+gates is the part of this stream that no physics check can see: that every open
+item in `handoff/P1B-to-P1T.md` is cited in `handoff/P1T-to-P1B.md`, that every
+item P1-T writes carries an identifier, a clock-sourced stamp, what is asked and
+what it unblocks, and that no maths span in a P1-T file is butted against a
+letter, a digit or a dash. It does **not** check the README's declared supplement
+edition against the files on disk: P1-B's `test_every_relative_link_resolves` and
+`test_the_readme_and_the_supplement_name_the_same_tree_version` already do, and two
+streams gating one property is the failure `docs/STREAMS.md` exists to prevent.
+
+**Running it is the act of reading the channel**, which is the point. On
+2026-10-28 P1-T read P1-B's answers out of their commit messages instead of out
+of `handoff/P1B-to-P1T.md`: two of P1-B's items sat unread, P1-T's answer to a
+third sat in a stream note neither party was required to read, and the item P1-T
+was about to send asked a question P1-B had answered six hours earlier. Nothing
+went red. A rule that the channel be read is kept only by remembering to read
+it, and the remembering had already failed, so it is an instrument now.
 
 **Start with `doctor.py` when anything fails.** It imports nothing outside the
 standard library, so it runs where the suite does not, and it reports the
@@ -67,6 +88,7 @@ construction. Requires `numpy`, `scipy`, `sympy`.
 | `c9_byparts_admissibility.py` | **the condition under which the by-parts of `c6` is legitimate at all.** `(WC₁)'` splits into `W'C₁ ~ κ'²` and `WC₁' ~ κ''`, whose **sum** is the total derivative `d(𝒱v̂_B)/dη` and is therefore bounded — **not because the two cancel pointwise, which they do not**: C9a measures the largest piece at **8.0×** the sum. (102) carries `𝒱C₁'` in place of `WC₁'` — larger by **exactly κ'** — and drops `W'C₁`, destroying the bound from both sides in one operation. The **split** by-parts, gravitational half by-parted and scattering half left at `K'`, reproduces the ancestor to 1e-13 and contains no `κ''` term at all (P1-T, 2026-10-26) |
 | `c10_oscillator_phase.py` | **the acceptance criterion for the acoustic step is blind to the driving it was meant to gate.** Eliminating `τ̃₁` between *Annals II* (152) and (153) returns `δT̃″ + [R'/(1+R)]δT̃' + k²c_s²δT̃ = −(k²/3)Φ_A − 𝓕` with `c_s² = 1/[3(1+R)]` exactly and the standard baryon-drag coefficient; nothing is imported to get it. On a **constant** `Φ` the boundary value `(δT̃+Φ_A)(η_*)` is a pure cosine of amplitude `Φ/3` and its phase is **zero**; on a decaying `Φ` the phase is non-zero at every `k`. So a *"tracks `cos(kr_s)` in exact phase"* criterion **accepts the undriven solution and rejects the driven one** — the step that should have caught **A-3** certifies its absence. The Einstein–de Sitter null, `Ω_r = 0` and `Φ` constant and phase exactly zero, is the control that separates a driving mechanism from a fit (P1-T, 2026-10-26) |
 | `c11_kernel_partner.py` | **a by-parts taken against the kernel has three terms, not two, and the one that is easy to drop is the one that keeps the source out of the post-decoupling span.** `d(WCK)/dη = 𝒱CK + WC'K + WCK'`, whose integral is a pure boundary term; the boundary at `η₀` is **exactly zero** for `ℓ ≥ 1` because `j_ℓ(0) = 0`, and the boundary at `η_i` is bounded by `e^{−κ}(η_i)`. So `∫WC'K = −∫𝒱CK − ∫WCK'` exactly, to 5.4e-8 across `2 ≤ ℓ ≤ 600`. The Sachs–Wolfe term `𝒱CK` puts 5.5e-7 of its mass outside the visibility; the differentiated term `WC'K` puts **0.75 to 0.99** of its mass outside it — a separation of 1.4e6. Keeping `WC'K` without its `WCK'` partner therefore replaces a recombination-confined source with one that accumulates to today, and the discarded partner is 2.7 to 1.9e3 times the Sachs–Wolfe term it leaves behind. **With `Φ` constant this does not go away**, because `C₁^grav` still carries the free streaming of `δT̃`, which is why the Einstein–de Sitter null is the control that sees it. `c9`'s two-term condition is the special case in which the kernel is held fixed (P1-T, 2026-10-26) |
+| `c12_sampling_bound.py` | **the rate at which a grid must sample the visibility, and the three candidate scales are one scale.** $\mathcal V=\kappa'e^{-\kappa}$ gives $\mathcal V'=(\kappa''+\kappa'^2)e^{-\kappa}$ and $e^{-\kappa}$ never vanishes, so the peak sits exactly where $\kappa''=-\kappa'^2$ — which makes the Thomson scale height $-\kappa'/\kappa''$ and the optical-depth e-fold $1/\kappa'$ **identically the same number** there, not approximately and not as a property of recombination but as the content of the stationarity condition (C12b, to 7.4e-15). The kernel is exactly band-limited by the Rayleigh expansion, so a product convolves and the two requirements **add** rather than one flooring the other: $2\pi/h\ge k_{\max}+\nu_{\mathcal V}$, with the cost of not adding them measured at 161x. The bound is not on sampling $\mathcal V$ but on **building** $\kappa$: accumulating it by trapezoid leaves $\delta\kappa=-(h^2/12)\kappa''$, so $\delta(\int\mathcal V)/\int\mathcal V=-(h\kappa'(\eta_\ast))^2/12$ and a coarse grid **lowers** the visibility. The rule $h\kappa'(\eta_\ast)\le\sqrt{12\varepsilon}$ returns $N\ge7737$ on PLANCK at one part in a thousand against `N_ETA_FLOOR = 8000`, **deriving T-58's measured constant to three per cent and closing S33** (P1-T, 2026-10-29) |
 
 ## Five things to read before trusting the output
 
@@ -173,8 +195,8 @@ $\ell\ge1$. So $\int WC'K=-\int\mathcal VCK-\int WCK'$, exactly.
 | term | where its mass lives | what it is |
 |---|---|---|
 | $\int\mathcal VCK$ | inside the visibility, late fraction $5.5\times10^{-7}$ | the Sachs--Wolfe monopole |
-| $\int WC'K$ | outside it, late fraction $0.75$–$0.99$ | the coefficient differentiated at $e^{-\kappa}\simeq1$ |
-| $\int WCK'$ | the partner that makes the first two add to zero | $2.7$–$1.9\times10^3$ times the Sachs--Wolfe term |
+| $\int WC'K$ | outside it, late fraction $0.75$ to $0.99$ | the coefficient differentiated at $e^{-\kappa}\simeq1$ |
+| $\int WCK'$ | the partner that makes the first two add to zero | $2.7$ to $1.9\times10^3$ times the Sachs--Wolfe term |
 
 > **The consequence — the generalisation of `c9`'s rule.** Every by-parts
 > against $K$ must account for all three terms. Drop the $K'$ term and the
@@ -215,11 +237,36 @@ different suites:
 | `gen_theory_audit.py` | P1-T | `c1`–`c8` | **`docs/THEORY-AUDIT.md` carried no by-parts admissibility result at all**, five days after `c9` landed |
 | `tests/test_frame_checks.py` | P1-B | `c1`–`c7` | **neither `c8` nor `c9` is gated by the bundle's own harness**; both pass `run_all.py` and nothing else |
 
-The first two are corrected here and both now carry `c1`–`c11`. **The third is
+The first two are globs over this directory now, P1-B's repair of 2026-10-26, so
+all twelve are carried and the thirteenth is carried the day it lands. **The third is
 outside P1-T's line and is flagged to P1-B rather than edited.** Until it
-carries `c8` through `c11`, the rank-0 control, the by-parts admissibility
+carries `c8` through `c12`, the rank-0 control, the by-parts admissibility
 condition, the oscillator-phase gate and the kernel-partner identity are
 documented and reproducible but not *gated*, and a regression in any of them
 would reach a release.
 
 **An instrument that is committed but not registered is a file, not a gate.**
+
+## c12 — the control that the first design could not have failed
+
+`c12_sampling_bound.py`, added 2026-10-29. **The first `c12` was withdrawn on
+2026-10-28 for laying its grid over the very window it meant to undersample**,
+so it could never violate its own bound and three of its five checks tested
+nothing. The replacement carries C12g and C12h: the bound evaluated at a grid
+chosen *from it* to fail, against one chosen to meet it — 1.57e-02 against
+6.25e-05, a separation of 252x across the bound. Without both, the instrument
+is decoration.
+
+**Two further choices are controls rather than conveniences.** The history
+carries a closed-form optical depth, so that $\int\mathcal V\,\mathrm d\eta$
+is scored against an exact reference and not against another quadrature. And a
+windowed numerical transform was tried for the band-limit check and discarded,
+because it measures the window rather than the kernel.
+
+> **What a convergence study cannot see.** D39 refined the line-of-sight grid
+> with `RecombinationHistory`'s own grid held fixed throughout. If the
+> construction bias above is present it is in every row of that sweep equally,
+> *including the extrapolated continuum limit the 0.93 per cent is measured
+> against*. An error frozen into a grid that is never refined does not appear
+> in a refinement study of a different grid. That is put to P1-B rather than
+> asserted here, because whether the bundle carries it is a run.
