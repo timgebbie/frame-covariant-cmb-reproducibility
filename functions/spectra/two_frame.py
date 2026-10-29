@@ -271,6 +271,7 @@ def build_environment(
     f_2: float = F2_DEFAULT,
     line_of_sight_weight: str = "printed",
     acoustic_start: str = "derived",
+    recombination_n_eta: int | None = None,
 ) -> TwoFrameEnvironment:
     r"""The $k$-independent half: background, recombination, potentials.
 
@@ -286,8 +287,20 @@ def build_environment(
     # "released" it is ignored and 0.674 is used, so nothing moves until
     # the control is flipped. S43's rule, applied to h rather than to a
     # weight --- the gate counts the one and not the other.
+    # **`recombination_n_eta` is `None` on the released path --- P1T->P1B #13,
+    # 2026-10-29.** `RecombinationHistory.build` grids at 4000 points over the
+    # whole span, and `c12` derives that a uniform grid accumulating kappa from
+    # kappa' by trapezoid lowers the visibility by $(h\kappa'(\eta_\ast))^2/12$.
+    # **D39 refined the line-of-sight grid with this one held at 4000
+    # throughout**, so a bias here sits in every row of that sweep equally,
+    # including the Richardson limit T-164's 0.95\% is measured against --- and
+    # a refinement cannot see an error frozen into a grid it does not refine.
+    # D40 moves it. The default is `None` so nothing released changes until
+    # something passes a number.
     recombination = RecombinationHistory.build(
-        background, omega_b_h2=omega_b_h2, h=float(hubble_h))
+        background, omega_b_h2=omega_b_h2, h=float(hubble_h),
+        **({} if recombination_n_eta is None
+           else {"n_eta": int(recombination_n_eta)}))
     eta_star = recombination.eta_star
     span = float(background.eta_0 - recombination.eta[0])
     # **The floor is applied here too --- finding T-58.** `required_n_eta` is

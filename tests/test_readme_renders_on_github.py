@@ -320,7 +320,16 @@ def _bare_asterisk_in_inline_maths(name: str) -> None:
     never did. One bare ``*`` is enough, because the ``**bold**`` markers
     elsewhere in the same paragraph supply its partner.
     """
-    text = _prose(name)
+    # **Code spans blanked --- T-165's second instance, 2026-10-29.** T-165
+    # repaired the butted-span gate for exactly this and deliberately left
+    # this one alone, on the rule that you fix what fired on the evidence that
+    # fired it. It has now fired: P1-B's handoff quoted
+    # ``` `$\mathcal{V}(\eta_*)C_2(\eta_*)$` ``` while *reporting that very
+    # defect* in `c3_byparts.py` to P1-T, and the gate counted the report as
+    # an instance. A code span renders literally, so the `*` in one pairs with
+    # no emphasis marker and is not a hazard. The evidence has arrived; the
+    # repair follows it rather than preceding it.
+    text = _without_code(_prose(name))
     body = re.sub(r"\$\$.*?\$\$", "", text, flags=re.S)   # displays covered above
     hits = [(body[: m.start()].count("\n") + 1, m.group(0))
             for m in re.finditer(r"(?<!\$)\$(?!\s)([^$\n]{1,80}?)(?<!\s)\$(?!\$)",

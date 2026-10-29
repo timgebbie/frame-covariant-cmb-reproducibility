@@ -39,7 +39,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -134,7 +134,31 @@ def main() -> int:
     with tempfile.TemporaryDirectory(prefix="supplement-") as tmp:
         build = Path(tmp)
         shutil.copy2(SOURCE, build / SOURCE.name)
-        for d in ("tables", "figures", "supplementary-materials"):
+        # **The staged set is read from the document --- finding T-174,
+        # 2026-10-29.** It was the literal triple
+        # `("tables", "figures", "supplementary-materials")`, and the
+        # supplement began `\input`ing `tikz/figure-history-flow-v1.3.7.tex`
+        # after that line was written. The directory was never staged, so
+        # **every build since has died** on *"File `tikz/...' not found.
+        # Emergency stop."* --- which is why Coordination found
+        # `SUPPLEMENTARY-MATERIAL-v1.3.19.pdf` nine sources stale. The PDF was
+        # not un-rebuilt; it was unbuildable.
+        #
+        # A hand-written list of what a document needs is the same shape as
+        # `gen_theory_audit.py`'s three registries and
+        # `check_release_hygiene`'s source set, and it fails the same way: the
+        # author of the next `\input` is not the author of the list. Both of
+        # those were repaired by reading the document, and so is this. The
+        # triple is kept as a **floor** rather than replaced, so the change can
+        # only ever stage more, never less.
+        wanted = {"tables", "figures", "supplementary-materials"}
+        text = SOURCE.read_text(encoding="utf-8")
+        for ref in re.findall(r"\\(?:input|include)\{([^}]+)\}", text) + \
+                re.findall(r"\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}", text):
+            head = PurePosixPath(ref.strip()).parts
+            if len(head) > 1:
+                wanted.add(head[0])
+        for d in sorted(wanted):
             if (ROOT / d).is_dir():
                 shutil.copytree(ROOT / d, build / d, dirs_exist_ok=True)
 

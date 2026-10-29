@@ -800,3 +800,17 @@ the DERIVED count at 300 reproduces 12.0 samples per j_l zero spacing exactly
 --- the band-edge condition a k_max = 1500 run sits at --- so the question is
 answered for the price of a 300 pass. Raising K_MAX here would change what is
 being measured, not sharpen it."""
+
+[[grid]]
+key = "scripts/diagnostic_d40_recombination_grid_bias.py::k_com"
+what = "the k grid D40 integrates over"
+status = "derived"
+note = """`required_k_points(K_MAX, span)` at K_MAX = 300, held fixed across
+every refinement of the RECOMBINATION grid so the only thing moving is the one
+D39 held still. Matching D39's K_MAX exactly is the point rather than a
+convenience: the two instruments refine different grids and their numbers are
+only comparable if everything else is the same, and T-172's conclusion -- that
+the two errors are separate and distinguishable by their ell-dependence --
+rests on that comparison. 300 also cannot carry the multipoles the secondaries
+live at, which is stated here because the follow-up run T-172 calls for will
+need a different K_MAX and must therefore be a different row."""

@@ -18,7 +18,7 @@ being possible.
 | status | count | means |
 |---|---|---|
 | **open** | 1 | a chosen literal whose convergence is **not** established. This status is the point of the register. |
-| **derived** | 25 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
+| **derived** | 26 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
 | **measured** | 7 | a chosen literal whose convergence has been measured, with the number stated. |
 | **described** | 11 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
 | **index** | 31 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
@@ -37,7 +37,7 @@ share this history, so a grid shift moves them together and cancels. Finding
 **T-46**, question **Q7**, decision **S33** --- derived immediately after the
 v1.2.0 tag. v1.2.0 ships it as a stated limit.
 
-## derived — 25
+## derived — 26
 
 ### `x` — the x grid j_ell(x) is tabulated on
 
@@ -73,7 +73,7 @@ spanning a factor of two thousand in k, which is why no number is chosen.
 
 ### `eta` — the eta grid for the two-frame evaluation of (102): F2, F5, F7
 
-`functions/spectra/two_frame.py:303`, `np.linspace`
+`functions/spectra/two_frame.py:316`, `np.linspace`
 
 `required_n_eta(k_max, span)` when `n_eta is None`, which is how every
 figure calls it, and `check_k` RAISES when a caller asks for a mode the grid
@@ -83,7 +83,7 @@ nothing in the bundle does.
 
 ### `mode_eta` — one acoustic mode's integration grid on the (102) generic-u^a route
 
-`functions/spectra/two_frame.py:384`, `np.linspace`
+`functions/spectra/two_frame.py:397`, `np.linspace`
 
 The same construction as `pipeline.py::mode_eta` and in the same
 release, because **T-51 had one instance per route**: `pipeline.run`,
@@ -287,6 +287,20 @@ the DERIVED count at 300 reproduces 12.0 samples per j_l zero spacing exactly
 --- the band-edge condition a k_max = 1500 run sits at --- so the question is
 answered for the price of a 300 pass. Raising K_MAX here would change what is
 being measured, not sharpen it.
+
+### `k_com` — the k grid D40 integrates over
+
+`scripts/diagnostic_d40_recombination_grid_bias.py:124`, `np.linspace`
+
+`required_k_points(K_MAX, span)` at K_MAX = 300, held fixed across
+every refinement of the RECOMBINATION grid so the only thing moving is the one
+D39 held still. Matching D39's K_MAX exactly is the point rather than a
+convenience: the two instruments refine different grids and their numbers are
+only comparable if everything else is the same, and T-172's conclusion -- that
+the two errors are separate and distinguishable by their ell-dependence --
+rests on that comparison. 300 also cannot carry the multipoles the secondaries
+live at, which is stated here because the follow-up run T-172 calls for will
+need a different K_MAX and must therefore be a different row.
 
 ### `k_com` — the k grid D4 integrates C_ell by rank on
 

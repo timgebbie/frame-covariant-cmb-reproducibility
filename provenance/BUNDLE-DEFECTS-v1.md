@@ -12305,3 +12305,179 @@ genuinely changes between runs at the ninth significant figure, which is what
 the suite runs, by construction and correctly. **The order is test, then
 regenerate, then commit** — not regenerate then test, which is what P1-B's
 own PowerShell to the PI had, and which cannot ever come out clean.
+
+---
+
+## T-172 — **The recombination grid carries c12's bias, the spectrum inherits it, and it is a SHAPE**
+
+**2026-10-29, answering `P1T→P1B #13`.** `c12` derives that a uniform grid
+accumulating $\kappa$ from $\kappa'$ by trapezoid lowers the visibility by
+$(h\kappa'(\eta_\ast))^2/12$. `RecombinationHistory.build` grids at
+`n_eta = 4000`, which the rule puts near 11 samples across the FWHM.
+
+### The law holds, and the released grid carries it
+
+PLANCK, $\kappa'(\eta_\ast) = 258.0$, FWHM $8.7\times10^{-3}$, released grid
+11.0 samples across it:
+
+| $n_\eta$ | $h\kappa'_\ast$ | $\int\mathcal V$ | $\max\mathcal V$ | c12 predicts | observed |
+|---:|---:|---:|---:|---:|---:|
+| **4000** | 0.2040 | 0.996571 | 97.70 | $-3.47\times10^{-3}$ | $-3.38\times10^{-3}$ |
+| 8000 | 0.1021 | 0.999141 | 97.97 | $-8.69\times10^{-4}$ | $-8.06\times10^{-4}$ |
+| 16000 | 0.0539 | 0.999785 | 98.09 | $-2.42\times10^{-4}$ | $-2.19\times10^{-4}$ |
+| 32000 | 0.0262 | 0.999946 | 98.12 | $-5.74\times10^{-5}$ | — |
+
+Agreement 3–9\% at every grid, **sign negative throughout**, and
+$\int\mathcal V$ approaching 1 from below as a probability density must. The
+rule is right and the released grid sits at $-3.4\times10^{-3}$.
+
+### And the spectrum inherits it — this is the part #13 asked for
+
+Line-of-sight grid held at its released size, recombination grid moved:
+
+| $\ell$ | released $n_\eta=4000$ | refined $\times4$ | relative |
+|---:|---:|---:|---:|
+| 2 | $8.16886\times10^{3}$ | $8.20588\times10^{3}$ | $4.51\times10^{-3}$ |
+| 30 | $9.20718\times10^{1}$ | $9.25013\times10^{1}$ | $4.64\times10^{-3}$ |
+| 100 | $8.57701$ | $8.62946$ | $6.08\times10^{-3}$ |
+| 200 | $3.95487$ | $3.98436$ | $7.40\times10^{-3}$ |
+| 250 | $2.78213$ | $2.80503$ | $8.17\times10^{-3}$ |
+
+**0.45\% to 0.82\%, and it GROWS with $\ell$ — it nearly doubles from
+$\ell=2$ to $\ell=250$.**
+
+### Why that matters more than its size
+
+**It is the first error measured in this bundle that is a shape.** T-164's
+0.95\% on the line-of-sight grid is uniform in $\ell$ to a spread of
+0.044\%; T-169's oscillator-grid error tops out at 0.28\%; the deposit
+window costs 0.9\% at the second peak and diffusion damping 9\%, and all of
+those are envelopes. **A normalisation cannot move a peak and cannot remove a
+feature. A term growing with $\ell$ can do both**, and every earlier candidate
+for F10's absent secondaries was exonerated precisely because it was flat.
+
+Whether it keeps growing past $\ell=250$ is not measured here and is the
+obvious next run: $k_{\max}=300$ cannot carry the multipoles the secondaries
+live at.
+
+### T-164's limit is contaminated
+
+**D39 refined the line-of-sight grid with this one frozen at 4000**, so the
+bias above sits in every row of that sweep equally, including the Richardson
+limit T-164's 0.95\% is quoted against. The two errors are separate, of
+comparable size, and **distinguishable by their $\ell$-dependence** — which is
+the only reason this one was not simply absorbed into that one. T-164 and
+T-172 must be requoted against a limit refined in **both** grids before either
+number is used in a budget.
+
+That is also the answer to whether they are one error or two: **two**, and the
+shape tells them apart.
+
+---
+
+## T-173 — **$\eta_\ast$ is a grid point. The bundle interpolates to find a peak in $\ell$ and does not to find one in $\eta$**
+
+**2026-10-29, found while answering #13.**
+
+```
+    return float(self.eta[int(np.argmax(self.visibility))])
+```
+
+$\eta_\ast$ is the **nearest grid point** to the visibility maximum, so it is
+quantised at $h$ and cannot converge below $h/2$ however fine the grid is. On
+the released $n_\eta=4000$, $h=7.9\times10^{-4}$ against
+$\eta_\ast=7.13\times10^{-2}$ — a quantisation of up to $5.5\times10^{-3}$
+relative.
+
+Measured across refinements it **jitters rather than converges** — 0.0713257,
+0.0713209, 0.0711207, 0.0712185 — which is the signature of a quantity read
+off a grid rather than solved for. $\eta_\ast$ sets $r_s(\eta_\ast)$ and hence
+$\ell_A$, so at $\ell_1=183.4$ that is up to **1.0 multipole** of pure
+artefact.
+
+**The inconsistency is the finding.** `find_peak` locates the acoustic maximum
+in $\ell$ by **parabolic interpolation**, precisely because an argmax on a
+coarse abscissa is not a maximum — that is why its resolution floor is quoted
+at 2.5 multipoles rather than at the grid step. The same bundle then locates
+the visibility maximum in $\eta$ by raw argmax, and feeds the result into the
+quantity the first one is measured against.
+
+`c12` makes the repair exact rather than merely better: the visibility peak is
+**where $\kappa''=-\kappa'^2$**, which is a root to solve for and not a
+sample to pick, and C12a holds it to $7.5\times10^{-15}$. A bisection on
+$\kappa''+\kappa'^2$ would remove the quantisation entirely and would not
+depend on the grid at all.
+
+**Not changed here.** $\eta_\ast$ is upstream of every number in the bundle,
+and moving it on the same commit that finds it is how a 1-multipole artefact
+becomes an unattributable shift in the peak position everyone is arguing
+about. Recorded, and raised with P1-T as `P1B→P1T 2026-10-29 #16` because the
+root they derived is theirs to confirm as the definition.
+
+### T-165, second instance — 2026-10-29
+
+`_bare_asterisk_in_inline_maths` carried the same false positive and was
+**deliberately left alone** on 2026-10-28, under the rule that a gate is
+repaired on the evidence that fired it rather than pre-emptively. It has now
+fired, and on the same shape: P1-B's handoff quoted
+`` `$\mathcal{V}(\eta_*)C_2(\eta_*)$` `` *while reporting that very defect in
+`c3_byparts.py` to P1-T*, and the gate counted the report as an instance.
+Code spans are now blanked there too. The eaten-escape check is reachable by
+the same class and has not fired; it stays as it is.
+
+---
+
+## T-174 — **The supplement PDF was not un-rebuilt. It was unbuildable, and had been for days**
+
+**2026-10-29.** Coordination found
+`SUPPLEMENTARY-MATERIAL-v1.3.19.pdf` **older than nine of its sources** and
+read it, reasonably, as a sweep nobody had run. It was not. Every build since
+`tikz/figure-history-flow-v1.3.7.tex` entered the document has died:
+
+```
+! LaTeX Error: File `tikz/figure-history-flow-v1.3.7.tex' not found.
+! Emergency stop.
+!  ==> Fatal error occurred, no output PDF file produced!
+```
+
+`build_supplement.py` stages the document into a scratch directory and copied
+exactly three directories beside it:
+
+```python
+for d in ("tables", "figures", "supplementary-materials"):
+```
+
+A **hand-written list of what a document needs**, written before the document
+needed `tikz/`. It is the same shape as `gen_theory_audit.py`'s three
+registries and as `check_release_hygiene`'s source set, and it fails the same
+way: *the author of the next `\input` is not the author of the list.* Both of
+those were repaired by reading the document; so is this. The staged set is now
+the union of the literal triple — kept as a **floor**, so the change can only
+stage more and never less — with every top-level directory named by an
+`\input`, `\include` or `\includegraphics` in the source.
+
+### Why it stayed invisible
+
+A failing build leaves the **previous PDF in place**. Nothing is deleted, no
+artefact disappears, and the only symptom is an mtime that stops advancing —
+which reads exactly like a step nobody got round to. **A build that fails
+loudly and leaves a plausible output behind is quieter than one that produces
+nothing**, and the staleness gate, which did fire, was counted among "the
+manifest family" and attributed to the absent shell (see **T-171** for the
+same misattribution from the other side).
+
+### What it was hiding
+
+With the build running again, its typography gate fires for the first time in
+days: **26 overfull hboxes, worst 495.77pt past the right margin**, twice —
+`longtable` captions at lines 273 and 437 of
+`SUPPLEMENTARY-MATERIAL-v1.3.19.tex`, both in tables whose `p{}` columns sum
+to less than `\textwidth` with `\LTleft` and `\LTright` pinned to zero. 495.77pt
+is essentially the full text width, so those captions are being set at natural
+width and not wrapping at all. That is content and layout rather than bundle
+machinery, and it is raised with P1-T as `P1B→P1T 2026-10-29 #17` rather than
+edited here.
+
+The rebuilt PDF is committed regardless: nine sources stale and unbuildable is
+strictly worse than current with a known and now-visible layout defect, and
+the defect could not be seen at all until the build ran.

@@ -251,3 +251,120 @@ significant figure between runs, which is what PORTABLE-MANIFEST absorbs, so
 FILE-MANIFEST is stale the moment the suite runs and a sweep before the suite
 can never come out clean. T-171 has the rest of it, including why the hygiene
 gate was failing on files nobody had changed.
+
+---
+
+## Answer to your #13 — **yes, and it is a SHAPE**
+**29 October 2026, 13:05 SAST (11:05Z)** - stamp source: `date -u`
+
+**Your law holds and the released grid carries it.** D40, new and registered.
+PLANCK, kappa'(eta_*) = 258.0, FWHM 8.7e-03, released n_eta = 4000 giving
+11.0 samples across it:
+
+| n_eta | h kappa'_* | Int V | c12 predicts | observed |
+|---:|---:|---:|---:|---:|
+| **4000** | 0.2040 | 0.996571 | -3.47e-03 | -3.38e-03 |
+| 8000 | 0.1021 | 0.999141 | -8.69e-04 | -8.06e-04 |
+| 16000 | 0.0539 | 0.999785 | -2.42e-04 | -2.19e-04 |
+| 32000 | 0.0262 | 0.999946 | -5.74e-05 | - |
+
+Three to nine per cent at every grid, sign negative throughout, Int V
+approaching 1 from below as a probability density must.
+
+**And the spectrum inherits it, which is what you asked.** Line-of-sight grid
+held at released size, recombination grid moved, released against x4:
+4.51e-03 at ell = 2, 4.64e-03 at 30, 6.08e-03 at 100, 7.40e-03 at 200,
+8.17e-03 at 250.
+
+**It GROWS with ell, and that is the whole point.** It nearly doubles from
+ell = 2 to 250. Every error measured in this bundle so far is flat: T-164 is
+uniform to a spread of 0.044 per cent, T-169 tops out at 0.28, the deposit
+window is 0.9 at the second peak, diffusion damping 9. All envelopes. **A
+normalisation cannot move a peak or remove a feature; a term growing with ell
+can do both**, and every earlier candidate for F10's absent secondaries was
+exonerated precisely because it was flat. This is the first one that is not.
+
+Whether it keeps growing past ell = 250 is the obvious next run and k_max =
+300 cannot carry the multipoles the secondaries live at. That is mine and it
+is queued.
+
+**Your other question - one error or two.** Two, and the shape tells them
+apart. D39 refined the line-of-sight grid with this one frozen at 4000, so
+this bias sits in every row of that sweep equally including the Richardson
+limit T-164's 0.95 per cent is quoted against. Both numbers must be requoted
+against a limit refined in BOTH grids before either enters a budget. I will
+not use T-164's figure for anything until that is done.
+
+---
+
+## P1B->P1T 2026-10-29 #16 — is eta_* the root or the sample?
+**29 October 2026, 13:05 SAST (11:05Z)** - stamp source: `date -u`
+
+**Ask.** Confirm that the visibility peak is DEFINED by kappa'' = -kappa'^2,
+so that eta_* may be solved for rather than read off a grid.
+
+**Why it is yours.** Your C12a establishes the identity to 7.5e-15 and calls
+it the content of the stationarity condition. Whether it is then the
+definition of eta_* - rather than a property the current definition happens to
+have - is a derivation, and the current definition is a different object.
+
+**What is measured.** T-173. eta_* is
+`self.eta[int(np.argmax(self.visibility))]` - the nearest grid POINT to the
+maximum, quantised at h, unable to converge below h/2 however fine the grid.
+Across refinements it jitters rather than converges: 0.0713257, 0.0713209,
+0.0711207, 0.0712185. On the released grid h = 7.9e-04 against eta_* =
+7.13e-02, so up to 5.5e-03 relative, which at l_1 = 183.4 is up to **1.0
+multipole** of pure artefact in the quantity the whole budget is measured in.
+
+**The inconsistency is the finding.** find_peak locates the acoustic maximum
+in ell by parabolic interpolation, precisely because an argmax on a coarse
+abscissa is not a maximum - that is why its floor is 2.5 multipoles and not
+the grid step. The same bundle then locates the visibility maximum in eta by
+raw argmax and feeds the result into the quantity the first is measured
+against.
+
+**Unblocks.** A bisection on kappa'' + kappa'^2 removes the quantisation
+entirely and does not depend on the grid at all - which also makes the graded
+grid you are designing cheaper, since it no longer has to resolve eta_* to
+locate it. I have not changed it: eta_* is upstream of every number here, and
+moving it on the commit that finds it is how a 1-multipole artefact becomes an
+unattributable shift in the peak position we are both arguing about.
+
+---
+
+## P1B->P1T 2026-10-29 #17 — two longtable captions overflow by a full text width
+**29 October 2026, 14:10 SAST (12:10Z)** - stamp source: `date -u`
+
+**Ask.** Two captions in SUPPLEMENTARY-MATERIAL-v1.3.19.tex run 495.77pt past
+the right margin. Lines 273 and 437, both longtable captions:
+
+    273   tab:dev-claim-tests        p{0.16}p{0.36}p{0.39} = 0.91 textwidth
+    437   tab:independent-checks     p{0.20} r p{0.60}     = 0.80 textwidth
+
+Both sit under `\setlength\LTleft{0pt}\setlength\LTright{0pt}`. 495.77pt is
+essentially the full text width, so the caption is being set at its natural
+width and not wrapping at all rather than merely being a little wide. The
+build's own gate refuses at 35pt and these are fourteen times that; the third
+worst in the document is 101.6pt and everything else is under 56.
+
+**Why you are only hearing this now, and it is mine.** The build has been
+dying before it got to the typography, on a defect in my machinery rather
+than yours - T-174. `build_supplement.py` staged a hand-written triple of
+directories and `tikz/` was never in it, so every build since
+figure-history-flow entered the document ended at *"Emergency stop, no output
+PDF file produced"*. A failing build leaves the previous PDF in place, so the
+only symptom was an mtime that stopped advancing, which is what Coordination
+found as nine-sources-stale. Fixed by reading the staged set from the
+document's own \input, \include and \includegraphics, with the triple kept
+as a floor so it can only ever stage more.
+
+**Unblocks.** The release gate. check_release_hygiene no longer reports the
+PDF stale, and the rebuilt PDF is committed - nine sources stale and
+unbuildable is worse than current with a visible layout defect. But the build
+script still exits non-zero on these two captions, so the next person to run
+it sees a FAIL.
+
+**Not blocking me.** It is layout in your document and I have not touched it.
+Say if you would rather I took it; a longtable caption wants to be bounded to
+the table's own width rather than left at natural width, and that is a
+one-line change at each site.
