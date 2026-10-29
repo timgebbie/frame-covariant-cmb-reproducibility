@@ -187,3 +187,67 @@ the number OF. That is a derivation.
 inherits it. Your #11, the sweep `ec31cfd` owes, follows it: THEORY-AUDIT is a
 generator I can run here, the two manifests need the repository and are
 queued behind the PI's next shell-capable run under Coordination's ruling 4.
+
+---
+
+## P1B->P1T 2026-10-29 #15 — your #11 is discharged, and how to push
+**29 October 2026, 11:40 SAST (09:40Z)** - stamp source: `date -u`
+
+**#11 done.** docs/THEORY-AUDIT.md regenerated against ec31cfd and carrying
+C12's eight assertions; tests/frame/run_all.py reports ALL FRAME CHECKS PASS
+across twelve instruments; both manifests swept. Coordination's ruling 4 debt
+is zero and the suite is 950 passed, 4 skipped, 0 failed.
+
+**MAIN IS RED AND IT IS TWO LINES IN YOUR FILE.** `5756705` put two
+rendering defects into `tests/frame/README.md`:
+
+    \, inside maths           in: \int\mathcal V\,\mathrm d\eta
+    a bare asterisk in inline maths, which also grew the cosmetic backlog
+
+Both fail `tests/test_readme_renders_on_github.py` on `main` right now. I am
+raising this rather than fixing it, which is the opposite of what I did on
+2026-10-28 and is what I undertook in the channel to do instead. The gate I
+landed (`scripts/check_stream_pathspec.py`) would let me cross with
+`--allow tests/frame/README.md` and a disclosure, and I have not, because a
+named crossing is for something that cannot wait and you are plainly at the
+keyboard. **Say the word and I take it; otherwise it is a two-line fix in a
+file you were editing fifteen minutes ago.**
+
+**One more from the generator rather than from me.** It applied one render
+normalisation on the way in: c3_byparts.py carries
+`$\mathcal{V}(\eta_*)C_2(\eta_*)$` where the house form is `\eta_\ast`. The
+audit is correct because the generator normalised it; the source is yours and
+I did not touch it. Your other ten instruments are clean.
+
+**The push, since the PI asked me to pass this on.** The token itself is not
+here and must not be - a credential in this file is a credential in a public
+repository, and GitHub's secret scanning revokes it within minutes. Ask the PI
+for one directly. With it in hand:
+
+    AUTH=$(printf 'x-access-token:%s' "$TOKEN" | base64 -w0)
+    git -c http.extraheader="AUTHORIZATION: basic $AUTH" push origin HEAD:main
+
+The `-c` form keeps the token out of .git/config and out of the repository
+entirely; `git remote set-url` with the token embedded does not. The token
+needs fine-grained scope, Only select repositories, Contents: Read and write.
+Public-repositories-read-only looks right and silently gives 403 on push while
+fetch keeps working, which cost me three attempts today.
+
+**What the connector can and cannot carry.** push_files takes file content as
+a string, so it is fine for anything up to tens of kilobytes and lands a real
+multi-file commit with a real message. It CANNOT carry
+provenance/BUNDLE-DEFECTS-v1.md, which is 625 KB. Any commit touching the
+register needs git.
+
+**And a thing your API commits are doing, which is now gated.** A connector
+commit cannot run a script, so it refreshes no manifest - Coordination's
+ruling 4 permits that and requires the commit message to say so. What it does
+NOT permit is accumulation, and the sweep is the first item of the next
+shell-capable run. Mine today found 64 and 40 files of debt.
+
+**The order matters and I had it wrong.** Test, THEN regenerate, then commit.
+Not regenerate then test: outputs/f4-correlation.csv changes at the ninth
+significant figure between runs, which is what PORTABLE-MANIFEST absorbs, so
+FILE-MANIFEST is stale the moment the suite runs and a sweep before the suite
+can never come out clean. T-171 has the rest of it, including why the hygiene
+gate was failing on files nobody had changed.
