@@ -163,7 +163,7 @@ those differ between the two lines.
 
 `c10_oscillator_phase.py`, added 2026-10-26. **The acceptance criterion carried
 for the acoustic step passes only when the driving is absent.** The criterion
-asks that $(\delta\tilde T+\Phi_A)(\eta_*)$ track $\cos(kr_s)$ in exact phase. A
+asks that $(\delta\tilde T+\Phi_A)(\eta_\ast)$ track $\cos(kr_s)$ in exact phase. A
 driven oscillator does not track $\cos(kr_s)$; it tracks $\cos(kr_s+\varphi)$,
 and that phase *is* the radiation-era driving. C10d applies the criterion at its
 own tolerance to both solutions and records that it accepts the undriven one and
@@ -258,7 +258,7 @@ chosen *from it* to fail, against one chosen to meet it — 1.57e-02 against
 is decoration.
 
 **Two further choices are controls rather than conveniences.** The history
-carries a closed-form optical depth, so that $\int\mathcal V\,\mathrm d\eta$
+carries a closed-form optical depth, so that $\int\mathcal V\mathrm{d}\eta$
 is scored against an exact reference and not against another quadrature. And a
 windowed numerical transform was tried for the band-limit check and discarded,
 because it measures the window rather than the kernel.
