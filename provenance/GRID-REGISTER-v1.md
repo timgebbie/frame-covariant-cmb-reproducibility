@@ -18,7 +18,7 @@ being possible.
 | status | count | means |
 |---|---|---|
 | **open** | 1 | a chosen literal whose convergence is **not** established. This status is the point of the register. |
-| **derived** | 26 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
+| **derived** | 27 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
 | **measured** | 7 | a chosen literal whose convergence has been measured, with the number stated. |
 | **described** | 11 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
 | **index** | 31 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
@@ -37,7 +37,7 @@ share this history, so a grid shift moves them together and cancels. Finding
 **T-46**, question **Q7**, decision **S33** --- derived immediately after the
 v1.2.0 tag. v1.2.0 ships it as a stated limit.
 
-## derived — 26
+## derived — 27
 
 ### `x` — the x grid j_ell(x) is tabulated on
 
@@ -80,6 +80,21 @@ figure calls it, and `check_k` RAISES when a caller asks for a mode the grid
 cannot resolve --- the guard finding **T-34** produced after F7 sized its grid
 for k=140 and integrated to k=420. A caller may still pass `n_eta` explicitly;
 nothing in the bundle does.
+
+### `grid` — the common acoustic grid coefficient_sets_batch integrates every mode on
+
+`functions/spectra/two_frame.py:501`, `np.linspace`
+
+`required_acoustic_points(k.max(), eta_couple - min(start))` -- the
+same rule the released per-mode path uses, taken at the STIFFEST mode over the
+WIDEST span, because a common grid cannot be coarser than its worst mode
+demands. The starts are not common: each mode is held at its own initial
+condition until its own `acoustic_start_eta` (T-166 measured that a common
+start moves tau_1 by 1.4e-02, so the per-mode start is physics). Registered
+although nothing released calls it: T-175 has it reproducing delta_T and tau_1
+at 2.5e-08 and C_1' only to 5.0e-03, so it is not adoptable yet, and a grid
+that is unregistered until it is adopted is a grid nobody reviews before the
+commit that adopts it.
 
 ### `mode_eta` — one acoustic mode's integration grid on the (102) generic-u^a route
 
@@ -290,7 +305,7 @@ being measured, not sharpen it.
 
 ### `k_com` — the k grid D40 integrates over
 
-`scripts/diagnostic_d40_recombination_grid_bias.py:124`, `np.linspace`
+`scripts/diagnostic_d40_recombination_grid_bias.py:146`, `np.linspace`
 
 `required_k_points(K_MAX, span)` at K_MAX = 300, held fixed across
 every refinement of the RECOMBINATION grid so the only thing moving is the one

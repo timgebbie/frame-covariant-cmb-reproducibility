@@ -12481,3 +12481,72 @@ edited here.
 The rebuilt PDF is committed regardless: nine sources stale and unbuildable is
 strictly worse than current with a known and now-visible layout defect, and
 the defect could not be seen at all until the build ran.
+
+---
+
+## T-175 — **The batch was validated on the solution. The spectrum uses its derivative**
+
+**2026-10-29.** `solve_acoustic_batch` with per-mode starts reproduces the
+released per-mode solve at **2.5e-08** and runs **7.1$\times$** faster
+(**T-167**), so `coefficient_sets_batch` was written to carry it into the hot
+path. It does not carry it, and the reason is instructive.
+
+| $k$ | own start | worst field | disagreement |
+|---:|---:|---|---:|
+| 0.05 | $10^{-9}$ | `c1_prime` | 2.4e-05 |
+| 60 | 2.9e-03 | `v_b_prime` | 1.4e-05 |
+| 120 | 1.4e-03 | `c1_prime` | 8.5e-05 |
+| 180 | 9.6e-04 | `c1_prime` | 1.5e-03 |
+| 240 | 7.2e-04 | `c1_prime` | 2.7e-03 |
+| **300** | 5.8e-04 | **`c1_prime`** | **5.0e-03** |
+
+Every grid here is 512 points and every span is the same to one cell, so it is
+not resolution. **A single mode batched agrees exactly** — with one mode the
+common grid *is* that mode's own grid and there is no mask to apply.
+
+### What T-167 checked, and what it did not
+
+T-167 compared $\delta_T$ and $\tau_1$. **The spectrum does not use those; it
+uses $C_1'$**, and the mask that makes the batch legitimate — holding each
+mode at its initial condition until its own `acoustic_start_eta` — puts a
+**step in the right-hand side** at that instant. The solution crosses it
+continuously and *its derivative does not*. So the quantity T-167 measured is
+the one the mask is gentlest on, and the quantity the bundle integrates is the
+one it is harshest on.
+
+**A speedup validated on the wrong object is the shape of M15**, and this is
+the second time in two days the same trap has been walked into from a
+different side: T-169's first measurement scored interpolation error and
+called it a grid defect. The discipline that caught both is the same — score
+on what the instrument downstream actually consumes.
+
+### Not adopted, and the test says so strictly
+
+`coefficient_sets_batch` stays in the tree, wired to nothing, with its
+equivalence tests marked `xfail(strict=True)`. Strict is the point: if the
+kink is repaired the test becomes an **unexpected pass** and fails the suite,
+so adoption is a decision somebody takes rather than one that quietly happens.
+A `skip` would have let it rot.
+
+### What would fix it
+
+Not a tolerance. The mask's discontinuity is real and the derivative is right
+to notice it. Either start every mode at the common start and accept T-166's
+pre-horizon driving as a physical choice to be made explicitly — which is
+`P1B→P1T #12`, and is P1-T's — or integrate the modes in **bands** sharing a
+start, so no mask is needed within a band and the batch is exact inside it.
+The second is mine and is the next attempt; the measured 7.1$\times$ was over
+a full range, and banding was already known to help the step controller.
+
+### One correction to this entry's own first draft
+
+The investigation briefly recorded a 3--8\% interpolation error in the
+released path. **It was not real.** The probe re-solved each mode on
+`env.eta`'s abscissae and called that exact; `env.eta` begins at
+`md_reference`, far later than a high-$k$ mode's own start, so that solve was
+a different initial-value problem and what it measured was T-166 again. The
+tell was that the linear and cubic interpolants differed from it *identically*.
+Re-measured against the same initial-value problem refined $8\times$,
+`np.interp` costs the released path **1.7e-05 at $k=5$ rising to 1.9e-04 at
+$k=1500$** — and a cubic would cost 3.0e-06, about sixty times less, which is
+worth having but is not a defect.

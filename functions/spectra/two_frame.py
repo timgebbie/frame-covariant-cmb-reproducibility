@@ -446,6 +446,101 @@ def coefficient_sets(
     return newtonian, cdm
 
 
+def coefficient_sets_batch(
+    k_values, env: TwoFrameEnvironment
+) -> list[tuple[CoefficientSet, CoefficientSet]]:
+    r"""`coefficient_sets` for many $k$, with **one** acoustic integration.
+
+    **The hot path, and nothing released calls this yet.** The per-mode loop
+    is 99.7\% of a spectrum run (**T-156**, 2208 s of 2208) and a `cProfile`
+    of `coefficient_sets` puts ~84\% of the coefficients stage inside
+    `acoustic`'s right-hand side, in scalar spline evaluations of five
+    quantities that **do not depend on $k$** and are rebuilt for every one of
+    4480 modes. `solve_acoustic_batch` evaluates them once per step for all
+    modes: measured **7.1$\times$**, flat from 64 modes to 256 (**T-167**).
+
+    **Why this is exact and not an approximation.** Three things have to hold
+    and each was measured rather than assumed:
+
+    * the **per-mode start is physics** --- a common start moves $\tau_1$ by
+      $1.4\times10^{-2}$ (**T-166**), because (152)/(153) drive a
+      super-horizon mode rather than freezing it. So each mode is held at its
+      own initial condition until its own `acoustic_start_eta`, via
+      `start_eta`, which makes this the *same* initial-value problem the
+      per-mode solve poses;
+    * the **transfer factors out**. (152)/(153) are linear and homogeneous in
+      $(\Phi,\,{\rm IC})$ together, and the released path scales both by the
+      same $T(k)$ **before** integrating (**T-37**) --- so integrating with
+      unscaled $\Phi$ and multiplying the solution by $T(k)$ afterwards is
+      identical, which is what lets one $\Phi$ serve every mode;
+    * and the **continuation past the window is `pipeline`'s one definition**,
+      reached by calling it rather than by repeating its four lines. Those
+      four lines existed twice until 2026-10-25, the control for T-145 was
+      added to one copy, and the two-frame path went on freezing while the
+      knob read `free_stream` --- **T-125**'s shape. A third copy here would
+      be the same defect a third time.
+
+    Returns one `(newtonian, cdm)` pair per entry of `k_values`, in order.
+    """
+    from functions.spectra.acoustic import solve_acoustic_batch
+
+    k = np.asarray(k_values, dtype=float)
+    for one in k:
+        env.check_k(float(one))
+    eta, eta_star, bg = env.eta, env.eta_star, env.background
+    eta_couple = min(float(bg.eta_0), TIGHT_COUPLING_FACTOR * float(eta_star))
+
+    if env.acoustic_start != "derived":
+        # The `z_max` control shares one grid already, so there is nothing to
+        # batch around and no reason to carry a second code path for it.
+        return [coefficient_sets(float(one), env) for one in k]
+
+    starts = np.array([acoustic_start_eta(float(one), env.eta_rs, env.r_s_table)
+                       for one in k])
+    start_c = float(starts.min())
+    grid = np.linspace(
+        start_c, eta_couple,
+        required_acoustic_points(float(k.max()), eta_couple - start_c))
+    mode_a, mode_h = potentials(bg, grid, constant_below=env.md_reference)
+    solved = solve_acoustic_batch(
+        k, grid, background=bg, phi_a=mode_a, phi_h=mode_h,
+        omega_b_h2=env.omega_b_h2, expansion_coupling=False,
+        start_eta=starts)
+
+    from functions.spectra.pipeline import (
+        TAU_CONTINUATION, _continue_by_free_streaming)
+
+    out = []
+    for i, one in enumerate(k):
+        t_k = env.transfer_at(float(one))
+        phi_a, phi_h = env.phi_a * t_k, env.phi_h * t_k
+        phi_a_prime = env.phi_a_prime * t_k
+        phi_h_prime = env.phi_h_prime * t_k
+        # `np.interp` holds the end value past `eta_couple`, which **is** the
+        # freeze the tight-coupling window calls for.
+        delta_t = np.interp(eta, grid, np.asarray(solved[i].delta_T, float) * t_k)
+        tau_1 = np.interp(eta, grid, np.asarray(solved[i].tau_1, float) * t_k)
+        if TAU_CONTINUATION == "free_stream":
+            delta_t, tau_1 = _continue_by_free_streaming(
+                float(one), eta, eta_couple, delta_t, tau_1)
+
+        shared = dict(
+            delta_t=delta_t, phi_a=phi_a, phi_a_prime=phi_a_prime,
+            phi_h_prime=phi_h_prime, tau_1=tau_1, kappa_prime=env.kappa_prime,
+            kappa_double_prime=env.kappa_second,
+            conformal_hubble=env.conformal_hubble,
+            r_baryon=env.r_baryon, r_baryon_prime=env.r_baryon_prime)
+        newtonian = newtonian_set(eta, float(one), **shared)
+        shift = cdm_frame_shift(eta, phi_a, float(one), background=bg)
+        cdm = cdm_set(
+            eta, float(one), phi_h=phi_h,
+            conformal_hubble_prime=env.conformal_hubble_prime,
+            scale_factor=env.a, rho=env.rho, pressure=env.pressure,
+            v=shift.v, v_prime=shift.v_prime, eta_star=eta_star, **shared)
+        out.append((newtonian, cdm))
+    return out
+
+
 #: Which coefficients each rank keeps. Everything else is zeroed, so the three
 #: evaluations are the *same* call to (102) with a mask, not three formulas.
 _RANK_KEEPS = {0: ("c0",), 1: ("c1",), 2: ("c2",)}

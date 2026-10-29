@@ -814,3 +814,18 @@ the two errors are separate and distinguishable by their ell-dependence --
 rests on that comparison. 300 also cannot carry the multipoles the secondaries
 live at, which is stated here because the follow-up run T-172 calls for will
 need a different K_MAX and must therefore be a different row."""
+
+[[grid]]
+key = "functions/spectra/two_frame.py::grid"
+what = "the common acoustic grid coefficient_sets_batch integrates every mode on"
+status = "derived"
+note = """`required_acoustic_points(k.max(), eta_couple - min(start))` -- the
+same rule the released per-mode path uses, taken at the STIFFEST mode over the
+WIDEST span, because a common grid cannot be coarser than its worst mode
+demands. The starts are not common: each mode is held at its own initial
+condition until its own `acoustic_start_eta` (T-166 measured that a common
+start moves tau_1 by 1.4e-02, so the per-mode start is physics). Registered
+although nothing released calls it: T-175 has it reproducing delta_T and tau_1
+at 2.5e-08 and C_1' only to 5.0e-03, so it is not adoptable yet, and a grid
+that is unregistered until it is adopted is a grid nobody reviews before the
+commit that adopts it."""

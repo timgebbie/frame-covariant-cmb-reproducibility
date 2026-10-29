@@ -83,6 +83,28 @@ FACTORS = (1, 2, 4, 8)
 ELLS = np.array([2, 30, 100, 200, 250])
 K_MAX = 300.0
 
+#: **`--high-ell`, the run T-172 calls for.** The released axis stops at
+#: $\ell=250$ and the bias measured there is 0.82\% and still climbing. The
+#: question that matters is whether it keeps climbing where the **secondaries**
+#: are: from $\ell_A=272.18$ they fall near $\ell\simeq539$ and
+#: $\ell\simeq811$, which $k_{\max}=300$ cannot carry at all.
+#:
+#: Two configurations rather than four --- the released grid and $\times4$ ---
+#: because the law is already established at $k_{\max}=300$ and what is wanted
+#: here is the $\ell$-dependence, not another convergence sequence.
+#:
+#: **What it will show, said before it runs.** If the bias is a genuine shape
+#: it keeps growing past $\ell=250$; if it saturates near 1\%, it is a
+#: slowly-varying envelope after all and cannot remove a feature either, and
+#: the secondaries are left to the assembly. **Saturation is the outcome that
+#: refutes the lead**, and it is the one being tested.
+HIGH_ELL = "--high-ell" in sys.argv
+if HIGH_ELL:
+    ELLS = np.array([2, 30, 100, 200, 250, 300, 400, 500, 539, 600,
+                     700, 811, 900])
+    K_MAX = 1500.0
+    SLUG = SLUG + "-high-ell"
+
 
 def _history(n_eta: int) -> RecombinationHistory:
     return RecombinationHistory.build(
@@ -180,13 +202,13 @@ def main() -> int:
 
     print(f"{'='*78}\n  DOES THE SPECTRUM INHERIT IT?\n{'='*78}")
     spec = {}
-    for f in FACTORS[:3]:
+    for f in ((1, 4) if HIGH_ELL else FACTORS[:3]):
         n = RELEASED_N * f
         spec[n] = _spectrum(n)
         print(f"    recombination n_eta = {n:6d}  done", flush=True)
 
     base = spec[RELEASED_N]
-    fine = spec[RELEASED_N * FACTORS[2]]
+    fine = spec[RELEASED_N * 4]
     print(f"\n    {'ell':>5} {'released':>16} {'refined x4':>16} {'rel':>12}")
     worst = 0.0
     for i, l in enumerate(ELLS):
