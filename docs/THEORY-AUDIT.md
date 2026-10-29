@@ -2,9 +2,9 @@
 
 > **Generated, not transcribed. Do not edit by hand.**
 >
-> Produced by `tests/frame/gen_theory_audit.py` at 2026-10-27 06:44 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
+> Produced by `tests/frame/gen_theory_audit.py` at 2026-10-29 06:20 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
 
-**Status: ALL CHECKS PASS** — 42 assertions across 11 instruments.
+**Status: ALL CHECKS PASS** — 50 assertions across 12 instruments.
 
 ## What this document does not establish — read first
 
@@ -85,13 +85,13 @@ Requiring $\Delta\tau_\ell=0$ at $\ell\ge2$ for arbitrary boost potential gives 
 
 ### The monopole row and the dipole shift
 
-$a\Delta\mathcal{B}_0=\tfrac13kv=\tfrac13k^2\Delta C_2$ exactly, and $\gamma$ -- which pairs $\Delta C_0$ against $k^2\Delta C_2$ -- vanishes only with $\mathcal{B}_0$ restored. **Both measurements stand and the conclusion drawn from them was wrong.** Finding **T-107**: the partner of $\Delta C_0$ is not in $C_2$ but in $-C_1$′, so $\gamma$ asks the wrong pairing, and the restoration that makes it vanish counts the monopole source twice -- criterion 5b doubles at $98.5$%. See **C8**, which scores the whole rank-0 content of the bracket instead of one coefficient against another. **M15: a gate built from one coefficient cannot see a cancellation distributed across the bracket.**
+$a\Delta\mathcal{B}_0=\tfrac13kv=\tfrac13k^2\Delta C_2$ exactly, and $\gamma$ -- which pairs $\Delta C_0$ against $k^2\Delta C_2$ -- vanishes only with $\mathcal{B}_0$ restored. **Both measurements stand and the conclusion drawn from them was wrong.** Finding **T-107**: the partner of $\Delta C_0$ is not in $C_2$ but in $-C_1$′, so $\gamma$ asks the wrong pairing, and the restoration that makes it vanish counts the monopole source twice -- criterion 5b doubles at $98.5$\%. See **C8**, which scores the whole rank-0 content of the bracket instead of one coefficient against another. **M15: a gate built from one coefficient cannot see a cancellation distributed across the bracket.**
 
 | assertion | verdict |
 |---|---|
 | C5a  a.Delta B_0 cancels (1/3) k^2 Delta C_2 exactly | **PASS** |
-| C5b  only the restored row gives gamma = 0 | **PASS** |
-| C5c  and it is >=10x better than either alternative | **PASS** — 8.9e-03 vs 3.2e-01 |
+| C5b  gamma reports zero for the row c8 REFUTES (M15) | **DEFECT PRESENT** — the pairing is wrong, not the arithmetic |
+| C5c  and gamma scores it >=10x better than the correct row | **DEFECT PRESENT** — 8.9e-03 vs 3.2e-01 -- see c8, T-107 |
 
 | measured | value |
 |---|---|
@@ -102,7 +102,7 @@ $a\Delta\mathcal{B}_0=\tfrac13kv=\tfrac13k^2\Delta C_2$ exactly, and $\gamma$ --
 | `r_no_B0` | 0.32445 |
 | `r_restored` | 0.00888329 |
 
-*Instrument: `tests/frame/c5_monopole.py`, sha256 `8ea8d6c44ba8…`*
+*Instrument: `tests/frame/c5_monopole.py`, sha256 `b909d3f5df35…`*
 
 ### The Thomson $v^B_a$ slot
 
@@ -125,7 +125,7 @@ $\kappa'v_B$ **cannot** sit inside $C_1$: the $K'$ coefficient becomes $2\alpha\
 
 ### The $\kappa'$ ledger
 
-Multiplying the transport equation by $W=e^{-\kappa}$ sends the gravitational source to $W$ and the in-scattered Thomson source to $\mathcal V=W\kappa'$, its $\kappa'$ consumed by the integrating factor. **$\kappa'$ may live in $W$, in $\mathcal V$, or in a derivative of either --- never in a coefficient.** A coefficient carrying a bare $\kappa'$ manufactures $\kappa'^2$ the moment it is differentiated, which is what (102) does and what T-88 did. This separates the *legitimate* $\kappa'^2$ inside $\dot{\mathcal V}=(\kappa''+\kappa'^2)W$, from differentiating the **weight**, from the illegitimate one, from differentiating a **coefficient** --- both look identical in the output.
+Multiplying the transport equation by $W=e^{-\kappa}$ sends the gravitational source to $W$ and the in-scattered Thomson source to $\mathcal V=W\kappa'$, its $\kappa'$ consumed by the integrating factor. **This is a REVIEW FLAG, not a prohibition --- revised 2026-10-21, finding T-113 and decision S48.** It read *``$\kappa'$ may live in $W$, in $\mathcal V$, or in a derivative of either --- never in a coefficient''* and was taken as normative. **It is not a theorem**: $W(\kappa'S)=\mathcal VS$ is exact, so a coefficient may hold $\kappa'$. The defect in (102) is wrong weights, signs, boundaries or missing partners --- which **C3b** measures at $2.6$ --- not the presence of $\kappa'$. The flag is kept because it is cheap and every assembly that failed this month trips it; what it may no longer do is settle a question on its own. Note also that $\kappa''=-\kappa'^2$ holds **at the visibility maximum**, where $\dot{\mathcal V}=0$, so *``three powers of $\kappa'$''* is a local statement and not a general one.
 
 | assertion | verdict |
 |---|---|
@@ -139,11 +139,11 @@ Multiplying the transport equation by $W=e^{-\kappa}$ sends the gravitational so
 | `printed_102_clean` | False |
 | `t88_clean` | False |
 
-*Instrument: `tests/frame/c7_kappa_ledger.py`, sha256 `86711e106e83…`*
+*Instrument: `tests/frame/c7_kappa_ledger.py`, sha256 `0159b589ff6a…`*
 
 ### The rank-0 partner, and where the monopole source enters
 
-(107) already carries the monopole source: $-C_1'=(\kappa'\hat v_B)'+(a\mathcal{B}_1)'/k$ and $(a\mathcal{B}_1)'/k=(\Phi_A'-\Phi_H')+\tfrac k3\tau_1$, with $\tfrac k3\tau_1=-a\mathcal{B}_0$. So (89)'s $\delta_{\ell0}$ row is **correctly empty** of $\mathcal{B}_0$ and only its normalisation is wrong. With $\alpha_0$ in place of $\alpha_2$, $C_0=-\tfrac13a\mathcal{B}_2$ and its frame shift $+\tfrac13kv$ is cancelled **inside the bracket**, by $\Delta[\tfrac k3\tau_1]$ in $-C_1'$. Restoring $a\mathcal{B}_0$ counts the source twice and leaves the same residual with the opposite sign -- finding T-107, which criterion 5b caught at $98.5$% and no frame instrument could. **Addendum 2026-10-26.** Finding T-148 scored $C_0$ against $\tfrac k3\tau_1$ and found they do not cancel; both halves of that measurement are right and the pairing is not this one. What cancels is $\Delta C_0+\Delta[\tfrac k3\tau_1]$, two **shifts**, exactly and for any $\tau_1$ whatever, because only the boost law $\Delta\tau_1=-v$ enters. $C_0$ is the rank-2 source leaking into $\ell=0$ through $j_0''(0)=-\tfrac13$; $\tfrac k3\tau_1$ is the rank-0 source itself. A leakage term and a source term have no reason to cancel in value, and $\tau_1\to+0.18v$ at superhorizon scales is a fact about the dipole, not a failure of this cancellation.
+(107) already carries the monopole source: $-C_1'=(\kappa'\hat v_B)'+(a\mathcal{B}_1)'/k$ and $(a\mathcal{B}_1)'/k=(\Phi_A'-\Phi_H')+\tfrac k3\tau_1$, with $\tfrac k3\tau_1=-a\mathcal{B}_0$. So (89)'s $\delta_{\ell0}$ row is **correctly empty** of $\mathcal{B}_0$ and only its normalisation is wrong. With $\alpha_0$ in place of $\alpha_2$, $C_0=-\tfrac13a\mathcal{B}_2$ and its frame shift $+\tfrac13kv$ is cancelled **inside the bracket**, by $\Delta[\tfrac k3\tau_1]$ in $-C_1'$. Restoring $a\mathcal{B}_0$ counts the source twice and leaves the same residual with the opposite sign -- finding T-107, which criterion 5b caught at $98.5$\% and no frame instrument could. **Addendum 2026-10-26.** Finding T-148 scored $C_0$ against $\tfrac k3\tau_1$ and found they do not cancel; both halves of that measurement are right and the pairing is not this one. What cancels is $\Delta C_0+\Delta[\tfrac k3\tau_1]$, two **shifts**, exactly and for any $\tau_1$ whatever, because only the boost law $\Delta\tau_1=-v$ enters. $C_0$ is the rank-2 source leaking into $\ell=0$ through $j_0''(0)=-\tfrac13$; $\tfrac k3\tau_1$ is the rank-0 source itself. A leakage term and a source term have no reason to cancel in value, and $\tau_1\to+0.18v$ at superhorizon scales is a fact about the dipole, not a failure of this cancellation.
 
 | assertion | verdict |
 |---|---|
@@ -167,7 +167,7 @@ Multiplying the transport equation by $W=e^{-\kappa}$ sends the gravitational so
 | `value_pairing` | -aB2_value/3 + k*tau1_value/3 |
 | `t148_tau1_over_v` | 0.176076 |
 
-*Instrument: `tests/frame/c8_rank0_partner.py`, sha256 `86d21d691502…`*
+*Instrument: `tests/frame/c8_rank0_partner.py`, sha256 `5a7c24974256…`*
 
 ### The admissibility of the by-parts, and what (102) replaces it with
 
@@ -217,7 +217,7 @@ Eliminating $\tilde\tau_1$ between \emph{Annals~II} (152) and (153) returns $\de
 | `criterion_accepts_undriven` | True |
 | `criterion_rejects_driven` | True |
 
-*Instrument: `tests/frame/c10_oscillator_phase.py`, sha256 `9311ccf27015…`*
+*Instrument: `tests/frame/c10_oscillator_phase.py`, sha256 `f20e18c1e4d4…`*
 
 ### The third term, and the slot that keeps the source out of today
 
@@ -248,11 +248,46 @@ A by-parts taken against the kernel has three terms, not two: $\mathrm d(WCK)/\m
 
 *Instrument: `tests/frame/c11_kernel_partner.py`, sha256 `7fc61636bab8…`*
 
+### The sampling rate of the visibility, and the three scales that are one
+
+The peak of the visibility is the point where $\kappa''=-\kappa'^2$, so at $\eta_\ast$ the scale height of the Thomson rate and the optical-depth e-fold are identically the same number, and the width follows as $\sigma_{\mathcal V}^{-2}=\kappa'(\eta_\ast)^2+\Lambda$ with $\Lambda$ vanishing for exponential freeze-out. The three candidate scales --- the FWHM of $\mathcal V$, the Thomson scale height, the recombination width --- are one scale, and the rule is written in $\kappa'(\eta_\ast)$ because it is the only one defined pointwise. The kernel is exactly band-limited: $j_\ell(z)=(2i^\ell)^{-1}\int_{-1}^{1}P_\ell(\mu)e^{iz\mu}\mathrm d\mu$ exhibits $j_\ell(k(\eta_0-\eta))$ as a superposition of $e^{i\omega\eta}$ with $|\omega|\le k$ and nothing outside, for every $\ell$, so the band edge enters as a shift and the two requirements add rather than one flooring the other. The binding statement is Euler--Maclaurin on the partial sums that accumulate $\kappa$ from $\kappa'$, $h\kappa'(\eta_\ast)\le\sqrt{12\epsilon}$ on the grid $\kappa$ is built on, which is 21.5 samples across the FWHM at one part in a thousand. Imposed locally it integrates to $N=12k_{\max}L/\pi+\kappa(\eta_i)/\sqrt{12\epsilon}$, so a grid uniform in conformal time plus a multiple of optical depth meets both conditions with one knob and the recombination cost is independent of $k_{\max}$.
+
+| assertion | verdict |
+|---|---|
+| C12a  the visibility peak is the point where kappa'' = -kappa'^2, so the shut-off rate of the Thomson rate equals the Thomson rate | **PASS** — eta_ast = 0.05427800, kappa'(eta_ast) = 267.7700, residual = 7.5e-15 |
+| C12b  the optical-depth e-fold and the Thomson scale height are identically one scale at eta_ast, and the FWHM is that scale to within the freeze-out profile | **PASS** — 1/kappa' and -kappa'/kappa'' agree to 7.4e-15; Lambda/kappa'^2 = 1.5e-14; FWHM x kappa'(eta_ast) = 2.4463, against 2.3548 for a Gaussian core and 2.4457 for exponential freeze-out |
+| C12c  j_l(k(eta_0-eta)) is a superposition of e^{i omega eta} with |omega| <= k and nothing outside, for every l | **PASS** — the Rayleigh identity holds to 3.7e-11 over 23 (l, z) rows, l = 0 to 150 -- the band edge is k and carries no l |
+| C12d  a band-limited factor SHIFTS the frequency at which the visibility must already be small, so k_max and the rate add | **PASS** — the shift identity holds to 2.7e-10; the source at 7 kappa' is 161x what it is at 7 kappa' + k, which is the cost of not adding them |
+| C12e  the second-order error is in BUILDING kappa, not in sampling V, and C12a turns it into -(h kappa'(eta_ast))^2 / 12 | **PASS** — order 1.981 to 2.000; the law holds to 1.67 per cent at every grid, and the sign is negative throughout -- a coarse grid lowers the visibility |
+| C12f  the bound in points across the FWHM, and the graded grid that makes the two costs add | **PASS** — uniform at eps = 1e-3 needs 7737 points (21.5 across the FWHM) -- N_ETA_FLOOR is 8000; graded at k_max = 1500 needs 20648, of which 2512 are the recombination term and do not depend on k_max |
+| C12g  the bound fires: a grid at a quarter of the required rate misses the tolerance it was sized for | **PASS** — n = 1934, h kappa' = 0.438 against the bound 0.110, gives 1.57e-02 against eps = 1e-03 |
+| C12h  and it discriminates: a grid at four times the required rate meets it, so C12g is not an instrument that always fails | **PASS** — n = 30949 gives 6.25e-05 -- a separation of 252x across the bound |
+
+| measured | value |
+|---|---|
+| `eta_star` | 0.054278 |
+| `kappa_prime_at_eta_star` | 267.77 |
+| `kappa_at_eta_i` | 275.14 |
+| `fwhm` | 0.009136 |
+| `fwhm_times_kappa_prime` | 2.44635 |
+| `exact_visibility_integral` | 1 |
+| `worst_rayleigh_residual` | 3.74e-11 |
+| `worst_shift_identity_residual` | 2.73e-10 |
+| `measured_order` | 1.98149 |
+| `worst_departure_from_one_twelfth` | 0.0166743 |
+| `n_uniform_eps_1e_3` | 7737.49 |
+| `points_across_fwhm_eps_1e_3` | 21.4965 |
+| `recombination_term_eps_1e_3` | 2511.67 |
+| `control_error_quarter_rate` | 0.0157205 |
+| `control_error_four_times_rate` | 6.25e-05 |
+
+*Instrument: `tests/frame/c12_sampling_bound.py`, sha256 `de53708c3313…`*
+
 ## Provenance
 
 | | |
 |---|---|
-| generated | 2026-10-27 06:44 UTC |
+| generated | 2026-10-29 06:20 UTC |
 | python | 3.13.16 |
 | numpy | 2.5.3 |
 | scipy | 1.18.1 |

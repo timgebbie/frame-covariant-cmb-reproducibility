@@ -463,15 +463,45 @@ def check_built_artefacts_are_not_stale(failures: list[str]) -> str:
         else:
             notes.append(f"{pdf.name} newer than all {len(sources)} sources")
 
+    # **For the MANIFESTS, mtime is the pre-filter and the digest is the
+    # verdict --- finding T-171, 2026-10-29.** The paragraph above is right
+    # about the PDF and wrong about these, and the two are different
+    # questions. A PDF older than its source is stale *by construction*,
+    # because nothing re-derives it; there is no cheap content test, which is
+    # what makes "which way round" the whole question there. A manifest
+    # states a **hash**. If the hash still matches, the manifest is current
+    # and there is nothing for it to be on the wrong side of.
+    #
+    # Left on mtime alone it was a gate that failed whenever the suite ran,
+    # which is the only way the suite is ever run: three tracked files ---
+    # `outputs/f4-correlation.csv`, `provenance/GRID-REGISTER-v1.md` and
+    # `functions/spectra/integral_solution.py` --- are rewritten during a
+    # pytest session with **byte-identical content**, and the manifests were
+    # then reported stale against files that had not changed. Run alone the
+    # same check passed. A gate whose verdict depends on what else ran in the
+    # session is not reporting on the tree.
+    #
+    # Worse than a false alarm: it had been firing for days beside two
+    # manifest failures that were real, and P1-B read all three as the same
+    # debt and attributed them to the repository. **A persistent false
+    # positive is camouflage for the true ones.**
+    from make_manifests import portable_digest, sha256 as _manifest_digest
+
     for man in sorted(ROOT.glob("*-MANIFEST-SHA256.txt")):
         t_man = man.stat().st_mtime
+        portable = man.name.startswith("PORTABLE")
         listed = []
         for line in man.read_text(encoding="utf-8").splitlines():
             parts = line.split()
             if len(parts) >= 2:
-                q = ROOT / parts[-1]
-                if q.is_file() and q.stat().st_mtime > t_man:
-                    listed.append(parts[-1])
+                rel = parts[-1]
+                q = ROOT / rel
+                if not (q.is_file() and q.stat().st_mtime > t_man):
+                    continue
+                now = (portable_digest(q, rel) if portable
+                       else _manifest_digest(q))
+                if now != parts[0]:
+                    listed.append(rel)
         if listed:
             failures.append(
                 f"{man.name} is older than {len(listed)} file(s) it hashes "

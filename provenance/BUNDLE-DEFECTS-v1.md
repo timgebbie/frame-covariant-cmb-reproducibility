@@ -12246,3 +12246,62 @@ reasoning that led to the previous repair loses why both were made.
 **Not automated, deliberately.** A writer that edits the README from the tree
 would be a fourth thing editing the README, and the failure here was never
 that the edit is hard. Offered to Coordination if they want it.
+
+---
+
+## T-171 — **The release gate failed whenever the suite ran, and the false alarm was camouflaging two real ones**
+
+**2026-10-29.** `check_release_hygiene` reported both manifests stale against
+`outputs/f4-correlation.csv`, `provenance/GRID-REGISTER-v1.md` and
+`functions/spectra/integral_solution.py`. All three were **byte-identical to
+what the manifest hashed.** Run on its own the same check passed; run inside
+`pytest` it failed. A gate whose verdict depends on what else ran in the
+session is not reporting on the tree.
+
+### The mechanism, and it is circular
+
+The check compared **mtimes**. `tests/test_bundle_file_selection.py`,
+`tests/test_portable_manifest.py` and `tests/test_release_hygiene.py` write a
+tracked file and restore it, which is how they test that drift is detected —
+a legitimate fixture. The restore is byte-for-byte and bumps the mtime. So
+**the tests that test the manifests were what made the manifests look stale**,
+and the gate that guards the release was failing because of the suite that
+checks the gate.
+
+### Why mtime was right there and wrong here
+
+The function's own docstring defends mtimes: *"A hash check says the content
+differs; an mtime check says which way round, and that is the question here."*
+**That is correct for the PDF and false for the manifests**, and the two are
+different questions. A PDF older than its source is stale *by construction* —
+nothing re-derives it, there is no cheap content test, and the direction is
+the whole question. A manifest **states a hash**: if the hash still matches,
+the manifest is current and there is nothing for it to be on the wrong side
+of.
+
+Repaired by keeping mtime as the **pre-filter** and making the digest the
+**verdict** — `portable_digest` for `PORTABLE-MANIFEST`, plain `sha256`
+otherwise, both imported from `make_manifests`, which the docstring already
+named as the owner of the content comparison. The PDF branch is untouched.
+
+### The part that cost something
+
+It had been firing for days **beside two manifest failures that were real** —
+`FILE-MANIFEST` 64 files behind and `PORTABLE-MANIFEST` 40, because commits
+landed through the API do not refresh them. P1-B read all three as one debt,
+called them "the manifest family, which only the repository can clear", and
+said so in three commit messages and to the PI. Two of the three were that;
+the third was this, and it was neither the repository's nor stale.
+
+**A persistent false positive is camouflage for the true ones.** It is worse
+than a gate that does not exist, because a gate that does not exist is not
+offered as a reason to stop looking.
+
+### And the sweep must be last
+
+Related, and the reason the debt looked unclearable from here: `f4-correlation.csv`
+genuinely changes between runs at the ninth significant figure, which is what
+`PORTABLE-MANIFEST` exists to absorb. So `FILE-MANIFEST` is stale the moment
+the suite runs, by construction and correctly. **The order is test, then
+regenerate, then commit** — not regenerate then test, which is what P1-B's
+own PowerShell to the PI had, and which cannot ever come out clean.
