@@ -73,6 +73,8 @@ from functions.spectra.pipeline import (  # noqa: E402
 from functions.spectra.transfer import shape_parameter  # noqa: E402
 from functions.spectra.two_frame import build_environment, coefficient_sets  # noqa: E402
 
+from _resumable import Checkpoint  # noqa: E402
+
 #: The released count, and refinements of it. 4000 is `build`'s default and
 #: is what every number in this bundle has been computed on.
 RELEASED_N = 4000
@@ -81,6 +83,9 @@ FACTORS = (1, 2, 4, 8)
 #: Spread across plateau, rise and first peak, as D39's is, so a displacement
 #: that is a shape is distinguishable from one that is a normalisation.
 ELLS = np.array([2, 30, 100, 200, 250])
+
+#: Rows this instrument writes per configuration: one $C_\ell$ per multipole.
+#: Set after `ELLS` is final, below, because `--high-ell` replaces it.
 K_MAX = 300.0
 
 #: **`--high-ell`, the run T-172 calls for.** The released axis stops at
@@ -104,6 +109,10 @@ if HIGH_ELL:
                      700, 811, 900])
     K_MAX = 1500.0
     SLUG = SLUG + "-high-ell"
+
+
+#: One row per multipole, fixed after `--high-ell` has had its say.
+ROWS_PER_CONFIG = int(ELLS.size)
 
 
 def _history(n_eta: int) -> RecombinationHistory:
@@ -201,10 +210,29 @@ def main() -> int:
 """)
 
     print(f"{'='*78}\n  DOES THE SPECTRUM INHERIT IT?\n{'='*78}")
+    # **Checkpointed --- T-162, and the lesson arrived the hard way.** The
+    # first `--high-ell` attempt ran twenty minutes at k_max = 1500 and died
+    # leaving a zero-byte log, because every print was buffered and nothing
+    # was on disk. A configuration here costs about 35 minutes, so a crash
+    # between the two throws away the half that succeeded --- which is the
+    # most expensive kind of nothing. One row per multipole, and
+    # `expect=ROWS_PER_CONFIG` so a run killed mid-write is recomputed rather
+    # than resumed as complete.
+    rows = Checkpoint(ROOT / "diagnostics" / f"{SLUG}.csv",
+                      ("recombination_n_eta", "ell", "c_ell"))
     spec = {}
     for f in ((1, 4) if HIGH_ELL else FACTORS[:3]):
         n = RELEASED_N * f
+        key = f"recombination n_eta={n}"
+        if rows.has(key, expect=ROWS_PER_CONFIG):
+            spec[n] = np.array([float(r["c_ell"]) for r in rows.all()
+                                if r["configuration"] == key])
+            print(f"    [resumed] {key}", flush=True)
+            continue
         spec[n] = _spectrum(n)
+        for i, l in enumerate(ELLS):
+            rows.add(key, recombination_n_eta=n, ell=int(l),
+                     c_ell=f"{spec[n][i]:.9e}")
         print(f"    recombination n_eta = {n:6d}  done", flush=True)
 
     base = spec[RELEASED_N]
