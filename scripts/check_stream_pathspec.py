@@ -44,9 +44,17 @@ ROOT = Path(__file__).resolve().parents[1]
 #: and `docs/RESUME.md` are Coordination's outright --- *"Do not write
 #: `docs/STREAMS.md` or `docs/RESUME.md`"*, standing since the channel opened.
 #: `tests/frame/` is P1-T's pathspec.
+#: `README.md` moved to **P1-T** on 2026-10-28 by the PI's grant, recorded in
+#: `docs/STREAMS.md` at `a0c8057`: the line declaring the live supplement
+#: edition can be invalidated only by a P1-T action, so the dependency and the
+#: custody ran in opposite directions and the download link died twice in one
+#: morning. **This table was written the same day and already had it wrong** —
+#: which is the gate's own lesson arriving immediately: a custody map kept in
+#: two places is kept in neither, and the only reason it was caught is that
+#: `a0c8057` landed on a fetch between a rebase and a push.
 FORBIDDEN: dict[str, tuple[str, ...]] = {
     "P1B": ("handoff/P1T-to-P1B.md", "docs/STREAMS.md", "docs/RESUME.md",
-            "tests/frame/*"),
+            "tests/frame/*", "README.md"),
     "P1T": ("handoff/P1B-to-P1T.md", "docs/STREAMS.md", "docs/RESUME.md"),
 }
 
