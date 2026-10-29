@@ -68,6 +68,9 @@ WHOSE = {
     "docs/STREAMS.md": "Coordination's. Ask there; do not write it.",
     "docs/RESUME.md": "Coordination's. Ask there; do not write it.",
     "tests/frame/*": "P1-T's pathspec.",
+    "README.md": "P1-T's since 2026-10-28. Raise it in handoff/P1B-to-P1T.md; "
+                 "the supplement line is the exception Coordination carved, "
+                 "and it travels with the supplement move, not on its own.",
 }
 
 

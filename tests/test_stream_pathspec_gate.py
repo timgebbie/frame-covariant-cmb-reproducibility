@@ -67,16 +67,26 @@ def test_every_forbidden_pattern_says_whose_it_is():
 def test_a_clean_set_passes():
     assert offending(
         ["scripts/figure_f10_formation_surface.py", "provenance/append-guard.txt",
-         "handoff/P1B-to-P1T.md", "README.md"], "P1B", []) == []
+         "handoff/P1B-to-P1T.md", "config/grid-register.toml"], "P1B", []) == []
 
 
 def test_the_crossing_that_actually_happened_fails():
-    """**The gate.** This exact set was committed on 2026-10-28 as `6e51a45`."""
+    """**The gate.** This exact set was committed on 2026-10-28 as `6e51a45`.
+
+    **It scores as TWO crossings now and was one then**, because `README.md`
+    moved to P1-T later the same day (`a0c8057`). That is not a flaw in the
+    test, it is the one thing a pathspec gate cannot do: it scores against
+    *current* custody, so it can refuse a commit being made and can never
+    judge one already made. The historical set is kept as the fixture anyway,
+    because it is the only set anyone has confirmed was a real crossing.
+    """
     bad = offending(
         ["README.md", "handoff/P1B-to-P1T.md", "handoff/P1T-to-P1B.md",
          "provenance/BUNDLE-DEFECTS-v1.md"], "P1B", [])
-    assert [p for p, _ in bad] == ["handoff/P1T-to-P1B.md"]
-    assert "P1-T's queue" in bad[0][1]
+    paths = [p for p, _ in bad]
+    assert paths == ["README.md", "handoff/P1T-to-P1B.md"]
+    assert "P1-T's queue" in dict(bad)["handoff/P1T-to-P1B.md"]
+    assert "P1-T's since 2026-10-28" in dict(bad)["README.md"]
 
 
 @pytest.mark.parametrize("stream,path", [
