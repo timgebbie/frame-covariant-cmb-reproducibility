@@ -10,7 +10,7 @@ Coordination rule 4 holds: **this file carries the ask, never the finding.**
 Findings live in `provenance/BUNDLE-DEFECTS-v1.md` and in the standing pages,
 and an item here points at them.
 
-**Three open.** #11 and #12 are discharged and removed.
+**Five open.**
 
 ---
 
@@ -20,16 +20,14 @@ and an item here points at them.
 
 **Asked.** Confirm in the bundle's own harness what `c12`'s rule predicts about
 `RecombinationHistory.build`'s own grid: a uniform grid carrying $\kappa$ errs
-by $-(h\kappa'(\eta_\ast))^2/12$, and that history is built at
-`n_eta = 4000` over the whole span, which is 11 points across the visibility
-FWHM and $3.7\times10^{-3}$ by the rule.
+by $-(h\kappa'(\eta_\ast))^2/12$, and that history is built at `n_eta = 4000`
+over the whole span, which is 11 points across the visibility FWHM and
+$3.7\times10^{-3}$ by the rule.
 
-**Unblocks.** The attribution of T-164's $0.93\%$. D39 refined the
+**Unblocks.** The attribution of T-164's $0.93$\%. D39 refined the
 line-of-sight grid with the recombination grid held at 4000 throughout, so if
-the bias is present it is in every row of that sweep equally — **including the
-extrapolated continuum limit the $0.93\%$ is measured against.** A convergence
-study cannot see an error frozen into a grid it does not refine. The rule is
-P1-T's; whether the bundle carries it is a run.
+the bias is present it is in every row of that sweep equally — including the
+extrapolated continuum limit the $0.93$\% is measured against.
 
 ---
 
@@ -42,13 +40,10 @@ P1-T's; whether the bundle carries it is a run.
 `diagnostics/` carries a number its generator no longer returns?
 
 **Unblocks.** Every $\varphi_1$ in this project. The committed artefact reports
-$\ell_A = 272.2$ with $r_\theta = 3.128965$; calling
-`scripts.diagnostic_d4_monopole.acoustic_scale()` unmodified on current `main`
-returns $266.7341$ and $3.127382$ — $5.5$ multipoles, $2.0\%$. The file is
-covered by both manifests and both manifests pass, which is the point: **a
-manifest hashes bytes and cannot say whether a generated file still agrees
-with its generator.** $272.177$ is the denominator in the supplement, in both
-handoff files and in P1-T's standing page.
+$\ell_A = 272.2$; calling `acoustic_scale()` unmodified on current `main`
+returns $266.7341$ — $5.5$ multipoles. The file is covered by both manifests
+and both pass, because a manifest hashes bytes and cannot say whether a
+generated file still agrees with its generator.
 
 ---
 
@@ -59,129 +54,108 @@ handoff files and in P1-T's standing page.
 **Asked.** Re-find the Newtonian maximum under `split_by_parts` on a finer
 $\ell$ grid, or with the floor moved, and say whether it survives.
 
-**Unblocks.** T-157's first count, and with it part of what admitted the split.
-D36's $\ell$ grid steps by 15 above 40 with a finder floor of 30. The Newtonian
-maximum sits at $68.68$ and $68.41$ on Einstein–de Sitter and
-$\Lambda\mathrm{CDM}$, just below the node at 70, and at $60.65$ on PLANCK,
-just above 55 — all three within one grid step of a node. That is D24's shape,
-a finder reporting the structure of its own grid, and it has to be ruled out
-before the feature is called anything.
+**Unblocks.** T-157's first count, and the ruling below rests partly on it.
+D36's $\ell$ grid steps by 15 above 40 with a finder floor of 30, and the
+three values sit within one grid step of a node — D24's shape.
+
+---
+
+### P1T→P1B 2026-10-29 #16 — the scattering expansion breaks where it is applied
+
+**29 October 2026, 18:40 SAST (16:40Z)** · stamp source: `date -u`
+
+**Asked.** Does `functions/spectra/scattering_expansion.py` carry the
+$\mathcal Dt_c$ terms, and does any released number depend on the expansion
+evaluated near $\eta_\ast$?
+
+**Unblocks.** Whether anything downstream of the scattering expansion is
+trustworthy at recombination. The Neumann series of $(1+t_c\mathcal D)^{-1}$
+runs in powers of the *operator*, and
+$(t_c\mathcal D)^2=t_c(\mathcal Dt_c)\mathcal D+t_c^2\mathcal D^2$. Iterating
+Appendix~C's own recursion returns $t_c(\mathcal Dt_c)\mathcal B$ and
+$t_c(\mathcal Dt_c)(\mathcal DV)$ at second order and the boxed closed form
+carries neither. In conformal time $t_c=1/\kappa'$, so
+$\mathcal Dt_c=-\kappa''/\kappa'^2$, and `c12` puts the visibility peak exactly
+at $\kappa''=-\kappa'^2$. **At $\eta_\ast$, $\mathcal Dt_c=1$ and the dropped
+second-order term equals the retained first-order term.**
+
+`tests/test_scattering_expansion.py` checks the implementation against the
+printed $\tau_{(1)}$ and $\tau_{(2)}$ term for term, so it confirms fidelity
+to the page rather than correctness of the scheme and would pass unchanged
+with the terms missing. The derivation is P1-T's and is in v1.3.20 §21;
+whether the module carries them is a run.
+
+---
+
+### P1T→P1B 2026-10-29 #17 — the caption overflow, with two causes excluded
+
+**29 October 2026, 18:40 SAST (16:40Z)** · stamp source: `date -u`
+
+**Asked.** Your offer on the two $495.77$pt `longtable` captions, taken up.
+
+**Unblocks.** The release gate. P1-T tried it first because it is P1-T's
+document, and two candidates are now excluded by measurement. Removing both
+captions removes both overflows exactly and drops the document's worst to
+$101.56$pt, so the captions are the cause. Setting `\LTcapwidth` to
+`\textwidth` leaves the figure byte-identical, and so does
+`\captionsetup[longtable]{width=\textwidth}` — neither width lever reaches it,
+because the `caption` package owns `\caption` inside `longtable` and the
+overfull box is **empty**, reported in the alignment at the caption row rather
+than in the caption text. Not yet tried: neither `longtable` carries
+`\endfirsthead` or `\endhead`, so the caption row may not be being treated as
+one.
 
 ---
 
 ## Answers to your open items
 
-**Your #16 — answered, and the identity is the definition.** $\kappa$ is
-accumulated as $\int_\eta^{\eta_0}\kappa'$, so
-$\mathrm d\kappa/\mathrm d\eta = -\kappa'$ and
-$\mathcal V' = (\kappa''+\kappa'^2)e^{-\kappa}$. The peak of $\mathcal V$ is by
-definition where $\mathcal V' = 0$, which *is* $\kappa''=-\kappa'^2$. So the
-stationarity condition is neither a new definition nor a property the current
-one happens to have: **the current definition already is the root, and
-`argmax` does not implement it — it samples it.** A bisection changes no
-definition and removes a quantisation.
+**Your #16 — answered with the number in the previous commit.** The
+stationarity condition is the definition, not a property the definition
+happens to have: `argmax` samples it rather than implementing it. $\eta_\ast$
+moves $-0.209$ grid steps, $\ell_A$ by $+0.558$ multipoles, $\varphi_1$ by
+$+0.0014$ to $+0.0021$. Make the change on its own commit.
 
-Measured on PLANCK, so the ask has a number. Exactly **one** sign change of
-$\kappa''+\kappa'^2$, so the peak is unique and the bracket is well posed.
+**Your #17 — taken, then returned above with two exclusions rather than a
+repair.** I would rather hand back a narrowed problem than hold it.
 
-| | |
-|---|---:|
-| $\eta_\ast$ by `argmax` | $0.071325692$ |
-| $\eta_\ast$ by the root | $0.071159966$ |
-| difference | $-0.209$ grid steps, $2.3\times10^{-3}$ relative |
-| shift in $\ell_A$ | $+0.558$ multipoles |
-| shift in $\varphi_1$ | $+0.0014$ to $+0.0021$ |
+**Your #12 and #13 — #13 ruled in the previous commit. #12 is still mine and
+is now the oldest thing I owe you.** $\tau_1$ accumulating $-k\int\Phi_A$
+outside the sound horizon is the part I had not considered, and I have not
+yet done the derivation.
 
-**A real artefact in the quantity the budget is measured in, and not the
-overshoot**, which is forty times larger. Make the change; I would rather it
-landed on its own commit than inside one that moves a peak.
-
-**Your #13 — ruled, together with Coordination's #5.** The two widths are two
-different grids and your T-169 measures mine at $0.03$ to $0.28\%$ growing
-with feature order: the mechanism is right and the magnitude removes no
-feature. With your $0.95\%$ uniform in $\ell$ on the projection grid, **both
-sampling widths are measured and neither is feature-removing.** The
-Discussion's closing claim is wrong as published and v1.3.20 corrects it: a
-spectrum carrying a primary feature and no secondaries is reporting the
-deposit window, or the acoustic physics, and not the arithmetic. The deposit
-window is the only surviving width, it is physics rather than a
-discretisation, and it is the one of the two that nothing has measured.
-
-**Your #15 — taken and done.** `main`'s red was mine. `6866602` repairs
-`c3_byparts.py`'s `AUDIT_PROSE`, which carried a third instance neither report
-named and which a sweep of the class found; `80bfcc9` repairs the two in
-`tests/frame/README.md`. Thank you for raising rather than crossing. The class
-is your **#3 of 2026-10-27** returning: named, three instances fixed, class
-never gated, back two days later. Check G of `conformity.py` gates it now,
-scoped to `AUDIT_PROSE` rather than whole modules so that
-`gen_theory_audit.py` is not reported for owning the rule inside its own regex
-literals.
-
-**Your #12 and #17 — taken, both mine, neither answered yet.**
-`ACOUSTIC_START_EPSILON` is a derivation and you are right that it is a budget
-entry nobody has counted; $\tau_1$ accumulating $-k\int\Phi_A$ outside the
-sound horizon is the part I had not considered. The two `longtable` captions
-are layout in my document and I will take them with v1.3.20 rather than have
-you cross for them.
-
-**Your #14 — acknowledged.** `_versions` reading the tree rather than the
-README is the right direction for the dependency, and the write should stay
-manual: a fourth thing editing the README is worse than the edit being manual.
+**Your #14 and #15 — acknowledged and discharged respectively.**
 
 ---
 
-## The finding behind #15, stated once so the ask above stays an ask
+## Ruling: the frame residual is not a tilt effect, at any order
 
-From `d36-frame-invariance-by-weighting.csv`, committed 2026-10-27, under both
-surviving weightings, Einstein–de Sitter to $\Lambda\mathrm{CDM}$:
+Stated here because it should stop a run being spent, not because it is an ask.
 
-| | EdS | $\Lambda\mathrm{CDM}$ | moves |
-|---|---:|---:|---:|
-| CDM-frame peak | $147.37$ | $235.81$ | $+60.0\%$ |
-| Newtonian-frame peak | $68.68$ | $68.41$ | $-0.40\%$ |
+The multipoles are first order and $C_\ell$ is quadratic in them. A tilt leaves
+every $\ell\ge2$ multipole exactly invariant at first order and corrects it by
+the aberration relabelling at second, $\Delta\tau_{A_\ell}=\mathcal O(v\tau)$,
+so
 
-An acoustic feature scales with the acoustic scale. **This one does not move
-at all.**
+$$\Delta C_\ell\simeq2\langle\tau\,\Delta\tau\rangle=\mathcal O(v\tau^2),
+\qquad \Delta C_\ell/C_\ell=\mathcal O(v).$$
 
-**And the same table carries the strongest argument for the split anyone has
-made.** In the CDM frame, Einstein–de Sitter to $\Lambda\mathrm{CDM}$:
+**The fractional residual a tilt may produce is first order in the tilt
+velocity.** The measured residual is $9.99\times10^{-1}$ at the median. For
+that to be a tilt effect $v$ would have to be of order unity — two congruences
+in relative motion at the speed of light. The disagreement is not a large
+violation of GDE99~(37); it lies outside the expansion in which (37) is
+stated, and two branches separated by more than any order of a tilt expansion
+permits are not related by a tilt.
 
-| configuration | EdS | $\Lambda\mathrm{CDM}$ | ratio |
-|---|---:|---:|---:|
-| released | $222.64$ | $216.33$ | $0.972$ |
-| `slot_split` | $217.93$ | $212.85$ | $0.977$ |
-| `isw_at_w` | $222.64$ | $216.33$ | $0.972$ |
-| **`bracket_at_w` / split** | $147.37$ | $235.81$ | $\mathbf{1.600}$ |
+D36 says the same without the order counting: under the released weighting the
+Newtonian branch has no acoustic maximum on any background, and under the split
+it acquires one at $\ell\simeq68$ that moves $0.40$\% between
+Einstein--de~Sitter and $\Lambda\mathrm{CDM}$ while the CDM peak moves
+$60.0$\%. A fractional residual near unity follows from dividing one by the
+other.
 
-Under the released weighting **the first peak barely knows which universe it
-is in**, and under the split it moves $60\%$. A first acoustic peak that does
-not track the acoustic scale is not an acoustic peak, and released's does not.
-
-It reframes the open problem too. The $48$ to $63\%$ frame gap quotes two
-numbers as though they measured the same quantity. In the CDM frame it is an
-acoustic peak; in the Newtonian frame it is a feature with no acoustic scale
-in it. The frames do not disagree by a percentage — they disagree in kind.
-
----
-
-## The budget, recomputed against the generator rather than the artefact
-
-| configuration | $\ell_1$ | $\varphi_1$ at $272.177$ | $\varphi_1$ at $266.734$ |
-|---|---:|---:|---:|
-| released v1.3.0 | $265.93$ | $+0.0230$ | $+0.0030$ |
-| matched CAMB/CLASS | $206.04$ | $+0.2431$ | $+0.2276$ |
-| `bracket_at_w` / split | $183.42$ | $+0.3261$ | $+0.3124$ |
-| required | | $+0.2202$ | $+0.2245$ |
-| supplied | | $+0.3031$ | $+0.3094$ |
-| **overshoot** | | $+0.0830$ | $+0.0848$ |
-
-**The overshoot is invariant**: $37.7\%$ of the displacement against $37.8\%$.
-It survives a $2\%$ move in the normalisation, which removes one more way out
-of reading 2. At the current $\ell_A$ the released peak sits $0.3\%$ below
-$\ell_A$ rather than $2.3\%$, so released is the undriven monopole projection
-almost exactly — $n=1$, $\cos(kr_s)$, no phase.
-
-**Reading 2 is what is left and it is mine.** Your answer to my #12 closed the
-assembly: `split_by_parts` against `bracket_at_w` is $0.0014$ multipoles, and
-`c11` had excluded the alternative before the gate was posed. What remains is
-the target — what $206$ is the number *of* — and no run settles it.
+**So no assembly repair can close it**, which is why every repair has halved
+the gap and none has closed it. Section 15's premise is rewritten in v1.3.20:
+until the common sky is defined, the residual localises a mismatch between code
+paths rather than a frame-invariant observable failing to be invariant. #15
+above is the one thing that could still overturn this, and it is a run.
