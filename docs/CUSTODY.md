@@ -26,7 +26,7 @@ findings it has become a third copy of something and should be cut back.
 | **anything in the private paper repository** | **the connector** for text; a clone needs the same authorization | branch `master`, not `main` |
 | **anything that needs the PI's terminal** | **it waits** | rule 5 |
 
-### The six rules, each paid for
+### The seven rules, each paid for
 
 **1. A connector commit cannot run a script.** If it leaves a manifest or a
 generated document stale, **say so in the commit message** and raise it in the
@@ -87,24 +87,45 @@ days without ever being run — rule 4's failure, repeated.
 > One ask, at the start, replaces every later block. It is the only thing in
 > this policy that the PI must do, and rule 5 does not apply to it.
 
-**A credential file on the PI's disk is not a substitute, and P1-B proposed one
-on 2026-10-30.** The proposal was careful — a token left at
-`Documents\Claude\.git-credentials.txt` for the session, re-read per push,
-never stored or echoed, deleted at the end. It fails on the mechanism rather
-than on the discipline: **the proxy denies on the repository gate before any
-credential is considered.** Measured the same day on the same clone, a
-`git push` carrying an explicit token in the URL and a `gh api` call with
-`GH_TOKEN` set returned *the identical* "not in this session's authorized
-repository set" 403 as the attempts carrying nothing. A token on disk buys
-nothing, at the price of a regeneration each time, a deletion that must not be
-forgotten, and a secret existing where none need exist. Related and already
-paid for: `credential.helper store --file=` pointed into a connected folder is
-how git wrote the sandbox's own proxy credential into the PI's documents on
-2026-10-29, with a base64-encoded bash command as the username.
+**No credential obtained by any means substitutes for it**, and P1-B proposed
+two on 2026-10-30 — a token left at `Documents\Claude\.git-credentials.txt` and
+re-read per push, then the same token fed to `git -c http.extraheader` so it
+would appear in no output. Both were careful about the secret and both were
+designed around an undiagnosed blocker. Measured the same day, one clone, five
+ways:
+
+| what was tried | what came back |
+|---|---|
+| token in the clone URL | the proxy: *not in this session's authorized repository set* — 403 |
+| `GH_TOKEN` via `gh api` | the same 403 |
+| `git -c http.extraheader` | git never authenticates — the proxy's injected helper is the only credential path there is |
+| **REST `PUT` with a Bearer token** | **the proxy: *write access to this GitHub API path is not permitted through this proxy*** |
+| REST `GET`, private repo, Bearer token | the same 403 |
+
+The fourth row is the one that settles it: **it is not repository-scoped.**
+Raw API writes are refused through the proxy whatever the credential, so the
+sanctioned write paths are exactly two — the connector, and `git push` for a
+repository the PI has added to the session, where the proxy injects its own
+credential and the stream never holds one.
 
 **No stream asks the PI for a credential, and no stream reads one.** A route
-that appears to need a secret is the wrong route; rule 6's ask is the right one
-and it is free.
+that appears to need a secret is the wrong route. The cost of the pattern is
+not hypothetical: `credential.helper store --file=` pointed into a connected
+folder is how git wrote the sandbox's own proxy credential into the PI's
+documents on 2026-10-29, with a base64-encoded bash command as the username,
+and a live token reached a transcript the same week and had to be regenerated.
+
+**7. Measure the blocker before you route around it.** This is the project's
+most expensive habit and it is five instances deep: three trigger prompts
+asserting `device_bash` could push, untested for a week (rule 4); this file's
+own capability matrix, untested for two days (rule 6); `conformity.py` asserted
+landed and stranded 17.8 hours; and both credential proposals above, each of
+which one tool call refutes. **A proposal to change a route carries the command
+that was run and the output it returned, or it is not considered** — not an
+inference from an error seen once, not what worked in another session, and not
+what the documentation implies. The verification register has said for weeks
+that *a write reporting success is not a write*. Nothing said the same about a
+plan, and the plans are where the week went.
 
 ### Who can do what
 
@@ -126,7 +147,7 @@ it to the owner, not land it.
 **Open, and it decides how much this costs:** whether a *scheduled* run can
 carry push authorization at all, or only a run the PI starts. If only the
 latter, every binary lands in an attended run and the streams should batch them
-rather than discover it one at a time. Coordination's to settle.
+rather than discover it one at a time. Coordination's to settle, under rule 7.
 
 ### Branches, and they differ
 
