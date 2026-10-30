@@ -20,12 +20,13 @@ findings it has become a third copy of something and should be cut back.
 | what you are landing | route | notes |
 |---|---|---|
 | **a text file with no generated dependent** | **the GitHub connector** | works from any session — no credential, no shell, no PI. Both repositories |
-| **text that a script produces** — manifests, `docs/THEORY-AUDIT.md`, the grid register, test output | **clone the public bundle in the cloud, run the generator there, push the result through the connector** | the cloud workspace has python with numpy/scipy/sympy, and `pdflatex`/`latexmk` |
-| **a binary** — the supplement PDF, a figure | **P1-B only**, from a cloud clone with a push credential | the connector carries text only |
-| **anything in the private paper repository** | **the connector** for text; `device_bash` for a local commit | the cloud cannot clone it |
-| **anything that needs the PI's terminal** | **it waits** | see rule 5 |
+| **several text files that must move together** — an edition bump's README line, `\date` and filename | **`push_files` through the connector: many paths, one commit** | one file per commit leaves the tree red between them, and a gate that reads two of them will say so |
+| **text that a script produces** — manifests, `docs/THEORY-AUDIT.md`, the grid register, test output | **clone the public bundle in the cloud, run the generator there, land the result** — `git push` if this session is authorized, the connector otherwise | the cloud workspace has python with numpy/scipy/sympy, and `pdflatex`/`latexmk`. The connector's ceiling is the model's context: **about 100 kB of text** |
+| **a binary, or any set containing one** — the supplement PDF, a figure | **a cloud clone in a session the PI has authorized for push** | the connector carries text only, and context carries no binary at all. **Not a stream's property — a session's.** Rule 6 |
+| **anything in the private paper repository** | **the connector** for text; a clone needs the same authorization | branch `master`, not `main` |
+| **anything that needs the PI's terminal** | **it waits** | rule 5 |
 
-### The five rules, each paid for
+### The six rules, each paid for
 
 **1. A connector commit cannot run a script.** If it leaves a manifest or a
 generated document stale, **say so in the commit message** and raise it in the
@@ -43,6 +44,15 @@ disk is not in the repository, and what is not in the repository cannot be
 read by the next session.** Committing there is different and is allowed; a
 commit is in git.
 
+> **The escape, and it is new on 2026-10-30.** When no route available to the
+> session can carry the artefact, the artefact **waits in the stream's own
+> session**, the **ask goes to the custodian of the path**, and the policy is
+> the thing that gets fixed. P1-T took that escape on v1.3.20 — they showed the
+> coupled set rather than asserting it, and routed the five promotion steps to
+> P1-B as `#18`. The disk write itself is still outside this policy and should
+> not recur; the demonstration and the escalation were correct, and the gap
+> they walked into was rule 6's, below.
+
 **3. `device_bash` leaves `.git` lock files it cannot delete.** Deletion in a
 connected folder is refused until the PI approves it, so `git` commands leave
 `index.lock`, `HEAD.lock` and friends behind, and **the next git command — his
@@ -59,17 +69,40 @@ opposite for a week and none had tested it.
 opened with the ruling that his machine is not a route. Anything genuinely
 urgent goes to the stream that can land it, through the handoff or a wake.
 
+**6. `git push` authorization is per session, and only the PI can grant it.**
+A cloud clone reads any public repository anonymously and writes to none. The
+git proxy injects a credential only for repositories in **that session's**
+authorized set; `gh api` is refused on the same ground, with the same message.
+**The set does not carry from one session to the next**, so a stream that
+pushed yesterday cannot push today unless it was granted again. Measured in
+Coordination's session, 2026-10-30: both repositories 403 on shell `git push`
+and on `gh api`, anonymous clone of the public bundle fine, connector reading
+and writing both. This had been recorded below as a capability of P1-B for two
+days without ever being run — rule 4's failure, repeated.
+
+> **If a run needs `git push`, ask at the top of the run, in these words:**
+> *Add `timgebbie/frame-covariant-cmb-reproducibility` and
+> `timgebbie/NonlinearShear` to this session's sources with push access.*
+>
+> One ask, at the start, replaces every later block. It is the only thing in
+> this policy that the PI must do, and rule 5 does not apply to it.
+
 ### Who can do what
 
-| | connector | cloud clone | run generators | push binary | the PI's machine |
-|---|---|---|---|---|---|
-| **P1-T** | yes, both repos | yes, public bundle | yes | no | `device_bash`, local commits |
-| **P1-B** | yes, both repos | **yes, with push** | yes | **yes** | `device_bash`, local commits |
-| **Coordination** | yes, both repos | read only — the proxy refuses writes to repos outside the session's authorized set | yes | no | `device_bash`, local commits |
+| | connector, read and write | cloud clone, read | `git push` from that clone | the PI's machine |
+|---|---|---|---|---|
+| **P1-T** | both repos | public bundle | **only if this session was authorized** | `device_bash`, local commits |
+| **P1-B** | both repos | public bundle | **only if this session was authorized** | `device_bash`, local commits |
+| **Coordination** | both repos | public bundle | **only if this session was authorized** | `device_bash`, local commits |
 
-**P1-B holds the only complete route, and that is correct rather than
-accidental** — P1-B is the bundle's custodian, and every binary and generated
-artefact is theirs by custody.
+**There is no per-stream capability in this table, and the version it replaces
+invented one.** Every session starts with the connector and nothing else.
+
+What differs between streams is **custody, not capability**: the binaries and
+the generated artefacts are **P1-B's to land**, because P1-B is the bundle's
+custodian, and that stays true whichever session happens to hold a credential.
+A stream that finds itself able to push something it does not own should hand
+it to the owner, not land it.
 
 ### Branches, and they differ
 
@@ -84,6 +117,12 @@ in arXiv v4's Comments field beside the revision note, and it is the citation
 trail behind the Zenodo DOI. arXiv versions are permanent.
 
 ### Always
+
+**Name the route in the commit message.** One line, first line of the body:
+`Route: connector` · `Route: push_files` · `Route: cloud clone, git push` ·
+`Route: device_bash, local commit`. It costs a line and makes adherence
+auditable from `git log` without asking anyone, which is the only kind of
+adherence check this project can afford.
 
 Commits made through a shell name their files with a pathspec on the commit as
 well as the add — never `git add -A`. **But a pathspec on `git commit` commits
@@ -103,7 +142,7 @@ for GitHub-rendered markdown, each against its own caption.
 | **P1-T** | the theory | `supplementary-materials/`, `tests/frame/`, `handoff/P1T-to-P1B.md`, and the root `README.md` |
 | **P1-B** | the implementation; **custodian of the bundle** | everything else, plus `handoff/P1B-to-P1T.md` |
 | **Coordination** | consistency, never correctness; **custodian of the paper repository** | `docs/CUSTODY.md` here, `docs/STREAMS.md` and `docs/RESUME.md` there |
-| **PI** | everything irreversible | tags, releases, arXiv, the journal |
+| **PI** | everything irreversible | tags, releases, arXiv, the journal — and session authorization, rule 6 |
 
 **The dividing line, testable per item: a number is P1-B's if it came out of a
 run, and P1-T's if it came out of a derivation.**
