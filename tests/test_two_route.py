@@ -134,11 +134,39 @@ def test_the_interpolant_at_eta_star_is_what_T46_says_it_is():
     as_shipped = two_route_transfer(30.0, ELLS, background=CDM_MODEL,
                                     match_interpolation=False)
     assert matched.worst < GATE / 10.0
-    assert as_shipped.worst > 10.0 * matched.worst, (
-        "T-46 says the unmatched comparison is dominated by the interpolant at "
-        f"eta_*. It now reports {as_shipped.worst:.2e} against the matched "
-        f"{matched.worst:.2e}. If that gap has closed, the interpolant changed "
-        "and Q7 was answered without the record being updated")
+
+    # **T-46 IS CLOSED, AND THE RECORD IS UPDATED --- finding T-180,
+    # 2026-10-30.** This test used to require `as_shipped.worst` to exceed ten
+    # times `matched.worst`, and said that if the gap ever closed, *"the
+    # interpolant changed and Q7 was answered without the record being
+    # updated"*. The gap closed on 2026-10-30 and **the interpolant did not
+    # change.**
+    #
+    #     recombination n_eta   matched     as shipped   ratio
+    #              4000         6.30e-08     1.53e-05      243
+    #              8000         6.92e-09     6.92e-09     1.00
+    #
+    # `RecombinationHistory.build`'s `n_eta` went 4000 -> 8000 under P1-T's
+    # ruling on `P1B->P1T #18`, and the discrepancy T-46 named **was never
+    # about the interpolant**: linear and cubic disagreed because the quantity
+    # they were reading was under-resolved. Resolve it and they agree.
+    # The matched comparison improved nine-fold at the same time.
+    #
+    # **Q7 — the PI's open call on whether to change the interpolant — does
+    # not need answering. The question dissolved**, and nothing about either
+    # interpolant moved.
+    #
+    # The assertion is inverted rather than deleted, so that the day something
+    # re-opens the gap this file says so. A deleted test would let the grid
+    # silently regress to a state where the interpolant choice matters again.
+    assert as_shipped.worst < 10.0 * matched.worst, (
+        f"the interpolant gap has RE-OPENED: as-shipped {as_shipped.worst:.2e} "
+        f"against matched {matched.worst:.2e}. T-180 closed it by taking the "
+        "recombination grid to 8000, so the first thing to check is whether "
+        "`RecombinationHistory.build`'s n_eta has moved back down -- at 4000 "
+        "this ratio was 243. If the grid is unchanged, then something else "
+        "has made the quantity read at eta_* under-resolved again and Q7 is "
+        "live for a second reason.")
 
 
 def test_the_eta_grid_is_derived_from_k_and_not_fixed():

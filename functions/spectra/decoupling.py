@@ -221,7 +221,22 @@ class RecombinationHistory:
         background: Background,
         *,
         omega_b_h2: float = 0.0224,
-        n_eta: int = 4000,
+        #: **4000 -> 8000, P1-T's ruling of 2026-10-30 on `P1B->P1T #18`.**
+        #: `c12` bounds a uniform grid accumulating $\kappa$ from $\kappa'$ at
+        #: $h\kappa'(\eta_\ast)\le\sqrt{12\varepsilon}$ --- 21.5 samples across
+        #: the visibility FWHM at $\varepsilon=10^{-3}$. **D40 measured 4000 at
+        #: 10.0 samples**, less than half the bound, and the spectrum inherits
+        #: it: 0.31\% at $\ell=2$ rising monotonically to **3.36\% at
+        #: $\ell=900$** (**T-176**).
+        #:
+        #: **Not 7737**, which is the threshold the bound returns at that
+        #: $\varepsilon$ --- a grid set exactly at its own threshold has no
+        #: margin against the next thing that moves. **Not graded**: c12's
+        #: bound is the composite error term of a *uniform* rule, derived for
+        #: constant $h$, so a graded grid has no referent for it and carrying
+        #: the number across would use a result outside its hypothesis. P1-T's
+        #: ruling, and the graded grid needs its own error term first.
+        n_eta: int = 8000,
         z_max: float = 3000.0,
         recombination: "Recombination" = None,  # type: ignore[assignment]
         h: float = 0.674,

@@ -54,7 +54,7 @@ ROOT = Path(__file__).resolve().parents[1]
 #: `a0c8057` landed on a fetch between a rebase and a push.
 FORBIDDEN: dict[str, tuple[str, ...]] = {
     "P1B": ("handoff/P1T-to-P1B.md", "docs/STREAMS.md", "docs/RESUME.md",
-            "tests/frame/*", "README.md"),
+            "tests/frame/*", "README.md", "supplementary-materials/*"),
     "P1T": ("handoff/P1B-to-P1T.md", "docs/STREAMS.md", "docs/RESUME.md"),
 }
 
@@ -68,6 +68,10 @@ WHOSE = {
     "docs/STREAMS.md": "Coordination's. Ask there; do not write it.",
     "docs/RESUME.md": "Coordination's. Ask there; do not write it.",
     "tests/frame/*": "P1-T's pathspec.",
+    "supplementary-materials/*": "P1-T's, per docs/CUSTODY.md. The PDF is a "
+                                 "build output P1-B produces, but the "
+                                 "directory and its sources are P1-T's -- "
+                                 "raise it in handoff/P1B-to-P1T.md.",
     "README.md": "P1-T's since 2026-10-28. Raise it in handoff/P1B-to-P1T.md; "
                  "the supplement line is the exception Coordination carved, "
                  "and it travels with the supplement move, not on its own.",

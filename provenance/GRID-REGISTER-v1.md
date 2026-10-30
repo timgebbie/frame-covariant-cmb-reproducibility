@@ -27,7 +27,7 @@ being possible.
 
 ### `eta` — the recombination history: kappa', visibility and opacity in eta
 
-`functions/spectra/decoupling.py:233`, `np.linspace`
+`functions/spectra/decoupling.py:248`, `np.linspace`
 
 **1.2% in the primary source at eta_*, measured.** `n_eta=4000`, spacing
 4.9e-04, which is COARSER than the line-of-sight grid it is interpolated onto.

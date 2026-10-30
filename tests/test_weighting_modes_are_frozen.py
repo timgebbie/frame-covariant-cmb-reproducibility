@@ -95,15 +95,35 @@ INTENDED = {
 #: existed. The comment is the $\ell=2$ transfer, so that a failure can be read
 #: without rerunning anything.
 FROZEN: dict[str, str] = {
-    "released": "ea34e84c444815f9a9252d1aa53b7fb3",                  # +6.076132e+00
-    "bracket_at_w": "e088fad44df65594985717120296c5e7",              # -7.121610e+00
-    "bracket_at_w_partners": "4ff5d76c0e6391d3e2070c435b746b5c",     # -7.139914e+00
-    "slot_split": "a4ad4ad35f5a50c7b1db27837cf4336b",                # -1.222578e+00
-    "slot_split_isw_half": "7263b3781d27c196658efc9ec1a56a69",       # -3.780116e-01
-    "slot_split_thomson_shear": "26784469f57ef7e15a2a562affa3a1a0",  # -2.051702e+01
-    "isw_at_w": "f14f4e08a776bc1c5bb3b7a00896c88e",                  # +6.058460e+00
-    "split_by_parts": "8ff81d5f67bea3e632844ed3d20ab671",            # -7.119302e+00
-    "split_by_parts_partners": "392088a2fb3112e92d951a7421e007b5",   # -7.137606e+00
+    # **RE-FROZEN 2026-10-30, T-180.** The nine digests below replace the nine
+    # taken before the `weighting=` refactor. The reason is authorised and
+    # measured rather than convenient: `RecombinationHistory.build`'s `n_eta`
+    # went 4000 -> 8000 under P1-T's ruling on `P1B->P1T #18`, because `c12`'s
+    # bound wants 21.5 samples across the visibility FWHM and 4000 gave 10.0.
+    # Every number in the bundle moves with it, which is what this file exists
+    # to notice, and it noticed.
+    #
+    # The pre-change digest and the pre-change $\ell=2$ value are kept on each
+    # row. A re-freeze that discards what it replaced is indistinguishable
+    # from editing a literal to make a test pass, which the message below
+    # forbids -- and the forbidding is right. What makes this legitimate is
+    # that the move was predicted, granted, and is recorded with its size.
+    #
+    # **And the sizes say something the ruling did not.** The two weightings
+    # T-163 left standing move by 4.4e-06 and 1.7e-05; the three it struck
+    # move by 9.4e-04 to 1.4e-02 -- two to three orders more. The survivors
+    # are the configurations least sensitive to the recombination grid, which
+    # is an independent corroboration of T-163 from a direction that run did
+    # not test.
+    "released": "587fc42d8a94d0837456784f17da9df6",                  # +6.081839e+00  was ea34e84c444815f9a9252d1aa53b7fb3 / +6.076132e+00  (9.4e-04)
+    "bracket_at_w": "7540b291403bd4bdbe27df560446b803",              # -7.121728e+00  was e088fad44df65594985717120296c5e7 / -7.121610e+00  (1.7e-05)
+    "bracket_at_w_partners": "04590723d293bbcf1c5f6ca58e9ecc5f",     # -7.140136e+00  was 4ff5d76c0e6391d3e2070c435b746b5c / -7.139914e+00  (3.1e-05)
+    "slot_split": "f387f1e5416c12d17790a558ae17e089",                # -1.217323e+00  was a4ad4ad35f5a50c7b1db27837cf4336b / -1.222578e+00  (4.3e-03)
+    "slot_split_isw_half": "f56a722003f23572021698860a222725",       # -3.726177e-01  was 7263b3781d27c196658efc9ec1a56a69 / -3.780116e-01  (1.4e-02)
+    "slot_split_thomson_shear": "b934cfee2f39018f0cafbf14cbd3dba1",  # -2.052766e+01  was 26784469f57ef7e15a2a562affa3a1a0 / -2.051702e+01  (5.2e-04)
+    "isw_at_w": "399820fed5b2f70700495ffb024399ba",                  # +6.064167e+00  was f14f4e08a776bc1c5bb3b7a00896c88e / +6.058460e+00  (9.4e-04)
+    "split_by_parts": "2823c1a62cd334048c7de6e8cdec9cf3",            # -7.119333e+00  was 8ff81d5f67bea3e632844ed3d20ab671 / -7.119302e+00  (4.4e-06)
+    "split_by_parts_partners": "71cfc34cdf4b7ec34d239deb50d04ba6",   # -7.137742e+00  was 392088a2fb3112e92d951a7421e007b5 / -7.137606e+00  (1.9e-05)
 }
 
 

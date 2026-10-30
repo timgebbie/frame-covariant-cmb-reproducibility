@@ -12734,3 +12734,72 @@ bundle. **A finder's vertex offset is a statement about curvature, not about
 validity.** Where a peak is genuinely broad — and the Newtonian first maximum
 is, being a plateau feature rather than an acoustic one — a large offset is
 the correct output of a correct finder.
+
+---
+
+## T-180 — **The recombination grid goes to 8000, and it closes T-46 and Q7**
+
+**2026-10-30.** P1-T granted `P1B→P1T #18`: `RecombinationHistory.build`'s
+`n_eta` from 4000 to 8000. Not 7737 (a grid at its own threshold has no
+margin), and **not graded** — `c12`'s bound is the composite error term of a
+*uniform* rule derived for constant $h$, so a graded grid has no referent for
+it and carrying the number across would use a result outside its hypothesis.
+
+| | 4000 | 8000 |
+|---|---:|---:|
+| samples across the FWHM | 10.0 | 21.0 |
+| $h\kappa'(\eta_\ast)$ | 0.2040 | **0.1021** |
+| $\int\mathcal V$ | 0.996571 | **0.999141** |
+| $\eta_\ast$ | 0.071325692 | 0.071320942 |
+
+The bound is $h\kappa'(\eta_\ast)\le\sqrt{12\varepsilon}=0.1095$ at
+$\varepsilon=10^{-3}$: **satisfied with 7\% margin**. The raw sample count
+reads 21.0 against the quoted 21.5 because that figure carries `c12`'s profile
+constant 2.4463; the inequality is the thing, and it holds.
+
+### It closes T-46, and Q7 with it
+
+`test_the_interpolant_at_eta_star_is_what_T46_says_it_is` failed, and its own
+message says why that matters: *"If that gap has closed, the interpolant
+changed and Q7 was answered without the record being updated."*
+
+| recombination $n_\eta$ | matched | as shipped | ratio |
+|---|---:|---:|---:|
+| 4000 | 6.30e-08 | 1.53e-05 | **243** |
+| 8000 | 6.92e-09 | 6.92e-09 | **1.00** |
+
+**The interpolant discrepancy was never about the interpolant.** T-46 recorded
+that `pipeline.run` reads its primary source at $\eta_\ast$ with `np.interp`
+while `integral_solution` uses a `CubicSpline`, and that unmatched the two
+differ by one to three orders. Refining the grid those quantities are built on
+collapses 243 to **1.00** — linear and cubic now agree because the thing being
+interpolated is resolved. The matched comparison improves 9$\times$ as well.
+
+**Q7 was the PI's open call on whether to change the interpolant. It does not
+need answering: the question dissolved.** T-46 is closed, not fixed — nothing
+about the two interpolants changed.
+
+### What else moved, and the sizes are a result
+
+`k_D` on PLANCK: 642.14 → 643.18, +0.16\%, with T-39's ratio untouched at
+0.8660 to four figures. The pin moves and the *factor* does not, which is what
+that test was built to show.
+
+The nine frozen weighting digests all moved and were re-frozen, keeping what
+they replaced on each row. **The sizes say something P1-T's ruling did not:**
+
+| | shift at $\ell=2$ |
+|---|---:|
+| `split_by_parts`, `bracket_at_w` — **T-163's survivors** | 4.4e-06, 1.7e-05 |
+| `released`, `isw_at_w` | 9.4e-04 |
+| `slot_split` | 4.3e-03 |
+| `slot_split_isw_half` | 1.4e-02 |
+
+**The two weightings T-163 left standing are the two least sensitive to the
+recombination grid, by two to three orders.** T-163 struck the others on frame
+agreement and the Einstein–de Sitter null; this is an independent corroboration
+from a direction that run did not test, and it was free.
+
+$\ell_A$ moves only 266.7341 → 266.7501, so **the grid is not what separates
+the live value from the artefact's 272.2** — `P1T→P1B #14` stays open and is
+not a resolution question.
