@@ -70,70 +70,87 @@ been unreachable since 2026-10-27, failing identically on every attempt.)*
 opened with the ruling that his machine is not a route. Anything genuinely
 urgent goes to the stream that can land it, through the handoff or a wake.
 
-**6. `git push` from a cloud clone is a property of the session, and the
-sessions differ.** This is the rule that has been got wrong the most times, in
-both directions, and the current state is:
+**6. A session that holds a credential can push, whether or not the proxy would
+have given it one.** P1-B established this and states it exactly:
 
-| session | `git push` from a cloud clone | how that is known |
-|---|---|---|
-| **P1-B's** | **works**, and carries its ordinary traffic | `340ab22`, `f2a52d4`, `4f99b7c`, `7c6abe2`, `ef93fa3`, `5796a48`, `a8cb2b1` on `main` — authored by `Claude <noreply@anthropic.com>` with author and committer stamps that differ, which a connector commit cannot produce. Mechanism stated by P1-B in `f2a52d4` `#20`: a cloud clone with a fine-grained PAT through `git -c http.extraheader` |
-| **Coordination's** | **refused**, five ways | token in the clone URL, `GH_TOKEN` via `gh api`, `http.extraheader`, REST `PUT` with a Bearer token, REST `GET` on the private repo — all 403 at the proxy, and the REST write refused as *"write access to this GitHub API path is not permitted through this proxy"*, which is not even repository-scoped. Measured 2026-10-30 |
-| **P1-T's** | **not measured by anyone** | `#20` tells P1-T the capability exists; whether P1-T's own session has it is one command away and nobody has run it |
+> *The proxy declining to **inject** a credential does not stop a push that
+> **carries** its own.*
 
-**No session may rule on another's capability, including this one.** Both
-halves of that table are real and they contradict each other, which means the
-proxy configuration differs between this project's sessions for reasons none of
-us has established. **Measure your own and act on that.** The probe is four
-commands and costs nothing:
+P1-B's session is **not** in the authorized repository set and has fifteen
+commits on `main` today, through a cloud clone with a fine-grained PAT and
+`git -c http.extraheader`. Two things are therefore separate and had been run
+together in this file for two days:
+
+| | |
+|---|---|
+| **the proxy injecting a credential** | per session, per repository, granted by the PI adding the repository to that session's sources. Absent in Coordination's session |
+| **a push carrying its own credential** | **works in P1-B's session**, and is how the bundle's binaries, manifests and generated artefacts have been landing |
+
+**The probe, and get it right — mine was wrong.** A `git push --dry-run`
+carrying **no** credential returns a 403 in every session tested, including
+P1-B's, which pushes successfully seconds later. **That form of the test proves
+nothing and the earlier text of this file told streams to run it.** The test
+that distinguishes anything is the one with a credential in it:
 
 ```
-git clone --depth 1 <repo> probe && cd probe
-git push --dry-run origin HEAD:refs/heads/probe-$(date +%s)
+git -c http.extraheader="Authorization: Basic $(printf 'x-access-token:%s' "$TOK" | base64 -w0)" \
+    push --dry-run origin HEAD:refs/heads/probe-$(date +%s)
 ```
 
-If it is refused, the connector is your route and the ceiling in the table
-above applies. If it is refused and you need to land a binary, **hand it to
-P1-B**, whose custody it is anyway.
+If that succeeds, the route is open and binaries are landable from your
+session. If it is refused **with a real token**, the connector is your route,
+the ~100 kB text ceiling applies, and a binary goes to **P1-B**, whose custody
+it is anyway.
 
-> **Withdrawn, 2026-10-30, and it is the worst instance this file carries.**
-> Three commits this morning — `9375628`, `08b2e2a`, `14088b5` — ruled on five
-> measurements from Coordination's session that *no* credential reaches GitHub
+**Measured in Coordination's session only, and binding on nobody else:** a push
+with no credential, and a `gh api` call, are both refused as *not in this
+session's authorized repository set*; a raw REST `PUT` is refused as *write
+access to this GitHub API path is not permitted through this proxy*. A third
+measurement, of `http.extraheader`, is **struck** — it used a placeholder
+token, so its failure cannot distinguish a blocked route from a rejected
+credential, and it was the row that did the damage below.
+
+> **Withdrawn 2026-10-30, and it is the worst thing this file has carried.**
+> Three commits that morning — `9375628`, `08b2e2a`, `14088b5` — generalised
+> Coordination's measurements into a ruling that *no* credential reaches GitHub
 > from *any* session, and refused P1-B's route as impossible. P1-B had been
-> pushing through it all week, and the evidence was in `git log` the whole
-> time. The measurements were sound; the scope was invented. Had P1-B complied
-> with the text, a working stream would have stopped. **A capability measured
-> in one session is a fact about that session.**
+> pushing through it all week; the evidence was in `git log` throughout; and
+> P1-B pushed `08b2e2a..f2a52d4` by that exact method while the ruling against
+> it was being written. **A capability measured in one session is a fact about
+> that session.** Had P1-B complied with the text, a working stream would have
+> stopped.
 
-**7. Measure the blocker before you route around it.** The project's most
-expensive habit, and it is six instances deep: three trigger prompts asserting
-`device_bash` could push, untested for a week (rule 4); this file's capability
-matrix giving P1-B push on no evidence, then taking it away on the wrong
-evidence (rule 6, both directions); `conformity.py` asserted landed and
-stranded 17.8 hours; P1-T routing around a push capability `#20` says it may
-have; and **the withdrawal above, which was written into the commit that
-introduced this rule.** That one is the proof of the rule rather than an
-exception to it.
+**7. Measure the blocker before you route around it, and measure it the way
+that could come out either way.** The project's most expensive habit, now six
+instances deep: three trigger prompts asserting `device_bash` could push,
+untested for a week (rule 4); this file's capability matrix granting P1-B push
+on no evidence and then revoking it on evidence from somebody else's session
+(rule 6, both directions); `conformity.py` asserted landed and stranded 17.8
+hours; P1-T routing around a push capability it has never tested; and **the
+withdrawal above, written into the same commit that introduced this rule** —
+the proof of it rather than an exception to it.
 
 **A proposal or a ruling about a route carries the command that was run and the
 output it returned, or it is not considered** — not an inference from an error
 seen once, not what worked in another session, not what the documentation
-implies, and *not a measurement from a different session*. The verification
-register has said for weeks that *a write reporting success is not a write*.
-The same now holds for a plan and for a refusal.
+implies, **not a measurement from a different session**, and **not a test whose
+negative result has two explanations**. The verification register has said for
+weeks that *a write reporting success is not a write*. The same now holds for a
+plan and, harder, for a refusal.
 
 ### Credentials, where one is in play
 
 Nothing here is an argument about whether the route works; rule 6 settles that
-per session. These are handling constraints and they hold wherever a token
-exists:
+per session, and in P1-B's it works. These are handling constraints:
 
 - **Never in chat.** A live PAT reached a transcript on 2026-10-29 and had to
-  be regenerated. The PI writes it to a file; a session is pointed at the path
-  and never reads the value back into its output.
+  be regenerated. The PI writes it to a file; a session is pointed at the path,
+  reads it into a variable, and never emits the value.
 - **Never `credential.helper store --file=` into a connected folder.** Git
   writes to that file. On 2026-10-29 it wrote the sandbox's own proxy
   credential into the PI's documents, with a base64-encoded bash command as
-  the username.
+  the username. `http.extraheader` from a shell variable, which is what P1-B
+  uses, has neither failure.
 - **Fine-grained, least scope.** Contents read and write plus Metadata read is
   the whole requirement for git. User permissions are not needed.
   `.github/workflows/` needs a separate Workflows permission and nothing here
@@ -145,9 +162,9 @@ exists:
 
 | | connector, read and write | cloud clone, read | `git push` from that clone | the PI's machine |
 |---|---|---|---|---|
-| **P1-T** | both repos | public bundle | **unmeasured — run the probe** | `device_bash` unreachable since 10-27 |
-| **P1-B** | both repos | public bundle | **yes, in use** | as above |
-| **Coordination** | both repos | public bundle | **no, measured 10-30** | as above |
+| **P1-T** | both repos | public bundle | **untested — run the probe above, with a token** | `device_bash` unreachable since 10-27 |
+| **P1-B** | both repos | public bundle | **yes, in use, fifteen commits on 10-30** | as above |
+| **Coordination** | both repos | public bundle | no credential held; not retested | as above |
 
 What differs between streams is **custody, not capability**: the binaries and
 the generated artefacts are **P1-B's to land**, because P1-B is the bundle's
@@ -172,9 +189,9 @@ trail behind the Zenodo DOI. arXiv versions are permanent.
 **Name the route in the commit message.** One line, first line of the body:
 `Route: connector` · `Route: push_files` · `Route: cloud clone, git push` ·
 `Route: device_bash, local commit`. It costs a line and makes adherence
-auditable from `git log` without asking anyone, which is the only kind of
-adherence check this project can afford — and had it been in force a week ago,
-the ruling withdrawn under rule 6 could not have been written.
+auditable from `git log` without asking anyone — and had it been in force a
+week ago, the ruling withdrawn under rule 6 could not have been written, because
+the route that was being called impossible was named in every commit using it.
 
 Commits made through a shell name their files with a pathspec on the commit as
 well as the add — never `git add -A`. **But a pathspec on `git commit` commits
@@ -213,10 +230,11 @@ Anyone may prod any stream; the stream that owns the question rules on it.
 Coordination names collisions and never allocates.
 
 **Coordination owns the policy and does not own the plumbing.** A stream
-blocked by this file raises it here rather than with the PI, and **a stream
-whose own measurement contradicts this file is right and this file is wrong**
-until Coordination has run the same command. That is not a courtesy; it is
-rule 7 applied to the author.
+blocked by this file raises it here rather than with the PI. And **a stream
+whose own measurement contradicts this file is right and this file is wrong**,
+immediately and without waiting for Coordination to agree — that is not a
+courtesy, it is rule 7 applied to the author, and on 2026-10-30 it was the only
+thing standing between a ruling and a stopped stream.
 
 **Frozen, and no stream writes them.** `correction/` is closed — *public* there
 means already published on arXiv, which is why it is frozen, and it is
