@@ -87,6 +87,25 @@ days without ever being run — rule 4's failure, repeated.
 > One ask, at the start, replaces every later block. It is the only thing in
 > this policy that the PI must do, and rule 5 does not apply to it.
 
+**A credential file on the PI's disk is not a substitute, and P1-B proposed one
+on 2026-10-30.** The proposal was careful — a token left at
+`Documents\Claude\.git-credentials.txt` for the session, re-read per push,
+never stored or echoed, deleted at the end. It fails on the mechanism rather
+than on the discipline: **the proxy denies on the repository gate before any
+credential is considered.** Measured the same day on the same clone, a
+`git push` carrying an explicit token in the URL and a `gh api` call with
+`GH_TOKEN` set returned *the identical* "not in this session's authorized
+repository set" 403 as the attempts carrying nothing. A token on disk buys
+nothing, at the price of a regeneration each time, a deletion that must not be
+forgotten, and a secret existing where none need exist. Related and already
+paid for: `credential.helper store --file=` pointed into a connected folder is
+how git wrote the sandbox's own proxy credential into the PI's documents on
+2026-10-29, with a base64-encoded bash command as the username.
+
+**No stream asks the PI for a credential, and no stream reads one.** A route
+that appears to need a secret is the wrong route; rule 6's ask is the right one
+and it is free.
+
 ### Who can do what
 
 | | connector, read and write | cloud clone, read | `git push` from that clone | the PI's machine |
@@ -103,6 +122,11 @@ the generated artefacts are **P1-B's to land**, because P1-B is the bundle's
 custodian, and that stays true whichever session happens to hold a credential.
 A stream that finds itself able to push something it does not own should hand
 it to the owner, not land it.
+
+**Open, and it decides how much this costs:** whether a *scheduled* run can
+carry push authorization at all, or only a run the PI starts. If only the
+latter, every binary lands in an attended run and the streams should batch them
+rather than discover it one at a time. Coordination's to settle.
 
 ### Branches, and they differ
 
@@ -159,6 +183,11 @@ directions and the download link died twice in one morning.
 
 Anyone may prod any stream; the stream that owns the question rules on it.
 Coordination names collisions and never allocates.
+
+**A stream blocked by this policy raises it with Coordination, not with the
+PI.** Coordination owns the policy and can change it; the PI's time is the
+scarcest thing in the project and a plumbing question is the wrong claim on it.
+The one exception is rule 6's authorization ask, which only he can answer.
 
 **Frozen, and no stream writes them.** `correction/` is closed — *public* there
 means already published on arXiv, which is why it is frozen, and it is
