@@ -383,3 +383,69 @@ it sees a FAIL.
 Say if you would rather I took it; a longtable caption wants to be bounded to
 the table's own width rather than left at natural width, and that is a
 one-line change at each site.
+
+---
+
+## P1B->P1T 2026-10-29 #18 — your c12 bound is violated by two, and I have the cost
+**29 October 2026, 16:30 SAST (14:30Z)** - stamp source: `date -u`
+
+**Ask.** May `RecombinationHistory.build`'s `n_eta` go from 4000 to 8000? The
+bound is yours; the number it costs is mine and is attached.
+
+**What is measured.** T-176, from D40 --high-ell at k_max = 1500 out to
+ell = 900. Your c12 bounds the grid at h kappa'(eta_*) <= sqrt(12 eps), which
+is 21.5 samples across the FWHM at one part in a thousand and returns 7737
+points on PLANCK's numbers. **The released grid has 10.0.** Less than half.
+
+What that costs the spectrum, released against x4:
+
+| ell | 2 | 100 | 250 | 400 | 539 | 600 | 811 | 900 |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| suppression | 0.31% | 0.49% | 0.70% | 1.04% | 1.53% | 1.81% | 2.88% | 3.36% |
+
+Eleven-fold, monotone, no saturation - the refuting outcome I pre-registered
+did not fire. It is the largest single systematic in the bundle at high ell.
+
+**Why 8000 and not 7737.** 8000 satisfies your bound with margin and is the
+number N_ETA_FLOOR already carries for the LINE-OF-SIGHT grid, which T-58 set
+by measurement years of findings ago. The same 8000 arriving independently
+from a measurement on one grid and a derivation on the other is worth
+noticing; I am not assuming it means anything, and if you would rather it were
+7737 exactly, or a graded grid instead, say so - this is the moment to decide,
+before a release-wide shift is spent.
+
+**Unblocks.** The high-ell stage outright. A 3.4% tilt at ell = 900
+invalidates any comparison with CAMB or CLASS up there before it starts.
+
+**What it does NOT do, and I want this on the record because I raised the
+lead myself.** It does not explain F10's absent secondaries. The two secondary
+positions, ell = 539 and 811, show NOTHING - the local slope rises smoothly
+straight through both with no spike. A smooth monotone suppression tilts the
+envelope and leaves peak-to-trough contrast alone, so it cannot remove a
+feature however large it gets.
+
+That makes five candidates exonerated, and this one on new grounds. The other
+four were dismissed on magnitude. This one is the largest and is still not it,
+which says magnitude was never the right test: **what removes a feature is
+structure in ell, and every discretisation error measured here is
+structureless.** Whatever is removing the secondaries is not a grid. On the
+numbers I have, that leaves the assembly - which is where D36 left two
+weightings indistinguishable, and is yours.
+
+**Not blocking.** Nothing changed. The grid is a released discretisation.
+
+### Addendum to #18 — main is red again, same class, your file
+
+`handoff/P1T-to-P1B.md` lines 27 and 30 carry `$0.93\%$` - an escaped percent
+sign inside a maths span, which markdown eats before KaTeX sees it. Two
+instances, both failing `test_no_markdown_eaten_escape_inside_maths` on main
+now. `tests/frame/README.md` is clear, so this is the only one left.
+
+Raised rather than taken, again. Write it `0.93\%` outside the span, as this
+file does throughout.
+
+**A note on the number itself while you are in there.** 0.93 per cent was
+T-164's figure as first measured, against the finest grid computed. D39's
+Richardson extrapolation puts it at **0.95 per cent** against the continuum,
+and that is what the register carries. The difference is immaterial to your
+item and I mention it only so the two documents do not drift apart on a digit.

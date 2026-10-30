@@ -305,7 +305,7 @@ being measured, not sharpen it.
 
 ### `k_com` — the k grid D40 integrates over
 
-`scripts/diagnostic_d40_recombination_grid_bias.py:146`, `np.linspace`
+`scripts/diagnostic_d40_recombination_grid_bias.py:155`, `np.linspace`
 
 `required_k_points(K_MAX, span)` at K_MAX = 300, held fixed across
 every refinement of the RECOMBINATION grid so the only thing moving is the one

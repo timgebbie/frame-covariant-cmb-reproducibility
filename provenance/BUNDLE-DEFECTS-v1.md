@@ -12550,3 +12550,67 @@ Re-measured against the same initial-value problem refined $8\times$,
 `np.interp` costs the released path **1.7e-05 at $k=5$ rising to 1.9e-04 at
 $k=1500$** — and a cubic would cost 3.0e-06, about sixty times less, which is
 worth having but is not a defect.
+
+---
+
+## T-176 — **The recombination bias grows to 3.4\% at $\ell=900$ and does not saturate. It still does not remove a secondary**
+
+**2026-10-29, D40 `--high-ell`.** $k_{\max}=1500$, $\ell$ to 900, released
+recombination grid against $\times4$. T-172 measured the bias to $\ell=250$
+and the pre-registered refuting outcome was **saturation near 1\%** — an
+envelope after all, unable to remove a feature. It did not fire.
+
+| $\ell$ | 2 | 100 | 250 | 400 | **539** | 600 | **811** | 900 |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| suppression | 0.31\% | 0.49\% | 0.70\% | 1.04\% | **1.53\%** | 1.81\% | **2.88\%** | **3.36\%** |
+
+**Eleven-fold from $\ell=2$ to $\ell=900$, monotone, no flattening anywhere.**
+It is the largest single systematic measured in this bundle at high $\ell$ —
+T-164 is 0.95\% and flat, T-169 tops out at 0.28\%.
+
+### And it is still not the secondaries, for a reason the size does not give
+
+The two bolded multipoles are the secondary peak positions,
+$\ell\simeq539$ and $\ell\simeq811$ from $\ell_A=272.18$. **Nothing happens
+at them.** The local slope $\mathrm d(\text{suppression})/\mathrm d\ln\ell$
+runs $5.2\times10^{-5}$, $1.4\times10^{-3}$, $2.0$, $3.5$, $5.0$, $8.3$,
+$1.5\times10^{-2}$, $2.1$, $2.6$, $3.2$, $3.9$, $4.6\times10^{-2}$ — rising
+smoothly through both of them with no spike and no structure.
+
+**A smooth monotone suppression tilts the envelope; it does not change
+peak-to-trough contrast.** Removing a feature requires suppressing the
+oscillatory part relative to the smooth part, and a multiplicative factor
+varying slowly in $\ell$ does the opposite of that — it survives the ratio.
+So the fifth candidate for F10's absent secondaries is exonerated like the
+other four, but **on new grounds**: not because it is small, since it is the
+largest, but because it is *smooth*.
+
+That is worth stating as a criterion rather than a result. The four earlier
+exonerations all turned on magnitude. This one shows magnitude was never the
+right test: **what removes a feature is structure in $\ell$, and every
+discretisation error measured here is structureless.** Whatever is removing
+the secondaries is not a grid.
+
+### What it does break, and the repair is already derived
+
+A 3.4\% tilt at $\ell=900$ invalidates any high-$\ell$ comparison with
+CAMB or CLASS before it begins, and the high-$\ell$ stage is where this bundle
+is going.
+
+`c12` bounds the grid at $h\kappa'(\eta_\ast)\le\sqrt{12\epsilon}$, which is
+**21.5 samples across the FWHM** at one part in a thousand, and returns 7737
+points for a uniform grid on PLANCK's numbers. D40 measures the released grid
+at **10.0 samples across the FWHM** — *less than half the derived bound*, and
+`RecombinationHistory.build` carries `n_eta = 4000` against c12's 7737.
+
+So the repair is not a judgement call: **raise it to 8000**, which satisfies
+the bound with margin and is the number `N_ETA_FLOOR` already carries for the
+line-of-sight grid. That the same 8000 arrives independently from T-58's
+measurement on one grid and from c12's derivation on the other is the kind of
+agreement worth noticing rather than the kind worth assuming — they are
+different grids meeting different requirements.
+
+**Not changed here.** The recombination grid is upstream of every number in
+the bundle and moving it is a release-wide shift; it is proposed to P1-T as
+`P1B→P1T 2026-10-29 #18` with the measurement attached, because the bound is
+theirs and the 3.4\% is mine.
