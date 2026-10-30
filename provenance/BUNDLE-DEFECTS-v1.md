@@ -12687,3 +12687,50 @@ from invisible into a test failure.
 Scoped, not done: forty-one artefacts across nineteen generators is a sweep,
 and doing it in the same commit that finds it would bury the $\ell_A$
 correction underneath it. The correction lands first.
+
+---
+
+## T-179 — **The Newtonian maximum is real. The argument for doubting it was not**
+
+**2026-10-29, answering `P1T→P1B #15`.** D36 reports a Newtonian first maximum
+at $\ell=60.65$ on PLANCK under `split_by_parts`, from an $\ell$ grid stepping
+by 15. P1-T asked whether it survives a finer grid; D41 ran the same
+configuration — same $k$ grid, same weighting, same finder, D36's own `_peak`
+and `ELLS` **imported rather than copied** — at step **one**.
+
+| | fine grid | D36's grid, same spectrum |
+|---|---:|---:|
+| Newtonian | **59.814** | 60.647 |
+| CDM | 183.417 | 183.417 |
+
+**It survives.** 0.83 multipoles, inside the finder's own 2.5-multipole
+resolution floor, and the CDM peak is identical to six figures. The
+pre-registered *survives* outcome fired: D36's grid was adequate, T-157's
+first count stands, and P1-T's ruling keeps that leg.
+
+### The part worth recording is why the suspicion looked good
+
+P1-B's own argument for it: D36's parabola puts its vertex **0.62 of a grid
+step** away from the sample it was fitted around, and *"a well-resolved maximum
+puts its vertex well inside the central interval; a vertex two thirds of the
+way to a neighbour means the three samples do not bracket what the finder
+claims they bracket."*
+
+**That reasoning is wrong, and the measurement shows exactly how.** The maximum
+here is *broad*: $D_\ell$ normalised to its own peak reads 0.9972, 1.0000,
+0.9969 at $\ell=56$, 60, 64 — flat to three parts in a thousand over
+$\pm4$ multipoles. A parabola through three nearly-equal samples has a vertex
+that wanders a long way for a very small change in any of them, so a large
+offset is what a **broad peak** produces as readily as what a node produces.
+
+**The offset test cannot distinguish the two.** It was offered as a
+discriminator and it is not one. What discriminates is looking at the curve,
+which is §3c again in its plainest form: the suspicion was about an object
+nobody had plotted.
+
+That matters beyond this item, because the same offset argument was used to
+cast doubt on D24's $\kappa_2=1$ rows and is reachable for any peak in the
+bundle. **A finder's vertex offset is a statement about curvature, not about
+validity.** Where a peak is genuinely broad — and the Newtonian first maximum
+is, being a plateau feature rather than an acoustic one — a large offset is
+the correct output of a correct finder.

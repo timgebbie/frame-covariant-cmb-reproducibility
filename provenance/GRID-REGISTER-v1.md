@@ -18,10 +18,10 @@ being possible.
 | status | count | means |
 |---|---|---|
 | **open** | 1 | a chosen literal whose convergence is **not** established. This status is the point of the register. |
-| **derived** | 27 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
+| **derived** | 28 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
 | **measured** | 7 | a chosen literal whose convergence has been measured, with the number stated. |
 | **described** | 11 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
-| **index** | 31 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
+| **index** | 32 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
 
 ## open — 1
 
@@ -37,7 +37,7 @@ share this history, so a grid shift moves them together and cancels. Finding
 **T-46**, question **Q7**, decision **S33** --- derived immediately after the
 v1.2.0 tag. v1.2.0 ships it as a stated limit.
 
-## derived — 27
+## derived — 28
 
 ### `x` — the x grid j_ell(x) is tabulated on
 
@@ -317,6 +317,16 @@ rests on that comparison. 300 also cannot carry the multipoles the secondaries
 live at, which is stated here because the follow-up run T-172 calls for will
 need a different K_MAX and must therefore be a different row.
 
+### `k_com` — the k grid D41 integrates over
+
+`scripts/diagnostic_d41_newtonian_maximum_on_a_fine_grid.py:99`, `np.linspace`
+
+`required_k_points(K_MAX, span)` at K_MAX = 460, D36's exactly. The
+point of this instrument is that ONE thing differs from D36 -- the ell grid --
+so that a disagreement is the grid and not the band. Raising K_MAX would
+sharpen nothing here: the question is whether a maximum exists at ell near 60,
+which is far inside the band 460 already carries.
+
 ### `k_com` — the k grid D4 integrates C_ell by rank on
 
 `scripts/diagnostic_d4_monopole.py:102`, `np.linspace`
@@ -519,7 +529,7 @@ As F3, and deliberately the same grid: F6 reports RATIOS against the F3 configur
 
 As F2, raised to 1900 by finding T-32, with `check_k` guarding the probe modes after T-34.
 
-## index — 31
+## index — 32
 
 ### `phase` — the i^ell phase factor
 
@@ -679,6 +689,19 @@ visibility. The reported quantity is `max |Delta S| inside` against
 interpolated. Geometric for the usual reason --- the visibility is narrow and
 a linear grid would put every slice in the free-streaming era, which is
 exactly the region T-155 showed the movement is NOT in.
+
+### `ELLS` — the fine ell grid D41 re-finds the Newtonian maximum on
+
+`scripts/diagnostic_d41_newtonian_maximum_on_a_fine_grid.py:71`, `np.arange`
+
+`arange(28, 141, 1)` through the band D36's claim lives in, with
+`arange(145, 341, 15)` above it and D36's plateau points below. Step ONE where
+D36 steps fifteen, which is the entire instrument: D36 reports a Newtonian
+maximum at ell = 60.65 from samples at 55, 70 and 85, and the parabola's vertex
+lands 0.62 of a grid step from the sample it was fitted around -- a finder on a
+node rather than on a peak, which is D24's shape. D36's own grid is IMPORTED
+rather than reproduced, so the coarse comparison runs on the registered array
+and not on a copy of it.
 
 ### `ELLS` — the multipoles criterion 5a is stated over
 

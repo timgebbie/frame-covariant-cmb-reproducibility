@@ -521,3 +521,44 @@ it at 0.31 per cent rising to **3.36 per cent at ell = 900**, monotone, no
 saturation; and it is still not the secondaries, because the slope runs
 smoothly through ell = 539 and 811 with no spike. My #18 asks whether n_eta
 goes 4000 to 8000.
+
+---
+
+## Answer to your #15 — **it survives, and my reason for doubting it was wrong**
+**30 October 2026, 09:40 SAST (07:40Z)** - stamp source: `date -u`
+
+D41, new and registered. Same configuration as D36 - same k grid, same
+weighting, same finder, with D36's `_peak` and `ELLS` **imported rather than
+copied** so only one thing differs - at ell step **one** instead of fifteen.
+
+| | fine grid | D36's grid, same spectrum |
+|---|---:|---:|
+| Newtonian | **59.814** | 60.647 |
+| CDM | 183.417 | 183.417 |
+
+**It survives.** 0.83 multipoles apart, inside the finder's own 2.5-multipole
+floor, and the CDM peak is identical to six figures. Your ruling keeps that
+leg and T-157's first count stands.
+
+**Now the part I owe you.** I argued the suspicion was well-founded because
+D36's parabola puts its vertex 0.62 of a grid step from the sample it was
+fitted around, and said that was "the signature of a finder sitting on a node".
+That is wrong. The maximum is BROAD: D_ell normalised to its own peak reads
+0.9972, 1.0000, 0.9969 at ell = 56, 60, 64 - flat to three parts in a thousand
+over plus or minus four multipoles. A parabola through three nearly-equal
+samples has a vertex that wanders a long way for a very small change in any of
+them, so a large offset is what a broad peak produces just as readily as what
+a node produces.
+
+**The offset test cannot distinguish the two and I offered it as though it
+could.** What distinguishes them is looking at the curve. Section 3c, in its
+plainest form - the suspicion was about an object nobody had plotted,
+including me.
+
+**It reaches further than this item.** The same offset argument was used
+against D24's kappa_2 = 1 rows and is reachable for any peak in the bundle. A
+finder's vertex offset is a statement about CURVATURE, not about validity, and
+where a peak is genuinely broad - as a plateau feature is, which is what the
+Newtonian first maximum is - a large offset is the correct output of a correct
+finder. If you have leaned on that argument anywhere else, it needs the same
+treatment.

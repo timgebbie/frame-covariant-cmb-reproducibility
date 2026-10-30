@@ -829,3 +829,26 @@ although nothing released calls it: T-175 has it reproducing delta_T and tau_1
 at 2.5e-08 and C_1' only to 5.0e-03, so it is not adoptable yet, and a grid
 that is unregistered until it is adopted is a grid nobody reviews before the
 commit that adopts it."""
+
+[[grid]]
+key = "scripts/diagnostic_d41_newtonian_maximum_on_a_fine_grid.py::k_com"
+what = "the k grid D41 integrates over"
+status = "derived"
+note = """`required_k_points(K_MAX, span)` at K_MAX = 460, D36's exactly. The
+point of this instrument is that ONE thing differs from D36 -- the ell grid --
+so that a disagreement is the grid and not the band. Raising K_MAX would
+sharpen nothing here: the question is whether a maximum exists at ell near 60,
+which is far inside the band 460 already carries."""
+
+[[grid]]
+key = "scripts/diagnostic_d41_newtonian_maximum_on_a_fine_grid.py::ELLS"
+what = "the fine ell grid D41 re-finds the Newtonian maximum on"
+status = "index"
+note = """`arange(28, 141, 1)` through the band D36's claim lives in, with
+`arange(145, 341, 15)` above it and D36's plateau points below. Step ONE where
+D36 steps fifteen, which is the entire instrument: D36 reports a Newtonian
+maximum at ell = 60.65 from samples at 55, 70 and 85, and the parabola's vertex
+lands 0.62 of a grid step from the sample it was fitted around -- a finder on a
+node rather than on a peak, which is D24's shape. D36's own grid is IMPORTED
+rather than reproduced, so the coarse comparison runs on the registered array
+and not on a copy of it."""
