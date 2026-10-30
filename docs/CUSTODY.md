@@ -1,34 +1,100 @@
 # Custody and routes
 
-**Maintained by Coordination. A map, not a record.** Who owns which path, and
-how a change reaches `main`. Where the work stands is in each stream's standing
-page; what has closed is in the project log. If this file ever starts carrying
+**Maintained by Coordination. A map and a policy, not a record.** Who owns
+which path, and how a change reaches `main`. Where the work stands is in each
+stream's standing page; what has closed is in the project log,
+`docs/STREAMS.md` in the paper repository. If this file ever starts carrying
 findings it has become a third copy of something and should be cut back.
 
 > **Renamed from `docs/STREAMS.md` on 2026-10-29, and the reason is a
-> correction.** `docs/STREAMS.md` already exists — it is the project log in
-> `timgebbie/NonlinearShear`, append-only, Coordination-only, and quite a
-> different document. This file was created under that name on 2026-10-28 with
-> a commit message asserting the name had never been used, which was reached by
-> checking one repository out of two. One name for two documents is rule 1,
-> introduced by the stream that enforces it; the log keeps the name.
+> correction.** That name already belonged to the project log. This file was
+> created under it on 2026-10-28 with a commit message asserting the name had
+> never been used, which was reached by checking one repository out of two.
 
 ---
 
-## The two repositories
+## THE LANDING POLICY
 
-| local folder | GitHub | visibility | holds |
+**One question: what are you landing?**
+
+| what you are landing | route | notes |
+|---|---|---|
+| **a text file with no generated dependent** | **the GitHub connector** | works from any session — no credential, no shell, no PI. Both repositories |
+| **text that a script produces** — manifests, `docs/THEORY-AUDIT.md`, the grid register, test output | **clone the public bundle in the cloud, run the generator there, push the result through the connector** | the cloud workspace has python with numpy/scipy/sympy, and `pdflatex`/`latexmk` |
+| **a binary** — the supplement PDF, a figure | **P1-B only**, from a cloud clone with a push credential | the connector carries text only |
+| **anything in the private paper repository** | **the connector** for text; `device_bash` for a local commit | the cloud cannot clone it |
+| **anything that needs the PI's terminal** | **it waits** | see rule 5 |
+
+### The five rules, each paid for
+
+**1. A connector commit cannot run a script.** If it leaves a manifest or a
+generated document stale, **say so in the commit message** and raise it in the
+handoff. The sweep is the first item of the next run that takes a clone, and
+**it must be zero at a tag.** Deferred to "the next run" it reached 64 files on
+`FILE-MANIFEST` and 40 on `PORTABLE-MANIFEST` inside one day, with three gates
+red on `main`.
+
+**2. Never write a loose file into the PI's working tree.** It stranded
+`tests/frame/conformity.py` there for 17.8 hours — invisible to every session,
+including the scheduled run whose own standing page instructs it to execute
+that file first — and it swept ~1,600 characters of P1-T prose into P1-B's
+`6e51a458` when the two operated on that tree at once. **A file on the PI's
+disk is not in the repository, and what is not in the repository cannot be
+read by the next session.** Committing there is different and is allowed; a
+commit is in git.
+
+**3. `device_bash` leaves `.git` lock files it cannot delete.** Deletion in a
+connected folder is refused until the PI approves it, so `git` commands leave
+`index.lock`, `HEAD.lock` and friends behind, and **the next git command — his
+own included — fails with "File exists".** Sweep them in the same call:
+`for f in .git/*.lock; do [ -e "$f" ] && mv "$f" ".git/stale-$(basename $f)-$(date +%s)"; done`
+
+**4. `device_bash` cannot push.** The Linux VM has no access to Windows
+Credential Manager. It reads, runs and **commits locally**; the commit is
+durable and rides on the PI's next push. Three trigger prompts asserted the
+opposite for a week and none had tested it.
+
+**5. If it needs the PI's terminal, it waits.** Not "unless it is quick" —
+*quick* is how about ten blocks reached him on 2026-10-29 alone, on a day that
+opened with the ruling that his machine is not a route. Anything genuinely
+urgent goes to the stream that can land it, through the handoff or a wake.
+
+### Who can do what
+
+| | connector | cloud clone | run generators | push binary | the PI's machine |
+|---|---|---|---|---|---|
+| **P1-T** | yes, both repos | yes, public bundle | yes | no | `device_bash`, local commits |
+| **P1-B** | yes, both repos | **yes, with push** | yes | **yes** | `device_bash`, local commits |
+| **Coordination** | yes, both repos | read only — the proxy refuses writes to repos outside the session's authorized set | yes | no | `device_bash`, local commits |
+
+**P1-B holds the only complete route, and that is correct rather than
+accidental** — P1-B is the bundle's custodian, and every binary and generated
+artefact is theirs by custody.
+
+### Branches, and they differ
+
+| repository | GitHub | visibility | branch |
 |---|---|---|---|
-| `NonlinearShear-bundle` | `frame-covariant-cmb-reproducibility` | **public** | the reproducibility bundle — what a referee opens |
-| `NonlinearShear` | `NonlinearShear` | **private**, branch `master` | the manuscript, submission artefacts, sources, the project log |
+| the bundle | `frame-covariant-cmb-reproducibility` | public | **`main`** |
+| the paper | `NonlinearShear` | **private** | **`master`** |
 
-**The bundle must not be renamed to match.** Its URL is in arXiv v4's Comments
-field beside the revision note, and it is the citation trail behind the Zenodo
-DOI. arXiv versions are permanent, so the asymmetric naming is a constraint
-rather than an oversight.
+A connector write to the paper repository that assumes `main` targets nothing.
+**The bundle must not be renamed** to match the local folder names: its URL is
+in arXiv v4's Comments field beside the revision note, and it is the citation
+trail behind the Zenodo DOI. arXiv versions are permanent.
 
-The private repository uses `master`; the bundle uses `main`. A connector write
-that assumes `main` there will target a branch that does not exist.
+### Always
+
+Commits made through a shell name their files with a pathspec on the commit as
+well as the add — never `git add -A`. **But a pathspec on `git commit` commits
+tracked files from the working tree and ignores staged additions**, so when the
+point is to add *new* files, stage them and commit without one.
+
+**No change to a rendered artefact is complete until the rendered artefact has
+been loaded and read** — the built PDF for the supplement, the page and its DOM
+for GitHub-rendered markdown, each against its own caption.
+
+---
 
 ## Streams
 
@@ -36,22 +102,21 @@ that assumes `main` there will target a branch that does not exist.
 |---|---|---|
 | **P1-T** | the theory | `supplementary-materials/`, `tests/frame/`, `handoff/P1T-to-P1B.md`, and the root `README.md` |
 | **P1-B** | the implementation; **custodian of the bundle** | everything else, plus `handoff/P1B-to-P1T.md` |
-| **Coordination** | consistency, never correctness; **custodian of the private repository** | `docs/CUSTODY.md` here, `docs/STREAMS.md` and `docs/RESUME.md` there |
+| **Coordination** | consistency, never correctness; **custodian of the paper repository** | `docs/CUSTODY.md` here, `docs/STREAMS.md` and `docs/RESUME.md` there |
 | **PI** | everything irreversible | tags, releases, arXiv, the journal |
 
 **The dividing line, testable per item: a number is P1-B's if it came out of a
 run, and P1-T's if it came out of a derivation.**
 
 **Custodian of a repository is not custodian of its contents.** Coordination
-owns whether the private repository exists, what its remote is, what is tracked,
+owns whether the paper repository exists, what its remote is, what is tracked,
 and whether the disk and the history agree. `paper/` inside it remains P1-T's.
 The same separation holds for P1-B and the bundle.
 
 **The root `README.md` is P1-T's by the PI's grant of 2026-10-28.** It had been
-P1-B's, while the line in it declaring the live supplement edition can only be
+P1-B's, while the line declaring the live supplement edition can only be
 invalidated by a P1-T action — the dependency and the custody ran in opposite
-directions and the download link died twice in one morning. The grant makes
-them coincide.
+directions and the download link died twice in one morning.
 
 Anyone may prod any stream; the stream that owns the question rules on it.
 Coordination names collisions and never allocates.
@@ -74,99 +139,44 @@ what is asked and one line of what it unblocks, and **its author removes it
 once it is answered**, so each file's length is the number of open asks. An
 answer is an append to one's own file citing the other's identifier.
 
-The handoff carries **the ask, never the finding**. Findings live in
-`provenance/BUNDLE-DEFECTS-v1.md` and in the standing pages.
+The handoff carries **the ask, never the finding**.
 
-**It is not synchronous, and it is not one-way either.** An item is ordinarily
-read when the other stream next runs. For an item its writer has marked
-**blocking**, that stream may **wake** the other — firing its working run with
-the identifier named — once per item, and a woken session does not fire back in
-the same run. Waking spends the other stream's budget, which is why the
-governor is narrow.
+**It is not synchronous, and it is not one-way either.** For an item its writer
+has marked **blocking**, that stream may **wake** the other — firing its working
+run with the identifier named — once per item, and a woken session does not
+fire back in the same run. Waking spends the other stream's budget.
 
 > An earlier revision ended this section *"anything genuinely urgent still goes
-> to the PI, who alone can start a session."* False, and never checked. Both
-> streams carry the connector that starts a run and could have done so from the
-> day the channel opened.
-
-## Routes to `main`
-
-| route | carries | needs |
-|---|---|---|
-| **the GitHub connector** | any text file, from any session | nothing |
-| **a cloud clone** | everything a script produces | `git clone --depth 1` of the public repository |
-| ~~the PI's machine~~ | — | **not a route** |
-
-**Measured 2026-10-29, because this table previously asserted a dependency
-nobody had tested.** On a fresh shallow clone in the cloud workspace:
-`pdflatex` and `latexmk` are present, so the supplement builds; numpy 2.4.4,
-scipy 1.17.1 and sympy 1.14.0 are present, so the instruments run;
-`tests/frame/run_all.py` reports ALL FRAME CHECKS PASS over twelve instruments,
-independent and isolated; `make_manifests.py --check` passes all five
-manifests; `check_portability.py` passes over 319 files with git agreeing on
-the set.
-
-**The pattern for anything with a generated dependent is: clone, run the
-generator, push the generated files through the connector.** The bundle is
-public, so the clone needs no credential and no session is privileged over any
-other.
-
-A connector commit cannot refresh a manifest in the same breath, so one that
-leaves an artefact stale **says so in its commit message**. The sweep is the
-first item of the next run that takes a clone, and **it must be zero at a tag.**
-
-**Writing to the PI's working tree is withdrawn as a route.** It caused two
-failures in two days: `tests/frame/conformity.py` was written there on
-2026-10-28 and spent 17.8 hours invisible to every session, including the
-scheduled run its own standing page instructs to execute it first; and about
-1,600 characters of P1-T prose were swept into `6e51a458` when P1-B rebased
-while that tree held a file P1-T had just written into it. **A file on the PI's
-disk is not in the repository, and what is not in the repository cannot be read
-by the next session.**
-
-**No change to a rendered artefact is complete until the rendered artefact has
-been loaded and read** — the built PDF for the supplement, the page and its DOM
-for GitHub-rendered markdown, each against its own caption.
+> to the PI, who alone can start a session."* False, and never checked.
 
 ## Recovery
 
 **The bundle.** This repository is its only complete copy and, as of
-2026-10-29, a sufficient one: the measurements above are a recovery test rather
-than a claim. A clone plus the cloud toolchain reconstitutes every generated
-artefact.
+2026-10-29, a sufficient one: a clone plus the cloud toolchain reconstitutes
+every generated artefact, which is a recovery test rather than a claim.
 
 **The paper.** Backed up for the first time on 2026-10-29. Until that morning
-it existed on one disk, and its `origin` pointed at `github.com/timgebbie/
-nonlinear-shear`, which does not exist — so every push since that remote was
-set had failed into the same error and nobody owned the container closely
-enough to notice. On taking custody Coordination found twenty-six files in
-`paper/` outside the repository, including every manuscript revision after
-v1.0.0 and `VERSIONS.md`, which is the record of what distinguishes them; three
-entire directories (`arxiv/`, `grg/`, `overleaf/`, about 17 MB of as-submitted
-archives); eight untracked `docs/streams/` files including the Paper 2 startup
-briefs; and a staged reorganisation of `docs/` left in the index since 4
-October. All of it is now committed and pushed.
+its `origin` pointed at a repository that does not exist, so every push had
+failed into the same error; twenty-six files in `paper/`, three whole
+directories and a staged reorganisation were outside version control.
 
-**What custody of a container means, so this class cannot recur:** that the
-disk and the repository agree. Coordination checks it by comparing directory
+**Still uncovered.** The Claude project documents, including both standing
+pages, are in no repository. Their only copy outside Claude is a nightly Google
+Drive backup, which from 2026-10-29 snapshots all three standing pages dated
+rather than only Coordination's.
+
+**What custody of a container means, so the class cannot recur:** that the disk
+and the repository agree. Coordination checks it by comparing directory
 listings against the repository, which needs no shell and no cooperation from
-either stream. A reconciliation that runs on its own is the answer to a dead
-remote; a rule saying someone should look is not.
-
-**Still uncovered.** The Claude project documents — both standing pages and
-every stream note — are not in git. Their only copy outside Claude is a nightly
-Google Drive backup, and that backup re-snapshots only the Coordination page by
-name, so the two stream standing pages are held at their first captured version
-and nothing since.
+either stream.
 
 ## Adding a stream
 
-A new stream needs four things settled before it writes anything, in this
-order: **what it adjudicates**, stated so a disputed item can be assigned to
-exactly one stream; **which paths it writes**, disjoint from every existing
-stream's; **which routes it may use**; and **its own standing page**, rewritten
-rather than appended to, which is the only document of that stream anyone else
-is required to read.
+Four things settled before it writes anything: **what it adjudicates**, stated
+so a disputed item can be assigned to exactly one stream; **which paths it
+writes**, disjoint from every existing stream's; **which routes it may use**,
+from the policy above; and **its own standing page**, rewritten rather than
+appended to.
 
 A stream that adjudicates nothing is a reviewer and does not need write access.
 Two streams adjudicating the same thing is the failure this table exists to
