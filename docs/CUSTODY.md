@@ -19,7 +19,7 @@ findings it has become a third copy of something and should be cut back.
 >
 > **A stream's own measurement outranks this file, immediately** — without
 > waiting for Coordination to agree, and without asking the PI. Raise it in
-> `handoff/to-coordination.md`; keep working meanwhile.
+> your own channel to Coordination; keep working meanwhile.
 >
 > *Renamed from `docs/STREAMS.md` on 2026-10-29; that name already belonged to
 > the project log.*
@@ -221,8 +221,8 @@ for GitHub-rendered markdown, each against its own caption.
 
 | stream | adjudicates | writes, in the bundle |
 |---|---|---|
-| **P1-T** | the theory | `supplementary-materials/`, `tests/frame/`, `handoff/P1T-to-P1B.md`, and the root `README.md` |
-| **P1-B** | the implementation; **custodian of the bundle** | everything else, plus `handoff/P1B-to-P1T.md` |
+| **P1-T** | the theory | `supplementary-materials/`, `tests/frame/`, `handoff/P1T-to-P1B.md`, `handoff/P1T-to-coordination.md`, and the root `README.md` |
+| **P1-B** | the implementation; **custodian of the bundle** | everything else, plus `handoff/P1B-to-P1T.md` and `handoff/P1B-to-coordination.md` |
 | **Coordination** | consistency, never correctness; **custodian of the paper repository** | `docs/CUSTODY.md` here, `docs/STREAMS.md` and `docs/RESUME.md` there |
 | **PI** | everything irreversible | tags, releases, arXiv, the journal |
 
@@ -243,10 +243,10 @@ Anyone may prod any stream; the stream that owns the question rules on it.
 Coordination names collisions and never allocates.
 
 **Coordination owns the policy and does not own the plumbing.** A stream
-blocked by this file raises it in `handoff/to-coordination.md` rather than with
-the PI. And a stream whose own measurement contradicts this file is right and
-this file is wrong, immediately — see the box at the top, which is a limit on
-this file's own author rather than advice to its readers.
+blocked by this file raises it in its own channel rather than with the PI. And
+a stream whose own measurement contradicts this file is right and this file is
+wrong, immediately — see the box at the top, which is a limit on this file's
+own author rather than advice to its readers.
 
 **Frozen, and no stream writes them.** `correction/` is closed — *public* there
 means already published on arXiv, which is why it is frozen, and it is
@@ -259,23 +259,35 @@ is frozen at both submission lines.
 |---|---|---|
 | `handoff/P1T-to-P1B.md` | P1-T | P1-B |
 | `handoff/P1B-to-P1T.md` | P1-B | P1-T |
-| **`handoff/to-coordination.md`** | **P1-T and P1-B** | **Coordination** |
+| `handoff/P1T-to-coordination.md` | P1-T | Coordination |
+| `handoff/P1B-to-coordination.md` | P1-B | Coordination |
 
-One writer per stream-to-stream file; neither stream edits the other's. **A
-queue, not a register:** an item carries an identifier, a clock-sourced stamp,
-one line of what is asked and one line of what it unblocks, and **its author
-removes it once it is answered**, so each file's length is the number of open
-asks. An answer is an append to one's own file citing the other's identifier.
+**One writer per file, every file, one direction.** A first attempt at the
+Coordination channel on 2026-10-30 used a single shared file with two writers
+and was replaced within the hour: concurrent writers are what lost
+`docs/STREAMS.md` two committed rows on 2026-10-03 and swept ~1,600 characters
+of P1-T prose into `6e51a458`, and reintroducing that in the file meant to
+prevent coordination failures was not a small irony.
+
+**A queue, not a register:** an item carries an identifier, a clock-sourced
+stamp, one line of what is asked and one line of what it unblocks, and **its
+author removes it once it is answered**, so each file's length is the number of
+open asks.
+
+**Between the streams**, an answer is an append to one's own file citing the
+other's identifier. **To Coordination**, the answer is the policy change itself
+— a commit to `docs/CUSTODY.md` or `docs/RESUME.md` — and the **author** strikes
+their own item citing that commit. Coordination never writes in a stream's
+file, because a reader who edits is a second writer.
 
 The handoff carries **the ask, never the finding**.
 
-**`handoff/to-coordination.md` is new on 2026-10-30 and it is the edge that was
-missing.** Both streams write it; Coordination reads it and removes items as
-they are answered, citing the commit that carries the fix. It exists because
-P1-B held the measurement refuting a ruling on `main` and had no way to deliver
-it — the correction went through the PI, at volume, while the wrong text stood.
-Every plumbing correction had been routing through the PI for the same reason,
-which is precisely what this policy exists to stop.
+**The Coordination channel is new on 2026-10-30 and it is the edge that was
+missing.** It exists because P1-B held the measurement refuting a ruling on
+`main` and had no way to deliver it — the correction went through the PI, at
+volume, while the wrong text stood. Every plumbing correction had been routing
+through the PI for the same reason, which is precisely what this policy exists
+to stop.
 
 **It is not synchronous, and it is not one-way either.** For an item its writer
 has marked **blocking**, that stream may **wake** the other — firing its working
@@ -312,8 +324,8 @@ either stream.
 Four things settled before it writes anything: **what it adjudicates**, stated
 so a disputed item can be assigned to exactly one stream; **which paths it
 writes**, disjoint from every existing stream's; **which routes it may use**,
-from the policy above; and **its own standing page**, rewritten rather than
-appended to.
+from the policy above; **its own standing page**, rewritten rather than
+appended to; and **its own one-way file to Coordination**.
 
 A stream that adjudicates nothing is a reviewer and does not need write access.
 Two streams adjudicating the same thing is the failure this table exists to
