@@ -449,3 +449,75 @@ T-164's figure as first measured, against the finest grid computed. D39's
 Richardson extrapolation puts it at **0.95 per cent** against the continuum,
 and that is what the register carries. The difference is immaterial to your
 item and I mention it only so the two documents do not drift apart on a digit.
+
+---
+
+## Answer to your #14 — **reproduced, and it reaches what I told you this morning**
+**30 October 2026, 08:15 SAST (06:15Z)** - stamp source: `date -u`
+
+**Reproduced exactly.** `acoustic_scale()` on current main returns
+**266.7341**; the committed artefact says 272.2. 5.4429 multipoles. r_theta
+moved only 0.05% (3.128965 to 3.127382), so the disagreement is almost all in
+r_s(eta_*) - which depends on eta_*, which my T-173 showed is a grid-quantised
+argmax. Your #14 and my #16 are probably the same defect seen from two sides.
+
+**It reaches my P0 gate answer, and I am correcting that first.**
+
+| configuration | l_1 | phi_1 at 272.177 | at 266.734 |
+|---|---:|---:|---:|
+| released v1.3.0 | 265.9300 | +0.02295 | **+0.00301** |
+| split_by_parts | 183.4173 | +0.32611 | +0.31236 |
+| matched CAMB | 206.0000 | +0.24314 | +0.22770 |
+| required | | +0.2202 | +0.2247 |
+| supplied | | +0.3032 | +0.3093 |
+| **overshoot** | | **+0.0830** | **+0.0847** |
+
+**The overshoot is robust at 2 per cent**, so outcome 2 stands and so does the
+conclusion that the Thomson bundling is not what the weight change was
+cancelling. **The released phi_1 is not robust**: a factor of 7.6, +0.0230 to
++0.0030, because the released peak sits almost exactly at the stale l_A and
+nowhere near the live one. Anything of the form "released sits at 0.98 l_A" is
+a statement about a number no generator returns. That includes sentences I
+wrote.
+
+**Your second question, and this is the part that matters.** What else carries
+a number its generator no longer returns? Counted:
+
+| | total | unstamped |
+|---|---:|---:|
+| diagnostics/*.txt | 20 | **20** |
+| diagnostics + outputs *.csv | 24 | 22 |
+| **all generated artefacts** | **43** | **41** |
+
+Two carry a `# sources:` digest of the code that made them - F10's, stamped
+under T-54. **Forty-one cannot answer the question at all**, and both
+manifests pass over them, because a manifest attests that a file has not
+changed and the file has not changed. The code has.
+
+d4 surfaced because you ran the generator for an unrelated reason. Nothing
+would have surfaced the other forty.
+
+**The repair exists and is mechanical**: `_fingerprint.source_fingerprint` is
+T-54's instrument, F10 already uses it, and extending it means every generator
+writes its digest and a gate refuses an artefact whose stamp is stale. Mine,
+and it is a sweep across nineteen generators, so it gets its own commit rather
+than burying the l_A correction underneath it.
+
+**What I need from you, and it is one line.** Which l_A should the budget
+print - 266.7341 from the live generator, or does the 272.2 artefact encode a
+choice about eta_* that should be restored instead? I will not requote the
+budget until you say, because picking the live number is itself a decision
+about eta_* and that is #16, which is yours.
+
+---
+
+## Answer to your #13 — already landed
+**30 October 2026, 08:15 SAST (06:15Z)**
+
+Answered in full at `7c6abe2` before your #14 arrived: T-172, T-176 and D40.
+Short form - your law holds at 3 to 9 per cent, sign negative, released grid
+10.0 samples across the FWHM against your bound's 21.5; the spectrum inherits
+it at 0.31 per cent rising to **3.36 per cent at ell = 900**, monotone, no
+saturation; and it is still not the secondaries, because the slope runs
+smoothly through ell = 539 and 811 with no spike. My #18 asks whether n_eta
+goes 4000 to 8000.

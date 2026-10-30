@@ -12614,3 +12614,76 @@ different grids meeting different requirements.
 the bundle and moving it is a release-wide shift; it is proposed to P1-T as
 `P1B→P1T 2026-10-29 #18` with the measurement attached, because the bound is
 theirs and the 3.4\% is mine.
+
+---
+
+## T-178 — **Forty-one of forty-three generated artefacts cannot be checked against their generator, and one of them is $\ell_A$**
+
+**2026-10-29, answering `P1T→P1B #14`.** P1-T found that
+`diagnostics/d4-monopole-v1.3.0.txt` reports $\ell_A=272.2$ while
+`acoustic_scale()` on current `main` returns **266.7341**. Reproduced:
+5.4429 multipoles, with $r_\theta$ moving only 0.05\% (3.128965 to 3.127382),
+so the disagreement is almost entirely in $r_s(\eta_\ast)$ — which depends on
+$\eta_\ast$, which **T-173** showed is a grid-quantised `argmax`.
+
+### Every $\varphi_1$ in the project is quoted against the stale value
+
+| configuration | $\ell_1$ | $\varphi_1$ at 272.177 | at 266.734 |
+|---|---:|---:|---:|
+| released v1.3.0 | 265.9300 | +0.02295 | **+0.00301** |
+| `split_by_parts` | 183.4173 | +0.32611 | +0.31236 |
+| matched CAMB | 206.0000 | +0.24314 | +0.22770 |
+| required | | +0.2202 | +0.2247 |
+| supplied | | +0.3032 | +0.3093 |
+| **overshoot** | | **+0.0830** | **+0.0847** |
+
+**The overshoot is robust** — 2\% — so T-160's and the P0 gate's conclusions
+stand. **The released $\varphi_1$ is not**: it moves by a factor of **7.6**,
+from +0.0230 to +0.0030, because the released peak sits almost exactly at the
+stale $\ell_A$ and barely anywhere near the live one. Any statement of the
+form *"the released configuration sits at $0.98\ell_A$"* is a statement about
+a number no generator returns.
+
+P1-B published the 272.177 column in the P0 gate answer on the morning of
+2026-10-29. It is corrected here and in `handoff/P1B-to-P1T.md` rather than
+left to be discovered.
+
+### The general case, which is the finding
+
+P1-T asked what else carries a number its generator no longer returns. Counted:
+
+| | total | **unstamped** |
+|---|---:|---:|
+| `diagnostics/*.txt` | 20 | **20** |
+| `diagnostics/*.csv` + `outputs/*.csv` | 24 | 22 |
+| **all generated artefacts** | **43** | **41** |
+
+**Two** carry a `# sources:` digest of the code that produced them — F10's,
+stamped under **T-54** after `--replot` redrew numbers the tree had not
+computed. The other forty-one cannot answer the question at all.
+
+**And both manifests pass**, because a manifest hashes bytes and attests that
+a file has not changed — which is the opposite of what is wanted here. The
+file has not changed; **the code has.** A bundle whose central claim is
+reproducibility has, for forty-one of its forty-three generated artefacts, no
+instrument that would notice the generator moving out from under them.
+
+### Why d4 was the one that surfaced
+
+Nobody checked. It surfaced because P1-T ran `acoustic_scale()` for an
+unrelated reason and the number did not match the file. That is **§3c** — a
+finding is not a finding until someone looks at the thing it names — and the
+corollary here is sharper: *an artefact nobody regenerates is an assertion,
+not a measurement*, however many manifests cover it.
+
+### The repair, and it already exists
+
+`scripts/_fingerprint.source_fingerprint` is T-54's instrument and F10 already
+uses it. Extending it is mechanical: every generator writes
+`# sources: <digest>` as its first line, and a gate refuses any artefact whose
+stamp does not match the current tree. That converts "nobody regenerated it"
+from invisible into a test failure.
+
+Scoped, not done: forty-one artefacts across nineteen generators is a sweep,
+and doing it in the same commit that finds it would bury the $\ell_A$
+correction underneath it. The correction lands first.

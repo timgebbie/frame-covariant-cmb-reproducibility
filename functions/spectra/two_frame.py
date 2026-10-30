@@ -497,15 +497,52 @@ def coefficient_sets_batch(
 
     starts = np.array([acoustic_start_eta(float(one), env.eta_rs, env.r_s_table)
                        for one in k])
-    start_c = float(starts.min())
-    grid = np.linspace(
-        start_c, eta_couple,
-        required_acoustic_points(float(k.max()), eta_couple - start_c))
-    mode_a, mode_h = potentials(bg, grid, constant_below=env.md_reference)
-    solved = solve_acoustic_batch(
-        k, grid, background=bg, phi_a=mode_a, phi_h=mode_h,
-        omega_b_h2=env.omega_b_h2, expansion_coupling=False,
-        start_eta=starts)
+
+    # **Banded on the CLAMP, not on the mask --- finding T-177, which
+    # corrects T-175.** T-175 attributed a 5.0e-03 disagreement in $C_1'$ to
+    # the mask's step in the right-hand side. **That was wrong.** Measured
+    # mode by mode: $k=300$ batched alongside $k=5$ --- a start spread of
+    # $3.4\times10^{-2}$, so a very large mask --- agrees at
+    # $4.5\times10^{-10}$. Mask size changes nothing.
+    #
+    # What does change everything is **where the common grid begins**. A mode
+    # whose sound horizon never reaches `ACOUSTIC_START_EPSILON` has its start
+    # clamped to $10^{-9}$, and $k=0.05$ and $k=1$ both do. Whenever that
+    # clamped value becomes `start_c`, every *other* mode in the batch is
+    # integrated on a grid anchored at the big bang and $k=300$ is out by
+    # $5.0\times10^{-3}$; whenever `start_c` is a genuine start it is out by
+    # $4\times10^{-10}$. The coefficient splines --- $R$, $R'$, $a\mathcal H$
+    # --- are built on whatever grid the caller passes, and anchoring them at
+    # $a\simeq0$ is what poisons them.
+    #
+    # So the modes are split at the clamp and each band gets its own grid
+    # anchored at its own earliest **genuine** start. Within a band the mask
+    # still carries the per-mode start, which T-166 requires and which the
+    # measurement above shows is free.
+    # The clamp is the r_s table's own first sample, read from the table
+    # rather than written as a constant here: `acoustic_start_eta` returns
+    # `eta[0]` when a mode's target sound horizon is below the table's
+    # range, so that value IS the clamp and a second copy of it would
+    # drift the first time the table's floor moves.
+    clamp = float(np.asarray(env.eta_rs, dtype=float)[0])
+    clamped = starts <= clamp
+    bands = [m for m in (clamped, ~clamped) if m.any()]
+
+    solved: list = [None] * int(k.size)
+    for band in bands:
+        idx = np.flatnonzero(band)
+        start_b = float(starts[idx].min())
+        grid = np.linspace(
+            start_b, eta_couple,
+            required_acoustic_points(float(k[idx].max()),
+                                     eta_couple - start_b))
+        mode_a, mode_h = potentials(bg, grid, constant_below=env.md_reference)
+        got = solve_acoustic_batch(
+            k[idx], grid, background=bg, phi_a=mode_a, phi_h=mode_h,
+            omega_b_h2=env.omega_b_h2, expansion_coupling=False,
+            start_eta=starts[idx])
+        for j, where in enumerate(idx):
+            solved[int(where)] = (got[j], grid)
 
     from functions.spectra.pipeline import (
         TAU_CONTINUATION, _continue_by_free_streaming)
@@ -518,8 +555,11 @@ def coefficient_sets_batch(
         phi_h_prime = env.phi_h_prime * t_k
         # `np.interp` holds the end value past `eta_couple`, which **is** the
         # freeze the tight-coupling window calls for.
-        delta_t = np.interp(eta, grid, np.asarray(solved[i].delta_T, float) * t_k)
-        tau_1 = np.interp(eta, grid, np.asarray(solved[i].tau_1, float) * t_k)
+        sol, mode_grid = solved[i]
+        delta_t = np.interp(eta, mode_grid,
+                            np.asarray(sol.delta_T, float) * t_k)
+        tau_1 = np.interp(eta, mode_grid,
+                          np.asarray(sol.tau_1, float) * t_k)
         if TAU_CONTINUATION == "free_stream":
             delta_t, tau_1 = _continue_by_free_streaming(
                 float(one), eta, eta_couple, delta_t, tau_1)

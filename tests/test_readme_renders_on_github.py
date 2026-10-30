@@ -516,8 +516,17 @@ def test_no_markdown_eaten_escape_inside_maths(name: str) -> None:
     it in that span silently disappears. A reader sees a truncated equation
     with no error.
     """
+    # **Code spans blanked --- T-165's THIRD instance, 2026-10-29.** This
+    # helper was left alone twice, on the rule that a gate is repaired on the
+    # evidence that fired it. It has now fired, and in the same way both of
+    # the others did: P1-B's handoff quoted ``` `$0.93\%$` ``` *while raising
+    # that exact defect in P1-T's file*, and the gate counted the report as an
+    # instance. Three for three, which is no longer a coincidence about any
+    # one check — **a rendering gate that reads code spans cannot be
+    # documented in the repository it guards**, and the class is now closed
+    # across all three rather than waited on a fourth time.
     bad = []
-    for span in _maths_spans(_prose(name)):
+    for span in _maths_spans(_without_code(_prose(name))):
         for ch, fix in MARKDOWN_EATEN.items():
             tok = "\\" + ch
             if tok in span:

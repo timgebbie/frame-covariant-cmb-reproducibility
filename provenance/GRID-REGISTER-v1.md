@@ -83,7 +83,7 @@ nothing in the bundle does.
 
 ### `grid` — the common acoustic grid coefficient_sets_batch integrates every mode on
 
-`functions/spectra/two_frame.py:501`, `np.linspace`
+`functions/spectra/two_frame.py:535`, `np.linspace`
 
 `required_acoustic_points(k.max(), eta_couple - min(start))` -- the
 same rule the released per-mode path uses, taken at the STIFFEST mode over the
