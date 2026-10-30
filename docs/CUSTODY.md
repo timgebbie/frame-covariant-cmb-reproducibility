@@ -6,10 +6,23 @@ stream's standing page; what has closed is in the project log,
 `docs/STREAMS.md` in the paper repository. If this file ever starts carrying
 findings it has become a third copy of something and should be cut back.
 
-> **Renamed from `docs/STREAMS.md` on 2026-10-29, and the reason is a
-> correction.** That name already belonged to the project log. This file was
-> created under it on 2026-10-28 with a commit message asserting the name had
-> never been used, which was reached by checking one repository out of two.
+> ### What this file may and may not say
+>
+> **It may record a capability**, scoped to the session that measured it and
+> attributed to the command that measured it: *measured in session X, on date
+> Y, by this command, with this output.*
+>
+> **It may not say that a route is impossible.** No session can observe
+> another's, and on 2026-10-30 this file said exactly that about a route P1-B
+> was using at the time. Had P1-B complied, a working stream would have
+> stopped.
+>
+> **A stream's own measurement outranks this file, immediately** — without
+> waiting for Coordination to agree, and without asking the PI. Raise it in
+> `handoff/to-coordination.md`; keep working meanwhile.
+>
+> *Renamed from `docs/STREAMS.md` on 2026-10-29; that name already belonged to
+> the project log.*
 
 ---
 
@@ -230,11 +243,10 @@ Anyone may prod any stream; the stream that owns the question rules on it.
 Coordination names collisions and never allocates.
 
 **Coordination owns the policy and does not own the plumbing.** A stream
-blocked by this file raises it here rather than with the PI. And **a stream
-whose own measurement contradicts this file is right and this file is wrong**,
-immediately and without waiting for Coordination to agree — that is not a
-courtesy, it is rule 7 applied to the author, and on 2026-10-30 it was the only
-thing standing between a ruling and a stopped stream.
+blocked by this file raises it in `handoff/to-coordination.md` rather than with
+the PI. And a stream whose own measurement contradicts this file is right and
+this file is wrong, immediately — see the box at the top, which is a limit on
+this file's own author rather than advice to its readers.
 
 **Frozen, and no stream writes them.** `correction/` is closed — *public* there
 means already published on arXiv, which is why it is frozen, and it is
@@ -247,19 +259,29 @@ is frozen at both submission lines.
 |---|---|---|
 | `handoff/P1T-to-P1B.md` | P1-T | P1-B |
 | `handoff/P1B-to-P1T.md` | P1-B | P1-T |
+| **`handoff/to-coordination.md`** | **P1-T and P1-B** | **Coordination** |
 
-One writer per file; neither stream edits the other's. **A queue, not a
-register:** an item carries an identifier, a clock-sourced stamp, one line of
-what is asked and one line of what it unblocks, and **its author removes it
-once it is answered**, so each file's length is the number of open asks. An
-answer is an append to one's own file citing the other's identifier.
+One writer per stream-to-stream file; neither stream edits the other's. **A
+queue, not a register:** an item carries an identifier, a clock-sourced stamp,
+one line of what is asked and one line of what it unblocks, and **its author
+removes it once it is answered**, so each file's length is the number of open
+asks. An answer is an append to one's own file citing the other's identifier.
 
 The handoff carries **the ask, never the finding**.
+
+**`handoff/to-coordination.md` is new on 2026-10-30 and it is the edge that was
+missing.** Both streams write it; Coordination reads it and removes items as
+they are answered, citing the commit that carries the fix. It exists because
+P1-B held the measurement refuting a ruling on `main` and had no way to deliver
+it — the correction went through the PI, at volume, while the wrong text stood.
+Every plumbing correction had been routing through the PI for the same reason,
+which is precisely what this policy exists to stop.
 
 **It is not synchronous, and it is not one-way either.** For an item its writer
 has marked **blocking**, that stream may **wake** the other — firing its working
 run with the identifier named — once per item, and a woken session does not
-fire back in the same run. Waking spends the other stream's budget.
+fire back in the same run. Waking spends the other stream's budget. The same
+applies to waking Coordination.
 
 > An earlier revision ended this section *"anything genuinely urgent still goes
 > to the PI, who alone can start a session."* False, and never checked.
