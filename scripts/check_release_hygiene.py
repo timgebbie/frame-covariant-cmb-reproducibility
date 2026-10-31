@@ -496,15 +496,86 @@ def check_built_artefacts_are_not_stale(failures: list[str]) -> str:
             return None
         return int(r.stdout.strip())
 
+    def _commit_of(path: Path) -> str | None:
+        """The sha of the commit that last touched *path*, or None."""
+        rel = path.relative_to(ROOT).as_posix()
+        try:
+            r = subprocess.run(
+                ["git", "-C", str(ROOT), "log", "-1", "--format=%H", "--", rel],
+                capture_output=True, text=True, timeout=30)
+        except (OSError, subprocess.SubprocessError):
+            return None
+        return r.stdout.strip() or None if not r.returncode else None
+
+    def _unmoved_since(path: Path, commit: str | None) -> bool:
+        """Does *path* hold the same bytes now as it did at *commit*?
+
+        **The whole of T-183 is that this question is cheap and the gate was
+        not asking it.** `git rev-parse <commit>:<path>` is the blob sha the
+        tree recorded then; `HEAD:<path>` is the one it records now. Equal
+        means content-identical, and it costs two `rev-parse` calls.
+
+        False on any uncertainty --- an unreadable commit, an untracked file,
+        a working-tree edit --- because the failure this gate exists to catch
+        is a source that moved, and a *missed* staleness is worse than a
+        spurious one. The caller only reaches here for a source the commit
+        clock has already flagged, so False restores the previous behaviour
+        exactly.
+        """
+        if commit is None:
+            return False
+        rel = path.relative_to(ROOT).as_posix()
+        try:
+            d = subprocess.run(
+                ["git", "-C", str(ROOT), "status", "--porcelain", "--", rel],
+                capture_output=True, text=True, timeout=30)
+            if d.returncode or d.stdout.strip():
+                return False            # a working-tree edit is a real move
+            then = subprocess.run(
+                ["git", "-C", str(ROOT), "rev-parse", f"{commit}:{rel}"],
+                capture_output=True, text=True, timeout=30)
+            now = subprocess.run(
+                ["git", "-C", str(ROOT), "rev-parse", f"HEAD:{rel}"],
+                capture_output=True, text=True, timeout=30)
+        except (OSError, subprocess.SubprocessError):
+            return False
+        if then.returncode or now.returncode:
+            return False
+        a, b = then.stdout.strip(), now.stdout.strip()
+        return bool(a) and a == b
+
     for pdf in pdfs:
         t_pdf = pdf.stat().st_mtime
         flagged = [p for p in sources if p.stat().st_mtime > t_pdf]
         g_pdf = _committed_at(pdf)
+        c_pdf = _commit_of(pdf)
         if g_pdf is not None:
             kept = []
             for p in flagged:
                 g_src = _committed_at(p)
                 if g_src is None or g_src > g_pdf:
+                    # **T-183, and it is T-171's principle reaching the one
+                    # branch that argued it could not.** The paragraph above
+                    # says there is no cheap content test here, and that is
+                    # true of the PDF and false of the SOURCE: git holds the
+                    # source's blob sha at every commit. If the source reads
+                    # identically now and at the commit that last touched the
+                    # PDF, **the source has not moved**, whatever the commit
+                    # clock says, and a PDF cannot be stale against a source
+                    # that has not moved.
+                    #
+                    # Found by walking into it. On 2026-10-31 a revert of a
+                    # bad push restored `SUPPLEMENTARY-MATERIAL-v1.3.21.tex`
+                    # to a byte-identical copy of what the committed PDF was
+                    # built from. That revert is a newer commit touching the
+                    # source, so the clock said stale and the remedy was to
+                    # rebuild and commit 1.6 MB of pdflatex timestamps --- the
+                    # **same no-op binary T-182 exists to prevent**, reached
+                    # by the branch T-182 installed. A rename-only commit, a
+                    # whitespace-identical restore and a `git revert` all do
+                    # this, and all of them are content-identical.
+                    if _unmoved_since(p, c_pdf):
+                        continue
                     kept.append(p)
             dropped = len(flagged) - len(kept)
             flagged = kept
