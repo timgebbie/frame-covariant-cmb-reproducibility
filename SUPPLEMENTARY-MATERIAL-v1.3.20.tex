@@ -290,7 +290,7 @@ mapping below is an inspected \emph{source inventory}; this document
 has not rerun the pinned repository suite as part of this editorial gate.
 
 \begingroup\footnotesize
-\setlength\LTleft{0pt}\setlength\LTright{0pt}
+\setlength\LTleft{0pt}\setlength\LTright{\fill}\setlength\LTcapwidth{\textwidth}
 \begin{longtable}{@{}p{0.16\textwidth}p{0.36\textwidth}p{0.39\textwidth}@{}}
 \caption{New \texttt{v1.3.0-dev} claim-facing Python checks.
 The inventory is distinct from software implementation tests. The
@@ -456,7 +456,7 @@ as one number.} Its verdicts are four kinds and they are counted apart, which
 they were not before 2026-10-21:
 
 \begingroup\footnotesize
-\setlength\LTleft{0pt}\setlength\LTright{0pt}
+\setlength\LTleft{0pt}\setlength\LTright{\fill}\setlength\LTcapwidth{\textwidth}
 \begin{longtable}{@{}p{0.20\textwidth}r>{\raggedright\arraybackslash}p{0.60\textwidth}@{}}
 \caption{Verdict classes in \texttt{independent\_checks\_v1.1.6.py}, run
 2026-10-26 under sympy 1.14.0 and Python 3.11.15, exit~0.}\label{tab:independent-checks}\\
@@ -1024,6 +1024,73 @@ here. That is the honest content of those columns and it is printed rather than
 left to inference.
 
 \input{tables/translations-layout-v1.3.5.tex}
+
+% --------------------------------------------------------------------------
+% 2026-10-31: the dictionary to the standard variables. Audit item I2-5.
+\subsection{The dictionary to the standard variables}
+\label{sec:theta-dictionary}
+
+Every gate in this bundle scores $\tau_\ell$ against $\tau_\ell$ and every
+external comparator is written in $\Theta_\ell$, so the map between them is
+load bearing in exactly one place and invisible everywhere else. The pieces
+are in three separated statements above and in Appendix~F; this is the one
+place they are composed.
+
+The direction dependence of a scalar mode is the contraction of the PSTF basis
+with $\hat k$. Its leading term is $\mu^\ell$ and trace removal supplies the
+rest, which is the Legendre polynomial up to normalisation:
+\begin{equation}
+  e^{\langle a_1\cdots a_\ell\rangle}\hat k_{a_1}\cdots\hat k_{a_\ell}
+  =\beta_\ell\,P_\ell(\mu),\qquad
+  \beta_\ell=\frac{\ell!}{(2\ell-1)!!},\qquad \mu=e\cdot\hat k .
+  \label{eq:pstf-legendre}
+\end{equation}
+Against the standard expansion
+$\Theta=\sum_\ell(-\mathrm i)^\ell(2\ell+1)\Theta_\ell P_\ell(\mu)$, term by
+term in $P_\ell$,
+\begin{equation}
+  \Theta_\ell=\frac{\mathrm i^\ell}{\alpha_\ell}\,\tau_\ell,
+  \qquad
+  \alpha_\ell=\frac{2\ell+1}{\beta_\ell}
+             =\frac{(2\ell+1)(2\ell-1)!!}{\ell!} .
+  \label{eq:theta-dictionary}
+\end{equation}
+
+\begin{center}\small
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+$\ell$ & 0 & 1 & 2 & 3 & 4 & 5 \\
+\midrule
+$\beta_\ell$  & $1$ & $1$ & $2/3$ & $2/5$ & $8/35$ & $8/63$ \\
+$\alpha_\ell$ & $1$ & $3$ & $15/2$ & $35/2$ & $315/8$ & $693/8$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+$\alpha_2=15/2$ is the value \S\ref{sec:ell-zero-row} records the bundle as
+carrying and the value its kernel argument needs; Appendix~F's
+$\alpha_\ell^{-1}\tau_\ell$ is \eqref{eq:theta-dictionary} with the phase
+stripped; and the $\mathrm i^\ell$ is the one the \emph{Annals~I} convention
+already fixes. The dictionary is therefore read off this document rather than
+imported into it.
+
+\paragraph{The two ends, and the dipole checks itself.} $\alpha_0=1$, so
+$\Theta_0=\delta\tilde T$ exactly --- the $\tau_0\equiv0$ convention keeps the
+monopole out of the conversion altogether. $\alpha_1=3$, so
+$\Theta_1=\mathrm i\tau_1/3$, which makes $\tau_1$ the photon velocity in the
+convention where $\Theta_1=v_\gamma/3$. \eqref{eq:152-peak} is then the photon
+Euler equation for $v_\gamma$ rather than for $\Theta_1$, and
+\eqref{eq:153-peak}'s $+\tfrac k3\tilde\tau_1$ is $\Theta_0'=-k\Theta_1$ with
+the same factor of three. Neither was arranged to come out that way.
+
+\paragraph{The spectrum cannot adjudicate this, because $\alpha_\ell$ cancels
+from every ratio it forms.} $\alpha_\ell$ is
+\emph{defined} as $(2\ell+1)/\beta_\ell$, so it cancels from every internal
+ratio --- which is \S\ref{sec:spectrum}'s point. A wrong $\alpha_\ell$ would
+therefore pass every gate in this bundle and corrupt only criterion~5b, where
+the comparison is against codes written in $\Theta_\ell$. That is the whole
+reason this subsection exists.
 
 
 % Step 1 of the physics chain, 2026-10-24.
@@ -2107,14 +2174,63 @@ of them measures a phase. The spacing gate takes differences of consecutive
 turning points, so the position of the \emph{first} one never enters: it is
 blind, by construction, to a constant offset in $kr_s$.
 
-That is why it is worth having, and it is the sharpest localisation in
-this supplement. The oscillator's period is right to $0.5\%$ and the
-projection at the first peak is faithful to $3\%$ (D25,
-\S\ref{sec:w-form}), while the released first peak sits at $0.635\,\ell_A$
-rather than $0.757$. Correct spacing with a displaced first peak
-is a phase offset, not a scale error: nothing here is stretching $r_s$ or
-$r_\theta$. The defect lies between the oscillator and the projection, which is
-the transport assembly, and \S\ref{sec:w-form} is where that is itemised.
+That is why it is worth having, and what it establishes is narrower than
+editions before 31 October 2026 claimed. The oscillator's period is right to
+$0.5\%$, while the released first peak sits at $0.9994\,\ell_A$ against the
+$0.7723\,\ell_A$ of the matched external spectrum. Correct spacing with a
+displaced first peak is a phase offset rather than a scale error: $r_s$ and
+$r_\theta$ are unstretched here.
+
+\paragraph{Two of the premises were this document's own errors and are
+corrected on 31 October 2026.} Editions before that date wrote \emph{the
+released first peak sits at $0.635\,\ell_A$}. That is $\ell=172.75$, which is \textbf{D24}
+with $\kappa''$ suppressed and is not the released configuration;
+\S\ref{sec:frame-discrepancy} prints $266.6$ for the released setting three
+times. The two sit on opposite sides of the matched value, so the misnaming
+reversed the direction of the displacement the sentence was about. Both
+figures also divided by the superseded $\ell_A=272.177$ and are restated
+above against $266.750$.
+
+\paragraph{The projection's fidelity was measured at a multipole the released
+peak is nowhere near.} D25 returns $3\%$ at $\ell=173$. The released first
+peak is at $\ell\simeq267$. A kernel faithful at one multipole is not thereby
+faithful at another $55\%$ further out, so until D25 is run there the
+projection stands neither excluded nor implicated. The claim that it is
+excluded is withdrawn, and the run is open with the implementation stream.
+
+\noindent
+What survives the two corrections is sharper than what they removed.
+$\ell/\ell_A$ is $kr_s/\pi$ identically, so a released peak at
+$0.9994\,\ell_A$ is $kr_s=0.9994\pi$: the first extremum of $\cos(kr_s)$, to
+within the estimator's own width. \textbf{The released assembly delivers the
+bare sound-horizon peak and supplies neither the driving phase nor the
+projection phase that carry a driven, projected spectrum to $0.7723$.}
+\S\ref{sec:w-form} is where the candidates for those two are itemised.
+
+\paragraph{What it does not establish, and the correction is to this
+supplement's own strongest claim.} Editions before 31 October 2026 concluded
+that the defect lies \emph{between} the oscillator and the projection, and called that
+the sharpest localisation here. \textbf{It does not follow from these premises.}
+Period is a difference of consecutive extrema and phase is the position of the
+first, so a period right to $0.5\%$ says nothing about the oscillator's own
+phase --- which is what the sentence above this one establishes about every
+gate in the table. The inference rules the oscillator out using a test
+declared blind to the thing that would convict it.
+
+And a candidate is identified elsewhere in this document.
+\texttt{c10\_oscillator\_phase.py} records that with $\Phi$ constant the
+boundary value is a pure cosine of \emph{zero} phase and with $\Phi$
+time-dependent it is not, so a criterion asking the oscillator to track
+$\cos(kr_s)$ in exact phase \emph{accepts} the undriven solution and
+\emph{rejects} the driven one. \textbf{A-3 is absent, so the exact-phase
+result is what this configuration must produce}, and it is a phase error in
+the oscillator of exactly the kind the period gate cannot see.
+
+Nothing measured changes. The displacement is \emph{not yet apportioned}
+between an upstream phase no gate here measures and a downstream assembly
+defect several do. The general form belongs with the \texttt{c10} row: \emph{a
+test that passes on the configuration a known approximation produces is not
+evidence that the approximation is absent from the result.}
 
 % === END source expansion: supplementary-materials/section-oscillator-v1.4.0.tex ===
 
@@ -2235,20 +2351,22 @@ it can be re-run; it is not a gate and nothing is scored against it.}
 % ===========================================================================
 \subsection{The budget is a total, and the split inside it does not survive}
 
-Against $\ell_A=272.177$ for \texttt{PLANCK\_MODEL}, four configurations
-measured in this bundle:
+Against $\ell_A=266.750$ for \texttt{PLANCK\_MODEL}, four configurations
+measured in this bundle. The $\ell_1$ column is the measurement; the two
+columns right of it are that column divided by $\ell_A$. 31 October 2026 is
+the first date on which the two carry the same repair:
 
 \begin{center}\small
 \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}X r r r@{}}
 \toprule
 \textbf{configuration} & $\ell_1$ & $\ell_1/\ell_A$ & $\varphi_1$ \\
 \midrule
-released v1.3.0 & $266.6$ & $0.9795$ & $+0.0205$ \\
-$\kappa'\kappa''\hat v_B$ suppressed, A-3 absent & $236.6$ & $0.8693$ &
-  $+0.1307$ \\
-matched CAMB/CLASS, $N_{\rm eff}=0$ \emph{(external)} & $206.0$ & $0.7569$ &
-  $+0.2431$ \\
-\textbf{D24}, $\kappa''$-suppressed & $172.75$ & $0.6347$ & $+0.3653$ \\
+released v1.3.0 & $266.6$ & $0.9994$ & $+0.0006$ \\
+$\kappa'\kappa''\hat v_B$ suppressed, A-3 absent & $236.6$ & $0.8870$ &
+  $+0.1130$ \\
+matched CAMB/CLASS, $N_{\rm eff}=0$ \emph{(external)} & $206.0$ & $0.7723$ &
+  $+0.2277$ \\
+\textbf{D24}, $\kappa''$-suppressed & $172.75$ & $0.6476$ & $+0.3524$ \\
 \bottomrule
 \end{tabularx}
 \end{center}
@@ -2259,17 +2377,56 @@ said before a difference between two of them is read as a physical
 displacement, and together they withdraw the reading this subsection carried
 in editions before v1.3.20.
 
-\paragraph{The denominator is under query and the $\ell_1$ column is not.}
-$\ell_A=272.177$ is the committed value in
-\texttt{diagnostics/d4-monopole-v1.3.0.txt}. Calling that artefact's own
-generator on current \texttt{main} returns $266.734$, with $r_\theta$ moving
-from $3.128965$ to $3.127382$: a difference of $5.5$ multipoles, or $2.0\%$.
-Both manifests cover the file and both pass, which is the point rather than a
-mitigation, since a manifest hashes bytes and cannot say whether a generated
-file still agrees with its generator. The question is open with the
-implementation stream and is not settled here. Every $\varphi_1$ and every
-ratio in this subsection divides by $272.177$ and is to be read with that
-attached; the $\ell_1$ column does not depend on it.
+\paragraph{The denominator was superseded on 21 October and nothing
+propagated it, which is why this table changed on 31 October 2026.}
+$\ell_A=272.177$ was the committed value in \texttt{diagnostics/\allowbreak{}d4-\allowbreak{}%
+monopole-\allowbreak{}v1.3.0.txt}. On the same day \texttt{f887301} set
+\texttt{RECOMBINATION\_H} to \texttt{corrected} on the theory stream's ruling,
+and \textbf{D20} measured that afternoon what the ruling moves: $\ell_A$ falls
+to $266.750$, with $r_\theta$ going $3.128965\to3.127382$. Both manifests
+covered the artefact throughout and both passed, which is the point rather
+than a mitigation: a manifest hashes bytes, so it certifies that a generated
+file has not been edited and is silent on whether its generator would still
+produce it. That is the defect class of a figure carrying a label older than
+the tree it was drawn from, and it is \textbf{T-181}.
+
+\paragraph{The published ratio divided a post-repair numerator by a
+pre-repair denominator.} $\ell_1=266.6$ was re-run on 21 October \emph{after}
+the scattering-rate correction (\textbf{T-109}), so the numerator already
+carried the repair that moved $\ell_A$ and the denominator did not. The
+$0.9795$ printed in editions before that date therefore compared two epochs.
+Same-epoch the ratio is $266.6/266.750=0.9994$, and $266.6/266.7341=0.9995$ on
+the coarser recombination grid, so the reading below holds on either grid.
+
+\paragraph{The released first peak is not distinguished from the bare
+sound-horizon position, and that is a result rather than a requote.} $\ell_A$
+is the multipole at which $kr_s=\pi$ projects: the first extremum of an
+undriven, delta-deposited, unsmoothed monopole. The released configuration
+lands on it to six parts in ten thousand --- inside any peak-estimator width,
+so what can be said is that the two are not separated --- while the matched
+external spectrum sits $23\%$ below it. \textbf{The released assembly supplies
+the undriven projection of $\cos(kr_s)$ and supplies neither the
+radiation-driving phase shift nor the finite-width projection phase that
+together carry a matched spectrum to $0.7723$.} \S\ref{sec:oscillator} reaches
+the same place from the other end, on different evidence: a criterion asking
+for exact $\cos(kr_s)$ accepts an undriven oscillator and rejects a driven
+one, and the released configuration passes it. Two arrivals, one conclusion,
+and neither was built from the other.
+
+\paragraph{Ratios elsewhere in this document divide by the superseded value,
+and the conversion is one multiplication.} Every figure in this supplement of
+the form \emph{measured multipole} over $\ell_A$ was quoted against $272.177$
+and is to be read $\times\,1.020346$: $0.979\to0.9994$, $0.869\to0.8870$,
+$0.757\to0.7723$, $0.635\to0.6476$, $0.277\to0.2826$. \textbf{The multipoles
+themselves do not move, and neither does any ratio formed from two of them},
+so every argument in \S\ref{sec:frame-discrepancy} turning on one of these
+standing above or below another survives unchanged. \emph{A ratio derived in
+units of $\ell_A$ is invariant under this change and is absent from that
+list} --- the undriven projection's $0.852\,\ell_A$ is a calculation, not a
+measurement over a denominator. Restating forty-one sites by hand is the
+transcription failure this item is itself an instance of; the durable repair
+is to print the multipole and normalise from the generated table, and it is
+registered with the implementation stream rather than attempted here.
 
 \paragraph{The second row is the configuration that fails the frame test by a
 factor of three.} It is the same configuration \S\ref{sec:frame-discrepancy}
@@ -3660,7 +3817,8 @@ above one as well. No absolute value of this ratio establishes a
 projection defect, and the earlier reading, which took $1.5$--$4.2$ as a
 defect on its face, was reading a property of $j_\ell$. What survives is the
 \emph{difference between the frames} at the same $\ell$ on the same kernel,
-because the kernel cancels there and nothing else in the comparison does.
+because the kernel is the only factor the two frames share at fixed $\ell$,
+and it cancels.
 
 One residue does survive at the peak, and it is frame-dependent. CDM
 reads $1.17$--$1.20$ against the Newtonian $1.03$--$1.04$, on \emph{both}
@@ -3670,12 +3828,18 @@ route, which would need $1.57$. It is the right \emph{shape} for the candidate
 below, and it was measured for another purpose, which is the only reason to
 give it any weight at all.
 
-\emph{What that leaves.} With the projection faithful at $\ell=173$ and the
-oscillator tracking $\cos(kr_s)$ in exact phase and period (T-71,
-T-74), a peak at $0.635\,\ell_A$ places the first extremum at
-$kr_s\simeq0.635\pi$ rather than $\pi$ --- a phase error of about $-0.37\pi$,
-arising \emph{between} the oscillator and the transfer, which is where
-\eqref{eq:byparts}'s discrepancies sit.
+\emph{What that leaves.} With the projection faithful at $\ell=173$, a peak at
+$0.6476\,\ell_A$ places the first extremum at $kr_s\simeq0.6476\pi$ rather than
+$\pi$ --- a phase error of about $-0.35\pi$, \emph{on this configuration and
+not on the released one}. Editions before 31 October 2026 placed it
+\emph{between} the oscillator and the transfer, on the ground that the oscillator tracks
+$\cos(kr_s)$ in exact phase (T-71, T-74). That ground is withdrawn at
+\S\ref{sec:oscillator}: exact phase is what an \emph{undriven} oscillator must
+produce, so it leaves every upstream candidate in play. The $-0.35\pi$ is
+\textbf{not yet apportioned}; \eqref{eq:byparts}'s discrepancies are where the
+downstream share sits. The released configuration carries a displacement of
+the opposite sign --- $0.9994\pi$ against the matched $0.7723\pi$ --- and a
+mechanism inventory owes both.
 
 \paragraph{A quarter-cycle account of that was printed here and is withdrawn
 --- finding T-123.} It wrote $C_2=A\cos kr_s$, read $+2\mathcal VC_2'$ against
@@ -6290,9 +6454,10 @@ acceptance test. The supporting history is in}
   second-order source carried at rank two with a tensor initial condition ---
   recorded as a mechanism, not claimed \\
 \textbf{Q11} & The acoustic source has the right phase and the spectrum does
-  not & Downgraded from blocker to residual, \emph{not closed}: the oscillator
-  tracks $\cos(kr_s)$ in exact phase and period, so the phase is lost between
-  the source and the transfer \\
+  not & \emph{Not closed, and its premise is withdrawn as of 31 October 2026.} That the
+  oscillator tracks $\cos(kr_s)$ in exact phase is what an undriven oscillator
+  must do --- \texttt{c10} --- so it does not establish that the source phase
+  is right, and the question as posed assumes what it asks \\
 \textbf{Q12} & Two implementations of (102) agree at $k=1$ and diverge above
   $k=3$ & Which of the two reproduces the integral (102) is derived from ---
   \S\ref{sec:w-form} answers this for the bulk and not for the boundary \\
@@ -6418,8 +6583,9 @@ and $(\ell+1)/(2\ell+3)$ is $3/7$ at $\ell=2$, so that row rearranges to
   \label{eq:egs-shear-identity}
 \end{equation}
 Nothing is approximated between the printed row and
-\eqref{eq:egs-shear-identity}: the shear has been moved to the left and
-nothing else has been done. Whatever an almost-EGS argument is in general, in
+\eqref{eq:egs-shear-identity}: the shear has been moved to the left, and no
+term has been dropped, added, expanded or reordered. Whatever an almost-EGS
+argument is in general, in
 these variables it has to pass through this identity, and the hypotheses it
 needs can be read off it.
 
@@ -6582,7 +6748,12 @@ excess separates into two terms of different character:
 \end{equation}
 The first term re-weights the deflectors that do lie in front of the source,
 and it does so by an amount constant along the ray, the two kernels differing
-by $\chi_s^{-1}-\chi_*^{-1}$ at every $\chi$ in $(0,\chi_s)$. The second term
+by $\chi_s^{-1}-\chi_*^{-1}$ at every $\chi$ in $(0,\chi_s)$. \emph{Constant
+along the ray is not constant across the sky.} The factor multiplies
+$\int_0^{\chi_s}\Phi_{\rm L}$, which varies with $\hat n$, so this term is a
+rescaled deflection field and not a uniform convergence; it is not degenerate
+with a change in the angular diameter distance to the source and it does not
+drop out of a single map. The second term
 is the whole contribution of an interval in which no deflector can lens this
 source at all, every point of it lying behind the source. Both excess kernels
 are positive throughout their ranges for every $\chi_s<\chi_*$, so a
@@ -6595,11 +6766,31 @@ unity for a source at last scattering and rising to three in the limit of a
 source at the observer. Both terms vanish identically at $\chi_s=\chi_*$,
 which is why the acoustic peaks are untouched by any of this.
 
+\paragraph{The geometry is sector-independent and the kernel above is not.}
+\eqref{eq:psi-source-resolved} is a scalar construction: the deflection is the
+gradient of one potential, which is the form the scalar sector takes and is
+the form every expression in this section uses. A vector mode deflects through
+a field whose curl part is non-zero, and the gradient of a scalar represents
+no curl at all, so that contribution is absent from $\psi$ by construction
+rather than by smallness. A tensor mode adds a term from the spatial part of
+the connection, which the potential-gradient picture has no slot for either.
+\textbf{What carries to those sectors is the geometric statement} --- a
+contribution generated at $\chi_s$ can be deflected only by matter at
+$\chi<\chi_s$, so its kernel terminates at its own source and a single-kernel
+treatment misweights it in the direction established above. \textbf{What does
+not carry is \eqref{eq:psi-source-resolved} itself}, which would have to be
+rewritten for each sector before any of the sizes quoted here meant anything
+there. This supplement is scalar throughout and makes no vector or tensor
+claim.
+
 What makes the bias structural rather than a defect of implementation is where
-the source distance is lost. A line-of-sight solution delivers the transfer
-function as one integral over conformal time against the radial kernel, and
-once that integral has been performed the contributions have been summed and
-the distance at which each was generated is not recoverable from the result.
+the source distance is lost. The standard line-of-sight construction, as
+\citet{SeljakZaldarriaga1996} set it out and as the public codes implement it,
+delivers the transfer function as one integral over conformal time against the
+radial kernel, and once that integral has been performed the contributions
+have been summed and the distance at which each was generated is not
+recoverable from the result. The limitation is of that construction and not of
+the line-of-sight method, as the rearrangement below shows.
 The spectrum handed to a lensing convolution is therefore already a sum over
 source distances, and a convolution applied to a sum cannot distinguish its
 terms; a single lensing-potential spectrum is then the only object the
