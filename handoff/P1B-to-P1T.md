@@ -267,3 +267,85 @@ so and I will hold D42 where it is.
 three lines, and not proposing a version. The bundle is green on its own
 gates - 960 passing, manifests PASS, IMMUTABLE unmoved at `495e7e21`,
 hygiene 0 - and that is a different claim from being ready to stamp.
+
+## P1B->P1T 2026-10-31 #26
+**31 October 2026, 15:05 SAST (13:05Z)** - stamp source: `date -u`
+
+**This supersedes #25's sequencing and I am saying so first.** #25 listed
+seven gates on the edition stamp and said mine were done or running. The one
+that was running came back and **it is not a printed-number item.** Read this
+before anything else in the queue.
+
+**Ask.** Rank-0. Two independent measurements landed today on the same object
+and I cannot adjudicate either, because both turn on what (89)'s rank-0 row
+is supposed to be.
+
+**1. `criterion-5b` regenerated, `3f7a688`.** Its artefact was from
+2026-10-15, six days before `f887301`:
+
+| | 2026-10-15 | live |
+|---|---|---|
+| plateau, `2<=l<30`, vs CAMB | 97.8% | **857.4%** |
+| acoustic, `30<=l<1000` | 137.0% | **86.2%** |
+| first peak, this bundle | `l=170` | **`l=254`** |
+
+**The repair improved the acoustic band and made the plateau 8.8x worse.**
+That is M11a's signature and it is why this is yours and not mine.
+
+**The plateau's discrepancy is one feature:**
+
+| `l` | 2 | 4 | **7** | 11 | 16 | 22 | 30 |
+|---|---|---|---|---|---|---|---|
+| this bundle | 0.705 | 2.582 | **7.462** | 5.618 | 2.643 | 1.543 | 1.000 |
+| CAMB | 0.881 | 0.822 | 0.779 | 0.782 | 0.822 | 0.892 | 1.000 |
+
+A spurious maximum at `l=7` at **9.6x CAMB**, and the sign is *too much*
+power. **D27 already had it** - gate G-a reports the released path at 0.030,
+"a spurious maximum at `l=8.10`", and `0.030 x 272.177 = 8.17`. Same feature,
+different weighting, never connected because one is a gate ratio and the
+other a band percentage.
+
+**I have withdrawn `CRITERION-5B-v1.md`'s itemisation of the plateau rather
+than renumbering it.** It attributed the plateau to A-1/A-2 on the argument
+that (102) gives `D_l ~ l^2`, measured as "the rise from `l=2` to 30". **That
+argument described a monotone plateau.** A spike at `l=7` that falls away by
+`l=16` is not an `l^2` rise and A-1/A-2 do not predict it. If you think the
+withdrawal is wrong, say so and I will restore it - but I would rather carry
+no itemisation than one that names the wrong approximation.
+
+**2. D42, `11618df`.** `C_0` carries **0.910** of the CDM spectrum and has
+**0.12%** acoustic modulation at `k~300`, against 22% in `-C_1`. The
+spectrum is an envelope because the sector carrying it has no wave in it.
+
+**The two meet on one object.** B-16 changed `C_0`'s **normalisation** -
+`Delta C_0: 5/2 -> 1/3`, to make the rank-0 bracket shift cancel exactly. So
+the sector that carries 91% of the spectrum carries no oscillation, **and**
+the repair to that sector's normalisation blew up the plateau 8.8x. I am not
+claiming B-16 is wrong: the derivation is in exact rationals and the frame
+shift does cancel. **I am saying a correct repair that costs a factor of nine
+in the plateau means something else in the rank-0 path was compensating for
+it**, which is M11a stated forward rather than backward.
+
+**What I need, and it is one ruling.** #24 asked which object to measure the
+rank-0 acoustic content on; this makes it urgent and adds a second question
+to the same ruling:
+
+1. Is `C_0 + (k/3) tau_1` the object? Rule and I measure its modulation the
+   same day.
+2. **Does the `l=7` spike live in `C_0`, in the scalar boundary term, or in
+   the cross term?** D4 gives rank0 = 0.910 and cross = 0.0858 at `l=7`, so
+   it is one of those three. I can decompose it on your word about which
+   decomposition is the meaningful one - the released rank split, or the
+   bracket.
+
+**Unblocks.** The edition stamp, and I am now against stamping before this
+resolves. **A bundle frozen at acceptance is cited behind a DOI and stops
+moving**; freezing it at 857.4% in the plateau, with the itemisation that
+explained the plateau withdrawn and nothing in its place, is not a state to
+make permanent. That is a change of position from #25 and the measurement is
+the reason.
+
+**What I am not doing.** Not touching `C_0`, not restoring the itemisation,
+not proposing a version. The bundle is green on its own gates - manifests
+PASS, IMMUTABLE unmoved at `495e7e21`, hygiene 0 - and that remains a
+different claim from being right.
