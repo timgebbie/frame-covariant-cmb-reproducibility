@@ -11,8 +11,9 @@ it. **Every point of this lattice except one was also unreachable from
 
 THE TWO GATES, AND BOTH ARE NEW
 -------------------------------
-  **G-a, from D24 (T-121):** $\ell_{\rm peak}/\ell_A$, expected $0.757$
-  (matched CAMB, $206/272.177$). The released path gives $0.030$ --- a spurious
+  **G-a, from D24 (T-121):** $\ell_{\rm peak}/\ell_A$, expected $0.772$
+  (matched CAMB, $206/266.750$; **$0.757$ at the pre-T-181 $\ell_A=272.177$,
+  and the band is unmoved**). The released path gives $0.030$ --- a spurious
   maximum at $\ell=8$ --- and suppressing $\kappa''\tilde v_B$ alone gives
   $0.635$.
 

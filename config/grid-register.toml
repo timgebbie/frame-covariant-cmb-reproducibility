@@ -852,3 +852,28 @@ lands 0.62 of a grid step from the sample it was fitted around -- a finder on a
 node rather than on a peak, which is D24's shape. D36's own grid is IMPORTED
 rather than reproduced, so the coarse comparison runs on the registered array
 and not on a copy of it."""
+
+[[grid]]
+key = "scripts/diagnostic_d42_does_the_source_oscillate_in_k.py::K_GRID"
+what = "the k grid D42 looks for the acoustic oscillation on"
+status = "described"
+note = """`arange(2, 601, 1)`. The rule is stated and it is the opposite of
+every other k grid in the tree: this one is deliberately far FINER than
+anything the spectrum uses, because the question is whether the oscillation is
+THERE and not whether a grid resolves it. The acoustic period in k is
+2 pi / r_s = 170.59 on PLANCK, so a step of 1 is about 171 samples per
+oscillation against `K_POINTS_PER_PERIOD = 3` on the spectrum path -- a factor
+of 57 of margin, bought because the cost is one cheap sweep with no Bessel
+table and no line-of-sight quadrature.
+
+**The guard is inside the instrument rather than elsewhere, which is why this
+is `described` and not `open`.** D42 counts detrended sign changes against
+the count a clean acoustic oscillation must give, `(k_max - k_min) r_s / pi`,
+which is ~7 here. A grid too coarse to carry the oscillation collapses that
+count toward zero, and the count is printed beside its prediction on every
+run. A grid that cannot show the thing being looked for therefore fails
+loudly instead of returning FLAT, which was the first draft's actual failure
+mode and is recorded in `_detrend`.
+
+The detrending filter's width is tied to `2 pi / r_s` and not to the grid, so
+refining the grid cannot change what counts as the pedestal."""

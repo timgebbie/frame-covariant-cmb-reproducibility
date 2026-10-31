@@ -86,7 +86,9 @@ def _measure(bg, obh2, h, mode):
     # cos(k r_s) means and what `make_model_table.py` uses. A first draft of
     # this file integrated from the recombination grid's own first point
     # instead, missing everything below z = 3000, and returned l_A = 553 on
-    # PLANCK against the generated table's 272.177 --- a factor of 2.03 that
+    # PLANCK against the generated table's 272.177 *as it then stood*, which
+    # is this file's own `released` column and is 266.750 since the repair
+    # this file measures went on (T-181) --- a factor of 2.03 that
     # would have gone into the headline. Caught by reading the two against
     # each other, which is the only reason the table is generated.
     eta_rs, rs_tab = sound_horizon_from_zero(bg, float(eta[i]), omega_b_h2=obh2)

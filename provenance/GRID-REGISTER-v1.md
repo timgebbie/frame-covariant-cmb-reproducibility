@@ -20,7 +20,7 @@ being possible.
 | **open** | 1 | a chosen literal whose convergence is **not** established. This status is the point of the register. |
 | **derived** | 28 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
 | **measured** | 7 | a chosen literal whose convergence has been measured, with the number stated. |
-| **described** | 11 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
+| **described** | 12 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
 | **index** | 32 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
 
 ## open — 1
@@ -153,7 +153,7 @@ plausible grid change reaches. Finding **T-79**.
 
 ### `k_com` — the k grid the Phi' sweep integrates C_ell on
 
-`scripts/diagnostic_d24_phi_prime_sweep.py:295`, `np.linspace`
+`scripts/diagnostic_d24_phi_prime_sweep.py:317`, `np.linspace`
 
 `required_k_points(K_MAX, r_theta)` at 3 samples per j_ell^2
 oscillation --- finding **T-56**, the same derivation F9 and D4 use. `K_MAX` is
@@ -175,7 +175,7 @@ and those two numbers are the whole verdict.
 
 ### `k_com` — the k grid the bulk-source lattice is screened on (gate G-b)
 
-`scripts/diagnostic_d26_bulk_source_lattice.py:182`, `np.linspace`
+`scripts/diagnostic_d26_bulk_source_lattice.py:183`, `np.linspace`
 
 `required_k_points(K_MAX, r_theta)` at 3 samples per j_ell^2
 oscillation --- **T-56**. `K_MAX = 200` because G-b asks only about the
@@ -185,7 +185,7 @@ directly rather than degrade it.
 
 ### `k_com` — the k grid gate G-a locates the first peak on
 
-`scripts/diagnostic_d27_gate_a.py:83`, `np.linspace`
+`scripts/diagnostic_d27_gate_a.py:85`, `np.linspace`
 
 `required_k_points(K_MAX, r_theta)` at 3 samples per j_ell^2
 oscillation --- **T-56**. `K_MAX` and the eta grid are **imported from D24**
@@ -443,7 +443,7 @@ side of anything the grid could contribute.
 four external recursions match at 1e-13 to 1e-14 at scale exactly 1, which no
 under-resolved grid produces.
 
-## described — 11
+## described — 12
 
 ### `K_COM` — the k grid the cost benchmark is measured on
 
@@ -467,7 +467,7 @@ Linear at `DK`. This script's entire output IS a convergence measurement, so its
 
 ### `ELLS` — the multipole grid the Phi' sweep locates the first peak on
 
-`scripts/diagnostic_d24_phi_prime_sweep.py:98`, `np.arange`
+`scripts/diagnostic_d24_phi_prime_sweep.py:101`, `np.arange`
 
 Dense at spacing 5 through `arange(100, 421, 5)` and sparse below,
 because the sweep reports **ell_peak by parabolic interpolation on three
@@ -478,6 +478,31 @@ guard --- the peak finder is run on a synthetic C_ell with a known maximum and
 must recover it to better than 0.5 in ell, which is a fifth of this spacing.
 Capped at 420 because this instrument needs the first peak **located**, not the
 damping tail resolved; F9 owns that and runs to 1000.
+
+### `K_GRID` — the k grid D42 looks for the acoustic oscillation on
+
+`scripts/diagnostic_d42_does_the_source_oscillate_in_k.py:139`, `np.arange`
+
+`arange(2, 601, 1)`. The rule is stated and it is the opposite of
+every other k grid in the tree: this one is deliberately far FINER than
+anything the spectrum uses, because the question is whether the oscillation is
+THERE and not whether a grid resolves it. The acoustic period in k is
+2 pi / r_s = 170.59 on PLANCK, so a step of 1 is about 171 samples per
+oscillation against `K_POINTS_PER_PERIOD = 3` on the spectrum path -- a factor
+of 57 of margin, bought because the cost is one cheap sweep with no Bessel
+table and no line-of-sight quadrature.
+
+**The guard is inside the instrument rather than elsewhere, which is why this
+is `described` and not `open`.** D42 counts detrended sign changes against
+the count a clean acoustic oscillation must give, `(k_max - k_min) r_s / pi`,
+which is ~7 here. A grid too coarse to carry the oscillation collapses that
+count toward zero, and the count is printed beside its prediction on every
+run. A grid that cannot show the thing being looked for therefore fails
+loudly instead of returning FLAT, which was the first draft's actual failure
+mode and is recorded in `_detrend`.
+
+The detrending filter's width is tied to `2 pi / r_s` and not to the grid, so
+refining the grid cannot change what counts as the pedestal.
 
 ### `k` — the k quadrature grid for the Sachs-Wolfe limit
 

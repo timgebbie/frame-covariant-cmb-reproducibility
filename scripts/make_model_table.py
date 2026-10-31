@@ -19,6 +19,54 @@ The columns that set the acoustic scale are the last three. $\ell_A=\pi
 r_\theta/r_s$ is what fixes where the peaks sit, and reading it beside
 $\Omega_m$, $\Omega_\Lambda$ and $h$ is how a parameter difference is told
 apart from a defect.
+
+FINDING T-181 --- THE SUPPLEMENT CARRIED THIS TABLE FROM BEFORE A REPAIR
+------------------------------------------------------------------------
+On **2026-10-21**, `f887301` set `decoupling.RECOMBINATION_H = "corrected"`:
+the $h$ in the Peebles ODE became the background's own, and the surviving
+$1/h$ stopped being dropped. **D20 measured exactly what that would move** and
+its `corrected` column is the live code's answer to four figures. Eight of the
+fifteen rows below moved with it, and the committed table was generated the
+day before:
+
+    row                  committed      live        shift (PLANCK)
+    z_*                   1114.54      1079.44      -3.1%
+    eta_*                0.0697426    0.0713209     +2.3%
+    r_s                  0.0361159    0.0368321     +2.0%
+    l_A                   272.177      266.750      -2.0%
+    k_D                   536.866      557.012      +3.8%   (+10.1% on EdS)
+
+**The row that changes an argument rather than a number is $z_*$.**
+`tables/criterion-5b-v1.2.0.tex` itemised the bundle's residual against
+CAMB/CLASS with *"the acoustic scale, $z_*=1114.5$ here against CAMB's
+1088.5"* --- a cost of $+2.40\%$. The live value is $1079.44$, which is
+$-0.83\%$: **the repair moved the bundle to the other side of the external
+value, and the published text still claimed the old side.** D20 said so in
+terms at the time (*"the correction moves z_* TOWARDS the external value"*)
+and nothing read it back into the table.
+
+WHY IT SURVIVED A REGENERATION
+------------------------------
+`tables/model-parameters-layout-v1.3.5.tex` is what the supplement actually
+`\input`s, and it was committed on **2026-10-25**, four days *after* the
+repair, with a header reading *"CAPTION PRESENTATION COPY, all numeric cells
+unchanged"*. It is the base table plus two lines: a header comment and one
+`\captionsetup`. It is a **hand-made third rendering**, and its own caption
+says the table is *"generated ... not transcribed"* --- a claim that was false
+of the file carrying it.
+
+Decision **D3** is written three functions below in as many words: *"a table
+the document carries is generated from the code or it drifts. One generator,
+two renderings."* The drift is what happens when someone adds the third by
+hand. So `render_tex` now takes `layout=`, `--write` emits all three, and the
+presentation copy is generated like the other two. **The filename stays at
+`v1.3.5`** because it is a contract with the supplement's `\input` line, and
+that line is P1-T's.
+
+Each output carries a `source_fingerprint` of the tree that produced it
+(**T-54**, repaired at **T-129**), so the next time this question is asked it
+is answered by reading one line rather than by re-deriving the history of a
+switch.
 """
 
 from __future__ import annotations
@@ -32,6 +80,9 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from _fingerprint import source_fingerprint as _digest  # noqa: E402
 
 from functions.background.flrw import (  # noqa: E402
     CDM_MODEL,
@@ -48,6 +99,11 @@ from functions.spectra.acoustic import (  # noqa: E402
 from functions.spectra.decoupling import RecombinationHistory, diffusion_scale  # noqa: E402
 
 VERSION = "v1.3.0"
+
+#: The presentation copy's filename, **pinned separately and deliberately**.
+#: The supplement's `\input` line names it, that line is P1-T's, and a
+#: generator must not rename a file out from under a document it does not own.
+LAYOUT_VERSION = "v1.3.5"
 
 #: `(label, Background, omega_b_h2, h, n_s)`. `h` and `n_s` are the values the
 #: *figures* pass, which is the thing that matters for a shape comparison ---
@@ -170,10 +226,18 @@ def _tex_num(v: str) -> str:
         return f"${mant}\\times10^{{{'-' if sign == '-' else ''}{exp}}}$"
     return f"${v}$"
 
-def render_tex(rows):
+def render_tex(rows, *, layout: bool = False):
     r"""The same table as LaTeX, for the supplement. **Same `rows`, one
     generator** --- the Markdown and the TeX cannot disagree because neither
-    is transcribed from the other."""
+    is transcribed from the other.
+
+    `layout=True` emits the presentation copy the supplement `\input`s: the
+    identical table plus one `\captionsetup`. **It is a rendering flag and not
+    a second table** --- finding T-181, where the presentation copy was made
+    by hand, survived the recombination repair by four days, and put eight
+    stale rows into the published PDF under a caption claiming it was
+    generated.
+    """
     esc = {"Omega_m": r"$\Omega_m$", "Omega_L": r"$\Omega_\Lambda$",
            "Omega_r": r"$\Omega_r$", "omega_b h^2": r"$\omega_b h^2$",
            "h": r"$h$", "n_s": r"$n_s$", "eta_0": r"$\eta_0$",
@@ -181,8 +245,11 @@ def render_tex(rows):
            "R(eta_*)": r"$R(\eta_*)$", "r_s": r"$r_s$",
            "r_theta": r"$r_\theta$", "l_A": r"$\ell_A=\pi r_\theta/r_s$",
            "k_D": r"$k_D$ (at $R=0$, T-21)"}
-    out = [r"\begin{table}[htbp]", r"\centering\small",
-           r"\caption{The three backgrounds side by side, with every derived "
+    out = [r"\begin{table}[htbp]", r"\centering\small"]
+    if layout:
+        out.append(r"\captionsetup{width=0.76\linewidth,"
+                   r"justification=raggedright,singlelinecheck=false}")
+    out += [r"\caption{The three backgrounds side by side, with every derived "
            r"scale. \textbf{Generated by \texttt{scripts/make\_model\_table.py}} "
            r"from the \texttt{Background} objects the code integrates, not "
            r"transcribed. The last three rows are the ones that answer a shape "
@@ -207,17 +274,35 @@ def main() -> int:
     text = render(rows)
     print(text)
     if "--write" in sys.argv:
+        stamp = _digest(__file__)
         out = ROOT / "provenance" / f"MODEL-PARAMETERS-{VERSION}.md"
-        out.write_text(text + "\n", encoding="utf-8", newline="\n")
+        out.write_text(f"<!-- sources: {stamp} -->\n" + text + "\n",
+                       encoding="utf-8", newline="\n")
         print(f"\nwrote {out.relative_to(ROOT)}")
         # **The supplement needs this table too and must not transcribe it.**
         # The PI asked where the model parameters are in the supplement, which
         # is the question decision D3 exists to make unaskable: a table the
         # document carries is generated from the code or it drifts. One
-        # generator, two renderings.
+        # generator, two renderings -- **three since T-181**, because the
+        # presentation copy the supplement actually reads was the one being
+        # made by hand, and it is the one that drifted.
         tex = ROOT / "tables" / f"model-parameters-{VERSION}.tex"
         tex.parent.mkdir(exist_ok=True)
-        tex.write_text(render_tex(rows) + "\n", encoding="utf-8", newline="\n")
+        tex.write_text(f"% sources: {stamp}\n" + render_tex(rows) + "\n",
+                       encoding="utf-8", newline="\n")
+        # **The filename stays `v1.3.5`.** It is a contract with
+        # `\input{tables/model-parameters-layout-v1.3.5.tex}` in the
+        # supplement, and the supplement is P1-T's. A version in a generated
+        # filename tracks the table's SCHEMA -- which rows exist -- and the
+        # rows did not change. Which code produced the numbers is what the
+        # fingerprint on line one says, and saying it there is the repair.
+        lay = ROOT / "tables" / f"model-parameters-layout-{LAYOUT_VERSION}.tex"
+        lay.write_text(
+            f"% {LAYOUT_VERSION} caption presentation copy. GENERATED -- "
+            f"see T-181.\n% sources: {stamp}\n"
+            + render_tex(rows, layout=True) + "\n",
+            encoding="utf-8", newline="\n")
+        print(f"wrote {lay.relative_to(ROOT)}")
         print(f"wrote {tex.relative_to(ROOT)}")
     return 0
 

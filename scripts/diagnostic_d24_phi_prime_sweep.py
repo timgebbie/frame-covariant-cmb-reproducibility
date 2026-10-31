@@ -40,8 +40,11 @@ bit-identical, the sweep is measuring the split rather than the physics.
 READING THE RESULT
 ------------------
 Reported as $\ell_{\rm peak}(\lambda)/\ell_A$ so the numbers land beside
-**1.00** (undriven) and **0.757** (matched CAMB, $206/272.177$). $\ell_A$ is
-carried in the output so a later reader cannot mistake the background.
+**1.00** (undriven) and **0.772** (matched CAMB, $206/266.750$). $\ell_A$ is
+carried in the output so a later reader cannot mistake the background. **Was
+$0.757$ at $\ell_A=272.177$ until T-181** --- the recombination repair of
+2026-10-21 moved the bundle's acoustic scale and the target moved with it;
+the verdict did not, and the constant carries the reasoning.
 
   flat in BOTH kappa'' runs      the channel is DEAD. The defect is upstream
                                  of Phi'; A-3 cannot fix it however well
@@ -102,8 +105,27 @@ ELLS = np.unique(np.concatenate([
 #: reader does not mistake it for F9's grid.
 K_MAX = 600.0
 
-#: Matched CAMB's own ratio, 206/272.177. Carried explicitly -- P1-T \S3.
-ELL_A = 272.177
+#: Matched CAMB's own ratio, 206/266.750. Carried explicitly -- P1-T \S3.
+#:
+#: **T-181: this was 272.177 and the number it came from was superseded on
+#: 2026-10-21.** `f887301` set `RECOMBINATION_H = "corrected"` and PLANCK's
+#: $\ell_A$ moved to 266.750 (D20's own `corrected` column, to four figures).
+#: The literal stayed. It is the bundle's $\ell_A$ that 206 is divided by ---
+#: CAMB supplies the 206 and nothing else here --- so when the bundle's
+#: acoustic scale moved, the target moved with it and the file did not.
+#:
+#: **The verdict does not move and saying so is the point.** D27 measured
+#: 0.0073 against a pre-registered [0.55, 0.80]; the target goes 0.757 ->
+#: 0.772 and the failure is a factor of ~100 either side of it. This is
+#: corrected because a stale number is a stale number, not because anything
+#: turns on it.
+#:
+#: **Raised to P1-T as `P1B->P1T #22`, and it is theirs:** carrying $\ell_A$
+#: explicitly is what makes the pre-registration mean something, and carrying
+#: it explicitly is also what let it go stale. Whether a gate normalises by a
+#: frozen scale or a live one is a pre-registration question. The value is
+#: P1-B's; the rule is not.
+ELL_A = 266.750
 TARGET = 206.0 / ELL_A
 
 FRAMES = ("newtonian", "cdm")

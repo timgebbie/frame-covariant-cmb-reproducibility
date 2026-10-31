@@ -15,7 +15,9 @@ property every repair this month has lacked."*
     REFERENCE POINTS, all already measured:
       released                 0.030   (spurious maximum at l = 8.10)
       kappa'' suppressed       0.635   (l = 172.75 +- 2.5)        T-121
-      matched CAMB             0.757   (206 / 272.177)
+      matched CAMB             0.772   (206 / 266.750)   T-181; was 0.757
+                                       at the pre-repair l_A, and [0.55,
+                                       0.80] contains both
 
     OUTCOMES, fixed in advance:
       in [0.55, 0.80] both frames   W1 succeeds on both gates
