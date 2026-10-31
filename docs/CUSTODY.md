@@ -34,27 +34,31 @@ findings it has become a third copy of something and should be cut back.
 |---|---|---|
 | **a text file under ~100 kB, with no generated dependent** | **the GitHub connector** | works from any session — no credential, no shell, no PI. Both repositories. **The ceiling is the model's context and it is not negotiable by trying harder** |
 | **several text files that must move together** — an edition bump's README line, `\date` and filename | **one commit**: `git push` from a clone, or `push_files` through the connector | one file per connector commit leaves the tree red between them, and a gate that reads two of them will say so |
-| **a text file *above* the ceiling** — `SUPPLEMENTARY-MATERIAL-v1.3.20.tex` is **384 099 B** | **the same route as a binary**: `git push` from a cloud clone | **For routing purposes an oversized text artefact is a binary.** P1-T's gap, raised 2026-10-30, and the resolution is theirs. **Splitting the supplement into `\input` fragments is not available** — see the requirement below |
+| **a text file *above* the ceiling** — `SUPPLEMENTARY-MATERIAL-v1.3.20.tex` is **384 099 B** | **the same route as a binary**: `git push` from a cloud clone | **For routing purposes an oversized text artefact is a binary.** P1-T's gap, raised 2026-10-30, and the resolution is theirs. **Splitting the supplement is not available** — see the requirement below |
 | **text that a script produces** — manifests, `docs/THEORY-AUDIT.md`, the grid register, test output | **clone in the cloud, run the generator there, land the result** — `git push` if your session can; the connector only if the output is under the ceiling | the cloud workspace has python with numpy/scipy/sympy, and `pdflatex`/`latexmk` |
 | **a binary, or any set containing one** — the supplement PDF, a figure | **`git push` from a cloud clone** | the connector carries text only, and context carries no binary at all. **P1-B's sessions do this routinely.** Rule 6 |
 | **anything in the private paper repository** | **the connector** for text under the ceiling; a clone needs push | branch `master`, not `main` |
 | **anything that needs the PI's terminal** | **it waits** | rules 5 and 8 |
 
-> ### The supplement is a single cohesive `.tex` file. PI requirement, 2026-10-31.
+> ### The supplement is a single coherent `.tex` file. PI requirement, 2026-10-31.
 >
 > *"The purpose of the document is to ensure a single cohesive .tex file. That
-> is a requirement."* It is a property of the document, not a consequence of
-> how it was built, and **it is not a judgement that a later session may
-> revisit.**
+> is a requirement."* **A separate `.bib` is allowed, and whether to have one
+> is P1-T's call.** The constraint is on the document body, not on the
+> bibliography.
 >
-> This is written here because the wrong fix is the obvious one. A session that
-> finds 384 kB of source against a 100 kB channel will reach for `\input`
-> fragments, and it will look like good engineering. **It is the channel's
-> problem, not the document's.** The route for an oversized text artefact is in
-> the table above and it works.
+> **The PI states there is a specific reason and has not recorded it here. That
+> is deliberate on this file's part: the reason is his, the requirement stands
+> without it, and a session that cannot see the reason does not get to weigh
+> it.** An unexplained requirement is exactly the kind a later session
+> optimises away in good faith.
 >
-> P1-T declined to propose the split on their own judgement before the
-> requirement was stated. That was the right call and it is now backed.
+> This matters because the wrong fix is the obvious one. A session that finds
+> 384 kB of source against a 100 kB channel will reach for `\input` fragments
+> and it will look like good engineering. **It is the channel's problem, not
+> the document's.** The route for an oversized text artefact is in the table
+> above and it works. P1-T declined to propose the split on their own judgement
+> before the requirement was stated; that was right, and it is now backed.
 
 ### The eight rules, each paid for
 
@@ -74,16 +78,31 @@ disk is not in the repository, and what is not in the repository cannot be
 read by the next session.** Committing there is different and is allowed; a
 commit is in git.
 
+> **What rule 2 cost, measured 2026-10-31, and it is Coordination's to carry.**
+> Five supplement editions landed between 26 and 28 October — v1.3.16, .17,
+> .18, .18+Implications, .19 — roughly one every twelve hours, **every one of
+> them authored `Tim Gebbie <tim.gebbie@gmail.com>`, which is a local commit
+> from the PI's machine.** That was P1-T's route: write into his working tree,
+> he commits and pushes. `device_bash` went unreachable on the 27th; rule 2
+> closed the tree on the 30th; and the replacement route named at the time
+> could carry neither 384 kB of `.tex` nor 1.6 MB of PDF.
+>
+> **Nothing has landed in `supplementary-materials/` since 28 October.** P1-T
+> did not become irregular. Its route was removed and nothing was put in its
+> place, which is a coordination failure and not a stream's.
+>
+> Rule 2 still stands — the route was bad and it stranded `conformity.py`. The
+> lesson is narrower and sharper: **closing a route obliges Coordination to
+> name the one that replaces it, and to check that the replacement can carry
+> what the old one carried.** It did not, for three days.
+
 > **The escape.** When no route available to the session can carry the
 > artefact, the artefact **waits in the stream's own session**, the **ask goes
 > to the custodian of the path**, and the policy is the thing that gets fixed.
-> P1-T took that escape on v1.3.20 — they showed the coupled set rather than
-> asserting it, and routed the five promotion steps to P1-B as `#18`. The disk
-> write itself stays outside this policy; the demonstration and the escalation
-> were right. **P1-B has offered to promote v1.3.20 from its own clone**
-> (`#20`), which is the correct resolution, needs nothing from the PI, and
-> **also disposes of the loose `.tex` and `.pdf`** P1-T could not clean up: a
-> promotion commits them, and the question is moot.
+> P1-T took that escape on v1.3.20 and routed the five promotion steps to P1-B
+> as `#18`. **P1-B has offered to promote it from its own clone** (`#20`),
+> which is the correct resolution, needs nothing from the PI, and **also
+> disposes of the loose `.tex` and `.pdf`** P1-T could not clean up.
 
 **3. `device_bash` leaves `.git` lock files it cannot delete.** Deletion in a
 connected folder is refused until the PI approves it, so `git` commands leave
@@ -231,6 +250,20 @@ P1-B is the bundle's custodian, and that stays true whichever session happens
 to hold a credential. A stream that finds itself able to push something it does
 not own should hand it to the owner, not land it.
 
+### The three author signatures, and they name the route
+
+| signature | what it means |
+|---|---|
+| `Tim Gebbie <tim.gebbie@gmail.com>` | a **local commit on the PI's machine**, pushed by him |
+| `Claude <noreply@anthropic.com>` | a **cloud clone pushing**, author and committer times usually differing |
+| `Tim <timgebbie@users.noreply.github.com>` | the **GitHub connector**, author and committer identical |
+
+Any commit's route is therefore readable from `git log` whatever its message
+says, which is how the three-day supplement gap under rule 2 was diagnosed.
+The `Route:` line is still required — it distinguishes `push_files` from a
+single connector write, and it states intent rather than mechanism — but the
+signature is the check on it.
+
 ### Branches, and they differ
 
 | repository | GitHub | visibility | branch |
@@ -248,9 +281,7 @@ trail behind the Zenodo DOI. arXiv versions are permanent.
 **Name the route in the commit message.** One line, first line of the body:
 `Route: connector` · `Route: push_files` · `Route: cloud clone, git push` ·
 `Route: device_bash, local commit`. It costs a line and makes adherence
-auditable from `git log` without asking anyone — and had it been in force a
-week ago, the ruling withdrawn under rule 6 could not have been written, because
-the route that was being called impossible was named in every commit using it.
+auditable from `git log` without asking anyone.
 
 Commits made through a shell name their files with a pathspec on the commit as
 well as the add — never `git add -A`. **But a pathspec on `git commit` commits
@@ -297,9 +328,9 @@ own author rather than advice to its readers.
 **Frozen, and no stream writes them.** `correction/` is closed — *public* there
 means already published on arXiv, which is why it is frozen, and it is
 unaffected by living in a private repository. `sources/` is read-only. Paper 1
-is frozen at both submission lines. **And the supplement is one `.tex` file by
-the PI's requirement of 2026-10-31** — its consolidation is not a build detail
-to be optimised away by whichever session next finds it inconvenient.
+is frozen at both submission lines. **And the supplement is a single coherent
+`.tex` by the PI's requirement of 2026-10-31** — a separate `.bib` is P1-T's
+call; the body is not to be fragmented.
 
 ## The handoff
 
@@ -314,8 +345,7 @@ to be optimised away by whichever session next finds it inconvenient.
 Coordination channel on 2026-10-30 used a single shared file with two writers
 and was replaced within the hour: concurrent writers are what lost
 `docs/STREAMS.md` two committed rows on 2026-10-03 and swept ~1,600 characters
-of P1-T prose into `6e51a458`, and reintroducing that in the file meant to
-prevent coordination failures was not a small irony.
+of P1-T prose into `6e51a458`.
 
 **A queue, not a register:** an item carries an identifier, a clock-sourced
 stamp, one line of what is asked and one line of what it unblocks, and **its
@@ -334,9 +364,7 @@ The handoff carries **the ask, never the finding**.
 missing.** It exists because P1-B held the measurement refuting a ruling on
 `main` and had no way to deliver it — the correction went through the PI, at
 volume, while the wrong text stood. P1-T's gap, closed in the landing table
-above, had to travel the same way for the same reason. Every plumbing
-correction had been routing through the PI, which is precisely what this policy
-exists to stop.
+above, travelled the same way for the same reason.
 
 **It is not synchronous, and it is not one-way either.** For an item its writer
 has marked **blocking**, that stream may **wake** the other — firing its working
