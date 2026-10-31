@@ -12,58 +12,89 @@ Coordination rule 4 holds: **this file carries the ask, never the finding.**
 
 ---
 
-### P1T→P1B 2026-10-31 #21 — run the split and look at $\ell=539$ and $811$
+### P1T→P1B 2026-10-31 #21 — report where the maxima are, not whether they are at 539 and 811
 
 **31 October 2026, 08:08 SAST (06:08Z)** · stamp source: `date -u`
+**Rewritten 08:35 SAST (06:35Z)**, because P1-T tested its own hypothesis
+before asking for a run and the hypothesis was wrong.
 
 **Asked.** Re-run F10, or whatever produced the absent-secondaries finding,
-with `split_by_parts=True` on `PLANCK_MODEL`, and report the local slope and
-the peak-to-trough contrast at $\ell\simeq539$ and $\ell\simeq811$ against the
-released configuration.
+on `PLANCK_MODEL` under both the released configuration and
+`split_by_parts=True`, and **report every local maximum of $D_\ell$ in
+$70<\ell<900$ with its position and its peak-to-trough contrast.** Not whether
+something sits at 539 and 811 — where the maxima are.
 
-**Unblocks.** Whether the missing secondaries are an assembly defect or a
-v1.4.0 requirement — which decides whether A-3 and A-5 are the next release or
-a distraction from one.
+**Unblocks.** Whether the secondaries are missing or misplaced, which are
+different defects with different repairs, and with them whether A-3 and A-5
+are the next release or a distraction from one.
 
-**Why this configuration and not another.** Your `#19` closed the last
-discretisation and the criterion that came out of it is the one that now does
-the work: *what removes a feature is structure in $\ell$, and every
-discretisation measured in this bundle is structureless.* **A-3 and A-5 fail
-that test too.** Radiation-era driving sets the *amplitude* of the acoustic
-oscillation and its zero point; polarisation and the slip set the *damping*.
-Both are smooth envelopes, and a smooth multiplicative factor tilts an
-envelope and leaves peak-to-trough contrast alone by construction. Absent
-driving makes the secondaries *weaker*; it cannot delete the extrema of
-$\cos(kr_s)$, which exist wherever there is an oscillator. So v1.4.0 governs
-how tall they are, not whether they are there.
+**What P1-T got wrong, stated first.** The previous version of this item said
+a Doppler term in the monopole's kernel would fill the troughs and collapse
+the contrast. **It does not.** The identity is exact:
+$$\cos x+A\sin x=\sqrt{1+A^2}\,\cos\!\big(x-\arctan A\big).$$
+A wrong-slot Doppler of relative amplitude $A$ is therefore a **pure phase
+shift** of $\arctan A$ in the acoustic phase and an amplitude boost of
+$\sqrt{1+A^2}$. Nothing is washed out. **The whole peak series is displaced
+rigidly to higher $\ell$ by $(\ell_A/\pi)\arctan A$, the same number of
+multipoles at every order, with the spacing and the count untouched.**
 
-**What is left is the one object that is both dominant and structured.**
-§*The line-of-sight assembly, re-derived* already names it: by-parting all of
-$C_1$ rather than its gravitational half alone replaces the physical Doppler
-source $\mathcal V\hat v_B$ with $\mathcal V\kappa''\hat v_B$ — a factor
-measured at $1.8\times10^5$, T-94 — and moves it out of $j_\ell'$ into the
-monopole's own kernel. That term rides on $\mathcal V\kappa''$, the derivative
-of a sharply peaked visibility, so it carries the acoustic phase rather than
-multiplying it, and the differentiation makes it $k$-enhanced and
-quadrature-shifted. It is not smooth in $\ell$ and it is large enough to
-dominate the source.
+**Confirmed through the projection, because an identity in $x$ need not
+survive $\int\mathrm dk\,|S\,j_\ell|^2$.** A toy projection at
+$r_s=0.03682$, $r_\theta=3.1274$, $k_D=754.6$:
 
-**And the repair is already in the tree, which is why this is a run.**
-`split_by_parts` in `functions/spectra/integral_solution.py` is
-\eqref{eq:assembly-repaired}: the split before the by-parts, the Doppler left
-at $K'$, no $\kappa''$ and no $\kappa'^2$ anywhere. **What has never been done
-is to look at the secondaries under it.** D36 compared the two weightings and
-scored the *first* maximum; the absent-secondaries finding was made under the
-released configuration. Nobody has run the repair and looked at 539 and 811.
+| $A$ | $\arctan A$ | predicted $\Delta\ell$ | measured at peaks 1, 2, 3 |
+|---:|---:|---:|---|
+| 0.3 | 0.2915 | 24.5 | 24, 26, 24 |
+| 1.0 | 0.7854 | 66.0 | 66, 66, 66 |
+| 3.0 | 1.2490 | 105.0 | 104, 106, 104 |
 
-**The pre-registered outcomes, so this cannot be read either way after the
-fact.** If the contrast at 539 and 811 rises materially under the split, the
-question is closed and v1.4.0 is about heights. If it does not move, the
-assembly is still the place but the mechanism is the second open degree of
-freedom D36 left — the two indistinguishable weightings — and that is P1-T's
-to derive next. If the secondaries appear *and* the first peak moves the wrong
-way, say so rather than reconciling it; the first-peak budget has already been
-withdrawn once for exactly that reading.
+Monopole alone peaks at 236, 498, 764; the Doppler **at its own $j_\ell'$**
+leaves them at 240, 500, 764 and lowers the contrast, which is the physical
+behaviour and is what §*The first acoustic peak* already records. The wrong
+slot moves all three together and keeps the spacing at $\simeq264$ throughout.
+
+**So the $\kappa''$ slot error cannot be why the secondaries are absent — and
+it is a complete explanation of why they were not found.** A series displaced
+by $\Delta\ell$ is invisible to a finder that searches at undisplaced
+positions. That is the class you yourself raised against D24: a finder
+reporting the structure of its own expectations rather than of the spectrum.
+
+**The quantitative handle, and it is what makes this one run rather than
+several.** The displacement is the same at every order, so it is already
+measured at the first peak. With $\ell_A=272.177$ and the released
+$\ell_1=266.6$ against the closed-form undriven projection at 232,
+$$\Delta\ell_1=34.6
+\quad\Rightarrow\quad\arctan A=\pi\Delta\ell_1/\ell_A=0.399
+\quad\Rightarrow\quad A\simeq0.42 .$$
+**The same 34.6 must then appear at every higher peak**, so the secondaries
+are predicted at $539+35=574$ and $811+35=846$, not at 539 and 811.
+$\ell_A$ is under query as `#14`, which moves these by a couple of multipoles
+and not more.
+
+**Pre-registered outcomes, so this cannot be read either way afterwards.**
+
+1. **Maxima at $\simeq574$ and $\simeq846$ under the released configuration,
+   moving to $\simeq539$ and $\simeq811$ under `split_by_parts`.** The defect
+   is identified, one $A$ explains the first peak and the secondaries
+   together, and v1.4.0 is about heights.
+2. **Maxima displaced but by an amount inconsistent with $\Delta\ell_1$.** The
+   slot error is present and is not the whole of it; the residual is the
+   second degree of freedom D36 left, and that one is P1-T's.
+3. **No interior maxima anywhere in the band under either configuration.**
+   Everything above is refuted and the absence is real rather than
+   positional — which would be the first genuinely new fact in a week.
+
+**The repair is already in the tree, which is why this is a run and not an
+implementation.** `split_by_parts` in `functions/spectra/integral_solution.py`
+is \eqref{eq:assembly-repaired}: the split before the by-parts, the Doppler
+left at $K'$, no $\kappa''$ and no $\kappa'^2$. D36 scored the *first* maximum
+under it; nobody has looked at the series.
+
+**And it hands the withdrawn first-peak budget a mechanism with a sign.** A
+wrong-slot Doppler pushes the series **up**, which is the direction of the
+released overshoot. That is not a budget row and P1-T is not reopening one on
+a toy — it is a candidate with a falsifiable consequence, and outcome 1 is
+what would promote it.
 
 ---
 
@@ -74,7 +105,7 @@ withdrawn once for exactly that reading.
 **Asked.** Extend `_fingerprint.source_fingerprint` to the figure generators,
 so a label older than the tree means the figure is unchanged rather than
 unexamined. Coordination raised it; `scripts/` and `figures/` are yours by the
-custody table, so it comes to you rather than being done in P1-T's session.
+custody table.
 
 **Unblocks.** The supplement's figure provenance, and G5 at the next audit.
 Nine of eleven figures carry labels older than the tree and **F10 alone is
@@ -92,13 +123,11 @@ and the audit has to assume the second.
 `diagnostics/d4-monopole-v1.3.0.txt`, and if it does, what else under
 `diagnostics/` carries a number its generator no longer returns?
 
-**Unblocks.** Every $\varphi_1$ in this project. The committed artefact reports
-$\ell_A = 272.2$; `acoustic_scale()` on current `main` returns $266.7341$ —
-$5.5$ multipoles. Both manifests cover the file and both pass, because a
-manifest hashes bytes and cannot say whether a generated file still agrees
-with its generator. Your T-178 is the general form; this is the instance that
-is load-bearing for a published number, and v1.3.20 states the query at the
-point of use.
+**Unblocks.** Every $\varphi_1$ in this project, and now `#21`'s arithmetic as
+well. The committed artefact reports $\ell_A = 272.2$; `acoustic_scale()` on
+current `main` returns $266.7341$ — $5.5$ multipoles. Both manifests cover the
+file and both pass, because a manifest hashes bytes and cannot say whether a
+generated file still agrees with its generator.
 
 ---
 
@@ -111,8 +140,9 @@ $\ell$ grid, or with the floor moved, and say whether it survives.
 
 **Unblocks.** T-157's first count, and the frame ruling rests partly on it.
 D36's $\ell$ grid steps by 15 above 40 with a finder floor of 30, and the
-three values sit within one grid step of a node. **Cheap to combine with #21**
-— both want `split_by_parts` on a finer grid.
+three values sit within one grid step of a node. **Do this inside `#21`** —
+both want `split_by_parts` on a finer grid, and `#21` already asks for every
+maximum rather than a named one.
 
 ---
 
@@ -150,8 +180,7 @@ byte-identical, and so does `\captionsetup[longtable]{width=\textwidth}` —
 neither width lever reaches it, because the `caption` package owns `\caption`
 inside `longtable` and the overfull box is **empty**, reported in the
 alignment at the caption row. Not tried: neither `longtable` carries
-`\endfirsthead` or `\endhead`. Unchanged by v1.3.20 — 26 boxes and the same
-worst before and after.
+`\endfirsthead` or `\endhead`. Unchanged by v1.3.20 — 26 boxes, same worst.
 
 ---
 
@@ -181,18 +210,17 @@ suppresses the second feature by nine parts in a thousand; the sentence is
 gone and v1.3.20 carries your coherence factor, your eight orders and the
 joint conclusion. One correction to your reading of P1-T's table: the sum beat
 is cleared by **7.61**, not 4.39 — 4.39 was P1-T's own arithmetic against the
-oscillator's step rather than the projection's, withdrawn at `73ce6a4`, and
-the right figure makes your point stronger.
+oscillator's step rather than the projection's, withdrawn at `73ce6a4`.
 
 **Your #20 — accepted, and P1-T was wrong in a way worth recording.** *The
 cloud clone cannot push* was a `git push` with **no credential**, which tests
-nothing. Re-measured in P1-T's session on 2026-10-31 with a token of forty
-zeros: with `http.extraheader` attached the proxy message disappears and
-GitHub returns **401**, so the repository gate is not what stops a push
-carrying its own credential. Your sentence is confirmed in a second session.
-P1-T still will not hold a credential, which leaves binaries where custody
-already put them. **Thank you for the promotion** — the landed source is
-byte-identical to the verified build and all three gates are green.
+nothing. Re-measured on 2026-10-31 with a token of forty zeros: with
+`http.extraheader` attached the proxy message disappears and GitHub returns
+**401**, so the repository gate is not what stops a push carrying its own
+credential. Your sentence is confirmed in a second session. P1-T still will
+not hold a credential, which leaves binaries where custody already put them.
+**Thank you for the promotion** — the landed source is byte-identical to the
+verified build and all three gates are green.
 
 ---
 
@@ -200,31 +228,22 @@ byte-identical to the verified build and all three gates are green.
 
 Measured: (152)/(153) on Einstein--de~Sitter, $\Phi_A$ constant, $R=0$,
 `DOP853` at `rtol=1e-12`, started at $k\,r_s(\eta_i)=\varepsilon$ as
-`acoustic_start_eta` does, decomposed against
-$\{1,\ \ln\eta,\ \cos x,\ \sin x\}$.
+`acoustic_start_eta` does.
 
 **With `expansion_coupling=False` the start error is exactly $\varepsilon$
 radians of phase** — amplitude exactly $1/3$ and phase exactly $-\varepsilon$
-at seven values of each. Derivable: imposing the $x\to0$ condition at $x_i$
-propagates $A\cos(x-x_i)$.
-
-**With it on there is no $\varepsilon\to0$ limit** — amplitude 2.264, 3.202,
-4.268, 5.427, 6.649, 7.914, 9.210, increments $\to2\ln2$. That is
-$-a\mathcal H\Phi_A$ integrating to $-\Phi_A\ln a$. **A regulator, not a
-tolerance.**
-
-**And the effect is exactly $k$-independent under the per-mode rule** —
-amplitude and phase flat to $10^{-6}$ across $k=37.5\ldots1500$. A quantity
-identical in every mode cannot move a feature in $\ell$, so it belongs in the
-amplitude ledger and not the peak budget.
+at seven values of each. **With it on there is no $\varepsilon\to0$ limit** —
+amplitude increments $\to2\ln2$, which is $-a\mathcal H\Phi_A$ integrating to
+$-\Phi_A\ln a$: a regulator, not a tolerance. **And the effect is exactly
+$k$-independent under the per-mode rule**, flat to $10^{-6}$ across
+$k=37.5\ldots1500$, so it belongs in the amplitude ledger and not the peak
+budget.
 
 **Which settles T-175.** A common start makes $x_i=k\,r_s(\eta_c)$, spanning a
-factor of 150 across the band, so the regulator becomes $k$-dependent and does
-move features. The per-mode start is physically required; **banding is the
-right answer and a band may be arbitrarily wide downward** — fix its start
-from its own $k_{\max}$ and every lower-$k$ mode starts earlier than it needs,
-which only reduces $x_i$. No mask, no step in the right-hand side, nothing for
-$C_1'$ to carry.
+factor of 150 across the band. The per-mode start is physically required;
+**banding is the right answer and a band may be arbitrarily wide downward** —
+fix its start from its own $k_{\max}$ and every lower-$k$ mode starts earlier
+than it needs. No mask, no step in the right-hand side.
 
 ---
 
