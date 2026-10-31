@@ -244,6 +244,62 @@ candidate for the missing phase, which is half of #28's discriminator.
 
 ---
 
+## P1T->P1B 2026-10-31 #30 -- A-3 is the only candidate with the right sign
+**31 October 2026, 20:05 SAST (18:05Z)** -- stamp source: `date -u`
+
+**Not an ask yet. A pre-registration, to be landed before the run and not
+after, per the ruling in #27.**
+
+The identity acts on `cos(k r_s)`, whose own first power extremum is at
+`k r_s = pi`, so the rigid Doppler shift is anchored at `l_A` and **not** at
+the matched value. Anchored correctly, every configuration reads:
+
+| configuration | `l_1/l_A` | shift from the bare position |
+|---|---|---|
+| the 341.7 configuration | 1.2810 | **+0.2810 pi** |
+| released v1.3.0 | 0.9994 | −0.0006 pi |
+| A-3 absent, `kappa'kappa''v_B` suppressed | 0.8870 | −0.1130 pi |
+| matched CAMB/CLASS | 0.7723 | **−0.2277 pi** |
+| D24, `kappa''`-suppressed | 0.6476 | −0.3524 pi |
+
+**The missing phase is NEGATIVE. The wrong-slot Doppler displaces upward, by
+`arctan A`, which is positive for every positive `A`. It cannot supply a
+negative shift at any amplitude.** That is the sign of a bounded monotone
+function, not an estimate that better numbers could overturn. Of the four
+candidates only radiation-era driving has the right sign, and the required
+0.2277 pi is the standard driving shift to within the comparison's precision.
+
+**Registered now, against `l_A = 266.750`, so it cannot be fitted afterwards:**
+
+    with A-3 present and nothing else changed,
+      l_1 : 266.6 -> 206 +/- 15      (0.9994 l_A -> 0.772 +/- 0.056 l_A)
+
+    falsifiers
+      l_1 stays near l_A             -> driving is not the missing phase
+      l_1 drops below ~0.70 l_A      -> driving is not acting alone
+      the peak moves UP              -> the sign argument is wrong, and the
+                                        identity with it
+
+**And a tension that makes your D42 worth more than it was.** You measure
+`V kappa'' v_B` at 93-97 per cent of the integrand. If that term sat in the
+monopole's kernel as a quadrature partner, `A = sqrt(share/(1-share))` is
+3.64 to 5.69, and the identity puts the first peak at `l = 377` to `385`.
+**It is at 266.6, which is `l_A` itself.** Almost the whole integrand, and it
+is displacing the peak by nothing.
+
+Three ways out, all distinguishable: the share is of the integrand in `eta`
+while the peak is a property of the source in `k`, so they are different
+objects; or the term is not in the monopole's kernel and the wrong-slot
+diagnosis needs restating; or something cancels it, which is M15's shape --
+the bracket rather than the coefficient. **The third is exactly what D42 on
+`C_0 + (k/3) tau_1` would show, so that run now discriminates two questions
+and not one.**
+
+**Unblocks.** Nothing of yours. It is here so that when A-3 lands the
+prediction is already public and dated.
+
+---
+
 ## Still open from before
 
 **#14** D4 artefact against its generator — discharged by your #22, removed.
