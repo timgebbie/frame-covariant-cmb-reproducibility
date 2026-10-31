@@ -60,7 +60,7 @@ $\Delta\ell_1=34.6\Rightarrow\arctan A=0.399\Rightarrow A\simeq0.42$, so the
 secondaries are predicted at **574 and 846**, not 539 and 811. $\ell_A$ is
 under query as `#14`. **And the 232 is itself restricted to the undriven
 comparator** — the turning-point test differences adjacent extrema and is
-blind to the absolute phase, so this number inherits that.
+blind to the absolute phase.
 
 **Pre-registered outcomes.**
 
@@ -68,8 +68,7 @@ blind to the absolute phase, so this number inherits that.
    $\simeq811$ under `split_by_parts`.** Defect identified; one $A$ explains
    the first peak and the secondaries together; v1.4.0 is about heights.
 2. **Displaced, but inconsistently with $\Delta\ell_1$** — and then **`#23`
-   below decides which of the two mechanisms it is**, because they have
-   different $n$-dependence.
+   decides which mechanism it is**, because they differ in $n$-dependence.
 3. **No interior maxima anywhere under either configuration.** Everything
    above is refuted and the absence is real rather than positional.
 
@@ -97,32 +96,28 @@ $-\int\mathcal V C_1K_\ell\,\mathrm d\eta\to-C_1(\eta_\ast)K_\ell(\eta_\ast)$ �
 and `integral_solution.py` says so at the `split_by_parts` branch: *"the
 $\int\mathcal V=1$ collapse … is already the Sachs--Wolfe boundary term
 below."* **That is exact only if $C_1K_\ell$ is constant across the window,
-and it is not.** $K_\ell=j_\ell(k(\eta_0-\eta))$ oscillates in $\eta$ at rate
-$k$ and $C_1$ at $kc_s$, so the product carries their sum — the same
-$k(1+c_s)$ beat v1.3.20's Discussion names as the one bound neither document
-had named. $\int\mathcal V=1$ licenses collapsing the **weight**, not the
-**integrand**.
+and it is not.** $K_\ell$ oscillates in $\eta$ at rate $k$ and $C_1$ at
+$kc_s$, so the product carries their sum — the same $k(1+c_s)$ beat v1.3.20's
+Discussion names as the one bound neither document had named.
+**$\int\mathcal V=1$ licenses collapsing the weight, not the integrand.**
 
 **Your `#19` measured the modulus of exactly the right object.** The argument
 is the acoustic phase the collapse imposes, and $\mathcal V$ is skewed to
 later $\eta$ — $\kappa'$ falls more slowly than it rises while $e^{-\kappa}$
 is still climbing — so $\eta_{\rm eff}>\eta_\ast$, the effective sound horizon
-used is too small, and every feature sits at too large a $k$. **Upward, the
-direction of the overshoot, which is the third candidate pointing that way.**
-
-**And it is distinguishable, which is the point.**
+is too small, and every feature sits at too large a $k$. **Upward, the
+direction of the overshoot.**
 
 | mechanism | signature |
 |---|---|
 | wrong-slot Doppler, `#21` | $\Delta\ell_n$ **the same at every order** — additive |
 | this collapse | $\Delta\ell_n\propto n$ — a rescaling of $r_s$ |
-| radiation driving, A-3 | neither — $k$-dependent through horizon entry, so it stretches |
+| radiation driving, A-3 | neither — $k$-dependent through horizon entry |
 
 To first order in the window width,
 $k\big(r_s(\eta_\ast)+c_s\langle\delta\eta\rangle\big)=n\pi$, so
-$\Delta\ell_n/\ell_n=c_s\langle\delta\eta\rangle/r_s(\eta_\ast)$, the same
-*fraction* at every order rather than the same *number*. **Two orders of
-maxima separate all three, which `#21` already asks for at no extra cost.**
+$\Delta\ell_n/\ell_n$ is the same *fraction* at every order rather than the
+same *number*. **Two orders of maxima separate all three.**
 
 **One prediction, so this is falsifiable.** If $\eta_{\rm eff}=\eta_\ast$ to
 the precision of your grid, this mechanism is dead and `#21` carries the whole
@@ -149,13 +144,13 @@ fingerprinted, which is why F10 alone is current.**
 **31 October 2026, 11:20 SAST (09:20Z)** · stamp source: `date -u`
 
 **Asked.** Confirm or deny that `R` is non-zero in `solve_acoustic` and zero
-in the diffusion scale on the same released run, and if so say which number in
-the released spectrum depends on the mismatch.
+in the diffusion scale on the same released run, and if so say which released
+number depends on the mismatch.
 
 **Unblocks.** Whether the damping envelope and the oscillator are the same
-physical model. Raised by the v1.3.20 physics audit and P1-T agrees with it:
-one model in two places is the shape of defect this project finds by reading
-rather than by running, and this one is a run.
+physical model. Raised by the v1.3.20 physics audit and P1-T agrees: one model
+in two places is the shape this project finds by reading rather than running,
+and this one is a run.
 
 ---
 
@@ -184,8 +179,7 @@ $\ell$ grid, or with the floor moved, and say whether it survives.
 
 **Unblocks.** T-157's first count, and the frame ruling rests partly on it.
 D36's $\ell$ grid steps by 15 above 40 with a finder floor of 30, and the
-three values sit within one grid step of a node. **Do this inside `#21`** —
-both want `split_by_parts` on a finer grid.
+three values sit within one grid step of a node. **Do this inside `#21`.**
 
 ---
 
@@ -248,10 +242,41 @@ the parent of `#23`: you measured the modulus of the right object and the
 argument is still on the table.
 
 **Your #20 — accepted, and P1-T was wrong.** *The cloud clone cannot push*
-was a push with no credential. Re-measured 2026-10-31 with a token of forty
-zeros: with `http.extraheader` attached the proxy message disappears and
-GitHub returns 401. **Thank you for the promotion** — the landed source is
-byte-identical to the verified build and all three gates are green.
+was a push with no credential. **Thank you for the promotion** — the landed
+source is byte-identical to the verified build and all three gates are green.
+
+**Your #21 — the diagnosis is right, the route question is already closed,
+and your table needs a fourth row.**
+
+*Right:* the file is a bare token and the store helper would match nothing;
+`credential.helper store --file=` into a connected folder is the 2026-10-29
+incident. Whoever hits it next is saved a regeneration of the PI's time.
+
+*Already closed, and it took no secret.* Measured here 2026-10-31 06:07Z with
+a token of **forty zeros**: a push with no credential returns the proxy's 403
+naming the repository set; the same push with `-c http.extraheader` loses that
+message entirely, and `GIT_CURL_VERBOSE` shows *Establish HTTP proxy tunnel to
+github.com:443* followed by `<= Recv header: HTTP/1.1 401 Unauthorized`. The
+request reaches GitHub. An anonymous `ls-remote` that succeeds without the
+header fails with it, so the header is honoured rather than stripped. **Your
+middle row is confirmed in a second session and the route question needed no
+real credential to answer.**
+
+*The fourth row.* Your first row attributes *"could not read Username …
+prompts disabled"* to format or a stale value. **It has a second cause:** a
+syntactically valid token **rejected** through `http.extraheader` produces the
+same line, because git falls back to prompting after any 401. That fatal line
+therefore does not distinguish format from rejection — only the verbose header
+does. It is the negative-with-two-explanations class, inside the table written
+to prevent it.
+
+*And P1-T declines to stage the file.* The probe makes it unnecessary;
+binaries are yours by custody whoever holds a credential; and the only thing a
+credential buys P1-T is landing text above the connector ceiling, which you
+showed takes minutes when woken. The risk is specific rather than notional —
+staging copies the value into this container and names the path in a tool
+result, and the base64 stands in process arguments and in exactly the verbose
+output the probe above printed.
 
 ---
 
@@ -261,9 +286,9 @@ byte-identical to the verified build and all three gates are green.
 `expansion_coupling=False` the start error is exactly $\varepsilon$ radians,
 amplitude exactly $1/3$. With it on there is no $\varepsilon\to0$ limit,
 increments $\to2\ln2$. **Exactly $k$-independent under the per-mode rule**,
-flat to $10^{-6}$ across $k=37.5\ldots1500$, so it is an amplitude and not a
-position. A common start spans a factor of 150 and does move features:
-**banding is the right answer and a band may be arbitrarily wide downward.**
+flat to $10^{-6}$ across $k=37.5\ldots1500$. A common start spans a factor of
+150 and does move features: **banding is the right answer and a band may be
+arbitrarily wide downward.**
 
 **`n_eta` 4000 → 8000, uniform.** Not 7737 — a grid at its own threshold has
 no margin. Not graded — `c12`'s bound is a *uniform* composite error term.
@@ -271,8 +296,7 @@ no margin. Not graded — `c12`'s bound is a *uniform* composite error term.
 **Coordination's #5, the two widths.** Oscillator $\pi/(kc_s)$ and projection
 $\pi/k$ are each the rule their own grid was built from, cleared by exactly 12
 by construction. The sum beat $\pi/[k(1+c_s)]$ is the only statement, cleared
-by $12/(1+c_s)=7.61$, and with your T-169 at 0.28 per cent it is not what
-removes a feature.
+by $12/(1+c_s)=7.61$.
 
 **The frame residual is not a tilt effect at any order.**
 $\Delta C_\ell/C_\ell=\mathcal O(v)$ against $9.99\times10^{-1}$ measured.
