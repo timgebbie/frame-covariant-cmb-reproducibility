@@ -10,7 +10,7 @@ the full linear spectrum with the acoustic peaks and the Silk damping tail
 (F9), in both frames; the integral solution (102) carried with a generic
 4-velocity and specialised back; acceptance criterion 5b closed.
 
-Supplement: **v1.3.19** — `SUPPLEMENTARY-MATERIAL-v1.3.19.tex`. **This is a
+Supplement: **v1.3.20** — `SUPPLEMENTARY-MATERIAL-v1.3.20.tex`. **This is a
 separate version line from the one above and is declared separately on
 purpose.** The line above is the *computational* release; a supplement edition
 records a documentation gate and is **not** an assertion that the repository
@@ -33,9 +33,9 @@ University of Cape Town, 2026, **arXiv:astro-ph/9912072v4**
 
 The supplementary-materials document is included here:
 
-> [SUPPLEMENTARY-MATERIAL-v1.3.19.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.19.pdf)
+> [SUPPLEMENTARY-MATERIAL-v1.3.20.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.20.pdf)
 
-Its source is `SUPPLEMENTARY-MATERIAL-v1.3.19.tex`, **one consolidated file in
+Its source is `SUPPLEMENTARY-MATERIAL-v1.3.20.tex`, **one consolidated file in
 the repository root**, which builds with `pdflatex` alone: the prose carries no
 `\input`, the bibliography is inline, and the only external files are the
 generated assets in `tables/`, `tikz/` and `figures/`. The prose fragments that
@@ -904,7 +904,7 @@ are in `provenance/DECISIONS-v1.0.0.md`.
 | Item | Value |
 |---|---|
 | **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMBR lensing in the exact 1+3 covariant radiation hierarchy* — **Paper 1**, University of Cape Town. **arXiv:astro-ph/9912072v4**, [doi:10.48550/arXiv.astro-ph/9912072](https://doi.org/10.48550/arXiv.astro-ph/9912072). Submitted 2026-10-16. CC BY 4.0. **The version suffix is not optional** — the bare identifier has carried three documents: `v2` the legacy 1999 work, `v3` the correction, `v4` this paper |
-| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.3.19.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.19.pdf) |
+| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.3.20.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.20.pdf) |
 | **GitHub repository** | [timgebbie/frame-covariant-cmb-reproducibility](https://github.com/timgebbie/frame-covariant-cmb-reproducibility) |
 | **ZivaHub/Figshare DOI** | [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509) — **live**. The **concept** DOI: it always resolves to the latest version, so it is the one to cite |
 | **Associated antecedent** | Gebbie, T.; Dunsby, P. K. S.; Ellis, G. F. R. (2000). *1+3 covariant cosmic microwave background anisotropies II: the almost-Friedmann–Lemaître model*. Annals of Physics **282**, 321–394. [doi:10.1006/aphy.2000.6034](https://doi.org/10.1006/aphy.2000.6034) |

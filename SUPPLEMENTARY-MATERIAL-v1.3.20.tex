@@ -1,5 +1,30 @@
 % Computational supplement to the associated paper.
-% Build: latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.3.19.tex  (only after locked
+%
+% v1.3.20, 2026-10-30, P1-T.  Nine changes, all of them corrections or
+% insertions and none of them a compression.
+%   1  The loading ratio names its species and states that cold dark matter
+%      does not scatter.
+%   2  The harmonic-normalisation claim is withdrawn: alpha_l is DEFINED as
+%      (2l+1)/beta_l, so the cancellation is a substitution and the spectrum
+%      cannot adjudicate the convention.  Appendix F is what does.
+%   3  The scattering expansion gains operator ordering, and the result that
+%      its dropped term equals its own first-order term at eta_*, because
+%      D t_c = +1 there exactly.
+%   4  Section 15's premise is order-counted.  A tilt leaves l>=2 invariant at
+%      first order, so a frame residual is at most O(v); 9.99e-1 is measured.
+%   5  The almost-EGS section gains its hypotheses, read off the rank-two row
+%      of the hierarchy already printed here rather than cited.
+%   6  A new section on source-distance lensing bias, in the PI's register.
+%   7  The first-peak budget is rebuilt.  Its two-equal-halves reading rested
+%      on a configuration this document refutes 1300 lines later, on a step
+%      that is not a step of this bundle, and on a denominator its own
+%      generator no longer returns.  Every measured number is kept.
+%   8  The Discussion's sampling claim is corrected: the bound it named is the
+%      bound the grid was derived from, so it cannot bind.  Two tighter ones
+%      are named, with exact k-independent margins.
+%   9  Two voice defects inside P1-T's declared sections.
+%
+% Build: latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.3.20.tex  (only after locked
 % assets have passed hash checks). THIS FILE IS THE WHOLE DOCUMENT: the prose
 % carries no \input, and every former supplementary-materials/ fragment is
 % expanded inline between its own BEGIN/END provenance comments. The only
@@ -43,7 +68,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.3.19 --- 28 October 2026\\
+\date{Supplement v1.3.20 --- 30 October 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.3.0-dev}
 
 \begin{document}
@@ -612,6 +637,38 @@ equations subject to the corrections documented here;
 supplement. The scheduling rule is physical: an envelope correction is
 not advanced while the source assembly it depends on remains disputed.
 
+\paragraph{Source-resolved lensing is a stream and is not scheduled against a
+version.} It should be noted that CAMB and CLASS apply the standard CMB
+lensing transformation to the complete unlensed temperature spectrum using one
+CMB lensing-potential spectrum. This loses the source-distance information of
+late secondary temperature contributions. The numerical bias in specific
+observables remains to be measured. The transformation referred to is the
+published lensed-spectrum method \citep{LewisChallinor2006}; neither code's
+source has been read for this edition, and the statement is about that method
+rather than about an inspected implementation. The kernels are derived at
+\S\ref{sec:implications-kernel} and the assembly-order argument is
+\S\ref{sec:source-distance-lensing}. No version in the sequence above carries
+this work, and it is recorded here so that the line-of-sight assembly is not
+frozen in a form that discards the source distance before anyone has decided
+whether it is wanted.
+
+\paragraph{The order of operations is part of the result, and nothing here
+shows the residue is zero.} A possible and presently unquantified contribution
+to the Hubble tension is that standard low- and high-redshift inference
+pipelines may not preserve the complete observer-defined observable, because a
+physical frame is fixed before free streaming, source projection, lensing and
+higher-order mode coupling have been completed. Four operations are involved
+--- frame specialisation, perturbative truncation, source integration and
+propagation --- and nothing in this document establishes that they commute.
+Where they do not, the order in which a pipeline performs them is part of what
+it reports, and two pipelines agreeing on every parameter can still disagree
+on the observable. The paragraph above is one instance: collapsing the source
+integral before the lensing operation is applied destroys a distinction the
+lensing would otherwise have acted on. No estimate of the residue is offered
+here and none is implied. What is claimed is that the residue is not known to
+be zero, and that a calculation carried along a single physical threading,
+with the order of operations declared, is what would settle it.
+
 \paragraph{The Lean certification is a separate repository and is not yet
 public.}
 The machine-checked certification of Paper~1 is being prepared at
@@ -1119,8 +1176,8 @@ The computed solution is not exact: the scattering-time expansion,
 A-3's static transfer, A-5's collision term and the diffusion treatment
 are separately qualified in \S\ref{sec:open-questions}.
 
-\paragraph{The sources are gauge-invariant, and for a reason worth stating
-once.} $\mathcal B_0$, $\mathcal B_a$ and $\mathcal B_{ab}$ all vanish in the
+\paragraph{The sources are gauge-invariant because they vanish in the
+background.} $\mathcal B_0$, $\mathcal B_a$ and $\mathcal B_{ab}$ all vanish in the
 background, so by Stewart--Walker they are gauge-invariant at first
 order --- which is the paper's own \emph{``note that these are CGI with
 respect to $u^a$''}. Gauge-invariance here is a consequence of the
@@ -1418,6 +1475,7 @@ a gate; the $\ell=1$ and $\ell=2$ rows are controls because they come out at
 unity without adjustment.
 
 \section{Frames and specialisation}
+\label{sec:frames-specialisation}
 
 \paragraph{``Frame'' is being asked to do two jobs, and they are different
 objects.} The word is used in this literature for something specified at a
@@ -1691,9 +1749,9 @@ comparison that is closer than it should be is the kind this bundle has already
 been wrong about once.
 
 \paragraph{For readers coming from the metric approach: a frame is not a gauge.}
-This is the distinction most easily lost in translation, and it is worth stating
-plainly because the two freedoms are often fixed together in a metric-based
-treatment and so look like one freedom.
+This is the distinction most easily lost in translation, because a
+metric-based treatment usually fixes the two freedoms together and they then
+look like one freedom.
 
 \begin{itemize}\itemsep2pt
   \item A gauge is a choice of coordinates --- equivalently a choice of
@@ -1853,7 +1911,14 @@ its phase remains unverified.}
   \dot{\delta T} &\simeq -H\Phi_A-\dot\Phi_H+\frac ka\frac{\tau_1}{3},
                \tag{153}\label{eq:153}
 \end{align}
-with $R=3\rho_M/4\rho_R$ and $c_s^2=\tfrac13(1+R)^{-1}$. The third, (154), is
+with $R=3\rho_M/4\rho_R$ and $c_s^2=\tfrac13(1+R)^{-1}$. \emph{Annals~II}'s
+$\rho_M$ and $\rho_R$ are the tightly coupled baryons and the photons, not all
+non-relativistic matter and all radiation. Cold dark matter does not scatter
+and carries no inertia in the acoustic fluid, so reading $\rho_M$ as the total
+matter density would change $c_s^2$ and the drag coefficient at every epoch.
+The implementation uses the species the physics selects:
+\texttt{functions/spectra/acoustic.py} forms $R=3\rho_b/4\rho_\gamma$ from
+$\omega_bh^2$ and $\omega_\gamma h^2$, scaling as $a$. The third, (154), is
 the single second-order oscillator in $\delta T$, and the paper obtains it from
 the pair by \emph{``ignoring the expansion coupled term (i.e.\ the small scale
 approximation)''}.
@@ -2168,7 +2233,7 @@ it. \emph{This row is a demonstration and its configuration is stated so that
 it can be re-run; it is not a gate and nothing is scored against it.}
 
 % ===========================================================================
-\subsection{The budget, and it comes out in two equal halves}
+\subsection{The budget is a total, and the split inside it does not survive}
 
 Against $\ell_A=272.177$ for \texttt{PLANCK\_MODEL}, four configurations
 measured in this bundle:
@@ -2179,54 +2244,98 @@ measured in this bundle:
 \textbf{configuration} & $\ell_1$ & $\ell_1/\ell_A$ & $\varphi_1$ \\
 \midrule
 released v1.3.0 & $266.6$ & $0.9795$ & $+0.0205$ \\
-artefact suppressed, undriven & $236.6$ & $0.8693$ & $+0.1307$ \\
-matched CAMB/CLASS, $N_{\rm eff}=0$ & $206.0$ & $0.7569$ & $+0.2431$ \\
+$\kappa'\kappa''\hat v_B$ suppressed, A-3 absent & $236.6$ & $0.8693$ &
+  $+0.1307$ \\
+matched CAMB/CLASS, $N_{\rm eff}=0$ \emph{(external)} & $206.0$ & $0.7569$ &
+  $+0.2431$ \\
 \textbf{D24}, $\kappa''$-suppressed & $172.75$ & $0.6347$ & $+0.3653$ \\
 \bottomrule
 \end{tabularx}
 \end{center}
 
 \noindent
-\textbf{The matched comparator is the analytic first peak}, $\varphi_1=0.243$.
-It is not an arbitrary target and it is not a fit: it is where the standard
-treatment puts the peak in this bundle's own cosmology, with $N_{\rm eff}=0$
-carried on both sides.
+Every entry is a measurement and every entry stands. Three things have to be
+said before a difference between two of them is read as a physical
+displacement, and together they withdraw the reading this subsection carried
+in editions before v1.3.20.
 
-And the displacement splits into two pieces of the same size:
+\paragraph{The denominator is under query and the $\ell_1$ column is not.}
+$\ell_A=272.177$ is the committed value in
+\texttt{diagnostics/d4-monopole-v1.3.0.txt}. Calling that artefact's own
+generator on current \texttt{main} returns $266.734$, with $r_\theta$ moving
+from $3.128965$ to $3.127382$: a difference of $5.5$ multipoles, or $2.0\%$.
+Both manifests cover the file and both pass, which is the point rather than a
+mitigation, since a manifest hashes bytes and cannot say whether a generated
+file still agrees with its generator. The question is open with the
+implementation stream and is not settled here. Every $\varphi_1$ and every
+ratio in this subsection divides by $272.177$ and is to be read with that
+attached; the $\ell_1$ column does not depend on it.
 
-\begin{center}\small
-\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}X c r@{}}
-\toprule
-\textbf{step} & $\ell_1$ & $\Delta\varphi_1$ \\
-\midrule
-remove the $\kappa'\kappa''\hat v_B$ artefact & $266.6\to236.6$ & $+0.1102$ \\
-supply the radiation-era driving & $236.6\to206.0$ & $+0.1124$ \\
-\midrule
-\textbf{total} & $266.6\to206.0$ & $\mathbf{+0.2226}$ \\
-\bottomrule
-\end{tabularx}
-\end{center}
+\paragraph{The second row is the configuration that fails the frame test by a
+factor of three.} It is the same configuration \S\ref{sec:frame-discrepancy}
+examines under \texttt{slot\_weight\_split} with the two boundary controls,
+where it puts the CDM peak at $0.869\,\ell_A$ and the Newtonian peak at
+$0.277\,\ell_A$. Those two threadings have equal multipoles at every
+$\ell\ge2$ to first order in $v$, so a configuration separating them by $3.1$
+has not produced a peak position: it has produced two, and the section that
+measures this says of it that it is not a repair and that nothing following it
+is a result. A number with that provenance cannot be the midpoint of a budget,
+because the budget's arithmetic requires it to be a single frame-independent
+$\ell_1$.
 
-\noindent
-\textbf{The two halves agree to $2.0\%$ of their mean, and neither was tuned.}
+\paragraph{The step from the second row to the third is not a measurement of
+driving.} The third row is the external comparator, as its label says, and
+A-3 is not wired into \texttt{solve\_acoustic} --- stated in this section
+below and unchanged at v1.3.20. No configuration of this bundle with the
+radiation-era driving supplied has been run, so the interval $236.6\to206.0$
+is not a displacement this bundle produced. It is the residual between a
+configuration of this bundle and a spectrum from another code, and naming it
+\emph{the driving} assigns the whole of that residual to one named absentee
+with nothing excluding the others. \S\ref{sec:frame-discrepancy} states the
+general form of that objection against this very number, and it applies to
+the budget as much as to the agreement it was raised about.
 
-\paragraph{And the undriven row is confirmed independently.} The projection
-demonstration above, run at this bundle's own $k_D$ with nothing fitted,
-predicts the undriven monopole peaks at $\ell_1=232$. \textbf{The bundle's
-artefact-suppressed configuration measured $236.6$} --- agreement to
-$\mathbf{1.9\%}$, untuned, between a closed-form projection and a released
-run. That is what licenses reading the middle row as \emph{undriven} rather
-than as \emph{a different wrong answer}.
+\paragraph{The four rows support a total and do not support a decomposition
+of it.} The released configuration sits
+$60.6$ multipoles above the matched comparator, $\varphi_1=+0.2226$ against
+$+0.0205$, and that total is a comparison between two endpoints that are each
+what they claim to be. Its decomposition is not established. The two
+differences $+0.1102$ and $+0.1124$ are arithmetic on the column above and
+remain arithmetic; their near-equality is a property of where the middle row
+happens to fall and is not evidence that two mechanisms of equal size are at
+work, because the middle row is not a peak position and the second difference
+is not a mechanism. Editions before v1.3.20 read the near-equality as a
+finding and said the two halves agree to $2.0\%$ of their mean with neither
+tuned. That reading is withdrawn here. The arithmetic was never in question
+and is unchanged.
+
+\paragraph{The closed-form projection stands, and what it corroborated does
+not.} The demonstration above, run at this bundle's own $k_D$ with nothing
+fitted, puts an undriven monopole's first peak at $\ell_1=232$, which is
+$0.852\,\ell_A$. That is a calculation and not a run, so nothing withdrawn
+above touches it. What it was previously said to confirm --- the second row's
+$236.6$, to $1.9\%$ --- is a number this subsection no longer reads as a peak
+position, so the corroboration is withdrawn with it. What survives is the
+comparison that does not need the middle row: the released configuration sits
+at $0.980\,\ell_A$ against the $0.852\,\ell_A$ a projection alone supplies, so
+the released peak is some $15\%$ further out than an undriven monopole
+projects, and that distance is what an account of the first peak has to
+produce. The present document does not produce it.
 
 % ===========================================================================
 \subsection{What this closes, and it closes two things}
 
-\paragraph{The peak is not displaced by one mechanism. It is undriven, and it
-is then displaced further by an artefact, and the two are equal.} Both push
-$\ell_1$ \emph{up}. Being undriven costs $0.112$; the artefact costs $0.110$.
-\emph{Any repair that addresses one and reports the peak will appear to
-overshoot or undershoot by half the distance}, which is what the two candidate
-configurations above do on opposite sides.
+\paragraph{The peak's displacement is not decomposed, and the document should
+not be read as decomposing it.} Removing the $\kappa'\kappa''\hat v_B$
+artefact moves $\ell_1$ down and the released configuration sits above the
+matched comparator, so the artefact is one contribution and its sign is
+settled. Its size is not separable from the rest by the rows above, for the
+three reasons just given, and no second contribution of comparable size has
+been measured in this bundle at all. Editions before v1.3.20 stated that the
+displacement came in two equal parts and that a repair addressing one of them
+would overshoot or undershoot by half the distance. That statement is
+withdrawn: it required the middle row to be a peak position and the interval
+above it to be a mechanism, and neither holds.
 
 \paragraph{The $j_\ell'$ slot is not a peak repair, and that is now settled.}
 Restoring the Doppler term at its own kernel --- discrepancy B-17~(iv),
@@ -2267,8 +2376,15 @@ at all.
 
 \paragraph{The test, stated before it is run.} Suppress the artefact and wire
 A-3 together. \textbf{The first peak must land at $206\pm6$} --- that is
-$\varphi_1=0.243$ --- on \texttt{PLANCK\_MODEL}. Either alone must land near
-$236.6$, from opposite sides. \emph{And on Einstein--de~Sitter, where
+$\varphi_1=0.243$ --- on \texttt{PLANCK\_MODEL}, and the CDM and Newtonian
+peaks must land there together, which the artefact-suppressed configuration on
+its own does not do. Editions before v1.3.20 added that either change alone
+must land near $236.6$ from opposite sides. That prediction is withdrawn on
+both halves. The two changes were never measured apart, so additivity in
+$\varphi_1$ is an assumption rather than a result; and both one-change
+configurations are reached by moving down from the released $266.6$, so
+neither approaches the midpoint from below and there are no opposite sides for
+them to approach from. \emph{And on Einstein--de~Sitter, where
 $\Omega_r=0$ by construction and A-3 cannot act at all, the peak must stay at
 the undriven position and must not move when A-3 is enabled.} That null
 control is what distinguishes a driving mechanism from a fit.
@@ -2744,9 +2860,12 @@ identity be truncated in a way that discards its largest term.
 \eqref{eq:assembly-repaired} is the transport assembly; the radiation-era
 driving enters the \emph{boundary value} $(\delta\tilde T+\Phi_A)(\eta_*)$
 through the oscillator's forcing, which is approximation \textbf{A-3} and is
-\S\ref{sec:first-peak}'s subject. The first-peak budget there puts the two
-contributions at $+0.1102$ and $+0.1124$ in $\varphi_1$ --- \textbf{equal to
-$2.0\%$}, and this section accounts for the first of them only.
+\S\ref{sec:first-peak}'s subject. The first-peak budget there carries a total
+of $+0.2226$ in $\varphi_1$ between the released configuration and the matched
+comparator, and this section accounts for the artefact alone. The two
+differences $+0.1102$ and $+0.1124$ that total comprises were read in earlier
+editions as two contributions of equal size; that reading is withdrawn at
+\S\ref{sec:first-peak} and no fraction of the total is claimed here.
 % === END source expansion: supplementary-materials/section-assembly-rederived-v1.3.15.tex ===
 
 % === BEGIN exact v1.3.0 source expansion: supplementary-materials/section-w-form-and-ell-zero-v1.4.0.tex ===
@@ -3695,10 +3814,47 @@ Newtonian frame, $\tilde\sigma_{ab}\simeq0$, and once in the CDM frame --- and
 the two must agree. They do not: the disagreement is total, median
 $9.99\times10^{-1}$ and worst $1.00$ over the released multipole set.
 
-Equation~\eqref{eq:gde37} is a theorem at linear order. It admits no
-tolerance and no background dependence, so a measured disagreement is a defect
-in the implemented specialisation and cannot be read as a limitation of the
-formalism. That is the premise of everything below.
+Equation~\eqref{eq:gde37} is a theorem at linear order, and the order is the
+whole of what it licenses. The multipoles are first order and $C_\ell$ is
+quadratic in them. A tilt leaves every $\ell\ge2$ multipole exactly invariant
+at first order and corrects it by the aberration relabelling at second,
+$\Delta\tau_{A_\ell}=\mathcal O(v\tau)$, so
+\begin{equation}
+  \Delta C_\ell \;\simeq\; 2\big\langle\tau\,\Delta\tau\big\rangle
+  \;=\; \mathcal O\big(v\,\tau^2\big),
+  \qquad
+  \frac{\Delta C_\ell}{C_\ell}\;=\;\mathcal O(v) .
+  \label{eq:frame-residual-order}
+\end{equation}
+The fractional residual a tilt may produce is first order in the tilt
+velocity. The measured residual is $9.99\times10^{-1}$ at the median. For that
+to be a tilt effect $v$ would have to be of order unity, which is two
+congruences in relative motion at the speed of light, so the disagreement is
+not a large violation of \eqref{eq:gde37}. It lies outside the expansion in
+which \eqref{eq:gde37} is stated, and two branches separated by more than any
+order of a tilt expansion permits are not related by a tilt.
+
+That moves the question from the formalism to the objects being compared.
+\eqref{eq:gde37} is invariance of $\tau_{A_\ell}$ under an infinitesimal change
+of congruence at a common direction label. What the bundle compares is raw
+multipoles from two numerical histories whose frame labels select different
+source constructions, with no direction map, no energy transformation and no
+common emission endpoint imposed between them. Those are different statements,
+and the footnote on this section's title says so. Until the common sky is
+defined the residual localises a mismatch between code paths rather than
+measuring a frame-invariant observable failing to be invariant, and the triage
+below is read in that light.
+
+A second measurement points the same way and does not depend on the order
+counting. Under the released weighting the Newtonian branch has no acoustic
+maximum on any background, and under the split it acquires one at
+$\ell\simeq68$ that moves by $0.40$\% between Einstein--de~Sitter and
+$\Lambda\mathrm{CDM}$ while the CDM-frame peak moves by $60.0$\%. A feature
+that does not track the acoustic scale is not an acoustic peak, so the two
+frames are not carrying the same object, and a fractional residual near unity
+follows from dividing one by the other. That measurement is recorded in
+\texttt{diagnostics/d36-frame-invariance-by-weighting.csv}; whether the
+$\ell\simeq68$ feature survives a finer multipole grid is not yet excluded.
 
 \subsection{Triage A --- sites the discrepancy cannot come from}
 Each row names the instrument and a grade. \textsc{theorem} is exact at linear
@@ -4495,11 +4651,20 @@ Appendix~F's free-streaming solution is bare in (\S\ref{sec:free-streaming}).
 \eqref{eq:187-188} reaches the same~1 by a different path through the same
 weights.
 
-That is worth more than tidiness. It means a $\beta_\ell$ or
-$\alpha_\ell$ slip cannot hide in the spectrum: to survive, it would have to
-survive a cancellation that is an identity. Both coefficients are therefore
-formed as exact rationals and compared as rationals out to $\ell=2000$, not as
-floating point.
+That is worth more than tidiness, and it does not establish what it was
+first taken to establish. $\alpha_\ell$ is \emph{defined} as
+$(2\ell+1)/\beta_\ell$, so the product is one for every $\beta_\ell\neq0$: the
+cancellation is a substitution and is insensitive to the value substituted. A
+wrong $\beta_\ell$ does not have to survive it. It passes through untouched,
+carried in both factors at once.
+
+What the identity does establish is that the observable is independent of the
+harmonic normalisation, which is what it must be --- and that independence is
+why the spectrum cannot adjudicate the convention. Appendix~F's free-streaming
+comparison tests it, and nothing internal to the spectrum can. The coefficients
+are formed as exact rationals and compared as rationals out to $\ell=2000$ for
+the separate reason T-17 gives below: a tautology in $\mathbb Q$ is a range
+failure in floating point.
 
 \paragraph{Finding T-17, and it is the cautionary one.} Written in the obvious
 order --- each factor converted to a double, then multiplied --- the identity
@@ -5153,6 +5318,33 @@ failing control, in \texttt{tests/test\_scattering\_expansion.py}. The closed
 form was derived from \eqref{eq:appc-recursion} and \emph{then} compared with
 the page, which is the only order in which the comparison carries information.
 
+\paragraph{The closed form holds the scattering time fixed along the path, and
+the antecedent's scheme is what fixes it.} The Neumann series of
+$(1+t_c\mathcal D)^{-1}$ runs in powers of the \emph{operator} $t_c\mathcal D$,
+and $(t_c\mathcal D)^2=t_c(\mathcal Dt_c)\mathcal D+t_c^2\mathcal D^2$.
+Iterating \eqref{eq:appc-recursion} directly returns
+$t_c(\mathcal Dt_c)\mathcal B$ and $t_c(\mathcal Dt_c)(\mathcal DV)$ at second
+order; neither appears in \eqref{eq:closed-form}, which carries scalar powers
+$t_c^m$ against operator powers $\mathcal D^m$. The term counts say whose
+omission it is. \eqref{eq:closed-form} holds $2^m+2^{m-1}$ terms and
+Appendix~C prints three at first order and six at second, which it could not do
+if the $\mathcal Dt_c$ terms were carried. The reconstruction is faithful to
+the page; the scheme on the page sets $\mathcal Dt_c=0$ without saying so.
+
+\paragraph{At the peak of the visibility the dropped term is the size of the
+term one order below it.} In conformal time $t_c=1/\kappa'$, so along the time
+direction $\mathcal Dt_c=-\kappa''/\kappa'^2$. The visibility
+$\mathcal V=\kappa'e^{-\kappa}$ is stationary where
+$\mathcal V'=(\kappa''+\kappa'^2)e^{-\kappa}$ vanishes, and $e^{-\kappa}$ never
+does, so the peak sits exactly at $\kappa''=-\kappa'^2$ --- measured to
+$7.4\times10^{-15}$ in \texttt{tests/frame/c12\_sampling\_bound.py}. There
+$\mathcal Dt_c=1$, and the dropped $t_c(\mathcal Dt_c)(\mathcal DV)$ is
+$t_c\mathcal DV$, which is the retained first-order term. The second-order
+remainder is the size of the first order at $\eta_\ast$, so the series is not
+asymptotic at the one epoch it is applied to. Two parameters control it and
+only one is small: $t_ck$ for the gradients, and $t_c\mathcal D\ln t_c$ for
+the time derivative, which is unity at the peak whatever $k$ is.
+
 \subsection{Two consequences the closed form makes immediate}
 
 \paragraph{The term counts are not chosen.} $\mathcal D^m$ expands into a sum
@@ -5718,8 +5910,8 @@ hierarchy is slaved, at ranks zero, one and two, and hands it to
 spectrum are therefore unrelated quantities, and extending one does not
 extend the other.
 
-\paragraph{The kernel slot carries physical content, and it is the quantity
-to get right.} A coefficient placed against \(j_\ell\), against
+\paragraph{A coefficient in the wrong kernel slot lands at the wrong angular
+scale.} A coefficient placed against \(j_\ell\), against
 \(j_\ell'\) or against \(j_\ell''\) enters the cascade at a different rank and
 produces a different angular dependence. \S\ref{sec:w-form} is an accounting
 of which coefficient belongs at which slot, and the \(\ell\)-leverage of the
@@ -5768,9 +5960,9 @@ the weights removes the late-time contribution entirely, because
 
 Metric-perturbation treatments commonly solve the tight-coupling problem and
 the free-streaming problem separately and join the two across recombination.
-\emph{The \(1+3\) covariant formulation never joins anything.} There is one
-hierarchy, valid at every epoch, and three regimes in which different terms
-dominate it.
+\emph{The \(1+3\) covariant formulation never joins anything.} One hierarchy
+holds at every epoch, and the three regimes differ only in which of its terms
+dominates.
 
 Figure~\ref{fig:history-flow} draws them along \(\eta\), together with the
 two weights. Its second, third and fourth panels are the three regimes below;
@@ -5817,16 +6009,106 @@ survives the deposit. An acoustic feature of order \(n\) requires the phase
 lost from the highest order downwards as that window broadens --- a statement
 about the transport, and one that holds whatever the oscillator does.
 
-\paragraph{Two widths bound how many acoustic features survive, and neither
-belongs to the oscillator.} The first is the deposit window itself, drawn in
+\paragraph{Two widths bound how many acoustic features survive, and neither of
+them can bind.} The first is the deposit window itself, drawn in
 Figure~\ref{fig:history-flow} and recorded there at \(\Delta\eta=0.00972\) in
 the code normalisation. The second is the resolution at which the transport is
-sampled: representing \(\cos(kr_s)\) faithfully requires a conformal-time step
-short against \(\pi/(kc_s)\), and the feature of order \(n\) sits at
-\(k\simeq nk_1\), so the sampling requirement tightens linearly in \(n\). Each
-bound removes features from the highest order downwards and leaves the first
-in place, so a spectrum carrying a primary feature and no secondaries is
-reporting one of the two rather than anything about the acoustic physics.
+sampled, and it is not one resolution. The oscillator is integrated mode by
+mode on a grid of its own, and the projection is integrated on the shared
+conformal grid: different integrands, different code, and no grid in common.
+Each carries its own rule and each rule is a sampling rate per period of the
+thing that grid resolves.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}X l l r@{}}
+\toprule
+\textbf{grid} & \textbf{what it resolves} & \textbf{bound} &
+  \textbf{cleared by} \\
+\midrule
+oscillator, per mode, \(24\) samples of \(2\pi\sqrt3/k\)
+  & \(\cos(kr_s)\) & \(\pi/(kc_s)\) & \(12\) \\
+projection, \texttt{ETA\_POINTS\_PER\_PERIOD}\(=12\) per zero
+  & \(j_\ell(k(\eta_0-\eta))\) & \(\pi/k\) & \(12\) \\
+\midrule
+projection, same grid & the \emph{product} & \(\pi/[k(1+c_s)]\) &
+  \(12/(1+c_s)\simeq7.61\) \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent
+The first two rows are the rules the two grids were built from, so each is
+cleared by exactly its own sampling rate at every \(k\), by construction and
+not by measurement. A quantity satisfied by construction cannot be what
+removes a feature, and naming either as a candidate is circular. Editions
+before v1.3.20 named the first of them.
+
+The third row is the one neither document names and the only one of the three
+that is a statement rather than a restatement. The projection integrand is a
+\emph{product} of the source and the kernel, so it carries their sum: the
+fastest component anywhere in it runs at \(k(1+c_s)\), not at \(k\), and the
+step that resolves it is \(\pi/[k(1+c_s)]\). The released grid clears that by
+\(7.61\) --- the tightest of the three margins and still not tight. All three
+are independent of \(k\), because each step is itself proportional to
+\(1/k\), and a floor on the sample count can only enlarge them. The order
+\(n\) of a feature therefore does not enter either grid: a feature at
+\(k\simeq nk_1\) is sampled exactly as well as the first.
+
+So neither sampling width removes a feature at any order the calculation
+reaches. Editions before v1.3.20 offered the window and the sampling as
+alternatives and closed on the window; the sampling is two things rather than
+one, and the window does not carry the conclusion either.
+
+\paragraph{The deposit window is measured and it suppresses the second feature
+by nine parts in a thousand.} The window's effect on a feature is its own
+Fourier weight at that feature's phase, which needs no assumption about
+whether \(\Delta\eta=0.00972\) is a width or a standard deviation:
+\begin{equation}
+  \mathcal C(k)=\frac{\big|\int\mathcal V(\eta)\,
+      e^{\,\mathrm ikr_s(\eta)}\,\mathrm d\eta\big|}
+     {\int\mathcal V(\eta)\,\mathrm d\eta},
+  \label{eq:deposit-coherence}
+\end{equation}
+with \(\mathcal C=1\) a delta-function deposit. Measured in the implementation
+stream on \texttt{PLANCK\_MODEL} with the released history, where
+\(r_s(\eta_\ast)=0.03682\) and \(k_1=\pi/r_s=85.3\):
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}X r r r r r r r r@{}}
+\toprule
+\textbf{feature order \(n\)} & 1 & 2 & 3 & 4 & 6 & 8 & 12 & 17 \\
+\midrule
+\(\mathcal C(k)\) & 0.998 & 0.991 & 0.980 & 0.965 & 0.926 & 0.877 & 0.773 &
+  0.673 \\
+suppression & \(0.2\%\) & \(0.9\%\) & \(2.0\%\) & \(3.5\%\) & \(7.4\%\) &
+  \(12.3\%\) & \(22.7\%\) & \(32.7\%\) \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent
+Even the seventeenth feature retains two thirds of its coherence. That is a
+narrow window behaving as a narrow window, and it is not a quantity that
+removes a feature.
+
+\paragraph{What removes a feature is structure in \(\ell\), and no
+discretisation measured here has any.} Five candidates have now been scored
+and all five are exonerated: the projection grid at 0.95 per cent and flat in
+\(\ell\); the oscillator grid at 0.28 per cent, rising with feature order
+exactly as the sampling argument predicts and topping out there; diffusion
+damping at 9 per cent at the second peak with \(k_D/k_1=6.5\); the
+recombination grid at 3.4 per cent by \(\ell=900\), the largest of the five,
+and smooth through \(\ell=539\) and \(811\) with no spike; and the deposit
+window above. Four were dismissed on magnitude and the fifth is the largest
+and is still not it, which says that magnitude was never the right test. A
+smooth multiplicative factor tilts an envelope and leaves the peak-to-trough
+ratio alone by construction, however large it grows, so a feature can only be
+removed by something carrying structure at that feature's position, and
+nothing measured in this bundle carries any. The absence of the secondaries is
+therefore
+a property of the assembly rather than of any grid, which is where
+\S\ref{sec:frame-discrepancy} leaves two weightings indistinguishable, and it
+is open.
 
 \section{Implications}
 \label{sec:implications}
@@ -5920,9 +6202,13 @@ by that same efficiency and integrated over \([0,\chi_s]\), it is
 \noindent
 So a secondary generated halfway to last scattering is over-weighted by
 \(50\%\) at the peak of its own efficiency and by a factor of two when the
-weighting is carried along the ray. \emph{The single-kernel statement is
-therefore conservative at the peak and understates the integrated effect by a
-further factor of two.}
+weighting is carried along the ray. The two figures are not independent, and
+their ratio is exact: writing \(x\equiv\chi_s/\chi_*\), the ray-integrated
+over-weighting \(3-2x\) exceeds the peak over-weighting \(2-x\) by
+\((3-2x)/(2-x)\), which is unity at \(x=1\), \(4/3\) at \(x=\tfrac12\), and
+rises to \(3/2\) as \(x\to0\). \emph{Quoting the peak ratio therefore
+understates the over-weighting, and understates it by no more than \(3/2\)
+however near the source lies.}
 
 \paragraph{This is a statement about the kernels and not about any
 solver.} \eqref{eq:kernel-ratio} follows from the two definitions and nothing
@@ -6040,8 +6326,8 @@ acceptance test. The supporting history is in}
 \end{tabularx}
 \end{center}
 
-\paragraph{Q16 cannot move a peak, and that is worth saying so it is not
-over-read.} What is frozen is the tight-coupling pair, which after decoupling
+\paragraph{Q16 freezes a pair that has nothing left to drive it, so it
+cannot move a peak.} What is frozen is the tight-coupling pair, which after decoupling
 has no scattering to drive it; the line-of-sight integral itself runs to
 $\eta_0$ on a grid whose density is set by the Bessel kernel's own period in
 $\eta$ and gated against aliasing --- finding T-3. A freeze that was
@@ -6114,6 +6400,101 @@ cannot supply without a translation. Applying them is therefore natural work for
 this formalism, and it is v2.0.0 work, because it is a calibration
 against data rather than an analytical reconstruction.
 
+% --------------------------------------------------------------------------
+% v1.3.20: the hypotheses, derived rather than cited.  Audit stage 4, C2.
+\subsection{The bounds require four objects, and three of them are derivatives}
+\label{sec:egs-hypotheses}
+
+The step from a bound on the multipoles to a bound on the geometry is one row
+of the hierarchy already printed at \eqref{eq:transport-exact}, and it can be
+written out. The rank-two gravitational source is $\mathcal B_2=\sigma_{ab}$,
+and $(\ell+1)/(2\ell+3)$ is $3/7$ at $\ell=2$, so that row rearranges to
+\begin{equation}
+  a\sigma_{ab}
+  =\dot\tau_{ab}
+  +\tfrac{3}{7}\mathrm D^c\tau_{abc}
+  -\mathrm D_{\langle a}\tau_{b\rangle}
+  +\kappa'\big(\tau_{ab}-\mathcal S_{ab}\big).
+  \label{eq:egs-shear-identity}
+\end{equation}
+Nothing is approximated between the printed row and
+\eqref{eq:egs-shear-identity}: the shear has been moved to the left and
+nothing else has been done. Whatever an almost-EGS argument is in general, in
+these variables it has to pass through this identity, and the hypotheses it
+needs can be read off it.
+
+\paragraph{A bound on the quadrupole alone does not bound the shear.} Four
+objects stand on the right of \eqref{eq:egs-shear-identity} and $\tau_{ab}$ is
+one of them. Of the other three, $\dot\tau_{ab}$ is a time derivative at the
+same rank, $\mathrm D^c\tau_{abc}$ is a spatial divergence one rank up, and
+$\mathrm D_{\langle a}\tau_{b\rangle}$ is a spatial gradient one rank down.
+What the argument needs is therefore a bound on a band of three consecutive
+ranks together with their first derivatives, and that is a different
+assumption from a bound on each multipole separately: a sequence can be
+uniformly small and have large derivatives. This document records no bound on
+any of the four, and \S\ref{sec:open-questions} is where that stands.
+
+\paragraph{The collision residual is largest where the quadrupole is made.}
+This release takes $\bar f_2=0$, so $\mathcal S_2=0$ by approximation A-5, and
+the final term of \eqref{eq:egs-shear-identity} is $\kappa'\tau_{ab}$ exactly.
+$\kappa'$ is not small near last scattering; it is the rate whose exponential
+integral defines the visibility, and \S\ref{sec:kappa-ledger} places the
+visibility maximum at $\kappa''=-\kappa'^2$. The one term carrying no
+derivative is therefore weighted by the largest rate in the problem over
+exactly the interval in which $\tau_{ab}$ is generated. A bound stated for the
+free-streaming era and a bound stated through recombination are different
+statements, and only the second has to carry $\kappa'\tau_{ab}$ where
+$\kappa'$ is at its largest.
+
+\paragraph{$\mathrm D_a$ is fixed by the threading, so these hypotheses are
+not threading-invariant.} Every spatial derivative in
+\eqref{eq:egs-shear-identity} is the projected derivative built from
+$h_{ab}=g_{ab}+u_au_b$, and $\tau_{A_\ell}$ is a PSTF tensor about the same
+$u^a$ by \eqref{eq:pstf-expansion}. Both are properties of a threading in the
+sense of \S\ref{sec:frames-specialisation} --- a smooth congruence over a
+region, not a unit vector at an event. Two threadings related by a tilt do not
+share $h_{ab}$, so they do not share $\mathrm D_a$, and the statement that the
+multipoles and their spatial gradients are small is indexed by the congruence
+it is made about. An almost-EGS cosmology is not specified until its threading
+is named. That is what makes the CDM and the Newtonian threadings two settings
+for one theorem rather than two descriptions of one setting, and
+\S\ref{sec:frame-discrepancy} is the measurement of how far apart they are.
+
+\paragraph{The identity inherits one uncertified placement of $a$, and that
+does not change which objects enter.} \eqref{eq:transport-exact} combines an
+overdot with $\kappa'$, and its factors of $a$ are held for audit rather than
+certified. \eqref{eq:egs-shear-identity} inherits that, and the inheritance is
+confined to the coefficients: rescaling a row multiplies its terms and can
+neither remove one nor introduce one. Which objects an almost-EGS argument
+must bound is settled by the identity as it stands. How large each
+contribution is is not, and waits on the same reconciliation.
+
+\paragraph{The exact hierarchy adds terms to this identity and removes none.}
+\eqref{eq:transport-exact} is the reduced transport equation. The exact
+brightness hierarchy of Paper~1, Eq.~(16) carries acceleration, shear and
+vorticity multiplying the anisotropy multipoles, and this row omits those
+products; restoring them puts further terms on the right of
+\eqref{eq:egs-shear-identity} beside the four already there. Four is therefore
+a floor on the number of objects to be bounded, and the three statements above
+are made in the direction that survives the restoration.
+
+\paragraph{The $H_0$ posteriors are where this would show, and the question is
+not posable until the threading is named.} In an explicitly defined almost-EGS
+cosmology --- one whose
+threading is named, whose anisotropy bound is stated with the derivative
+bounds \eqref{eq:egs-shear-identity} requires, and whose collision term is
+declared --- can a unified $1+3$ covariant treatment of collisionless matter
+beyond dust at low redshift and of source-resolved CMB propagation at high
+redshift produce a measurable shift or broadening of the corresponding $H_0$
+posteriors, once both are computed for the same observer congruence and the
+same observable endpoints? Nothing in this release answers it. It is recorded
+because the identity above is what would have to be evaluated to begin, and
+because the question is not well posed until the threading is named, which is
+the content of this subsection.
+
+% --------------------------------------------------------------------------
+\subsection{The table v2.0.0 fills}
+
 \begin{table}[h]
 \centering\footnotesize
 \caption{The structure v2.0.0 fills. No cell is computed at v1.0.0, and
@@ -6152,6 +6533,87 @@ direction and not a plan: it is gated on v1.5.0, and the correction's sign and
 size are unknown until it is done. It is recorded so the v2.0.0 table is built in
 a shape that can take it. See
 \texttt{provenance/ALMOST-EGS-BOUNDS-v1.md}.
+
+% --------------------------------------------------------------------------
+% v1.3.20, PI insertion.  PI register, not house style: connected prose, no
+% run-in heads, the equations carrying the argument.  The ratio is NOT
+% repeated here; it is derived at sec:implications-kernel and cited.
+\section{Source-Distance Lensing Biases of Secondary CMB Anisotropies}
+\label{sec:source-distance-lensing}
+
+Lensing of the microwave background is ordinarily applied as a single
+remapping of the observed sky, in which the entire unlensed temperature field
+is displaced by the gradient of one lensing potential, and that potential is
+the one appropriate to a source lying on the last-scattering surface
+\citep{LewisChallinor2006}. For the primary anisotropy the construction is
+exact up to the thickness of the visibility, because the primary is generated
+in a shell whose width is small against the distance to it. For anything
+generated after that shell it is not exact, and what is lost is not a small
+correction to the primary calculation but a quantity the primary calculation
+has no slot for. A secondary contribution arising at a comoving distance
+$\chi_s<\chi_*$ --- the late integrated Sachs--Wolfe effect, the Rees--Sciama
+term, the Doppler contribution from reionised gas --- can be deflected only by
+matter lying between the observer and its own source, so the potential that
+lenses it is
+\begin{equation}
+  \psi(\hat n;\chi_s)
+  =-2\int_0^{\chi_s}\!\mathrm d\chi
+    \left(\frac{1}{\chi}-\frac{1}{\chi_s}\right)
+    \Phi_{\rm L}\big(\chi\hat n,\eta_0-\chi\big),
+  \label{eq:psi-source-resolved}
+\end{equation}
+in which $\Phi_{\rm L}$ is the lensing source built from the combination
+$\Phi_A-\Phi_H$ shown frame-invariant in \S\ref{sec:frames-specialisation},
+and the source distance enters the upper limit and the kernel alike. The
+overall normalisation of $\Phi_{\rm L}$ is common to every potential written
+in this section and cancels from the comparison that follows, which is a
+statement about kernels and not about amplitudes.
+
+Writing the same expression with $\chi_*$ in place of $\chi_s$ and subtracting
+isolates exactly what a single-kernel treatment adds to a secondary, and the
+excess separates into two terms of different character:
+\begin{equation}
+  \psi(\hat n;\chi_*)-\psi(\hat n;\chi_s)
+  =-2\left(\frac{1}{\chi_s}-\frac{1}{\chi_*}\right)
+     \int_0^{\chi_s}\!\mathrm d\chi\,\Phi_{\rm L}
+   \;-\;2\int_{\chi_s}^{\chi_*}\!\mathrm d\chi
+     \left(\frac{1}{\chi}-\frac{1}{\chi_*}\right)\Phi_{\rm L}.
+  \label{eq:psi-single-kernel-excess}
+\end{equation}
+The first term re-weights the deflectors that do lie in front of the source,
+and it does so by an amount constant along the ray, the two kernels differing
+by $\chi_s^{-1}-\chi_*^{-1}$ at every $\chi$ in $(0,\chi_s)$. The second term
+is the whole contribution of an interval in which no deflector can lens this
+source at all, every point of it lying behind the source. Both excess kernels
+are positive throughout their ranges for every $\chi_s<\chi_*$, so a
+single-kernel treatment weights every deflector in front of a secondary more
+heavily than the correct kernel does and then adds a range of deflectors
+behind it; the departure has a definite direction and is not a scatter about
+the right answer. Its size is the ratio obtained in
+\S\ref{sec:implications-kernel}: carried along the ray it is $3-2\chi_s/\chi_*$,
+unity for a source at last scattering and rising to three in the limit of a
+source at the observer. Both terms vanish identically at $\chi_s=\chi_*$,
+which is why the acoustic peaks are untouched by any of this.
+
+What makes the bias structural rather than a defect of implementation is where
+the source distance is lost. A line-of-sight solution delivers the transfer
+function as one integral over conformal time against the radial kernel, and
+once that integral has been performed the contributions have been summed and
+the distance at which each was generated is not recoverable from the result.
+The spectrum handed to a lensing convolution is therefore already a sum over
+source distances, and a convolution applied to a sum cannot distinguish its
+terms; a single lensing-potential spectrum is then the only object the
+convolution can be given. Recovering what was lost requires the integrand
+partitioned by source distance before it is squared, together with a lensing
+operation carrying a potential spectrum, or a set of cross-spectra, for each
+partition. That is a rearrangement of the order in which the assembly is
+performed, not a correction applied at the end of it, and it is the same
+non-commutativity between source integration and propagation recorded in
+\S\ref{sec:future-situation}. The bearing is on observables in which a
+secondary and the lensing field are correlated deliberately --- integrated
+Sachs--Wolfe to lensing cross-power, and lensing tomography --- rather than on
+the primary spectrum. Nothing in this release measures the size of the effect
+in any such observable, and nothing in this release is arranged to.
 
 % PART III -- the qualification provisions. 2026-10-25.
 \clearpage
