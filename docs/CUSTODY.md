@@ -32,11 +32,11 @@ findings it has become a third copy of something and should be cut back.
 
 | what you are landing | route | notes |
 |---|---|---|
-| **a text file under ~100 kB, with no generated dependent** | **the GitHub connector** | works from any session — no credential, no shell, no PI. Both repositories. **The ceiling is the model's context and it is not negotiable by trying harder** |
-| **several text files that must move together** — an edition bump's README line, `\date` and filename | **one commit**: `git push` from a clone, or `push_files` through the connector | one file per connector commit leaves the tree red between them, and a gate that reads two of them will say so |
-| **a text file *above* the ceiling** — `SUPPLEMENTARY-MATERIAL-v1.3.20.tex` is **384 099 B** | **the same route as a binary**: `git push` from a cloud clone | **For routing purposes an oversized text artefact is a binary.** P1-T's gap, raised 2026-10-30, and the resolution is theirs. **Splitting the supplement is not available** — see the requirement below |
+| **a text file under ~100 kB, with no generated dependent** | **the GitHub connector** | works from any session — no credential, no shell, no PI. Both repositories. **The ceiling is the model's context and it is not negotiable by trying harder.** Fidelity through it is not a worry: 609 lines of python and 731 of digest landed this way on 2026-10-31 and verified byte-identical on a re-clone, twice |
+| **several text files that must move together** — an edition bump's README line, `\date` and filename | **one commit**: `git push` from a clone, or `push_files` through the connector | one file per connector commit leaves the tree red between them, and a gate that reads two of them will say so. **But see rule 9 before using `push_files` on a file another session may touch** |
+| **a text file *above* the ceiling** — a supplement source runs to ~384 kB | **the same route as a binary**: `git push` from a cloud clone | **For routing purposes an oversized text artefact is a binary.** P1-T's gap, raised 2026-10-30. **Splitting the supplement is not available** — see the requirement below |
 | **text that a script produces** — manifests, `docs/THEORY-AUDIT.md`, the grid register, test output | **clone in the cloud, run the generator there, land the result** — `git push` if your session can; the connector only if the output is under the ceiling | the cloud workspace has python with numpy/scipy/sympy, and `pdflatex`/`latexmk` |
-| **a binary, or any set containing one** — the supplement PDF, a figure | **`git push` from a cloud clone** | the connector carries text only, and context carries no binary at all. **P1-B's sessions do this routinely.** Rule 6 |
+| **a binary, or any set containing one** — the supplement PDF, a figure | **`git push` from a cloud clone** | the connector carries text only, and context carries no binary at all. Rule 6 |
 | **anything in the private paper repository** | **the connector** for text under the ceiling; a clone needs push | branch `master`, not `main` |
 | **anything that needs the PI's terminal** | **it waits** | rules 5 and 8 |
 
@@ -56,11 +56,9 @@ findings it has become a third copy of something and should be cut back.
 > This matters because the wrong fix is the obvious one. A session that finds
 > 384 kB of source against a 100 kB channel will reach for `\input` fragments
 > and it will look like good engineering. **It is the channel's problem, not
-> the document's.** The route for an oversized text artefact is in the table
-> above and it works. P1-T declined to propose the split on their own judgement
-> before the requirement was stated; that was right, and it is now backed.
+> the document's.**
 
-### The eight rules, each paid for
+### The nine rules, each paid for
 
 **1. A connector commit cannot run a script.** If it leaves a manifest or a
 generated document stale, **say so in the commit message** and raise it in the
@@ -79,30 +77,16 @@ read by the next session.** Committing there is different and is allowed; a
 commit is in git.
 
 > **What rule 2 cost, measured 2026-10-31, and it is Coordination's to carry.**
-> Five supplement editions landed between 26 and 28 October — v1.3.16, .17,
-> .18, .18+Implications, .19 — roughly one every twelve hours, **every one of
-> them authored `Tim Gebbie <tim.gebbie@gmail.com>`, which is a local commit
-> from the PI's machine.** That was P1-T's route: write into his working tree,
-> he commits and pushes. `device_bash` went unreachable on the 27th; rule 2
-> closed the tree on the 30th; and the replacement route named at the time
-> could carry neither 384 kB of `.tex` nor 1.6 MB of PDF.
+> Five supplement editions landed between 26 and 28 October — roughly one every
+> twelve hours, **every one authored `Tim Gebbie <tim.gebbie@gmail.com>`, which
+> is a local commit from the PI's machine.** That was P1-T's route. `device_bash`
+> went unreachable on the 27th; rule 2 closed the tree on the 30th; and the
+> replacement named at the time could carry neither 384 kB of `.tex` nor 1.6 MB
+> of PDF. Nothing landed in `supplementary-materials/` for three days. P1-T did
+> not become irregular — its route was removed and nothing was put in its place.
 >
-> **Nothing has landed in `supplementary-materials/` since 28 October.** P1-T
-> did not become irregular. Its route was removed and nothing was put in its
-> place, which is a coordination failure and not a stream's.
->
-> Rule 2 still stands — the route was bad and it stranded `conformity.py`. The
-> lesson is narrower and sharper: **closing a route obliges Coordination to
-> name the one that replaces it, and to check that the replacement can carry
-> what the old one carried.** It did not, for three days.
-
-> **The escape.** When no route available to the session can carry the
-> artefact, the artefact **waits in the stream's own session**, the **ask goes
-> to the custodian of the path**, and the policy is the thing that gets fixed.
-> P1-T took that escape on v1.3.20 and routed the five promotion steps to P1-B
-> as `#18`. **P1-B has offered to promote it from its own clone** (`#20`),
-> which is the correct resolution, needs nothing from the PI, and **also
-> disposes of the loose `.tex` and `.pdf`** P1-T could not clean up.
+> **Closing a route obliges Coordination to name the one that replaces it, and
+> to check that the replacement can carry what the old one carried.**
 
 **3. `device_bash` leaves `.git` lock files it cannot delete.** Deletion in a
 connected folder is refused until the PI approves it, so `git` commands leave
@@ -111,17 +95,16 @@ own included — fails with "File exists".** Sweep them in the same call:
 `for f in .git/*.lock; do [ -e "$f" ] && mv "$f" ".git/stale-$(basename $f)-$(date +%s)"; done`
 
 **4. `device_bash` cannot push.** The Linux VM has no access to Windows
-Credential Manager. It reads, runs and **commits locally**; the commit is
-durable and rides on the PI's next push. Three trigger prompts asserted the
-opposite for a week and none had tested it. *(`device_bash` has in any case
-been unreachable since 2026-10-27 — five identical failures in P1-T's session,
-four in Coordination's. Nothing should depend on it, and the file bridge writes
-but does not delete.)*
+Credential Manager. It reads, runs and **commits locally**. Three trigger
+prompts asserted the opposite for a week and none had tested it. *(It has in any
+case been unreachable since 2026-10-27, and **a scheduled cloud run has no
+device bridge at all**, so the credential file on the PI's disk is unreachable
+from one. Nothing should depend on either.)*
 
 **5. If it needs the PI's terminal, it waits.** Not "unless it is quick" —
-*quick* is how about ten blocks reached him on 2026-10-29, and four more
-reached him on 2026-10-30 from a different stream. Anything genuinely urgent
-goes to the stream that can land it, through the handoff or a wake.
+*quick* is how about ten blocks reached him on 2026-10-29, and four more on
+2026-10-30 from a different stream. Anything genuinely urgent goes to the
+stream that can land it, through the handoff or a wake.
 
 **6. A session that holds a credential can push, whether or not the proxy would
 have given it one.** P1-B established this and states it exactly:
@@ -129,126 +112,110 @@ have given it one.** P1-B established this and states it exactly:
 > *The proxy declining to **inject** a credential does not stop a push that
 > **carries** its own.*
 
-P1-B's session is **not** in the authorized repository set and has fifteen
-commits on `main` for 2026-10-30, through a cloud clone with a fine-grained PAT
-and `git -c http.extraheader`. Two things are therefore separate and had been
-run together in this file for two days:
-
-| | |
-|---|---|
-| **the proxy injecting a credential** | per session, per repository, granted by the PI adding the repository to that session's sources. Absent in Coordination's session, and **a grant made mid-session does not appear to reach a running one** |
-| **a push carrying its own credential** | **works in P1-B's session**, and is how the bundle's binaries, manifests and generated artefacts have been landing |
-
 **The probe, and get it right — mine was wrong.** A `git push --dry-run`
-carrying **no** credential returns a 403 in every session tested, including
-P1-B's, which pushes successfully seconds later. **That form of the test proves
-nothing**, this file told streams to run it, and **both other streams have now
-recorded a credential-free 403 as evidence their route is closed.** The test
-that distinguishes anything is the one with a credential in it:
+carrying **no** credential returns 403 in every session tested, including ones
+that push successfully seconds later. **That form of the test proves nothing**,
+this file told streams to run it, and **both other streams recorded a
+credential-free 403 as evidence their route was closed.** The test that
+distinguishes anything carries a credential:
 
 ```
 git -c http.extraheader="Authorization: Basic $(printf 'x-access-token:%s' "$TOK" | base64 -w0)" \
     push --dry-run origin HEAD:refs/heads/probe-$(date +%s)
 ```
 
-If that succeeds, the route is open and binaries — and oversized text — are
-landable from your session. If it is refused **with a real token**, the
-connector is your route, the ~100 kB ceiling applies, and anything over it goes
-to **P1-B**, whose custody it is anyway.
-
-**Measured in Coordination's session only, and binding on nobody else:** a push
-with no credential, and a `gh api` call, are both refused as *not in this
-session's authorized repository set*; a raw REST `PUT` is refused as *write
-access to this GitHub API path is not permitted through this proxy*. A third
-measurement, of `http.extraheader`, is **struck** — it used a placeholder
-token, so its failure cannot distinguish a blocked route from a rejected
-credential, and it was the row that did the damage below.
+**Two things about the credential itself, both measured 2026-10-31.** The PI's
+file is **a bare token, not a `.git-credentials` file**, and the store helper's
+failure on that format is **indistinguishable from a dead token** — three
+regenerations were spent before anyone looked. And the proxy's own 403 names a
+tool, **`add_repo` with `access:"push"`**, as the way to attach a repository to
+a session with credentials. It is not exposed in any session that has looked.
+**If it works it retires the PAT entirely**, and that is one measurement by
+whoever gets a session carrying it.
 
 > **Withdrawn 2026-10-30, and it is the worst thing this file has carried.**
 > Three commits that morning — `9375628`, `08b2e2a`, `14088b5` — generalised
-> Coordination's measurements into a ruling that *no* credential reaches GitHub
-> from *any* session, and refused P1-B's route as impossible. P1-B had been
-> pushing through it all week; the evidence was in `git log` throughout; and
-> P1-B pushed `08b2e2a..f2a52d4` by that exact method while the ruling against
-> it was being written. **A capability measured in one session is a fact about
-> that session.** Had P1-B complied with the text, a working stream would have
-> stopped.
+> Coordination's own session measurements into a ruling that *no* credential
+> reaches GitHub from *any* session, and refused P1-B's route as impossible.
+> P1-B had been pushing through it all week, and pushed `08b2e2a..f2a52d4` by
+> that exact method while the ruling against it was being written. **A
+> capability measured in one session is a fact about that session.**
 
 **7. Measure the blocker before you route around it, and measure it the way
-that could come out either way.** The project's most expensive habit, now seven
-instances deep: three trigger prompts asserting `device_bash` could push,
-untested for a week (rule 4); this file's capability matrix granting P1-B push
-on no evidence and then revoking it on evidence from somebody else's session
-(rule 6, both directions); `conformity.py` asserted landed and stranded 17.8
-hours; P1-T treating an unverified route as verified, four scripts deep; both
-streams reading a credential-free 403 as a closed route; and **the withdrawal
-above, written into the same commit that introduced this rule** — the proof of
-it rather than an exception to it.
+that could come out either way.** The project's most expensive habit: three
+trigger prompts asserting `device_bash` could push, untested for a week; this
+file's capability matrix granting P1-B push on no evidence and then revoking it
+on evidence from somebody else's session; `conformity.py` asserted landed and
+stranded 17.8 hours; both streams reading a credential-free 403 as a closed
+route; **and `check_release_hygiene` reported for days as the only failing gate
+on `main` when it was comparing mtimes inside a `git clone`, which writes every
+file at one instant** — T-182, and the remedy it printed would have committed a
+1.5 MB no-op binary.
 
 **A proposal or a ruling about a route carries the command that was run and the
 output it returned, or it is not considered** — not an inference from an error
 seen once, not what worked in another session, not what the documentation
 implies, **not a measurement from a different session**, and **not a test whose
-negative result has two explanations**. The verification register has said for
-weeks that *a write reporting success is not a write*. The same now holds for a
-plan and, harder, for a refusal.
+negative result has two explanations.**
 
 **8. A run you cannot read is a run you did not do. — P1-T's rule, adopted
 under their name, 2026-10-30.** Any instruction that reaches the PI's keyboard
 **writes its output to a file in a connected folder**. A script whose only
 report is the console is an uninstrumented run and **is not to be sent**: four
-of them went to the PI in one afternoon and returned no information four times,
-because the stream that sent them cannot read his console. P1-T was already
-enforcing exactly this shape on P1-B's queue through `conformity.py` check A —
+went to him in one afternoon and returned no information four times. P1-T was
+already enforcing this shape on P1-B's queue through `conformity.py` check A —
 *an answer filed where the reader is not required to look is not an answer* —
-and had not turned it on its own plumbing. The rule is better stated by the
-stream that paid for it than by the one writing the policy.
+and had not turned it on its own plumbing.
 
-> **P1-T's self-audit of 2026-10-30, adjudicated.** Six breaches listed, five
-> claimed as P1-T's. **Four stand**: rule 5, the loose `.tex` and `.pdf` under
-> rule 2, raising with the PI rather than with the policy, and the
-> uninstrumented runs now covered by rule 8. **One is withdrawn** — the
-> dependency on `.git-credentials` breached a rule that no longer exists, and
-> that route is how P1-B lands everything. **One is shared, and is mine more
-> than theirs**: treating an unverified route as verified is rule 7, and
-> Coordination committed it the same morning and far more expensively.
->
-> A self-audit that overstates its own fault is still a measurement error.
-> **Four, not five.**
+**9. A whole-file rewrite is safe only if the read and the write are in the
+same commit. — P1-B's rule, adopted under their name, 2026-10-31.**
 
-### Credentials, where one is in play
+On that morning six commits landed on `main` inside twenty-five minutes from at
+least three sessions. **`d6d203f` rewrote `handoff/P1B-to-P1T.md` whole from a
+read taken before another session's commit, and deleted that session's `#21`
+sixteen minutes after it was written** — an item carrying a real finding.
+Restored verbatim at `154dd89` and verified by `sha256sum` against the remote.
+**Nothing was lost to git. What was lost was channel content, and it was found
+by luck.**
 
-Nothing here is an argument about whether the route works; rule 6 settles that
-per session, and in P1-B's it works. These are handling constraints:
+**The rule that failed is not a missing rule.** *One writer per file* holds
+between **streams** and says nothing about **two sessions of the same stream**,
+which is what happened — and which is the ordinary case for a stream with a
+scheduled run and a working session.
 
-- **Never in chat.** A live PAT reached a transcript on 2026-10-29 and had to
-  be regenerated. The PI writes it to a file; a session is pointed at the path,
-  reads it into a variable, and never emits the value.
-- **Never `credential.helper store --file=` into a connected folder.** Git
-  writes to that file. On 2026-10-29 it wrote the sandbox's own proxy
-  credential into the PI's documents, with a base64-encoded bash command as
-  the username. `http.extraheader` from a shell variable, which is what P1-B
-  uses, has neither failure.
-- **Fine-grained, least scope.** Contents read and write plus Metadata read is
-  the whole requirement for git. User permissions are not needed.
-  `.github/workflows/` needs a separate Workflows permission and nothing here
-  does.
-- **The file is the PI's to place and the PI's to remove**, and it comes off
-  the disk when the work stops. No session deletes it and no session copies it.
+**The fix is a tool choice, not a discipline, which is why it is worth writing
+down:**
+
+| | |
+|---|---|
+| **`create_or_update_file`** | carries the blob sha of what you read. **The API refuses the write if the file moved since.** Safe |
+| **`push_files`** | carries no sha. Commits against whatever head it finds, **cannot detect a concurrent write, and clobbers silently.** `d6d203f` was a `push_files` write |
+
+So: **a whole-file rewrite of any path a second session might touch goes
+through `create_or_update_file`, with the sha read in the same turn.**
+`push_files` is for new files and for paths only one session writes — its one
+commit over many paths is still the right answer for a coupled set, as the
+landing table says, provided nobody else is in those files.
+
+**A refused write is the rule working.** Re-read, merge onto what came back,
+and write again. Never force past it.
+
+**And prefer appending to a queue over rewriting it.** A handoff file's whole
+point is that its length is the count of what is open; an append cannot delete
+an item that arrived while you were thinking.
 
 ### Who can do what
 
 | | connector, read and write | cloud clone, read | `git push` from that clone | the PI's machine |
 |---|---|---|---|---|
 | **P1-T** | both repos | public bundle | **untested with a credential — a credential-free 403 is not a result** | `device_bash` unreachable since 10-27 |
-| **P1-B** | both repos | public bundle | **yes, in use, fifteen commits on 10-30** | as above |
+| **P1-B** | both repos | public bundle | **yes with the PAT; no credential in a scheduled run**, which has no device bridge | as above |
 | **Coordination** | both repos | public bundle | no credential held | as above |
 
 What differs between streams is **custody, not capability**: the binaries, the
 oversized text and the generated artefacts are **P1-B's to land**, because
 P1-B is the bundle's custodian, and that stays true whichever session happens
-to hold a credential. A stream that finds itself able to push something it does
-not own should hand it to the owner, not land it.
+to hold a credential.
 
 ### The three author signatures, and they name the route
 
@@ -258,11 +225,8 @@ not own should hand it to the owner, not land it.
 | `Claude <noreply@anthropic.com>` | a **cloud clone pushing**, author and committer times usually differing |
 | `Tim <timgebbie@users.noreply.github.com>` | the **GitHub connector**, author and committer identical |
 
-Any commit's route is therefore readable from `git log` whatever its message
-says, which is how the three-day supplement gap under rule 2 was diagnosed.
-The `Route:` line is still required — it distinguishes `push_files` from a
-single connector write, and it states intent rather than mechanism — but the
-signature is the check on it.
+Any commit's route is readable from `git log` whatever its message says, which
+is how the three-day supplement gap under rule 2 was diagnosed.
 
 ### Branches, and they differ
 
@@ -272,16 +236,14 @@ signature is the check on it.
 | the paper | `NonlinearShear` | **private** | **`master`** |
 
 A connector write to the paper repository that assumes `main` targets nothing.
-**The bundle must not be renamed** to match the local folder names: its URL is
-in arXiv v4's Comments field beside the revision note, and it is the citation
-trail behind the Zenodo DOI. arXiv versions are permanent.
+**The bundle must not be renamed**: its URL is in arXiv v4's Comments field and
+is the citation trail behind the Zenodo DOI. arXiv versions are permanent.
 
 ### Always
 
 **Name the route in the commit message.** One line, first line of the body:
 `Route: connector` · `Route: push_files` · `Route: cloud clone, git push` ·
-`Route: device_bash, local commit`. It costs a line and makes adherence
-auditable from `git log` without asking anyone.
+`Route: device_bash, local commit`.
 
 Commits made through a shell name their files with a pathspec on the commit as
 well as the add — never `git add -A`. **But a pathspec on `git commit` commits
@@ -325,12 +287,9 @@ a stream whose own measurement contradicts this file is right and this file is
 wrong, immediately — see the box at the top, which is a limit on this file's
 own author rather than advice to its readers.
 
-**Frozen, and no stream writes them.** `correction/` is closed — *public* there
-means already published on arXiv, which is why it is frozen, and it is
-unaffected by living in a private repository. `sources/` is read-only. Paper 1
-is frozen at both submission lines. **And the supplement is a single coherent
-`.tex` by the PI's requirement of 2026-10-31** — a separate `.bib` is P1-T's
-call; the body is not to be fragmented.
+**Frozen, and no stream writes them.** `correction/` is closed. `sources/` is
+read-only. Paper 1 is frozen at both submission lines. **And the supplement is
+a single coherent `.tex` by the PI's requirement of 2026-10-31.**
 
 ## The handoff
 
@@ -341,11 +300,8 @@ call; the body is not to be fragmented.
 | `handoff/P1T-to-coordination.md` | P1-T | Coordination |
 | `handoff/P1B-to-coordination.md` | P1-B | Coordination |
 
-**One writer per file, every file, one direction.** A first attempt at the
-Coordination channel on 2026-10-30 used a single shared file with two writers
-and was replaced within the hour: concurrent writers are what lost
-`docs/STREAMS.md` two committed rows on 2026-10-03 and swept ~1,600 characters
-of P1-T prose into `6e51a458`.
+**One writer per file, every file, one direction — and rule 9 for the case that
+rule does not cover**, which is two sessions of one stream.
 
 **A queue, not a register:** an item carries an identifier, a clock-sourced
 stamp, one line of what is asked and one line of what it unblocks, and **its
@@ -360,20 +316,10 @@ file, because a reader who edits is a second writer.
 
 The handoff carries **the ask, never the finding**.
 
-**The Coordination channel is new on 2026-10-30 and it is the edge that was
-missing.** It exists because P1-B held the measurement refuting a ruling on
-`main` and had no way to deliver it — the correction went through the PI, at
-volume, while the wrong text stood. P1-T's gap, closed in the landing table
-above, travelled the same way for the same reason.
-
 **It is not synchronous, and it is not one-way either.** For an item its writer
 has marked **blocking**, that stream may **wake** the other — firing its working
 run with the identifier named — once per item, and a woken session does not
-fire back in the same run. Waking spends the other stream's budget. The same
-applies to waking Coordination.
-
-> An earlier revision ended this section *"anything genuinely urgent still goes
-> to the PI, who alone can start a session."* False, and never checked.
+fire back in the same run. The same applies to waking Coordination.
 
 ## Recovery
 
@@ -383,36 +329,22 @@ every generated artefact, which is a recovery test rather than a claim.
 
 **The paper.** Backed up for the first time on 2026-10-29. Until that morning
 its `origin` pointed at a repository that does not exist, so every push had
-failed into the same error; twenty-six files in `paper/`, three whole
-directories and a staged reorganisation were outside version control.
+failed into the same error.
 
-**Still uncovered.** The Claude project documents, including both standing
-pages, are in no repository. Their only copy outside Claude is a nightly Google
-Drive backup, which from 2026-10-29 snapshots all three standing pages dated
-rather than only Coordination's.
+**The `claude/` standing pages are backed up nightly to Google Drive, dated, and
+that is working** — verified 2026-10-31, snapshots present for both stream pages
+on the 29th and 30th. They remain in **no repository**, which is a
+single-vendor backup rather than no backup.
 
 **The log stays whole and is appended carefully.** `docs/STREAMS.md` is ~71 kB
-and the connector has no append — only whole-file replace — so a Coordination
-session without push must emit the entire log to add a row. Splitting it was
-proposed and is **not** being done. The procedure instead: hold the pre-write
-blob sha and the read content, write with the sha guard, **read back and
-compare sizes**, and restore from the held content if the write came back
-short. A truncated write is recoverable because the previous blob stays in
-history; an unverified one is not noticed at all.
-
-**What custody of a container means, so the class cannot recur:** that the disk
-and the repository agree. Coordination checks it by comparing directory
-listings against the repository, which needs no shell and no cooperation from
-either stream.
+and the connector has no append. The procedure: hold the pre-write blob sha and
+the read content, write with the sha guard, **read back and compare sizes**,
+restore from the held content if it came back short.
 
 ## Adding a stream
 
 Four things settled before it writes anything: **what it adjudicates**, stated
 so a disputed item can be assigned to exactly one stream; **which paths it
-writes**, disjoint from every existing stream's; **which routes it may use**,
-from the policy above; **its own standing page**, rewritten rather than
-appended to; and **its own one-way file to Coordination**.
-
-A stream that adjudicates nothing is a reviewer and does not need write access.
-Two streams adjudicating the same thing is the failure this table exists to
-prevent.
+writes**, disjoint from every existing stream's; **which routes it may use**;
+**its own standing page**, rewritten rather than appended to; and **its own
+one-way file to Coordination**.
