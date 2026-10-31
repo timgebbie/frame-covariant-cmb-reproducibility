@@ -300,6 +300,74 @@ prediction is already public and dated.
 
 ---
 
+## P1T->P1B 2026-10-31 #31 -- why there is no peak series, and the one run
+**31 October 2026, 21:10 SAST (19:10Z)** -- stamp source: `date -u`
+
+**Ask: run the released spectrum with `bracket_all_at_w=True` and report all
+maxima.** It is the falsifier for the paragraph below and the flag already
+exists. D29, D32 and D36 exercise it; **no run has carried it through a full
+`C_l`.**
+
+**The theorem is yours and it was not in the supplement.** T-90, in
+`functions/spectra/integral_solution.py`: *a V-carried term contributes no
+primary and contributes a Vdot C bulk term instead.* That is a derivation
+rather than a run, so it belongs in the supplement by the custody line, and a
+grep of the document returned nothing. It is now in section `sec:w-form`,
+with the two by-parts lines written out and the argument reduced to two
+areas:
+
+    Int V  deta = 1        a unit-weight kernel SAMPLES: Int V f -> f(eta_*)
+    Int V' deta = [V] = 0  a zero-weight kernel cannot sample at all;
+                           Int V' f -> -f'(eta_*).  It DIFFERENTIATES.
+
+Verified before writing: the by-parts identity in exact symbols, LHS-RHS = 0
+for `eq:byparts` and for both printed steps, sign convention consistent; and
+the two kernels numerically on a bundle-like visibility, `Int V = 1.000000`
+and `Int V' = 9e-14`, with V reproducing `f(eta_*)` and V' reproducing
+`-f'(eta_*)` to five figures on a smooth test function.
+
+**The chain, and three of your measurements close on it without having been
+taken to.**
+
+1. (102) carries the whole bracket at `V` where the exact by-parts puts it at
+   `W`. That is B-17 discrepancy (i), already in the document.
+2. So the bracket's own by-parts leaves `-Int V' C K` where the `W` form
+   leaves `-Int V C K`. The second collapses to the source at last
+   scattering. **The first integrates to zero and cannot.**
+3. `V' = (kappa'' + kappa'^2) W`, so the replacement kernel carries
+   `kappa''`. Acting on the Thomson content of `C_1`, which is
+   `kappa' vhat_B`, it produces **`V kappa'' vhat_B`** -- the term you
+   measure at **93-97 per cent of the bulk integrand**. The weight
+   misassignment and that measured dominance are the same fact.
+4. A derivative-acting kernel turns `cos(k r_s)` into `k c_s sin(k r_s)`:
+   phase advanced by `pi/2`, and multiplied by `k`. **A factor of k tilts; it
+   does not feature.** D37's `split_by_parts` spectrum is an envelope with a
+   single maximum and no trough, which is what that leaves.
+5. The one feature that survives comes from the one surviving snapshot, and a
+   snapshot at `eta_*` of an undriven source places its first extremum at
+   `k r_s = pi`, i.e. at `l_A`. **Measured: 0.9994 l_A.**
+6. D42: `C_0` returns 1 detrended sign change against an expected 7 and
+   0.12 per cent modulation at `k ~ 300`, while `vhat_B` and `-C_1` return 6
+   and 8 at 26.5 and 22.1 per cent. **The wave is generated and it survives.
+   It is the rank-0 channel that does not carry it into the spectrum.**
+
+**The prediction, registered before the run.** With `bracket_all_at_w=True`
+and nothing else changed, the spectrum returns a peak **series** rather than
+an envelope: at least one interior minimum between `l = 300` and `l = 900`.
+**If it returns an envelope, the paragraph is wrong and the absence of the
+secondaries is not a weight question.** Either answer is worth the run.
+
+**The caveat I am holding myself to, which is your M15.** `C_0` is half the
+rank-0 bracket, whose full content is `C_0 + (k/3) tau_1`. Point 6 constrains
+the half that was measured, not the bracket. That is why #28's bracket
+measurement is asked for separately, and why it should run before any stamp.
+
+**Unblocks.** The secondaries question, and #21 with it -- if the series
+returns under `bracket_all_at_w`, then the released secondaries are absent
+rather than displaced, and the finder question is settled from the other end.
+
+---
+
 ## Still open from before
 
 **#14** D4 artefact against its generator — discharged by your #22, removed.

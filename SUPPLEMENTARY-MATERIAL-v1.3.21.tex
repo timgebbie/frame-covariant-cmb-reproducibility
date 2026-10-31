@@ -3164,6 +3164,91 @@ brightness hierarchy.}
 
 
 
+\paragraph{The two weights are not interchangeable, and the kernel each
+one leaves behind is what separates them.} \eqref{eq:byparts} puts the
+bracket $C_0-C_1'+C_2''$ under $W$ and leaves $-\mathcal VC_1$,
+$2\mathcal VC_2'$ and $\mathcal V'C_2$ beside it. Carrying that bracket
+under $\mathcal V$ instead is \textbf{B-17 discrepancy (i)}, and the
+consequence is not a change of size. Take any coefficient $C$ and apply the
+product rule under each weight in turn:
+\begin{align}
+ \int_{\eta_*}^{\eta_0}WCK'\,\mathrm d\eta
+   &=\big[WCK\big]_{\eta_*}^{\eta_0}
+     -\int_{\eta_*}^{\eta_0}\mathcal VCK\,\mathrm d\eta
+     -\int_{\eta_*}^{\eta_0}WC'K\,\mathrm d\eta,
+   \label{eq:weight-w-byparts}\\
+ \int_{\eta_*}^{\eta_0}\mathcal VCK'\,\mathrm d\eta
+   &=\big[\mathcal VCK\big]_{\eta_*}^{\eta_0}
+     -\int_{\eta_*}^{\eta_0}\mathcal V'CK\,\mathrm d\eta
+     -\int_{\eta_*}^{\eta_0}\mathcal VC'K\,\mathrm d\eta .
+   \label{eq:weight-v-byparts}
+\end{align}
+Both boundary terms vanish. $\big[WCK\big]$ does so because $W(\eta_0)=1$
+against $j_\ell(0)=0$ for $\ell\ge1$ at the top and $W\to0$ at the bottom;
+$\big[\mathcal VCK\big]$ does so because the visibility vanishes at both
+ends. \textbf{What differs is the kernel each line puts in the boundary's
+place}, and the two differ in the only property that matters here:
+\begin{equation}
+  \int_{\eta_*}^{\eta_0}\mathcal V\,\mathrm d\eta=1,
+  \qquad
+  \int_{\eta_*}^{\eta_0}\mathcal V'\,\mathrm d\eta
+    =\big[\mathcal V\big]_{\eta_*}^{\eta_0}=0 .
+  \label{eq:kernel-weights}
+\end{equation}
+
+\paragraph{A term carried under the visibility contributes no primary.}
+\eqref{eq:kernel-weights} is the whole argument. A kernel of unit weight
+reproduces its integrand at the deposit, $\int\mathcal Vf\,\mathrm d\eta\to
+f(\eta_\ast)$, which is the $\int\mathcal V=1$ collapse this document uses
+throughout and is what a primary anisotropy \emph{is}: the source at last
+scattering, carried intact to one epoch. A kernel of \emph{zero} weight
+cannot reproduce anything. Integrating \eqref{eq:weight-v-byparts}'s
+replacement against a smooth $f$ gives
+$\int\mathcal V'f\,\mathrm d\eta\to-f'(\eta_\ast)$: it acts as a
+\textbf{derivative} and not as a sample. \textbf{So the $W$-carried term
+yields a primary and the $\mathcal V$-carried term yields the derivative of
+one.} Nothing has been approximated to reach that; it follows from the two
+areas in \eqref{eq:kernel-weights}, and those follow from the visibility
+being normalised and vanishing at both ends.
+
+\paragraph{What the misweighted bracket contributes instead is the term the
+implementation stream measures at $93$--$97\%$ of the bulk integrand.}
+$\mathcal V'=(\kappa''+\kappa'^2)W$, so the replacement kernel carries
+$\kappa''$. Acting on the Thomson content of $C_1$, which is
+$\kappa'\hat v_B$, it produces $\mathcal V\kappa''\hat v_B$ --- the term that
+dominates the released bulk. \textbf{The weight misassignment and the
+measured dominance of that one term are the same fact}, arrived at from the
+algebra here and from a run there, and neither was built from the other.
+
+\paragraph{Three measurements close on this, and none of them was taken to
+test it.} First, the released first peak sits at $0.9994\,\ell_A$
+(\S\ref{sec:frame-discrepancy}): one surviving snapshot places one feature
+where the undriven source's first extremum projects, $kr_s=\pi$. Second, the
+released spectrum under \texttt{split\_by\_parts} rises to a single maximum
+and decays monotonically with no trough --- an envelope, which is what a
+derivative-acting kernel leaves when it converts $\cos(kr_s)$ into
+$kc_s\sin(kr_s)$: a phase advanced by $\pi/2$ and a multiplication by $k$,
+which tilts rather than features. Third, the rank-0 coefficient $C_0$
+returns one detrended sign change against an expected seven and $0.12\%$
+modulation at $k\simeq300$, while $\hat v_B$ and $-C_1$ return six and eight
+at $26.5\%$ and $22.1\%$. \textbf{The oscillation is generated and it
+survives; it is the rank-0 channel that does not carry it into the
+spectrum.}
+
+\paragraph{The falsifier is one run and the control already exists.}
+Restoring the bracket to $W$ is
+\texttt{bracket\_\allowbreak{}all\_\allowbreak{}at\_\allowbreak{}w}, which
+\textbf{D29}, \textbf{D32} and \textbf{D36} exercise and which no run has
+yet carried through a full $C_\ell$. If the reading above is right, that
+configuration returns a peak \emph{series} rather than an envelope. If it
+returns an envelope, this subsection is wrong and the absence of the
+secondaries is not a weight question. \emph{The prediction is registered
+here before the run and not after.} One caveat is carried with it: $C_0$ is
+half of the rank-0 bracket, whose full content is $C_0+\tfrac k3\tau_1$, so
+the third measurement above constrains the half that was measured and not
+the bracket --- which is \textbf{M15}, and is why the bracket measurement is
+asked for separately.
+
 \paragraph{Both endpoints of the projected identity.}
 For this calculation alone, define the pre-integrated object
 \begin{equation}
@@ -6123,6 +6208,11 @@ carrying an explicit factor of the scattering rate is at visibility weight
 whatever it is multiplied by. Reading that identity as a licence to exchange
 the weights removes the late-time contribution entirely, because
 \(\mathcal V\) vanishes once recombination is complete and \(W\) does not.
+\S\ref{sec:w-form} carries the other half of the same statement: the exchange
+also removes the \emph{primary}, because the kernel a
+\(\mathcal V\)-carried term leaves behind integrates to zero and so acts as a
+derivative rather than as a sample. \textbf{Exchanging the weights loses both
+ends of the ray, not one.}
 
 \subsection{One equation, three regimes, and without matching}
 \label{sec:discussion-regimes}
