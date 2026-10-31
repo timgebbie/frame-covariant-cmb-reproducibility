@@ -453,7 +453,7 @@ The release grid, matching F9 exactly. A benchmark run on a grid nobody ships me
 
 ### `K_COM` — the k quadrature grid for the CAMB and CLASS comparison
 
-`scripts/compare_criterion_5b.py:91`, `np.arange`
+`scripts/compare_criterion_5b.py:85`, `np.arange`
 
 `arange(0.05, 1500.0, pi/3)`. 1500 is chosen against the damping scale
 rather than picked: at k_D=536.9 the envelope e^{-2(k/k_D)^2} is 2e-07 there, so
@@ -601,7 +601,7 @@ The release selection, matching F9. The per-mode projection cost scales with how
 
 ### `ELLS` — the multipoles the external comparison is evaluated at
 
-`scripts/compare_criterion_5b.py:86`, `np.arange`
+`scripts/compare_criterion_5b.py:80`, `np.arange`
 
 Linear across the acoustic band rather than logarithmic, which is a
 PRESENTATION choice with a reason: the peaks sit near 206, 410, 610 and 810, and
