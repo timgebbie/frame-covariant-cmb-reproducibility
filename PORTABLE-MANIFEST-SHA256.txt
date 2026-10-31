@@ -39,6 +39,7 @@ c5dce08bd0c9e3cb3697fb7665e73700ee95d489ddb77a94cdc6551eb8094239  diagnostics/d2
 1291ccfc071add0723e9a59d449ec198178047278435d00c47fdae62c080f8b3  diagnostics/d20-recombination-h-v1.3.0.txt
 c386617c66b897a9356df9a86115f68aa670ff4b08a422d01bd4efb6d628505f  diagnostics/d21-sachs-wolfe-scalar-v1.3.0.txt
 51d6aedd5ea8e4ce8a1dd70deb1ffd4bdbfde1495ca0663676176e1891d717e5  diagnostics/d22-identity-live-v1.3.0.txt
+fac8a0ba80eddf9ad33491f7efc4b86222300879614ff7ff7c4efa572a5da16c  diagnostics/d24-phi-prime-sweep.csv
 ec9c2088538389b20113c2cf1d2e4cd388ad08f84c68fa2d1a24dbaa2fa97180  diagnostics/d32-isw-discriminator.csv
 96de1a30bdc9b11750aa356874a35328fd60cc41efd6ecd5ae484e9830523f86  diagnostics/d33-w-path-integral.csv
 5c4d3662828f0732133eb69f8f1cb1a4c524d5340decd5f4432c617bc9bf70e6  diagnostics/d34-split-by-parts.csv
