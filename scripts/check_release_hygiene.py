@@ -63,6 +63,7 @@ from __future__ import annotations
 
 import ast
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -417,6 +418,14 @@ def check_built_artefacts_are_not_stale(failures: list[str]) -> str:
     than its source may be stale in a way nothing can detect; a PDF *older*
     than its source is stale by construction and is the recurrence being
     stopped. `make_manifests.py --check` already owns the content comparison.
+
+    **And why the commit clock rather than mtime alone --- T-182.** `git
+    clone` writes every file at one instant, so in a fresh clone the mtime
+    ordering is a coin flip and this check reported a false release-blocker on
+    `main` for as long as anyone ran it from a clone. mtime stays the
+    pre-filter, and stays the whole answer for a source that is modified or
+    untracked, which is the case the check was built for. Where git can speak
+    about both files it is the verdict. See the note at the loop.
     """
     notes, pdfs = [], sorted((ROOT / "supplementary-materials").glob("*.pdf"))
     #: **The sources are what the document `\input`s, read from the document
@@ -448,13 +457,63 @@ def check_built_artefacts_are_not_stale(failures: list[str]) -> str:
             p = ROOT / (rel if rel.endswith(".tex") else rel + ".tex")
             if p.is_file():
                 sources.append(p)
+    # **mtime is the pre-filter; the commit clock is the verdict --- finding
+    # T-182, P1-B, 2026-10-31.** This is the T-171 correction applied to the
+    # branch that was left out of it.
+    #
+    # `git clone` stamps every file it checks out at one instant, so on a
+    # fresh clone the ordering between a PDF and its sources is a coin flip
+    # at sub-second resolution and carries **no information about the tree**.
+    # Measured on `main` at `12beba8`: this branch reported the v1.3.19 PDF
+    # "0.0 h older than 9 of its sources" and told the reader to rebuild a
+    # 1.5 MB binary, while by commit time the PDF is **21.7 hours newer than
+    # all eleven** sources the document inputs, and none of the eleven is
+    # newer than it. The instruction would have landed a no-op binary to
+    # satisfy an artefact of the checkout.
+    #
+    # So the question "which way round" --- which is still the right question,
+    # and is why this is not a hash check --- is put to the clock that
+    # survives a clone. **mtime is kept as the pre-filter and as the whole
+    # answer wherever git cannot speak**: a source edited in a working tree
+    # and not yet committed has no commit newer than the PDF's, and that
+    # uncommitted edit is precisely the recurrence this check exists to catch,
+    # so an untracked or modified source is trusted to mtime exactly as before.
+    def _committed_at(path: Path) -> int | None:
+        """Commit time of *path*, or None if git cannot answer for it."""
+        rel = path.relative_to(ROOT).as_posix()
+        try:
+            r = subprocess.run(
+                ["git", "-C", str(ROOT), "log", "-1", "--format=%ct", "--", rel],
+                capture_output=True, text=True, timeout=30)
+            d = subprocess.run(
+                ["git", "-C", str(ROOT), "status", "--porcelain", "--", rel],
+                capture_output=True, text=True, timeout=30)
+        except (OSError, subprocess.SubprocessError):
+            return None
+        if r.returncode or d.returncode or not r.stdout.strip():
+            return None
+        if d.stdout.strip():          # modified or untracked: mtime is the truth
+            return None
+        return int(r.stdout.strip())
+
     for pdf in pdfs:
         t_pdf = pdf.stat().st_mtime
-        newer = sorted(p.relative_to(ROOT).as_posix() for p in sources
-                       if p.stat().st_mtime > t_pdf)
+        flagged = [p for p in sources if p.stat().st_mtime > t_pdf]
+        g_pdf = _committed_at(pdf)
+        if g_pdf is not None:
+            kept = []
+            for p in flagged:
+                g_src = _committed_at(p)
+                if g_src is None or g_src > g_pdf:
+                    kept.append(p)
+            dropped = len(flagged) - len(kept)
+            flagged = kept
+            if dropped:
+                notes.append(f"{pdf.name}: {dropped} mtime-only ordering(s) "
+                             f"overruled by the commit clock")
+        newer = sorted(p.relative_to(ROOT).as_posix() for p in flagged)
         if newer:
-            lead = max(p.stat().st_mtime for p in sources
-                       if p.stat().st_mtime > t_pdf) - t_pdf
+            lead = max(p.stat().st_mtime for p in flagged) - t_pdf
             failures.append(
                 f"{pdf.relative_to(ROOT).as_posix()} is {lead/3600:.1f} h "
                 f"older than {len(newer)} of its sources "
