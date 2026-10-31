@@ -24,11 +24,27 @@ comparison with CAMB and CLASS, which is most of this document, is context.
 
 | band | $\ell$ | vs CAMB | vs CLASS | code–code floor |
 |---|---|---|---|---|
-| plateau and late ISW | $2\le\ell<30$ | **97.8%** | **97.8%** | 0.125% |
-| acoustic peaks | $30\le\ell<1000$ | **137.0%** | **137.3%** | **0.370%** |
+| band | $\ell$ | vs CAMB | vs CLASS | code–code floor |
+|---|---|---|---|---|
+| plateau and late ISW | $2\le\ell<30$ | **857.4%** | **857.4%** | 0.125% |
+| acoustic peaks | $30\le\ell<1000$ | **86.2%** | **86.2%** | **0.370%** |
 
-**First acoustic peak: this bundle at $\ell\simeq170$, CAMB and CLASS at
-$\ell\simeq198$** on the comparison grid — about 15% low.
+**First acoustic peak: this bundle at $\ell=254$, CAMB and CLASS at
+$\ell\simeq198$** on the comparison grid — about 28% **high**.
+
+> **These four numbers moved at the repair of 2026-10-21 and this file is
+> hand-maintained, so they moved without it.** `f887301` — B-16's $\ell=0$ row
+> and T-109's scattering-rate units — was adjudicated and landed, and the
+> previous entries (97.8%, 137.0%, $\ell\simeq170$, 15% low) are from a run
+> six days before it. **Finding T-181**: this is the third hand-made copy of
+> generated numbers found in two days, after the model-parameters presentation
+> copy and the `criterion-5b` caption. The other two are generated now; **this
+> one is not, and it should be.**
+>
+> **The repair moved the two bands in opposite directions.** The acoustic band
+> improved, 137.0% → 86.2%. The plateau got **8.8× worse**, 97.8% → 857.4%.
+> A repair that improves one band and ruins another is **M11a's signature**:
+> two defects that only fix together, scored one at a time.
 
 ## The itemisation, which is the point
 
@@ -43,11 +59,42 @@ approximation each part belongs to.
    is **80.5×** on (102)'s branch against the pipeline's 1.70× and CAMB's 1.14×.
    **This is a property of the antecedent's equation, not a defect of this
    reconstruction** --- findings T-41 and T-42.
-2. **The damping coefficient, measured and attributable: 17.2%** in the acoustic
-   band between $f_2=3/4$ and $f_2=1$. Both are *Annals II*'s.
-3. **The acoustic scale**, $\ell_{\rm peak}$ 170 against 198, consistent with
-   $z_*=1114.5$ here against CAMB's 1088.5 --- Peebles against HyRec --- and the
-   sound-horizon treatment.
+
+   **That reading no longer survives the numbers, and the correction is
+   T-181's.** "The rise from $\ell=2$ to 30" described a monotone plateau and
+   the plateau is not monotone any more. It carries a **spurious maximum at
+   $\ell=7$ at $9.6\times$ CAMB**:
+
+   | $\ell$ | 2 | 4 | **7** | 11 | 16 | 22 | 30 |
+   |---|---|---|---|---|---|---|---|
+   | this bundle | 0.705 | 2.582 | **7.462** | 5.618 | 2.643 | 1.543 | 1.000 |
+   | CAMB | 0.881 | 0.822 | 0.779 | 0.782 | 0.822 | 0.892 | 1.000 |
+
+   **D27 already had this feature and nobody connected it**: gate G-a reports
+   the released path at $0.030$, *"a spurious maximum at $\ell=8.10$"*. Same
+   feature, a different weighting, and it is the plateau's whole discrepancy.
+   An $\ell^2$ rise is monotone; **a spike at $\ell=7$ that falls away by
+   $\ell=16$ is not an $\ell^2$ rise and A-1/A-2 do not predict it.** So the
+   857.4% is not attributable to the antecedent's equation, and this item no
+   longer itemises it. **Raised to P1-T; it is rank-0's and the normalisation
+   B-16 changed is rank-0's.**
+2. **The damping coefficient, measured and attributable: 16.7%** in the acoustic
+   band between $f_2=3/4$ and $f_2=1$. Both are *Annals II*'s. (17.2% before
+   the repair; this is the one item of the four that barely moved.)
+3. **The acoustic scale**, $\ell_{\rm peak}$ **254** against 198 --- and
+   **the consistency argument this item used to make is withdrawn.** It read:
+   *"170 against 198, consistent with $z_*=1114.5$ here against CAMB's 1088.5."*
+   Both numbers are superseded and **both flipped sign**. $z_*$ is now 1079.4,
+   *below* CAMB's 1088.5 rather than above it; $\ell_{\rm peak}$ is now *above*
+   198 rather than below.
+
+   **The two no longer move together, which is the content.** A lower $z_*$ is
+   later recombination, a larger sound horizon and a **smaller** $\ell_A$ ---
+   and $\ell_A$ did fall, 272.177 → 266.750. $\ell_{\rm peak}$ went the other
+   way, 170 → 254. **A peak that moves opposite to the acoustic scale is not
+   being placed by the acoustic scale**, so it cannot be itemised against
+   recombination, and this item no longer claims it is. What places it is open
+   and is raised to P1-T with the $\ell=7$ spike, because both are rank-0's.
 4. **The slow-decoupling order**, which F6 measures separately and which is the
    largest single approximation in the chain.
 

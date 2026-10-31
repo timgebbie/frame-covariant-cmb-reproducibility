@@ -39,7 +39,10 @@ which approximation each part of the difference belongs to.
 from __future__ import annotations
 
 import csv
+import os
+import pathlib
 import sys
+import tempfile
 from datetime import date
 from pathlib import Path
 
@@ -47,6 +50,9 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from _fingerprint import source_fingerprint as _digest  # noqa: E402
 
 from functions.background.flrw import (  # noqa: E402
     PLANCK_H,
@@ -112,10 +118,48 @@ def bundle_spectrum(f_2: float) -> tuple[np.ndarray, dict]:
         ell_max=int(needed.max()), ells=needed,
         x_max=float(K_COM.max() * (env.background.eta_0 - env.eta[0])) + 20.0)
 
+    # **Checkpointed, and the reason is that an unresumable run is an
+    # unrunnable one here.** This loop is 1433 modes and runs twice, which is
+    # roughly forty minutes. A cloud session's background process does not
+    # reliably survive that, and this script died twice at the same place on
+    # 2026-10-31 leaving `criterion-5b-v1.2.0.tex` carrying a pre-repair
+    # `z_*` --- a number the supplement prints in an argument against CAMB.
+    # A generated artefact that cannot be regenerated in the environment that
+    # owns it is a transcription with extra steps.
+    #
+    # **The cache is keyed on `source_fingerprint`, so a tree change
+    # invalidates it rather than silently resuming into different physics.**
+    # That is T-54's instrument as repaired at T-129, and it is the only
+    # thing that makes a resumed run as trustworthy as a fresh one.
+    #
+    # **It is written OUTSIDE the tree, deliberately.** The bundle freezes at
+    # paper 1's acceptance and is cited behind a DOI; a scratch file that
+    # lands in a manifest is a permanent artefact of a temporary convenience.
+    cache = pathlib.Path(
+        os.environ.get("CRITERION5B_CACHE", tempfile.gettempdir())
+    ) / f"criterion5b-{f_2:.6g}-{_digest(__file__)}.npy"
     transfer = np.zeros((ELLS.size, K_COM.size))
+    start = 0
+    if cache.exists():
+        try:
+            held = np.load(cache)
+            if held.shape == (ELLS.size + 1, K_COM.size):
+                transfer = held[:-1]
+                start = int(held[-1, 0])
+                print(f"    resuming at mode {start} of {K_COM.size} "
+                      f"from {cache.name}", flush=True)
+        except Exception as exc:                       # a bad cache is not an
+            print(f"    cache unreadable ({exc}); recomputing")  # error, it is
+            start = 0                                            # a recompute
     for j, k in enumerate(K_COM):
+        if j < start:
+            continue
         _, cdm = coefficient_sets(float(k), env)
         transfer[:, j] = transfer_by_rank(ELLS, float(k), cdm, env, table)[-1]
+        if (j + 1) % 50 == 0 or j + 1 == K_COM.size:
+            held = np.vstack([transfer, np.full((1, K_COM.size), j + 1.0)])
+            np.save(cache, held)
+            print(f"      mode {j+1:5d} of {K_COM.size}", flush=True)
 
     power = primordial_power(K_COM, n_s=PLANCK_N_S, amplitude=1.0)
     cl = np.array([cl_covariant_route(int(l), K_COM, transfer[i], power)
