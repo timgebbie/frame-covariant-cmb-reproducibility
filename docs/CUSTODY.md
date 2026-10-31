@@ -34,11 +34,27 @@ findings it has become a third copy of something and should be cut back.
 |---|---|---|
 | **a text file under ~100 kB, with no generated dependent** | **the GitHub connector** | works from any session — no credential, no shell, no PI. Both repositories. **The ceiling is the model's context and it is not negotiable by trying harder** |
 | **several text files that must move together** — an edition bump's README line, `\date` and filename | **one commit**: `git push` from a clone, or `push_files` through the connector | one file per connector commit leaves the tree red between them, and a gate that reads two of them will say so |
-| **a text file *above* the ceiling** — `SUPPLEMENTARY-MATERIAL-v1.3.20.tex` is **384 099 B** | **the same route as a binary**: `git push` from a cloud clone | **For routing purposes an oversized text artefact is a binary.** P1-T's gap, raised 2026-10-30, and the resolution is theirs. Splitting a consolidated document into `\input` fragments to fit a channel is a plumbing change to a document's structure and is **not** the answer |
+| **a text file *above* the ceiling** — `SUPPLEMENTARY-MATERIAL-v1.3.20.tex` is **384 099 B** | **the same route as a binary**: `git push` from a cloud clone | **For routing purposes an oversized text artefact is a binary.** P1-T's gap, raised 2026-10-30, and the resolution is theirs. **Splitting the supplement into `\input` fragments is not available** — see the requirement below |
 | **text that a script produces** — manifests, `docs/THEORY-AUDIT.md`, the grid register, test output | **clone in the cloud, run the generator there, land the result** — `git push` if your session can; the connector only if the output is under the ceiling | the cloud workspace has python with numpy/scipy/sympy, and `pdflatex`/`latexmk` |
 | **a binary, or any set containing one** — the supplement PDF, a figure | **`git push` from a cloud clone** | the connector carries text only, and context carries no binary at all. **P1-B's sessions do this routinely.** Rule 6 |
 | **anything in the private paper repository** | **the connector** for text under the ceiling; a clone needs push | branch `master`, not `main` |
 | **anything that needs the PI's terminal** | **it waits** | rules 5 and 8 |
+
+> ### The supplement is a single cohesive `.tex` file. PI requirement, 2026-10-31.
+>
+> *"The purpose of the document is to ensure a single cohesive .tex file. That
+> is a requirement."* It is a property of the document, not a consequence of
+> how it was built, and **it is not a judgement that a later session may
+> revisit.**
+>
+> This is written here because the wrong fix is the obvious one. A session that
+> finds 384 kB of source against a 100 kB channel will reach for `\input`
+> fragments, and it will look like good engineering. **It is the channel's
+> problem, not the document's.** The route for an oversized text artefact is in
+> the table above and it works.
+>
+> P1-T declined to propose the split on their own judgement before the
+> requirement was stated. That was the right call and it is now backed.
 
 ### The eight rules, each paid for
 
@@ -101,7 +117,7 @@ run together in this file for two days:
 
 | | |
 |---|---|
-| **the proxy injecting a credential** | per session, per repository, granted by the PI adding the repository to that session's sources. Absent in Coordination's session |
+| **the proxy injecting a credential** | per session, per repository, granted by the PI adding the repository to that session's sources. Absent in Coordination's session, and **a grant made mid-session does not appear to reach a running one** |
 | **a push carrying its own credential** | **works in P1-B's session**, and is how the bundle's binaries, manifests and generated artefacts have been landing |
 
 **The probe, and get it right — mine was wrong.** A `git push --dry-run`
@@ -281,7 +297,9 @@ own author rather than advice to its readers.
 **Frozen, and no stream writes them.** `correction/` is closed — *public* there
 means already published on arXiv, which is why it is frozen, and it is
 unaffected by living in a private repository. `sources/` is read-only. Paper 1
-is frozen at both submission lines.
+is frozen at both submission lines. **And the supplement is one `.tex` file by
+the PI's requirement of 2026-10-31** — its consolidation is not a build detail
+to be optimised away by whichever session next finds it inconvenient.
 
 ## The handoff
 
@@ -345,12 +363,14 @@ pages, are in no repository. Their only copy outside Claude is a nightly Google
 Drive backup, which from 2026-10-29 snapshots all three standing pages dated
 rather than only Coordination's.
 
-**The log cannot currently be appended to safely.** `docs/STREAMS.md` is ~65 kB
+**The log stays whole and is appended carefully.** `docs/STREAMS.md` is ~71 kB
 and the connector has no append — only whole-file replace — so a Coordination
-session without push must emit the entire log in one output to add a row, and a
-truncated output destroys the project's historical record. A session with push
-appends with `>>` and never reads it. **PI's call** between granting
-Coordination push and splitting the log into dated files.
+session without push must emit the entire log to add a row. Splitting it was
+proposed and is **not** being done. The procedure instead: hold the pre-write
+blob sha and the read content, write with the sha guard, **read back and
+compare sizes**, and restore from the held content if the write came back
+short. A truncated write is recoverable because the previous blob stays in
+history; an unverified one is not noticed at all.
 
 **What custody of a container means, so the class cannot recur:** that the disk
 and the repository agree. Coordination checks it by comparing directory
