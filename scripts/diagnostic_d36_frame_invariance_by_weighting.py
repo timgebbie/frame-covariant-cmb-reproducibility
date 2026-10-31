@@ -90,6 +90,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+from _peak import first_acoustic_peak  # noqa: E402
+
 SLUG = "d36-frame-invariance-by-weighting"
 
 from functions.background.flrw import (  # noqa: E402
@@ -137,16 +139,15 @@ def _peak(ells, d, floor=30.0):
 
     Returns `nan` when there is none --- which is **not** a failure of the
     finder and is the released Newtonian frame's actual answer.
+
+    **The body moved to `scripts/_peak.py` at T-184 and this is now one line.**
+    Three finders called "the first acoustic peak" were live with three
+    different bands, and the one with no band was wired to gate G-a. D41
+    already imported this function rather than copying it, for the reason now
+    written at the top of `_peak.py`; that reasoning applies to all of them.
+    The signature is kept so D41's import does not move.
     """
-    idx = np.nonzero(ells >= floor)[0]
-    for i in idx[1:-1]:
-        if d[i] > d[i - 1] and d[i] >= d[i + 1]:
-            den = d[i - 1] - 2.0 * d[i] + d[i + 1]
-            if den == 0.0:
-                return float(ells[i])
-            return float(ells[i] + 0.5 * (d[i - 1] - d[i + 1]) / den
-                         * (ells[i + 1] - ells[i]))
-    return float("nan")
+    return first_acoustic_peak(ells, d, floor=floor)[0]
 
 
 def _measure(bg, obh2, h, gamma, controls):

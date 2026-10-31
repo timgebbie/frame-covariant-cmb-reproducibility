@@ -73,6 +73,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 SLUG = "d24-phi-prime-sweep"
 VERSION = "v1.3.0"
 
+from _peak import first_acoustic_peak  # noqa: E402
 from functions.background.flrw import (  # noqa: E402
     PLANCK_H, PLANCK_MODEL, PLANCK_N_S, PLANCK_OMEGA_B_H2)
 from functions.spectra import coefficients as _co  # noqa: E402
@@ -141,31 +142,39 @@ def _env():
 
 
 def peak_position(ell: np.ndarray, d_ell: np.ndarray) -> tuple[float, float]:
-    r"""The maximum of $D_\ell$ by parabolic interpolation on three samples.
+    r"""The first ACOUSTIC maximum of $D_\ell$, interpolated. **T-184.**
 
-    Returns (position, spacing-limited uncertainty). **Not `argmax`**: on this
-    grid argmax can only ever return a grid point, and the grid spacing near
-    the peak is 5, which is larger than differences the sweep is looking for.
-    The uncertainty returned is half that local spacing, which is the honest
-    floor on a three-point interpolation.
+    Returns (position, spacing-limited uncertainty), delegating to the one
+    definition in `scripts/_peak.py`. The interpolation is unchanged --- this
+    function's Lagrange vertex was the best of the three in the tree and is
+    what `_peak.py` now carries for all of them.
+
+    **What changed is that it no longer takes a global `argmax` over
+    $\ell\ge2$**, and that was a defect rather than a generalisation. The
+    released spectrum carries a spurious maximum at $\ell\simeq7$ at
+    $9.6\times$ CAMB's plateau (T-181b), so the global maximum of $D_\ell$ is
+    a **plateau** feature, not an acoustic one. Everything reading this
+    function was therefore being handed the plateau spike:
+
+      - **D27's gate G-a** reports the released path at $0.030$, *"a spurious
+        maximum at $\ell=8.10$"*. That is this finder landing on the $\ell=7$
+        sample of `ELLS` and interpolating. **G-a has never measured the
+        released acoustic peak**, and its published failure against the
+        pre-registered $[0.55,0.80]$ scored an instrument artefact. The claim
+        is repeated in `README.md`, which is P1-T's and is raised to them.
+      - D26 quotes the same $0.030$ for the same reason.
+
+    **Pre-registered, before the rerun that this change requires.** P1-T
+    locate the released first peak at $\ell_1=266.6$ by an independent route
+    (\S frame-discrepancy, three times), which is $0.9994\,\ell_A$ at
+    $\ell_A=266.750$. With the plateau excluded this finder should return
+    close to that. If it does, G-a's real verdict is a **phase** offset ---
+    $\ell_1\simeq\ell_A$ is where an *undriven* oscillator's first extremum
+    projects, and A-3 is the registered reason it would be undriven --- and
+    the gate then fails for the right reason instead of the wrong one. If it
+    returns something else, this prediction is wrong and that is the finding.
     """
-    ell = np.asarray(ell, dtype=float)
-    d = np.asarray(d_ell, dtype=float)
-    i = int(np.argmax(d))
-    if i == 0 or i == d.size - 1:
-        return float(ell[i]), float("nan")
-    x0, x1, x2 = ell[i - 1], ell[i], ell[i + 1]
-    y0, y1, y2 = d[i - 1], d[i], d[i + 1]
-    # Lagrange vertex, valid for UNEQUAL spacing, which this grid has at the
-    # join between its sparse and dense halves.
-    den = (x0 - x1) * (x0 - x2) * (x1 - x2)
-    if den == 0.0:
-        return float(x1), float("nan")
-    a = (x2 * (y1 - y0) + x1 * (y0 - y2) + x0 * (y2 - y1)) / den
-    b = (x2 * x2 * (y0 - y1) + x1 * x1 * (y2 - y0) + x0 * x0 * (y1 - y2)) / den
-    if a == 0.0:
-        return float(x1), float("nan")
-    return float(-b / (2.0 * a)), float(0.5 * min(x1 - x0, x2 - x1))
+    return first_acoustic_peak(ell, d_ell)
 
 
 def spectra_both_frames(env, table, k_com, power):

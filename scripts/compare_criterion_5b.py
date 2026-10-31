@@ -53,6 +53,7 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from _fingerprint import source_fingerprint as _digest  # noqa: E402
+from _peak import first_acoustic_peak  # noqa: E402
 
 from functions.background.flrw import (  # noqa: E402
     PLANCK_H,
@@ -196,8 +197,40 @@ def band_difference(ell: np.ndarray, a: np.ndarray, b: np.ndarray,
 
 
 def peak_position(ell: np.ndarray, s: np.ndarray) -> int:
-    band = (ell >= 100) & (ell <= 320)
-    return int(ell[band][int(np.argmax(s[band]))])
+    r"""The first acoustic maximum, rounded to the nearest multipole. **T-184.**
+
+    **Was `argmax` inside a hard band `[100, 320]`, which is a third
+    definition of "the first acoustic peak"** and differed from the other two
+    in both ends and in having no interpolation at all --- so it could only
+    ever return a grid point, on a grid spaced by 28 here.
+
+    The band was doing one job correctly, excluding the Sachs--Wolfe plateau,
+    and `_peak.py`'s floor does that explicitly rather than by a magic lower
+    bound; the upper bound at 320 had no stated reason and is dropped.
+
+    **I predicted 254 would be unmoved and it moved. Measured:**
+
+        bundle   254 -> 265        CAMB  198 -> 206        CLASS  198 -> 206
+
+    The prediction was about the *band* and the change that mattered was the
+    *interpolation*: the old form had none, so on a grid spaced by 28 near the
+    peak it could only ever return a sample. Every one of these three was
+    grid-limited, and the shift is about a third of a grid step in each.
+
+    **The CAMB row is the one that matters, because the bundle was carrying
+    two different numbers for the same spectrum's first peak.** D24's gate
+    target is `206.0 / ELL_A`, 206 being matched CAMB; this table printed 198
+    for the same CAMB spectrum. Interpolating returns 206 and the two agree.
+    The old 198 was not a different measurement, it was this one rounded down
+    to the nearest sample.
+
+    The released peak at 265 against $\ell_A=266.750$ is $0.993\,\ell_A$,
+    which corroborates P1-T's independently routed $266.6$ ($0.9994$) to
+    within this grid's resolution --- and is the same pre-registration D24's
+    `peak_position` now carries.
+    """
+    pos, _ = first_acoustic_peak(ell, s)
+    return int(round(pos)) if np.isfinite(pos) else -1
 
 
 def tex_escape(s: str) -> str:

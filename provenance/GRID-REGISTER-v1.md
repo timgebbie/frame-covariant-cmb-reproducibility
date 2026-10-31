@@ -153,7 +153,7 @@ plausible grid change reaches. Finding **T-79**.
 
 ### `k_com` — the k grid the Phi' sweep integrates C_ell on
 
-`scripts/diagnostic_d24_phi_prime_sweep.py:317`, `np.linspace`
+`scripts/diagnostic_d24_phi_prime_sweep.py:326`, `np.linspace`
 
 `required_k_points(K_MAX, r_theta)` at 3 samples per j_ell^2
 oscillation --- finding **T-56**, the same derivation F9 and D4 use. `K_MAX` is
@@ -270,7 +270,7 @@ truncation.
 
 ### `k_com` — the k grid the frame gap is integrated over
 
-`scripts/diagnostic_d36_frame_invariance_by_weighting.py:162`, `np.linspace`
+`scripts/diagnostic_d36_frame_invariance_by_weighting.py:163`, `np.linspace`
 
 `required_k_points(K_MAX, span)`, K_MAX = 460, matching D34 so the
 two instruments measure the same configurations on the same quadrature and a
@@ -453,7 +453,7 @@ The release grid, matching F9 exactly. A benchmark run on a grid nobody ships me
 
 ### `K_COM` — the k quadrature grid for the CAMB and CLASS comparison
 
-`scripts/compare_criterion_5b.py:85`, `np.arange`
+`scripts/compare_criterion_5b.py:92`, `np.arange`
 
 `arange(0.05, 1500.0, pi/3)`. 1500 is chosen against the damping scale
 rather than picked: at k_D=536.9 the envelope e^{-2(k/k_D)^2} is 2e-07 there, so
@@ -467,7 +467,7 @@ Linear at `DK`. This script's entire output IS a convergence measurement, so its
 
 ### `ELLS` — the multipole grid the Phi' sweep locates the first peak on
 
-`scripts/diagnostic_d24_phi_prime_sweep.py:101`, `np.arange`
+`scripts/diagnostic_d24_phi_prime_sweep.py:102`, `np.arange`
 
 Dense at spacing 5 through `arange(100, 421, 5)` and sparse below,
 because the sweep reports **ell_peak by parabolic interpolation on three
@@ -601,7 +601,7 @@ The release selection, matching F9. The per-mode projection cost scales with how
 
 ### `ELLS` — the multipoles the external comparison is evaluated at
 
-`scripts/compare_criterion_5b.py:80`, `np.arange`
+`scripts/compare_criterion_5b.py:87`, `np.arange`
 
 Linear across the acoustic band rather than logarithmic, which is a
 PRESENTATION choice with a reason: the peaks sit near 206, 410, 610 and 810, and
@@ -691,7 +691,7 @@ suppresses terms inside of.
 
 ### `ELLS` — the multipoles the frame gap is scored over
 
-`scripts/diagnostic_d36_frame_invariance_by_weighting.py:113`, `np.arange`
+`scripts/diagnostic_d36_frame_invariance_by_weighting.py:115`, `np.arange`
 
 Dense through the plateau (2--30), then `arange(40, 341, 15)`. The
 scored quantity is the MEDIAN frame gap over this axis, so the step sets how
