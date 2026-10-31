@@ -33,7 +33,7 @@ findings it has become a third copy of something and should be cut back.
 | what you are landing | route | notes |
 |---|---|---|
 | **a text file under ~100 kB, with no generated dependent** | **the GitHub connector** | works from any session — no credential, no shell, no PI. Both repositories. **The ceiling is the model's context and it is not negotiable by trying harder.** Fidelity through it is not a worry: 609 lines of python and 731 of digest landed this way on 2026-10-31 and verified byte-identical on a re-clone, twice |
-| **several text files that must move together** — an edition bump's README line, `\date` and filename | **one commit**: `git push` from a clone, or `push_files` through the connector | one file per connector commit leaves the tree red between them, and a gate that reads two of them will say so. **But see rule 9 before using `push_files` on a file another session may touch** |
+| **several text files that must move together** — an edition bump's README line, `\date` and filename | **one commit**: `git push` from a clone, or `push_files` through the connector | one file per connector commit leaves the tree red between them, and a gate that reads two of them will say so. Rule 9 does not restrict this — the question there is who else is in those paths |
 | **a text file *above* the ceiling** — a supplement source runs to ~384 kB | **the same route as a binary**: `git push` from a cloud clone | **For routing purposes an oversized text artefact is a binary.** P1-T's gap, raised 2026-10-30. **Splitting the supplement is not available** — see the requirement below |
 | **text that a script produces** — manifests, `docs/THEORY-AUDIT.md`, the grid register, test output | **clone in the cloud, run the generator there, land the result** — `git push` if your session can; the connector only if the output is under the ceiling | the cloud workspace has python with numpy/scipy/sympy, and `pdflatex`/`latexmk` |
 | **a binary, or any set containing one** — the supplement PDF, a figure | **`git push` from a cloud clone** | the connector carries text only, and context carries no binary at all. Rule 6 |
@@ -183,22 +183,27 @@ between **streams** and says nothing about **two sessions of the same stream**,
 which is what happened — and which is the ordinary case for a stream with a
 scheduled run and a working session.
 
-**The fix is a tool choice, not a discipline, which is why it is worth writing
-down:**
+**The two routes fail differently, and only one of them fails silently.**
 
-| | |
-|---|---|
-| **`create_or_update_file`** | carries the blob sha of what you read. **The API refuses the write if the file moved since.** Safe |
-| **`push_files`** | carries no sha. Commits against whatever head it finds, **cannot detect a concurrent write, and clobbers silently.** `d6d203f` was a `push_files` write |
+| | the guard | how it goes wrong |
+|---|---|---|
+| **connector, `create_or_update_file`** | carries the blob sha you read; **the API refuses the write if the file moved** | it doesn't, unless you re-read and then ignore what came back |
+| **connector, `push_files`** | **none.** Commits against whatever head it finds | **clobbers silently.** `d6d203f` was a `push_files` write |
+| **a clone, `git push`** | git itself — a push against a moved remote is **refused as non-fast-forward** | it takes *two* steps: **force past the refusal**, or **pull and let a whole-file rewrite resolve over somebody else's edit without reading the result** |
 
-So: **a whole-file rewrite of any path a second session might touch goes
-through `create_or_update_file`, with the sha read in the same turn.**
-`push_files` is for new files and for paths only one session writes — its one
-commit over many paths is still the right answer for a coupled set, as the
-landing table says, provided nobody else is in those files.
+So, concretely:
 
-**A refused write is the rule working.** Re-read, merge onto what came back,
-and write again. Never force past it.
+- **Through the connector:** a whole-file rewrite of any path a second session
+  might touch goes through **`create_or_update_file`, with the sha read in the
+  same turn.** `push_files` stays right for new files, for a coupled set, and
+  for paths only one session writes — the condition is who else is in them, not
+  how many there are.
+- **From a clone:** git already protects you, so **never force**, and **after a
+  pull, read the merged file before you push it.** A whole-file rewrite merged
+  against somebody's append is exactly where an item disappears without a
+  conflict marker.
+- **Either way, a refused write is the rule working.** Re-read, merge onto what
+  came back, write again.
 
 **And prefer appending to a queue over rewriting it.** A handoff file's whole
 point is that its length is the count of what is open; an append cannot delete
