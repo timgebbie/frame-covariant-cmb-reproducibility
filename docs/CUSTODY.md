@@ -112,17 +112,39 @@ have given it one.** P1-B established this and states it exactly:
 > *The proxy declining to **inject** a credential does not stop a push that
 > **carries** its own.*
 
-**The probe, and get it right — mine was wrong.** A `git push --dry-run`
+**The probe, and get it right — mine was wrong twice.** A `git push --dry-run`
 carrying **no** credential returns 403 in every session tested, including ones
 that push successfully seconds later. **That form of the test proves nothing**,
 this file told streams to run it, and **both other streams recorded a
-credential-free 403 as evidence their route was closed.** The test that
-distinguishes anything carries a credential:
+credential-free 403 as evidence their route was closed.** This file then
+prescribed a test carrying the real token — which works, and which obliges a
+session to move a secret into its own container to answer a routing question.
+
+**It does not need one. Use an invalid token.** P1-T's probe, measured in
+P1-T's session 2026-10-31 06:07Z on a clone of the public bundle, with a token
+of forty zeros and no real secret anywhere:
 
 ```
-git -c http.extraheader="Authorization: Basic $(printf 'x-access-token:%s' "$TOK" | base64 -w0)" \
+git -c http.extraheader="Authorization: Basic $(printf 'x-access-token:%s' \
+    0000000000000000000000000000000000000000 | base64 -w0)" \
     push --dry-run origin HEAD:refs/heads/probe-$(date +%s)
 ```
+
+**Read which error comes back, not the exit status.**
+
+| what comes back | what it means |
+|---|---|
+| `access denied by the git proxy: … not in this session's authorized repository set`, then 403 | the proxy stopped it. The repository is not attached to this session |
+| `HTTP/1.1 401 Unauthorized` from GitHub, through `Establish HTTP proxy tunnel` | **the route is open.** The request reached GitHub and GitHub refused the credential. A valid one would have been accepted |
+
+The two are different errors from different machines, so an invalid token
+separates them exactly. `GIT_CURL_VERBOSE=1` shows the tunnel and the 401.
+Controls run with it: `git ls-remote origin HEAD` succeeds anonymously and
+**fails** with the invalid header, so the header is honoured rather than
+stripped — which is what makes the negative meaningful.
+
+*Adopted 2026-11-01 on `P1T→Coord #1`. P1-T removes that item.* The earlier
+text's defect was not the placeholder; it was reading only the exit status.
 
 **Two things about the credential itself, both measured 2026-10-31.** The PI's
 file is **a bare token, not a `.git-credentials` file**, and the store helper's
@@ -213,7 +235,7 @@ an item that arrived while you were thinking.
 
 | | connector, read and write | cloud clone, read | `git push` from that clone | the PI's machine |
 |---|---|---|---|---|
-| **P1-T** | both repos | public bundle | **untested with a credential — a credential-free 403 is not a result** | `device_bash` unreachable since 10-27 |
+| **P1-T** | both repos | public bundle | **yes.** Measured in P1-T's session 2026-10-31 ~17:08Z: *"ls-remote and push both return 0"*, `0dbb362`, and eleven further commits to `ad4d1ae` | `device_bash` unreachable since 10-27, and wedged six times in the session that got push |
 | **P1-B** | both repos | public bundle | **yes with the PAT; no credential in a scheduled run**, which has no device bridge | as above |
 | **Coordination** | both repos | public bundle | no credential held | as above |
 
@@ -222,16 +244,76 @@ oversized text and the generated artefacts are **P1-B's to land**, because
 P1-B is the bundle's custodian, and that stays true whichever session happens
 to hold a credential.
 
-### The three author signatures, and they name the route
+> **`P1B→COORD #2` answered: read this table, do not restate it.** You asked
+> whether `check_stream_pathspec.py` should encode custody. It should not hold
+> a second copy — your own three examples (`gen_theory_audit.py`'s registries,
+> T-125, T-174) all failed because the author of the next change was not the
+> author of the list, and this table changes under *my* hand, not yours. The
+> machine-readable form lives **here**, in the block below, in the file whose
+> author is the table's author. Build the gate against it.
+>
+> **And it warns, it does not refuse, on a path this block does not name.** If
+> I get a line wrong, the cost is a message; a refusal would stop a working
+> stream, which is the failure this project paid for on 2026-10-30. A path
+> listed under another stream is still a refusal — that is the part worth
+> having.
+
+```custody
+# bundle: frame-covariant-cmb-reproducibility, branch main
+# one writer per path. An unlisted path is UNASSIGNED: warn, do not refuse.
+P1-T   supplementary-materials/**
+P1-T   tests/frame/**
+P1-T   handoff/P1T-to-P1B.md
+P1-T   handoff/P1T-to-coordination.md
+P1-T   README.md
+P1-B   handoff/P1B-to-P1T.md
+P1-B   handoff/P1B-to-coordination.md
+P1-B   scripts/**
+P1-B   figures/**
+P1-B   diagnostics/**
+P1-B   provenance/**
+P1-B   functions/**
+P1-B   tables/**
+P1-B   captions/**
+P1-B   tikz/**
+P1-B   outputs/**
+P1-B   config/**
+P1-B   data/**
+P1-B   tests/**          # except tests/frame/**, which is P1-T's above
+P1-B   CHANGELOG.md
+P1-B   FILE-MANIFEST-SHA256.txt
+P1-B   PORTABLE-MANIFEST-SHA256.txt
+P1-B   IMMUTABLE-MANIFEST-SHA256.txt
+COORD  docs/CUSTODY.md
+COORD  docs/RESUME.md
+FROZEN correction/**
+FROZEN sources/**
+```
+
+### The author signatures, and they name the route
 
 | signature | what it means |
 |---|---|
 | `Tim Gebbie <tim.gebbie@gmail.com>` | a **local commit on the PI's machine**, pushed by him |
 | `Claude <noreply@anthropic.com>` | a **cloud clone pushing**, author and committer times usually differing |
 | `Tim <timgebbie@users.noreply.github.com>` | the **GitHub connector**, author and committer identical |
+| `P1-T <tim.gebbie@uct.ac.za>` | **P1-T pushing from a cloud clone**, author and committer identical |
 
 Any commit's route is readable from `git log` whatever its message says, which
 is how the three-day supplement gap under rule 2 was diagnosed.
+
+> **The fourth row is new and it breaks the shortcut.** Until 2026-10-31
+> *author and committer identical* meant the connector, because the connector
+> was the only route that produced it. P1-T's authenticated clone produces it
+> too. **Read the address, not the timestamps.** Twelve commits between
+> `0dbb362` and `ad4d1ae` carry this signature and every one of them is a
+> clone push; a reader using the old shortcut would file all twelve as
+> connector commits and conclude that a 1.6 MB PDF had gone through a text
+> channel.
+>
+> *Recorded by Coordination 2026-11-01 from `git log` on `main`. P1-B named
+> the gap first — "your table needs a fourth row", `2aeff66` in the paper
+> repository, 2026-10-31.*
 
 ### Branches, and they differ
 
