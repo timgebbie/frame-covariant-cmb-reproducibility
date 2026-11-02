@@ -924,7 +924,8 @@ Wilson is the strongest of the four, and not because of his weights, which are
 Hu \& Sugiyama's. He writes the recursion in the \emph{imaginary} convention,
 with both bracket terms positive under an overall $-ikT$, where the others carry
 opposite signs under a real $k$. The two are related by
-$\Theta_\ell=i^\ell\delta_\ell$, which turns one form into the other exactly.
+a phase, Hu~\&~Sugiyama's real coefficient being $\mathrm i^\ell$ times
+Wilson's $\delta_\ell$, which turns one form into the other exactly.
 He is integrated complex and as printed, and the phase removed only afterwards;
 transforming the equation first would assume the identity under test. That the
 transformed solution is \emph{real} to $10^{-10}$ is a separate assertion from
@@ -1062,18 +1063,37 @@ left to inference.
 \input{tables/translations-layout-v1.3.5.tex}
 
 % --------------------------------------------------------------------------
-% 2026-10-31: the dictionary to the standard variables. Audit item I2-5.
-\subsection{The dictionary to the standard variables}
+% 2026-11-02: the map to the comparators' Legendre coefficients, audit item
+% I2-5. Written 2026-10-31 in the comparators' own symbol, which in a 1+3
+% document is the expansion; rewritten in covariant variables only.
+\subsection{The map to the comparators' Legendre coefficients, and the frame
+it holds in}
 \label{sec:theta-dictionary}
 
-Every gate in this bundle scores $\tau_\ell$ against $\tau_\ell$ and every
-external comparator is written in $\Theta_\ell$, so the map between them is
-load bearing in exactly one place and invisible everywhere else. The pieces
-are in three separated statements above and in Appendix~F; this is the one
-place they are composed.
+Every gate in this bundle scores $\tau_\ell$ against $\tau_\ell$, and every
+external comparator integrates a different object: the coefficients of a
+Legendre expansion of the temperature about a wavevector, defined on the
+slicing of a metric gauge. The map between the two is load bearing in exactly
+one place, criterion~5b, and invisible everywhere else. The pieces are in three
+separated statements above and in Appendix~F; this is the one place they are
+composed.
 
-The direction dependence of a scalar mode is the contraction of the PSTF basis
-with $\hat k$. Its leading term is $\mu^\ell$ and trace removal supplies the
+\paragraph{The map is a matching made in one frame, and not a second
+description of the same objects.} $\tau_{A_\ell}$ is defined on the rest
+spaces of a physically specified congruence $u^a$; the comparators'
+coefficients are defined against a coordinate slicing chosen by a gauge. The
+two can be matched only in the frame whose congruence is normal to that
+slicing --- for a code written in conformal Newtonian gauge, the zero-shear
+frame. At $\ell\ge2$ the matching then holds in every frame to first order,
+because those multipoles are equal across threadings at that order
+(\S\ref{sec:first-peak}); at $\ell=0$ and $\ell=1$ it is made in that frame and
+nowhere else.
+
+\paragraph{The identity behind the map is a property of the flat-space
+harmonics.} On a flat background the covariant scalar harmonics admit a
+plane-wave representation, and in it the rank-$\ell$ harmonic is the
+trace-free product of the unit wavevector $\hat k$. Its contraction with the
+photon direction has leading term $\mu^\ell$, and trace removal supplies the
 rest, which is the Legendre polynomial up to normalisation:
 \begin{equation}
   e^{\langle a_1\cdots a_\ell\rangle}\hat k_{a_1}\cdots\hat k_{a_\ell}
@@ -1081,11 +1101,11 @@ rest, which is the Legendre polynomial up to normalisation:
   \beta_\ell=\frac{\ell!}{(2\ell-1)!!},\qquad \mu=e\cdot\hat k .
   \label{eq:pstf-legendre}
 \end{equation}
-Against the standard expansion
-$\Theta=\sum_\ell(-\mathrm i)^\ell(2\ell+1)\Theta_\ell P_\ell(\mu)$, term by
-term in $P_\ell$,
+Write $\mathcal L^{\rm ext}_\ell$ for the coefficient the comparators carry on
+$(-\mathrm i)^\ell(2\ell+1)P_\ell(\mu)$. Matching term by term in $P_\ell$, in
+the frame above,
 \begin{equation}
-  \Theta_\ell=\frac{\mathrm i^\ell}{\alpha_\ell}\,\tau_\ell,
+  \mathcal L^{\rm ext}_\ell=\frac{\mathrm i^\ell}{\alpha_\ell}\,\tau_\ell,
   \qquad
   \alpha_\ell=\frac{2\ell+1}{\beta_\ell}
              =\frac{(2\ell+1)(2\ell-1)!!}{\ell!} .
@@ -1108,25 +1128,44 @@ $\alpha_2=15/2$ is the value \S\ref{sec:ell-zero-row} records the bundle as
 carrying and the value its kernel argument needs; Appendix~F's
 $\alpha_\ell^{-1}\tau_\ell$ is \eqref{eq:theta-dictionary} with the phase
 stripped; and the $\mathrm i^\ell$ is the one the \emph{Annals~I} convention
-already fixes. The dictionary is therefore read off this document rather than
-imported into it.
+already fixes. \textbf{The normalisation is read off this document; only a
+symbol was ever imported}, and the last paragraph of this subsection withdraws
+it.
 
-\paragraph{The two ends, and the dipole checks itself.} $\alpha_0=1$, so
-$\Theta_0=\delta\tilde T$ exactly --- the $\tau_0\equiv0$ convention keeps the
-monopole out of the conversion altogether. $\alpha_1=3$, so
-$\Theta_1=\mathrm i\tau_1/3$, which makes $\tau_1$ the photon velocity in the
-convention where $\Theta_1=v_\gamma/3$. \eqref{eq:152-peak} is then the photon
-Euler equation for $v_\gamma$ rather than for $\Theta_1$, and
-\eqref{eq:153-peak}'s $+\tfrac k3\tilde\tau_1$ is $\Theta_0'=-k\Theta_1$ with
-the same factor of three. Neither was arranged to come out that way.
+\paragraph{The two ends, and the dipole checks itself.} $\alpha_0=1$, so the
+comparators' monopole coefficient is $\delta\tilde T$ in that frame --- the
+$\tau_0\equiv0$ convention keeps the monopole out of the conversion
+altogether. $\alpha_1=3$, so their dipole coefficient is $\mathrm i\tau_1/3$,
+which makes $\tau_1$ the photon velocity \emph{relative to $u^a$}, in the
+normalisation where the comparators' dipole is a third of it. That clause is
+the one their notation cannot carry, because their velocity is defined against
+a slicing rather than a congruence. \eqref{eq:152-peak} is then the photon
+Euler equation for that velocity, and \eqref{eq:153-peak}'s
+$+\tfrac k3\tilde\tau_1$ is the comparators' monopole equation --- the
+monopole's rate equal to $-k$ times the dipole coefficient --- with the same
+factor of three. Neither was arranged to come out that way.
 
 \paragraph{The spectrum cannot adjudicate this, because $\alpha_\ell$ cancels
 from every ratio it forms.} $\alpha_\ell$ is
 \emph{defined} as $(2\ell+1)/\beta_\ell$, so it cancels from every internal
 ratio --- which is \S\ref{sec:spectrum}'s point. A wrong $\alpha_\ell$ would
 therefore pass every gate in this bundle and corrupt only criterion~5b, where
-the comparison is against codes written in $\Theta_\ell$. That is the whole
-reason this subsection exists.
+the comparison is against codes written in Legendre coefficients. That is
+the whole reason this subsection exists.
+
+\paragraph{This subsection used the comparators' own symbol, and in this
+formalism that symbol is the expansion.} Between 31 October and 2 November the
+coefficients above were written $\Theta_\ell$, the symbol of the
+Hu~\&~Sugiyama hierarchy this bundle transcribes for comparison. In a $1+3$
+covariant document $\Theta$ is the expansion of the congruence,
+$\nabla_au^a$, as it is in the Gauss constraint and in $\mathrm D_a\Theta$
+elsewhere in this supplement and throughout Paper~1, so the symbol collided
+with the most central kinematic quantity the formalism has. \textbf{The
+physics of the subsection was unaffected and its vocabulary was not}: a
+coefficient named in the comparators' formalism carries their slicing with
+it, and the frame drops out of the reader's view in a document whose subject
+is the frame. The symbol is withdrawn and the coefficients are named by their
+role.
 
 
 % Step 1 of the physics chain, 2026-10-24.
@@ -1944,11 +1983,13 @@ with it.
 
 \paragraph{One coefficient is changed for criterion~5b, and only there.}
 The photon quadrupole's Thomson collision term carries
-$\Pi=\Theta_2+E_0+E_2$, so polarisation feeds back into the temperature
+the temperature quadrupole together with the monopole and quadrupole of the
+E-mode polarisation, so polarisation feeds back into the temperature
 hierarchy and strengthens the diffusion damping. CAMB and CLASS both include
 this structurally: it is not an output option, and neither can be asked
 to leave it out --- CLASS fails outright in \texttt{perturbations\_solve} below
-\texttt{l\_max\_pol\_g = 2}, because $\Pi$ needs $E_2$, and CAMB exposes no
+\texttt{l\_max\_pol\_g = 2}, because that collision term needs the E-mode
+quadrupole, and CAMB exposes no
 switch for it. Truncating CLASS's polarisation hierarchy from 10 to 4 moves the
 acoustic band by 0.043\%, which bounds the hierarchy's \emph{depth} and not the
 \emph{feedback}.
