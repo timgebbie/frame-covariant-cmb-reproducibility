@@ -233,7 +233,7 @@ them.
 
 ### `k_com` — the k grid D34 integrates the bump, the plateau and the peak over
 
-`scripts/diagnostic_d34_split_by_parts.py:128`, `np.linspace`
+`scripts/diagnostic_d34_split_by_parts.py:129`, `np.linspace`
 
 `required_k_points(K_MAX, span)`, K_MAX = 460 --- the largest in the
 bundle, and higher than D33's 420 because the peak is predicted to MOVE here
@@ -643,7 +643,7 @@ free-streaming era.
 
 ### `ELLS` — the multipoles P1-T's split by-parts is scored on
 
-`scripts/diagnostic_d34_split_by_parts.py:85`, `np.arange`
+`scripts/diagnostic_d34_split_by_parts.py:86`, `np.arange`
 
 Dense at the plateau (2--30) then `arange(40, 341, 10)`.
 **The step is 10 and not 20 because prediction 2 is `236.6 +/- 5`**: a grid
@@ -656,7 +656,7 @@ that a peak which ran PAST 236.6 --- the outcome fixed as a different finding
 
 ### `sl` — the conformal times D34 reports the late share at
 
-`scripts/diagnostic_d34_split_by_parts.py:127`, `np.geomspace`
+`scripts/diagnostic_d34_split_by_parts.py:128`, `np.geomspace`
 
 As D33's, 12 slices, same construction and the same argument. The
 late share is the EdS null control, read at one abscissa; the slice count sets

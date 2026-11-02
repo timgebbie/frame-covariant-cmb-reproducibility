@@ -472,6 +472,47 @@ def main() -> int:
         print("    Watch the NEWTONIAN column: released it has no acoustic "
               "maximum at all (T-157).")
 
+    # **`bracket_all_at_w` through a full spectrum, which nothing has ever
+    # done.** P1-T registered this on 31 October as the falsifier for *why
+    # there is no peak series*: the flag exists, D29, D32 and D36 exercise it,
+    # and **no run has carried it through a C_l**. D36 scores it on two
+    # numbers per background and those two numbers are the reason to look:
+    #
+    #     PLANCK, cdm       released    bracket_at_w     CAMB
+    #     first peak / l_A    0.997        0.688         0.772
+    #     bump D_7/D_30       8.82         0.266         0.779
+    #
+    # The released path puts the first peak at the UNDRIVEN position and the
+    # plateau 11x high; this weighting moves the peak inside the
+    # pre-registered [0.55, 0.80] and the plateau down by a factor of 33. It
+    # also gives the Newtonian frame an acoustic maximum where released has
+    # none at all.
+    #
+    # **What D36 cannot say is whether a SERIES appears**, because it reports
+    # the first peak and one plateau sample and nothing between. That is the
+    # whole question, and it needs the full k = 1500 grid.
+    #
+    # Control, not a release artefact (V14), for the same reason
+    # `--split-by-parts` is: T-143 measured why this cannot be the repair as
+    # it stands. This is what the weighting looks like carried all the way,
+    # not a claim that it is right.
+    if "--bracket-all-at-w" in sys.argv:
+        from functions.spectra import two_frame as _tf
+        # Character for character D36's `bracket_at_w` entry, so the picture
+        # and the table cannot be of different configurations.
+        _tf.BULK_SOURCE_CONTROLS = dict(bracket_all_at_w=True,
+                                        by_parts_weight_terms=True)
+        STEM = "d43-f9-bracket-all-at-w"
+        CSV_PATH_REL = ("diagnostics", "d43-f9-bracket-all-at-w.csv")
+        print("    **BRACKET ALL AT W (B-17 (i), T-143)** --- P1-T's "
+              "registered falsifier for the absent peak series.")
+        print("    PRE-REGISTERED: D36 puts the first peak at 0.688 l_A here "
+              "against 0.997 released.")
+        print("    A SERIES means secondaries were suppressed by the weight. "
+              "ONE peak means the weight")
+        print("    fixes the position and not the series, and the next "
+              "question is upstream of it.")
+
     if "--b-slot-repair" in sys.argv:
         from functions.spectra import two_frame as _tf
         _tf.B_SLOT_REPAIR = True

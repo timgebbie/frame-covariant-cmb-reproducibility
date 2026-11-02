@@ -49,3 +49,12 @@ desktop.ini
 f9-repair.log
 f9-repair.err
 f9.log
+
+# **In-flight checkpoints, never artefacts.** F9 and the resumable
+# diagnostics write a `*-partial.csv` while running so a killed run resumes
+# instead of restarting. A `git add -A` from another window swept one into a
+# commit on 2026-11-02: an incomplete run's intermediate state landing in the
+# bundle, which would hash into the manifests and be indistinguishable from a
+# finished artefact to anyone reading the tree.
+diagnostics/*-partial.csv
+outputs/*-partial.csv

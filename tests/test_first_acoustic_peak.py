@@ -126,8 +126,66 @@ def test_it_reproduces_D36s_published_number() -> None:
     assert pos == pytest.approx(60.65, abs=0.01)
 
 
-def test_the_three_call_sites_now_share_one_definition() -> None:
-    """D24, D36 and criterion-5b must not drift apart again.
+def test_no_second_copy_of_the_finder_survives_in_scripts() -> None:
+    """No `scripts/*.py` may define its own peak finder. **T-184 missed one.**
+
+    The merge on 31 October took three copies on the argument that a rule two
+    copies be kept in step is kept only by someone remembering. **There were
+    four** --- `d34` had one too, the scan that found the others listed that
+    file, and it was read past. An incomplete merge leaves exactly the
+    condition the merge was for, so the guard is structural rather than a
+    note: anything in `scripts/` that defines a finder rather than importing
+    one fails here.
+    """
+    import ast
+
+    offenders = []
+    for path in sorted((ROOT / "scripts").glob("*.py")):
+        if path.name == "_peak.py":
+            continue
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+        for node in tree.body:
+            if not isinstance(node, ast.FunctionDef):
+                continue
+            if node.name not in ("_peak", "peak_position"):
+                continue
+            # **Semantic, not shape.** A first draft asserted the body was
+            # exactly one `return first_acoustic_peak(...)` and flagged
+            # `compare_criterion_5b`, which delegates and then rounds to the
+            # nearest multipole --- a false positive in the guard rather than
+            # a copy in the tree. What makes a function a second finder is
+            # that it does the SEARCH itself, so that is what is tested: it
+            # must call the shared one, and must contain neither an `argmax`
+            # nor a loop looking for a maximum.
+            # **The docstring is not code, and a first draft forgot that.**
+            # Dumping the whole node matched the word `argmax` inside D24's
+            # and criterion-5b's docstrings, where both explain what they
+            # used to do --- so the guard flagged the two functions whose
+            # documentation is clearest about having been repaired. The
+            # leading docstring is dropped before anything is inspected.
+            body = list(node.body)
+            if (body and isinstance(body[0], ast.Expr)
+                    and isinstance(getattr(body[0], "value", None), ast.Constant)
+                    and isinstance(body[0].value.value, str)):
+                body = body[1:]
+            dump = "".join(ast.dump(n) for n in body)
+            calls_shared = "first_acoustic_peak" in dump
+            searches_itself = (
+                "argmax" in dump
+                or any(isinstance(n, (ast.For, ast.While))
+                       for stmt in body for n in ast.walk(stmt)))
+            if not calls_shared or searches_itself:
+                offenders.append(
+                    f"{path.name}::{node.name} "
+                    f"(calls_shared={calls_shared}, "
+                    f"searches_itself={searches_itself})")
+    assert not offenders, (
+        "these define a peak finder instead of importing the one in "
+        f"scripts/_peak.py: {offenders}")
+
+
+def test_the_four_call_sites_now_share_one_definition() -> None:
+    """D24, D34, D36 and criterion-5b must not drift apart again.
 
     **The rule that two copies be kept in step is kept only by someone
     remembering**, and this bundle has lost that bet four times --- the three
@@ -137,6 +195,7 @@ def test_the_three_call_sites_now_share_one_definition() -> None:
     """
     import compare_criterion_5b as c5b
     import diagnostic_d24_phi_prime_sweep as d24
+    import diagnostic_d34_split_by_parts as d34
     import diagnostic_d36_frame_invariance_by_weighting as d36
 
     ell = np.array([2.0, 4, 7, 11, 16, 22, 30, 60, 120, 180, 230, 265, 300, 360])
@@ -145,5 +204,6 @@ def test_the_three_call_sites_now_share_one_definition() -> None:
     shared, _ = first_acoustic_peak(ell, d)
 
     assert d24.peak_position(ell, d)[0] == pytest.approx(shared)
+    assert d34._peak(ell, d) == pytest.approx(shared)
     assert d36._peak(ell, d) == pytest.approx(shared)
     assert c5b.peak_position(ell, d) == int(round(shared))

@@ -64,6 +64,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 SLUG = "d34-split-by-parts"
 VERSION = "v1.3.0"
 
+from _peak import first_acoustic_peak  # noqa: E402
 from functions.background.flrw import (  # noqa: E402
     CDM_MODEL, LCDM_MODEL, PLANCK_H, PLANCK_MODEL, PLANCK_N_S,
     PLANCK_OMEGA_B_H2)
@@ -102,16 +103,16 @@ CONFIGS = [
 
 
 def _peak(ells, d, floor=30.0):
-    """First interior maximum above `floor`, parabolically interpolated."""
-    idx = np.nonzero(ells >= floor)[0]
-    for i in idx[1:-1]:
-        if d[i] > d[i - 1] and d[i] >= d[i + 1]:
-            den = d[i - 1] - 2.0 * d[i] + d[i + 1]
-            if den == 0.0:
-                return float(ells[i])
-            return float(ells[i] + 0.5 * (d[i - 1] - d[i + 1]) / den
-                         * (ells[i + 1] - ells[i]))
-    return float("nan")
+    """First interior maximum above `floor`, parabolically interpolated.
+
+    **T-184 missed this one and that is the finding.** Three copies were
+    merged on 31 October on the argument that a rule two copies be kept in
+    step is kept only by someone remembering. There were four. The scan that
+    found the other three listed this file and I read past it, which is the
+    same failure one level up: an incomplete merge leaves exactly the
+    condition the merge was for.
+    """
+    return first_acoustic_peak(ells, d, floor=floor)[0]
 
 
 def _measure(bg, obh2, h, gamma, controls):
