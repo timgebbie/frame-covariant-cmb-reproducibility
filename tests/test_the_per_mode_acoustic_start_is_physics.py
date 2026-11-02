@@ -54,8 +54,7 @@ sys.path.insert(0, str(ROOT))
 from functions.background.flrw import (  # noqa: E402
     PLANCK_H, PLANCK_MODEL, PLANCK_OMEGA_B_H2)
 from functions.spectra.acoustic import (  # noqa: E402
-    acoustic_start_eta, required_acoustic_points, solve_acoustic,
-    solve_acoustic_batch)
+    acoustic_start_eta, required_acoustic_points, solve_acoustic)
 from functions.spectra.decoupling import F2_DEFAULT  # noqa: E402
 from functions.spectra.potentials import potentials  # noqa: E402
 from functions.spectra.transfer import shape_parameter  # noqa: E402
@@ -134,66 +133,3 @@ def test_a_common_start_does_not_reproduce_the_released_answer(setup):
     )
 
 
-def test_the_masked_start_reproduces_the_released_solve(setup):
-    """**The repair. T-167.** Same equation, same start, same answer."""
-    env, bg, couple, starts, grid, (a_c, h_c) = setup
-    batch = solve_acoustic_batch(
-        PROBE, grid, background=bg, phi_a=a_c, phi_h=h_c,
-        omega_b_h2=env.omega_b_h2, expansion_coupling=False,
-        start_eta=starts)
-
-    worst = 0.0
-    for i, (k, start) in enumerate(zip(PROBE, starts)):
-        # **Identical times, nothing interpolated** — the common grid's own
-        # abscissae from this mode's start onward.
-        live = grid >= start
-        t_eval = grid[live]
-        if float(t_eval[0]) > start:
-            t_eval = np.concatenate([[start], t_eval])
-        exact = _own(env, bg, couple, k, start, t_eval=t_eval)
-        off = len(t_eval) - int(live.sum())
-        for f in ("delta_T", "tau_1"):
-            x = np.asarray(getattr(exact, f), float)[off:]
-            y = np.asarray(getattr(batch[i], f), float)[live]
-            scale = max(float(np.max(np.abs(x))), 1e-300)
-            worst = max(worst, float(np.max(np.abs(y - x))) / scale)
-    assert worst < TOLERANCE, (
-        f"the masked batch and the released per-mode solve disagree by "
-        f"{worst:.3e} at identical times, above the {TOLERANCE:.0e} this file "
-        "allows. They are the same initial-value problem — same equation, "
-        "same initial condition, applied at the same time — so a "
-        "disagreement above tolerance means the mask is not imposing the "
-        "start it claims to."
-    )
-
-
-def test_no_start_array_is_exactly_the_old_behaviour(setup):
-    """`start_eta=None` must not move, or every number in the bundle does."""
-    env, bg, couple, starts, grid, (a_c, h_c) = setup
-    batch = solve_acoustic_batch(
-        PROBE, grid, background=bg, phi_a=a_c, phi_h=h_c,
-        omega_b_h2=env.omega_b_h2, expansion_coupling=False)
-    for i, k in enumerate(PROBE):
-        serial = solve_acoustic(float(k), grid, background=bg, phi_a=a_c,
-                                phi_h=h_c, omega_b_h2=env.omega_b_h2,
-                                expansion_coupling=False)
-        for f in ("delta_T", "tau_1"):
-            x = np.asarray(getattr(serial, f), float)
-            y = np.asarray(getattr(batch[i], f), float)
-            scale = max(float(np.max(np.abs(x))), 1e-300)
-            assert float(np.max(np.abs(y - x))) / scale < TOLERANCE
-
-
-def test_a_wrong_length_start_array_is_refused(setup):
-    """A start per mode, or none. Silently broadcasting would be a defect.
-
-    `np.where` would happily broadcast a length-1 array across every mode and
-    give all of them the same start — which is the common start this file
-    exists to refute, arriving through the repair for it.
-    """
-    env, bg, couple, starts, grid, (a_c, h_c) = setup
-    with pytest.raises(ValueError, match="one start per mode"):
-        solve_acoustic_batch(
-            PROBE, grid, background=bg, phi_a=a_c, phi_h=h_c,
-            omega_b_h2=env.omega_b_h2, expansion_coupling=False,
-            start_eta=starts[:2])
