@@ -54,6 +54,15 @@ The second is the one worth your attention: the document **understates its own
 agreement by a factor of twenty**, in the row where A-3 is said to account for
 the whole excess. I have verified both in arithmetic and neither needs a run.
 
+**And the root `README.md` is the corroboration, not a second instance.** Its
+own version of that sentence already reads *"1/0.7723 = 1.2948 accounts for
+the measured 266.6/206.1 = 1.2936 to **0.1%**"*, inside a box recording that
+both figures moved on 31 October and that the agreement tightened by a factor
+of ten. The supplement's 3808 still reads *"against 1/0.757 = 1.321 …
+agreeing to 2%"*. **The repair reached the README and stopped** — T-103's
+shape with the two documents swapped — and it is independent evidence that
+3808 is wrong rather than a convention I have misread.
+
 **Three consequential numbers follow from the same repair and I have not yet
 fixed their wording**, because I cannot build the PDF this change would need:
 3881's `0.243 l_A` becomes `0.2277 l_A`, and the sentence it feeds —
@@ -61,11 +70,43 @@ fixed their wording**, because I cannot build the PDF this change would need:
 multipoles apart"* — becomes `l≈206` against `l≈176`, 30 multipoles. That is
 derived, not measured, and it is mine to restate.
 
-**And line 5040 carries the superseded criterion-5b pair**, `97.8%` across the
+**Line 5040 carries the superseded criterion-5b pair**, `97.8%` across the
 plateau and `137%` across the peaks, which your `3f7a688` replaced with
-`857.4%` and `86.2%`. I have landed the repair of the identical sentence in
-the root `README.md` this run; the supplement's copy is in the same blocked
-file.
+`857.4%` and `86.2%`, and the README carries the identical sentence with the
+identical defect. **I have authored both repairs and landed neither.** For the
+README the ceiling is not the reason — at 76 kB it is under it. A connector
+write is a whole-file retype through one context, and the same operation on
+*this* file at 22 kB moved a blank line between my disk copy and the landed
+one an hour ago, caught by `sha256sum` on a re-clone. I will not run that
+unattended on the project's front page for a four-line correction when the
+change has to move with the supplement in any case. **Both halves go in one
+`git push` from disk, with no transcription.**
+
+**The README replacement, so it is not re-derived.** It replaces the sentence
+beginning *"The distance to the external codes is large, expected, and
+itemised rather than totalled"* through *"The itemisation is in …"*:
+
+> The distance to the external codes is large and expected: **857.4% across
+> the plateau, 86.2% across the peaks**, of which the damping coefficient
+> alone is 16.7%. **Three of those four figures moved at the recombination
+> repair of 21 October** (`f887301`) and that paragraph carried the pre-repair
+> set — 97.8%, 137%, 17.2%, and a first peak at `l≈170`. The repair improved
+> the acoustic band and made the plateau 8.8 times worse, which is **M11a**'s
+> signature and is open.
+>
+> **The consistency argument is withdrawn.** It read *"170 against 198,
+> consistent with z_* = 1114.5 here against CAMB's 1088.5"*. Both numbers
+> moved and **both changed side**: z_* is 1079.4, below CAMB's 1088.5 rather
+> than above it, and the first peak is at `l = 254`, above 198 rather than
+> below. A lower z_* is later recombination, a larger sound horizon and a
+> **smaller** `l_A` — and `l_A` did fall, 272.177 to 266.750, while the peak
+> went the other way. **A peak that moves opposite to the acoustic scale is
+> not being placed by the acoustic scale**, so it cannot be itemised against
+> recombination.
+
+Verified on my clone: `tests/test_readme_renders_on_github.py` is 3 failed /
+336 passed with the change and 3 failed / 336 passed without it — the three
+are `#34` below and are pre-existing — and conformity check D is green.
 
 **Ruling on the device, so the next edition does not repeat it.** *Stating a
 conversion once and leaving the literals* is withdrawn as a repair. A reader
