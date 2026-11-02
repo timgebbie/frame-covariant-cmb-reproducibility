@@ -38,6 +38,7 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from _fingerprint import source_fingerprint as _digest  # noqa: E402
+from _peak import first_acoustic_peak  # noqa: E402
 
 import matplotlib  # noqa: E402
 
@@ -255,19 +256,15 @@ def first_peak(ell: np.ndarray, s: np.ndarray, *, floor: float = 30.0) -> float:
     *interior* local maximum above `floor` --- 30, the normalisation anchor,
     below which "first peak" means nothing --- and returns **`nan`** when the
     curve has none, which the caller must then say out loud.
+
+    **T-184 found three copies of this, merged them, and missed two.** This
+    was the fifth, and it escaped the structural guard because that guard
+    matched the names `_peak` and `peak_position` and this one is called
+    `first_peak`. A guard keyed to names is a guard against the names it
+    knows; it is now keyed to any function in `scripts/` whose name contains
+    "peak", which is what the five had in common and nothing else does.
     """
-    x, y = np.asarray(ell, dtype=float), np.asarray(s, dtype=float)
-    inside = np.nonzero(x >= float(floor))[0]
-    for i in inside:
-        if i == 0 or i == x.size - 1:
-            continue
-        if not (y[i] > y[i - 1] and y[i] > y[i + 1]):
-            continue
-        denom = y[i - 1] - 2.0 * y[i] + y[i + 1]
-        if denom == 0.0:
-            return float(x[i])
-        return float(x[i] + 0.5 * (y[i - 1] - y[i + 1]) / denom * (x[i + 1] - x[i]))
-    return float("nan")
+    return first_acoustic_peak(ell, s, floor=floor)[0]
 
 
 def label_for(name: str, curves: dict) -> str:

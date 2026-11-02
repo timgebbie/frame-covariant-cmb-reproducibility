@@ -147,7 +147,14 @@ def test_no_second_copy_of_the_finder_survives_in_scripts() -> None:
         for node in tree.body:
             if not isinstance(node, ast.FunctionDef):
                 continue
-            if node.name not in ("_peak", "peak_position"):
+            # **Keyed to "peak", not to a list of names.** The first version
+            # matched `_peak` and `peak_position` exactly and so missed
+            # `figure_f9::first_peak` --- a fifth copy, found only because a
+            # spectrum run printed a peak the guard had never looked at. A
+            # guard keyed to a list of names guards against that list. All
+            # five finders had "peak" in the name and nothing else in
+            # `scripts/` does.
+            if "peak" not in node.name:
                 continue
             # **Semantic, not shape.** A first draft asserted the body was
             # exactly one `return first_acoustic_peak(...)` and flagged
