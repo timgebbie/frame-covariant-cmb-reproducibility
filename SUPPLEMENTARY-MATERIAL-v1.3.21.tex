@@ -424,6 +424,24 @@ and \path{paper/checks/coherence_gate.py} for the structure. Paper~2 is
 expected to carry its pair, written to the same scope rather than extended to
 cover both papers.
 
+\paragraph{The algebra check is carried in this bundle, and the structure
+check is not.} Naming a file at a path only the authors can reach is the
+defect this document records elsewhere as \textbf{236.6}: a public statement
+about an artefact the public cannot run. The algebra check is therefore
+mirrored here, byte-identical, at
+\path{source/source-v2/independent_checks_v1.1.6.py}, where
+\texttt{IMMUTABLE-MANIFEST-SHA256.txt} records its digest and a change to it
+is a release-blocking event rather than a routine update. \textbf{The version
+in its name is what makes that safe}: it is the oracle for one frozen paper
+edition, so a later edition brings its own file rather than altering this one.
+It imports only the standard library, \texttt{numpy} and \texttt{sympy},
+writes its verdicts beside itself and reads nothing, so it runs from a clone
+of this repository alone. \emph{The structure check is deliberately not
+mirrored.} It gates the manuscript build --- it asks whether a build log, a
+\texttt{.bbl} and a \texttt{.bib} exist and whether every heading carries a
+label --- and this bundle holds no manuscript, so here it could only ever
+fail. A gate that cannot pass is one nobody reads.
+
 \paragraph{What the algebra check re-derives, and what it only records.}
 \path{independent_checks_v1.1.6.py} takes Paper~1's coefficients and identities
 and re-establishes them in sympy from constructions of its own, rather than
@@ -6440,7 +6458,7 @@ residual is
 \noindent
 which for a power-law spectrum of index \(\nu\) factorises as
 \((\nu-2)(3\nu-8)/16\) and vanishes at \(\nu=2\) and \(\nu=8/3\). Both
-statements are asserted in \path{paper/checks/independent_checks_v1.1.6.py},
+statements are asserted in \path{source/source-v2/independent_checks_v1.1.6.py},
 section~H, in exact rationals.
 
 \paragraph{What cancels is the deflection response, and variance conservation is not established.} It establishes that
