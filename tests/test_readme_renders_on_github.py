@@ -90,7 +90,7 @@ MARKDOWN = _rendered_markdown()
 #: Lower these as files are cleaned. Raising one requires saying why in the
 #: commit, which is the whole mechanism.
 COSMETIC_BASELINE = {
-    "test_no_bare_asterisk_in_inline_maths": 18,
+    "test_no_bare_asterisk_in_inline_maths": 17,  # 18 -> 17, 2026-11-02: Coordination cleared docs/CUSTODY.md (21f7260)
     "test_no_inline_maths_immediately_after_a_hyphen": 12,
     #: **P1-T's #9, 2026-10-27.** Frozen at 11 files rather than enforced at
     #: zero, and the reason is not timidity: **163 of the 218 instances are in
@@ -99,7 +99,7 @@ COSMETIC_BASELINE = {
     #: guard that makes this class permanent in it. The root `README.md` and
     #: `handoff/P1B-to-P1T.md` were cleared in the landing that added this, so
     #: the public face carries none.
-    "test_no_maths_span_butted_against_a_word_or_dash": 11,
+    "test_no_maths_span_butted_against_a_word_or_dash": 10,  # 11 -> 10, same cleanup
 #: **Both lowered by one on 2026-10-25**, and not by a cleanup: `_prose`
 #: stopped judging `captions/*.md` front matter --- which is LaTeX stored
 #: for the build and was never going to render as prose --- by markdown
