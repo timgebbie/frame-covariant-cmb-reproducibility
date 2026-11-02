@@ -261,3 +261,23 @@ def test_the_counter_can_still_see_a_real_series() -> None:
     found = acoustic_maxima(ell, camb)
     assert len(found) >= 3, (
         f"CAMB has an acoustic series and the counter must see it; got {found}")
+
+
+def test_the_counter_and_the_finder_agree_on_the_first_peak() -> None:
+    """**The two functions in `_peak.py` must not disagree with each other.**
+
+    On PLANCK's released Newtonian frame the counter returned [30] and the
+    finder 415.4 for the same curve: the counter let the floor point --- the
+    renormalisation anchor, D/D_30 == 1 by construction --- qualify as a
+    maximum, and that seeded the prominence test against the real peak. Same
+    candidate rule now, asserted on a curve shaped like that one.
+    """
+    from _peak import acoustic_maxima
+
+    ell = np.array([2.0, 7, 16, 22, 30, 60, 120, 240, 330, 415, 480, 600, 720])
+    d = np.array([0.4, 0.6, 0.8, 0.95, 1.0, 0.6, 0.2, 0.05, 0.06, 0.08,
+                  0.07, 0.03, 0.01])
+    assert acoustic_maxima(ell, d)[0] == pytest.approx(
+        ell[int(np.argmin(np.abs(ell - first_acoustic_peak(ell, d)[0])))])
+    assert 30.0 not in acoustic_maxima(ell, d), (
+        "the renormalisation anchor is not an acoustic maximum")

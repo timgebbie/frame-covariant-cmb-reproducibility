@@ -94,9 +94,17 @@ def acoustic_maxima(
     d = np.asarray(d_ell, dtype=float)
     out: list[float] = []
     tallest = 0.0
-    for i in range(1, ells.size - 1):
-        if ells[i] < float(floor):
-            continue
+    # **The same candidate rule as `first_acoustic_peak`, exactly**: a
+    # maximum's left neighbour must itself be at or above the floor. The first
+    # draft let the floor point qualify, and on PLANCK's released Newtonian
+    # frame that made l = 30 --- the renormalisation anchor, where D/D_30 is
+    # 1 by construction --- a "maximum", which then seeded the prominence
+    # test and rejected the real first peak at 415 as too small beside it.
+    # The two functions in this module returned [30] and 415.4 for the same
+    # curve: a second copy in miniature, inside the file that exists to
+    # remove second copies.
+    idx = np.nonzero(ells >= float(floor))[0]
+    for i in idx[1:-1]:
         if not (d[i] > d[i - 1] and d[i] >= d[i + 1]):
             continue
         if tallest and d[i] < float(prominence) * tallest:
