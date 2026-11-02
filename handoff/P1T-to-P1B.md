@@ -333,10 +333,16 @@ prediction is already public and dated.
 ## P1T->P1B 2026-10-31 #31 -- why there is no peak series, and the one run
 **31 October 2026, 21:10 SAST (19:10Z)** -- stamp source: `date -u`
 
-**Ask: run the released spectrum with `bracket_all_at_w=True` and report all
-maxima.** It is the falsifier for the paragraph below and the flag already
-exists. D29, D32 and D36 exercise it; **no run has carried it through a full
-`C_l`.**
+**CORRECTED 2 November. The ask is `isw_only_at_w=True`, not
+`bracket_all_at_w=True`. Do not run the configuration this item first named.**
+
+I registered `bracket_all_at_w` as the falsifier on 31 October without
+reading D32's own configuration table, which answered it on **25 October**.
+D32 ran that column, and the full identity beside it, and recorded that both
+put late power on a background with no late effect to carry and that *"the
+spectrum must still be laid down at recombination, which is what columns B
+and C destroyed."* **My prediction was answerable before I made it.** It is
+withdrawn, and the item below is rewritten.
 
 **The theorem is yours and it was not in the supplement.** T-90, in
 `functions/spectra/integral_solution.py`: *a V-carried term contributes no
@@ -381,11 +387,37 @@ taken to.**
    and 8 at 26.5 and 22.1 per cent. **The wave is generated and it survives.
    It is the rank-0 channel that does not carry it into the spectrum.**
 
-**The prediction, registered before the run.** With `bracket_all_at_w=True`
-and nothing else changed, the spectrum returns a peak **series** rather than
-an envelope: at least one interior minimum between `l = 300` and `l = 900`.
-**If it returns an envelope, the paragraph is wrong and the absence of the
-secondaries is not a weight question.** Either answer is worth the run.
+**Neither weight is right for the whole bracket, and that is the finding.**
+At `V` the bracket's `K'` channel yields no primary -- the theorem above, and
+it stands. At `W` it is drowned: T-143 has `C_0` and `C_2` growing by 33x to
+the present while `W` falls only to 0.368, so a `W`-carried bracket measures
+the growing mode rather than recombination. **The split is by physical
+channel and not by term.** That is what the standard line-of-sight integrand
+already does and what `(a B_1)'/k = (Phi_A' - Phi_H') + (k/3) tau_1` says
+here: the potential difference accumulates along the path and belongs at `W`;
+`(k/3) tau_1` is `dT'` and belongs at the visibility with the rest of the
+deposit.
+
+**So the ask is D32's column E, `isw_only_at_w=True`, carried through a full
+`C_l` and reporting all maxima.** That column has a pre-registration already
+written into D32 on the late share; what no run has is its **peak
+structure**.
+
+    REGISTERED, 2 November, before the run
+      isw_only_at_w=True, nothing else changed:
+        the spectrum stays localised at recombination -- the early share
+        is unchanged from released, which is what B and C destroyed -- AND
+        it carries at least one interior minimum between l = 300 and l = 900.
+
+    FALSIFIERS
+      localisation destroyed as in B and C  -> the split is not along the
+                                               driving either, and the
+                                               growing mode belongs at W for
+                                               a reason this project lacks
+      localised but still an envelope       -> the absence of the secondaries
+                                               is not a weight question at
+                                               all, and the theorem above
+                                               constrains nothing about them
 
 **The caveat I am holding myself to, which is your M15.** `C_0` is half the
 rank-0 bracket, whose full content is `C_0 + (k/3) tau_1`. Point 6 constrains

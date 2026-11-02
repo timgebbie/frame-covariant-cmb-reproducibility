@@ -3202,20 +3202,28 @@ place}, and the two differ in the only property that matters here:
   \label{eq:kernel-weights}
 \end{equation}
 
-\paragraph{A term carried under the visibility contributes no primary.}
-\eqref{eq:kernel-weights} is the whole argument. A kernel of unit weight
-reproduces its integrand at the deposit, $\int\mathcal Vf\,\mathrm d\eta\to
-f(\eta_\ast)$, which is the $\int\mathcal V=1$ collapse this document uses
-throughout and is what a primary anisotropy \emph{is}: the source at last
-scattering, carried intact to one epoch. A kernel of \emph{zero} weight
-cannot reproduce anything. Integrating \eqref{eq:weight-v-byparts}'s
-replacement against a smooth $f$ gives
+\paragraph{A term that reaches the kernel through $K'$ yields no primary
+when it is carried at the visibility, and the restriction to $K'$ is the
+whole of the claim.} \eqref{eq:kernel-weights} is the argument. A kernel of
+unit weight reproduces its integrand at the deposit,
+$\int\mathcal Vf\,\mathrm d\eta\to f(\eta_\ast)$, which is the
+$\int\mathcal V=1$ collapse this document uses throughout and is what a
+primary anisotropy \emph{is}: the source at last scattering, carried intact
+to one epoch. A kernel of \emph{zero} weight reproduces nothing. Integrating
+\eqref{eq:weight-v-byparts}'s replacement against a smooth $f$ gives
 $\int\mathcal V'f\,\mathrm d\eta\to-f'(\eta_\ast)$: it acts as a
-\textbf{derivative} and not as a sample. \textbf{So the $W$-carried term
-yields a primary and the $\mathcal V$-carried term yields the derivative of
-one.} Nothing has been approximated to reach that; it follows from the two
-areas in \eqref{eq:kernel-weights}, and those follow from the visibility
-being normalised and vanishing at both ends.
+\textbf{derivative} rather than as a sample. \textbf{So of two terms reaching
+the kernel through $K'$, the one carried at $W$ yields a primary and the one
+carried at $\mathcal V$ yields the derivative of one.}
+
+\emph{A term carried at $\mathcal V$ against $K$ itself is untouched by this
+and samples correctly} --- that is the Sachs--Wolfe channel, and it is why
+the released spectrum has a primary at all. Editions before 2 November
+stated the result without the restriction, which claimed it for every
+$\mathcal V$-carried term and so for the monopole that supplies the one
+feature the spectrum does have. \textbf{The correction narrows the theorem
+and leaves its consequence standing}, because $C_1$ reaches the kernel
+through $K'$ by construction and $C_2$ through $K''$.
 
 \paragraph{What the misweighted bracket contributes instead is the term the
 implementation stream measures at $93$--$97\%$ of the bulk integrand.}
@@ -3241,19 +3249,34 @@ at $26.5\%$ and $22.1\%$. \textbf{The oscillation is generated and it
 survives; it is the rank-0 channel that does not carry it into the
 spectrum.}
 
-\paragraph{The falsifier is one run and the control already exists.}
-Restoring the bracket to $W$ is
-\texttt{bracket\_\allowbreak{}all\_\allowbreak{}at\_\allowbreak{}w}, which
-\textbf{D29}, \textbf{D32} and \textbf{D36} exercise and which no run has
-yet carried through a full $C_\ell$. If the reading above is right, that
-configuration returns a peak \emph{series} rather than an envelope. If it
-returns an envelope, this subsection is wrong and the absence of the
-secondaries is not a weight question. \emph{The prediction is registered
-here before the run and not after.} One caveat is carried with it: $C_0$ is
-half of the rank-0 bracket, whose full content is $C_0+\tfrac k3\tau_1$, so
-the third measurement above constrains the half that was measured and not
-the bracket --- which is \textbf{M15}, and is why the bracket measurement is
-asked for separately.
+\paragraph{Neither weight is right for the whole bracket, and that is the
+finding rather than a complication of it.} Editions before 2 November named
+\texttt{bracket\_\allowbreak{}all\_\allowbreak{}at\_\allowbreak{}w} as the
+falsifier and predicted that it returns a peak series. \textbf{That
+prediction is withdrawn, and it was answerable before it was made.}
+\textbf{D32} ran that configuration, and the identity beside it, on
+25 October: both put late power on a background with no late effect to carry,
+and the record states that the spectrum must still be laid down at
+recombination, \emph{which is what those two configurations destroyed}. The
+reason is in \textbf{T-143}: carried at $W$ the bracket is integrated along
+the whole ray, where $C_0$ and $C_2$ grow by a factor of $33$ to the present
+while $W$ falls only to $0.368$, so a $W$-carried bracket measures the
+growing mode rather than recombination.
+
+\noindent
+So the bracket cannot go wholesale to either weight. At $\mathcal V$ its
+$K'$ channel yields no primary; at $W$ it is drowned. \textbf{The split is by
+physical channel and not by term}, which is what the standard line-of-sight
+integrand already does and what $(a\mathcal B_1)'/k=(\Phi_A'-\Phi_H')+\tfrac
+k3\tau_1$ says here: the potential difference accumulates along the path and
+belongs at $W$, while $\tfrac k3\tau_1$ is $\delta\tilde T'$ and belongs at
+the visibility with the rest of the deposit. \emph{The control for that is
+\texttt{isw\_\allowbreak{}only\_\allowbreak{}at\_\allowbreak{}w} and it is
+the one no run has carried through a full $C_\ell$.} One caveat stands
+either way: $C_0$ is half of the rank-0 bracket, whose full content is
+$C_0+\tfrac k3\tau_1$, so the third measurement above constrains the half
+that was measured and not the bracket --- \textbf{M15}, and why the bracket
+measurement is asked for separately.
 
 \paragraph{Both endpoints of the projected identity.}
 For this calculation alone, define the pre-integrated object
