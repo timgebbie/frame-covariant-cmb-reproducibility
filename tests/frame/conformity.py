@@ -20,7 +20,11 @@ It gates five things that have each already cost this bundle something:
 
   A  every item in `handoff/P1B-to-P1T.md` is cited in `handoff/P1T-to-P1B.md`
   B  every item P1-T writes carries an identifier, a clock-sourced stamp, what
-     is asked and what it unblocks  (Coordination's queue contract)
+     is asked and what it unblocks  (Coordination's queue contract).  CORRECTED
+     2026-11-02: its heading regex wanted three hashes and the file writes two,
+     so it matched nothing and had never once scored an item.  It now carries a
+     control, like D carries E, because a check that cannot pass is a check
+     nobody reads.
   D  no maths span in a P1-T file is butted against a letter, a digit or a dash
   F  the supplement's own voice, on the sections P1-T wrote and only those
   E  the D check's own regex cannot straddle two spans -- the control, which is
@@ -159,9 +163,42 @@ def rendering_violations(text):
 # ---------------------------------------------------------------------------
 # A  the channel is read, and running this check is the reading
 # ---------------------------------------------------------------------------
-THEIR_ITEM = re.compile(r'^##\s+P1B\s*(?:->|\u2192)\s*P1T\s+(\d{4}-\d{2}-\d{2})\s+#(\d+)(.*)$', re.M)
-MY_ITEM    = re.compile(r'^###\s+P1T\s*(?:->|\u2192)\s*P1B\s+(\d{4}-\d{2}-\d{2})\s+#(\d+)\s*(.*)$', re.M)
-CITATION   = re.compile(r'[Yy]our\s+#(\d+)')
+THEIR_ITEM = re.compile(r'^#{2,3}\s+P1B\s*(?:->|\u2192)\s*P1T\s+(\d{4}-\d{2}-\d{2})\s+#(\d+)(.*)$', re.M)
+
+#: **Corrected 2026-11-02.  This read ``^###`` and every item heading in
+#: `handoff/P1T-to-P1B.md` is ``##``** -- the same shape THEIR_ITEM above
+#: matches with two hashes in the other file.  So check B matched nothing on
+#: every run since this file landed, and reported *"no items found -- the queue
+#: is empty or the heading format has drifted"* over a queue carrying seven
+#: items.  **A check that cannot pass is a check nobody reads**, and this one
+#: had been red beside two real failures for five days.  The asymmetry was
+#: internal to this file, which makes it the 2026-10-28 class exactly: an
+#: instrument measuring an artefact of its own construction.  `check_queue_contract`
+#: now carries its own control, below, for the same reason check D carries E.
+MY_ITEM    = re.compile(r'^#{2,3}\s+P1T\s*(?:->|\u2192)\s*P1B\s+(\d{4}-\d{2}-\d{2})\s+#(\d+)\s*(.*)$', re.M)
+
+#: **A citation is the other stream's identifier, and the bare form is
+#: ambiguous.**  Both streams number from one integer space, so ``#22`` in my
+#: file is P1-B's item in one paragraph and my own in another -- it is both, on
+#: 2026-11-02, fourteen lines apart.  The unambiguous form is ``P1B#22`` and it
+#: is what this gate wants written.  The legacy ``your #22`` is kept, widened to
+#: carry the words an English sentence puts between them: *"Your diagnosis in
+#: #21 was right"* is a citation and the narrow form scored it UNCITED, which is
+#: a false failure of the check whose whole purpose is to stop a real one being
+#: missed.  A bare ``#22`` is deliberately NOT a citation: it is how I label my
+#: own items, and reading it as one would make check A pass on my own queue.
+CITATION   = re.compile(r'(?:\bP1B\s*#|[Yy]our\s+(?:\w+\s+){0,3}#)(\d+)')
+
+#: The control for CITATION, in the shape check E uses: the probes the regex
+#: must score, and the probes it must not.  A citation scheme is a convention,
+#: and a convention drifts.
+CITE_PROBES = (
+    ('**Your #22 is discharged.**',               {22}),
+    ('Your diagnosis in #21 was right.',          {21}),
+    ('P1B#27 is answered below.',                 {27}),
+    ('**#22** the figure fingerprints.',          set()),
+    ('item #25 above is what that looks like',    set()),
+)
 
 
 def check_channel(quiet=False):
@@ -195,11 +232,16 @@ def check_channel(quiet=False):
 # ---------------------------------------------------------------------------
 # B  the queue contract Coordination wrote into docs/STREAMS.md
 # ---------------------------------------------------------------------------
-def check_queue_contract():
-    if not MINE.exists():
-        return report('B  my items carry identifier, stamp, ask and unblocks', False,
-                      '%s does not exist' % MINE)
-    text = MINE.read_text(encoding='utf-8')
+#: An item states what is asked, or states that it is not an ask.  Both forms
+#: are in use on both sides of the channel and the contract is about the reader
+#: knowing which: an ask carries what it unblocks, a declaration does not.
+ASK   = re.compile(r'\*\*Ask(?:ed)?\b')
+NOASK = re.compile(r'\*\*(?:Not an ask|Answered|Declared|Ruling)\b')
+UNBLK = re.compile(r'\*\*Unblocks\b')
+
+
+def queue_failures(text):
+    """Coordination's queue contract, scored on one document's text."""
     heads = list(MY_ITEM.finditer(text))
     bad = []
     for i, m in enumerate(heads):
@@ -207,15 +249,69 @@ def check_queue_contract():
         tag = '#%s' % m.group(2)
         if 'stamp source' not in body:
             bad.append('%s carries no clock-sourced stamp' % tag)
-        if not re.search(r'\*\*Asked\.?\*\*', body):
-            bad.append('%s does not say what is asked' % tag)
-        if not re.search(r'\*\*Unblocks\.?\*\*', body):
-            bad.append('%s does not say what it unblocks' % tag)
+        asks = bool(ASK.search(body))
+        if not asks and not NOASK.search(body):
+            bad.append('%s says neither what is asked nor that it is not an ask' % tag)
+        if asks and not UNBLK.search(body):
+            bad.append('%s is an ask and does not say what it unblocks' % tag)
+    return bad
+
+
+#: THE CONTROL FOR B, and it exists because B was dead for five days while
+#: printing a sentence that read like a finding about the queue.  Each probe is
+#: a whole miniature document, so the heading level is part of what is tested.
+_STAMP = '**2 November 2026** - stamp source: `date -u`'
+B_PROBES = (
+    ('## P1T->P1B 2026-11-02 #99 - a well-formed ask\n%s\n\n**Ask.** One line.\n\n**Unblocks.** One line.\n' % _STAMP, 0),
+    ('### P1T->P1B 2026-11-02 #99 - the same item at three hashes\n%s\n\n**Ask.** One line.\n\n**Unblocks.** One line.\n' % _STAMP, 0),
+    ('## P1T->P1B 2026-11-02 #99 - a declaration, which needs no unblocks\n%s\n\n**Not an ask.** One line.\n' % _STAMP, 0),
+    ('## P1T->P1B 2026-11-02 #99 - an ask with no unblocks\n%s\n\n**Ask.** One line.\n' % _STAMP, 1),
+    ('## P1T->P1B 2026-11-02 #99 - two asks in one item\n%s\n\n**Ask one.** A line.\n\n**Ask two.** A line.\n\n**Unblocks.** One line.\n' % _STAMP, 0),
+    ('## P1T->P1B 2026-11-02 #99 - the colon form\n%s\n\n**Ask: do the thing.** A line.\n\n**Unblocks:** One line.\n' % _STAMP, 0),
+    ('## P1T->P1B 2026-11-02 #99 - no markers at all\n%s\n\nProse and nothing else.\n' % _STAMP, 1),
+    ('## P1T->P1B 2026-11-02 #99 - an ask with no stamp\n\n**Ask.** One line.\n\n**Unblocks.** One line.\n', 1),
+)
+
+
+def contract_control():
+    """The parser must find the headings, and must still fail on a bad item."""
+    problems = []
+    for probe, expected in B_PROBES:
+        if not MY_ITEM.search(probe):
+            problems.append('CONTROL FAILED -- the item heading is not matched at '
+                            'all, which is how this check sat green-less and '
+                            'silent for five days:\n         %s'
+                            % probe.splitlines()[0])
+            continue
+        got = len(queue_failures(probe))
+        if (got > 0) != (expected > 0):
+            problems.append('CONTROL FAILED -- probe scored %d failure(s), '
+                            'expected %s:\n         %s'
+                            % (got, 'some' if expected else 'none',
+                               probe.splitlines()[0]))
+    for probe, expected in CITE_PROBES:
+        if {int(n) for n in CITATION.findall(probe)} != expected:
+            problems.append('CONTROL FAILED -- the citation regex scores %r as '
+                            '%s, expected %s'
+                            % (probe,
+                               sorted(int(n) for n in CITATION.findall(probe)),
+                               sorted(expected)))
+    return problems
+
+
+def check_queue_contract():
+    if not MINE.exists():
+        return report('B  my items carry identifier, stamp, ask and unblocks', False,
+                      '%s does not exist' % MINE)
+    text = MINE.read_text(encoding='utf-8')
+    bad = queue_failures(text)
+    heads = list(MY_ITEM.finditer(text))
+    if not heads:
+        bad.insert(0, 'no items found -- the queue is empty or the heading '
+                      'format has drifted')
+    bad += contract_control()
     return report('B  my items carry identifier, stamp, ask and unblocks',
-                  not bad and bool(heads),
-                  '\n'.join(bad) if bad else
-                  ('' if heads else 'no items found -- the queue is empty or the '
-                                    'heading format has drifted'))
+                  not bad, '\n'.join(bad))
 
 
 # ---------------------------------------------------------------------------
