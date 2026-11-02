@@ -28,7 +28,10 @@ eyeball off a log axis.
 from __future__ import annotations
 
 import csv
+import hashlib
+import os
 import sys
+import tempfile
 from pathlib import Path
 
 import numpy as np
@@ -143,13 +146,65 @@ def spectrum(background, omega_b_h2: float,
     table = BesselTable.build(
         ell_max=int(needed.max()), ells=needed,
         x_max=float(k_com.max() * (env.background.eta_0 - env.eta[0])) + 20.0)
+    # **Checkpointed per mode, T-187, because a per-background checkpoint is
+    # not one here.** On 2026-11-02 the `--bracket-all-at-w` run finished
+    # Einstein--de Sitter, started LCDM's 4575 modes, and died with the
+    # container. The checkpoint below this function records a background only
+    # when it is finished, so the forty minutes spent on LCDM were simply lost,
+    # and the run that is P1-T's registered falsifier cannot complete in an
+    # environment that is reclaimed more often than it takes.
+    #
+    # **The key names the CONFIGURATION, not only the code.**
+    # `source_fingerprint` covers the files; it cannot see
+    # `BULK_SOURCE_CONTROLS` or `B_SLOT_REPAIR`, which the CLI flags set at
+    # run time. A key without them would let a `--bracket-all-at-w` run resume
+    # from a released-run cache and report the mixture as either --- T-125's
+    # hazard, a control that reads as live and is not, arriving through a
+    # cache rather than through a call path.
+    #
+    # Written outside the tree for the reason `compare_criterion_5b` gives:
+    # this bundle freezes behind a DOI and a scratch file in a manifest is a
+    # permanent artefact of a temporary convenience.
+    from functions.spectra import two_frame as _tf
+    config = repr((
+        float(background.omega_m), float(background.omega_lambda),
+        float(background.omega_r), float(omega_b_h2), float(hubble_h),
+        sorted(dict(_tf.BULK_SOURCE_CONTROLS).items()),
+        bool(_tf.B_SLOT_REPAIR), int(k_com.size), float(K_MAX)))
+    key = hashlib.sha256(
+        (source_fingerprint() + config).encode("utf-8")).hexdigest()[:16]
+    cache = Path(os.environ.get("F9_MODE_CACHE", tempfile.gettempdir())) \
+        / f"f9-modes-{key}.npz"
+
     transfer = {"newtonian": np.zeros((ELLS.size, k_com.size)),
                 "cdm": np.zeros((ELLS.size, k_com.size))}
+    start = 0
+    if cache.exists():
+        try:
+            held = np.load(cache)
+            if held["newtonian"].shape == transfer["newtonian"].shape:
+                transfer = {"newtonian": held["newtonian"].copy(),
+                            "cdm": held["cdm"].copy()}
+                start = int(held["done"])
+                print(f"      resuming at mode {start} of {k_com.size} "
+                      f"({cache.name})", flush=True)
+        except Exception as exc:      # a bad cache is a recompute, not an error
+            print(f"      mode cache unreadable ({exc}); recomputing")
+            start = 0
     for j, k in enumerate(k_com):
+        if j < start:
+            continue
         sets = dict(zip(("newtonian", "cdm"), coefficient_sets(float(k), env)))
         for name, coefficients in sets.items():
             transfer[name][:, j] = transfer_by_rank(
                 ELLS, float(k), coefficients, env, table)[-1]
+        if (j + 1) % 50 == 0 or j + 1 == k_com.size:
+            tmp = cache.with_suffix(".tmp.npz")
+            np.savez(tmp, newtonian=transfer["newtonian"],
+                     cdm=transfer["cdm"], done=j + 1)
+            os.replace(tmp, cache)   # atomic: a kill mid-write keeps the old
+            if (j + 1) % 500 == 0:
+                print(f"      mode {j + 1:5d} of {k_com.size}", flush=True)
     power = primordial_power(k_com, n_s=PLANCK_N_S, amplitude=1.0)
     return {name: np.array([cl_covariant_route(int(l), k_com, block[i], power)
                             for i, l in enumerate(ELLS)])

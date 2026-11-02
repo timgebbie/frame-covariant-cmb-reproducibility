@@ -335,7 +335,7 @@ it.
 
 ### `k_com` — the k grid the released angular spectrum is integrated on
 
-`scripts/figure_f9_acoustic_spectrum.py:138`, `np.linspace`
+`scripts/figure_f9_acoustic_spectrum.py:141`, `np.linspace`
 
 `required_k_points(1500, r_theta)`, per background because r_theta is.
 **Was `np.arange(0.05, 1500.0, np.pi/3)` until 2026-10-17** --- 0.96 samples
@@ -821,7 +821,7 @@ Selection only, with the dipole prepended so the probe is on the figure.
 
 ### `ELLS` — the multipoles F9 is drawn at
 
-`scripts/figure_f9_acoustic_spectrum.py:85`, `np.arange`
+`scripts/figure_f9_acoustic_spectrum.py:88`, `np.arange`
 
 Linear at 30 across the acoustic band. Each ell is an independent
 quadrature, so this selects which points are drawn and changes no value ---
