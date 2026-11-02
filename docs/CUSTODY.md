@@ -32,7 +32,7 @@ findings it has become a third copy of something and should be cut back.
 
 | what you are landing | route | notes |
 |---|---|---|
-| **a text file under ~100 kB, with no generated dependent** | **the GitHub connector** | works from any session — no credential, no shell, no PI. Both repositories. **The ceiling is the model's context and it is not negotiable by trying harder.** Fidelity through it is not a worry: 609 lines of python and 731 of digest landed this way on 2026-10-31 and verified byte-identical on a re-clone, twice |
+| **a text file under ~100 kB, with no generated dependent** | **the GitHub connector** | works from any session — no credential, no shell, no PI. Both repositories. **The ceiling is the model's context and it is not negotiable by trying harder.** Fidelity is measured, not assumed: byte-identical twice for P1-B on 2026-10-31, and **a blank line moved** for P1-T on 2026-11-02 on a 22 kB `.tex`, caught by `sha256` on a re-clone. **Read back by hash** |
 | **several text files that must move together** — an edition bump's README line, `\date` and filename | **one commit**: `git push` from a clone, or `push_files` through the connector | one file per connector commit leaves the tree red between them, and a gate that reads two of them will say so. Rule 9 does not restrict this — the question there is who else is in those paths |
 | **a text file *above* the ceiling** — a supplement source runs to ~384 kB | **the same route as a binary**: `git push` from a cloud clone | **For routing purposes an oversized text artefact is a binary.** P1-T's gap, raised 2026-10-30. **Splitting the supplement is not available** — see the requirement below |
 | **text that a script produces** — manifests, `docs/THEORY-AUDIT.md`, the grid register, test output | **clone in the cloud, run the generator there, land the result** — `git push` if your session can; the connector only if the output is under the ceiling | the cloud workspace has python with numpy/scipy/sympy, and `pdflatex`/`latexmk` |
@@ -92,7 +92,7 @@ commit is in git.
 connected folder is refused until the PI approves it, so `git` commands leave
 `index.lock`, `HEAD.lock` and friends behind, and **the next git command — his
 own included — fails with "File exists".** Sweep them in the same call:
-`for f in .git/*.lock; do [ -e "$f" ] && mv "$f" ".git/stale-$(basename $f)-$(date +%s)"; done`
+`for f in .git/*.lock; do [ -e "$f" ] && mv "$f" ".git/stale_$(basename $f)_$(date +%s)"; done`
 
 **4. `device_bash` cannot push.** The Linux VM has no access to Windows
 Credential Manager. It reads, runs and **commits locally**. Three trigger
@@ -127,7 +127,7 @@ of forty zeros and no real secret anywhere:
 ```
 git -c http.extraheader="Authorization: Basic $(printf 'x-access-token:%s' \
     0000000000000000000000000000000000000000 | base64 -w0)" \
-    push --dry-run origin HEAD:refs/heads/probe-$(date +%s)
+    push --dry-run origin HEAD:refs/heads/probe_$(date +%s)
 ```
 
 **Read which error comes back, not the exit status.**
@@ -266,6 +266,7 @@ P1-T   tests/frame/**
 P1-T   handoff/P1T-to-P1B.md
 P1-T   handoff/P1T-to-coordination.md
 P1-T   README.md
+P1-T   source/**         # PI ruling 2026-11-02; immutable once recorded, a new edition is a new file
 P1-B   handoff/P1B-to-P1T.md
 P1-B   handoff/P1B-to-coordination.md
 P1-B   scripts/**
@@ -285,7 +286,6 @@ P1-B   FILE-MANIFEST-SHA256.txt
 P1-B   PORTABLE-MANIFEST-SHA256.txt
 P1-B   IMMUTABLE-MANIFEST-SHA256.txt
 COORD  docs/CUSTODY.md
-COORD  docs/RESUME.md
 FROZEN correction/**
 FROZEN sources/**
 ```
@@ -347,7 +347,7 @@ for GitHub-rendered markdown, each against its own caption.
 
 | stream | adjudicates | writes, in the bundle |
 |---|---|---|
-| **P1-T** | the theory | `supplementary-materials/`, `tests/frame/`, `handoff/P1T-to-P1B.md`, `handoff/P1T-to-coordination.md`, and the root `README.md` |
+| **P1-T** | the theory | `supplementary-materials/`, `tests/frame/`, `source/`, `handoff/P1T-to-P1B.md`, `handoff/P1T-to-coordination.md`, and the root `README.md` — the `custody` block above is the authority |
 | **P1-B** | the implementation; **custodian of the bundle** | everything else, plus `handoff/P1B-to-P1T.md` and `handoff/P1B-to-coordination.md` |
 | **Coordination** | consistency, never correctness; **custodian of the paper repository** | `docs/CUSTODY.md` here, `docs/STREAMS.md` and `docs/RESUME.md` there |
 | **PI** | everything irreversible | tags, releases, arXiv, the journal |
