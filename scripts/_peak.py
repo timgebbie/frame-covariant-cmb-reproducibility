@@ -64,6 +64,48 @@ import numpy as np
 PLATEAU_FLOOR = 30.0
 
 
+def acoustic_maxima(
+    ells, d_ell, *, floor: float = PLATEAU_FLOOR, prominence: float = 0.10,
+) -> list[float]:
+    r"""Every interior maximum above `floor` that stands `prominence` proud.
+
+    **The threshold is the whole point and a count without one is noise.**
+    On 2026-11-02 a bare count of local maxima reported the released
+    Newtonian Einstein--de~Sitter spectrum as having *three* --- $\ell=450$,
+    690 and 870 --- and that read as the acoustic peak series everyone has
+    been looking for. It was not. The values are
+
+        450  0.00152        690  0.00005        870  0.00004
+
+    of $D_{30}$: the second and third are **3 per cent of the first**, in the
+    fifth decimal of a renormalised quantity, a hundredfold down the damping
+    tail. They are ripple on a floor, and a counter with no amplitude test
+    cannot tell them from peaks.
+
+    `prominence` is measured against the **running maximum so far**, not
+    against the global one, because a genuine series falls steeply: the
+    second acoustic peak of a real spectrum is a few tenths of the first, and
+    a global threshold would discard it along with the noise. Ten per cent of
+    the tallest peak seen up to that $\ell$ keeps a real series and rejects a
+    tail ripple, and it is stated here rather than buried at a call site so
+    that a count printed anywhere in this bundle means the same thing.
+    """
+    ells = np.asarray(ells, dtype=float)
+    d = np.asarray(d_ell, dtype=float)
+    out: list[float] = []
+    tallest = 0.0
+    for i in range(1, ells.size - 1):
+        if ells[i] < float(floor):
+            continue
+        if not (d[i] > d[i - 1] and d[i] >= d[i + 1]):
+            continue
+        if tallest and d[i] < float(prominence) * tallest:
+            continue
+        tallest = max(tallest, float(d[i]))
+        out.append(float(ells[i]))
+    return out
+
+
 def first_acoustic_peak(
     ells, d_ell, *, floor: float = PLATEAU_FLOOR,
 ) -> tuple[float, float]:

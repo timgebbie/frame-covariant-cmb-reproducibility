@@ -214,3 +214,50 @@ def test_the_four_call_sites_now_share_one_definition() -> None:
     assert d34._peak(ell, d) == pytest.approx(shared)
     assert d36._peak(ell, d) == pytest.approx(shared)
     assert c5b.peak_position(ell, d) == int(round(shared))
+
+
+def test_a_tail_ripple_is_not_an_acoustic_peak() -> None:
+    r"""**The count that fooled me on 2026-11-02, as a fixture.**
+
+    A spectrum with one real maximum and two ripples a hundredfold down the
+    damping tail. A bare local-maximum count calls that three peaks and reads
+    as the acoustic series; the amplitudes say otherwise. These numbers are
+    the released Newtonian Einstein--de~Sitter curve, rounded.
+    """
+    from _peak import acoustic_maxima
+
+    ell = np.array([30.0, 300, 390, 450, 510, 570, 630, 690, 750, 810, 870, 930])
+    d = np.array([1.0, 0.00043, 0.00111, 0.00152, 0.00088, 0.00018,
+                  0.00003, 0.00005, 0.00003, 0.00003, 0.00004, 0.00003])
+
+    bare = [float(ell[i]) for i in range(1, ell.size - 1)
+            if d[i] > d[i - 1] and d[i] >= d[i + 1]]
+    assert len(bare) == 3, (
+        "fixture is wrong: a bare count must find three, or this test does "
+        "not reproduce the mistake it exists for")
+
+    assert acoustic_maxima(ell, d) == [450.0]
+
+
+def test_the_counter_can_still_see_a_real_series() -> None:
+    """CAMB's three peaks. **A counter that rejects everything is not a test.**
+
+    The negative control above only shows the threshold rejects ripple. This
+    shows it keeps a genuine series whose later peaks are a few tenths of the
+    first --- which is why `prominence` is measured against the running
+    maximum and not the global one.
+    """
+    from _peak import acoustic_maxima
+
+    csv_path = ROOT / "outputs" / "criterion-5b.csv"
+    if not csv_path.exists():
+        pytest.skip("the criterion-5b spectra are not in this tree")
+    rows = [r for r in csv.reader(csv_path.open(encoding="utf-8"))
+            if r and not r[0].startswith("#")]
+    head = rows[0]
+    ell = np.array([float(r[0]) for r in rows[1:]])
+    camb = np.array([float(r[head.index("camb")]) for r in rows[1:]])
+
+    found = acoustic_maxima(ell, camb)
+    assert len(found) >= 3, (
+        f"CAMB has an acoustic series and the counter must see it; got {found}")
