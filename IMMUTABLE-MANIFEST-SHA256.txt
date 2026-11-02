@@ -1,5 +1,6 @@
 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  source/.gitkeep
 8c271211e9c86cbc9b8bfbdc5abeaaa423b48baa33897d7b72dd01efc211fc50  source/README.md
 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  source/source-v1/.gitkeep
+a8b026b37ff3ada242a88b0a7e5bf00a97abd2a0da8c1d9b654b0e801aa2c4c3  source/source-v1/TG-FrameCovariantCMBR-v1.1.6-arxiv.zip
 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  source/source-v2/.gitkeep
 5e2191b068f081ff8cee1f2e3e722c7374b7cceb05282cbbb512026596d7e516  source/source-v2/independent_checks_v1.1.6.py

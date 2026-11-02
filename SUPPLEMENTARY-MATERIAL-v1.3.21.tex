@@ -442,6 +442,19 @@ mirrored.} It gates the manuscript build --- it asks whether a build log, a
 label --- and this bundle holds no manuscript, so here it could only ever
 fail. A gate that cannot pass is one nobody reads.
 
+\paragraph{The edition the check is an oracle for is carried beside it.}
+\path{source/source-v1/TG-FrameCovariantCMBR-v1.1.6-arxiv.zip} is the arXiv
+source bundle for \texttt{v1.1.6-arxiv}, byte-identical to the submitted
+archive and carrying the \texttt{.tex}, the \texttt{.bib}, the \texttt{.bbl}
+and the three figure sources it builds from. \textbf{A check and the thing it
+checks are of no use apart}, and until this edition a reader could obtain
+neither from this repository. Both now sit under \path{source/}, where
+\texttt{IMMUTABLE-MANIFEST-SHA256.txt} records their digests. \emph{The freeze
+recorded here is the arXiv freeze and not acceptance}, which
+\path{source/README.md} reserves \path{source-v1/} for; the two coexist
+because each carries its edition in its name, so a later submission arrives as
+its own file rather than overwriting this one.
+
 \paragraph{What the algebra check re-derives, and what it only records.}
 \path{independent_checks_v1.1.6.py} takes Paper~1's coefficients and identities
 and re-establishes them in sympy from constructions of its own, rather than
