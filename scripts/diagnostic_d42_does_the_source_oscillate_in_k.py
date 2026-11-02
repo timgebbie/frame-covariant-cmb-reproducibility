@@ -101,6 +101,38 @@ gate built from one coefficient cannot see a cancellation distributed across
 the bracket*, and a diagnostic built from one coefficient cannot see an
 oscillation distributed across it either.
 
+**Which half, and why half is not enough --- P1-T, `2362ae8`.** $C_0$ is
+the **frame-dependent** half. Under a change of frame $C_0$ shifts by
+$+kv/3$ and $(k/3)\tau_1$ by $-kv/3$, so with the corrected monopole row the
+bracket shifts by exactly zero: **only the bracket is a physical object.**
+This file measures $C_0$ in the CDM frame, which is a fact about a frame.
+Calling it "the rank-0 channel" --- as the supplement did on 31 October ---
+states that fact as if it were physics. The qualitative reading survives,
+because the shift $kv/3$ is smooth in $k$ and so cannot put an oscillation
+into $C_0$ or take one out in either frame; the physical claim does not.
+
+PRE-REGISTERED FOR THE BRACKET RUN, written before it exists
+------------------------------------------------------------
+The bracket $C_0+(k/3)\tau_1$ will be measured at the visibility peak in
+**both** frames, and P1-T's frame statement supplies a control that costs
+nothing:
+
+    CONTROL     the bracket agrees between the Newtonian and CDM frames to
+                the integrator's tolerance, mode by mode. If it does not,
+                either the bracket is assembled wrongly here or the
+                corrected monopole row is not doing what MONOPOLE_ROW says
+                -- and no modulation read off it means anything.
+    PHYSICS     the bracket's modulation at k~100..500, read the same way as
+                the table above. Comparable to -C_1's 22% -> 3% means the
+                rank-0 bracket carries the wave and the envelope in D_l comes
+                from elsewhere. Comparable to C_0's tenths of a percent means
+                the physical rank-0 object carries no wave, and that is a
+                finding about the physics rather than about a frame.
+
+**tau_1 is not on `CoefficientSet` today**, so the run needs it exposed from
+`coefficient_sets` --- one construction, returned, rather than a second
+assembly of the tight-coupling continuation in this file (**T-125**'s shape).
+
 **So the number to quote from this file is the modulation per coefficient,
 and the measurement it demands next is the same modulation on the bracket.**
 The spectrum-level reading survives that caveat only because D4's rank shares
