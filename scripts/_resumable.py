@@ -55,9 +55,40 @@ class Checkpoint:
             print(f"  [resume] {self.path.name}: {len(self._rows)} row(s) "
                   f"from {done} configuration(s) already computed; "
                   f"those are skipped", file=sys.stderr, flush=True)
-        else:
-            with self.path.open("w", newline="", encoding="utf-8") as fh:
-                csv.DictWriter(fh, self.fields).writeheader()
+        # **No file until there is a row to put in it --- 2026-11-03, T-189.**
+        # This branch used to write the CSV header here, on construction, so
+        # the released artefact existed before the diagnostic had computed
+        # anything. `diagnostics/d24-phi-prime-sweep.csv` sat on `main` as 63
+        # bytes of column names from `41a92cc` onwards, and every manifest
+        # sweep hashed it, because a manifest can only record what is on disk.
+        #
+        # **What was measured, since it is not the obvious thing.** That file
+        # has had exactly one committed content in its life --- the header,
+        # `fac8a0ba...`. Yet six commits on `main`, every one of them titled
+        # *manifest sweep after rebase* (`41a92cc`, `993ce78`, `dfb4d05`,
+        # `64bf705`, `a09cfbe`, `a59822a`), carry a FILE-MANIFEST line reading
+        # `7e8d1ac6...` --- the hash of a populated sweep that is in no commit
+        # at all. At each of those six the two manifests contradict each other
+        # about one file: PORTABLE says `fac8a0ba`, which is the file that is
+        # actually there. **The manifest was generated from a tree that is not
+        # the tree committed**, and the next ordinary commit put `fac8a0ba`
+        # back. That is why the sweep kept *restoring the entry* instead of
+        # anyone *rerunning the diagnostic*.
+        #
+        # **And nothing caught it.** `make_manifests.py --check` prints
+        # `DRIFT  FILE-MANIFEST-SHA256.txt does not match the tree` at all six,
+        # tags the row `[numeric]`, excuses it as matplotlib/TeX/BLAS variation
+        # and **exits 0**. That excuse is sound for a rendering and false here:
+        # this file carries no numbers, only column names. The escape hatch
+        # that exists for float noise also passes a manifest line pointing at
+        # a file nobody has. The gate is P1-B's and the repair is not in this
+        # commit --- it needs its own falsifier --- but the recurrence stops
+        # here, at the line that created the artefact.
+        #
+        # The header is now written by the first `add()`, so a diagnostic that
+        # completes no configuration leaves nothing behind and there is nothing
+        # for a sweep to record. Resume is unaffected: a file that was never
+        # written has no rows to resume from, which is what it reported anyway.
 
     def has(self, configuration: str, *, expect: int | None = None) -> bool:
         """True when this configuration completed in this or a previous run.
@@ -101,9 +132,12 @@ class Checkpoint:
                       .strftime("%Y-%m-%dT%H:%M:%SZ")}
         row.update({k: str(v) for k, v in values.items()})
         self._rows.append(row)
+        fresh = not self.path.exists()
         with self.path.open("a", newline="", encoding="utf-8") as fh:
-            csv.DictWriter(fh, self.fields).writerow(
-                {k: row.get(k, "") for k in self.fields})
+            writer = csv.DictWriter(fh, self.fields)
+            if fresh:
+                writer.writeheader()
+            writer.writerow({k: row.get(k, "") for k in self.fields})
             fh.flush()
             # **Best-effort, and it must be --- 2026-10-26.** `os.fsync` raised
             # `OSError: [Errno 9] Bad file descriptor` partway through D36 on

@@ -147,3 +147,46 @@ def test_every_checkpointed_diagnostic_declares_its_row_count():
         f"{sorted(set(offenders) - known)}. Pass `expect=` the number of rows "
         "the instrument writes per configuration — see T-162."
     )
+
+
+#: **T-189, 2026-11-03. A checkpoint that computed nothing must leave nothing.**
+#:
+#: `Checkpoint.__init__` used to write the CSV header on construction, so the
+#: released artefact existed before the diagnostic had produced a single row.
+#: `diagnostics/d24-phi-prime-sweep.csv` sat on `main` as 63 bytes of column
+#: names from `41a92cc` to this commit, and `make_manifests` hashed it on every
+#: sweep because a manifest can only record what is on disk.
+#:
+#: The header is now written by the first `add()`. The three tests below are
+#: the feature, the file it must still produce, and the negative control T-44
+#: requires — the first would pass trivially if `add()` stopped writing at all.
+
+
+def test_a_checkpoint_that_adds_nothing_creates_no_file(tmp_path):
+    """Construction is not a result, so it must not leave an artefact."""
+    cp = _cp(tmp_path, "empty.csv")
+    assert not cp.path.exists(), (
+        "a Checkpoint that completed no configuration left a file behind; "
+        "a manifest sweep will record it as the diagnostic's output")
+    assert cp.all() == []
+
+
+def test_the_first_row_writes_the_header(tmp_path):
+    """And the file is still a readable CSV with its column names."""
+    cp = _cp(tmp_path, "one.csv")
+    cp.add("cfg || EdS", background="EdS", metric="a", value="1.0")
+
+    lines = cp.path.read_text(encoding="utf-8").splitlines()
+    assert lines[0].split(",") == list(cp.fields)
+    assert len(lines) == 2, lines
+
+    # and it resumes, which is the whole point of writing it at all
+    assert _cp(tmp_path, "one.csv").has("cfg || EdS", expect=1)
+
+
+def test_the_negative_control_a_written_checkpoint_does_exist(tmp_path):
+    """T-44: the absence test above must fail when there IS a row."""
+    cp = _cp(tmp_path, "control.csv")
+    cp.add("cfg || EdS", background="EdS", metric="a", value="1.0")
+    assert cp.path.exists()
+    assert cp.path.stat().st_size > 0
