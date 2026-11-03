@@ -1,5 +1,13 @@
 % Computational supplement to the associated paper.
 %
+% v1.3.23, 2026-11-03.  The coefficient at fault, named from the target
+% paper's own source equation: the rank-one gravitational source enters (89)
+% with the wrong sign against the Thomson term, and the rank-zero source is
+% dropped.  With both corrected the three frame conditions hold identically;
+% either alone fails, which is why T-105 was refuted when tried by itself.
+% The repair registered before it is built.  Delta C_0 /= 0 withdrawn as an
+% outcome.
+%
 % v1.3.22, 2026-11-03.  Content corrections to v1.3.21, each a withdrawal, a
 % restatement or an addition and none a compression.  The account of the
 % missing peak series built on the kernel weights is withdrawn (a kernel that
@@ -42,7 +50,7 @@
 %      are named, with exact k-independent margins.
 %   9  Two voice defects inside P1-T's declared sections.
 %
-% Build: latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.3.22.tex  (only after locked
+% Build: latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.3.23.tex  (only after locked
 % assets have passed hash checks). THIS FILE IS THE WHOLE DOCUMENT: the prose
 % carries no \input, and every former supplementary-materials/ fragment is
 % expanded inline between its own BEGIN/END provenance comments. The only
@@ -86,7 +94,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.3.22 --- 3 November 2026\\
+\date{Supplement v1.3.23 --- 3 November 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.3.0-dev}
 
 \begin{document}
@@ -3441,14 +3449,63 @@ $(C_2'-C_1)\,j_\ell$ is not a free choice of sign: \eqref{eq:byparts} forces
 it from $+C_2K''$, so printing $-C_2'$ there would make the collapsed boundary
 frame-invariant and the boundary no longer the boundary of its own integrand.
 \emph{The defect is upstream, in how the gravitational coefficients carry the
-frame}: the relative sign of the Sachs--Wolfe combination inside $C_1$ in
-(90), the transformation laws for $\delta T$ and $\Phi_A$, or the rank-zero
-row, which \eqref{eq:frame-conditions} requires to be frame-invariant and
-which $C_0$ is not while the bracket is. Which of the three is wrong is
-derived from \eqref{eq:transport-exact} in a generic frame before any repair
-is registered, and the control for that repair is
-\eqref{eq:frame-conditions}, scored on the coefficients over the visibility
-window before any spectrum is read.
+frame, and Paper~1's own source equation names it.} Its linear redshift
+source is
+\begin{equation}
+  \mathcal B(x,e)\simeq+\tfrac13\mathrm D^a\tau_a
+    -(\mathrm D_a\ln T+A_a)e^a-\sigma_{ab}e^ae^b ,
+  \label{eq:paper1-source}
+\end{equation}
+with the Thomson term $+\sigma_{\rm T}n_e\bar f_1e^av^B_a$ beside it. Two
+features of it are absent from this bundle's coefficients. \textbf{The
+rank-one gravitational source enters with the opposite sign to the Thomson
+Doppler term}, so that $a\mathcal B_1=-k(\delta T+\Phi_A)$ in this bundle's
+harmonic convention, where the coefficients are built with
+$+k(\delta T+\Phi_A)$; and \textbf{the rank-zero source
+$\tfrac13\mathrm D^a\tau_a$, which is $a\mathcal B_0=-\tfrac k3\tau_1$, is
+carried}, where the coefficients drop it (\S\ref{sec:ell-zero-row}). Scored
+symbolically against this bundle's own transformation laws, with the matching
+(89) as built, the three conditions of \eqref{eq:frame-conditions} read:
+\begin{center}\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+coefficients & rank zero & scattering & gravitational & by-parted $K$ coefficient \\
+\midrule
+as built & $kv/3$ & $0$ & $-2v'/k$ & frame-dependent \\
+rank-one sign corrected alone & $kv/3$ & $0$ & $0$ & frame-dependent \\
+$a\mathcal B_0$ carried alone (T-105) & $0$ & $0$ & $-2v'/k$ & frame-dependent \\
+both, as \eqref{eq:paper1-source} & $0$ & $0$ & $0$ & invariant, identically \\
+\bottomrule
+\end{tabular}
+\end{center}
+\textbf{Both corrections together, and neither alone.} That is why T-105 was
+refuted when it was tried by itself: with the rank-one sign as built, $-C_1'$
+carries $+\tfrac k3\tau_1$ and the restored $a\mathcal B_0$ doubles it, which
+is the $98.5\%$ criterion~5b caught; with the sign of
+\eqref{eq:paper1-source}, $-C_1'$ carries $-\tfrac k3\tau_1$ and
+$a\mathcal B_0$ cancels it. In a shear-free frame the $W$-carried
+gravitational content of the bracket is then $-(\Phi_A'-\Phi_H')$, the
+integrated Sachs--Wolfe term, with no photon dipole riding along the ray. The
+transformation laws for $\delta T$ and $\Phi_A$ are right, and (102)'s
+$+C_2'$ stands. \emph{The frame test cannot see the relative sign between the
+$j_\ell$ and $j_\ell'$ slots}, since each is invariant on its own;
+\eqref{eq:paper1-source} fixes it.
+
+\paragraph{The repair, registered on 3 November before it is built.} Build
+$a\mathcal B_1$ with the sign of \eqref{eq:paper1-source}, at the one place it
+is defined, and carry $a\mathcal B_0$ in $C_0$ with it and never without it;
+score \eqref{eq:frame-conditions} on the coefficients before any spectrum is
+read. Registered: \emph{(a)} the three conditions hold to the integrator's
+tolerance at every mode; \emph{(b)} in the Newtonian frame the $W$-carried
+gravitational content is $-(\Phi_A'-\Phi_H')$ and $\tfrac k3\tau_1$ cancels;
+\emph{(c)} the exact identity, the bracket at $W$ with its visibility terms,
+returns $C_\ell$ at $\ell\ge2$ identical in the two frames, and on
+Einstein--de~Sitter, where the potentials are constant and there is no late
+effect to carry, it no longer puts power late; \emph{(d)} the assembly that
+keeps $\kappa'$ out of every derivative and $\hat v_B$ with $C_2$ carries a
+peak series in both frames, identical at $\ell\ge2$. If \emph{(d)} fails while
+\emph{(a)}--\emph{(c)} hold, the loss of the series is not a frame defect, and
+the admissibility condition is what remains.
 
 \paragraph{Both endpoints of the projected identity.}
 For this calculation alone, define the pre-integrated object
@@ -3843,6 +3900,19 @@ $\tfrac k3\tau_1$
 identification used here, which is why the reduced form is quoted.
 Adding it to $C_0$ counts it twice, and criterion 5b doubles at $98.5\%$.
 Finding T-107 replaces T-105.
+
+\paragraph{Read with \S\ref{sec:w-form} as of 3 November: T-107 is right
+about T-105 alone, and the row is required together with the rank-one sign.}
+The double counting measured above is real for the coefficients as built,
+where $a\mathcal B_1=+k(\delta T+\Phi_A)$ puts $+\tfrac k3\tau_1$ inside
+$-C_1'$. Paper~1's source \eqref{eq:paper1-source} carries the rank-one
+gravitational term with the opposite sign; $-C_1'$ then carries
+$-\tfrac k3\tau_1$ and the restored row cancels it rather than doubling it.
+\textbf{With both, the rank-zero coefficient is the bracket
+$C_0+\tfrac k3\tau_1$, frame-invariant to $2.1\times10^{-14}$ (\textbf{D42}),
+and the conclusion of the next paragraph --- that $\Delta C_0\neq0$ is the
+correct outcome --- is withdrawn}: $\Delta C_0=0$ is the first frame
+condition. Its algebra stands as a statement about $C_0$ alone.
 
 \paragraph{So $\Delta C_0\neq0$, and that is the correct outcome.} Under
 \eqref{eq:c0-solved}, with Appendix~\ref{sec:frame-division}'s own
