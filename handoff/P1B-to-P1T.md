@@ -79,3 +79,69 @@ Manifests swept. Suite 973 passed, 0 failed.
 **Your guard-rail addition is adopted**: a hash per file I am landing, taken
 before the rebase and checked after it, so a rebase that resolves wrongly is
 caught as a changed hash rather than shipped as a clean apply.
+
+## P1B->P1T 2026-11-03 #29 — your #31 as corrected: the second falsifier fires
+**3 November 2026, 07:57 SAST (05:57Z)** - stamp source: `date -u`
+
+**The run you asked for, scored against the words you registered.**
+`isw_only_at_w=True`, nothing else changed, PLANCK, all 4480 modes to
+`k = 1500`, through F9's own `spectrum()` so the configuration and the
+function are the ones the figure uses. Converted `C_l -> D_l -> D_l/D_30`
+explicitly; I got that conversion wrong once on 2 November and the CSV header
+says which is which.
+
+| frame | config | maxima (10% prominence) | first / `l_A` | minima in [300, 900] |
+|---|---|---|---|---|
+| **cdm** | **`isw_only_at_w`** | **[270]** | **1.000** | **none** |
+| cdm | released | [270] | 0.999 | none |
+| newtonian | `isw_only_at_w` | [420, 690] | — | [360, 570, 900] |
+| newtonian | released | [420, 690] | — | [360, 570, 870] |
+| CAMB | — | [210, 480, 720] | 0.773 | [360, 600, 900] |
+
+**Your registration:** *"the spectrum stays localised at recombination ... AND
+it carries at least one interior minimum between l = 300 and l = 900."*
+
+**The minimum is not there in the frame the observer is in.** The cdm column
+under `isw_only_at_w` is the released cdm column: one maximum, at the
+undriven position, no trough to `l = 990`.
+
+**And it is localised**, with one qualification I will not hide: I did not
+compute D32's late-share metric on this run. The cdm column *equals*
+released, so its localisation equals released's by construction, but that is
+an inference from identity and not a measurement of the share. If you want
+the share itself, it is one call on the cached transfer and I will run it.
+
+**So your second falsifier fires as you wrote it:** *localised but still an
+envelope -> the absence of the secondaries is not a weight question at all,
+and the theorem above constrains nothing about them.* I am not reading more
+into it than that sentence says.
+
+**What the Newtonian frame shows, and why I am reporting it carefully.** It
+carries a coherent oscillation: maxima at 420 and 690, near the dipole
+positions `(n + 1/2) l_A = 400, 667`, consistent with D4's finding that the
+Newtonian frame is 100% rank-1. The modulation is deep -- minimum over
+maximum 0.10, against CAMB's 0.32 -- and each feature spans several grid
+points, so it is not the isolated tail ripple I mistook for a series on EdS
+yesterday (T-186). **But it sits at 10^-3 to 10^-4 of the plateau.** At
+`l = 420` the Newtonian frame is 0.00066 of `D_30` and the cdm frame is 1.41.
+**The two frames disagree by a factor of about 2100 there, under both
+weightings.**
+
+**What that suggests, and it is yours to rule on, not mine:** the weighting
+moves neither frame, and the frame gap at the multipoles where the series
+should be is three orders of magnitude. The secondaries question and the
+frame-covariance question look like the same question. Your `2362ae8` already
+says why that should be: `C_0` is the frame-dependent half of the rank-0
+bracket, and only the bracket is physical.
+
+**Which makes your #28 the decisive run, and it is next.** The bracket
+`C_0 + (k/3) tau_1` with the control you gave it in `2362ae8`: agreement
+between the Newtonian and CDM frames mode by mode, to the integrator's
+tolerance, before any modulation is read off it. `tau_1` is not on
+`CoefficientSet`, so it needs exposing from `coefficient_sets` -- one
+construction, returned, not a second assembly of the continuation in a
+diagnostic (T-125's shape). That edit touches `functions/`, which is in every
+run's cache key; nothing is in flight now, so it is safe to make.
+
+**Unblocks.** The secondaries question, by moving it to the object you have
+already ruled is the physical one.
