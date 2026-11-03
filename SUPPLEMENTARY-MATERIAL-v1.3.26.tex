@@ -1,5 +1,28 @@
 % Computational supplement to the associated paper.
 %
+% v1.3.26, 2026-11-03.  Four repairs, none of them to an argument.
+%   1  The notation table reprinted from its corrected source: Phi_A and
+%      Phi_H named with their frame dependence (each shifts by (v' + H v)/k;
+%      their difference, which sets E_ab, does not); Theta as the expansion
+%      of u^a, never a multipole; Theta_l attributed to Hu & Sugiyama's
+%      Eq. (6) and mapped to tau_l; the shear's note naming the Thomson
+%      cross-section sigma_T.  The table changed on main after the v1.3.25
+%      PDF was built, so that PDF printed the old one.
+%   2  Long file names in typewriter type made breakable, in the convention
+%      scripts/make_tables.py already uses.  scripts/build_supplement.py fails
+%      a right-margin overhang above 35pt, and four boxes exceeded it: 101.6pt
+%      and 55.6pt in two paragraphs unchanged since v1.3.14, 48.2pt in the
+%      frame-check inventory, 41.6pt in the manifest paragraph.
+%   3  The frame-check inventory (tab:dev-claim-tests) completed with C12,
+%      which it omitted from 29 October although the group, the harness and
+%      the theory audit all carry it.
+%   4  The paragraphs introducing that inventory brought to the tree: twelve
+%      instruments, not eleven; the harness gates all twelve by discovery
+%      since 27 October (T-155), where these paragraphs said it gated seven;
+%      and c10-c12 placed against the status table alongside the eight
+%      instruments the paragraph already placed.
+%   No other text of this document changed.
+%
 % v1.3.25, 2026-11-03.  One Discussion sentence brought into line with the
 % by-parts section: exchanging the weights replaces a primary reached through
 % K' by its derivative, rather than removing it; the bold span standing in for
@@ -62,7 +85,7 @@
 %      are named, with exact k-independent margins.
 %   9  Two voice defects inside P1-T's declared sections.
 %
-% Build: latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.3.25.tex  (only after locked
+% Build: latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.3.26.tex  (only after locked
 % assets have passed hash checks). THIS FILE IS THE WHOLE DOCUMENT: the prose
 % carries no \input, and every former supplementary-materials/ fragment is
 % expanded inline between its own BEGIN/END provenance comments. The only
@@ -106,7 +129,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.3.25 --- 3 November 2026\\
+\date{Supplement v1.3.26 --- 3 November 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.3.0-dev}
 
 \begin{document}
@@ -304,26 +327,34 @@ oscillator's peak spacing and step five by \textbf{G1} against four external
 hierarchies, both of them repository diagnostics rather than frame checks.
 Exactly one row of Table~\ref{tab:status} names an instrument from the set
 below --- step six, where \textbf{c3} measures that (102) is not the exact
-integration by parts of its own integral. What the remaining eight establish
-sits beneath the table rather than in it: the conditions the matching
-coefficients must satisfy for the frame law to hold, which are prior to every
-row and are the reason a failing row can be localised at all. The inventory
-below should be read in that light, and not as a count of certified steps.
+integration by parts of its own integral. What eight of the remaining eleven
+establish sits beneath the table rather than in it: the conditions the
+matching coefficients must satisfy for the frame law to hold, which are prior
+to every row and are the reason a failing row can be localised at all. The
+other three bear on rows without being named in them. \textbf{c10} scores the
+phase that step four's row says it does not establish, and finds that a
+criterion of exact phase accepts the undriven oscillator and rejects the
+driven one; \textbf{c11} extends \textbf{c9}'s admissibility condition to a
+by-parts taken against the kernel; and \textbf{c12} states the rate at which a
+grid must sample the visibility, which every row that reads a spectrum relies
+on. The inventory below should be read in that light, and not as a count of
+certified steps.
 
 The source tree at the pinned \texttt{v1.3.0-dev} commit also contains
 independent, claim-facing Python instruments that are \emph{absent}
 from the \texttt{v1.0.0}, \texttt{v1.1.0} and \texttt{v1.2.0} tags.
 This is part of the \emph{current} repository situation, not a
 future Lean deliverable and not an increment in the physics-release
-sequence. The eleven instruments in \texttt{tests/frame/} use
+sequence. The twelve instruments in \texttt{tests/frame/} use
 self-contained kernel, visibility and frame constructions rather than
 importing the spectral solver, and \path{tests/frame/run_all.py} invokes each
 in an isolated subprocess under \texttt{-I}.
-\path{tests/test_frame_checks.py}, which is the bundle's own harness, invokes
-seven of the eleven: \texttt{c8} through \texttt{c11} are reproducible and
-documented but are not gated there, so a regression in any of them would not
-fail the suite. That gap is recorded in \path{tests/frame/README.md} and is
-open. The file\textendash{}to\textendash{}claim
+\path{tests/test_frame_checks.py}, which is the bundle's own harness, gates
+all twelve: it discovers them from the directory rather than from a list,
+since 27 October (finding T-155), so an instrument is gated the day it lands.
+Editions v1.3.18 to v1.3.25 said it invoked seven and left \texttt{c8} through
+\texttt{c11} ungated: true when written on the morning of 27 October, and
+stale from the repair that afternoon. The file\textendash{}to\textendash{}claim
 mapping below is an inspected \emph{source inventory}; this document
 has not rerun the pinned repository suite as part of this editorial gate.
 
@@ -362,15 +393,15 @@ required under frame transformation; Paper~1's common-endpoint condition
 differentiation of a coefficient versus its weight
 & Distinguishes the exact identity \(W\kappa'=\mathcal V\)
 from the erroneous \emph{extra} derivative; no new weighting is assumed.\\[3pt]
-\texttt{c7\_kappa\_ledger.py} & Integrating-factor and opacity ledger
+\texttt{c7\_\allowbreak{}kappa\_\allowbreak{}ledger.py} & Integrating-factor and opacity ledger
 for the line-of-sight source
 & Separates \(W\)-weighted gravity and \(\mathcal V\)-weighted
 scattering; distinguishes legitimate from spurious opacity-rate terms.\\[3pt]
-\texttt{c8\_rank0\_partner.py} & Complete rank-zero integrand
+\texttt{c8\_\allowbreak{}rank0\_\allowbreak{}partner.py} & Complete rank-zero integrand
 partner, correcting the C5 interpretation
 & Includes the \(-C_1'\) partner and records the double-counting
 negative control; does not itself demonstrate the correct spectrum.\\[3pt]
-\texttt{c9\_byparts\_admissibility.py} & Added 2026-10-26. The
+\texttt{c9\_\allowbreak{}byparts\_\allowbreak{}admissibility.py} & Added 2026-10-26. The
 condition under which the integration by parts of C6 is admissible at all.
 \(W'C_1\) and \(WC_1'\) sum to the total derivative
 \(\mathrm d(\mathcal V\hat v_B)/\mathrm d\eta\); (102) carries
@@ -384,7 +415,7 @@ obstruction the bundling in (90) creates, C9 the \(\kappa''\) artefact that
 a rate; it may not be differentiated while it does. The two pieces do
 \emph{not} cancel pointwise --- the measured ratio of either to their sum is
 \(\simeq8\) --- and the sum is bounded because it is a total derivative.\\[3pt]
-\texttt{c10\_oscillator\_phase.py} & Added 2026-10-26. The acceptance
+\texttt{c10\_\allowbreak{}oscillator\_\allowbreak{}phase.py} & Added 2026-10-26. The acceptance
 criterion for the acoustic step, scored against the driving it was meant to
 gate. Eliminating \(\tilde\tau_1\) between \emph{Annals~II} (152) and (153)
 returns the oscillator with \(c_s^2=1/[3(1+R)]\) exactly and the standard
@@ -398,7 +429,7 @@ potential here is \emph{not} a model of the radiation era: it falls at
 \(x=k\eta/\sqrt3\), so the measured phase falls as \(1/k\) where the real decay
 is tied to equality. What is established is the mechanism and its sign, not the
 magnitude in this bundle.\\[3pt]
-\texttt{c11\_kernel\_partner.py} & Added 2026-10-26. A by-parts taken against
+\texttt{c11\_\allowbreak{}kernel\_\allowbreak{}partner.py} & Added 2026-10-26. A by-parts taken against
 the kernel has three terms, not two:
 \(\mathrm d(WCK)/\mathrm d\eta=\mathcal VCK+WC'K+WCK'\), whose integral is a
 pure boundary term. The boundary at \(\eta_0\) is exactly zero for
@@ -415,7 +446,29 @@ discarded partner is \(2.7\) to \(1.9\times10^3\) times the Sachs--Wolfe term
 it leaves behind. A constant \(\Phi\) does not exempt this, which is why the
 Einstein--de~Sitter null is the control that sees it. The monopole is a
 stand-in and the late fractions state where the terms live in \(\eta\), not
-their amplitude in this bundle.\\
+their amplitude in this bundle.\\[3pt]
+\texttt{c12\_\allowbreak{}sampling\_\allowbreak{}bound.py} & Added 2026-10-29.
+The rate at which a grid must sample the visibility. Because
+\(\mathcal V'=(\kappa''+\kappa'^2)e^{-\kappa}\), the peak of \(\mathcal V\)
+sits where \(\kappa''=-\kappa'^2\), so there the scale height of the Thomson
+rate and the optical-depth e-fold are the same number, and the width follows
+from \(\kappa'(\eta_\ast)\). The kernel is band-limited, \(|\omega|\le k\) for
+every \(\ell\), so the band edge and the recombination rate add rather than
+one flooring the other. The binding statement is on accumulating \(\kappa\)
+from \(\kappa'\): \(h\kappa'(\eta_\ast)\le\sqrt{12\epsilon}\) on the grid
+\(\kappa\) is built on, \(21.5\) samples across the full width at half
+maximum at one part in a thousand, and imposed locally it integrates to
+\(N=12k_{\max}L/\pi+\kappa(\eta_i)/\sqrt{12\epsilon}\)
+& \textbf{A rule for building a grid; no project code is imported.} The
+prefactor is demonstrated on a history built in the file, whose optical depth
+is a closed form, so the reference for \(\int\mathcal V\,\mathrm d\eta\) is
+exact rather than another quadrature. The constant \(1/12\) is
+Euler--Maclaurin's, asserted and not fitted; the constant relating the full
+width to \(1/\kappa'(\eta_\ast)\) depends on the profile at the four-per-cent
+level and is reported, not asserted. Its first version, withdrawn 2026-10-28,
+laid its grid over the window it meant to undersample and so could not fail;
+the bound is now evaluated at a grid chosen from it to fail and at one chosen
+to meet it, and the check fails if the bound does not tell them apart.\\
 \end{longtable}
 \endgroup
 
@@ -463,7 +516,7 @@ defect this document records elsewhere as \textbf{236.6}: a public statement
 about an artefact the public cannot run. The algebra check is therefore
 mirrored here, byte-identical, at
 \path{source/source-v1.1.6/independent_checks_v1.1.6.py}, where
-\texttt{IMMUTABLE-MANIFEST-SHA256.txt} records its digest and a change to it
+\texttt{IMMUTABLE-\allowbreak{}MANIFEST-\allowbreak{}SHA256.txt} records its digest and a change to it
 is a release-blocking event rather than a routine update. \textbf{The version
 in its name is what makes that safe}: it is the oracle for one frozen paper
 edition, so a later edition brings its own file rather than altering this one.
@@ -482,7 +535,7 @@ arXiv source bundle for \texttt{v1.1.6-arxiv}, byte-identical to the submitted
 archive and carrying the \texttt{.tex}, the \texttt{.bib}, the \texttt{.bbl}
 and the three figure sources it builds from. \textbf{A check and the thing it
 checks are of no use apart}, so the two sit together in
-\path{source/source-v1.1.6/}, where \texttt{IMMUTABLE-MANIFEST-SHA256.txt}
+\path{source/source-v1.1.6/}, where \texttt{IMMUTABLE-\allowbreak{}MANIFEST-\allowbreak{}SHA256.txt}
 records both digests. \emph{The freeze recorded here is the arXiv freeze and
 not acceptance}: an accepted manuscript, or a second paper, arrives as a
 directory of its own and never alters this one, and the version in each name
@@ -914,7 +967,7 @@ step where its own definition gives $i^\ell$. The covariant multipole
 $\tau_{A_\ell}$ is invariant under the choice, so the misprint never produced a
 wrong result; the mode coefficients are not invariant, and the two statements are
 distinct. Both are asserted as tests. A misprint, recorded in
-\texttt{provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md}.}
+\texttt{provenance/\allowbreak{}ANNALS-II-\allowbreak{}ANTECEDENT-\allowbreak{}AND-\allowbreak{}CORRECTIONS-\allowbreak{}v1.md}.}
 
 Nomenclature is kept strictly separate: $\tau_\ell$ are mode
 coefficients and $\tau_{A_\ell}$ are multipole coefficients.
@@ -2330,7 +2383,7 @@ gate in the table. The inference rules the oscillator out using a test
 declared blind to the thing that would convict it.
 
 And a candidate is identified elsewhere in this document.
-\texttt{c10\_oscillator\_phase.py} records that with $\Phi$ constant the
+\texttt{c10\_\allowbreak{}oscillator\_\allowbreak{}phase.py} records that with $\Phi$ constant the
 boundary value is a pure cosine of \emph{zero} phase and with $\Phi$
 time-dependent it is not, so a criterion asking the oscillator to track
 $\cos(kr_s)$ in exact phase \emph{accepts} the undriven solution and
@@ -3636,7 +3689,7 @@ The source-level finding that follows was first made against commit
 \texttt{3b01aea8}. In Gate~v1.3.8 the same relevant code paths were
 reinspected at commit \texttt{70f0f44ff8f7} of the public repository;
 the complete commit identifier and file hashes are recorded in
-\texttt{REPOSITORY-CONFORMITY-v1.3.8.csv}. The distinction between an
+\texttt{REPOSITORY-\allowbreak{}CONFORMITY-\allowbreak{}v1.3.8.csv}. The distinction between an
 optional code path, the released default and a numerical spectrum remains
 necessary.\footnote{The pinned revision is
 \nolinkurl{70f0f44ff8f71f0313a97c17df7fcf0b83d6b753} (accessed
@@ -3708,7 +3761,7 @@ from the printed form in the partner terms''}; the released weight is the
 and finding T-20.
 
 This is a defect in the antecedent and carries a B- number in
-\texttt{provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md} beside B-10 and
+\texttt{provenance/\allowbreak{}ANNALS-II-\allowbreak{}ANTECEDENT-\allowbreak{}AND-\allowbreak{}CORRECTIONS-\allowbreak{}v1.md} beside B-10 and
 B-11. It is stated here as well because \eqref{eq:byparts} \emph{is} the
 correction, and this supplement prints the correction beside every other defect
 it records --- B-11's sign on $C_0$, T-104's normalisation, T-103's weighting.
@@ -3971,7 +4024,7 @@ zero would say the partner was in $C_2$, which it is not. The withdrawn draft
 reached $\gamma=0$ by \emph{adding a term}, and a gate that can be driven to
 zero by adding a term is a fit rather than a gate --- which is M15,
 \emph{a gate built from one coefficient cannot see a cancellation distributed
-across the bracket}. \texttt{c8\_rank0\_partner.py} scores the whole rank-0
+across the bracket}. \texttt{c8\_\allowbreak{}rank0\_\allowbreak{}partner.py} scores the whole rank-0
 content of the bracket and is the gate for this row;
 Appendix~\ref{sec:frame-division}'s questions~3 and~4 close with c8 or
 not at all. Its questions~1 and~2 are settled by T-66 and by
@@ -4343,10 +4396,10 @@ class in $C_2$ would be inherited silently here.
 The acceptance condition, stated in advance so the repair can fail
 visibly. (i)~$A_N=A_C$ to the quadrature floor T-85 measures, neither
 better nor worse; (ii)~the Newtonian column moves by no more than that floor;
-(iii)~\texttt{c7\_kappa\_ledger.py} reports no coefficient holding $\kappa'$
+(iii)~\texttt{c7\_\allowbreak{}kappa\_\allowbreak{}ledger.py} reports no coefficient holding $\kappa'$
 --- \emph{a review signal that the error class is absent by construction, not a
 proof of correctness}, since \eqref{eq:ledger-identity} makes the ledger a flag;
-(iv)~\texttt{c8\_rank0\_partner.py}, not $\gamma$, scores the rank-0 content of
+(iv)~\texttt{c8\_\allowbreak{}rank0\_\allowbreak{}partner.py}, not $\gamma$, scores the rank-0 content of
 the bracket on the live coefficients; and (v)~the spectrum adjudicates,
 and it adjudicates last, since two wrong columns can agree.
 
@@ -4476,7 +4529,7 @@ already carried inside $-C_1'$, so restoring it counts the monopole source
 twice and criterion 5b doubles at $98.5\%$. Under the corrected row
 $C_0=-\tfrac13a\mathcal B_2$ and $\Delta C_0=+\tfrac{kv}{3}\neq0$, so this is
 not a site the discrepancy cannot come from. Its partner is
-cross-coefficient and \texttt{c8\_rank0\_partner.py} is the gate ---
+cross-coefficient and \texttt{c8\_\allowbreak{}rank0\_\allowbreak{}partner.py} is the gate ---
 M15: a gate built from one coefficient cannot see a cancellation
 distributed across the bracket.
 
@@ -4957,7 +5010,7 @@ peak structure as separate physical checks.}
 The repository was inspected read-only at
 \nolinkurl{70f0f44ff8f71f0313a97c17df7fcf0b83d6b753} on
 25~October~2026. The exact file hashes and relevant source-line ranges
-are in \texttt{REPOSITORY-CONFORMITY-v1.3.8.csv}. The following
+are in \texttt{REPOSITORY-\allowbreak{}CONFORMITY-\allowbreak{}v1.3.8.csv}. The following
 conformity statements are about \emph{code paths}; no new full
 scientific run is implied.
 
@@ -7293,15 +7346,15 @@ which regenerates every output, figure and table, recomputes the SHA-256
 manifests, and reports any artefact that differs from the recorded hash.
 
 Three manifests serve distinct purposes; the release fingerprint is binding.
-\texttt{PORTABLE-MANIFEST-SHA256.txt} is the release fingerprint: it
+\texttt{PORTABLE-\allowbreak{}MANIFEST-\allowbreak{}SHA256.txt} is the release fingerprint: it
 \emph{excludes the renderings} --- everything under \texttt{figures/} and
-\texttt{supplementary-materials/}, and every \texttt{.png} and \texttt{.pdf} ---
+\texttt{supplementary-\allowbreak{}materials/}, and every \texttt{.png} and \texttt{.pdf} ---
 and canonicalises numeric output to nine significant figures, so a machine that
 did not generate the artefacts can still satisfy it. A mismatch there is
-release-blocking. \texttt{FILE-MANIFEST-SHA256.txt} is then a
+release-blocking. \texttt{FILE-\allowbreak{}MANIFEST-\allowbreak{}SHA256.txt} is then a
 \emph{within-machine} drift check, reported by artefact class, where only an
 \texttt{exact}-class mismatch blocks.
-\texttt{IMMUTABLE-MANIFEST-SHA256.txt} covers frozen reference material, where
+\texttt{IMMUTABLE-\allowbreak{}MANIFEST-\allowbreak{}SHA256.txt} covers frozen reference material, where
 any change is release-blocking. The corrections record is append-guarded rather
 than frozen, because it must take new findings: appending is permitted and
 rewriting recorded bytes is not.

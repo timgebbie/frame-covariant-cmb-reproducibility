@@ -225,12 +225,16 @@ different suites:
 | `tests/test_frame_checks.py` | P1-B | `c1`–`c7` | **neither `c8` nor `c9` is gated by the bundle's own harness**; both pass `run_all.py` and nothing else |
 
 The first two are globs over this directory now, P1-B's repair of 2026-10-26, so
-all twelve are carried and the thirteenth is carried the day it lands. **The third is
-outside P1-T's line and is flagged to P1-B rather than edited.** Until it
-carries `c8` through `c12`, the rank-0 control, the by-parts admissibility
-condition, the oscillator-phase gate and the kernel-partner identity are
-documented and reproducible but not *gated*, and a regression in any of them
-would reach a release.
+all twelve are carried and the thirteenth is carried the day it lands. **The third
+became a glob on the afternoon of 2026-10-27** (`33c1c7f`, finding T-155):
+`tests/test_frame_checks.py` discovers `c*.py` here and sorts them by number,
+so the bundle's harness has gated every instrument in this directory since
+then, `c12` included from the day it landed. Before that repair the rank-0
+control, the by-parts admissibility condition, the oscillator-phase gate and
+the kernel-partner identity were documented and reproducible but not *gated*.
+**This paragraph and the supplement's account of the harness went on saying
+so for a week after it stopped being true**; both were corrected on
+2026-11-03, against `pytest --collect-only`, which lists all twelve.
 
 **An instrument that is committed but not registered is a file, not a gate.**
 
