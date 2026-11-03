@@ -723,6 +723,26 @@ class CoefficientSet:
     a_b2_second: np.ndarray | None = None
     v_b: np.ndarray | None = None
     v_b_prime: np.ndarray | None = None
+    #: $a\mathcal B_0=-\tfrac k3\tau_1$ **in this set's own frame**.
+    #: Carried so the rank-0 BRACKET can be read,
+    #: $C_0+\tfrac k3\tau_1 = C_0-a\mathcal B_0$, which is the only rank-0
+    #: object that is physical: under a change of frame $C_0$ shifts by
+    #: $+kv/3$ and $\tfrac k3\tau_1$ by $-kv/3$, so with the corrected monopole
+    #: row the bracket shifts by exactly zero and $C_0$ alone is a fact about a
+    #: frame.
+    #:
+    #: **Returned from the builders rather than reconstructed by a reader,
+    #: and that is the whole design.** $\tau_1$ is frame-dependent ---
+    #: $\tilde\tau_1-v$ in the CDM frame, with a velocity-versus-reduced
+    #: normalisation T-66 had to fix --- and both builders already compute the
+    #: frame-correct $a\mathcal B_0$ for `match_coefficients`. A diagnostic
+    #: re-deriving it would be a second copy of T-66's convention, which is
+    #: T-125's shape exactly; returning the one already built is not.
+    #:
+    #: **It is not a source and must not be added to one.** Restoring
+    #: $a\mathcal B_0$ to $C_0$ double-counts content $-C_1'$ already carries
+    #: (T-107, refuted at 98.5%). This field exists to be READ.
+    a_b0: np.ndarray | None = None
 
 
 def tau_1_prime(
@@ -819,6 +839,7 @@ def newtonian_set(
         # (89) prints kappa' v_B; the bundle carries v~_B = tau~_1 = v_B/k.
         # **T-66**: that is now true, because `reduce_dipole` makes it true.
         v_b=k * vb_t, v_b_prime=k * vb_t_prime,
+        a_b0=a_b0,          # Newtonian-frame, as built above for (89)
     )
 
 
@@ -1133,6 +1154,7 @@ def cdm_set(
         a_b2=-(k**2) * c2, a_b2_prime=-(k**2) * c2_prime,
         a_b2_second=-(k**2) * c2_second,
         v_b=k * vb_t_E, v_b_prime=k * vb_t_prime_E,
+        a_b0=a_b0_E,        # CDM-frame: -(k/3)(tau~_1 - boost), as built above
     )
 
 

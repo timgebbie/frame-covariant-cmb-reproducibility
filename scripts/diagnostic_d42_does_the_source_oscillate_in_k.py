@@ -101,7 +101,7 @@ gate built from one coefficient cannot see a cancellation distributed across
 the bracket*, and a diagnostic built from one coefficient cannot see an
 oscillation distributed across it either.
 
-**Which half, and why half is not enough --- P1-T, `2362ae8`.** $C_0$ is
+**Which half, and why half is not enough.** $C_0$ is
 the **frame-dependent** half. Under a change of frame $C_0$ shifts by
 $+kv/3$ and $(k/3)\tau_1$ by $-kv/3$, so with the corrected monopole row the
 bracket shifts by exactly zero: **only the bracket is a physical object.**
@@ -114,7 +114,7 @@ into $C_0$ or take one out in either frame; the physical claim does not.
 PRE-REGISTERED FOR THE BRACKET RUN, written before it exists
 ------------------------------------------------------------
 The bracket $C_0+(k/3)\tau_1$ will be measured at the visibility peak in
-**both** frames, and P1-T's frame statement supplies a control that costs
+**both** frames, and the frame statement supplies a control that costs
 nothing:
 
     CONTROL     the bracket agrees between the Newtonian and CDM frames to
@@ -129,9 +129,37 @@ nothing:
                 the physical rank-0 object carries no wave, and that is a
                 finding about the physics rather than about a frame.
 
-**tau_1 is not on `CoefficientSet` today**, so the run needs it exposed from
-`coefficient_sets` --- one construction, returned, rather than a second
-assembly of the tight-coupling continuation in this file (**T-125**'s shape).
+SCORED, 2026-11-03, against the words above
+-------------------------------------------
+    CONTROL     PASSES. Newtonian against CDM, worst relative disagreement
+                over the visibility window 2.1e-14 -- double-precision
+                roundoff, four orders below the integrator's rtol = 1e-10.
+                The bracket is frame-invariant and the corrected monopole row
+                does what MONOPOLE_ROW says. **C_0 alone is 0 in the Newtonian
+                frame and 185 in the CDM frame at k = 300**: C_0 is the
+                frame-dependent half of the bracket.
+
+    PHYSICS     THE BRACKET CARRIES THE WAVE, and more strongly than the
+                outcome anticipated. Eight detrended sign changes against ~7,
+                correctly phased. Modulation 311% / 492% / 569% / 558% / 544%
+                at k ~ 100..500 -- above 100%, so it oscillates THROUGH zero.
+                **Its wave amplitude is flat**, 6.78 / 6.73 / 6.52 across
+                k ~ 100..300 while the pedestal falls, which is an undamped
+                acoustic oscillation; -C_1's wave falls 4.5x over the same
+                range. So by the registered outcome: **the envelope in D_l
+                comes from elsewhere.** The source carries the series. It is
+                lost between the source and the spectrum.
+
+**Why C_0 alone looked dead, which is the correction to this file's headline.**
+In the CDM frame C_0 (~185) and (k/3) tau_1 (~ -178) are two large smooth
+pedestals whose difference is the small oscillating bracket (~7). Each half on
+its own is dominated by the pedestal, so a measurement of either half reads the
+pedestal. **D42 measured a frame-dependent half and called it rank 0.** The
+table above stands as a measurement of C_0; its physical reading does not.
+
+**`a_b0` is now on `CoefficientSet`**, returned by each builder in its
+own frame rather than reconstructed here, so T-66's normalisation lives in one
+place. It is read, never added to a source: that is T-107, refuted.
 
 **So the number to quote from this file is the modulation per coefficient,
 and the measurement it demands next is the same modulation on the bracket.**
@@ -255,8 +283,16 @@ def main() -> int:
           f"{period:.2f} in k\n")
 
     series: dict[str, np.ndarray] = {}
-    for name in ("v_b", "minus_c1", "c0"):
+    for name in ("v_b", "minus_c1", "c0", "bracket"):
         series[name] = np.zeros(K_GRID.size)
+
+    # **The bracket, and the control that has to pass before it is read.**
+    # $C_0+\tfrac k3\tau_1 = C_0-a\mathcal B_0$, with each set's own
+    # frame-correct $a\mathcal B_0$ returned by its builder. The
+    # frame disagreement is accumulated over the visibility window, where
+    # the deposit is, and printed beside the modulation it licenses.
+    window = np.asarray(env.visibility) > 0.01 * float(np.max(env.visibility))
+    frame_gap = 0.0
 
     for j, k in enumerate(K_GRID):
         sets = coefficient_sets(float(k), env)
@@ -272,8 +308,24 @@ def main() -> int:
         if rank0 is None:
             rank0 = np.asarray(c.coefficients, dtype=float)[0]
         series["c0"][j] = _at_star(env, rank0) if np.ndim(rank0) else float(rank0)
+
+        bN = (np.asarray(sets[FRAMES["newtonian"]].coefficients.c0)
+              - np.asarray(sets[FRAMES["newtonian"]].a_b0))
+        bC = np.asarray(cs.coefficients.c0) - np.asarray(cs.a_b0)
+        scale = float(np.max(np.abs(bC[window]))) or 1.0
+        frame_gap = max(frame_gap, float(np.max(np.abs(bN[window] - bC[window])))
+                        / scale)
+        series["bracket"][j] = _at_star(env, bC)
         if j % 100 == 0:
             print(f"      k {k:6.1f} of {K_MAX:.0f}", flush=True)
+
+    print(f"\n    BRACKET CONTROL: worst relative Newtonian-vs-CDM disagreement "
+          f"over the visibility window = {frame_gap:.2e}")
+    if not frame_gap < 1e-8:
+        print("    **CONTROL FAILED.** The bracket is not frame-invariant here, "
+              "so it is assembled wrongly or the corrected monopole row is not "
+              "doing what MONOPOLE_ROW says. No modulation read off it below "
+              "means anything.")
 
     out = ROOT / "diagnostics" / f"{SLUG}.csv"
     with out.open("w", encoding="utf-8", newline="\n") as fh:

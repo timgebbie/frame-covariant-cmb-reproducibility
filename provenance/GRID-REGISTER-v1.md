@@ -466,7 +466,7 @@ damping tail resolved; F9 owns that and runs to 1000.
 
 ### `K_GRID` — the k grid D42 looks for the acoustic oscillation on
 
-`scripts/diagnostic_d42_does_the_source_oscillate_in_k.py:139`, `np.arange`
+`scripts/diagnostic_d42_does_the_source_oscillate_in_k.py:199`, `np.arange`
 
 `arange(2, 601, 1)`. The rule is stated and it is the opposite of
 every other k grid in the tree: this one is deliberately far FINER than
