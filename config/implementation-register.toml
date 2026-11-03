@@ -605,8 +605,8 @@ note = "an order above the integrator floor"
 [[notation]]
 symbol = "$\\Phi_A$, $\\Phi_H$"
 code = "phi_a, phi_h"
-meaning = "the two gauge-invariant potentials entering (177) and (179)"
-note = ""
+meaning = "the acceleration and curvature potentials entering (177) and (179)"
+note = "each shifts by $(v'+\\mathcal{H}v)/k$ under a change of frame; $\\Phi_A-\\Phi_H$, which sets $E_{ab}$, does not"
 
 [[notation]]
 symbol = "$\\tilde\\delta_T$"
@@ -738,7 +738,7 @@ note = "carried generic; frames are specialisations made at the end"
 symbol = "$\\sigma_{ab}$"
 code = "---"
 meaning = "shear"
-note = "$\\sigma$ is the shear and nothing else"
+note = "the shear of $u^a$; the Thomson cross-section is $\\sigma_T$"
 
 [[notation]]
 symbol = "$A_a$"
@@ -747,10 +747,16 @@ meaning = "acceleration, $\\dot u_a$"
 note = ""
 
 [[notation]]
+symbol = "$\\Theta$"
+code = "---"
+meaning = "the expansion of $u^a$, $\\nabla_a u^a$"
+note = "never a multipole"
+
+[[notation]]
 symbol = "$\\Theta_\\ell$"
 code = "---"
-meaning = "Hu \\& Sugiyama's multipole variable"
-note = "$\\beta$-normalised"
+meaning = "Hu \\& Sugiyama's (1995) Legendre coefficient, their Eq.~(6), quoted only where their hierarchy is compared"
+note = "$\\beta$-normalised; mapped to $\\tau_\\ell$ in \\S\\ref{sec:theta-dictionary}"
 
 # --- conventions ---------------------------------------------------------------
 # How each treatment in the foundational literature writes the same hierarchy,
