@@ -10,7 +10,7 @@ the full linear spectrum with the acoustic peaks and the Silk damping tail
 (F9), in both frames; the integral solution (102) carried with a generic
 4-velocity and specialised back; acceptance criterion 5b closed.
 
-Supplement: **v1.3.21** — `SUPPLEMENTARY-MATERIAL-v1.3.21.tex`. **This is a
+Supplement: **v1.3.22** — `SUPPLEMENTARY-MATERIAL-v1.3.22.tex`. **This is a
 separate version line from the one above and is declared separately on
 purpose.** The line above is the *computational* release; a supplement edition
 records a documentation gate and is **not** an assertion that the repository
@@ -33,9 +33,9 @@ University of Cape Town, 2026, **arXiv:astro-ph/9912072v4**
 
 The supplementary-materials document is included here:
 
-> [SUPPLEMENTARY-MATERIAL-v1.3.21.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.21.pdf)
+> [SUPPLEMENTARY-MATERIAL-v1.3.22.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.22.pdf)
 
-Its source is `SUPPLEMENTARY-MATERIAL-v1.3.21.tex`, **one consolidated file in
+Its source is `SUPPLEMENTARY-MATERIAL-v1.3.22.tex`, **one consolidated file in
 the repository root**, which builds with `pdflatex` alone: the prose carries no
 `\input`, the bibliography is inline, and the only external files are the
 generated assets in `tables/`, `tikz/` and `figures/`. The prose fragments that
@@ -228,7 +228,7 @@ $\mathrm d/\mathrm d\eta$, with $\eta$ conformal time.
 | $\kappa'=an_e\sigma_T$ | differential optical depth, with $n_e$ the free-electron density |
 | $W=e^{-\kappa}$, $\mathcal V=W\kappa'$ | the optical-depth weight; the visibility function |
 | $\mathcal D$, $k_D$ | the diffusion (Silk) damping factor $e^{-(k/k_D)^2}$ and its scale. $\mathcal D$ is **not** $\mathrm D_a$ |
-| $\Phi_A$, $\Phi_H$ | the two gauge-invariant potentials, acceleration and curvature |
+| $\Phi_A$, $\Phi_H$ | the acceleration and curvature potentials of the frame $u^a$. Each shifts by $(v'+\mathcal Hv)/k$ under a change of frame; their difference, which sets the electric Weyl tensor, does not |
 | $\rho_b$, $\rho_\gamma$, $R=3\rho_b/4\rho_\gamma$ | baryon and photon energy densities; the baryon loading |
 | $\hat v_B$, $q_a$ | the baryon velocity; the energy flux, which the CDM frame sets to zero |
 | $v^a$, $v_{A_\ell}$ | the frame tilt $\tilde u^a-u^a$; its PSTF part of rank $\ell$, identically zero for $\ell\ge2$ |
@@ -409,30 +409,38 @@ three ways rather than two.** Counted from F9's own CSV against CAMB:
 | primary peak | 210 | 224 / 194 / **267** — PLANCK 29% high, down from 66% |
 | secondary peaks | **480 and 720** | **none** |
 
-**The plateau and the missing secondary peaks come from one term, and what
-that term does to each is different — corrected 2026-10-31.** At low $k$ the
-boundary term is 105% $\kappa'\hat v_B$, which puts a Doppler-shaped term
-where Sachs–Wolfe belongs, and that is the plateau. In the bulk
-$\mathcal V\kappa''\hat v_B$ is 93–97% of the integrand.
+**The plateau and the missing secondary peaks come from one operation —
+corrected 2026-11-03.** (102)'s integration by parts differentiates $C_1$
+whole, and $C_1$ holds a scattering rate. That carries $\kappa'\hat v_B$ into
+the Sachs–Wolfe slot — at low $k$ the boundary term is 105% $\kappa'\hat v_B$,
+and that is the plateau — and, one derivative on, $\mathcal V\kappa''\hat v_B$
+into the bulk, where it is 93–97% of the integrand. The same operation
+separates $\hat v_B$ from $C_2$, and $\hat v_B+C_2$ is the combination that
+does not change with the frame (T-82).
 
-Earlier editions called that term *smooth* and said it **buries** the
-secondary peaks. **It does neither.** It carries $\hat v_B\propto\sin(kr_s)$,
-so it is smooth in $\eta$ across the deposit and **oscillatory in $k$**; and
-adding an oscillation in quadrature to the monopole is an exact identity,
-$\cos x+A\sin x=\sqrt{1+A^2}\cos(x-\arctan A)$, so a Doppler term of relative
-amplitude $A$ sitting in the **monopole's** kernel is a **pure phase shift**.
-It **displaces** the whole peak series rigidly to higher $\ell$ by
-$(\ell_A/\pi)\arctan A$ — the same number of multipoles at every order, with
-the spacing and the count untouched — and it cannot remove a feature. Verified
-through the projection at three amplitudes: predicted 24.5, 66.0 and 105.0
-multipoles against 24/26/24, 66/66/66 and 104/106/104 at the first three
-peaks.
+**Which frame the velocity is measured in decides what that term does.**
+Relative to a shear-free $u^a$, $\hat v_B$ oscillates, and a Doppler term in
+the monopole's kernel is a phase shift: $\cos x+A\sin x=\sqrt{1+A^2}\cos(x-\arctan A)$
+displaces a series rigidly and removes no feature. Relative to the CDM
+frame, which is the frame F9 is drawn in, $\hat v_B$ carries the frame
+velocity, which is smooth in $k$ and never crosses zero. Separated from $C_2$
+and multiplied by $\kappa'$ it is a pedestal under the oscillation, and the
+series does not survive it. Earlier editions of this page read the first
+case into the second and concluded that the secondaries might be displaced
+rather than absent. **In the observer's frame they are absent.**
 
-**So the secondaries may be displaced rather than absent**, which is a
-different defect with a different repair, and a finder searching the
-undisplaced positions would report them missing either way. That is open as
-handoff `#21` and is one run. The $W$-form (**S48**) remains the repair for
-the term itself; the two frames disagreeing is the third symptom of it.
+**It is not a weight question, and the defect is in how the coefficients
+carry the frame.** Moving the bracket's weight from $\mathcal V$ to $W$,
+whole or channel by channel, leaves the CDM-frame spectrum an envelope; both
+registered predictions to the contrary were run and failed. For the $\ell\ge2$
+multipoles not to move under a change of frame, the shift of the
+line-of-sight integrand must be a total derivative, and that requires three
+things: rank zero frame-invariant alone, the scattering half of $C_1$ paired
+with $C_2$, and the gravitational half paired with $C_2'$. On this bundle's
+coefficient sets the second holds to machine precision; the first and third
+fail, the third by exactly $2C_2'$. The supplement's section *The by-parts,
+and the assembly that does not need it* has the derivation, and the repair
+is registered once the coefficient at fault is identified.
 
 **Measured at the limit where it is decidable, 2026-10-22 — finding T-117.**
 The transfer $T_\ell(k)$ does **not** reduce to the Sachs–Wolfe transfer
@@ -795,8 +803,7 @@ figures/                 Versioned PDF/PNG figure pairs
 tables/                  Generated audit tables: equations, parameters, notation
 captions/                Standalone captions, and the figure plan for the set
 diagnostics/             Generated scientific acceptance checks
-source/source-v1/        Frozen target-paper source
-source/source-v2/        Computational conformity and clarification inserts
+source/source-v1.1.6/    Paper 1 at its arXiv freeze, and the algebra check written against it
 provenance/              Theory-to-code traceability and the corrections record
 supplementary-materials/ Compiled computational supplement
 ```
@@ -938,7 +945,7 @@ are in `provenance/DECISIONS-v1.0.0.md`.
 | Item | Value |
 |---|---|
 | **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMBR lensing in the exact 1+3 covariant radiation hierarchy* — **Paper 1**, University of Cape Town. **arXiv:astro-ph/9912072v4**, [doi:10.48550/arXiv.astro-ph/9912072](https://doi.org/10.48550/arXiv.astro-ph/9912072). Submitted 2026-10-16. CC BY 4.0. **The version suffix is not optional** — the bare identifier has carried three documents: `v2` the legacy 1999 work, `v3` the correction, `v4` this paper |
-| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.3.21.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.21.pdf) |
+| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.3.22.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.22.pdf) |
 | **GitHub repository** | [timgebbie/frame-covariant-cmb-reproducibility](https://github.com/timgebbie/frame-covariant-cmb-reproducibility) |
 | **ZivaHub/Figshare DOI** | [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509) — **live**. The **concept** DOI: it always resolves to the latest version, so it is the one to cite |
 | **Associated antecedent** | Gebbie, T.; Dunsby, P. K. S.; Ellis, G. F. R. (2000). *1+3 covariant cosmic microwave background anisotropies II: the almost-Friedmann–Lemaître model*. Annals of Physics **282**, 321–394. [doi:10.1006/aphy.2000.6034](https://doi.org/10.1006/aphy.2000.6034) |

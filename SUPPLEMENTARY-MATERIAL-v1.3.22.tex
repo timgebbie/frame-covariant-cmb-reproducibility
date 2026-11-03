@@ -1,8 +1,21 @@
 % Computational supplement to the associated paper.
 %
+% v1.3.22, 2026-11-03.  Content corrections to v1.3.21, each a withdrawal, a
+% restatement or an addition and none a compression.  The account of the
+% missing peak series built on the kernel weights is withdrawn (a kernel that
+% differentiates displaces a series and cannot erase one), with both registered
+% falsifiers recorded as run.  Added: the three conditions a change of frame
+% imposes on the line-of-sight coefficients, derived without the visibility
+% collapse, and their score on this bundle's sets -- the scattering pairing
+% holds, the rank-zero and gravitational pairings fail, the second by exactly
+% 2 C_2'.  The rank-zero frame rule recorded as measured.  The first-peak
+% readings scoped to an assembly that carries the oscillation.  source/ named
+% for the edition it freezes.
+%
 % v1.3.21, 2026-10-31, P1-T.  Content corrections to v1.3.20, carrying the
 % acoustic-scale repair this document had not propagated, three errors of its
-% own, the tau_l <-> Theta_l dictionary, a scalar-sector narrowing of the
+% own, the map from tau_l to the comparators' Legendre coefficients (written
+% Theta_l until 2 November), a scalar-sector narrowing of the
 % source-distance lensing section, and the layout gate.  Nothing compressed.
 %
 % v1.3.20, 2026-10-30, P1-T.  Nine changes, all of them corrections or
@@ -29,7 +42,7 @@
 %      are named, with exact k-independent margins.
 %   9  Two voice defects inside P1-T's declared sections.
 %
-% Build: latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.3.21.tex  (only after locked
+% Build: latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.3.22.tex  (only after locked
 % assets have passed hash checks). THIS FILE IS THE WHOLE DOCUMENT: the prose
 % carries no \input, and every former supplementary-materials/ fragment is
 % expanded inline between its own BEGIN/END provenance comments. The only
@@ -73,7 +86,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.3.21 --- 31 October 2026\\
+\date{Supplement v1.3.22 --- 3 November 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.3.0-dev}
 
 \begin{document}
@@ -429,7 +442,7 @@ check is not.} Naming a file at a path only the authors can reach is the
 defect this document records elsewhere as \textbf{236.6}: a public statement
 about an artefact the public cannot run. The algebra check is therefore
 mirrored here, byte-identical, at
-\path{source/source-v2/independent_checks_v1.1.6.py}, where
+\path{source/source-v1.1.6/independent_checks_v1.1.6.py}, where
 \texttt{IMMUTABLE-MANIFEST-SHA256.txt} records its digest and a change to it
 is a release-blocking event rather than a routine update. \textbf{The version
 in its name is what makes that safe}: it is the oracle for one frozen paper
@@ -442,18 +455,20 @@ mirrored.} It gates the manuscript build --- it asks whether a build log, a
 label --- and this bundle holds no manuscript, so here it could only ever
 fail. A gate that cannot pass is one nobody reads.
 
-\paragraph{The edition the check is an oracle for is carried beside it.}
-\path{source/source-v1/TG-FrameCovariantCMBR-v1.1.6-arxiv.zip} is the arXiv
-source bundle for \texttt{v1.1.6-arxiv}, byte-identical to the submitted
+\paragraph{The edition the check is an oracle for is carried beside it, in
+one directory named for that edition.}
+\path{source/source-v1.1.6/TG-FrameCovariantCMBR-v1.1.6-arxiv.zip} is the
+arXiv source bundle for \texttt{v1.1.6-arxiv}, byte-identical to the submitted
 archive and carrying the \texttt{.tex}, the \texttt{.bib}, the \texttt{.bbl}
 and the three figure sources it builds from. \textbf{A check and the thing it
-checks are of no use apart}, and until this edition a reader could obtain
-neither from this repository. Both now sit under \path{source/}, where
-\texttt{IMMUTABLE-MANIFEST-SHA256.txt} records their digests. \emph{The freeze
-recorded here is the arXiv freeze and not acceptance}, which
-\path{source/README.md} reserves \path{source-v1/} for; the two coexist
-because each carries its edition in its name, so a later submission arrives as
-its own file rather than overwriting this one.
+checks are of no use apart}, so the two sit together in
+\path{source/source-v1.1.6/}, where \texttt{IMMUTABLE-MANIFEST-SHA256.txt}
+records both digests. \emph{The freeze recorded here is the arXiv freeze and
+not acceptance}: an accepted manuscript, or a second paper, arrives as a
+directory of its own and never alters this one, and the version in each name
+is what makes an immutable prefix safe. The edition of 2 November carried the
+two files in separate directories, \path{source-v1/} and \path{source-v2/};
+they were moved together on 3 November.
 
 \paragraph{What the algebra check re-derives, and what it only records.}
 \path{independent_checks_v1.1.6.py} takes Paper~1's coefficients and identities
@@ -2490,6 +2505,23 @@ for exact $\cos(kr_s)$ accepts an undriven oscillator and rejects a driven
 one, and the released configuration passes it. Two arrivals, one conclusion,
 and neither was built from the other.
 
+\paragraph{Read with \S\ref{sec:w-form} as corrected on 3 November, the
+second arrival is withdrawn and the first stands.} The arrival from
+\S\ref{sec:oscillator} concerns the source: the oscillator tracks
+$\cos(kr_s)$ in exact phase, as an undriven oscillator must, and
+\S\ref{sec:w-form} leaves that untouched. The arrival from the spectrum does
+not survive. In the frame the released figure is drawn in, the spectrum's
+single maximum is the envelope of a term carrying the frame velocity ---
+$\kappa'\hat v_B$ in the Sachs--Wolfe slot and $\mathcal V\kappa''\hat v_B$ in
+the bulk, with $\hat v_B$ separated from the $C_2$ that cancels its frame
+dependence --- and not a projected extremum of the source. \textbf{So
+$0.9994\,\ell_A$ is a measured position without a mechanism behind it}: it is
+not distinguished from $\ell_A$, and that is no longer evidence that the
+released assembly projects the undriven $\cos(kr_s)$. The phases tabulated
+below are measured positions and stay as measurements; reading them as phases
+of one oscillation needs an assembly that carries the oscillation into the
+spectrum.
+
 \paragraph{Every ratio in this document is now quoted against one acoustic
 scale, and the conversion note that stood here is withdrawn.} Editions
 between 31 October and 2 November restated the sites that \emph{named} the
@@ -3051,7 +3083,8 @@ does two further things:
   plateau \emph{what stands where the Sachs--Wolfe monopole should be is a
   Doppler term multiplied by a scattering rate of $3.8\times10^2$}. That is
   findings \textbf{T-101} and \textbf{T-121}, and it is the $\ell\simeq7$
-  bump.
+  bump. It is also the first of two reasons the released spectrum carries no
+  peak series in the observer's frame (\S\ref{sec:w-form}).
 \end{itemize}
 
 \textbf{Three findings, one operation.} B-17~(iv), T-94 and T-101 are not
@@ -3289,69 +3322,133 @@ the kernel through $K'$, the one carried at $W$ yields a primary and the one
 carried at $\mathcal V$ yields the derivative of one.}
 
 \emph{A term carried at $\mathcal V$ against $K$ itself is untouched by this
-and samples correctly} --- that is the Sachs--Wolfe channel, and it is why
-the released spectrum has a primary at all. Editions before 2 November
-stated the result without the restriction, which claimed it for every
-$\mathcal V$-carried term and so for the monopole that supplies the one
-feature the spectrum does have. \textbf{The correction narrows the theorem
-and leaves its consequence standing}, because $C_1$ reaches the kernel
-through $K'$ by construction and $C_2$ through $K''$.
+and samples correctly} --- that is the Sachs--Wolfe channel. Editions before
+2 November stated the result without the restriction to $K'$, and so claimed
+it for the monopole too.
 
-\paragraph{What the misweighted bracket contributes instead is the term the
-implementation stream measures at $93$--$97\%$ of the bulk integrand.}
-$\mathcal V'=(\kappa''+\kappa'^2)W$, so the replacement kernel carries
-$\kappa''$. Acting on the Thomson content of $C_1$, which is
-$\kappa'\hat v_B$, it produces $\mathcal V\kappa''\hat v_B$ --- the term that
-dominates the released bulk. \textbf{The weight misassignment and the
-measured dominance of that one term are the same fact}, arrived at from the
-algebra here and from a run there, and neither was built from the other.
+\paragraph{What the kernel weights do not do is explain the missing series,
+and editions from 31 October to 2 November said that they did.} A derivative
+of a primary is a primary displaced by half a period: $\sin(kr_s)$ has as many
+zeros as $\cos(kr_s)$, so a kernel that differentiates moves a peak series and
+cannot erase one. Those editions argued that the factor of $k$ a derivative
+brings tilts rather than features, and concluded an envelope; the conclusion
+does not follow. \textbf{The identities
+\eqref{eq:weight-w-byparts}--\eqref{eq:kernel-weights} stand as mathematics,
+and the account of the series built on them is withdrawn.} So is the
+attribution that went with it. The term measured at $93$--$97\%$ of the
+released bulk, $\mathcal V\kappa''\hat v_B$, belongs to the admissibility
+condition of \S\ref{sec:assembly-rederived} and not to the weight: $C_1$ holds
+$\kappa'\hat v_B$ by (90), so differentiating $C_1$ under either weight
+produces $\kappa''\hat v_B$. It is the bulk face of the operation whose
+boundary face is $\kappa'\hat v_B$ standing in the Sachs--Wolfe slot, and no
+choice of weight removes it.
 
-\paragraph{Three measurements close on this, and none of them was taken to
-test it.} First, the released first peak sits at $0.9994\,\ell_A$
-(\S\ref{sec:frame-discrepancy}): one surviving snapshot places one feature
-where the undriven source's first extremum projects, $kr_s=\pi$. Second, the
-released spectrum under \texttt{split\_by\_parts} rises to a single maximum
-and decays monotonically with no trough --- an envelope, which is what a
-derivative-acting kernel leaves when it converts $\cos(kr_s)$ into
-$kc_s\sin(kr_s)$: a phase advanced by $\pi/2$ and a multiplication by $k$,
-which tilts rather than features. Third, the rank-0 coefficient $C_0$
-returns one detrended sign change against an expected seven and $0.12\%$
-modulation at $k\simeq300$, while $\hat v_B$ and $-C_1$ return six and eight
-at $26.5\%$ and $22.1\%$. \textbf{The oscillation is generated and it
-survives; what does not carry it is $C_0$, measured in the CDM frame, and
-$C_0$ is one frame-dependent half of the rank-0 bracket rather than a channel
-of its own.} Under a change of frame $C_0$ shifts by $+kv/3$ and
-$\tfrac k3\tau_1$ by $-kv/3$, so only their sum is a physical object; a
-statement about either half is a statement about a frame.
-
-\paragraph{Neither weight is right for the whole bracket, and that is the
-finding rather than a complication of it.} Editions before 2 November named
+\paragraph{The series is not a weight question, and both registered
+falsifiers say so.} Editions before 2 November named
 \texttt{bracket\_\allowbreak{}all\_\allowbreak{}at\_\allowbreak{}w} as the
-falsifier and predicted that it returns a peak series. \textbf{That
-prediction is withdrawn, and it was answerable before it was made.}
-\textbf{D32} ran that configuration, and the identity beside it, on
-25 October: both put late power on a background with no late effect to carry,
-and the record states that the spectrum must still be laid down at
-recombination, \emph{which is what those two configurations destroyed}. The
-reason is in \textbf{T-143}: carried at $W$ the bracket is integrated along
-the whole ray, where $C_0$ and $C_2$ grow by a factor of $33$ to the present
-while $W$ falls only to $0.368$, so a $W$-carried bracket measures the
-growing mode rather than recombination.
+falsifier and predicted that it returns a peak series. The prediction was
+withdrawn on 2 November as answerable before it was made: \textbf{D32} had run
+that configuration on 25 October, and \textbf{T-143} says why it cannot
+localise --- carried at $W$ the bracket is integrated along the whole ray,
+where $C_0$ and $C_2$ grow by a factor of $33$ while $W$ falls only to
+$0.368$. Carried through a full $C_\ell$ since, it returns one maximum and no
+interior minimum between $\ell=300$ and $900$ on each background tried.
+\textbf{The prediction failed.} Its replacement,
+\texttt{isw\_\allowbreak{}only\_\allowbreak{}at\_\allowbreak{}w}, was
+registered as \emph{the spectrum stays localised at recombination and carries
+at least one interior minimum between $\ell=300$ and $\ell=900$}, with a
+second falsifier, \emph{localised but still an envelope}. Run on PLANCK
+through F9's own spectrum, its CDM-frame column is the released column --- one
+maximum, at $\ell_A$, no trough to $\ell=990$ --- and \textbf{the second
+falsifier fires as written}: the absence of the secondaries is not a weight
+question. Neither run is yet among this bundle's released diagnostics.
+
+\paragraph{The measurements offered for the withdrawn account stand as
+measurements.} The released first peak sits at $0.9994\,\ell_A$; its reading
+as one surviving snapshot of the undriven source goes with the account
+(\S\ref{sec:first-peak}). The released spectrum under
+\texttt{split\_by\_parts} rises to one maximum and decays with no trough. And
+\textbf{D42} separates each coefficient from its pedestal with a running mean
+one acoustic period wide, a filter with a zero at the acoustic frequency that
+cannot leak the oscillation into the pedestal: $\hat v_B$ and $-C_1$ carry the
+wave at $26.5\%$ and $22.1\%$ modulation, and $C_0$, in the CDM frame, at
+$0.12\%$. Read directly, none of the three crosses zero below $k=600$: each
+oscillates on a pedestal larger than the oscillation.
 
 \noindent
-So the bracket cannot go wholesale to either weight. At $\mathcal V$ its
-$K'$ channel yields no primary; at $W$ it is drowned. \textbf{The split is by
-physical channel and not by term}, which is what the standard line-of-sight
-integrand already does and what $(a\mathcal B_1)'/k=(\Phi_A'-\Phi_H')+\tfrac
-k3\tau_1$ says here: the potential difference accumulates along the path and
-belongs at $W$, while $\tfrac k3\tau_1$ is $\delta\tilde T'$ and belongs at
-the visibility with the rest of the deposit. \emph{The control for that is
-\texttt{isw\_\allowbreak{}only\_\allowbreak{}at\_\allowbreak{}w} and it is
-the one no run has carried through a full $C_\ell$.} One caveat stands
-either way: $C_0$ is half of the rank-0 bracket, whose full content is
-$C_0+\tfrac k3\tau_1$, so the third measurement above constrains the half
-that was measured and not the bracket --- \textbf{M15}, and why the bracket
-measurement is asked for separately.
+\textbf{The frame rule for rank zero is now measured.} Under a change of
+frame $C_0$ shifts by $+kv/3$ and $\tfrac k3\tau_1$ by $-kv/3$, so only their
+sum is a physical object. The sum agrees between the Newtonian and CDM frames
+to $2.1\times10^{-14}$ over the visibility window for $k=2$--$600$, which is
+double-precision roundoff, while $C_0$ alone is $0$ in the Newtonian frame and
+$185$ in the CDM frame at $k=300$ (\textbf{D42}). $C_0$ is built from the
+shear, which vanishes in a shear-free frame, so there the bracket \emph{is}
+$\tfrac k3\tau_1$, the photon dipole relative to a shear-free $u^a$, and it
+crosses zero four times below $k=400$, near $106$, $174$, $266$ and $340$
+(\textbf{D42}). \textbf{The source carries the acoustic wave.} A
+statement about $C_0$ alone is a statement about a frame.
+
+\paragraph{What a change of frame requires of the integrand.} At first order
+a change of frame moves only the dipole, so for every observer the
+multipoles with $\ell\ge2$ of $\int_0^{\eta_0}W\{C_0K+C_1K'+C_2K''\}\,
+\mathrm d\eta$ must not move. With $W(0)=0$, $W(\eta_0)=1$,
+$j_\ell(0)=\delta_{\ell0}$ and $j_\ell'(0)=\tfrac13\delta_{\ell1}$, that
+holds exactly when the shift of the integrand is a total derivative,
+\begin{equation}
+  W\big\{\Delta C_0\,K+\Delta C_1\,K'+\Delta C_2\,K''\big\}
+  =\frac{\mathrm d}{\mathrm d\eta}\Big[W\big(\alpha K+\beta K'\big)\Big],
+  \label{eq:frame-total-derivative}
+\end{equation}
+which with $W'=\kappa'W$ is three matching conditions: $\Delta C_2=\beta$,
+$\Delta C_1=\kappa'\beta+\beta'+\alpha$ and $\Delta C_0=\kappa'\alpha+\alpha'$.
+A change of frame is kinematic and cannot depend on the scattering history,
+and $C_0$ holds no rate, so $\alpha=0$. Split by rate content,
+$C_1=C_1^{\rm grav}+C_1^{\rm scatt}$ with $C_1^{\rm scatt}=-\kappa'\hat v_B$,
+the conditions are
+\begin{equation}
+  \Delta C_0=0,\qquad
+  \Delta C_1^{\rm scatt}=\kappa'\,\Delta C_2,\qquad
+  \Delta C_1^{\rm grav}=\Delta C_2' .
+  \label{eq:frame-conditions}
+\end{equation}
+\textbf{Rank zero is frame-invariant alone; the scattering half of rank one
+pairs with $C_2$; the gravitational half pairs with $C_2'$.} No
+$\int\mathcal V=1$ collapse enters, so the conditions hold at the
+visibility's finite width. The second is \textbf{T-82}: $\hat v_B+C_2$ agrees
+between the frames to machine precision, and it holds. The first fails: that
+is \textbf{D42}'s $0$ against $185$. The third fails as well, and it can be
+read off this bundle's own transformation laws. The moving projector shifts
+$\delta T$ by $-\mathcal Hv/k$, the CDM frame sets $\tilde\Phi_A=0$, and
+$v'+\mathcal Hv=-k\Phi_A$, so $\delta T+\Phi_A$ shifts by $+v'/k$ and
+$C_1^{\rm grav}=-(\delta T+\Phi_A)$ by $-v'/k$; $C_2=v/k$ makes
+$\Delta C_2'=+v'/k$. \textbf{The third condition fails by exactly $2C_2'$.}
+
+\paragraph{Where the series is lost, and the repair that is ruled out.}
+(102)'s integration by parts does two things that no weight undoes. It carries
+$\kappa'\hat v_B$ into the Sachs--Wolfe slot and, one derivative on,
+$\mathcal V\kappa''\hat v_B$ into the bulk; and by integrating the rank-two
+term by parts twice it separates $C_2$ from $\hat v_B$, the pair the second
+condition of \eqref{eq:frame-conditions} binds. In a shear-free frame $C_2$
+vanishes and the separation is invisible. In the CDM frame $\hat v_B$ carries
+$-v/k$, the frame velocity, which is smooth in $k$; separated from $C_2$ and
+multiplied by $\kappa'$ it is a pedestal under the oscillating monopole, and
+the series does not survive it. \textbf{So the missing series and the open
+frame discrepancy of \S\ref{sec:frame-discrepancy} are one defect.}
+
+\noindent
+What this rules out is a repair at the boundary. (102)'s boundary scalar
+$(C_2'-C_1)\,j_\ell$ is not a free choice of sign: \eqref{eq:byparts} forces
+it from $+C_2K''$, so printing $-C_2'$ there would make the collapsed boundary
+frame-invariant and the boundary no longer the boundary of its own integrand.
+\emph{The defect is upstream, in how the gravitational coefficients carry the
+frame}: the relative sign of the Sachs--Wolfe combination inside $C_1$ in
+(90), the transformation laws for $\delta T$ and $\Phi_A$, or the rank-zero
+row, which \eqref{eq:frame-conditions} requires to be frame-invariant and
+which $C_0$ is not while the bracket is. Which of the three is wrong is
+derived from \eqref{eq:transport-exact} in a generic frame before any repair
+is registered, and the control for that repair is
+\eqref{eq:frame-conditions}, scored on the coefficients over the visibility
+window before any spectrum is read.
 
 \paragraph{Both endpoints of the projected identity.}
 For this calculation alone, define the pre-integrated object
@@ -3903,6 +4000,18 @@ work.
 
 A-3 answers to three configurations and gives a different answer to
 each, so no statement about it is safe without naming which.
+
+\emph{And on the released assembly A-3 cannot yet be tested.} The boundary
+value it changes, $(\delta\tilde T+\Phi_A)(\eta_*)$, sits beside
+$\kappa'\hat v_B$, which in the observer's frame carries the frame velocity
+and outweighs it (\S\ref{sec:w-form}). On that assembly a first peak that
+stays near $\ell_A$ when A-3 is enabled would mean the boundary value is
+swamped, not that driving is absent, and a Doppler term in the monopole's
+kernel acts as a quadrature partner only where $\hat v_B$ oscillates, which is
+in a shear-free frame. The released row's agreement to $0.1\%$ below is
+therefore a coincidence of positions until A-3 runs on an assembly that meets
+\eqref{eq:frame-conditions}, and its prediction is restated against that
+assembly before the run.
 
 \begin{center}\small
 \begin{tabularx}{\textwidth}{@{}l l >{\raggedright\arraybackslash}X@{}}
@@ -6473,9 +6582,11 @@ ratio alone by construction, however large it grows, so a feature can only be
 removed by something carrying structure at that feature's position, and
 nothing measured in this bundle carries any. The absence of the secondaries is
 therefore
-a property of the assembly rather than of any grid, which is where
-\S\ref{sec:frame-discrepancy} leaves two weightings indistinguishable, and it
-is open.
+a property of the assembly rather than of any grid, and \S\ref{sec:w-form}
+names it: an integration by parts that differentiates a coefficient holding a
+rate and separates $\hat v_B$ from $C_2$, in an assembly whose gravitational
+coefficients fail two of the three frame conditions \eqref{eq:frame-conditions}.
+It closes when an assembly meeting all three is built.
 
 \section{Implications}
 \label{sec:implications}
@@ -6515,7 +6626,7 @@ residual is
 \noindent
 which for a power-law spectrum of index \(\nu\) factorises as
 \((\nu-2)(3\nu-8)/16\) and vanishes at \(\nu=2\) and \(\nu=8/3\). Both
-statements are asserted in \path{source/source-v2/independent_checks_v1.1.6.py},
+statements are asserted in \path{source/source-v1.1.6/independent_checks_v1.1.6.py},
 section~H, in exact rationals.
 
 \paragraph{What cancels is the deflection response, and variance conservation is not established.} It establishes that
