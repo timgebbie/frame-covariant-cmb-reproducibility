@@ -1,5 +1,10 @@
 % Computational supplement to the associated paper.
 %
+% v1.3.25, 2026-11-03.  One Discussion sentence brought into line with the
+% by-parts section: exchanging the weights replaces a primary reached through
+% K' by its derivative, rather than removing it; the bold span standing in for
+% a heading there removed.
+%
 % v1.3.24, 2026-11-03.  The assembly in frame-invariant slots:
 % eq:assembly-repaired extended to rank two, with the admissibility
 % condition's companion -- a rank-two term is integrated by parts once, onto
@@ -57,7 +62,7 @@
 %      are named, with exact k-independent margins.
 %   9  Two voice defects inside P1-T's declared sections.
 %
-% Build: latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.3.24.tex  (only after locked
+% Build: latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.3.25.tex  (only after locked
 % assets have passed hash checks). THIS FILE IS THE WHOLE DOCUMENT: the prose
 % carries no \input, and every former supplementary-materials/ fragment is
 % expanded inline between its own BEGIN/END provenance comments. The only
@@ -101,7 +106,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.3.24 --- 3 November 2026\\
+\date{Supplement v1.3.25 --- 3 November 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.3.0-dev}
 
 \begin{document}
@@ -6533,11 +6538,13 @@ carrying an explicit factor of the scattering rate is at visibility weight
 whatever it is multiplied by. Reading that identity as a licence to exchange
 the weights removes the late-time contribution entirely, because
 \(\mathcal V\) vanishes once recombination is complete and \(W\) does not.
-\S\ref{sec:w-form} carries the other half of the same statement: the exchange
-also removes the \emph{primary}, because the kernel a
+\S\ref{sec:w-form} carries the other half of the same statement: for a term
+that reaches the kernel through \(K'\), the exchange also replaces the
+\emph{primary} by its derivative, because the kernel a
 \(\mathcal V\)-carried term leaves behind integrates to zero and so acts as a
-derivative rather than as a sample. \textbf{Exchanging the weights loses both
-ends of the ray, not one.}
+derivative rather than as a sample. Exchanging the weights therefore loses
+both ends of the ray: the late-time contribution, and the sample at the
+deposit.
 
 \subsection{One equation, three regimes, and without matching}
 \label{sec:discussion-regimes}

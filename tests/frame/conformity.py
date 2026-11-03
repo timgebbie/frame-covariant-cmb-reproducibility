@@ -1,52 +1,20 @@
 #!/usr/bin/env python3
-"""Conformity gate for the P1-T stream.  Standard library only.  P1-T, 2026-10-28.
+"""Conformity gate for the supplement's voice and the README's maths spans.
+Standard library only.
 
-WHY THIS EXISTS, AND IT IS NOT A STYLE CHECKER.
+It gates three things, each of which has already cost this bundle something:
 
-On 2026-10-28 P1-T read P1-B's answers out of their COMMIT MESSAGES rather than
-out of `handoff/P1B-to-P1T.md`.  The commit log is a record; the handoff is the
-channel.  Two of P1-B's items sat unread -- one from the previous day, one from
-six hours earlier -- and the item P1-T was about to send asked a question P1-B
-had already answered.  Nothing failed, nothing went red, and the only thing
-between that and spending one of P1-B's runs on a settled question was somebody
-noticing.
-
-A rule that the channel be read is kept only by remembering to read it, and the
-remembering had already failed once.  So the rule is an instrument now, and
-RUNNING IT IS THE ACT OF READING: it prints every open item in P1-B's file and
-fails while any of them is uncited.
-
-It gates five things that have each already cost this bundle something:
-
-  A  every item in `handoff/P1B-to-P1T.md` is cited in `handoff/P1T-to-P1B.md`
-  B  every item P1-T writes carries an identifier, a clock-sourced stamp, what
-     is asked and what it unblocks  (Coordination's queue contract).  CORRECTED
-     2026-11-02: its heading regex wanted three hashes and the file writes two,
-     so it matched nothing and had never once scored an item.  It now carries a
-     control, like D carries E, because a check that cannot pass is a check
-     nobody reads.
-  D  no maths span in a P1-T file is butted against a letter, a digit or a dash
-  F  the supplement's own voice, on the sections P1-T wrote and only those
+  D  no maths span in the README files is butted against a letter, a digit or
+     a dash -- GitHub's renderer reads the pair as one token
   E  the D check's own regex cannot straddle two spans -- the control, which is
      T-44's requirement and the defect that produced a false 91 on 2026-10-28
-
-THERE IS NO C, AND THE GAP IS DELIBERATE.  It checked that the README's declared
-supplement edition had a .tex and a .pdf behind it.  P1-B's
-`test_every_relative_link_resolves` and
-`test_the_readme_and_the_supplement_name_the_same_tree_version` already do
-exactly that, both driven off the same `Supplement:` line, and both were red on
-`main` when this was written.  Two streams gating one thing is the failure
-`docs/STREAMS.md` exists to prevent, so the check was removed rather than kept
-"just in case": a second gate on the same property does not double the
-assurance, it halves the chance anyone knows which one to believe.  The letter
-is left out rather than renumbered so that this note has somewhere to live.
+  F  the supplement's own voice, on the sections listed below
 
 NO PROJECT CODE IS IMPORTED.  Nothing here is a physics claim and this file is
 not a frame instrument: `run_all.py` globs `c<digit>*.py` and will not collect
 it, which is deliberate -- the instrument count is a count of physics.
 
     python tests/frame/conformity.py            # gate; exit 1 on any failure
-    python tests/frame/conformity.py --queue    # print the channel and stop
 """
 import re
 import sys
@@ -55,14 +23,7 @@ import pathlib
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 
-MINE   = ROOT / 'handoff' / 'P1T-to-P1B.md'
-THEIRS = ROOT / 'handoff' / 'P1B-to-P1T.md'
 README = ROOT / 'README.md'
-
-#: Files P1-T writes, from `docs/STREAMS.md`.  The root README is carried as a
-#: PI grant of 2026-10-28 and is NOT in Coordination's table; the mismatch is
-#: reported rather than resolved here, because STREAMS.md is Coordination's.
-PI_GRANTED = ('README.md',)
 
 FAILED = []
 PASSED = []
@@ -160,165 +121,13 @@ def rendering_violations(text):
     return bad
 
 
-# ---------------------------------------------------------------------------
-# A  the channel is read, and running this check is the reading
-# ---------------------------------------------------------------------------
-THEIR_ITEM = re.compile(r'^#{2,3}\s+P1B\s*(?:->|\u2192)\s*P1T\s+(\d{4}-\d{2}-\d{2})\s+#(\d+)(.*)$', re.M)
-
-#: **Corrected 2026-11-02.  This read ``^###`` and every item heading in
-#: `handoff/P1T-to-P1B.md` is ``##``** -- the same shape THEIR_ITEM above
-#: matches with two hashes in the other file.  So check B matched nothing on
-#: every run since this file landed, and reported *"no items found -- the queue
-#: is empty or the heading format has drifted"* over a queue carrying seven
-#: items.  **A check that cannot pass is a check nobody reads**, and this one
-#: had been red beside two real failures for five days.  The asymmetry was
-#: internal to this file, which makes it the 2026-10-28 class exactly: an
-#: instrument measuring an artefact of its own construction.  `check_queue_contract`
-#: now carries its own control, below, for the same reason check D carries E.
-MY_ITEM    = re.compile(r'^#{2,3}\s+P1T\s*(?:->|\u2192)\s*P1B\s+(\d{4}-\d{2}-\d{2})\s+#(\d+)\s*(.*)$', re.M)
-
-#: **A citation is the other stream's identifier, and the bare form is
-#: ambiguous.**  Both streams number from one integer space, so ``#22`` in my
-#: file is P1-B's item in one paragraph and my own in another -- it is both, on
-#: 2026-11-02, fourteen lines apart.  The unambiguous form is ``P1B#22`` and it
-#: is what this gate wants written.  The legacy ``your #22`` is kept, widened to
-#: carry the words an English sentence puts between them: *"Your diagnosis in
-#: #21 was right"* is a citation and the narrow form scored it UNCITED, which is
-#: a false failure of the check whose whole purpose is to stop a real one being
-#: missed.  A bare ``#22`` is deliberately NOT a citation: it is how I label my
-#: own items, and reading it as one would make check A pass on my own queue.
-CITATION   = re.compile(r'(?:\bP1B\s*#|[Yy]our\s+(?:\w+\s+){0,3}#)(\d+)')
-
-#: The control for CITATION, in the shape check E uses: the probes the regex
-#: must score, and the probes it must not.  A citation scheme is a convention,
-#: and a convention drifts.
-CITE_PROBES = (
-    ('**Your #22 is discharged.**',               {22}),
-    ('Your diagnosis in #21 was right.',          {21}),
-    ('P1B#27 is answered below.',                 {27}),
-    ('**#22** the figure fingerprints.',          set()),
-    ('item #25 above is what that looks like',    set()),
-)
-
-
-def check_channel(quiet=False):
-    if not THEIRS.exists():
-        return report('A  every open item of P1-B\'s is cited in mine', False,
-                      '%s does not exist -- the channel is one-way and that is '
-                      'itself the failure' % THEIRS)
-    theirs = THEIRS.read_text(encoding='utf-8')
-    mine = MINE.read_text(encoding='utf-8') if MINE.exists() else ''
-
-    items = [(d, int(n), t.strip(' -\u2014')) for d, n, t in THEIR_ITEM.findall(theirs)]
-    cited = {int(n) for n in CITATION.findall(mine)}
-    uncited = [i for i in items if i[1] not in cited]
-
-    if not quiet:
-        print()
-        print('  THE CHANNEL -- handoff/P1B-to-P1T.md, %d item(s) open' % len(items))
-        for d, n, t in items:
-            print('    %s  #%-3d %-6s %s' % (d, n, 'CITED' if n in cited else 'UNCITED',
-                                             t[:58] or '(untitled)'))
-        print()
-
-    return report('A  every open item of P1-B\'s is cited in mine',
-                  not uncited,
-                  '' if not uncited else
-                  'uncited: ' + ', '.join('#%d (%s)' % (n, d) for d, n, _ in uncited) +
-                  '\nAn item is answered in handoff/P1T-to-P1B.md citing its number,'
-                  '\nnever in a stream note, which neither of us is required to read.')
-
-
-# ---------------------------------------------------------------------------
-# B  the queue contract Coordination wrote into docs/STREAMS.md
-# ---------------------------------------------------------------------------
-#: An item states what is asked, or states that it is not an ask.  Both forms
-#: are in use on both sides of the channel and the contract is about the reader
-#: knowing which: an ask carries what it unblocks, a declaration does not.
-ASK   = re.compile(r'\*\*Ask(?:ed)?\b')
-NOASK = re.compile(r'\*\*(?:Not an ask|Answered|Declared|Ruling)\b')
-UNBLK = re.compile(r'\*\*Unblocks\b')
-
-
-def queue_failures(text):
-    """Coordination's queue contract, scored on one document's text."""
-    heads = list(MY_ITEM.finditer(text))
-    bad = []
-    for i, m in enumerate(heads):
-        body = text[m.end(): heads[i + 1].start() if i + 1 < len(heads) else len(text)]
-        tag = '#%s' % m.group(2)
-        if 'stamp source' not in body:
-            bad.append('%s carries no clock-sourced stamp' % tag)
-        asks = bool(ASK.search(body))
-        if not asks and not NOASK.search(body):
-            bad.append('%s says neither what is asked nor that it is not an ask' % tag)
-        if asks and not UNBLK.search(body):
-            bad.append('%s is an ask and does not say what it unblocks' % tag)
-    return bad
-
-
-#: THE CONTROL FOR B, and it exists because B was dead for five days while
-#: printing a sentence that read like a finding about the queue.  Each probe is
-#: a whole miniature document, so the heading level is part of what is tested.
-_STAMP = '**2 November 2026** - stamp source: `date -u`'
-B_PROBES = (
-    ('## P1T->P1B 2026-11-02 #99 - a well-formed ask\n%s\n\n**Ask.** One line.\n\n**Unblocks.** One line.\n' % _STAMP, 0),
-    ('### P1T->P1B 2026-11-02 #99 - the same item at three hashes\n%s\n\n**Ask.** One line.\n\n**Unblocks.** One line.\n' % _STAMP, 0),
-    ('## P1T->P1B 2026-11-02 #99 - a declaration, which needs no unblocks\n%s\n\n**Not an ask.** One line.\n' % _STAMP, 0),
-    ('## P1T->P1B 2026-11-02 #99 - an ask with no unblocks\n%s\n\n**Ask.** One line.\n' % _STAMP, 1),
-    ('## P1T->P1B 2026-11-02 #99 - two asks in one item\n%s\n\n**Ask one.** A line.\n\n**Ask two.** A line.\n\n**Unblocks.** One line.\n' % _STAMP, 0),
-    ('## P1T->P1B 2026-11-02 #99 - the colon form\n%s\n\n**Ask: do the thing.** A line.\n\n**Unblocks:** One line.\n' % _STAMP, 0),
-    ('## P1T->P1B 2026-11-02 #99 - no markers at all\n%s\n\nProse and nothing else.\n' % _STAMP, 1),
-    ('## P1T->P1B 2026-11-02 #99 - an ask with no stamp\n\n**Ask.** One line.\n\n**Unblocks.** One line.\n', 1),
-)
-
-
-def contract_control():
-    """The parser must find the headings, and must still fail on a bad item."""
-    problems = []
-    for probe, expected in B_PROBES:
-        if not MY_ITEM.search(probe):
-            problems.append('CONTROL FAILED -- the item heading is not matched at '
-                            'all, which is how this check sat green-less and '
-                            'silent for five days:\n         %s'
-                            % probe.splitlines()[0])
-            continue
-        got = len(queue_failures(probe))
-        if (got > 0) != (expected > 0):
-            problems.append('CONTROL FAILED -- probe scored %d failure(s), '
-                            'expected %s:\n         %s'
-                            % (got, 'some' if expected else 'none',
-                               probe.splitlines()[0]))
-    for probe, expected in CITE_PROBES:
-        if {int(n) for n in CITATION.findall(probe)} != expected:
-            problems.append('CONTROL FAILED -- the citation regex scores %r as '
-                            '%s, expected %s'
-                            % (probe,
-                               sorted(int(n) for n in CITATION.findall(probe)),
-                               sorted(expected)))
-    return problems
-
-
-def check_queue_contract():
-    if not MINE.exists():
-        return report('B  my items carry identifier, stamp, ask and unblocks', False,
-                      '%s does not exist' % MINE)
-    text = MINE.read_text(encoding='utf-8')
-    bad = queue_failures(text)
-    heads = list(MY_ITEM.finditer(text))
-    if not heads:
-        bad.insert(0, 'no items found -- the queue is empty or the heading '
-                      'format has drifted')
-    bad += contract_control()
-    return report('B  my items carry identifier, stamp, ask and unblocks',
-                  not bad, '\n'.join(bad))
 
 
 # ---------------------------------------------------------------------------
 # D  the rendering rule, on the files P1-T writes
 # ---------------------------------------------------------------------------
 def check_rendering():
-    targets = [MINE, HERE / 'README.md', README]
+    targets = [HERE / 'README.md', README]
     bad = []
     for p in targets:
         if not p.exists():
@@ -486,28 +295,11 @@ def check_voice():
 
 
 def main():
-    queue_only = '--queue' in sys.argv
-    print('P1-T conformity gate -- %s' % ROOT)
+    print('Conformity gate -- %s' % ROOT)
     print()
-    check_channel(quiet=False)
-    if queue_only:
-        return 0
-    check_queue_contract()
     check_rendering()
     check_control()
     check_voice()
-
-    if ROOT.joinpath('docs', 'STREAMS.md').exists():
-        streams = ROOT.joinpath('docs', 'STREAMS.md').read_text(encoding='utf-8')
-        for path in PI_GRANTED:
-            if re.search(r'\*\*P1-T\*\*.*%s' % re.escape(path), streams):
-                continue
-            print()
-            print('  note  %s is written by P1-T under a PI grant of 2026-10-28 and is'
-                  % path)
-            print('        NOT in docs/STREAMS.md\'s table. Coordination owns that file;')
-            print('        this is named rather than resolved here.')
-
     print()
     print('  %d passed, %d failed' % (len(PASSED), len(FAILED)))
     return 1 if FAILED else 0

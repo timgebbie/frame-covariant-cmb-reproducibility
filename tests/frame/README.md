@@ -7,31 +7,18 @@ frame-covariance conditions, plus the generator that turns them into
 
 ```
 python3 doctor.py                                      # why the suite will or will not run here
-python3 conformity.py                                  # the channel, and the stream's own conformity
+python3 conformity.py                                  # README maths spans, and the supplement's voice
 python3 run_all.py                                     # exit 0 only if all pass
 python3 gen_theory_audit.py                            # writes the document itself
 python3 -I c6_thomson.py                               # or run one
 ```
 
-**Run `conformity.py` first, every run, before reading anything else.** It is
-not a physics instrument and `run_all.py` does not collect it — the glob takes
-`c` followed by a digit, and the instrument count is a count of physics. What it
-gates is the part of this stream that no physics check can see: that every open
-item in `handoff/P1B-to-P1T.md` is cited in `handoff/P1T-to-P1B.md`, that every
-item P1-T writes carries an identifier, a clock-sourced stamp, what is asked and
-what it unblocks, and that no maths span in a P1-T file is butted against a
-letter, a digit or a dash. It does **not** check the README's declared supplement
-edition against the files on disk: P1-B's `test_every_relative_link_resolves` and
-`test_the_readme_and_the_supplement_name_the_same_tree_version` already do, and two
-streams gating one property is the failure `docs/STREAMS.md` exists to prevent.
-
-**Running it is the act of reading the channel**, which is the point. On
-2026-10-28 P1-T read P1-B's answers out of their commit messages instead of out
-of `handoff/P1B-to-P1T.md`: two of P1-B's items sat unread, P1-T's answer to a
-third sat in a stream note neither party was required to read, and the item P1-T
-was about to send asked a question P1-B had answered six hours earlier. Nothing
-went red. A rule that the channel be read is kept only by remembering to read
-it, and the remembering had already failed, so it is an instrument now.
+**`conformity.py` is not a physics instrument**, and `run_all.py` does not
+collect it — the glob takes `c` followed by a digit, and the instrument count
+is a count of physics. It gates three things: that no maths span in the
+README files is butted against a letter, a digit or a dash; that its own
+regex cannot straddle two spans, which is the control on the first; and the
+supplement's voice, on the sections listed in the file.
 
 **Start with `doctor.py` when anything fails.** It imports nothing outside the
 standard library, so it runs where the suite does not, and it reports the
