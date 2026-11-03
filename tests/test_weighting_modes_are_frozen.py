@@ -119,9 +119,10 @@ FROZEN: dict[str, str] = {
     "bracket_at_w": "7540b291403bd4bdbe27df560446b803",              # -7.121728e+00  was e088fad44df65594985717120296c5e7 / -7.121610e+00  (1.7e-05)
     "bracket_at_w_partners": "04590723d293bbcf1c5f6ca58e9ecc5f",     # -7.140136e+00  was 4ff5d76c0e6391d3e2070c435b746b5c / -7.139914e+00  (3.1e-05)
     "slot_split": "f387f1e5416c12d17790a558ae17e089",                # -1.217323e+00  was a4ad4ad35f5a50c7b1db27837cf4336b / -1.222578e+00  (4.3e-03)
-    "slot_split_isw_half": "f56a722003f23572021698860a222725",       # -3.726177e-01  was 7263b3781d27c196658efc9ec1a56a69 / -3.780116e-01  (1.4e-02)
+    # T-190: these two read `c1_prime_isw`, which now carries T(k).
+    "slot_split_isw_half": "df82ed11e9f095c7ded44eeb0f03050a",       # -3.709629e-01  was f56a722003f23572021698860a222725 / -3.726177e-01  (4.4e-03, T-190)
     "slot_split_thomson_shear": "b934cfee2f39018f0cafbf14cbd3dba1",  # -2.052766e+01  was 26784469f57ef7e15a2a562affa3a1a0 / -2.051702e+01  (5.2e-04)
-    "isw_at_w": "399820fed5b2f70700495ffb024399ba",                  # +6.064167e+00  was f14f4e08a776bc1c5bb3b7a00896c88e / +6.058460e+00  (9.4e-04)
+    "isw_at_w": "198887fc0cdff87f45e96b9c8d995be2",                  # +6.065822e+00  was 399820fed5b2f70700495ffb024399ba / +6.064167e+00  (2.7e-04, T-190)
     "split_by_parts": "2823c1a62cd334048c7de6e8cdec9cf3",            # -7.119333e+00  was 8ff81d5f67bea3e632844ed3d20ab671 / -7.119302e+00  (4.4e-06)
     "split_by_parts_partners": "71cfc34cdf4b7ec34d239deb50d04ba6",   # -7.137742e+00  was 392088a2fb3112e92d951a7421e007b5 / -7.137606e+00  (1.9e-05)
 }

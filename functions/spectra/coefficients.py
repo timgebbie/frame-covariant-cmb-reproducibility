@@ -155,6 +155,51 @@ def _solved_match_corrected() -> tuple[Fraction, Fraction]:
 MONOPOLE_ROW: str = "corrected"
 
 
+#: **The rank-one gravitational source and the rank-zero source, as Paper 1's
+#: linear redshift source carries them.** That source is
+#:
+#:     B ~ +(1/3) D^a tau_a - (D_a ln T + A_a) e^a - sigma_ab e^a e^b
+#:
+#: with the Thomson term $+\sigma_{\rm T}n_e\bar f_1e^av^B_a$ beside it, so
+#: the gravitational rank-one term enters with the sign **opposite** to the
+#: Thomson term, and the rank-zero term is carried. In this bundle's harmonic
+#: convention that is $a\mathcal B_1=-k(\delta T+\Phi_A)$, and
+#: $a\mathcal B_0=-\tfrac k3\tau_1$ inside $C_0$.
+#:
+#: `"as built"` is the released matching, $a\mathcal B_1=+k(\delta T+\Phi_A)$
+#: with no $a\mathcal B_0$. `"paper 1"` carries **both** corrections, and they
+#: are one switch because either alone breaks a frame condition of
+#: $W\{C_0K+C_1K'+C_2K''\}$: the sign alone leaves $\Delta C_0=kv/3$, and
+#: $a\mathcal B_0$ alone (T-105) leaves $\Delta C_1^{\rm grav}-\Delta C_2'$ at
+#: $-2v'/k$. With both, $-C_1'$ carries $-\tfrac k3\tau_1$ and the carried
+#: $a\mathcal B_0$ cancels it, so no photon dipole rides along the ray.
+RANK_ONE_SOURCE: str = "as built"
+
+
+def rank_one_gravitational(gradient: np.ndarray) -> np.ndarray:
+    r"""$a\mathcal B_1$ from the gradient $k(\delta T+\Phi_A)$, or its
+    $\eta$-derivative from the gradient's: **the one place the sign of the
+    rank-one gravitational source is set** (`RANK_ONE_SOURCE`)."""
+    if RANK_ONE_SOURCE == "as built":
+        return np.asarray(gradient, dtype=float)
+    if RANK_ONE_SOURCE == "paper 1":
+        if not MONOPOLE_ROW.startswith("corrected"):
+            raise ValueError(
+                "RANK_ONE_SOURCE = 'paper 1' carries a B_0 in C_0, which the "
+                "matching applies only with the corrected monopole row; with "
+                f"MONOPOLE_ROW = {MONOPOLE_ROW!r} the sign would be taken and "
+                "the row silently dropped, which breaks a frame condition")
+        return -np.asarray(gradient, dtype=float)
+    raise ValueError(f"RANK_ONE_SOURCE must be 'as built' or 'paper 1'; "
+                     f"got {RANK_ONE_SOURCE!r}")
+
+
+def _carries_b0() -> bool:
+    r"""Whether $C_0$ carries $a\mathcal B_0$: under `"paper 1"` always, and
+    otherwise only in T-105's refuted variant, kept regenerable."""
+    return MONOPOLE_ROW == "corrected+b0" or RANK_ONE_SOURCE == "paper 1"
+
+
 #: $C_0$ as it follows from (89) **with the sign (89) prints** on its
 #: $\delta_{\ell0}$ entry. Kept as a known-wrong alternative that must change
 #: the answer (decision **S12**), and the subject of finding **B-11**.
@@ -294,14 +339,14 @@ def newtonian_coefficients(
     phi_a = np.asarray(phi_a, dtype=float)
     return match_coefficients(
         eta, k_com,
-        a_b1=float(k_com) * (delta_t + phi_a),
+        a_b1=rank_one_gravitational(float(k_com) * (delta_t + phi_a)),
         a_b2=np.zeros_like(delta_t),
         kappa_prime_v_b=float(k_com) * np.asarray(kappa_prime, dtype=float)
         * np.asarray(v_b, dtype=float),
         frame="newtonian",
         a_b0=a_b0,
         monopole_row_corrected=MONOPOLE_ROW.startswith("corrected"),
-        restore_b0=(MONOPOLE_ROW == "corrected+b0"),
+        restore_b0=_carries_b0(),
     )
 
 
@@ -500,7 +545,7 @@ def newtonian_c1_prime(
         phi_h_prime=phi_h_prime, tau_1=tau_1, conformal_hubble=conformal_hubble)
     # (107): -C~_1' = (kappa' v~_B)' + (1/k)(a B~_1)'
     return -(np.asarray(kappa_prime_v_b_prime, dtype=float)
-             + a_b1_prime / float(k_com))
+             + rank_one_gravitational(a_b1_prime) / float(k_com))
 
 
 def newtonian_a_b1_prime(
@@ -827,14 +872,16 @@ def newtonian_set(
         kappa_prime_v_b_prime=kpvb_prime)
     zero = np.zeros_like(np.asarray(eta, dtype=float))
     k = float(k_com)
-    a_b1 = k * (np.asarray(delta_t, dtype=float) + np.asarray(phi_a, dtype=float))
+    a_b1 = rank_one_gravitational(
+        k * (np.asarray(delta_t, dtype=float) + np.asarray(phi_a, dtype=float)))
     return CoefficientSet(
         coefficients=coefficients, c1_prime=c1p,
         c2_second=zero, c2_prime_star=0.0,
         a_b1=a_b1,
-        a_b1_prime=newtonian_a_b1_prime(
+        a_b1_prime=rank_one_gravitational(newtonian_a_b1_prime(
             k, delta_t=delta_t, phi_a=phi_a, phi_a_prime=phi_a_prime,
-            phi_h_prime=phi_h_prime, tau_1=tau1, conformal_hubble=conformal_hubble),
+            phi_h_prime=phi_h_prime, tau_1=tau1,
+            conformal_hubble=conformal_hubble)),
         a_b2=zero, a_b2_prime=zero, a_b2_second=zero,
         # (89) prints kappa' v_B; the bundle carries v~_B = tau~_1 = v_B/k.
         # **T-66**: that is now true, because `reduce_dipole` makes it true.
@@ -843,7 +890,24 @@ def newtonian_set(
     )
 
 
-__all__ += ["CoefficientSet", "tau_1_prime", "newtonian_set"]
+def gravitational_rank_one(cs: "CoefficientSet") -> tuple[np.ndarray, np.ndarray]:
+    r"""$C_1^{\rm grav}$ and $C_1^{\rm grav}{}'$ of one set: $p_1\,a\mathcal B_1/k$
+    and $p_1(a\mathcal B_1)'/k$, with $p_1$ from the solved matching (89).
+
+    Read from $a\mathcal B_1$ directly rather than as $C_1+\kappa'\hat v_B$,
+    which would subtract a rate-carrying term orders of magnitude larger; the
+    derivative is the set's own, from (106), never splined (T-23).
+    """
+    if cs.a_b1 is None or cs.a_b1_prime is None:
+        raise ValueError("this set does not carry a B_1 and its derivative")
+    p1 = float(_solved_match()[1])
+    k = float(cs.coefficients.k_com)
+    return (p1 * np.asarray(cs.a_b1, dtype=float) / k,
+            p1 * np.asarray(cs.a_b1_prime, dtype=float) / k)
+
+
+__all__ += ["CoefficientSet", "tau_1_prime", "newtonian_set",
+            "RANK_ONE_SOURCE", "rank_one_gravitational", "gravitational_rank_one"]
 
 
 def cdm_frame_shear(
@@ -1054,9 +1118,11 @@ def cdm_set(
     delta_t_E = np.asarray(delta_t, dtype=float) - cH * v / k
     delta_t_prime_E = delta_t_prime_N - (cHp * v + cH * vp) / k
 
-    # A_a = 0 is the frame condition, so a B_1 is the temperature gradient alone
-    a_b1_E = k * delta_t_E
-    a_b1_prime_E = k * delta_t_prime_E
+    # A_a = 0 is the frame condition, so a B_1 is the temperature gradient alone,
+    # entering with the source's sign. `a_b1_prime_N` above stays the
+    # derivative of the gradient itself: it is (106), inverted for dT~'.
+    a_b1_E = rank_one_gravitational(k * delta_t_E)
+    a_b1_prime_E = rank_one_gravitational(k * delta_t_prime_E)
 
     # --- the Thomson term: n-t4, with (152) for the Newtonian dipole ---------
     tau_1_prime_N = tau_1_prime(k, tau_1=tau_1, delta_t=delta_t, phi_a=phi_a,
@@ -1126,7 +1192,7 @@ def cdm_set(
         kappa_prime_v_b=kappa_prime_v_b_E, frame="cdm",
         a_b0=a_b0_E,
         monopole_row_corrected=MONOPOLE_ROW.startswith("corrected"),
-        restore_b0=(MONOPOLE_ROW == "corrected+b0"))
+        restore_b0=_carries_b0())
     # (90) through `match_coefficients` and the $v$ route must agree.
     if not np.allclose(coefficients.c2, c2, rtol=1e-12, atol=0.0):
         raise ValueError(

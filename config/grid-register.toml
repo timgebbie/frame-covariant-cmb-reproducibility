@@ -862,3 +862,30 @@ mode and is recorded in `_detrend`.
 
 The detrending filter's width is tied to `2 pi / r_s` and not to the grid, so
 refining the grid cannot change what counts as the pedestal."""
+
+[[grid]]
+key = "scripts/diagnostic_d44_the_line_of_sight_in_invariant_slots.py::ELLS"
+what = "the multipoles D44 reads the acoustic series on"
+status = "described"
+note = """Linear in l at 15 from 30 to 1200, with the plateau points 2-25 below.
+The rule is the acoustic spacing: a series spaced near l_A ~ 270 is sampled
+some eighteen times per period, so a maximum or trough cannot fall between
+samples, and the first maximum's position is the three-point vertex with half
+the spacing, 7.5, printed beside it by `first_acoustic_peak`."""
+
+[[grid]]
+key = "scripts/diagnostic_d44_the_line_of_sight_in_invariant_slots.py::k_com"
+what = "the k grid of D44's spectra"
+status = "derived"
+note = """F9's grid, from the same `required_k_points` per background (T-56), so
+the two instruments sample C_l alike and `required_k_points` raises where the
+period of j_l^2 cannot be met."""
+
+[[grid]]
+key = "scripts/diagnostic_d44_the_line_of_sight_in_invariant_slots.py::CONDITION_K"
+what = "the modes at which D44 checks the frame conditions on the coefficients"
+status = "described"
+note = """k = 2..400 in steps of 2: each mode is an independent pointwise check
+of an identity between two coefficient sets, not a quadrature node, so there
+is no resolution to converge. The range is D42's, covering the
+acoustic band to beyond the second trough on all three backgrounds."""

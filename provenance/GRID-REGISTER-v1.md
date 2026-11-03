@@ -18,9 +18,9 @@ being possible.
 | status | count | means |
 |---|---|---|
 | **open** | 1 | a chosen literal whose convergence is **not** established. This status is the point of the register. |
-| **derived** | 27 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
+| **derived** | 28 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
 | **measured** | 7 | a chosen literal whose convergence has been measured, with the number stated. |
-| **described** | 12 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
+| **described** | 14 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
 | **index** | 32 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
 
 ## open — 1
@@ -37,7 +37,7 @@ share this history, so a grid shift moves them together and cancels. Finding
 **T-46**, question **Q7**, decision **S33** --- derived immediately after the
 v1.2.0 tag. v1.2.0 ships it as a stated limit.
 
-## derived — 27
+## derived — 28
 
 ### `x` — the x grid j_ell(x) is tabulated on
 
@@ -73,7 +73,7 @@ spanning a factor of two thousand in k, which is why no number is chosen.
 
 ### `eta` — the eta grid for the two-frame evaluation of (102): F2, F5, F7
 
-`functions/spectra/two_frame.py:316`, `np.linspace`
+`functions/spectra/two_frame.py:318`, `np.linspace`
 
 `required_n_eta(k_max, span)` when `n_eta is None`, which is how every
 figure calls it, and `check_k` RAISES when a caller asks for a mode the grid
@@ -83,7 +83,7 @@ nothing in the bundle does.
 
 ### `mode_eta` — one acoustic mode's integration grid on the (102) generic-u^a route
 
-`functions/spectra/two_frame.py:397`, `np.linspace`
+`functions/spectra/two_frame.py:399`, `np.linspace`
 
 The same construction as `pipeline.py::mode_eta` and in the same
 release, because **T-51 had one instance per route**: `pipeline.run`,
@@ -312,6 +312,14 @@ so that a disagreement is the grid and not the band. Raising K_MAX would
 sharpen nothing here: the question is whether a maximum exists at ell near 60,
 which is far inside the band 460 already carries.
 
+### `k_com` — the k grid of D44's spectra
+
+`scripts/diagnostic_d44_the_line_of_sight_in_invariant_slots.py:181`, `np.linspace`
+
+F9's grid, from the same `required_k_points` per background (T-56), so
+the two instruments sample C_l alike and `required_k_points` raises where the
+period of j_l^2 cannot be met.
+
 ### `k_com` — the k grid D4 integrates C_ell by rank on
 
 `scripts/diagnostic_d4_monopole.py:102`, `np.linspace`
@@ -428,7 +436,7 @@ side of anything the grid could contribute.
 four external recursions match at 1e-13 to 1e-14 at scale exactly 1, which no
 under-resolved grid produces.
 
-## described — 12
+## described — 14
 
 ### `K_COM` — the k grid the cost benchmark is measured on
 
@@ -488,6 +496,25 @@ mode and is recorded in `_detrend`.
 
 The detrending filter's width is tied to `2 pi / r_s` and not to the grid, so
 refining the grid cannot change what counts as the pedestal.
+
+### `CONDITION_K` — the modes at which D44 checks the frame conditions on the coefficients
+
+`scripts/diagnostic_d44_the_line_of_sight_in_invariant_slots.py:104`, `np.arange`
+
+k = 2..400 in steps of 2: each mode is an independent pointwise check
+of an identity between two coefficient sets, not a quadrature node, so there
+is no resolution to converge. The range is D42's, covering the
+acoustic band to beyond the second trough on all three backgrounds.
+
+### `ELLS` — the multipoles D44 reads the acoustic series on
+
+`scripts/diagnostic_d44_the_line_of_sight_in_invariant_slots.py:100`, `np.arange`
+
+Linear in l at 15 from 30 to 1200, with the plateau points 2-25 below.
+The rule is the acoustic spacing: a series spaced near l_A ~ 270 is sampled
+some eighteen times per period, so a maximum or trough cannot fall between
+samples, and the first maximum's position is the three-point vertex with half
+the spacing, 7.5, printed beside it by `first_acoustic_peak`.
 
 ### `k` — the k quadrature grid for the Sachs-Wolfe limit
 

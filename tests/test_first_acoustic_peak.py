@@ -281,3 +281,31 @@ def test_the_counter_and_the_finder_agree_on_the_first_peak() -> None:
         ell[int(np.argmin(np.abs(ell - first_acoustic_peak(ell, d)[0])))])
     assert 30.0 not in acoustic_maxima(ell, d), (
         "the renormalisation anchor is not an acoustic maximum")
+
+
+def test_troughs_are_found_between_accepted_maxima_and_nowhere_else() -> None:
+    r"""A series of three peaks has two troughs, each between its neighbours.
+
+    A damped cosine on a plateau: the dip before the first peak is not a
+    trough of the series, and neither is anything past the last peak.
+    """
+    from _peak import acoustic_maxima, acoustic_minima
+
+    ell = np.arange(30.0, 1201.0, 15.0)
+    d = 1.0 + np.exp(-ell / 900.0) * np.cos(2.0 * np.pi * (ell - 220.0) / 290.0)
+    peaks = acoustic_maxima(ell, d)
+    troughs = acoustic_minima(ell, d)
+    assert len(peaks) >= 3, f"fixture is wrong: {peaks}"
+    assert len(troughs) == len(peaks) - 1
+    for left, mid, right in zip(peaks[:-1], troughs, peaks[1:]):
+        assert left < mid < right
+
+
+def test_a_single_peak_and_its_tail_ripple_make_no_trough() -> None:
+    """The ripple fixture above: one acoustic maximum, so no trough at all."""
+    from _peak import acoustic_minima
+
+    ell = np.array([30.0, 300, 390, 450, 510, 570, 630, 690, 750, 810, 870, 930])
+    d = np.array([1.0, 0.00043, 0.00111, 0.00152, 0.00088, 0.00018,
+                  0.00003, 0.00005, 0.00003, 0.00003, 0.00004, 0.00003])
+    assert acoustic_minima(ell, d) == []

@@ -12803,3 +12803,25 @@ from a direction that run did not test, and it was free.
 $\ell_A$ moves only 266.7341 → 266.7501, so **the grid is not what separates
 the live value from the artefact's 272.2** — `P1T→P1B #14` stays open and is
 not a resolution question.
+
+
+## T-190 — **The ISW content handed to the bulk-source controls had no $T(k)$**
+
+`bulk_source_primitives` supplied `c1_prime_isw` as
+$-(\Phi_A'-\Phi_H')$ from the environment's potentials, which are the
+$k\to0$ potentials: `coefficient_sets` multiplies every potential by $T(k)$
+before it builds a coefficient (T-37), and this array was the one place it
+did not. So `isw_only_at_w` and `w_half_is_isw_only` moved an ISW term
+$1/T(k)$ too large against a $C_1'$ that was correctly suppressed --- a factor
+of 2 at $k\simeq300$ on PLANCK, where the ISW is in any case a part in $10^4$
+of $C_1'$. Repaired by applying $T(k)$ at the supply. The two frozen
+configurations that read it move, and nothing else does:
+
+| | $\ell=2$ before | after | shift |
+|---|---:|---:|---:|
+| `isw_at_w` | +6.064167 | +6.065822 | 2.7e-04 |
+| `slot_split_isw_half` | −0.3726177 | −0.3709629 | 4.4e-03 |
+
+The registered falsifier run on `isw_only_at_w` (an envelope on three of three
+backgrounds) is unaffected in kind: the series it looked for is not carried by
+a term of this size.

@@ -72,8 +72,8 @@ Bertschinger and Seljak & Zaldarriaga write it in the $\alpha$ variable.
 Wilson is the strongest panel, and not because of his weights, which are Hu &
 Sugiyama's. He writes the recursion in the **imaginary** convention — both
 bracket terms positive under an overall $-ikT$ — where the others carry opposite
-signs under a real $k$. The two are related by $\Theta_\ell=i^\ell\delta_\ell$,
-exactly. He is integrated complex and as printed, and the phase removed only
+signs under a real $k$. Hu & Sugiyama's $\Theta_\ell$ is $i^\ell$ times
+Wilson's $\delta_\ell$, exactly. He is integrated complex and as printed, and the phase removed only
 afterwards; transforming the equation first would assume the identity under test.
 That the transformed solution is *real* to $10^{-10}$ is asserted separately from
 that it agrees. His panel therefore tests the phase convention — the subject of

@@ -114,6 +114,37 @@ def acoustic_maxima(
     return out
 
 
+def acoustic_minima(
+    ells, d_ell, *, floor: float = PLATEAU_FLOOR, prominence: float = 0.10,
+) -> list[float]:
+    r"""The trough between each pair of consecutive `acoustic_maxima`.
+
+    A minimum of a series is what lies between two of its peaks, so troughs
+    are found **from the maxima** rather than by a second scan with a rule of
+    its own: the lowest sample strictly between two accepted maxima, kept when
+    it sits below **both** of them by `prominence` times the tallest maximum
+    seen so far --- the same threshold, measured the same way, as the maxima
+    it separates. A dip before the first maximum or after the last is not a
+    trough of the series and is not returned.
+    """
+    ells = np.asarray(ells, dtype=float)
+    d = np.asarray(d_ell, dtype=float)
+    peaks = acoustic_maxima(ells, d, floor=floor, prominence=prominence)
+    out: list[float] = []
+    tallest = 0.0
+    for left, right in zip(peaks[:-1], peaks[1:]):
+        i0 = int(np.nonzero(ells == left)[0][0])
+        i1 = int(np.nonzero(ells == right)[0][0])
+        tallest = max(tallest, float(d[i0]), float(d[i1]))
+        if i1 - i0 < 2:
+            continue
+        j = i0 + 1 + int(np.argmin(d[i0 + 1:i1]))
+        depth = min(float(d[i0]), float(d[i1])) - float(d[j])
+        if depth >= float(prominence) * tallest:
+            out.append(float(ells[j]))
+    return out
+
+
 def first_acoustic_peak(
     ells, d_ell, *, floor: float = PLATEAU_FLOOR,
 ) -> tuple[float, float]:

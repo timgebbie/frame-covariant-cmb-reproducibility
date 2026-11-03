@@ -118,6 +118,31 @@ def write_tex(name: str, caption: str, colspec: str, header: list[str],
     return path
 
 
+#: The caption-only presentation copies the supplement inputs, and the line
+#: each adds after the plain table's spacing: the copy differs from the plain
+#: table in nothing else, so it is derived from it rather than kept by hand.
+LAYOUT_VERSION = "v1.3.5"
+LAYOUT_CAPTION_WIDTH = {
+    "notation": "caption follows the full-width table",
+    "parameters": "caption follows the full-width table",
+    "translations": "caption spans the landscape table width",
+}
+
+
+def write_layout_copy(plain: Path) -> Path:
+    """The presentation copy of one generated table, written beside it."""
+    name = plain.name.split("-v")[0]
+    lines = plain.read_text(encoding="utf-8").split("\n")
+    spacing = lines.index("\\renewcommand{\\arraystretch}{1.25}")
+    lines.insert(spacing + 1, "\\setlength{\\LTcapwidth}{\\linewidth} % "
+                 + LAYOUT_CAPTION_WIDTH[name])
+    lines.insert(0, f"% {LAYOUT_VERSION} CAPTION-ONLY PRESENTATION COPY of "
+                 f"{plain.name}")
+    path = TABLES / f"{name}-layout-{LAYOUT_VERSION}.tex"
+    path.write_text("\n".join(lines), encoding="utf-8", newline="\n")
+    return path
+
+
 def main() -> int:
     reg = load()
     TABLES.mkdir(exist_ok=True)
@@ -283,6 +308,8 @@ def main() -> int:
         "@{}p{24mm}p{26mm}p{20mm}p{34mm}p{40mm}p{48mm}@{}",
         header, tex_rows, "tab:conventions", landscape=True))
 
+    written += [write_layout_copy(p) for p in list(written)
+                if p.suffix == ".tex" and p.name.split("-v")[0] in LAYOUT_CAPTION_WIDTH]
     for p in written:
         print(f"wrote {p.relative_to(ROOT)}")
     n_pending = sum(1 for e in reg["equations"] if not e.get("module"))

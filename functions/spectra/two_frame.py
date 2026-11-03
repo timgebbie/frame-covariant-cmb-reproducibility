@@ -49,8 +49,10 @@ from functions.spectra.coefficients import (
     CoefficientSet,
     background_fluid,
     cdm_set,
+    gravitational_rank_one,
     newtonian_set,
 )
+from functions.spectra.line_of_sight import Sources
 from functions.spectra.decoupling import (
     F2_DEFAULT,
     RecombinationHistory,
@@ -545,9 +547,42 @@ def bulk_source_primitives(k_com, env, coefficients) -> dict:
         # is $8.9\times10^{-5}$ of $C_1'$. T-121 measured the same fact from
         # the other side --- $\kappa''\tilde v_B$ is 99.8% of $|C_1'|$ --- so
         # a control that moves only this moves one part in eleven thousand.
-        c1_prime_isw=-(np.asarray(env.phi_a_prime, dtype=float)
-                       - np.asarray(env.phi_h_prime, dtype=float)),
+        #
+        # $T(k)$ is applied here as `coefficient_sets` applies it to every
+        # potential it builds from (T-37); without it this array is the
+        # $k\to0$ potential at every $k$ while the rest of $C_1'$ is not.
+        c1_prime_isw=-env.transfer_at(k_com)
+        * (np.asarray(env.phi_a_prime, dtype=float)
+           - np.asarray(env.phi_h_prime, dtype=float)),
     )
+
+
+def line_of_sight_inputs(
+    k_com: float, coefficients: CoefficientSet, env: TwoFrameEnvironment,
+) -> tuple[Sources, float]:
+    r"""One frame's `line_of_sight.Sources`, and the diffusion factor at $k$.
+
+    Everything is the set's own: $C_1^{\rm grav}$ and its derivative are
+    $p_1a\mathcal B_1/k$ and $p_1(a\mathcal B_1)'/k$ with the derivative from
+    (106), never splined (T-23); $C_2$ and its derivatives are the frame's
+    closed forms. So the frame test of an assembly built from these is a test
+    of the coefficients, and nothing here can make it pass.
+    """
+    c = coefficients.coefficients
+    c1_grav, c1_grav_prime = gravitational_rank_one(coefficients)
+    zero = np.zeros_like(env.eta)
+    sources = Sources(
+        eta=np.asarray(env.eta, dtype=float),
+        opacity=np.asarray(env.opacity, dtype=float),
+        visibility=np.asarray(env.visibility, dtype=float),
+        c0=np.asarray(c.c0, dtype=float),
+        c1_grav=c1_grav, c1_grav_prime=c1_grav_prime,
+        v_hat_b=np.asarray(coefficients.v_b, dtype=float) / float(k_com),
+        c2=np.asarray(c.c2, dtype=float),
+        c2_prime=(zero if coefficients.c2_prime is None
+                  else np.asarray(coefficients.c2_prime, dtype=float)),
+        c2_second=np.asarray(coefficients.c2_second, dtype=float))
+    return sources, float(np.exp(-((float(k_com) / env.damping_k) ** 2)))
 
 
 def transfer_by_rank(
