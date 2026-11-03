@@ -1,5 +1,12 @@
 % Computational supplement to the associated paper.
 %
+% v1.3.24, 2026-11-03.  The assembly in frame-invariant slots:
+% eq:assembly-repaired extended to rank two, with the admissibility
+% condition's companion -- a rank-two term is integrated by parts once, onto
+% the slot its rank-one partner occupies, and not twice.  In a shear-free
+% frame it reduces to the Sachs-Wolfe, Doppler and integrated Sachs-Wolfe
+% terms.  The identity checked in exact symbols.
+%
 % v1.3.23, 2026-11-03.  The coefficient at fault, named from the target
 % paper's own source equation: the rank-one gravitational source enters (89)
 % with the wrong sign against the Thomson term, and the rank-zero source is
@@ -50,7 +57,7 @@
 %      are named, with exact k-independent margins.
 %   9  Two voice defects inside P1-T's declared sections.
 %
-% Build: latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.3.23.tex  (only after locked
+% Build: latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.3.24.tex  (only after locked
 % assets have passed hash checks). THIS FILE IS THE WHOLE DOCUMENT: the prose
 % carries no \input, and every former supplementary-materials/ fragment is
 % expanded inline between its own BEGIN/END provenance comments. The only
@@ -94,7 +101,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.3.23 --- 3 November 2026\\
+\date{Supplement v1.3.24 --- 3 November 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.3.0-dev}
 
 \begin{document}
@@ -3506,6 +3513,37 @@ keeps $\kappa'$ out of every derivative and $\hat v_B$ with $C_2$ carries a
 peak series in both frames, identical at $\ell\ge2$. If \emph{(d)} fails while
 \emph{(a)}--\emph{(c)} hold, the loss of the series is not a frame defect, and
 the admissibility condition is what remains.
+
+\paragraph{The assembly, in slots that are each frame-invariant.} Write
+$G\equiv C_1^{\rm grav}-C_2'$, the combination the third condition of
+\eqref{eq:frame-conditions} makes frame-invariant. Then, exactly,
+\begin{equation}
+  W\{C_0K+C_1K'+C_2K''\}
+  =W\,(C_0-G')\,K-\mathcal V\,G\,K-\mathcal V\,(\hat v_B+C_2)\,K'
+   +\frac{\mathrm d}{\mathrm d\eta}\Big[W\big(GK+C_2K'\big)\Big],
+  \label{eq:assembly-invariant}
+\end{equation}
+and the total derivative projects onto $\ell\le1$ alone, since $W(0)=0$,
+$K(\eta_0)=\delta_{\ell0}$ and $K'(\eta_0)=-\tfrac k3\delta_{\ell1}$. Every
+slot is frame-invariant on its own: $C_0$ by the first condition, $G$ and so
+$G'$ by the third, $\hat v_B+C_2$ by the second. No coefficient holding a
+rate is differentiated, since the scattering half of $C_1$ is never
+integrated by parts and $C_2$ holds no rate; and no rank-two partner is
+separated from its rank-one half. \textbf{That second property is the
+admissibility condition's companion, and it is checkable in the tree as the
+rate condition is: a rank-two term may be integrated by parts once, onto the
+slot its rank-one partner occupies, and not twice.}
+\eqref{eq:assembly-repaired} is the rank-one restriction of
+\eqref{eq:assembly-invariant}. In a shear-free frame $C_2=0$ and
+$G=C_1^{\rm grav}$, so $\tfrac k3\tau_1$ cancels from $C_0-G'$ and
+\eqref{eq:assembly-invariant} is the Sachs--Wolfe deposit at $j_\ell$, the
+Doppler deposit at $j_\ell'$ and the integrated Sachs--Wolfe term at $W$:
+the three terms of the standard line-of-sight solution. Collapsed onto the
+visibility it is (102)'s boundary with the rank-one sign of
+\eqref{eq:paper1-source}, and with $\kappa'\hat v_B$ taken out of the
+$j_\ell$ slot and returned, as $\hat v_B$, to the $j_\ell'$ slot it came
+from. The difference of the two sides of \eqref{eq:assembly-invariant} is
+zero in exact symbols, for arbitrary $W$, $\kappa'$ and coefficients.
 
 \paragraph{Both endpoints of the projected identity.}
 For this calculation alone, define the pre-integrated object
