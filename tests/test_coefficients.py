@@ -554,12 +554,13 @@ def test_the_frame_shift_of_every_coefficient_is_the_closed_form_one():
     # monopole slot where alpha_0 = 1 belongs. The closed form of Delta C_0 is
     # -(1/3) Delta(a B_2) = +(1/3) k v, and 5/2 was that times 15/2.
     #
-    # **And the sign of its importance is not in this line.** Delta C_0 does
-    # not have to vanish: its partner is +(k/3) tau_1 inside -C_1', so the
-    # bracket's rank-0 shift is +1/3 - 1/3 = 0 exactly under the corrected row
-    # and 13/6 under the printed one. gamma, which pairs Delta C_0 against
-    # k^2 Delta C_2, cannot see that -- M15. c8_rank0_partner.py scores the
-    # bracket, which is the object the cancellation lives in.
+    # **Read with the ruling of 3 November.** Under the as-built source the
+    # bracket's rank-0 shift is +1/3 - 1/3 = 0 with the corrected row and 13/6
+    # with the printed one, and that zero is two errors compensating. Paper 1's
+    # source carries a B_0 = -(k/3) tau_1 in C_0, with the opposite rank-one
+    # sign, and then Delta C_0 = 0 itself: the first frame condition, which
+    # tests/test_line_of_sight.py asserts with the other two. What this test
+    # pins is the as-built closed form, which is still the default.
     assert worst(e.coefficients.c0 - n.coefficients.c0, k * v / 3.0) < 1e-13
     assert worst(e.coefficients.c1 - n.coefficients.c1, -(vp - kp * v) / k) < 1e-13
     assert worst(e.coefficients.c2 - n.coefficients.c2, v / k) < 1e-13

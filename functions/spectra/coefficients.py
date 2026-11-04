@@ -117,41 +117,33 @@ def _solved_match_corrected() -> tuple[Fraction, Fraction]:
 
 
 #: **The $\ell=0$ row of (89) --- `"printed"`, `"corrected"` or
-#: `"corrected+b0"`. Findings T-104 and T-107.**
+#: `"corrected+b0"`. Findings T-104 and T-107, read with the ruling of
+#: 3 November that `RANK_ONE_SOURCE` carries.**
 #:
 #:     "printed"        C_0 = -(5/2) a B_2      alpha_2 on a monopole row
 #:     "corrected"      C_0 = -(1/3) a B_2      alpha_0, finding T-104
-#:     "corrected+b0"   C_0 = -(1/3) a B_2 - a B_0     REFUTED, T-107
+#:     "corrected+b0"   C_0 = -(1/3) a B_2 - a B_0
 #:
-#: **The row is correctly empty of $a\mathcal B_0$, and the reason is a
-#: constraint rather than an omission.** $\tau_0\equiv0$ is not a choice:
-#: $T(x)$ is *defined* as the monopole of $T(x,e)$, so (89)'s $\ell=0$ line is
-#: not an evolution equation but the constraint fixing $(\ln T)^\cdot$, and
-#: differentiating it puts a **zero** on the right.
-#: $\mathcal B_0=-\tfrac13\mathrm D^a\tau_a$ was never an independent source
-#: --- it is the dipole divergence, and it reaches the solution through the
-#: dipole, which is where **D11/T-79** found it.
+#: **The normalisation is settled: the monopole row takes $\alpha_0$, not
+#: $\alpha_2$** (T-104). **Whether $C_0$ carries $a\mathcal B_0$ is not this
+#: switch's to settle.** Paper 1's eq:B carries $a\mathcal B_0=-\tfrac k3\tau_1$
+#: together with the rank-one sign that `RANK_ONE_SOURCE = "paper 1"` sets, and
+#: either correction alone breaks a frame condition. With
+#: $\Delta(a\mathcal B_2)=-kv$ and $\Delta\tau_1=-v$ (T-66), in units of $kv$:
 #:
-#: **Only the normalisation is wrong, and correcting it is what makes the
-#: rank-0 frame shift cancel.** The bracket's rank-0 content is
-#: $C_0+\tfrac k3\tau_1$, the second term being the partner (107) already
-#: carries. With $\Delta(a\mathcal B_2)=-kv$ and $\Delta\tau_1=-v$ (T-66), in
-#: units of $kv$:
+#:     row           rank-one source   Delta C_0   (102)'s bracket C_0 + (k/3) tau_1
+#:     printed       as built          +5/2        +13/6
+#:     corrected     as built          +1/3         0
+#:     corrected+b0  as built           0          -1/3
+#:     corrected     paper 1            0          (a B_0 is carried in C_0)
 #:
-#:     printed        Delta C_0 = +5/2    bracket shift = +13/6
-#:     corrected      Delta C_0 = +1/3    bracket shift =  0  exactly
-#:     corrected+b0   Delta C_0 =  0      bracket shift = -1/3
-#:
-#: **$\Delta C_0$ was never without a partner --- the partner was outmatched
-#: by $\alpha_2/\alpha_0=15/2$.** `"corrected+b0"` adds a second copy of a
-#: source the bracket already held, which criterion 5b measured at 98.5%
-#: (**T-107**); it is kept because a refuted variant that cannot be
-#: regenerated cannot be checked.
-#:
-#: **$\gamma$ is the wrong gate for this and always was** --- it pairs
-#: $\Delta C_0$ against $k^2\Delta C_2$ while the partner sits in $-C_1'$.
-#: That is **M15**, the dual of M14: *a gate built from one coefficient cannot
-#: see a cancellation distributed across the bracket.*
+#: **$\Delta C_0=0$ is the first frame condition, and $\gamma=0$ states it.**
+#: The as-built zero in the bracket is two errors compensating: the rank-one
+#: sign, and the $a\mathcal B_0$ left out. An earlier reading took that zero
+#: for the cancellation and $\gamma$ for the wrong gate (M15); read with the
+#: ruling, the gate was right. T-107 (criterion 5b, 98.5%) refutes restoring
+#: $a\mathcal B_0$ **alone**, under the as-built sign, and nothing more;
+#: `"corrected+b0"` is kept so that the refuted variant can be regenerated.
 MONOPOLE_ROW: str = "corrected"
 
 
