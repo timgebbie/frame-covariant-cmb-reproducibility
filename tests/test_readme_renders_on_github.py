@@ -51,7 +51,12 @@ def _rendered_markdown() -> list[str]:
     parser, ``\eta_*`` is correct there, and enforcing these rules on the
     supplement would be the mirror-image mistake.
     """
-    skip = {".git", "__pycache__", "node_modules", "sources", "correction"}
+    # The directories `.gitignore` keeps out of every commit are skipped with
+    # `.git` itself: github.com renders only what is committed. pytest writes
+    # its own README.md into `.pytest_cache` on a first run, so without it the
+    # second run of the suite tested seven more rules than the first.
+    skip = {".git", "__pycache__", "node_modules", "sources", "correction",
+            ".pytest_cache", ".venv", "venv", ".ipynb_checkpoints"}
     out = []
     for p_ in sorted(ROOT.rglob("*.md")):
         if skip & set(p_.parts):

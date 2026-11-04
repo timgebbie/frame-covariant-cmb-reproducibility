@@ -889,3 +889,29 @@ note = """k = 2..400 in steps of 2: each mode is an independent pointwise check
 of an identity between two coefficient sets, not a quadrature node, so there
 is no resolution to converge. The range is D42's, covering the
 acoustic band to beyond the second trough on all three backgrounds."""
+
+[[grid]]
+key = "scripts/diagnostic_d45_the_slots_sum_back.py::SUM_BACK_K"
+what = "the modes at which D45 sums the three slots back to the direct integral"
+status = "described"
+note = """Forty modes in each of k = 2-100, 100-400 and 400-1500, the bands in which
+the step k*d(eta) of the line-of-sight quadrature changes regime. Each mode is
+an independent check of an identity, not a quadrature node, so there is
+nothing to converge in k; the eta step is converged instead, by repeating
+every mode on a grid with half the step."""
+
+[[grid]]
+key = "scripts/diagnostic_d45_the_slots_sum_back.py::k_com"
+what = "the k grid of D45's cross-spectra"
+status = "derived"
+note = """F9's grid, from the same `required_k_points` per background (T-56), so
+the cross-spectra add to the spectrum F9 draws."""
+
+[[grid]]
+key = "scripts/diagnostic_d45_the_slots_sum_back.py::CROSS_ELLS"
+what = "the multipoles at which D45 splits C_l into the slots' auto- and cross-spectra"
+status = "described"
+note = """D44's multipoles, the plateau points 2-25 and then l = 30-1200 in steps of
+15, so that the two instruments read the same series by the same maxima. The
+step is some eighteen samples per acoustic period, so neither a maximum nor
+a sign change of a cross-term can fall between samples unseen."""

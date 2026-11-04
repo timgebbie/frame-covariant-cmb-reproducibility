@@ -7,6 +7,41 @@ All notable changes to this bundle are recorded here. The version policy is in
 
 ### Added
 
+- `functions/spectra/line_of_sight.py` — **the line of sight in
+  frame-invariant slots**, the supplement's eq:assembly-invariant. With
+  $G=C_1^{\rm grav}-C_2'$, $\int W\lbrace C_0K+C_1K'+C_2K''\rbrace$ becomes a Sachs–Wolfe
+  slot $-\int\mathcal V GK$, a Doppler slot $-\int\mathcal V(\hat v_B+C_2)K'$
+  and an integrated slot $\int W(C_0-G')K$, plus an end-point term that
+  touches only $\ell\le1$. Each slot is invariant under a change of frame at
+  every $\eta$, no coefficient holding $\kappa'$ is differentiated, and the
+  photon moments are read only where photons scatter: in the Newtonian frame
+  the integrated slot's source is $-(\Phi_A'-\Phi_H')$. `three_slots` is the
+  physics; `slots` keeps the five-term form and the direct integral beside it
+  as checks.
+- `coefficients.RANK_ONE_SOURCE` — Paper 1's eq:B carries the rank-one
+  gravitational source with the sign opposite to the Thomson term, and
+  carries $a\mathcal B_0=-\tfrac k3\tau_1$ in $C_0$. The two are one switch
+  because either alone breaks a frame condition.
+  `two_frame.covariant_coefficient_sets` and `line_of_sight_inputs` build the
+  slots' inputs under it; the module default stays `"as built"`, which is the
+  antecedent (102) path, until the default is moved.
+- **D44** — the assembly with Paper 1's signs, scored as registered on three
+  backgrounds. The three frame conditions hold to $3\times10^{-13}$; one
+  $C_\ell$ in both frames to $4.2\times10^{-14}$; the odd acoustic series on
+  Einstein–de Sitter (165, 495; trough 360) and ΛCDM (150, 450), and one
+  maximum on Planck, at $0.71\thinspace\ell_A$.
+- **D45** — the slots summed back to the integral they rearrange. Built from
+  one set of arrays, the three slots plus the end points against the direct
+  quadrature: the difference falls by exactly four when the $\eta$ step
+  halves, in every band to $k=1500$ and in both frames, so it is quadrature,
+  and it sits in the direct integral; the slots move by at most
+  $6\times10^{-5}$ when the step halves. The photon moments stored after last
+  scattering move the direct integral by $10^2$ of the transfer and the slots
+  by at most $1.3\times10^{-2}$. The slots' cross-spectra put Planck's
+  cancellation at $\ell\lesssim30$, between the Sachs–Wolfe and integrated
+  slots, and find none across the acoustic band. The one floor the step does
+  not move is the visibility against the opacity's derivative, finding
+  **T-191**.
 - `scripts/figure_f10_formation_surface.py` — **F10**, and it is the release's
   new key figure. The fraction of today's $C_\ell$ already in place at each
   conformal time, six multipoles, three backgrounds, both frames. **Every curve
@@ -14,7 +49,8 @@ All notable changes to this bundle are recorded here. The version policy is in
   $\Lambda$CDM and Planck require $\mathcal O(0.1)$ at $\ell=2$ — the late
   integrated Sachs–Wolfe effect — and Einstein–de Sitter requires exactly zero.
   The EdS null control is what makes it a defect rather than a numerical
-  artefact. Mechanism: **B-17 (i)**, the bulk bracket carried at
+  artefact. *That was (102). Drawn with the assembly, the late share is
+  restored; see* Changed. Mechanism: **B-17 (i)**, the bulk bracket carried at
   $\mathcal V\mathcal D$ where the by-parts wants $W$. Finding **T-128**.
   **F9 is not deprecated by it** and moves down one section: F9 says *where*
   the power lands in $\ell$, F10 says *when* it was laid down.
@@ -64,6 +100,14 @@ All notable changes to this bundle are recorded here. The version policy is in
 
 ### Changed
 
+- **F9 and F10 draw the assembly**, with Paper 1's source signs, in place of
+  (102). F9's first maxima: Einstein–de Sitter 165.4, ΛCDM 143.8, Planck
+  188.5, against CAMB's 206.1 and CLASS's 206.2; the two frames agree to
+  $3.5\times10^{-14}$. F10 now shows the late integrated Sachs–Wolfe term
+  that (102) could not carry: on Planck it deposits 22–54% of today's
+  $C_\ell$ at $\ell=2$–$4$ after the visibility has closed. The even peaks
+  are absent on every background, because the oscillator is not yet driven
+  by the decaying potentials (A-3, deferred to v1.4.0).
 - **The acoustic start is derived per mode from k** — `pipeline.run` takes
   `acoustic_start`, defaulting to `"derived"`: each mode is integrated from the
   η at which k·r_s(η) ≤ 0.1, which is what (180)'s δT(0,k) = −⅔Φ_A(0,k),

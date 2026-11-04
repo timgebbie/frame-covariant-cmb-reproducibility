@@ -18,9 +18,9 @@ being possible.
 | status | count | means |
 |---|---|---|
 | **open** | 1 | a chosen literal whose convergence is **not** established. This status is the point of the register. |
-| **derived** | 28 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
+| **derived** | 29 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
 | **measured** | 7 | a chosen literal whose convergence has been measured, with the number stated. |
-| **described** | 14 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
+| **described** | 16 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
 | **index** | 32 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
 
 ## open — 1
@@ -37,7 +37,7 @@ share this history, so a grid shift moves them together and cancels. Finding
 **T-46**, question **Q7**, decision **S33** --- derived immediately after the
 v1.2.0 tag. v1.2.0 ships it as a stated limit.
 
-## derived — 28
+## derived — 29
 
 ### `x` — the x grid j_ell(x) is tabulated on
 
@@ -320,6 +320,13 @@ F9's grid, from the same `required_k_points` per background (T-56), so
 the two instruments sample C_l alike and `required_k_points` raises where the
 period of j_l^2 cannot be met.
 
+### `k_com` — the k grid of D45's cross-spectra
+
+`scripts/diagnostic_d45_the_slots_sum_back.py:127`, `np.linspace`
+
+F9's grid, from the same `required_k_points` per background (T-56), so
+the cross-spectra add to the spectrum F9 draws.
+
 ### `k_com` — the k grid D4 integrates C_ell by rank on
 
 `scripts/diagnostic_d4_monopole.py:102`, `np.linspace`
@@ -436,7 +443,7 @@ side of anything the grid could contribute.
 four external recursions match at 1e-13 to 1e-14 at scale exactly 1, which no
 under-resolved grid produces.
 
-## described — 14
+## described — 16
 
 ### `K_COM` — the k grid the cost benchmark is measured on
 
@@ -515,6 +522,25 @@ The rule is the acoustic spacing: a series spaced near l_A ~ 270 is sampled
 some eighteen times per period, so a maximum or trough cannot fall between
 samples, and the first maximum's position is the three-point vertex with half
 the spacing, 7.5, printed beside it by `first_acoustic_peak`.
+
+### `CROSS_ELLS` — the multipoles at which D45 splits C_l into the slots' auto- and cross-spectra
+
+`scripts/diagnostic_d45_the_slots_sum_back.py:105`, `np.arange`
+
+D44's multipoles, the plateau points 2-25 and then l = 30-1200 in steps of
+15, so that the two instruments read the same series by the same maxima. The
+step is some eighteen samples per acoustic period, so neither a maximum nor
+a sign change of a cross-term can fall between samples unseen.
+
+### `SUM_BACK_K` — the modes at which D45 sums the three slots back to the direct integral
+
+`scripts/diagnostic_d45_the_slots_sum_back.py:99`, `np.linspace`
+
+Forty modes in each of k = 2-100, 100-400 and 400-1500, the bands in which
+the step k*d(eta) of the line-of-sight quadrature changes regime. Each mode is
+an independent check of an identity, not a quadrature node, so there is
+nothing to converge in k; the eta step is converged instead, by repeating
+every mode on a grid with half the step.
 
 ### `k` — the k quadrature grid for the Sachs-Wolfe limit
 

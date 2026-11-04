@@ -12825,3 +12825,28 @@ configurations that read it move, and nothing else does:
 The registered falsifier run on `isw_only_at_w` (an envelope on three of three
 backgrounds) is unaffected in kind: the series it looked for is not carried by
 a term of this size.
+
+
+## T-191 — **On the line-of-sight grid the visibility is not the derivative of the opacity**
+
+`two_frame.build_environment` interpolates $\mathcal V$ and $W=e^{-\kappa}$
+onto the line-of-sight grid separately, each linearly from the recombination
+grid, on which $\kappa$ is the trapezoid integral of $\kappa'$. Analytically
+$W'=\mathcal V$. On the grid, $\int\mathcal V\thinspace d\eta=0.999141$ on PLANCK and
+$0.999260$ on $\Lambda$CDM against $W(\eta_0)-W(\eta_{\rm start})=1$, and
+$|W'-\mathcal V|$ reaches $5\times10^{-3}$ of the visibility's peak, and
+$2\times10^{-2}$ on a grid with half the step, because $W$ is piecewise linear
+between recombination nodes.
+
+eq:assembly-invariant needs $W'=\mathcal V$, so **D45**'s sum-back carries a
+floor that does not fall when the step halves, $10^{-4}$ of the transfer at
+$k\lesssim10$; with $\mathcal V$ replaced by $W'$ on the grid the floor goes
+and the residual falls by four with the step, in every band. The three-slot
+transfer itself moves by at most $8\times10^{-4}$ of its largest value under
+the replacement, and both frames carry the same weights, so no frame result
+moves.
+
+**Not repaired here.** The repair is one $\kappa$ on the line-of-sight grid,
+integrated there from $\kappa'$, with $W$ and $\mathcal V$ both taken from it.
+It moves every transfer at the $10^{-3}$ level, so it lands with the next
+regeneration of the figures rather than beside a run already drawn.
