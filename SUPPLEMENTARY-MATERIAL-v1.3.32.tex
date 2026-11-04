@@ -1,5 +1,48 @@
 % Computational supplement to the associated paper.
 %
+% v1.3.32, 2026-11-04.  The edition for the v1.3.0 release, and one sign
+% convention for the gravitational source.
+%   Release items:
+%   - D45 scored in sec:w-form: the sum-back closes; the residual is the direct
+%     integral's quadrature (falls by 4.00 as the step halves), and T-191's
+%     floor, Int V = 0.99914, goes with V = W'.
+%   - The C_1^grav under V is the oscillator's stored solution, paired under W
+%     with its exact derivative from (152)-(153); (106) is the small-scale
+%     form and its residual (4e-4 LCDM, 1.3e-2 PLANCK at k <= 100) is recorded.
+%   - PLANCK_MODEL below l ~ 30 is A-3's: the potential both slots read carries
+%     a half-present radiation era (SW source 0.187 against Phi_A/3 = 0.310);
+%     F9's dip near l = 5 is not a prediction of v1.3.0.
+%   - sec:first-peak names its object: 266.6 is (102) as built; v1.3.0 releases
+%     the frame-invariant assembly, first maximum 188.5 = 0.7067 l_A.
+%   - The reading of the v1.4.0 test (f) is restated from D45: the slots move
+%     PLANCK's first maximum down (225, 210, 195 by slot), not up.
+%   - What v1.3.0 builds is stated: the assembly with RANK_ONE_SOURCE =
+%     "paper 1"; (102) kept as built for comparison.  README: step 7; its
+%     diagnostics-table row for D45 waits on D45 entering the run script.
+%   Sign convention:
+%   B is Annals II's (67)-(68) source, standing on the left of (67), in every
+%   equation here; Paper 1's (37) is the same source on the right and is written
+%   B^P1 = -B wherever it is quoted.  S8 now states the mode coefficients once,
+%   from Annals II's definitions after its (7): aB_0 = -(k/3) tau_1,
+%   aB_1 = k(dT + Phi_A), aB_2 = a sigma.  Consequences:
+%   - eq:transport-exact carries aB on the left (it carried Paper 1's B on the
+%     right in v1.3.30-31 under the symbol S8 uses for its negative);
+%     eq:egs-shear-identity's preamble follows (B_ab = sigma_ab), the identity
+%     itself unchanged.
+%   - eq:transport and the boxed eq:w-form carry -aB_l and -W aB_l.
+%   - eq:paper1-source is printed as B^P1 = -B.  The ruling is restated in this
+%     convention: the rank-one row the frame conditions select is
+%     kC_1 = aB_1 - kappa' v_B; (89) prints -(aB_1 + kappa' v_B); the two agree
+%     with aB^P1_1 = -k(dT + Phi_A) in B_1's place, which is what the code does.
+%     The rank-zero source enters C_0 as -aB_0 = (k/3) tau_1.  A footnote
+%     records that the frame conditions fix the row, not which printed sign is
+%     at fault: against Annals II's own (13), (71) carries the Thomson term with
+%     the wrong sign, and the selected row carries the kernel derivative's sign
+%     at rank one.  No coefficient, no computed number and no frame-condition
+%     entry changes: the four-configuration table and C8h-C8k stand as scored.
+%   - README steps 2 and 7 and the c7 docstring follow; docs/THEORY-AUDIT.md
+%     regenerated for c7's new hash.
+%
 % v1.3.31, 2026-11-04.  Sequential style audit, third batch: Section 12, free
 % streaming.  The section title and four headings name their object; the
 % italic lead, two bold table sentences and a "that is the whole content" are
@@ -246,7 +289,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.3.31 --- 4 November 2026\\
+\date{Supplement v1.3.32 --- 4 November 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.3.0-dev}
 
 \begin{document}
@@ -1456,16 +1499,18 @@ time variable:
   \tau'_{A_\ell}
   +\underbrace{a\Big[\tfrac{\ell+1}{2\ell+3}\mathrm D^a\tau_{A_\ell a}
                +\mathrm D_{\langle a_\ell}\tau_{A_{\ell-1}\rangle}\Big]}_{\text{free streaming}}
+  +\underbrace{a\mathcal B_{A_\ell}}_{\text{gravitational}}
   +\underbrace{\kappa'\tau_{A_\ell}}_{\text{out-scattering}}
-  =\underbrace{a\mathcal B_{A_\ell}}_{\text{gravitational}}
-  +\underbrace{\kappa'\mathcal S_{A_\ell}}_{\text{in-scattering}} .
+  =\underbrace{\kappa'\mathcal S_{A_\ell}}_{\text{in-scattering}} .
   \label{eq:transport-exact}
 \end{equation}
-$\mathcal B$ is the linear redshift source of Paper~1, Eq.~(37), which stands
-on the right-hand side as it does here; \citet{GebbieDunsbyEllis2000} write the
-same source on the left of their integrated Boltzmann equation, Eq.~(67), with
-the opposite sign, and \S\ref{sec:source-derivatives} decomposes it by rank in
-their sign. The rows $\ell\ge1$ of \eqref{eq:transport-exact} are their
+$\mathcal B$ is the gravitational source of \citet{GebbieDunsbyEllis2000},
+which stands on the left of their integrated Boltzmann equation, Eq.~(67), as
+it does here and as every gravitational coupling of Paper~1's exact hierarchy,
+Eq.~(16), does; \S\ref{sec:source-derivatives} decomposes it by rank and gives
+its mode coefficients. Paper~1, Eq.~(37), writes the same source on the
+right-hand side, so that $\mathcal B^{\rm P1}=-\mathcal B$, and this supplement
+marks Paper~1's sign with that superscript wherever it quotes it. The rows $\ell\ge1$ of \eqref{eq:transport-exact} are their
 multipole divergence equations, Eqs.~(16)--(18), multiplied through by $a$.
 Under the harmonics $Q_{A_\ell}$ of \S\ref{sec:theory-map} the free-streaming
 bracket becomes $k\big[w_\ell\tau_{\ell+1}-\tau_{\ell-1}\big]$, with
@@ -1479,7 +1524,9 @@ equation. The rank-lowering sign is that of Paper~1, Eq.~(16), and of
 operator $e^a\mathrm D_a$, and no rephasing of $\tau_{A_\ell}$ changes their
 relative sign. With the minus sign the bracket would have been the same-sign
 form, which no real-coefficient comparator carries. The code integrates
-(F.1)--(F.4) directly, so no computed result moved.}
+(F.1)--(F.4) directly, so no computed result moved. In v1.3.30 and v1.3.31
+the source stood on the right in Paper~1's sign, under the symbol
+\S\ref{sec:source-derivatives} uses for its negative.}
 
 \noindent
 This is \emph{not} the full exact brightness hierarchy of Paper~1,
@@ -1617,10 +1664,18 @@ its Eq.~(68),
 $$\mathcal B=-\tfrac13\mathrm D^a\tau_a
   +\big(\mathrm D_a\ln T+A_a\big)e^a+\sigma_{ab}e^ae^b,$$
 giving $\mathcal B_0=-\tfrac13\mathrm D^a\tau_a$,
-$\mathcal B_1=\mathrm D_a\ln T+A_a$ and $\mathcal B_2=\sigma_{ab}$. Paper~1,
-Eq.~(37), writes the same source on the right-hand side, as
-\eqref{eq:transport-exact} does, so its $\mathcal B$ is the negative of this
-one; the sign the line of sight carries is ruled in \S\ref{sec:w-form}
+$\mathcal B_1=\mathrm D_a\ln T+A_a$ and $\mathcal B_2=\sigma_{ab}$. With the
+mode coefficients \emph{Annals~II} defines after its Eq.~(7),
+$\mathrm D^a\tau_a=(k/a)\tau_1Q$ and
+$\mathrm D_a\ln T+A_a=[(k/a)\delta T+A]Q_a$, where $A=(k/a)\Phi_A$ since
+$\tilde A_a=\mathrm D_a\Phi_A$ in the Newtonian frame and $\Phi_A$ shifts with
+the frame (\S\ref{sec:frames-specialisation}), they are
+$$a\mathcal B_0=-\tfrac k3\tau_1,\qquad a\mathcal B_1=k(\delta T+\Phi_A),\qquad
+  a\mathcal B_2=a\sigma .$$
+This is the $\mathcal B$ of every equation in this supplement,
+\eqref{eq:transport-exact} included. Paper~1, Eq.~(37), writes the same
+source on the right-hand side, $\mathcal B^{\rm P1}=-\mathcal B$, and
+\S\ref{sec:w-form} records how the matching (89) has to carry it
 (\eqref{eq:paper1-source}).
 The rank-two closure refers to this reduced gravitational source. It does
 not remove the acceleration, shear and vorticity couplings between
@@ -1806,10 +1861,11 @@ of \eqref{eq:frame-conditions} puts $-a\mathcal B_0$ on the right instead,
 which is the row of Paper~1's source, \eqref{eq:c0-ruled}, and it works only
 together with Paper~1's rank-one sign. \S\ref{sec:ell-zero-row} derives both
 rows and records once how this paragraph's claim was withdrawn, restored and
-qualified between 21 October and 3 November (T-105, T-107). The released
-default builds \eqref{eq:c0-solved} with the rank-one source as built;
-\texttt{RANK\_ONE\_SOURCE = "paper 1"} builds \eqref{eq:c0-ruled} with the
-sign corrected.
+qualified between 21 October and 3 November (T-105, T-107). The
+frame-invariant assembly that F9 draws, and that v1.3.0 releases, is built with
+\texttt{RANK\_ONE\_SOURCE = "paper 1"}, \eqref{eq:c0-ruled}; the antecedent's
+(102) is kept at \texttt{"as built"}, \eqref{eq:c0-solved} with the rank-one
+source as built, as the object it is compared with.
 
 \paragraph{The open terms.} The derivation is complete for what the
 integral solution needs. What remains open is $(\star)$, and, from
@@ -2518,10 +2574,12 @@ divides between the absent driving and the assembly is not yet apportioned.
 The peak position is analytically known, and knowing it turns a displacement
 into a budget with named contributors and closes two candidate mechanisms.
 Since 4 November F9 draws the
-assembly of \eqref{eq:assembly-invariant}, whose first maximum on the Planck
-background is at $0.71\,\ell_A$ (\S\ref{sec:w-form}). The readings in this
-section are of (102), which remains the module default, unless they say
-otherwise.
+assembly of \eqref{eq:assembly-invariant}, and v1.3.0 releases it: its first
+maximum on \texttt{PLANCK\_MODEL} is at $\ell=188.5$, $0.7067\,\ell_A$
+(\S\ref{sec:w-form}). The readings in this section are of (102), the
+antecedent's assembly, unless they say otherwise, and where this document
+says ``released'' of $\ell=266.6$ it means (102) as built, the configuration
+of every measurement made before 4 November.
 
 % ===========================================================================
 \subsection{The sound speed}
@@ -2628,7 +2686,7 @@ the first date on which the two carry the same repair:
 \toprule
 \textbf{configuration} & $\ell_1$ & $\ell_1/\ell_A$ & $\varphi_1$ \\
 \midrule
-released v1.3.0 & $266.6$ & $0.9994$ & $+0.0006$ \\
+(102) as built & $266.6$ & $0.9994$ & $+0.0006$ \\
 full boundary at released $\kappa''$, CDM frame, A-3 absent & $236.6$ & $0.8870$ &
   $+0.1130$ \\
 matched CAMB/CLASS, $N_{\rm eff}=0$ \emph{(external)} & $206.0$ & $0.7723$ &
@@ -2639,7 +2697,10 @@ D24, $\kappa''$-suppressed & $172.75$ & $0.6476$ & $+0.3524$ \\
 \end{center}
 
 \noindent
-Every entry is a measurement and every entry stands. Three things have to be
+v1.3.0 releases a fifth configuration, the frame-invariant assembly, whose first
+maximum is at $188.5$, $0.7067\,\ell_A$, $\varphi_1=+0.2933$, below the matched
+value; the budget below was set up on (102) and is read on it. Every entry is a
+measurement and every entry stands. Three things have to be
 said before a difference between two of them is read as a physical
 displacement, and together they withdraw the reading this subsection carried
 in editions before v1.3.20.
@@ -2842,13 +2903,18 @@ the candidates are A-5, the cancellation among the slots on
 if \emph{(g)} fails, the wiring touches more than the radiation era, an
 implementation defect to be read before anything else.
 
-One feature of \emph{(f)} decides how it reads. The undriven frame-invariant
-assembly already puts the first maximum at $0.71\,\ell_A$, below the matched
-$0.7723$, and driving moves peaks to lower $\ell$, so driving alone should
-move the maximum away from $206$; only the potential's decay in the integrated
-slot and the Doppler slot can move it up. \emph{(f)} therefore registers the
-full linear physics rather than A-3 in isolation, and a miss is informative
-either way. The test registered before 4 November, on (102) with the artefact
+One feature of \emph{(f)} decides how it reads. D45 places the undriven
+assembly's first maximum on \texttt{PLANCK\_MODEL}, by the shared prominence
+rule, at $\ell=225$ from the Sachs--Wolfe slot alone, at $210$ with the Doppler
+slot and at $195$ with the integrated slot, whose early integrated
+Sachs--Wolfe term is in phase at $\ell=100$--$300$; F9's estimator puts the
+total at $188.5$. The slots move the maximum down, as driving does, and it
+already sits below the matched $206$. A-3 changes the potential in the
+boundary value and in the integrated slot together, so \emph{(f)} registers
+the full linear physics rather than A-3 in isolation, and a miss is
+informative either way. v1.3.30 read the opposite, that only the integrated
+and Doppler slots could move the maximum, and up; D45 measures the slots
+moving it down. The test registered before 4 November, on (102) with the artefact
 suppressed and the CDM and Newtonian peaks required to land at $206\pm6$
 together, is superseded by this one: (102) does not meet
 \eqref{eq:frame-conditions}, so its peaks could not land together, and the
@@ -2948,7 +3014,8 @@ $T(x,e)$, so the $\ell=0$ equation does not evolve a free quantity --- it
 fixes $(\ln T)^{\textstyle\cdot}$, and $\mathcal B_0$ is a functional of the
 solution rather than an external forcing. Whether the matching row of (89) is
 then empty is a separate question, and the first frame condition answers it
-the other way: with Paper~1's rank-one sign the row carries $a\mathcal B_0$,
+the other way: with Paper~1's rank-one sign the row carries
+$-a\mathcal B_0=\tfrac k3\tau_1$,
 \eqref{eq:c0-ruled}, and \S\ref{sec:ell-zero-row} records why T-107 found the
 opposite with the sign as built. The free-streaming $\ell=0$ equation and the
 rank-zero source appear in different sections and look like different
@@ -3639,18 +3706,34 @@ frame-invariant and the boundary no longer the boundary of its own integrand.
 frame, and Paper~1's own source equation names it.} Its linear redshift
 source is
 \begin{equation}
-  \mathcal B(x,e)\simeq+\tfrac13\mathrm D^a\tau_a
-    -(\mathrm D_a\ln T+A_a)e^a-\sigma_{ab}e^ae^b ,
+  \mathcal B^{\rm P1}(x,e)\simeq+\tfrac13\mathrm D^a\tau_a
+    -(\mathrm D_a\ln T+A_a)e^a-\sigma_{ab}e^ae^b=-\mathcal B(x,e),
   \label{eq:paper1-source}
 \end{equation}
-with the Thomson term $+\sigma_{\rm T}n_e\bar f_1e^av^B_a$ beside it. Two
-features of it are absent from this bundle's coefficients. \textbf{The
-rank-one gravitational source enters with the opposite sign to the Thomson
-Doppler term}, so that $a\mathcal B_1=-k(\delta T+\Phi_A)$ in this bundle's
-harmonic convention, where the coefficients are built with
-$+k(\delta T+\Phi_A)$; and \textbf{the rank-zero source
-$\tfrac13\mathrm D^a\tau_a$, which is $a\mathcal B_0=-\tfrac k3\tau_1$, is
-carried}, where the coefficients drop it (\S\ref{sec:ell-zero-row}). Scored
+with the Thomson term $+\sigma_{\rm T}n_e\bar f_1e^av^B_a$ beside it on the
+right-hand side. Two features of it are absent from this bundle's
+coefficients. The rank-one gravitational source enters with the opposite
+sign to the Thomson Doppler term, as it does in \emph{Annals~II}'s own
+Eq.~(67) and in that equation's rank-one mode form, its Eq.~(13). The
+rank-one row of the matching that the frame conditions select is
+$kC_1=a\mathcal B_1-\kappa'v_B$, with $a\mathcal B_1=k(\delta T+\Phi_A)$
+(\S\ref{sec:source-derivatives}), where (89) prints
+$-(a\mathcal B_1+\kappa'v_B)$ and the coefficients are built from it. With
+Paper~1's source in $\mathcal B_1$'s place,
+$a\mathcal B^{\rm P1}_1=-k(\delta T+\Phi_A)$, the printed row is the selected
+one, and that is how the code carries it. And the rank-zero source is
+carried: $\mathcal B^{\rm P1}_0=\tfrac13\mathrm D^a\tau_a=-\mathcal B_0$ enters
+$C_0$ as $-a\mathcal B_0=\tfrac k3\tau_1$, where the coefficients drop it
+(\S\ref{sec:ell-zero-row}).\footnote{The frame conditions fix the row, not
+which printed sign is at fault. Against \emph{Annals~II}'s own Eq.~(13), its
+mode form (71) carries the Thomson term with the wrong sign, and (89) repeats
+(71). The selected row also carries, at rank one, the sign of the kernel's
+derivative, $K'=-k\,j_\ell'$ for $K=j_\ell\big(k(\eta_0-\eta)\big)$, which
+ranks zero and two do not: against \emph{Annals~II}'s source $\mathcal S_B$,
+as (12) and (13) fix it at ranks two and one and (71) at rank zero, the
+selected row is $-\mathcal S_B$ at rank one and $+\mathcal S_B$ at ranks zero
+and two. The two
+compound to the one difference above, the sign of $a\mathcal B_1$.} Scored
 symbolically against this bundle's own transformation laws, with the matching
 (89) as built, the three conditions of \eqref{eq:frame-conditions} read:
 \begin{center}\small
@@ -3667,10 +3750,10 @@ both, as \eqref{eq:paper1-source} & $0$ & $0$ & $0$ & invariant, identically \\
 \end{center}
 \textbf{Both corrections together, and neither alone.} That is why T-105 was
 refuted when it was tried by itself: with the rank-one sign as built, $-C_1'$
-carries $+\tfrac k3\tau_1$ and the restored $a\mathcal B_0$ doubles it, which
+carries $+\tfrac k3\tau_1$ and the restored $-a\mathcal B_0$ doubles it, which
 is the $98.5\%$ criterion~5b caught; with the sign of
 \eqref{eq:paper1-source}, $-C_1'$ carries $-\tfrac k3\tau_1$ and
-$a\mathcal B_0$ cancels it. In a shear-free frame the $W$-carried
+$-a\mathcal B_0$ cancels it. In a shear-free frame the $W$-carried
 gravitational content of the bracket is then $-(\Phi_A'-\Phi_H')$, the
 integrated Sachs--Wolfe term, with no photon dipole riding along the ray. The
 transformation laws for $\delta T$ and $\Phi_A$ are right, and (102)'s
@@ -3771,19 +3854,63 @@ defect, and names the admissibility condition as what remains. The first half
 holds on \texttt{PLANCK\_MODEL}. The second does not apply, because the
 assembly scored satisfies the admissibility condition by construction. What
 separates \texttt{PLANCK\_MODEL} from the backgrounds that carry the series is
-not yet scored. D44 shows one candidate: on \texttt{PLANCK\_MODEL} the
-integrated slot's auto-spectrum reaches $2.1$ times the total, against $0.36$
-on $\Lambda$CDM, so the slots cancel strongly where radiation is present at
-recombination.
+not yet scored. D45 measures where the slots cancel, and no pair cancels at
+$\ell=100$--$400$: there the integrated slot is $1$--$5\%$ of $C_\ell$ and twice
+the cross-spectrum of the Sachs--Wolfe and integrated slots adds $11$--$16\%$,
+in phase. D44's $2.1$ is the integrated slot's auto-spectrum at $\ell=5$, and
+from $\ell=2$ to $10$ twice that cross-spectrum runs from $-1.9$ to $-3.1$ of
+the total, against $-0.12$ at $\ell=2$ on $\Lambda$CDM. The cause is in the
+potential both slots read, and it is A-3's. \texttt{PLANCK\_MODEL}'s
+background carries radiation, so $D/a$ falls by $7\%$ before $\eta_*$ and by
+$10\%$ more by matter domination, while the monopole starts from the matter-era
+adiabatic value $-\tfrac23\Phi_A$ and the radiation-era potential
+\eqref{eq:radiation-potential} is not wired: the radiation era is half
+present. The Sachs--Wolfe source at last scattering is then $0.187$ against
+$\Phi_A/3=0.310$, with $0.535$ in the integrated slot. \texttt{LCDM\_MODEL},
+whose background carries no radiation, returns $\Phi_A/3$ to three figures,
+$0.3331$, and $2\Delta\Phi=0.442$ in the integrated slot. F9's
+\texttt{PLANCK\_MODEL} curve below $\ell\simeq30$, its dip near $\ell=5$
+included, is therefore the incomplete radiation era of A-3 and not a
+prediction of v1.3.0; the radiation era is v1.4.0's
+(\S\ref{sec:future-situation}).
 
-\paragraph{Two checks not yet closed.} The sum-back asked for on
-3 November, the three slots and the total derivative against the direct
-integral mode by mode, does not close. D44's direct integral and its five-slot
-form differ from the three slots at order one in the CDM frame; D44 describes
-the two differences as the quadrature of the $WC_2'K'$ term (five against
-three) and the stored photon moments against their own evolution after last
-scattering (direct against five). Until it closes, no evaluation independent
-of the slots confirms their weights. The relative sign between slots, which
+\paragraph{The sum-back.} The sum-back asked for on 3 November, the three
+slots and the total derivative against the direct integral mode by mode,
+closes. D44 had found the direct integral and its five-slot form apart from
+the three slots at order one in the CDM frame. D45 sums the three slots and
+the end points against a direct quadrature built from the same arrays, in
+both frames, for $k=2$ to $1500$, and their difference falls by a factor of
+$4.00$ when the $\eta$ step halves, in every band. It is quadrature, and it is
+the direct integral's: under the halving the slots move by at most
+$6\times10^{-5}$ and the direct integral by $5\times10^{-2}$ to $8\times10^2$.
+Five slots against three in the CDM frame is the same quadrature. The one
+floor that does not fall is T-191, $\int\mathcal V=0.99914$, because the
+visibility is interpolated apart from the opacity whose derivative it is;
+with $\mathcal V=W'$ it goes. An evaluation independent of the slots now
+confirms their weights.
+
+\paragraph{The $C_1^{\rm grav}$ under $\mathcal V$.} The identity is an
+integration by parts of one function, so the $C_1^{\rm grav}$ under
+$\mathcal V$ and the derivative under $W$ have to be one function and its
+derivative. F9 pairs the oscillator's stored $C_1^{\rm grav}$ under
+$\mathcal V$ with (106) under $W$, and (106) integrated from the start does
+not return the stored moment at last scattering: the two differ by
+$4\times10^{-4}$ of the transfer on $\Lambda$CDM and by $1.3\times10^{-2}$ on
+\texttt{PLANCK\_MODEL} at $k\le100$. The oscillator's belongs under
+$\mathcal V$. The Sachs--Wolfe slot is the boundary value
+$(\delta T+\Phi_A)(\eta_*)$, and that is the solution of the pair
+(152)--(153) this bundle integrates and the oscillator's gates certify
+(\S\ref{sec:oscillator}). Under $W$ belongs its exact derivative, the pair's
+own right-hand side on that solution,
+$(\delta T+\Phi_A)'=\Phi_A'-\Phi_H'-\mathcal H\Phi_A+\tfrac k3\tau_1$ in the
+Newtonian frame. (106) is the antecedent's small-scale form of the same
+derivative, without the $-\mathcal H\Phi_A$ that (154) also drops, so the
+residual between the two is the size of that approximation, larger on
+\texttt{PLANCK\_MODEL} at low $k$, where the potential decays. It is recorded,
+not carried: the same rule as \S\ref{sec:oscillator}'s pair and (154). The
+pairing moves F9 by at most $1.3\times10^{-2}$ of the transfer.
+
+\paragraph{The relative sign between slots.} The relative sign between slots, which
 no frame test can see, D44 probes by reversing the Doppler slot; the result is
 again frame-invariant, with the \texttt{PLANCK\_MODEL} maximum at
 $0.78\,\ell_A$. That configuration is the slot decomposition of coefficients
@@ -3962,7 +4089,7 @@ only because the by-parts was taken \emph{onto the coefficients}. Multiplying
 the transport equation at rank $\ell$,
 \begin{equation}
   \tau_\ell' \;+\; (\text{streaming couplings}) \;+\; \kappa'\tau_\ell
-  \;=\; a\mathcal B_\ell \;+\; \kappa'\mathcal S_\ell ,
+  \;=\; -a\mathcal B_\ell \;+\; \kappa'\mathcal S_\ell ,
   \label{eq:transport}
 \end{equation}
 through by $W$ --- with $\kappa$ accumulated backwards from $\eta_0$, so
@@ -3974,14 +4101,14 @@ into $\mathrm d[W\tau_\ell]/\mathrm d\eta$, and gives
   \boxed{\;
   \frac{\mathrm d}{\mathrm d\eta}\big[W\tau_\ell\big]
   \;+\; W\,(\text{streaming couplings})
-  \;=\; W\,a\mathcal B_\ell \;+\; \mathcal V\,\mathcal S_\ell \;}
+  \;=\; -W\,a\mathcal B_\ell \;+\; \mathcal V\,\mathcal S_\ell \;}
   \label{eq:w-form}
 \end{equation}
 with $\big[W\tau_\ell\big]_{\eta_*}^{\eta_0}=\tau_\ell(\eta_0)-W(\eta_*)
 \tau_\ell(\eta_*)$ as its only boundary term, since $W(\eta_0)=1$. Here
 $a\mathcal B_\ell$ is the gravitational source of
-\S\ref{sec:source-derivatives}, with the sign \eqref{eq:paper1-source}
-rules, and $\mathcal S_\ell$ the in-scattered Thomson source; both $\kappa'$ in \eqref{eq:transport} are the same $\kappa'$, the
+\S\ref{sec:source-derivatives}, which \emph{Annals~II}'s Eq.~(67) carries on
+the left, and $\mathcal S_\ell$ the in-scattered Thomson source; both $\kappa'$ in \eqref{eq:transport} are the same $\kappa'$, the
 out-scattering and the in-scattering being two halves of one collision term.
 
 \paragraph{What \eqref{eq:w-form} is, at its true size.} It is not
@@ -7285,9 +7412,9 @@ against data rather than an analytical reconstruction.
 
 The step from a bound on the multipoles to a bound on the geometry is one row
 of the hierarchy already printed at \eqref{eq:transport-exact}, and it can be
-written out. In the sign of \eqref{eq:transport-exact} the rank-two
-gravitational source is $\mathcal B_{ab}=-\sigma_{ab}$, and $(\ell+1)/(2\ell+3)$ is
-$3/7$ at $\ell=2$, so that row rearranges to
+written out. The rank-two gravitational source is
+$\mathcal B_{ab}=\sigma_{ab}$, on the left of \eqref{eq:transport-exact}, and
+$(\ell+1)/(2\ell+3)$ is $3/7$ at $\ell=2$, so that row rearranges to
 \begin{equation}
   a\sigma_{ab}
   =-\Big[\tau'_{ab}

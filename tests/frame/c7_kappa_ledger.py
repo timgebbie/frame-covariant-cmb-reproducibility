@@ -3,10 +3,10 @@
 
 Multiplying the transport equation by the integrating factor W = e^-kappa:
 
-    tau_l' + (streaming) + kappa' tau_l  =  a B_l + kappa' S_l
-    d/deta[W tau_l] + W(streaming)       =  W a B_l + (W kappa') S_l
-                                                      ~~~~~~~~~~~
-                                                         = V
+    tau_l' + (streaming) + kappa' tau_l  =  -a B_l + kappa' S_l
+    d/deta[W tau_l] + W(streaming)       =  -W a B_l + (W kappa') S_l
+                                                       ~~~~~~~~~~~
+                                                          = V
 
 The gravitational source arrives under W.  The in-scattered Thomson source
 arrives under V, its kappa' already consumed by the integrating factor.

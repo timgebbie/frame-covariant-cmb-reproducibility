@@ -2,7 +2,7 @@
 
 > **Generated, not transcribed. Do not edit by hand.**
 >
-> Produced by `tests/frame/gen_theory_audit.py` at 2026-11-04 07:57 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
+> Produced by `tests/frame/gen_theory_audit.py` at 2026-11-04 11:26 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
 
 **Status: ALL CHECKS PASS** — 54 assertions across 12 instruments.
 
@@ -139,7 +139,7 @@ Multiplying the transport equation by $W=e^{-\kappa}$ sends the gravitational so
 | `printed_102_clean` | False |
 | `t88_clean` | False |
 
-*Instrument: `tests/frame/c7_kappa_ledger.py`, sha256 `0159b589ff6a…`*
+*Instrument: `tests/frame/c7_kappa_ledger.py`, sha256 `999b2414ec50…`*
 
 ### The rank-0 partner, and where the monopole source enters
 
@@ -296,7 +296,7 @@ The peak of the visibility is the point where $\kappa''=-\kappa'^2$, so at $\eta
 
 | | |
 |---|---|
-| generated | 2026-11-04 07:57 UTC |
+| generated | 2026-11-04 11:26 UTC |
 | python | 3.13.18 |
 | numpy | 2.5.3 |
 | scipy | 1.18.1 |

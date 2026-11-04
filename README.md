@@ -10,7 +10,7 @@ the full linear spectrum with the acoustic peaks and the Silk damping tail
 (F9), in both frames; the integral solution (102) carried with a generic
 4-velocity and specialised back; acceptance criterion 5b closed.
 
-Supplement: **v1.3.31** — `SUPPLEMENTARY-MATERIAL-v1.3.31.tex`. **This is a
+Supplement: **v1.3.32** — `SUPPLEMENTARY-MATERIAL-v1.3.32.tex`. **This is a
 separate version line from the one above and is declared separately on
 purpose.** The line above is the *computational* release; a supplement edition
 records a documentation gate and is **not** an assertion that the repository
@@ -33,9 +33,9 @@ University of Cape Town, 2026, **arXiv:astro-ph/9912072v4**
 
 The supplementary-materials document is included here:
 
-> [SUPPLEMENTARY-MATERIAL-v1.3.31.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.31.pdf)
+> [SUPPLEMENTARY-MATERIAL-v1.3.32.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.32.pdf)
 
-Its source is `SUPPLEMENTARY-MATERIAL-v1.3.31.tex`, **one consolidated file in
+Its source is `SUPPLEMENTARY-MATERIAL-v1.3.32.tex`, **one consolidated file in
 the repository root**, which builds with `pdflatex` alone: the prose carries no
 `\input`, the bibliography is inline, and the only external files are the
 generated assets in `tables/`, `tikz/` and `figures/`. The prose fragments that
@@ -259,16 +259,21 @@ four external hierarchies.
 **2 — The source closes at rank two.** The gravitational source
 $\mathcal B_{A_\ell}$ is **identically zero for $\ell\ge3$**:
 
-$$\mathcal B_0=-\tfrac13\mathrm D^a\tau_a,\qquad \mathcal B_a=\mathrm D_a\ln T+A_a,\qquad \mathcal B_{ab}=\sigma_{ab}\quad(71)$$
+$$\mathcal B_0=-\tfrac13\mathrm D^a\tau_a,\qquad \mathcal B_a=\mathrm D_a\ln T+A_a,\qquad \mathcal B_{ab}=\sigma_{ab}\quad(68)$$
 
 — a monopole from the dipole divergence, a gradient-plus-acceleration at rank
 one, and **the shear at rank two**. That the chain terminates is what makes a
 closed-form integral solution possible at all, and the shear entry is why this
 repository is called `NonlinearShear`. `functions/spectra/coefficients.py`.
 
-These are *Annals II*'s (71). Paper 1's linear redshift source gives the
-rank-one gravitational term the sign opposite to the Thomson Doppler term; in
-this bundle's harmonic convention that is $a\mathcal B_1=-k(\delta T+\Phi_A)$,
+These are *Annals II*'s (68), the source on the left of its (67); in the mode
+coefficients it defines, $a\mathcal B_1=k(\delta T+\Phi_A)$ and
+$a\mathcal B_0=-\tfrac k3\tau_1$. Paper 1's linear redshift source is the same
+source written on the right, $\mathcal B^{\rm P1}=-\mathcal B$, and it stands
+against the Thomson Doppler term with the opposite sign. The matching's
+rank-one row needs that: (89) prints $-(a\mathcal B_1+\kappa'v_B)$, the frame
+conditions select $a\mathcal B_1-\kappa'v_B$, and the two agree once Paper 1's
+$a\mathcal B^{\rm P1}_1=-k(\delta T+\Phi_A)$ stands in $\mathcal B_1$'s place,
 where the coefficients as built carry $+k(\delta T+\Phi_A)$. Step 7 is where
 the difference matters.
 
@@ -382,10 +387,11 @@ Rank zero is invariant on its own. The Thomson half of rank one pairs with
 $C_2$, and the gravitational half pairs with $C_2'$.
 
 The coefficients of step 6 as built satisfy the second condition and fail the
-other two. Paper 1's own source supplies both repairs. The rank-one
-gravitational term enters with the opposite sign to the Thomson Doppler term,
-$a\mathcal B_1=-k(\delta T+\Phi_A)$, and the rank-zero source
-$a\mathcal B_0=-\tfrac k3\tau_1$ is carried in $C_0$. Neither repair works
+other two. Paper 1's own source supplies both repairs. Its rank-one
+gravitational term stands against the Thomson Doppler term with the opposite
+sign, so the rank-one row carries $a\mathcal B^{\rm P1}_1=-k(\delta T+\Phi_A)$
+where (89) has $a\mathcal B_1$; and its rank-zero source is carried in $C_0$,
+as $-a\mathcal B_0=\tfrac k3\tau_1$. Neither repair works
 alone. With both, and writing $G\equiv C_1^{\rm grav}-C_2'$, the integrand
 rearranges exactly into slots that are each frame-invariant:
 
@@ -407,9 +413,14 @@ $C_\ell$ in the Newtonian and CDM frames to $4\times10^{-14}$. On
 Einstein–de Sitter it carries an acoustic series, with maxima at $\ell=165$ and
 $495$ and a trough at $360$. On `PLANCK_MODEL` it has a single maximum, at
 $0.71\thinspace \ell_A$, so the series is not yet recovered where it matters,
-and that loss is not a frame defect. The released default remains (102) until
-the slots are checked against an independent evaluation of their own
-integrand.
+and that loss is not a frame defect. **D45** sums the slots back to the direct
+integral they rearrange: the difference falls by $4.00$ when the step halves,
+so it is the direct integral's quadrature and the slot weights stand.
+v1.3.0 releases this assembly, with the first maximum on `PLANCK_MODEL` at
+$\ell=188.5$ ($0.7067\thinspace \ell_A$). Below $\ell\simeq30$ on
+`PLANCK_MODEL` the potential both slots read carries an incomplete radiation
+era, which is approximation A-3 and v1.4.0's work, so the curve there is not
+a prediction.
 
 **8 — The spectrum, and the two routes.** The observable is assembled from
 three factors and nothing else: the primordial power $P(k)$, the transfer
@@ -1003,7 +1014,7 @@ are in `provenance/DECISIONS-v1.0.0.md`.
 | Item | Value |
 |---|---|
 | **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMBR lensing in the exact 1+3 covariant radiation hierarchy* — **Paper 1**, University of Cape Town. **arXiv:astro-ph/9912072v4**, [doi:10.48550/arXiv.astro-ph/9912072](https://doi.org/10.48550/arXiv.astro-ph/9912072). Submitted 2026-10-16. CC BY 4.0. **The version suffix is not optional** — the bare identifier has carried three documents: `v2` the legacy 1999 work, `v3` the correction, `v4` this paper |
-| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.3.31.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.31.pdf) |
+| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.3.32.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.32.pdf) |
 | **GitHub repository** | [timgebbie/frame-covariant-cmb-reproducibility](https://github.com/timgebbie/frame-covariant-cmb-reproducibility) |
 | **ZivaHub/Figshare DOI** | [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509) — **live**. The **concept** DOI: it always resolves to the latest version, so it is the one to cite |
 | **Associated antecedent** | Gebbie, T.; Dunsby, P. K. S.; Ellis, G. F. R. (2000). *1+3 covariant cosmic microwave background anisotropies II: the almost-Friedmann–Lemaître model*. Annals of Physics **282**, 321–394. [doi:10.1006/aphy.2000.6034](https://doi.org/10.1006/aphy.2000.6034) |
