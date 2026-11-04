@@ -1,5 +1,16 @@
 % Computational supplement to the associated paper.
 %
+% v1.3.31, 2026-11-04.  Sequential style audit, third batch: Section 12, free
+% streaming.  The section title and four headings name their object; the
+% italic lead, two bold table sentences and a "that is the whole content" are
+% restated plainly; "a ratio of linear polynomials" is a ratio of polynomials
+% of equal degree (w_l is quadratic over quadratic); the conventions sheet is
+% named by its file and rows.  In sec:w-form, eq:transport's pointer to the
+% rank decomposition is restored to its v1.3.29 sense: its a B_l is the
+% matching's, with the sign eq:paper1-source rules.  How that mode-form sign
+% sits against the covariant placement of eq:transport-exact is read at the
+% audit of sec:w-form, not asserted before it.
+%
 % v1.3.30, 2026-11-04.  Sequential style audit, second batch: Sections 4 to
 % 11, from the theory-to-computation map to the first acoustic peak, with the
 % physics read against Paper 1 and the accepted Annals II source on the way.
@@ -235,7 +246,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.3.30 --- 4 November 2026\\
+\date{Supplement v1.3.31 --- 4 November 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.3.0-dev}
 
 \begin{document}
@@ -2871,12 +2882,12 @@ reconciled with it. Nothing in this section rests on either.
 % its module docstring, which quotes Annals II Appendix F pp. 379-380.
 % Findings cited, none minted: B-2, T-3.
 % ---------------------------------------------------------------------------
-\section{Free streaming, and where every $\ell\ge3$ comes from}
+\section{Free streaming}
 \label{sec:free-streaming}
 
-\emph{The source closes at rank two and the oscillator evolves ranks zero and
-one. Free streaming generates higher multipoles and supplies the
-line-of-sight kernel.}
+The source closes at rank two and the oscillator evolves ranks zero and one,
+so every multipole with $\ell\ge3$ comes from free streaming, which also
+supplies the line-of-sight kernel.
 
 % ===========================================================================
 \subsection{Free streaming after scattering}
@@ -2903,20 +2914,20 @@ form this bundle integrates as its reference, (F.3):
 \end{equation}
 
 Each multipole is coupled to its two neighbours and to nothing else.
-That is the whole content: the ladder has no closure and no termination, so
+The ladder has no closure and no termination, so
 the three ranks the source supplies generate every rank above them. It
 is also the only $\ell$-coupling in the released hierarchy --- every other
 coupling in the scheme reaches $\ell\pm1$ or $\ell\pm2$ and arrives later, by
 frame, which is what F8 draws.
 
-\paragraph{The $\ell$-weights are where an error would hide, and it would hide
-at large $\ell$.} $w_\ell\to\tfrac14$ and the two bracket weights in
+\paragraph{The $\ell$-weights at large $\ell$.} The $\ell$-weights are where
+an error would hide, and it would hide at large $\ell$. $w_\ell\to\tfrac14$ and the two bracket weights in
 \eqref{eq:F3} tend to $\tfrac12$ and $\tfrac12$: every coupling in the
-recursion is a ratio of linear polynomials and tends to a constant.
+recursion is a ratio of polynomials of equal degree and tends to a constant.
 So a coupling that grew like $\ell$ would be invisible at low $\ell$
 and divergent at high $\ell$ --- which is exactly the regime this paper is
 about, and the reason the Appendix~F chain is the acceptance spine rather than
-a smoke test. Decision S9.
+a smoke test (decision~S9).
 
 % ===========================================================================
 \subsection{Free streaming at $\ell=0$}
@@ -2969,7 +2980,7 @@ feature fixed in $k$ appears at a fixed $\ell$ --- is a property of
 that produced it.
 
 % ===========================================================================
-\subsection{Three normalisations, none privileged, and one printed slip}
+\subsection{Three normalisations}
 
 Appendix~F writes one recursion three ways, and the bundle integrates all
 three \emph{as printed}:
@@ -2987,43 +2998,43 @@ three \emph{as printed}:
 \end{center}
 
 \noindent
-with $\alpha_\ell=(2\ell+1)/\beta_\ell$. Privileging none of them is
-the point: the three differ by $\ell$-dependent factors, so an error in a
+with $\alpha_\ell=(2\ell+1)/\beta_\ell$. None of them is privileged:
+the three differ by $\ell$-dependent factors, so an error in a
 weight shows as a disagreement between normalisations that no single one can
 reveal. This is the same discipline the spectrum uses when it reports (186)
 and (187)--(188) separately rather than asserting they agree.
 
-\paragraph{(F.4) as printed carries a factor its own text removes.} The
+\paragraph{(F.4) as printed.} It carries a factor its own text removes. The
 display keeps $(2\ell+1)$ on the left, while the sentence preceding it
 specifies a division by $(2\ell+1)$ that was not applied; only after that
 division is it the Ma \& Bertschinger form the text says it is. The
 bundle divides --- finding B-2.
 
-\paragraph{And $k$ is comoving here, which the conventions sheet does not say
-of every section.} Appendix~F's $k$ is comoving and
+\paragraph{The comoving $k$.} $k$ is comoving here, which the conventions
+sheet does not say of every section. Appendix~F's $k$ is comoving and
 $k_{\rm phys}=k_{\rm com}/a$; the explicit $1/a$ in \eqref{eq:F1} against a
-proper-time derivative is what fixes it. The project's conventions sheet
-declares $k\equiv k_{\rm phys}$ in its \emph{harmonic-recursion} section, so
+proper-time derivative is what fixes it. \texttt{provenance/conventions.md}
+declares $k\equiv k_{\rm phys}$ in its harmonic rows, C3.1 and C3.2, so
 the two differ by a factor $a$ in precisely these equations. A bare
 $k$ is therefore ambiguous at exactly the point where it matters most, and
 every equation in this section is written in $k_{\rm com}$.
 
 % ===========================================================================
-\subsection{What gates this, and what each gate can and cannot see}
+\subsection{Gates on free streaming}
 
 \begin{center}\small
 \begin{tabularx}{\textwidth}{@{}l >{\raggedright\arraybackslash}X l@{}}
 \toprule
 \textbf{gate} & \textbf{what it tests} & \textbf{result} \\
 \midrule
-\textbf{F1} & the recursion against \textbf{four external hierarchies}, in two
+\textbf{F1} & the recursion against four external hierarchies, in two
   normalisations and two phase conventions --- criterion~1 & residuals
   $\lesssim10^{-13}$ \\
 \texttt{test\_appendix\_f\_chain} & that no coupling grows with $\ell$: an
   $O(\ell)$ coupling wired in early fails it at large $\ell$ & gate on S9 \\
 \texttt{sign\_control} & the \emph{negative} control --- the same recursion
-  with the relative sign of the two couplings flipped. \textbf{It must fail to
-  reproduce the external form}, and a suite in which it passes is not testing
+  with the relative sign of the two couplings flipped. It must fail to
+  reproduce the external form, and a suite in which it passes is not testing
   the phase & negative control \\
 \eqref{eq:analytic-projection} & the integrated recursion against
   $j_\ell(k(\eta-\eta_i))$ for a unit monopole, per multipole & normalisation
@@ -3034,8 +3045,8 @@ every equation in this section is written in $k_{\rm com}$.
 \end{tabularx}
 \end{center}
 
-\paragraph{What none of them sees.} All five test the recursion \emph{with the
-source switched off}. They establish that free streaming is reconstructed
+\paragraph{The source, switched off.} All five test the recursion \emph{with
+the source switched off}. They establish that free streaming is reconstructed
 faithfully and say nothing about whether the right thing is streamed:
 the matching at $\eta_*$ is a separate question and is
 \S\ref{sec:w-form}'s. F1 at $10^{-13}$ is therefore not evidence
@@ -3968,9 +3979,9 @@ into $\mathrm d[W\tau_\ell]/\mathrm d\eta$, and gives
 \end{equation}
 with $\big[W\tau_\ell\big]_{\eta_*}^{\eta_0}=\tau_\ell(\eta_0)-W(\eta_*)
 \tau_\ell(\eta_*)$ as its only boundary term, since $W(\eta_0)=1$. Here
-$a\mathcal B_\ell$ is the gravitational source in the sign of
-\eqref{eq:paper1-source}, the negative of \S\ref{sec:source-derivatives}'s
-rank decomposition, and $\mathcal S_\ell$ the in-scattered Thomson source; both $\kappa'$ in \eqref{eq:transport} are the same $\kappa'$, the
+$a\mathcal B_\ell$ is the gravitational source of
+\S\ref{sec:source-derivatives}, with the sign \eqref{eq:paper1-source}
+rules, and $\mathcal S_\ell$ the in-scattered Thomson source; both $\kappa'$ in \eqref{eq:transport} are the same $\kappa'$, the
 out-scattering and the in-scattering being two halves of one collision term.
 
 \paragraph{What \eqref{eq:w-form} is, at its true size.} It is not
