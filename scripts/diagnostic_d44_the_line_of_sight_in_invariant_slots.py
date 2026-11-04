@@ -299,9 +299,17 @@ def report() -> int:
                                                          power)
                                       for i, l in enumerate(ELLS)])
                          for n, t in tr.items()}
+        scale = [max(np.max(np.abs(tr["three_N"][:, j])),
+                     np.max(np.abs(tr["three_C"][:, j])))
+                 for j in range(k_com.size)]
         per_mode = {
             "three": max(_rel(tr["three_N"][:, j], tr["three_C"][:, j])
                          for j in range(k_com.size)),
+            **{f"slot {s}": max(
+                float(np.max(np.abs(held[f"{s}_N"][:, j]
+                                    - held[f"{s}_C"][:, j]))) / scale[j]
+                for j in range(k_com.size) if scale[j] > 0)
+               for s in SLOTS},
             "five": max(_rel(tr["five_N"][:, j], tr["five_C"][:, j])
                         for j in range(k_com.size)),
             "direct": max(_rel(tr["direct_N"][:, j], tr["direct_C"][:, j])
@@ -314,7 +322,10 @@ def report() -> int:
         residuals[name] = per_mode
 
     say()
-    say("2-3. PER MODE, max over modes of max_l |T_N - T_C| / max_l |T|")
+    say("2-3. PER MODE, max over modes of max_l |T_N - T_C| / max_l |T|; "
+        "each slot against the whole")
+    say("     three-slot transfer, so a slot that is zero to rounding reads "
+        "as rounding")
     for name, r in residuals.items():
         say(f"   {name:8s} " + "  ".join(f"{k} {v:.1e}" for k, v in r.items()))
 
@@ -393,7 +404,7 @@ def _draw(spectra: dict) -> None:
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     from functions.plotting.style import (
-        DETERMINISTIC_METADATA, INK, SERIES, use_house_style)
+        DETERMINISTIC_METADATA, SERIES, SERIES_DASH, use_house_style)
 
     use_house_style()
     fig, axes = plt.subplots(1, 3, figsize=(11.0, 3.4))
@@ -401,12 +412,12 @@ def _draw(spectra: dict) -> None:
         def shape(c):
             d = d_ell(ELLS, c)
             return d / np.interp(30.0, ELLS, d)
-        ax.plot(ELLS, shape(cl["three_N"]), color=SERIES[0], lw=1.8,
-                label="three slots, Newtonian")
-        ax.plot(ELLS, shape(cl["three_C"]), color=SERIES[1], lw=1.0,
-                ls="--", label="three slots, CDM")
-        ax.plot(ELLS, shape(cl["reversed_N"]), color=INK["muted"], lw=1.0,
-                label="Doppler sign reversed")
+        ax.plot(ELLS, shape(cl["three_N"]), color=SERIES[1],
+                ls=SERIES_DASH[1], lw=1.8, label="three slots, Newtonian")
+        ax.plot(ELLS, shape(cl["three_C"]), color=SERIES[2],
+                ls=SERIES_DASH[2], lw=1.2, label="three slots, CDM")
+        ax.plot(ELLS, shape(cl["reversed_N"]), color=SERIES[4],
+                ls=SERIES_DASH[4], lw=1.0, label="Doppler sign reversed")
         ax.set_xscale("log")
         ax.set_title(name)
         ax.set_xlabel(r"$\ell$")

@@ -1,0 +1,119 @@
+D44 --- the line of sight with Paper 1's source signs, scored as registered.
+
+QUESTION
+    Paper 1's linear redshift source carries the rank-one gravitational term
+    with the sign opposite to the Thomson term, and carries the rank-zero term
+    $a\mathcal B_0=-\tfrac k3\tau_1$. Built that way, do the coefficients meet
+    the three frame conditions of $\int W\{C_0K+C_1K'+C_2K''\}$; does the
+    assembly that keeps $\kappa'$ out of every derivative and $\hat v_B$ with
+    $C_2$ give one $C_\ell$ in both frames; and does that $C_\ell$ carry an
+    acoustic series?
+
+REGISTERED BEFORE IT WAS BUILT (supplement v1.3.23)
+    (a) the three conditions hold to the integrator's tolerance at every mode;
+    (b) in the Newtonian frame the W-carried gravitational content is
+        -(Phi_A' - Phi_H') and (k/3) tau_1 cancels;
+    (c) the exact identity, the bracket at W with its visibility terms,
+        returns C_l at l >= 2 identical in the two frames, and on
+        Einstein-de Sitter no late power;
+    (d) the assembly that keeps kappa' out of every derivative and vhat_B with
+        C_2 carries a peak series in both frames, identical at l >= 2. If (d)
+        fails while (a)-(c) hold, the loss of the series is not a frame defect.
+    With it, from the transfer side: the full C_l agrees between the frames
+    below 1e-12, and a residual above 1e-6 that does not track the quadrature
+    refutes it.
+
+WHAT IS MEASURED
+    1. Coefficients, k = 2..400, all three backgrounds, as built and with
+       Paper 1's signs: each condition as the largest relative frame shift
+       over W > 1e-10; and (b), the Newtonian integrated source against
+       -(Phi_A' - Phi_H').
+    2. Per mode on F9's k grid to k = 1500, Paper 1's signs: the three slots
+       of the supplement's eq:assembly-invariant (line_of_sight.three_slots)
+       in both frames; the five slots and the
+       direct integral in both frames. Five against three is the quadrature
+       of the W C_2' K' term; direct against five is the stored photon
+       moments against their own evolution after last scattering.
+    3. (c) on every 75th mode: (102)'s bracket at W with its visibility terms,
+       through transfer_by_rank, in both frames.
+    4. C_l: the three slots in both frames --- the frame residual, the maxima
+       and troughs of D_l by the shared prominence rule, the first maximum in
+       units of l_A --- and the same slots with the Doppler slot's sign
+       reversed, the relative sign no frame test can see; Einstein-de Sitter's
+       integrated-slot share.
+
+    CAMB and CLASS enter only after all of the above is scored, as context.
+
+sources: ff97a11a7d4f9c19
+
+1. COEFFICIENTS, k = 2..400: largest relative frame shift over W > 1e-10
+                       rank zero  scattering  gravitational  (b) source-ISW
+   EdS      as built     1.0e+00     1.0e-13        1.8e+00         2.1e+11
+   EdS      paper 1      1.3e-13     1.0e-13        6.0e-16         4.6e-16
+   LCDM     as built     1.0e+00     2.6e-13        1.6e+00         1.0e+02
+   LCDM     paper 1      3.3e-13     2.6e-13        6.1e-16         4.5e-16
+   PLANCK   as built     1.0e+00     2.6e-13        1.4e+00         1.8e+01
+   PLANCK   paper 1      2.8e-13     2.6e-13        5.5e-16         4.4e-16
+
+2-3. PER MODE, max over modes of max_l |T_N - T_C| / max_l |T|; each slot against the whole
+     three-slot transfer, so a slot that is zero to rounding reads as rounding
+   EdS      three 2.5e-08  slot sw 9.4e-15  slot dop 1.8e-13  slot isw 2.5e-08  five 1.8e+00  direct 1.5e+00  five vs three (CDM) 1.8e+00  identity (c) 1.6e+00
+   LCDM     three 1.7e-10  slot sw 3.1e-16  slot dop 8.0e-16  slot isw 1.7e-10  five 2.1e-01  direct 1.4e+00  five vs three (CDM) 1.0e+00  identity (c) 1.2e+00
+   PLANCK   three 2.0e-10  slot sw 1.4e-15  slot dop 8.8e-16  slot isw 2.0e-10  five 1.8e-01  direct 1.3e+00  five vs three (CDM) 1.0e+00  identity (c) 1.1e+00
+
+4. C_l (Paper 1's signs). Frame residual max_l |C_N - C_C| / C_N; maxima and troughs of D_l;
+   first maximum / l_A.
+
+   EdS  (l_A = 190.6)
+     three     frame residual 2.1e-14
+       Newtonian maxima [165.0, 495.0]  troughs [360.0]  first 165 = 0.87 l_A
+       CDM       maxima [165.0, 495.0]  troughs [360.0]  first 165 = 0.87 l_A
+     reversed  frame residual 1.6e-14
+       Newtonian maxima [165.0, 510.0]  troughs [360.0]  first 169 = 0.89 l_A
+       CDM       maxima [165.0, 510.0]  troughs [360.0]  first 169 = 0.89 l_A
+     five      frame residual 1.6e-03
+       Newtonian maxima [165.0, 495.0]  troughs [360.0]  first 165 = 0.87 l_A
+       CDM       maxima [165.0, 495.0]  troughs [360.0]  first 165 = 0.87 l_A
+     direct    frame residual 5.5e-01
+       Newtonian maxima [60.0]  troughs []  first 64 = 0.34 l_A
+       CDM       maxima [60.0]  troughs []  first 64 = 0.34 l_A
+     integrated-slot auto-spectrum / total, max over l: 2.7e-23
+
+   LCDM  (l_A = 170.5)
+     three     frame residual 4.2e-14
+       Newtonian maxima [150.0, 450.0]  troughs []  first 145 = 0.85 l_A
+       CDM       maxima [150.0, 450.0]  troughs []  first 145 = 0.85 l_A
+     reversed  frame residual 3.8e-14
+       Newtonian maxima [150.0, 450.0]  troughs []  first 149 = 0.87 l_A
+       CDM       maxima [150.0, 450.0]  troughs []  first 149 = 0.87 l_A
+     five      frame residual 1.2e-03
+       Newtonian maxima [150.0, 450.0]  troughs []  first 145 = 0.85 l_A
+       CDM       maxima [150.0, 450.0]  troughs []  first 145 = 0.85 l_A
+     direct    frame residual 4.9e-01
+       Newtonian maxima [60.0]  troughs []  first 53 = 0.31 l_A
+       CDM       maxima [60.0]  troughs []  first 53 = 0.31 l_A
+     integrated-slot auto-spectrum / total, max over l: 3.6e-01
+
+   PLANCK  (l_A = 266.8)
+     three     frame residual 2.9e-14
+       Newtonian maxima [195.0]  troughs []  first 189 = 0.71 l_A
+       CDM       maxima [195.0]  troughs []  first 189 = 0.71 l_A
+     reversed  frame residual 3.7e-14
+       Newtonian maxima [210.0]  troughs []  first 208 = 0.78 l_A
+       CDM       maxima [210.0]  troughs []  first 208 = 0.78 l_A
+     five      frame residual 1.9e-03
+       Newtonian maxima [195.0]  troughs []  first 189 = 0.71 l_A
+       CDM       maxima [195.0]  troughs []  first 189 = 0.71 l_A
+     direct    frame residual 7.4e-01
+       Newtonian maxima [60.0]  troughs []  first 58 = 0.22 l_A
+       CDM       maxima [60.0]  troughs []  first 58 = 0.22 l_A
+     integrated-slot auto-spectrum / total, max over l: 2.1e+00
+
+SCORED
+   frame, three slots: worst C_l residual 4.2e-14 -> below 1e-12
+   (d) series, three slots, Newtonian (troughs between maxima): EdS 2 maxima / 1 troughs, LCDM 2 maxima / 0 troughs, PLANCK 1 maxima / 0 troughs
+   (c) is section 2-3's 'identity (c)' column, transfer level.
+
+CONTEXT, NOT TARGET: CAMB and CLASS maxima of D_l (same rule)
+   camb  maxima [206.0, 491.0, 730.0, 1014.0, 1276.0]
+   class maxima [206.0, 491.0, 730.0, 1014.0, 1277.0]
