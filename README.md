@@ -10,7 +10,7 @@ the full linear spectrum with the acoustic peaks and the Silk damping tail
 (F9), in both frames; the integral solution (102) carried with a generic
 4-velocity and specialised back; acceptance criterion 5b closed.
 
-Supplement: **v1.3.27** — `SUPPLEMENTARY-MATERIAL-v1.3.27.tex`. **This is a
+Supplement: **v1.3.28** — `SUPPLEMENTARY-MATERIAL-v1.3.28.tex`. **This is a
 separate version line from the one above and is declared separately on
 purpose.** The line above is the *computational* release; a supplement edition
 records a documentation gate and is **not** an assertion that the repository
@@ -33,9 +33,9 @@ University of Cape Town, 2026, **arXiv:astro-ph/9912072v4**
 
 The supplementary-materials document is included here:
 
-> [SUPPLEMENTARY-MATERIAL-v1.3.27.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.27.pdf)
+> [SUPPLEMENTARY-MATERIAL-v1.3.28.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.28.pdf)
 
-Its source is `SUPPLEMENTARY-MATERIAL-v1.3.27.tex`, **one consolidated file in
+Its source is `SUPPLEMENTARY-MATERIAL-v1.3.28.tex`, **one consolidated file in
 the repository root**, which builds with `pdflatex` alone: the prose carries no
 `\input`, the bibliography is inline, and the only external files are the
 generated assets in `tables/`, `tikz/` and `figures/`. The prose fragments that
@@ -266,6 +266,12 @@ one, and **the shear at rank two**. That the chain terminates is what makes a
 closed-form integral solution possible at all, and the shear entry is why this
 repository is called `NonlinearShear`. `functions/spectra/coefficients.py`.
 
+These are *Annals II*'s (71). Paper 1's linear redshift source gives the
+rank-one gravitational term the sign opposite to the Thomson Doppler term; in
+this bundle's harmonic convention that is $a\mathcal B_1=-k(\delta T+\Phi_A)$,
+where the coefficients as built carry $+k(\delta T+\Phi_A)$. Step 7 is where
+the difference matters.
+
 **3 — The frame law, and what is invariant.** Under a change of fundamental
 congruence $\tilde u^a=u^a+v^a$, GDE99 (37) gives
 
@@ -346,9 +352,11 @@ rationals and uses (90) as a check on itself. Solved that way (90)'s $C_0$
 comes out with the opposite sign to the printed one — finding **B-11**,
 traceable to $j_0''(0)=-\tfrac13$ from the ascending series, printed as
 $+\tfrac13$. The coefficients are CGI with respect to a generic $u^a$, so a
-frame choice sets them: Newtonian is $\tilde\sigma_{ab}\approx0$, hence
-$\tilde C_0\approx\tilde C_2\approx0$ and $\tilde C_1$ alone; CDM is $q_a=0$
-and keeps all three. The line-of-sight integral (102) carries them to the
+frame choice sets them: Newtonian is $\tilde\sigma_{ab}\approx0$, hence, as
+built, $\tilde C_0\approx\tilde C_2\approx0$ and $\tilde C_1$ alone; CDM is
+$q_a=0$ and keeps all three. With Paper 1's source $C_0$ also carries
+$-a\mathcal B_0=\tfrac k3\tau_1$, which does not vanish in the Newtonian frame
+(step 7). The line-of-sight integral (102) carries them to the
 present:
 
 $$\frac{\beta_\ell\thinspace \tau_\ell(\eta_0)}{2\ell+1}\simeq[C_2'-C_1]_{\eta_\ast}\mathcal D\thinspace j_\ell(k\Delta\eta_\ast)+kC_2(\eta_\ast)\mathcal D\left[\tfrac{\ell}{2\ell+1}j_{\ell-1}-\tfrac{\ell+1}{2\ell+1}j_{\ell+1}\right]_{k\Delta\eta_\ast}+\int_{\eta_\ast}^{\eta_0}\mathrm d\eta\thinspace \mathcal V e^{-(k/k_D)^2}\lbrace C_0-C_1'+C_2''\rbrace \thinspace j_\ell(k\Delta\eta)\quad(102)$$
@@ -360,7 +368,50 @@ $\ell\pm1$ — a different coupling from step 5's, acting at the boundary rather
 than along the path. `functions/spectra/coefficients.py`,
 `integral_solution.py`.
 
-**7 — The spectrum, and the two routes.** The observable is assembled from
+**7 — The assembly in frame-invariant slots.** A change of frame moves only
+the dipole (step 3), so for every $\ell\ge2$ the line-of-sight integrand
+$W\lbrace C_0K+C_1K'+C_2K''\rbrace$, with $K=j_\ell(k(\eta_0-\eta))$ and a prime
+on $K$ the derivative in $\eta$, may change only by a total derivative. Split
+$C_1$ into its gravitational half and its Thomson half
+$C_1^{\rm scatt}=-\kappa'\hat v_B$, and use $W'=\kappa'W$. This gives three
+conditions, with no collapse of the visibility:
+
+$$\Delta C_0=0,\qquad \Delta C_1^{\rm scatt}=\kappa'\Delta C_2,\qquad \Delta C_1^{\rm grav}=\Delta C_2'$$
+
+Rank zero is invariant on its own. The Thomson half of rank one pairs with
+$C_2$, and the gravitational half pairs with $C_2'$.
+
+The coefficients of step 6 as built satisfy the second condition and fail the
+other two. Paper 1's own source supplies both repairs. The rank-one
+gravitational term enters with the opposite sign to the Thomson Doppler term,
+$a\mathcal B_1=-k(\delta T+\Phi_A)$, and the rank-zero source
+$a\mathcal B_0=-\tfrac k3\tau_1$ is carried in $C_0$. Neither repair works
+alone. With both, and writing $G\equiv C_1^{\rm grav}-C_2'$, the integrand
+rearranges exactly into slots that are each frame-invariant:
+
+$$W\lbrace C_0K+C_1K'+C_2K''\rbrace=W(C_0-G')K-\mathcal V\thinspace G\thinspace K-\mathcal V(\hat v_B+C_2)K'+\frac{\mathrm d}{\mathrm d\eta}\left[W(GK+C_2K')\right]$$
+
+The total derivative projects onto $\ell\le1$ only. No coefficient holding the
+rate $\kappa'$ is differentiated, and the rank-two term is integrated by parts
+once, onto its rank-one partner's slot, so $C_2$ stays with $\hat v_B$. (102)
+integrates it by parts twice and differentiates $C_1$ while $C_1$ still holds
+$\kappa'$. That separates the invariant pair $\hat v_B+C_2$ and puts
+$\mathcal V\kappa''\hat v_B$ into the bulk, which is why (102)'s spectrum
+differs between the two frames. In a shear-free frame $C_2=0$, and the slots
+reduce to the Sachs–Wolfe, Doppler and integrated Sachs–Wolfe terms.
+
+The assembly is built: `RANK_ONE_SOURCE = "paper 1"` in `coefficients.py`, and
+`three_slots` in `functions/spectra/line_of_sight.py`. **D44** scores it on three
+backgrounds. Its three conditions hold to $10^{-13}$, and its slots give one
+$C_\ell$ in the Newtonian and CDM frames to $4\times10^{-14}$. On
+Einstein–de Sitter it carries an acoustic series, with maxima at $\ell=165$ and
+$495$ and a trough at $360$. On `PLANCK_MODEL` it has a single maximum, at
+$0.71\thinspace \ell_A$, so the series is not yet recovered where it matters,
+and that loss is not a frame defect. The released default remains (102) until
+the slots are checked against an independent evaluation of their own
+integrand.
+
+**8 — The spectrum, and the two routes.** The observable is assembled from
 three factors and nothing else: the primordial power $P(k)$, the transfer
 $T_\ell(k)$ that (102) returns, and the projection $j_\ell$ already inside it.
 *Annals II* §7.2 writes the assembly twice —
@@ -952,7 +1003,7 @@ are in `provenance/DECISIONS-v1.0.0.md`.
 | Item | Value |
 |---|---|
 | **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMBR lensing in the exact 1+3 covariant radiation hierarchy* — **Paper 1**, University of Cape Town. **arXiv:astro-ph/9912072v4**, [doi:10.48550/arXiv.astro-ph/9912072](https://doi.org/10.48550/arXiv.astro-ph/9912072). Submitted 2026-10-16. CC BY 4.0. **The version suffix is not optional** — the bare identifier has carried three documents: `v2` the legacy 1999 work, `v3` the correction, `v4` this paper |
-| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.3.27.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.27.pdf) |
+| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.3.28.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.28.pdf) |
 | **GitHub repository** | [timgebbie/frame-covariant-cmb-reproducibility](https://github.com/timgebbie/frame-covariant-cmb-reproducibility) |
 | **ZivaHub/Figshare DOI** | [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509) — **live**. The **concept** DOI: it always resolves to the latest version, so it is the one to cite |
 | **Associated antecedent** | Gebbie, T.; Dunsby, P. K. S.; Ellis, G. F. R. (2000). *1+3 covariant cosmic microwave background anisotropies II: the almost-Friedmann–Lemaître model*. Annals of Physics **282**, 321–394. [doi:10.1006/aphy.2000.6034](https://doi.org/10.1006/aphy.2000.6034) |

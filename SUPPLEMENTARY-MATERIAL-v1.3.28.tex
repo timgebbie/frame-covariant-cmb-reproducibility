@@ -1,5 +1,17 @@
 % Computational supplement to the associated paper.
 %
+% v1.3.28, 2026-11-04.  D44 scored against the registrations of 3 November,
+% in sec:w-form, as written: (a) and (b) hold on all three backgrounds; (c),
+% restated before the run as a statement about the uncollapsed identity,
+% holds, and its collapsed form fails at order one as the restatement said;
+% (d) holds on Einstein-de Sitter and fails on PLANCK_MODEL, and that loss is
+% not a frame defect.  The registration's second clause, the admissibility
+% condition as what remains, does not apply: the assembly scored satisfies it
+% by construction.  The sum-back is recorded as not closed, and D44's reversed
+% Doppler run is shown to need coefficients that break (89), so the matching
+% fixes the sign the frame test cannot.  Two headings shortened and one bold
+% sentence unbolded in the same section.
+%
 % v1.3.27, 2026-11-04.  The ruling of 3 November (eq:paper1-source) carried
 % to every site that still read the rank-zero row as built.
 %   1  The row's right-hand side is fixed by the first frame condition,
@@ -152,7 +164,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.3.27 --- 4 November 2026\\
+\date{Supplement v1.3.28 --- 4 November 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.3.0-dev}
 
 \begin{document}
@@ -3559,11 +3571,13 @@ $a\mathcal B_0$ cancels it. In a shear-free frame the $W$-carried
 gravitational content of the bracket is then $-(\Phi_A'-\Phi_H')$, the
 integrated Sachs--Wolfe term, with no photon dipole riding along the ray. The
 transformation laws for $\delta T$ and $\Phi_A$ are right, and (102)'s
-$+C_2'$ stands. \emph{The frame test cannot see the relative sign between the
-$j_\ell$ and $j_\ell'$ slots}, since each is invariant on its own;
-\eqref{eq:paper1-source} fixes it.
+$+C_2'$ stands. The frame test cannot see the relative sign between the
+$j_\ell$ and $j_\ell'$ slots, since each is invariant on its own;
+\eqref{eq:paper1-source} and the matching (89) fix it, as the scoring below
+shows.
 
-\paragraph{The repair, registered on 3 November before it is built.} Build
+\paragraph{The registered repair.} On 3 November, before it was built, the
+repair was registered as follows. Build
 $a\mathcal B_1$ with the sign of \eqref{eq:paper1-source}, at the one place it
 is defined, and carry $a\mathcal B_0$ in $C_0$ with it and never without it;
 score \eqref{eq:frame-conditions} on the coefficients before any spectrum is
@@ -3579,7 +3593,7 @@ peak series in both frames, identical at $\ell\ge2$. If \emph{(d)} fails while
 \emph{(a)}--\emph{(c)} hold, the loss of the series is not a frame defect, and
 the admissibility condition is what remains.
 
-\paragraph{The assembly, in slots that are each frame-invariant.} Write
+\paragraph{The assembly.} Write
 $G\equiv C_1^{\rm grav}-C_2'$, the combination the third condition of
 \eqref{eq:frame-conditions} makes frame-invariant. Then, exactly,
 \begin{equation}
@@ -3594,10 +3608,10 @@ slot is frame-invariant on its own: $C_0$ by the first condition, $G$ and so
 $G'$ by the third, $\hat v_B+C_2$ by the second. No coefficient holding a
 rate is differentiated, since the scattering half of $C_1$ is never
 integrated by parts and $C_2$ holds no rate; and no rank-two partner is
-separated from its rank-one half. \textbf{That second property is the
+separated from its rank-one half. That second property is the
 admissibility condition's companion, and it is checkable in the tree as the
 rate condition is: a rank-two term may be integrated by parts once, onto the
-slot its rank-one partner occupies, and not twice.}
+slot its rank-one partner occupies, and not twice.
 \eqref{eq:assembly-repaired} is the rank-one restriction of
 \eqref{eq:assembly-invariant}. In a shear-free frame $C_2=0$ and
 $G=C_1^{\rm grav}$, so $\tfrac k3\tau_1$ cancels from $C_0-G'$ and
@@ -3609,6 +3623,72 @@ visibility it is (102)'s boundary with the rank-one sign of
 $j_\ell$ slot and returned, as $\hat v_B$, to the $j_\ell'$ slot it came
 from. The difference of the two sides of \eqref{eq:assembly-invariant} is
 zero in exact symbols, for arbitrary $W$, $\kappa'$ and coefficients.
+
+\paragraph{The registrations scored.} D44, released on 4 November, scores
+the four registrations on Einstein--de~Sitter, $\Lambda$CDM and
+\texttt{PLANCK\_MODEL}: at the coefficients for $k=2$ to $400$, and in the
+transfer on F9's $k$ grid to $k=1500$. Registration \emph{(a)} holds. With
+Paper~1's signs the largest relative frame shift over the window
+$W>10^{-10}$ is at most $3.3\times10^{-13}$ at rank zero,
+$2.6\times10^{-13}$ in the scattering condition and $6.1\times10^{-16}$ in the
+gravitational one, while as built the rank-zero and gravitational conditions
+fail at order one, $1.0$ and $1.4$--$1.8$. Registration \emph{(b)} holds: in
+the Newtonian frame the $W$-carried gravitational content equals
+$-(\Phi_A'-\Phi_H')$ to $4.6\times10^{-16}$, against $18$ to $2\times10^{11}$
+as built, so $\tfrac k3\tau_1$ cancels.
+
+Registration \emph{(c)} was printed against the bracket at $W$ with its
+visibility terms. On 3 November, before the run, it was restated as a
+statement about the uncollapsed identity, which is the three-slot assembly
+term for term, because the collapsed form keeps
+$-\kappa'(\eta_*)\Delta C_2(\eta_*)$ at the boundary and drops the bulk
+partners that cancel it. In that form it holds. The three slots give one
+$C_\ell$ in both frames to $4.2\times10^{-14}$, and each mode to
+$2.5\times10^{-8}$, below D44's stated thresholds of $10^{-12}$ for $C_\ell$
+and $10^{-6}$ per mode; and on
+Einstein--de~Sitter the integrated slot carries a fraction
+$2.7\times10^{-23}$ of the power, so no power is put late where the
+potentials are constant. The competing prediction of TT-004~\S3, that this
+slot would carry late power there, is refuted. The collapsed form, measured
+alongside, differs between the frames at order one, $1.1$ to $1.6$, as the
+restatement said it would.
+
+Registration \emph{(d)} holds on Einstein--de~Sitter and fails on
+\texttt{PLANCK\_MODEL}. The three slots are identical in the two frames on
+every background. On Einstein--de~Sitter, with $\ell_A=190.6$, they put
+maxima of $D_\ell$ at $\ell=165$ and $495$ and a trough at $360$: an interior
+minimum between $\ell=300$ and $900$, the criterion carried from
+3 November, with the first maximum at $0.87\,\ell_A$. On $\Lambda$CDM they put
+maxima at $150$ and $450$ with no trough that meets the shared prominence
+rule. On \texttt{PLANCK\_MODEL} they put a single maximum, at $0.71\,\ell_A$,
+and no trough, where CAMB and CLASS put maxima at $206$, $491$, $730$, $1014$
+and $1276$ ($1277$ for CLASS). The registration reads a failure of \emph{(d)} with
+\emph{(a)}--\emph{(c)} holding as a loss of the series that is not a frame
+defect, and names the admissibility condition as what remains. The first half
+holds on \texttt{PLANCK\_MODEL}. The second does not apply, because the
+assembly scored satisfies the admissibility condition by construction. What
+separates \texttt{PLANCK\_MODEL} from the backgrounds that carry the series is
+not yet scored. D44 shows one candidate: on \texttt{PLANCK\_MODEL} the
+integrated slot's auto-spectrum reaches $2.1$ times the total, against $0.36$
+on $\Lambda$CDM, so the slots cancel strongly where radiation is present at
+recombination.
+
+\paragraph{Two checks not yet closed.} The sum-back asked for on
+3 November, the three slots and the total derivative against the direct
+integral mode by mode, does not close. D44's direct integral and its five-slot
+form differ from the three slots at order one in the CDM frame; D44 describes
+the two differences as the quadrature of the $WC_2'K'$ term (five against
+three) and the stored photon moments against their own evolution after last
+scattering (direct against five). Until it closes, no evaluation independent
+of the slots confirms their weights. The relative sign between slots, which
+no frame test can see, D44 probes by reversing the Doppler slot; the result is
+again frame-invariant, with the \texttt{PLANCK\_MODEL} maximum at
+$0.78\,\ell_A$. That configuration is the slot decomposition of coefficients
+that satisfy all three frame conditions but not (89). With $C_2$ reversed,
+(89) ties $C_0$ to the same $a\mathcal B_2$ and requires
+$\Delta C_0=-\tfrac23kv$, so the first condition fails. The matching therefore
+fixes the sign that the frame test cannot, and the reversed run is context
+rather than a candidate.
 
 \paragraph{Both endpoints of the projected identity.}
 For this calculation alone, define the pre-integrated object
