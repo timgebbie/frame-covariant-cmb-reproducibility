@@ -1,5 +1,13 @@
 % Computational supplement to the associated paper.
 %
+% v1.3.33, 2026-11-04.  The abstract and Part I read for the v1.3.0 release:
+% the coefficients that fail two frame conditions are the antecedent's as
+% built, not the released ones; the released assembly sums back (D45); the
+% Planck low-l carries A-3's incomplete radiation era; the finding range is
+% T-1 to T-191.  Part I's late-time paragraph names (102) for the V D weight,
+% says the released assembly carries the integrated slot under W, and reads
+% the plateau from D45: Phi_A/3 on LCDM, 0.187 against 0.310 on PLANCK.
+%
 % v1.3.32, 2026-11-04.  The edition for the v1.3.0 release, and one sign
 % convention for the gravitational source.
 %   Release items:
@@ -289,7 +297,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.3.32 --- 4 November 2026\\
+\date{Supplement v1.3.33 --- 4 November 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.3.0-dev}
 
 \begin{document}
@@ -318,16 +326,18 @@ streaming, matching, the line-of-sight solution and the angular spectrum.
 Part~III records numerical resolution, parameter choices and interpretive
 limits. The first-order frame law requires the two predicted skies to agree
 in a common observer frame, and on the line-of-sight integrand it becomes
-three conditions on the matching coefficients. The coefficients as released
-fail two of them. Paper~1's own source satisfies all three, and the assembly
-built from it gives one spectrum in the Newtonian and CDM frames, with an
+three conditions on the matching coefficients. The antecedent's coefficients,
+as built, fail two of them. Paper~1's own source satisfies all three, and the
+assembly built from it, which v1.3.0 releases, gives one spectrum in the
+Newtonian and CDM frames and sums back to the integral it rearranges, with an
 acoustic series on Einstein--de~Sitter but not yet on the Planck background.
 The integration-by-parts reconstruction of the published line-of-sight
-solution identifies four discrepancies in the released assembly, and on the
-Planck background the first-peak position, the low-$\ell$ Sachs--Wolfe
-plateau and the secondary peaks are not yet recovered. Findings are recorded
+solution identifies four discrepancies in the antecedent's assembly. On the
+Planck background the first-peak position and the secondary peaks are not yet
+recovered, and below $\ell\simeq30$ the spectrum carries an incomplete
+radiation era, which is approximation A-3 and the work of v1.4.0. Findings are recorded
 against the antecedent (B-1 to B-17) and against the implementation (T-1 to
-T-190), and an inventory of findings is not treated as a certification of
+T-191), and an inventory of findings is not treated as a certification of
 the physical calculation. CAMB and CLASS provide external comparisons, not
 inputs or calibration targets, and the supplement makes no claim of new
 physics. The identifier \texttt{astro-ph/9912072v4} refers to Paper~1; the
@@ -835,9 +845,10 @@ not exist.
 The late-time share diagnostic is $0.0000$ on the Einstein--de~Sitter and
 \texttt{PLANCK\_MODEL} backgrounds. Einstein--de~Sitter is a null control
 for the \emph{late} integrated Sachs--Wolfe (ISW) term when its potential is
-constant. On the Planck background the released line-of-sight bracket is
-weighted by $\mathcal V\mathcal D$. Since $\mathcal V$ vanishes after
-recombination, it suppresses the late-time gravitational contribution. The
+constant. In the antecedent's assembly (102) the line-of-sight bracket is
+weighted by $\mathcal V\mathcal D$, and since $\mathcal V$ vanishes after
+recombination it suppresses the late-time gravitational contribution; the
+assembly v1.3.0 releases carries it under $W$ instead. The
 benchmark expectation of order $0.1$ recorded in the original diagnostic is
 model- and diagnostic-dependent; it is not a consequence of frame covariance.
 
@@ -851,8 +862,8 @@ integrating factor in \eqref{eq:w-form} gives
 Thus a late-time gravitational term carried with $W$ can survive after
 visibility has closed, whereas the same term carried with $\mathcal V$
 vanishes in that limit. This explains the absence of the \emph{late ISW}
-contribution in the released transport assembly. It does not, by itself,
-explain the missing ordinary Sachs--Wolfe plateau: a matter-dominated
+contribution in (102). It does not, by itself, explain the missing ordinary
+Sachs--Wolfe plateau: a matter-dominated
 Einstein--de~Sitter model has the ordinary plateau without a late ISW effect
 \citep{SachsWolfe1967,GebbieDunsbyEllis2000}.
 
@@ -868,12 +879,16 @@ cross term remains:
  \label{eq:status-cross-term}
 \end{equation}
 An accumulation fraction for a line-of-sight \emph{amplitude} is therefore
-not, without further definition, a fraction of $C_\ell$. The absence of the
-plateau remains a separate spectrum-level finding. Approximation A-1 is
-established as the missing late-time weight; its contribution to the total
-low-$\ell$ morphology still requires a separate test. The assembly of
+not, without further definition, a fraction of $C_\ell$. Approximation A-1 is
+established as (102)'s missing late-time weight. The assembly of
 \eqref{eq:assembly-invariant} carries the gravitational content at $W$, and
-D44 measures its integrated slot directly (\S\ref{sec:w-form}).
+D45 measures its slots directly (\S\ref{sec:w-form}): on
+\texttt{LCDM\_MODEL}, with no radiation in its background, the Sachs--Wolfe
+source at last scattering is $\Phi_A/3$ to three figures and the integrated
+slot carries the late $2\Delta\Phi$; on \texttt{PLANCK\_MODEL} the
+Sachs--Wolfe source is $0.187$ against $\Phi_A/3=0.310$, because the
+radiation era is half present, and the plateau there is A-3's, not a v1.3.0
+claim.
 
 
 \paragraph{Asserted, not gated.}
