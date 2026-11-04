@@ -33,10 +33,13 @@ missing shape.
 
 THE LOWER LIMIT IS NOT $\eta_\ast$
 ----------------------------------
-(102)'s bulk runs from the **recombination start** (T-58), not from
+The line of sight runs from the **recombination start** (T-58), not from
 $\eta_\ast$, so *before decoupling* is a real epoch here with real
 accumulation in it rather than an empty panel. The first slice is the grid's
-own floor and the curve there is what the integral has built by then.
+own floor and the curve there is what the integral has built by then. The
+integral is the supplement's eq:assembly-invariant with Paper 1's source signs:
+each slot is accumulated to each slice, and the $\eta_0$ column is the
+full integral.
 
 GATE
 ----
@@ -71,11 +74,12 @@ from functions.plotting.style import (  # noqa: E402
     INK, SERIES, SERIES_DASH, save_figure, use_house_style)
 from functions.spectra.bessel_table import BesselTable  # noqa: E402
 from functions.spectra.decoupling import F2_DEFAULT  # noqa: E402
-from functions.spectra.integral_solution import (  # noqa: E402
-    integral_solution, required_multipoles)
+from functions.spectra.integral_solution import required_multipoles  # noqa: E402
 from functions.spectra.pipeline import primordial_power, required_k_points  # noqa: E402
 from functions.spectra.transfer import shape_parameter  # noqa: E402
-from functions.spectra.two_frame import build_environment, coefficient_sets  # noqa: E402
+from functions.spectra.line_of_sight import kernel_set, three_slots  # noqa: E402
+from functions.spectra.two_frame import (  # noqa: E402
+    build_environment, covariant_coefficient_sets, line_of_sight_inputs)
 
 from _fingerprint import source_fingerprint as _digest  # noqa: E402
 
@@ -173,48 +177,27 @@ def _accumulate():
     acc = {f: np.zeros((ELLS.size, sl.size)) for f in FRAMES}
     gate, dk = 0.0, k_com[1] - k_com[0]
     for j, k in enumerate(k_com):
-        sets = dict(zip(FRAMES, coefficient_sets(float(k), env)))
-        diffusion = float(np.exp(-((float(k) / env.damping_k) ** 2)))
-        common = dict(table=table, weight=env.weight, diffusion=diffusion,
-                      damping_total=diffusion, eta_star=eta_star,
-                      eta_floor=floor, visibility=env.visibility, eta_0=eta_0)
-        for f in FRAMES:
-            s = sets[f]
-            res = integral_solution(
-                ELLS, coefficients=s.coefficients, c1_prime=s.c1_prime,
-                c2_second=s.c2_second, c2_prime_star=s.c2_prime_star,
-                c2_prime=s.c2_prime, eta_slices=sl, **common)
-            # **Normalised by the largest transfer at this $k$, not pointwise
-            # --- finding T-158, 2026-10-26.**
-            #
-            # This read `|difference| / |integrated|` element by element, and
-            # at $K_{\max}=400$ with $\ell\le300$ it returned $4.6\times
-            # 10^{-13}$ and looked exact. The first high-resolution run failed
-            # it at $1.75\times10^{-8}$ --- and the decomposition had not
-            # degraded at all. **The transfer has zeros**, and above
-            # $\ell\simeq300$ at high $k$ they are deep: the worst case found
-            # is $\ell=40$, $k=1176$, where the absolute difference is
-            # $1.4\times10^{-20}$ against an $|{\rm integrated}|$ of
-            # $6.1\times10^{-10}$. Machine precision divided by a number
-            # passing through zero.
-            #
-            # Raising the slice count changes nothing --- 14, 24, 40 and 64
-            # all return the same $10^{-13}$ --- which is what rules out a
-            # resolution limit and leaves the metric.
-            #
-            # Measured against the largest transfer at the same $k$, that same
-            # worst case is $3.5\times10^{-13}$: **the gate's own number at
-            # $K_{\max}=400$, unchanged.** So this is not a loosened threshold,
-            # it is a denominator that cannot vanish. The threshold is
-            # untouched.
-            scale = max(float(np.max(np.abs(res.integrated))), 1e-300)
-            gate = max(gate, float(np.max(
-                np.abs(res.partial_bulk[:, -1] - res.integrated))) / scale)
-            boundary = (res.boundary_scalar + res.boundary_shear)[:, None]
-            acc[f] += (k ** 2 * power[j]) * (res.partial_bulk + boundary) ** 2 * dk
+        kern = kernel_set(ELLS, float(k), eta=env.eta, eta_0=eta_0, table=table)
+        for f, cs in zip(FRAMES, covariant_coefficient_sets(float(k), env)):
+            sources, damping = line_of_sight_inputs(float(k), cs, env)
+            res = three_slots(kern, sources, eta_slices=sl)
+            full = res.transfer(damping)
+            laid = res.partial_transfer(damping)
+            # The gate, against the largest transfer at this k (T-158): the
+            # eta_0 column must be the full integral, not a second one.
+            scale = max(float(np.max(np.abs(full))), 1e-300)
+            gate = max(gate, float(np.max(np.abs(laid[:, -1] - full))) / scale)
+            acc[f] += (k ** 2 * power[j]) * laid ** 2 * dk
         if j % 200 == 0:
             print(f"      k {k:7.1f} of {K_MAX:.0f}", flush=True)
     return acc, sl, eta_star, eta_0, floor, gate
+
+
+def _late_share(a, sl, eta_star, eta_0) -> np.ndarray:
+    """Fraction of today's C_l laid down after the visibility has closed."""
+    x = (sl - eta_star) / (eta_0 - eta_star)
+    return np.array([1.0 - float(np.interp(0.01, x, a[i] / a[i, -1]))
+                     if a[i, -1] > 0 else 0.0 for i in range(a.shape[0])])
 
 
 def _write_csv(acc, sl, eta_star, eta_0, floor):
@@ -224,7 +207,7 @@ def _write_csv(acc, sl, eta_star, eta_0, floor):
         fh.write(f"# sources: {_digest(__file__)}\n")
         fh.write(f"# eta_star {eta_star:.9e}  eta_0 {eta_0:.9e}  "
                  f"floor {floor:.9e}\n")
-        w = _csv.writer(fh)
+        w = _csv.writer(fh, lineterminator="\n")
         w.writerow(["frame", "ell", "eta", "c_ell"])
         for f in FRAMES:
             for i, l in enumerate(ELLS):
@@ -335,22 +318,17 @@ def _draw(acc, sl, eta_star, eta_0, floor):
 
     fig.suptitle("F10  the angular autocorrelation as it forms — Planck 2018, "
                  "CDM frame", fontsize=10)
+    # **The reading is computed, never typed** (T-161 was a typed sentence
+    # that drifted from its own picture). The late share is the fraction of
+    # today's C_l that arrives after (eta - eta_*) = 0.01 (eta_0 - eta_*),
+    # when the visibility has closed.
+    late = _late_share(acc[FRAME], sl, eta_star, eta_0)
+    low = float(late[int(np.argmin(np.abs(ELLS - 2)))])
+    high = float(np.max(np.abs(late[ELLS >= 30])))
     fig.text(0.5, 0.015,
-             # **The colour word was inverted --- finding T-161.** `cmap` is
-             # `Greys` with `vmin=0, vmax=1`, so the fraction of today's value
-             # reads **1.0 as BLACK**. The band to the right of recombination
-             # is therefore black, meaning every multipole is already at its
-             # final value; the caption said *white*, which on this colourbar
-             # means the opposite — nothing accumulated at all. The physical
-             # claim after the colon was correct throughout, which is why it
-             # survived every reading: a reader who trusted the sentence got
-             # the right physics and a reader who trusted the picture got the
-             # right physics, and only someone checking one against the other
-             # would see them disagree.
-             "Panel (b) is uniformly black to the right of recombination on "
-             "every row — every multipole already at today's value — so "
-             "nothing is deposited after the visibility closes, where the "
-             "late ISW must deposit ~10% of $C_2$.",
+             f"After the visibility closes the integrated Sachs–Wolfe term "
+             f"still deposits {low:.0%} of today's $C_2$; above $\\ell=30$ "
+             f"at most {high:.0%} of any multipole arrives that late.",
              ha="center", fontsize=7.5, color=INK["muted"])
     fig.tight_layout(rect=(0, 0.055, 1, 0.94))
     return fig
@@ -373,12 +351,9 @@ def main() -> int:
         return 1
 
     # The reading, printed so it is in the log as well as in the picture.
-    a = acc[FRAME]
-    x = (sl - eta_star) / (eta_0 - eta_star)
-    late = [1.0 - float(np.interp(0.01, x, a[i] / a[i, -1]))
-            for i in range(ELLS.size) if a[i, -1] > 0]
-    print(f"    late share, worst over {ELLS.size} multipoles: "
-          f"{max(np.abs(late)):.4f}  (the late ISW needs ~0.1 at ell=2)")
+    late = _late_share(acc[FRAME], sl, eta_star, eta_0)
+    for l, share in zip(ELLS, late):
+        print(f"    late share  l={int(l):4d}  {share:+.4f}")
 
     _write_csv(acc, sl, eta_star, eta_0, floor)
     print(f"    wrote {CSV.relative_to(ROOT)}")

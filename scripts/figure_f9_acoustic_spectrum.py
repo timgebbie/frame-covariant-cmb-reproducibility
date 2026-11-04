@@ -60,6 +60,7 @@ from functions.spectra.angular import cl_covariant_route, d_ell  # noqa: E402
 from functions.spectra.bessel_table import BesselTable  # noqa: E402
 from functions.spectra.decoupling import F2_DEFAULT  # noqa: E402
 from functions.spectra.integral_solution import required_multipoles  # noqa: E402
+from functions.spectra.line_of_sight import kernel_set, three_slots  # noqa: E402
 from functions.spectra.pipeline import (  # noqa: E402
     primordial_power,
     required_k_points,
@@ -68,6 +69,8 @@ from functions.spectra.transfer import shape_parameter  # noqa: E402
 from functions.spectra.two_frame import (  # noqa: E402
     build_environment,
     coefficient_sets,
+    covariant_coefficient_sets,
+    line_of_sight_inputs,
     transfer_by_rank,
 )
 from functions.plotting.style import (  # noqa: E402
@@ -124,12 +127,14 @@ def spectrum(background, omega_b_h2: float,
              hubble_h: float) -> dict[str, np.ndarray]:
     r"""$C_\ell$ in **both frames**, with the transfer function and Silk damping.
 
-    `coefficient_sets` returns the Newtonian and the CDM coefficient triples
-    from one solve, so carrying both costs a second projection and no second
-    solution. **That is the point of (102) being carried with a generic $u^a$
-    and specialised at the end rather than at the start**, and a key figure for
-    a frame-covariance release that drew only one frame would be showing the
-    thing the release is not about.
+    **The line of sight is the supplement's eq:assembly-invariant**, built from
+    the coefficients with Paper 1's source signs: the Sachs--Wolfe and Doppler
+    slots where photons scatter, the integrated slot along the path, each
+    invariant under a change of frame. Both frames come from one solve, so the
+    two columns differ only by what the frame can change, which for
+    $\ell\ge2$ is nothing. The bulk-source lattice of (102) is still reachable
+    through `BULK_SOURCE_CONTROLS` and `B_SLOT_REPAIR`, for the diagnostic
+    flags below, and with the coefficients as built.
     """
     gamma = shape_parameter(background.omega_m, hubble_h)
     env = build_environment(
@@ -166,11 +171,13 @@ def spectrum(background, omega_b_h2: float,
     # this bundle freezes behind a DOI and a scratch file in a manifest is a
     # permanent artefact of a temporary convenience.
     from functions.spectra import two_frame as _tf
+    lattice = bool(_tf.BULK_SOURCE_CONTROLS) or bool(_tf.B_SLOT_REPAIR)
     config = repr((
         float(background.omega_m), float(background.omega_lambda),
         float(background.omega_r), float(omega_b_h2), float(hubble_h),
         sorted(dict(_tf.BULK_SOURCE_CONTROLS).items()),
-        bool(_tf.B_SLOT_REPAIR), int(k_com.size), float(K_MAX)))
+        bool(_tf.B_SLOT_REPAIR), int(k_com.size), float(K_MAX),
+        "lattice, as built" if lattice else "three slots, paper 1"))
     key = hashlib.sha256(
         (source_fingerprint() + config).encode("utf-8")).hexdigest()[:16]
     cache = Path(os.environ.get("F9_MODE_CACHE", tempfile.gettempdir())) \
@@ -191,13 +198,23 @@ def spectrum(background, omega_b_h2: float,
         except Exception as exc:      # a bad cache is a recompute, not an error
             print(f"      mode cache unreadable ({exc}); recomputing")
             start = 0
+    eta_0 = float(env.background.eta_0)
     for j, k in enumerate(k_com):
         if j < start:
             continue
-        sets = dict(zip(("newtonian", "cdm"), coefficient_sets(float(k), env)))
-        for name, coefficients in sets.items():
-            transfer[name][:, j] = transfer_by_rank(
-                ELLS, float(k), coefficients, env, table)[-1]
+        if lattice:
+            sets = dict(zip(("newtonian", "cdm"),
+                            coefficient_sets(float(k), env)))
+            for name, coefficients in sets.items():
+                transfer[name][:, j] = transfer_by_rank(
+                    ELLS, float(k), coefficients, env, table)[-1]
+        else:
+            kern = kernel_set(ELLS, float(k), eta=env.eta, eta_0=eta_0,
+                              table=table)
+            for name, cs in zip(("newtonian", "cdm"),
+                                covariant_coefficient_sets(float(k), env)):
+                sources, damping = line_of_sight_inputs(float(k), cs, env)
+                transfer[name][:, j] = three_slots(kern, sources).transfer(damping)
         if (j + 1) % 50 == 0 or j + 1 == k_com.size:
             tmp = cache.with_suffix(".tmp.npz")
             np.savez(tmp, newtonian=transfer["newtonian"],
@@ -376,10 +393,10 @@ def draw(curves, peaks, frames, gaps) -> int:
         ax.plot(ELLS, frames[label]["newtonian"], color=SERIES[i], lw=1.1,
                 ls=SERIES_DASH[2], alpha=0.85,
                 label=f"{label} — Newtonian frame")
-    worst = max(np.median(g) for g in gaps.values())
+    worst = max(float(np.max(g)) for g in gaps.values())
     ax.annotate(
         "one solve, frame chosen at the end\n"
-        f"median frame gap up to {worst:.0%}",
+        f"largest frame gap {worst:.1e}",
         xy=(0.985, 0.30), xycoords="axes fraction", ha="right", va="top",
         fontsize=7.2, color=INK["secondary"])
     ax.set_title("(b) the same spectra, both frames", fontsize=9, loc="left")
@@ -653,7 +670,7 @@ def main() -> int:
         where = (f"l={peaks[label]:.1f}" if np.isfinite(peaks[label])
                  else "NONE above l=30 -- the curve has no interior maximum")
         print(f"    {label:26s} first peak {where};  frame gap "
-              f"median {np.median(gaps[label]):.1%} worst {gaps[label].max():.1%}")
+              f"median {np.median(gaps[label]):.1e} worst {gaps[label].max():.1e}")
 
     for name in ("camb", "class"):
         ell_ref, cl_ref = reference(name)

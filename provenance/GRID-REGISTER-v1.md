@@ -332,7 +332,7 @@ the last place a grid may be chosen by eye.
 
 ### `k_com` — the k grid F10's accumulation is integrated over
 
-`scripts/figure_f10_formation_surface.py:166`, `np.linspace`
+`scripts/figure_f10_formation_surface.py:170`, `np.linspace`
 
 `required_k_points(K_MAX, r_theta)`, K_MAX = 300, matching D30
 exactly so the figure and the diagnostic behind it are the same measurement.
@@ -343,7 +343,7 @@ it.
 
 ### `k_com` — the k grid the released angular spectrum is integrated on
 
-`scripts/figure_f9_acoustic_spectrum.py:141`, `np.linspace`
+`scripts/figure_f9_acoustic_spectrum.py:146`, `np.linspace`
 
 `required_k_points(1500, r_theta)`, per background because r_theta is.
 **Was `np.arange(0.05, 1500.0, np.pi/3)` until 2026-10-17** --- 0.96 samples
@@ -748,7 +748,7 @@ and not on a copy of it.
 
 ### `ELLS` — the multipoles F10's surface is drawn over
 
-`scripts/figure_f10_formation_surface.py:118`, `np.arange`
+`scripts/figure_f10_formation_surface.py:122`, `np.arange`
 
 Dense below 30, then stepping by 20 to 300. **This is the axis the
 first version of F10 threw away**, and the reason the rebuild exists: the
@@ -760,7 +760,7 @@ damping tail is F9's and is not drawn.
 
 ### `LEVELS` — the filled contour levels of F10's panel (b)
 
-`scripts/figure_f10_formation_surface.py:135`, `np.linspace`
+`scripts/figure_f10_formation_surface.py:139`, `np.linspace`
 
 `linspace(0.0, 1.0, 21)` --- **a set of drawing levels, not a
 discretisation of anything continuous**, which is what `index` is for. It is
@@ -777,7 +777,7 @@ level set that stopped at 0.90 could not show the thing the figure is for.
 
 ### `post` — the conformal times F10 samples AFTER recombination
 
-`scripts/figure_f10_formation_surface.py:162`, `np.geomspace`
+`scripts/figure_f10_formation_surface.py:166`, `np.geomspace`
 
 `eta_* + geomspace(span*1e-4, span, N_SLICES-4)`, ten slices.
 Geometric because the visibility is narrow and a linear grid would put every
@@ -787,7 +787,7 @@ distinguishable and enough to read a progression.
 
 ### `pre` — the conformal times F10 samples ACROSS recombination
 
-`scripts/figure_f10_formation_surface.py:161`, `np.linspace`
+`scripts/figure_f10_formation_surface.py:165`, `np.linspace`
 
 `linspace(eta_floor, eta_star, 4)`. **Linear, not geometric, and
 deliberately so**: the PI asked for the autocorrelation *just before
@@ -848,7 +848,7 @@ Selection only, with the dipole prepended so the probe is on the figure.
 
 ### `ELLS` — the multipoles F9 is drawn at
 
-`scripts/figure_f9_acoustic_spectrum.py:88`, `np.arange`
+`scripts/figure_f9_acoustic_spectrum.py:91`, `np.arange`
 
 Linear at 30 across the acoustic band. Each ell is an independent
 quadrature, so this selects which points are drawn and changes no value ---

@@ -146,26 +146,52 @@ class ThreeSlots:
     sachs_wolfe: np.ndarray   # - Int V G K
     doppler: np.ndarray       # - Int V (vhat_B + C2) K'
     integrated: np.ndarray    #   Int W (C0 - G') K
+    #: `(3, n_ell, n_slices)`: each slot integrated from the start of the grid
+    #: up to each requested $\eta$, or `None` when no slices were asked for.
+    partial: np.ndarray | None = None
 
     def transfer(self, damping: float = 1.0) -> np.ndarray:
         return float(damping) * (self.sachs_wolfe + self.doppler) + self.integrated
 
+    def partial_transfer(self, damping: float = 1.0) -> np.ndarray:
+        """`transfer` laid down by each slice: `(n_ell, n_slices)`."""
+        if self.partial is None:
+            raise ValueError("no eta slices were requested")
+        sw, dop, isw = self.partial
+        return float(damping) * (sw + dop) + isw
 
-def three_slots(kernels: Kernels, s: Sources) -> ThreeSlots:
-    r"""The three slots at the kernels' $k$, with $G=C_1^{\rm grav}-C_2'$."""
+
+def three_slots(kernels: Kernels, s: Sources,
+                eta_slices: np.ndarray | None = None) -> ThreeSlots:
+    r"""The three slots at the kernels' $k$, with $G=C_1^{\rm grav}-C_2'$.
+
+    `eta_slices` asks also for each slot accumulated up to each slice: the
+    same trapezoid, summed cumulatively, so the last slice at $\eta_0$ is the
+    full integral and not a second definition of it.
+    """
     if s.eta.shape != kernels.eta.shape:
         raise ValueError("sources and kernels must share the eta grid")
     eta, k = kernels.eta, kernels.k_com
     V, W = s.visibility, s.opacity
     g = s.c1_grav - s.c2_prime
     g_prime = s.c1_grav_prime - s.c2_second
-    return ThreeSlots(
-        ell=kernels.ell, k_com=k,
-        sachs_wolfe=-np.trapezoid(kernels.j * (V * g), eta, axis=1),
-        doppler=k * np.trapezoid(kernels.jd * (V * (s.v_hat_b + s.c2)),
-                                 eta, axis=1),
-        integrated=np.trapezoid(kernels.j * (W * (s.c0 - g_prime)),
-                                eta, axis=1))
+    integrands = (-kernels.j * (V * g),
+                  k * kernels.jd * (V * (s.v_hat_b + s.c2)),
+                  kernels.j * (W * (s.c0 - g_prime)))
+    totals = [np.trapezoid(f, eta, axis=1) for f in integrands]
+    partial = None
+    if eta_slices is not None:
+        at = np.asarray(eta_slices, dtype=float)
+        partial = np.empty((3, kernels.ell.size, at.size))
+        for n, f in enumerate(integrands):
+            cum = np.concatenate(
+                [np.zeros((f.shape[0], 1)),
+                 np.cumsum(0.5 * (f[:, 1:] + f[:, :-1]) * np.diff(eta), axis=1)],
+                axis=1)
+            for i in range(f.shape[0]):
+                partial[n, i] = np.interp(at, eta, cum[i])
+    return ThreeSlots(ell=kernels.ell, k_com=k, sachs_wolfe=totals[0],
+                      doppler=totals[1], integrated=totals[2], partial=partial)
 
 
 @dataclass(frozen=True)

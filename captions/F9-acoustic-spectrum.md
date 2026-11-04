@@ -6,40 +6,58 @@ script = "scripts/figure_f9_acoustic_spectrum.py"
 artefact = "figures/f9-acoustic-spectrum-v1.2.0.pdf"
 category = "acceptance"
 caption = """
-\\textbf{The release's deliverable} (decision~S1): the angular power spectrum
-for the three backgrounds this bundle ships --- CDM (Einstein--de Sitter),
-$\\Lambda$CDM, and the stamped Planck~2018 set with a photon-only radiation era
-whose $\\Omega_\\gamma h^2$ is \\emph{derived} from $T_{\\rm CMB}$. Shape,
-$D_\\ell$ renormalised at $\\ell=30$, because neither this bundle nor the
-external codes fixes $A_s$ the same way and an amplitude comparison would
-measure a normalisation.\\\\[2pt]
-\\textbf{Panel (a) --- the spectrum.} The peaks and the damping tail come from
-\\emph{Annals~II}'s own equations: the integral solution~(102) with the
-Bond--Efstathiou transfer function driving the oscillation per mode, and the
-diffusion scale from \\textbf{(dif-damp-correct)} at $f_2=3/4$, which is the
-antecedent's own corrected coefficient rather than a departure from it
-(\\textbf{T-43}). \\textbf{This shows that} the almost-Friedmann--Lemaitre
-formulation, carried to the damping scale, produces acoustic structure without
-anything being imported from a Boltzmann code.\\\\[2pt]
-\\textbf{CAMB and CLASS are drawn as context and are not a target} ---
-decision~\\textbf{S4c}. Criterion~5b is gated on this bundle's own pipeline,
-(102) against (177)--(179), at $9.5\\times10^{-6}$ against $10^{-3}$. The
-distance to the external codes is large, expected, and \\emph{itemised rather
-than totalled} in \\texttt{provenance/CRITERION-5B-v1.md}: $97.8\\%$ across the
-plateau, $137\\%$ across the peaks, of which the damping coefficient alone is
-$17.2\\%$. The first peak is quoted from a \\emph{parabolic interpolation}
-through the grid maximum and its neighbours, because the $\\ell$ grid steps by
-30 across the acoustic band and reading the peak off it directly would assert a
-precision the sampling does not have.\\\\[2pt]
-\\textbf{Panel (b) --- the panel a gauge-fixed treatment cannot draw.} The same
-spectra in \\emph{both} frames, from \\emph{one} solve: \\texttt{coefficient\\_sets}
-returns the Newtonian and CDM triples together, because~(102) is carried with a
-generic $u^a$ and the frame is chosen at the end. \\textbf{This shows that} the
-frame is a choice made after the derivation rather than an assumption built
-into its start --- the claim the $1+3$ covariant approach exists to make, drawn
-here rather than asserted. The median frame gap reaches $40\\%$, which is a
-\\emph{result} and not a defect: $C_\\ell$ is quadratic in frame-dependent
-pieces, while the invariance~(102) satisfies is a statement about the total at
-fixed $k$, measured separately by~D6.\\\\[2pt]$^{\\dagger}$\\,\\emph{Superseded by findings} \\textbf{T-59}\\emph{,} \\textbf{T-74}\\emph{; see} \\texttt{provenance/BUNDLE-DEFECTS-v1.md}.
+\\textbf{The angular power spectrum for the three backgrounds this bundle ships}
+--- CDM (Einstein--de~Sitter), $\\Lambda$CDM and the stamped Planck~2018 set ---
+as shape, $D_\\ell$ renormalised at $\\ell=30$.\\\\[2pt]
+\\textbf{The line of sight is the supplement's
+eq.~\\eqref{eq:assembly-invariant}}, built from the coefficients with
+Paper~1's source signs: the Sachs--Wolfe and Doppler terms where photons
+scatter, the integrated Sachs--Wolfe term along the path, each invariant under
+a change of frame, and no coefficient that holds the scattering rate
+differentiated.\\\\[2pt]
+\\textbf{Panel (a) --- the spectrum, CDM frame.} The odd acoustic peaks are
+present, $2\\ell_A$ apart; the first is at $\\ell\\simeq189$ on Planck
+($0.71\\,\\ell_A$), $144$ on $\\Lambda$CDM and $165$ on Einstein--de~Sitter.
+The even peaks are absent, as an oscillator driven by a constant potential and
+loaded with baryons predicts: the radiation-era driving that sets the peak
+heights is not yet in the source (\\textbf{A-3}). CAMB and CLASS are context,
+not a target (decision~\\textbf{S4c}).\\\\[2pt]
+\\textbf{Panel (b) --- both frames, from one solve.} The Newtonian and CDM
+spectra coincide to $3.5\\times10^{-14}$ at every multipole: a first-order
+change of frame moves only the dipole, and here it moves nothing at
+$\\ell\\ge2$.
 """
 +++
+
+# F9 — the angular spectrum with the acoustic peaks, in both frames
+
+**The standalone caption.** The spectrum this bundle computes from the 1+3
+covariant line of sight, for three backgrounds, in two frames.
+
+## What it shows
+
+| | EdS | ΛCDM | Planck |
+|---|---:|---:|---:|
+| first peak, ℓ | 165 | 144 | 189 |
+| largest frame gap, any ℓ | 1.3e-14 | 3.5e-14 | 1.1e-14 |
+
+The odd acoustic peaks are present and spaced by twice ℓ_A. The even peaks are
+absent: with no radiation-era driving the oscillation's zero point is set by
+baryon loading, which suppresses the rarefaction peaks to a few per cent of the
+compression peaks. That is approximation **A-3**, and it is upstream of the
+line of sight.
+
+## What it does not say
+
+* **It does not say the heights are right.** They are not, and CAMB's second
+  peak is the clearest place to see it.
+* **CAMB and CLASS are context and not a target** (**S4c**): they share a first
+  peak at ℓ ≈ 206 and agree with each other to 0.3 per cent.
+
+## Provenance
+
+Generated by `scripts/figure_f9_acoustic_spectrum.py` from
+`functions/spectra/line_of_sight.py` with
+`two_frame.covariant_coefficient_sets`; the shape is committed as
+`outputs/f9-acoustic-spectrum.csv`, stamped with a digest of the code that
+produced it. The scoring of the assembly is diagnostic **D44**.

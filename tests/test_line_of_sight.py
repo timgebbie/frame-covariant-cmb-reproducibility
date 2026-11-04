@@ -172,3 +172,26 @@ def test_the_kernels_come_from_relations_and_match_the_functions():
         assert np.max(np.abs(kern.jdd[i][inner] - numeric[inner])) < 1e-4
     assert kern.jdd[0][-1] == pytest.approx(2.0 / 15.0)
     assert kern.jdd[1][-1] == 0.0
+
+
+def test_the_slots_accumulated_to_eta_0_are_the_slots(env):
+    """The formation surface's partial integrals end where the integral does."""
+    with source("paper 1"):
+        k = MODES[1]
+        kern = kernel_set(ELLS, k, eta=env.eta, eta_0=float(env.background.eta_0))
+        s, damping = line_of_sight_inputs(k, coefficient_sets(k, env)[0], env)
+        slices = np.array([float(env.eta_star), float(env.background.eta_0)])
+        got = three_slots(kern, s, eta_slices=slices)
+        full = got.transfer(damping)
+        assert np.max(np.abs(got.partial_transfer(damping)[:, -1] - full)) \
+            < 1e-12 * np.max(np.abs(full))
+
+
+def test_the_covariant_sets_are_paper_1_and_leave_the_default_alone(env):
+    from functions.spectra.two_frame import covariant_coefficient_sets
+    held = coefficients.RANK_ONE_SOURCE
+    n_cov, _ = covariant_coefficient_sets(MODES[0], env)
+    assert coefficients.RANK_ONE_SOURCE == held
+    with source("paper 1"):
+        n_ref, _ = coefficient_sets(MODES[0], env)
+    assert np.array_equal(n_cov.a_b1, n_ref.a_b1)

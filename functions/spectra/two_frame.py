@@ -557,6 +557,27 @@ def bulk_source_primitives(k_com, env, coefficients) -> dict:
     )
 
 
+def covariant_coefficient_sets(
+    k_com: float, env: TwoFrameEnvironment
+) -> tuple[CoefficientSet, CoefficientSet]:
+    r"""`(newtonian, cdm)` with Paper 1's source signs.
+
+    The coefficients the frame-invariant line of sight is built from: the
+    rank-one gravitational source against the Thomson term as Paper 1's eq:B
+    carries it, and $a\mathcal B_0$ in $C_0$ with it. The module default stays
+    the antecedent's, which the routes that reproduce *Annals II* as printed
+    are built on; this is the one place the covariant figures ask for the
+    other, so the choice is made once and not at each call site.
+    """
+    from functions.spectra import coefficients as _c
+    held = _c.RANK_ONE_SOURCE
+    _c.RANK_ONE_SOURCE = "paper 1"
+    try:
+        return coefficient_sets(k_com, env)
+    finally:
+        _c.RANK_ONE_SOURCE = held
+
+
 def line_of_sight_inputs(
     k_com: float, coefficients: CoefficientSet, env: TwoFrameEnvironment,
 ) -> tuple[Sources, float]:
