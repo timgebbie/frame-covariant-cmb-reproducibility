@@ -112,6 +112,11 @@ DEFERRED: dict[str, tuple[str, str]] = {
     # different question entirely, and nothing in the deferral records what
     # else it would have measured.
     "D3  source terms against k": ("v1.5.0", "S45"),   # S-b, renumbered T-87/S45
+    # **F11, the PI's figure plan for v1.4.0 (2026-11-04).** F10 redrawn with
+    # the radiation era wired (A-3), as the lead figure; F10 and F9 keep their
+    # identifiers and move down by caption order. Deferred as data so that
+    # `check_deferrals` refuses v1.4.0 without it.
+    "F11 formation surface with the radiation era": ("v1.4.0", "PI 2026-11-04"),
     # **T-51 was here and is DISCHARGED**, fixed 2026-10-16 within hours
     # of being registered. It is removed rather than left with a stale
     # target --- which is the same rule F6 and F8 were removed under, and

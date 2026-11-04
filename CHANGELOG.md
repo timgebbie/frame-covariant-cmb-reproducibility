@@ -3,7 +3,26 @@
 All notable changes to this bundle are recorded here. The version policy is in
 `README.md` under *Version-control policy*.
 
+## [Unreleased] — v1.4.0 in preparation
+
+### Changed
+
+- `scripts/bump_release.py --open` follows the supplement's edition scheme: it
+  flips the tree's three labels and opens this section, and no longer copies,
+  renames or deletes the supplement, whose editions are declared on the
+  README's `Supplement:` line.
+
+### Planned
+
+- **F11**, the formation surface with the radiation era wired, as the lead
+  figure. F10 and F9 keep their identifiers and files and move down by their
+  captions' `order`. Registered as deferred to v1.4.0 in `run_all.py`, so the
+  release refuses to ship without it.
+
 ## [1.3.0] — 2026-11-04
+
+Tag `v1.3.0` on `0fd58a9`. Archive `frame-covariant-cmb-reproducibility-v1.3.0.zip`, 331 files, SHA-256
+`57b095c81a16c388d3cc4b722000216afa11fed61e02436b19a0e040e8f31db7`.
 
 ### Added
 

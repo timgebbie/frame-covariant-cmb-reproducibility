@@ -1,14 +1,13 @@
 # 1+3 covariant CMB anisotropies reproducibility bundle
 
-Version: **v1.3.0** — the frame-invariant line of sight. The line-of-sight
-integral is assembled from Paper 1's linear redshift source as a Sachs–Wolfe,
-a Doppler and an integrated slot, each invariant under a change of frame. The
-two frames give one $C_\ell$ to $4\times10^{-14}$ (**D44**), the slots sum back
-to the integral they rearrange (**D45**), and F9 and F10 are drawn from them.
-**Last release: v1.3.0** — 4 November 2026. The previous release, v1.2.0
-(tagged 2026-10-16), brought the full linear spectrum with the acoustic peaks
-and the Silk damping tail (F9) in both frames, the integral solution (102)
-carried with a generic 4-velocity, and acceptance criterion 5b.
+Version: **v1.4.0-dev** — the radiation era on the frame-invariant line of
+sight: the radiation-era potential and the driving it gives the oscillator
+(approximation **A-3**), whose test the supplement registers before the work.
+**Last release: v1.3.0** — 4 November 2026: the line-of-sight integral
+assembled from Paper 1's linear redshift source as a Sachs–Wolfe, a Doppler
+and an integrated slot, each invariant under a change of frame. The two frames
+give one $C_\ell$ to $4\times10^{-14}$ (**D44**), the slots sum back to the
+integral they rearrange (**D45**), and F9 and F10 are drawn from them.
 
 Supplement: **v1.3.33** — `SUPPLEMENTARY-MATERIAL-v1.3.33.tex`. **This is a
 separate version line from the one above and is declared separately on
@@ -650,7 +649,7 @@ findings that **change what the code computes**:
 The complete record — fifteen findings, together with the antecedent's deliberate
 approximations and the one lineage note — is in `provenance/`.
 
-## Current situation: v1.3.0
+## Current situation: v1.4.0-dev
 
 This bundle is an **independent Python reconstruction, from first 1+3 covariant
 principles, of the almost-Friedmann–Lemaître results of** T. Gebbie,
@@ -945,7 +944,7 @@ both from the repository root, where the path says which one you meant.
 
 ## Verification status
 
-**Released as v1.3.0; this tree is v1.3.0.** Every artefact carries a
+**Released as v1.3.0; this tree is v1.4.0-dev.** Every artefact carries a
 maturity rung and a release gates on the rung, not on an opinion that the work
 is done (**S27**); `provenance/RELEASE-STATUS-v1.md` carries them and is
 **generated and verified** — a claim whose module, object, test or harness
