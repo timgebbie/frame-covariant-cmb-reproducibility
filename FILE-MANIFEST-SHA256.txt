@@ -256,7 +256,7 @@ afd3c2f8ddbccca1661b4ec410c52ca60c4cdaf9a37e79a224dd978612d796c0  tables/paramet
 f602bd451e4ae7f24c82d67b9a1b2494a22418d3efa420f63918ae1bca75c39d  tables/scattering-expansion-layout-v1.3.5.tex
 3b382fea3f044a4b1078b575ecbcdbe98a5c5fbebe2ba77e385dde072399475f  tables/scattering-expansion-v1.3.0.csv
 c36e59323a07c0c571f5128855475b5ecc97b8d837a17b719c425fd392b475d2  tables/scattering-expansion-v1.3.0.tex
-6ce2d48bbe64e298cbfc147f01ccda76c762d6ecc46cc5e412a4451f925f61a3  tables/status-layout-v1.3.4.tex
+37e1d8cec6d0b1217d59a30c7cc82c65e7c759e48160680810800516a0809e48  tables/status-layout-v1.3.4.tex
 aa5cfef8ea27293d63665b9afcf5dc1d9ed15e8ea270c53719db0aeb053cbe4d  tables/translations-layout-v1.3.5.tex
 952ea41394e7ffcc09a332d33b3445951aaa536397920b8bf6f4b58c97973901  tables/translations-v1.0.0.csv
 1598f65558d3656fffceb68ebafe09643f62052aa0c2c6cb6a3eaba16a9ef346  tables/translations-v1.0.0.tex

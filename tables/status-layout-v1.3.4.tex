@@ -1,5 +1,6 @@
 % v1.3.4 read-only layout of the first table from the v1.3.3 master.
-% All original ten rows and five fields retained. See the integrity JSON.
+% The original ten rows and five fields, with one row added for the
+% assembly in frame-invariant slots (D44).
 \begingroup
 \footnotesize
 \renewcommand{\arraystretch}{1.2}
@@ -34,11 +35,13 @@
 \addlinespace[4pt]
 6 & the identity's $j_\ell'$ counterpart is absent from (102)\par\emph{Status:} measured, failing & \emph{Instrument:} analysis, \textbf{T-124}\par\emph{Does not establish:} that it moves the peak: it adds power \emph{below} it \\
 \addlinespace[4pt]
+6 & the assembly in frame-invariant slots, with Paper~1's source, gives one spectrum in both frames\par\emph{Status:} measured; holds & \emph{Instrument:} \textbf{D44}, frame residual $4\times10^{-14}$ in $C_\ell$; series on EdS ($165$, $495$; trough $360$), not on PLANCK (one maximum, $0.71\,\ell_A$)\par\emph{Does not establish:} the slot weights, until the sum-back closes \\
+\addlinespace[4pt]
 7 & the two routes to $C_\ell$ agree\par\emph{Status:} established & \emph{Instrument:} criterion 5b, $9.5\times10^{-6}$\par\emph{Does not establish:} the weight: both sides carry $e^{-\kappa}$, and A-1/A-2 are a factor of eighty apart across the plateau \\
 \addlinespace[4pt]
-7 & the first acoustic peak sits where a matched spectrum puts it\par\emph{Status:} measured, failing & \emph{Instrument:} \textbf{D24}, $0.635$ vs $0.757\,\ell_A$\par\emph{Does not establish:} its mechanism; and the two numbers use different peak estimators \\
+7 & the first acoustic peak sits where a matched spectrum puts it\par\emph{Status:} measured, failing & \emph{Instrument:} (102) as built, $266.6$ against the matched $206.0$, that is $0.9994$ vs $0.7723\,\ell_A$ at $\ell_A=266.750$ (\S\ref{sec:first-peak}); \textbf{D24}, $\kappa''$-suppressed, $0.6476\,\ell_A$, as a variant\par\emph{Does not establish:} its mechanism: the peak of (102) is not distinguished from $\ell_A$ within a peak-estimator width, a position without a driving phase behind it; and $266.6$ is the first interior maximum above $\ell=30$ where D24's is the global maximum \\
 \addlinespace[4pt]
-7 & the Sachs--Wolfe plateau is present\par\emph{Status:} measured, failing & \emph{Instrument:} figure~F9 (spectrum morphology); late-share diagnostic $0.0000$ on both backgrounds\par\emph{Does not establish:} the late-share test detects the missing late-time source, not the cause of the entire plateau shape \\
+7 & the Sachs--Wolfe plateau is present\par\emph{Status:} measured, failing & \emph{Instrument:} (102) as built: figure~F9 (spectrum morphology) and the late-share diagnostic, $0.0000$ on both backgrounds, as drawn before \texttt{c0d20f7}; both figures now draw the assembly of step~6\par\emph{Does not establish:} the late-share test detects the missing late-time source, not the cause of the entire plateau shape \\
 \addlinespace[4pt]
 \end{longtable}
 \endgroup
