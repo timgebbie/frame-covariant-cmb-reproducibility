@@ -1,5 +1,27 @@
 % Computational supplement to the associated paper.
 %
+% v1.3.27, 2026-11-04.  The ruling of 3 November (eq:paper1-source) carried
+% to every site that still read the rank-zero row as built.
+%   1  The row's right-hand side is fixed by the first frame condition,
+%      eq:c0-ruled; eq:c0-solved is kept as the row with zero on the right,
+%      unboxed.  The tau_0 = 0 reading of a zero right-hand side is withdrawn,
+%      and where it fails inside (89) is recorded as not located.
+%   2  The history of T-105, T-107 and the gamma reading is stated once, in
+%      sec:ell-zero-row.  The other sites point to it: the inventory rows for
+%      c5 and c8; Rank 0 and Status in Part I; Free streaming at l = 0;
+%      Established results; the Triage A note; and, in the frame-division
+%      appendix, the partner paragraph, the shift of (102), (89)'s l = 0 line
+%      and items 3 and 4 of its open list.
+%   3  The instruments follow.  c5's gamma checks assert again, since
+%      gamma = 0 is the first frame condition.  c8 gains C8h-C8k, which
+%      reproduce the rank-zero and gravitational columns of the table under
+%      eq:paper1-source from the frame table and show that the collapsed
+%      partition is neither necessary nor sufficient.
+%   4  The first-peak paragraph whose heading inverted its body ("the second
+%      arrival is withdrawn" over a body withdrawing the first) is rewritten.
+%   Headings rewritten here are short and object-centred, following the
+%   author's style profile v2.0; the sequential style audit begins next.
+%
 % v1.3.26, 2026-11-03.  Four repairs, none of them to an argument.
 %   1  The notation table reprinted from its corrected source: Phi_A and
 %      Phi_H named with their frame dependence (each shifts by (v' + H v)/k;
@@ -85,8 +107,9 @@
 %      are named, with exact k-independent margins.
 %   9  Two voice defects inside P1-T's declared sections.
 %
-% Build: latexmk -pdf SUPPLEMENTARY-MATERIAL-v1.3.26.tex  (only after locked
-% assets have passed hash checks). THIS FILE IS THE WHOLE DOCUMENT: the prose
+% Build: python3 scripts/build_supplement.py, never latexmk alone: the script
+% compiles twice, fails on any error and on an overhang above 35pt, and is
+% byte-reproducible (only after locked assets have passed hash checks). THIS FILE IS THE WHOLE DOCUMENT: the prose
 % carries no \input, and every former supplementary-materials/ fragment is
 % expanded inline between its own BEGIN/END provenance comments. The only
 % external files are generated assets -- tables/, tikz/, figures/, and the bib.
@@ -129,7 +152,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.3.26 --- 3 November 2026\\
+\date{Supplement v1.3.27 --- 4 November 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.3.0-dev}
 
 \begin{document}
@@ -387,8 +410,13 @@ comparison with the printed \emph{Annals II} expression
 \texttt{c4\_rank\_slot.py} & Conditional rank-two matching coefficients
 required under frame transformation; Paper~1's common-endpoint condition
 & A residual Thomson term is outside the simplified functional; no blanket invariance claim.\\[3pt]
-\texttt{c5\_monopole.py} & Monopole matching and dipole-shift comparison
-& \textbf{Superseded conclusion} (finding T-107); the measurements are retained, but its proposed monopole restoration double-counts a source. Read with C8.\\[3pt]
+\texttt{c5\_monopole.py} & Monopole matching and dipole-shift comparison;
+$\gamma=0$ is the first frame condition
+& T-107 superseded its conclusion on 21 October; read with
+\eqref{eq:paper1-source} its original reading stands again, since the
+restored row is the one Paper~1's source requires once the rank-one sign is
+corrected (\S\ref{sec:ell-zero-row}). The measurements are retained
+throughout.\\[3pt]
 \texttt{c6\_thomson.py} & Thomson contribution carried with visibility;
 differentiation of a coefficient versus its weight
 & Distinguishes the exact identity \(W\kappa'=\mathcal V\)
@@ -398,9 +426,12 @@ for the line-of-sight source
 & Separates \(W\)-weighted gravity and \(\mathcal V\)-weighted
 scattering; distinguishes legitimate from spurious opacity-rate terms.\\[3pt]
 \texttt{c8\_\allowbreak{}rank0\_\allowbreak{}partner.py} & Complete rank-zero integrand
-partner, correcting the C5 interpretation
-& Includes the \(-C_1'\) partner and records the double-counting
-negative control; does not itself demonstrate the correct spectrum.\\[3pt]
+partner in the collapsed bracket; since 4 November, C8h--C8k score the four
+configurations of \eqref{eq:paper1-source} against all three frame conditions
+& Its zero for the row without $a\mathcal B_0$ is two errors compensating, and
+the configuration satisfying all three conditions does not vanish in its
+partition (\S\ref{sec:ell-zero-row}); does not itself demonstrate the correct
+spectrum.\\[3pt]
 \texttt{c9\_\allowbreak{}byparts\_\allowbreak{}admissibility.py} & Added 2026-10-26. The
 condition under which the integration by parts of C6 is admissible at all.
 \(W'C_1\) and \(WC_1'\) sum to the total derivative
@@ -1664,45 +1695,27 @@ real; settling it needs \S2.5's $O(\epsilon\epsilon_H)$ bookkeeping read against
 each term of (105), not a judgement about which is negligible. Logged as
 open, not filed as a finding against the paper.
 
-\paragraph{Rank 0: not needed. \textnormal{Un-withdrawn 2026-10-22:
-the claim stands, the reason does not.}} This paragraph read:
-\emph{``$\dot{\mathcal B}_0$ is not required by (102) at all --- $C_0$ carries
-$\mathcal B_2$, not $\mathcal B_0$.''} It was withdrawn on 2026-10-21 on the
-authority of T-105, which held that (89)'s
-$a\mathcal B_0\delta_{\ell0}$ row had been dropped in error. T-105 has
-since fallen, three times over, and the claim above is restored with a
-different reason.
-
-$\tau_0\equiv0$ is a \emph{constraint}, not initial data: $T$ is \emph{defined}
-as the monopole of $T(x,e)$, so differentiating $\int A_0\,\mathrm{d}\eta'=0$ puts
-zero on the right of (89)'s $\ell=0$ row --- $\mathcal B_0$ is a
-functional of the solution and not an external forcing. Solving that row with
-$\alpha_0$ in place of $\alpha_2$ and $h_0''(0)=-\tfrac13$ gives
-$C_0=-\tfrac13a\mathcal B_2$ with \emph{no} $\mathcal B_0$ in it, and the
-factor against (90)'s printed $-\tfrac52a\mathcal B_2$ comes out as
-$\alpha_2/\alpha_0=\tfrac{15}{2}$ exactly --- finding T-104, which is
-\emph{cleaner} standing alone. Independently, $a\mathcal B_0=-(k/3)\tau_1$ is
-an identity and $-C_1'$ carries $+(k/3)\tau_1$ already, so restoring
-$a\mathcal B_0$ to $C_0$ counts the monopole source twice. The measurement
-agrees: criterion 5b doubles, to 98.5\%, under the restoration --- finding
-T-107.
-
-So $\mathcal B_0$'s \emph{content} is required and its \emph{row} is
-correctly empty, and both statements hold at once. The released code has
-carried this since 2026-10-21: \texttt{MONOPOLE\_ROW = "corrected"} is
-$C_0=-\tfrac13a\mathcal B_2$, and the restoration is kept only as the
-regenerable control that refuted it.
+\paragraph{Rank 0.} (102) does not differentiate $C_0$, so
+$\dot{\mathcal B}_0$ is not required. $\mathcal B_0$ itself is. With
+$\alpha_0$ in place of $\alpha_2$ and $h_0''(0)=-\tfrac13$, (89)'s $\ell=0$
+row gives $C_0=-\tfrac13a\mathcal B_2$ when its right-hand side is zero, and
+the factor against (90)'s printed $-\tfrac52a\mathcal B_2$ is
+$\alpha_2/\alpha_0=\tfrac{15}{2}$ exactly (T-104). The first frame condition
+of \eqref{eq:frame-conditions} puts $-a\mathcal B_0$ on the right instead,
+which is the row of Paper~1's source, \eqref{eq:c0-ruled}, and it works only
+together with Paper~1's rank-one sign. \S\ref{sec:ell-zero-row} derives both
+rows and records once how this paragraph's claim was withdrawn, restored and
+qualified between 21 October and 3 November (T-105, T-107). The released
+default builds \eqref{eq:c0-solved} with the rank-one source as built;
+\texttt{RANK\_ONE\_SOURCE = "paper 1"} builds \eqref{eq:c0-ruled} with the
+sign corrected.
 
 \paragraph{Status.} The derivation is complete for what the integral
-solution needs. What remains open is $(\star)$. The
-$a\mathcal B_0\delta_{\ell0}$ row of (89) is not open and is
-not dropped in error --- it is correctly absent, for the reason above.
-$\Delta C_0=+kv/3$ is non-zero and its partner is cross-coefficient, in
-$-C_1'$ rather than in $C_2$, which is why the rank-0 partner check
-\texttt{c8} scores the bracket and the single-coefficient residual $\gamma$
-cannot: M15. A $\gamma$ driven to zero by adding a term is a fit, not
-a gate; the $\ell=1$ and $\ell=2$ rows are controls because they come out at
-unity without adjustment.
+solution needs. What remains open is $(\star)$, and, from
+\S\ref{sec:ell-zero-row}, where the reading of $\tau_0\equiv0$ as a zero
+right-hand side fails within the derivation of (89). The $\ell=1$ and
+$\ell=2$ rows are controls because they come out at unity without
+adjustment.
 
 \section{Frames and specialisation}
 \label{sec:frames-specialisation}
@@ -2563,37 +2576,31 @@ $0.9795$ printed in editions before that date therefore compared two epochs.
 Same-epoch the ratio is $266.6/266.750=0.9994$, and $266.6/266.7341=0.9995$ on
 the coarser recombination grid, so the reading below holds on either grid.
 
-\paragraph{The released first peak is not distinguished from the bare
-sound-horizon position, and that is a result rather than a requote.} $\ell_A$
-is the multipole at which $kr_s=\pi$ projects: the first extremum of an
-undriven, delta-deposited, unsmoothed monopole. The released configuration
-lands on it to six parts in ten thousand --- inside any peak-estimator width,
-so what can be said is that the two are not separated --- while the matched
-external spectrum sits $23\%$ below it. \textbf{The released assembly supplies
-the undriven projection of $\cos(kr_s)$ and supplies neither the
-radiation-driving phase shift nor the finite-width projection phase that
-together carry a matched spectrum to $0.7723$.} \S\ref{sec:oscillator} reaches
-the same place from the other end, on different evidence: a criterion asking
-for exact $\cos(kr_s)$ accepts an undriven oscillator and rejects a driven
-one, and the released configuration passes it. Two arrivals, one conclusion,
-and neither was built from the other.
+\paragraph{The released first peak.} $\ell_A$ is the multipole at which
+$kr_s=\pi$ projects: the first extremum of an undriven, delta-deposited,
+unsmoothed monopole. The released configuration lands on it to six parts in
+ten thousand, inside any peak-estimator width, so the two are not separated,
+while the matched external spectrum sits $23\%$ below it. Editions to
+2 November read this as the released assembly supplying the undriven
+projection of $\cos(kr_s)$ and neither the radiation-driving phase shift nor
+the finite-width projection phase that together carry a matched spectrum to
+$0.7723$, and found the same conclusion in \S\ref{sec:oscillator}, where a
+criterion asking for exact $\cos(kr_s)$ accepts an undriven oscillator and
+rejects a driven one.
 
-\paragraph{Read with \S\ref{sec:w-form} as corrected on 3 November, the
-second arrival is withdrawn and the first stands.} The arrival from
-\S\ref{sec:oscillator} concerns the source: the oscillator tracks
-$\cos(kr_s)$ in exact phase, as an undriven oscillator must, and
-\S\ref{sec:w-form} leaves that untouched. The arrival from the spectrum does
-not survive. In the frame the released figure is drawn in, the spectrum's
-single maximum is the envelope of a term carrying the frame velocity ---
-$\kappa'\hat v_B$ in the Sachs--Wolfe slot and $\mathcal V\kappa''\hat v_B$ in
-the bulk, with $\hat v_B$ separated from the $C_2$ that cancels its frame
-dependence --- and not a projected extremum of the source. \textbf{So
-$0.9994\,\ell_A$ is a measured position without a mechanism behind it}: it is
-not distinguished from $\ell_A$, and that is no longer evidence that the
-released assembly projects the undriven $\cos(kr_s)$. The phases tabulated
-below are measured positions and stay as measurements; reading them as phases
-of one oscillation needs an assembly that carries the oscillation into the
-spectrum.
+Read with \S\ref{sec:w-form}, the oscillator's evidence stands and the
+spectrum's does not. The oscillator concerns the source, which tracks
+$\cos(kr_s)$ in exact phase as an undriven oscillator must, and
+\S\ref{sec:w-form} leaves that untouched. In the frame the released figure is
+drawn in, however, the spectrum's single maximum is the envelope of a term
+carrying the frame velocity, $\kappa'\hat v_B$ in the Sachs--Wolfe slot and
+$\mathcal V\kappa''\hat v_B$ in the bulk, with $\hat v_B$ separated from the
+$C_2$ that cancels its frame dependence, and not a projected extremum of the
+source. So $0.9994\,\ell_A$ is a measured position without a mechanism behind
+it, and its closeness to $\ell_A$ is no longer evidence that the released
+assembly projects the undriven $\cos(kr_s)$. The phases tabulated below are
+measured positions and stay as measurements; reading them as phases of one
+oscillation needs an assembly that carries the oscillation into the spectrum.
 
 \paragraph{Every ratio in this document is now quoted against one acoustic
 scale, and the conversion note that stood here is withdrawn.} Editions
@@ -2809,7 +2816,7 @@ about, and the reason the Appendix~F chain is the acceptance spine rather than
 a smoke test. Decision S9.
 
 % ===========================================================================
-\subsection{The $\ell=0$ row is the rank-zero source, seen from the other side}
+\subsection{Free streaming at $\ell=0$}
 
 Continued to $\ell=0$, \eqref{eq:F1} has $w_0=\tfrac13$ and reads
 \begin{equation}
@@ -2825,13 +2832,13 @@ The two are one statement, and that is why $\tau_0\equiv0$ is a
 constraint rather than initial data. $T$ is \emph{defined} as the monopole of
 $T(x,e)$, so the $\ell=0$ equation does not evolve a free quantity --- it
 fixes $(\ln T)^{\textstyle\cdot}$, and $\mathcal B_0$ is a functional of the
-solution rather than an external forcing. Restoring $a\mathcal B_0$ to
-$C_0$ as though it were a source therefore counts it twice, which is finding
-T-107 and is settled at \S\ref{sec:ell-zero-row}.
-
-\emph{This connection is worth drawing because the two appear in different
-sections and look like different objects.} They are the same row of the same
-hierarchy.
+solution rather than an external forcing. Whether the matching row of (89) is
+then empty is a separate question, and the first frame condition answers it
+the other way: with Paper~1's rank-one sign the row carries $a\mathcal B_0$,
+\eqref{eq:c0-ruled}, and \S\ref{sec:ell-zero-row} records why T-107 found the
+opposite with the sign as built. The free-streaming $\ell=0$ equation and the
+rank-zero source appear in different sections and look like different
+objects; they are the same row of the same hierarchy.
 
 % ===========================================================================
 \subsection{The closed form, and why the kernel is a spherical Bessel function}
@@ -3862,9 +3869,9 @@ triage tables exist to separate.
 \subsection{The $\ell=0$ matching row}
 \label{sec:ell-zero-row}
 
-\paragraph{The rows of (89) are Taylor coefficients of the kernel at the
-origin, and one of the three uses the wrong rank's normalisation.}
-With $h_\ell=\alpha_\ell j_\ell$ and
+\paragraph{The rows of (89).} The rows of (89) are Taylor coefficients of
+the kernel at the origin, and the $\ell=0$ row carries the rank-two
+normalisation. With $h_\ell=\alpha_\ell j_\ell$ and
 $\alpha_\ell=(2\ell+1)/\beta_\ell$ --- this bundle's own
 \texttt{functions/harmonics/weights.py}, where
 $\beta_\ell=\ell!/(2\ell-1)!!$ gives $\beta_0=\beta_1=1$ and
@@ -3916,63 +3923,74 @@ neither comes from (89). (89) is the \emph{claim} about what the rows hold and
 the kernel is the \emph{object}. Two of the three rows reproduce (89)'s entry
 exactly from the object, which validates the route; the third does not.
 
-\paragraph{The right-hand side of the $\ell=0$ row is zero, and that is forced
-by a definition.} $\tau_0\equiv0$ is a constraint, not initial data:
-$T(x)$ is defined as the monopole of $T(x,e)$, so differentiating
-$\int A_0\,\mathrm d\eta'=0$ puts zero on the right of the row.
-$\mathcal B_0$ is a functional of the solution, not an external forcing.
-Appendix~\ref{sec:frame-division} states this and states it first ---
-\emph{``(89)'s $\ell=0$ line is not mis-sourced \ldots $C_0$ is correctly
-derived''}. With $\alpha_0$ on the left and zero on the right,
+\paragraph{The right-hand side.} With $\alpha_0$ on the left the $\ell=0$
+row reads
 \begin{equation}
-  C_0 + k^2C_2\,h_0''(0) = 0 ,
+  C_0 + k^2C_2\,h_0''(0) = r_0 ,
   \qquad h_0''(0)=-\tfrac13 ,
+  \label{eq:ell0-row}
 \end{equation}
-and with $C_2=-k^{-2}a\mathcal B_2$ this solves to
+where $r_0$ is the rank-zero source on the right and
+$C_2=-k^{-2}a\mathcal B_2$. Two values of $r_0$ have been argued, and the
+first frame condition decides between them. The constraint
+$\tau_0\equiv0$, which holds because $T(x)$ is defined as the monopole of
+$T(x,e)$, was read as putting zero on the right, with $\mathcal B_0$ a
+functional of the solution rather than an external forcing;
+Appendix~\ref{sec:frame-division} states that reading. With $r_0=0$,
 \begin{equation}
-  \boxed{\;C_0 \;=\; -\tfrac13\,a\mathcal B_2\;}
+  C_0=-\tfrac13\,a\mathcal B_2
   \label{eq:c0-solved}
 \end{equation}
-in place of (90)'s $C_0=-\tfrac52a\mathcal B_2$. One correction, and
-the ratio against the printed row is $\tfrac52\big/\tfrac13=\tfrac{15}2$
-exactly --- $\alpha_2/\alpha_0$, with no $\mathcal B_0$ anywhere.
-Instrument \texttt{c5\_monopole.py}, under \texttt{tests/frame/}, which carries
+in place of (90)'s $C_0=-\tfrac52a\mathcal B_2$, and the ratio against the
+printed row is $\tfrac52\big/\tfrac13=\tfrac{15}2$ exactly, which is
+$\alpha_2/\alpha_0$ (T-104). The rank-zero condition of
+\eqref{eq:frame-conditions} fixes $r_0$ instead. With
+$C_0=-\tfrac13a\mathcal B_2+c\,a\mathcal B_0$ and the frame table's
+$\Delta(a\mathcal B_2)=-kv$ and $\Delta(a\mathcal B_0)=+\tfrac13kv$, the shift
+is $\Delta C_0=(1+c)\tfrac{kv}{3}$, so $\Delta C_0=0$ requires $c=-1$, that is
+$r_0=-a\mathcal B_0$ and
+\begin{equation}
+  C_0=-\tfrac13\,a\mathcal B_2-a\mathcal B_0
+     =-\tfrac13\,a\mathcal B_2+\tfrac k3\tau_1 ,
+  \label{eq:c0-ruled}
+\end{equation}
+the row Paper~1's source \eqref{eq:paper1-source} carries. The normalisation
+correction $\alpha_2\to\alpha_0$ is common to both rows; what the frame
+condition changes is the right-hand side. The reading of $\tau_0\equiv0$ as a
+zero right-hand side is withdrawn on this ground, and where it fails within
+the derivation of (89) is not located here. The instrument
+\texttt{c5\_monopole.py}, under \texttt{tests/frame/}, scores
+$\gamma=\Delta C_0/(k^2\Delta C_2)$ for both rows and for the printed one, with
 a negative control on each alternative.\footnote{The Taylor coefficients are
 verified independently, but the $\ell=0$ matching rule has not been checked
 against the published Annals~II Eq.~(89) in the journal. Consequently
 $C_0=-a\mathcal B_2/3$ is conditional on that rule and is not yet an
 independently certified correction of the published Eq.~(90).}
 
-\paragraph{Where $\mathcal B_0$ does enter, and why restoring it to $C_0$ is
-double counting. \textnormal{Correction, 2026-10-22.}} An earlier
-draft of this subsection restored an $a\mathcal B_0\delta_{\ell0}$ row,
-printed $C_0=-\tfrac13a\mathcal B_2-a\mathcal B_0$, and recorded it as
-T-105. That is withdrawn. By identity
+\paragraph{$\mathcal B_0$ inside the bracket.} By identity
 \begin{equation}
   a\mathcal B_0=-\tfrac{k}{3}\,\tau_1 ,
 \end{equation}
 derived in index algebra and controlled on rank~1, where the identical chain
-returns $a\mathcal B_1=k(\delta T+\Phi_A)$ --- the released
-\texttt{coefficients.py} line. And (107) carries
-$-C_1'=(\kappa'\hat v_B)'+(a\mathcal B_1)'/k$ with
-$(a\mathcal B_1)'/k=(\Phi_A'-\Phi_H')+\tfrac k3\tau_1$, so
-the monopole source is already inside the bracket, in $-C_1'$.
-\emph{That is the expansion-terms-off form of (106)}:
+returns $a\mathcal B_1=k(\delta T+\Phi_A)$, the line \texttt{coefficients.py}
+builds. (107) carries $-C_1'=(\kappa'\hat v_B)'+(a\mathcal B_1)'/k$ with
+$(a\mathcal B_1)'/k=(\Phi_A'-\Phi_H')+\tfrac k3\tau_1$, so with the rank-one
+source as built a copy of $\tfrac k3\tau_1$ already sits inside the bracket,
+in $-C_1'$. That is the expansion-terms-off form of (106):
 \texttt{coefficients.py} builds $(a\mathcal B_1)'$ with
 $-a\mathcal H\,\delta T-3a\mathcal H\,\Phi_A$ in addition, behind
 \texttt{A\_B1\_PRIME\_EXPANSION\_TERMS}. Whether they belong was finding
-T-67; it is \textbf{refuted by measurement, 2026-10-25}. Enabling the control
-changes $(a\mathcal B_1)'$ by $42\%$ --- from $-3.805197\times10^{1}$ to
-$-5.396853\times10^{1}$ --- but changes both frames \emph{identically}, so
-$\Delta[(a\mathcal B_1)']$ is unaltered to the last bit. The terms are
+T-67, refuted by measurement on 25 October. Enabling the control changes
+$(a\mathcal B_1)'$ by $42\%$, from $-3.805197\times10^{1}$ to
+$-5.396853\times10^{1}$, but changes both frames identically, so
+$\Delta[(a\mathcal B_1)']$ is unaltered to the last bit and the terms are
 frame-neutral in the difference. Scored directly at the coefficient against
 the required $\mathrm d[-\mathcal Hv-k\Phi_A]/\mathrm d\eta$, the
-transformation already closes without them: machine zero on
-Einstein--de~Sitter, ratio $0.9725$ on $\Lambda$CDM and $0.9309$ on
-\texttt{PLANCK\_MODEL}.
+transformation closes without them: machine zero on Einstein--de~Sitter,
+ratio $0.9725$ on $\Lambda$CDM and $0.9309$ on \texttt{PLANCK\_MODEL}.
 
-\emph{The Einstein--de~Sitter row of that comparison is a null, not a
-confirmation.} On $K=0$ dust $\mathcal H=2/\eta$,
+The Einstein--de~Sitter row of that comparison is a null, not a
+confirmation. On $K=0$ dust $\mathcal H=2/\eta$,
 and the regular branch of $v'+\mathcal Hv=-k\Phi_A$ with $\Phi_A$ constant is
 $v=-k\Phi_A\eta/3$, so
 \begin{equation}
@@ -3985,60 +4003,68 @@ $v=-k\Phi_A\eta/3$, so
 \end{equation}
 $v$ grows by $\sqrt{1+z_*}$ between last scattering and today and $\mathcal H$
 falls by the same factor, exactly, so their product does not move at all.
-\textbf{Both sides of the Einstein--de~Sitter row are identically zero before
-anything is computed}: it is a null control, it passes as a null control must,
-and it carries no evidence about the terms. \emph{The two $\Lambda$ rows carry
-whatever content that comparison has.} The informative Einstein--de~Sitter
-statement is the one at the coefficient rather than at its derivative, where
-\eqref{eq:eds-boost-constant} predicts $-\tfrac13k\Phi_A$ outright; that row
-is \textbf{Q17} of \S\ref{sec:open-questions}. They do not affect the
-$\tfrac k3\tau_1$
-identification used here, which is why the reduced form is quoted.
-Adding it to $C_0$ counts it twice, and criterion 5b doubles at $98.5\%$.
-Finding T-107 replaces T-105.
+Both sides of the Einstein--de~Sitter row are therefore identically zero
+before anything is computed. It passes as a null control must and carries no
+evidence about the terms, and the two $\Lambda$ rows carry whatever content the
+comparison has. The informative Einstein--de~Sitter statement is the one at
+the coefficient rather than at its derivative, where
+\eqref{eq:eds-boost-constant} predicts $-\tfrac13k\Phi_A$ outright; that row is
+\textbf{Q17} of \S\ref{sec:open-questions}. None of this affects the
+identification of $\tfrac k3\tau_1$, which is why the reduced form is quoted.
 
-\paragraph{Read with \S\ref{sec:w-form} as of 3 November: T-107 is right
-about T-105 alone, and the row is required together with the rank-one sign.}
-The double counting measured above is real for the coefficients as built,
-where $a\mathcal B_1=+k(\delta T+\Phi_A)$ puts $+\tfrac k3\tau_1$ inside
-$-C_1'$. Paper~1's source \eqref{eq:paper1-source} carries the rank-one
-gravitational term with the opposite sign; $-C_1'$ then carries
-$-\tfrac k3\tau_1$ and the restored row cancels it rather than doubling it.
-\textbf{With both, the rank-zero coefficient is the bracket
-$C_0+\tfrac k3\tau_1$, frame-invariant to $2.1\times10^{-14}$ (\textbf{D42}),
-and the conclusion of the next paragraph --- that $\Delta C_0\neq0$ is the
-correct outcome --- is withdrawn}: $\Delta C_0=0$ is the first frame
-condition. Its algebra stands as a statement about $C_0$ alone.
+\paragraph{T-105 and T-107.} A draft of this subsection on 22 October carried
+$a\mathcal B_0$ in the row, as in \eqref{eq:c0-ruled}, and was recorded as
+T-105. With the rank-one source as built the restored row adds a second copy
+of $\tfrac k3\tau_1$ to the one $-C_1'$ already holds, and criterion~5b
+doubles, to $98.5\%$ (T-107). T-105 was withdrawn and \eqref{eq:c0-solved}
+adopted. Read with \eqref{eq:paper1-source}, the measurement stands and the
+conclusion drawn from it does not. The cancellation of $\Delta C_0$ against
+$\Delta[\tfrac k3\tau_1]$ in $-C_1'$, which \texttt{c8} scores in the collapsed
+bracket, is two errors compensating: $\Delta C_0=+\tfrac{kv}{3}$ because the
+row lacks $a\mathcal B_0$, against the $-\tfrac{kv}{3}$ that the as-built sign
+puts in $-C_1'$, which is part of the gravitational condition failing by
+$-2v'/k$. Paper~1's source corrects both. Its rank-one gravitational term has
+the opposite sign, so $-C_1'$ carries $-\tfrac k3\tau_1$ and the row's
+$+\tfrac k3\tau_1$ cancels it rather than doubling it. The rank-zero
+coefficient is then the bracket $C_0+\tfrac k3\tau_1$, frame-invariant to
+$2.1\times10^{-14}$ (\textbf{D42}). The table of \S\ref{sec:w-form} shows that
+neither correction works alone, and C8h--C8k in \texttt{c8} reproduce its
+rank-zero and gravitational columns from the frame table. So T-107 refutes the
+restoration alone, and the row is required together with the rank-one sign.
 
-\paragraph{So $\Delta C_0\neq0$, and that is the correct outcome.} Under
-\eqref{eq:c0-solved}, with Appendix~\ref{sec:frame-division}'s own
-$\Delta(a\mathcal B_2)=-kv$ and $\Delta C_2=v/k$,
+\paragraph{The ratio $\gamma$.} Under \eqref{eq:c0-solved}, with
+Appendix~\ref{sec:frame-division}'s $\Delta(a\mathcal B_2)=-kv$ and
+$\Delta C_2=v/k$,
 \begin{equation}
   \Delta C_0=-\tfrac13\Delta(a\mathcal B_2)=+\tfrac{kv}{3},
   \qquad
-  \gamma\equiv\frac{\Delta C_0}{k^2\Delta C_2}=\tfrac13 .
+  \gamma\equiv\frac{\Delta C_0}{k^2\Delta C_2}=\tfrac13 ,
 \end{equation}
-A non-zero $\gamma$ is the signature that $\Delta C_0$'s partner is
-cross-coefficient, sitting in $-C_1'$ rather than in $C_2$. A $\gamma$ of
-zero would say the partner was in $C_2$, which it is not. The withdrawn draft
-reached $\gamma=0$ by \emph{adding a term}, and a gate that can be driven to
-zero by adding a term is a fit rather than a gate --- which is M15,
-\emph{a gate built from one coefficient cannot see a cancellation distributed
-across the bracket}. \texttt{c8\_\allowbreak{}rank0\_\allowbreak{}partner.py} scores the whole rank-0
-content of the bracket and is the gate for this row;
-Appendix~\ref{sec:frame-division}'s questions~3 and~4 close with c8 or
-not at all. Its questions~1 and~2 are settled by T-66 and by
-\S\ref{sec:w-form} respectively.
+and under \eqref{eq:c0-ruled} $\gamma=0$. Since $\Delta C_2\neq0$, $\gamma=0$
+is the first condition of \eqref{eq:frame-conditions}. Between 22 October and
+2 November this document read a non-zero $\gamma$ as the sign of a partner of
+$\Delta C_0$ in $-C_1'$, and read a $\gamma$ driven to zero by adding a term as
+a fit rather than a gate (M15: a gate built from one coefficient cannot see a
+cancellation distributed across the bracket). Both readings are withdrawn. The
+term added is Paper~1's own; the partner is the $\tfrac k3\tau_1$ that the
+as-built sign puts in $-C_1'$; and M15 holds for the collapsed bracket and not
+for the identity, whose conditions are slot by slot. \texttt{c5} scores
+$\gamma$ and asserts it again. The gate for this row is the first condition,
+scored in C8j and on the built coefficients. It closes the third item of the
+open list in Appendix~\ref{sec:frame-division}: $C_0$ belongs in the integrand,
+as \eqref{eq:c0-ruled}. The fourth item, the residual left when $C_0$ is
+removed, is the gravitational condition failing under the as-built sign. The
+first and second items are settled by T-66 and by \S\ref{sec:w-form}.
 
-\paragraph{One thing \eqref{eq:c0-solved} does not disturb.} Appendix
-\ref{sec:frame-division} excludes a comoving/physical or amplitude/potential
-mismatch by measuring $C_0/(k^2C_2)$ as a background-independent and
-$k$-independent rational. That argument holds under
-\eqref{eq:c0-solved} unchanged --- the ratio is still a pure rational, now
-$\tfrac13$ rather than $\tfrac52$ --- because what it rests on is that $C_0$
-and $C_2$ divide one $a\mathcal B_2$. The measurement was right and
-what it showed was internal consistency, which is not correctness. It is
-the same reading the bundle gave T-82 and T-85, applied to itself.
+\paragraph{The ratio $C_0/(k^2C_2)$.} Appendix~\ref{sec:frame-division}
+excludes a comoving/physical or amplitude/potential mismatch by measuring
+$C_0/(k^2C_2)$ as a background-independent and $k$-independent rational. Under
+\eqref{eq:c0-solved} the ratio is still a pure rational, $\tfrac13$ in place
+of $\tfrac52$, because $C_0$ and $C_2$ divide one $a\mathcal B_2$. Under
+\eqref{eq:c0-ruled} this holds for the $a\mathcal B_2$ part of $C_0$, and the
+$\tfrac k3\tau_1$ part is a separate source. The measurement was right, and what
+it showed was internal consistency, which is not correctness: the reading the
+bundle gave T-82 and T-85, applied to itself.
 
 % ===========================================================================
 \subsection{The $\kappa'$ ledger}
@@ -4127,13 +4153,17 @@ at $99.8$--$109.8\%$ of $|C_1'|$; that \eqref{eq:w-form} follows from
 \eqref{eq:transport} by one multiplication and is the assembly in which none
 of the four can be made, without being different physics; that (89)'s
 $\ell=0$ row carries $\alpha_2$ where $\alpha_0$ belongs, with the $\ell=1$ and
-$\ell=2$ rows as unadjusted controls; that the row's right-hand side is zero by
-the $\tau_0\equiv0$ constraint, giving \eqref{eq:c0-solved}; that
-$a\mathcal B_0=-\tfrac k3\tau_1$ is already carried in $-C_1'$, so restoring it
-to $C_0$ double counts; and that $\mathcal S_2$ is a Triage~C site and cannot
-carry a frame gap at linear order.
+$\ell=2$ rows as unadjusted controls; that the first frame condition puts
+$-a\mathcal B_0$ on the row's right-hand side, giving \eqref{eq:c0-ruled},
+while with the rank-one source as built the restoration alone double counts
+(T-107), so the row is required together with Paper~1's rank-one sign
+(\S\ref{sec:ell-zero-row}); and that $\mathcal S_2$ is a Triage~C site and
+cannot carry a frame gap at linear order.
 
-Ungated --- Part~I, \S\ref{sec:asserted-not-gated}. That \eqref{eq:w-form} closes the frame gap. It
+Ungated --- Part~I, \S\ref{sec:asserted-not-gated}. That \eqref{eq:w-form}
+closes the frame gap. With Paper~1's source the slots of
+\eqref{eq:assembly-invariant} are each frame-invariant, and the measurement of
+that is registration~(c) of \S\ref{sec:w-form}, scored with D44. It
 satisfies the ledger by construction and no setting of
 \texttt{integral\_solution}'s seven controls reaches it --- each redistributes
 weights while leaving $\kappa'$ inside $C_1$ --- but that is an argument from
@@ -4518,20 +4548,17 @@ The additive $\kappa'\tau_0$ route & \textbf{T-79} & \textsc{resolved, closed} \
 \end{tabularx}
 \end{center}
 
-One row was withdrawn from this table, 2026-10-23. It read
-\emph{``$C_0$'s boost behaviour with $\mathcal B_0$ restored''}, graded
-\textsc{machine zero} on T-77 and \texttt{c5\_monopole.py}.
-\emph{The measurement stands} --- $a\Delta\mathcal B_0=\tfrac13kv=\tfrac13k^2
-\Delta C_2$ exactly --- \emph{but the configuration it was measured in does
-not}. T-105, which restored an $a\mathcal B_0\delta_{\ell0}$ row to
-$C_0$, is withdrawn by T-107: $a\mathcal B_0=-\tfrac k3\tau_1$ is
-already carried inside $-C_1'$, so restoring it counts the monopole source
-twice and criterion 5b doubles at $98.5\%$. Under the corrected row
-$C_0=-\tfrac13a\mathcal B_2$ and $\Delta C_0=+\tfrac{kv}{3}\neq0$, so this is
-not a site the discrepancy cannot come from. Its partner is
-cross-coefficient and \texttt{c8\_\allowbreak{}rank0\_\allowbreak{}partner.py} is the gate ---
-M15: a gate built from one coefficient cannot see a cancellation
-distributed across the bracket.
+One row was withdrawn from this table on 23 October: \emph{$C_0$'s boost
+behaviour with $\mathcal B_0$ restored}, graded \textsc{machine zero} on T-77
+and \texttt{c5\_monopole.py}. Its measurement,
+$a\Delta\mathcal B_0=\tfrac13kv=\tfrac13k^2\Delta C_2$ exactly, stands, and the
+row stays out of this table for a sharper reason than the one given then. As
+built, $C_0$ is \eqref{eq:c0-solved} and $\Delta C_0=+\tfrac{kv}{3}$, which
+fails the first frame condition, so $C_0$ is a site the discrepancy does come
+from. The configuration graded machine zero is \eqref{eq:c0-ruled}, the row
+Paper~1's source requires with the rank-one sign corrected: a repair, not a
+site of the released calculation. \S\ref{sec:ell-zero-row} records why T-107
+withdrew it with the sign as built.
 
 \noindent
 Nothing in this table can be moved by a measurement. A result that
@@ -6226,34 +6253,35 @@ With $\Delta X\equiv X^{(u)}-X^{(n)}$: $\Delta(a\mathcal B_1)
 \end{equation}
 all three in one $v$ and one $k$.
 
-The first entry is superseded, and so is the title of the subsection
-that follows. \textnormal{Corrected 2026-10-23, findings T-104 and T-107.}
-$\Delta C_0=+\tfrac52kv$ is the shift of (90)'s \emph{printed} $C_0$. (89)'s
-$\delta_{\ell0}$ row carries $\alpha_2$ where $\alpha_0$ belongs --- a factor
-$\tfrac{15}2$, finding T-104 --- and solved at its own normalisation
-the row gives $C_0=-\tfrac13a\mathcal B_2$, whence
+The first entry is superseded (T-104, 23 October). $\Delta C_0=+\tfrac52kv$
+is the shift of (90)'s printed $C_0$. (89)'s $\delta_{\ell0}$ row carries
+$\alpha_2$ where $\alpha_0$ belongs, a factor $\tfrac{15}2$, and solved at its
+own normalisation with zero on the right the row gives
+$C_0=-\tfrac13a\mathcal B_2$, whence
 \begin{equation}
-  \Delta C_0=+\tfrac{kv}{3}\qquad\text{(corrected)},
+  \Delta C_0=+\tfrac{kv}{3}\qquad\text{for \eqref{eq:c0-solved}},
   \label{eq:dc0-corrected}
 \end{equation}
-smaller by $\tfrac{15}2$. Every scaling below survives with its
+smaller by $\tfrac{15}2$, and $\Delta C_0=0$ for the row of Paper~1's source,
+\eqref{eq:c0-ruled}. Every scaling below survives with its
 prefactor divided by $\tfrac{15}2$: \eqref{eq:no-partner} becomes
 $\tfrac16(k/\mathcal H)^2$ in place of $\tfrac54(k/\mathcal H)^2$, and the
 conclusion that the ratio grows as $(k/\mathcal H)^2$ is unchanged, because
 $\Delta C_0$ and $\tfrac1k2v''$ are compared as powers of $k/\mathcal H$ and a
 constant does not move that.
 
-What does not survive is ``$\Delta C_0$ has no partner''.
-$a\mathcal B_0=-\tfrac k3\tau_1$ by identity, and $-C_1'$ carries
-$+\tfrac k3\tau_1$, so the partner exists and is \emph{cross-coefficient} ---
-finding T-107. $\gamma$, which pairs $\Delta C_0$ against
-$k^2\Delta C_2$, therefore asks the wrong pairing and cannot see it:
-M15, \emph{a gate built from one coefficient cannot see a
-cancellation distributed across the bracket}.
-\texttt{tests/frame/c8\_rank0\_partner.py} scores the whole rank-0 content of
-the bracket and is the gate for this question.
+Whether $\Delta C_0$ has a partner was revised twice. On 23 October this
+appendix read the $+\tfrac k3\tau_1$ in $-C_1'$ as a cross-coefficient partner
+of $\Delta C_0$ (T-107), which made $\gamma$ the wrong pairing and
+\texttt{c8\_\allowbreak{}rank0\_\allowbreak{}partner.py} the gate. Read with
+\eqref{eq:frame-conditions} and \eqref{eq:paper1-source}, the original
+statement stands: in the exact identity rank zero must be invariant alone, so
+the as-built $\Delta C_0=+\tfrac{kv}{3}$ is a defect of the row rather than
+half of a cancellation. The $+\tfrac k3\tau_1$ in $-C_1'$ comes from the
+as-built rank-one sign, and \S\ref{sec:ell-zero-row} gives the row and the
+sign that satisfy all three conditions.
 
-\subsection{The shift of (102), including the cross-coefficient partner}
+\subsection{The shift of (102)}
 
 (102) reads
 \begin{equation}
@@ -6275,9 +6303,9 @@ and \eqref{eq:three-shifts} gives
 \noindent\emph{Historical printed-coefficient result.}\footnote{This is the shift of the historical printed coefficient
 $C_0=-5a\mathcal B_2/2$ and therefore carries $+5kv/2$. If the corrected
 monopole row of Eq.~\eqref{eq:c0-solved} is adopted, its contribution is
-$+kv/3$ instead. The required cross-coefficient cancellation involving
-$-C_1'$ remains unverified. The historical equation is retained for audit;
-it must not be used as the current corrected frame-shift law.}
+$+kv/3$ instead, and with the row of Paper~1's source, \eqref{eq:c0-ruled},
+it is zero. The historical equation is retained for audit; it must not be
+used as the current frame-shift law.}
 $v$ obeys $v'=-\mathcal Hv-k\Phi_A$, so on sub-horizon scales it changes on the
 Hubble rate: $v'\sim\mathcal Hv$, $v''\sim\mathcal H^2v$. Then
 \begin{equation}
@@ -6286,13 +6314,12 @@ Hubble rate: $v'\sim\mathcal Hv$, $v''\sim\mathcal H^2v$. Then
 \end{equation}
 and the two boundary shifts are smaller still. For the printed coefficient alone this estimate produces a term of
 order $(k/\mathcal H)^2$ relative to $v''$, but it does not establish a
-failure of the corrected frame transformation. The relevant comparison is the
-complete rank-zero bracket, including its cross-coefficient partner.\footnote{The
+failure of the corrected frame transformation. The complete test is the three
+conditions of \eqref{eq:frame-conditions}, slot by slot.\footnote{The
 estimate in Eq.~\eqref{eq:no-partner} uses the superseded coefficient
-$C_0=-5a\mathcal B_2/2$. In the corrected matching its prefactor changes,
-and $-C_1'$ can provide an additional rank-zero term. Neither the printed
-coefficient estimate nor its scaling alone is a complete frame-covariance
-test.}
+$C_0=-5a\mathcal B_2/2$. In the corrected matching its prefactor changes.
+Neither the printed coefficient estimate nor its scaling alone is a complete
+frame-covariance test.}
 
 
 \paragraph{Corrected coefficient shift and its differentiated partners.}
@@ -6326,16 +6353,20 @@ replace the \emph{printed-coefficient algebra} as the conditional shift of
 the corrected matching; they do not prove that the assembled observable is
 frame invariant. Such a claim requires the frame transformation of all
 sources, weights, projected boundary terms and the integration variable
-in one expression. In particular, a possible cross-coefficient cancellation
-must be exhibited on the complete bracket and tested in the implementation.
-The source of the frame relations is Paper~1, Secs.~II~E and VI~B, with the
+in one expression. This paragraph asked for a cross-coefficient cancellation
+to be exhibited on the complete bracket. Read with
+\eqref{eq:frame-conditions}, the test is slot by slot rather than on the
+bracket, and with Paper~1's source all three conditions hold
+(\S\ref{sec:w-form}); the frame equality of the assembled observable is
+registration~(c) there. The source of the frame relations is Paper~1, Secs.~II~E and VI~B, with the
 first-order limitation of its Eq.~(74), together with the 
 \emph{published} Annals~II matching equations as cited provisionally
 here. The latter still require a journal-page comparison.\footnote{The
 $\Delta\mathsf A$ and $\Delta\mathsf F$ assumptions are the frame-convention
 input to this calculation. The code's corresponding field transforms and
 its complete projected line-of-sight frame equality have not yet passed
-an independent present-state repository test.}
+an independent present-state repository test; registration~(c) of
+\S\ref{sec:w-form} is that test, scored with D44.}
 
 \subsection{The $k^2$ is (90)'s, not a mixed convention}
 
@@ -6421,12 +6452,16 @@ $\int(\kappa'e^{-\kappa})[C_1-2C_2]j_\ell$ and
 $\int((\kappa')^2-\kappa'')e^{-\kappa}C_2j_\ell$ moves the disagreement from
 $72.2$ to $71.6$ at $k=20$ and from $3686.9$ to $3686.8$ at $k=300$.
 
-\paragraph{(89)'s $\ell=0$ line is not mis-sourced.} $a\mathcal B_0\delta_{\ell0}$
-is commented out of the equation the integral solution solves and restored in
-the open-case extension, which looks like a dropped source. It is not: the
-ansatz must give $\tau_0=0$, and differentiating $\int A_0\,d\eta'=0$ yields
-(89)'s $\ell=0$ line with zero on the right. $C_0$ is correctly
-derived.
+\paragraph{(89)'s $\ell=0$ line.} $a\mathcal B_0\delta_{\ell0}$ is commented
+out of the equation the integral solution solves and restored in the
+open-case extension, which looks like a dropped source. This appendix read it
+as no dropped source: the ansatz must give $\tau_0=0$, and differentiating
+$\int A_0\,d\eta'=0$ yields (89)'s $\ell=0$ line with zero on the right. The
+first frame condition reads it the other way. With Paper~1's rank-one sign
+the line carries $-a\mathcal B_0$ on the right, \eqref{eq:c0-ruled}, so the
+term commented out of the flat case is the one the open-case extension
+restores, and the frame condition requires it in the flat case too. Where the
+$\tau_0=0$ reading fails is not located (\S\ref{sec:ell-zero-row}).
 
 \paragraph{Undoing the integration by parts: untested, not refuted.} (93) comes
 from a kernel in which the two derivatives act on $\tau^{(0)}_\ell$ and bring
@@ -6446,9 +6481,13 @@ doing analytically.
   bundle has erred here once (T-27). Settle it by index algebra on (109).
 \item The by-parts step, the one untested repair.
 \item Whether $C_0$ belongs in the integrand, which the measurement
-  answers empirically and the algebra does not.
+  answers empirically and the algebra does not. Closed by the first frame
+  condition: it belongs, as \eqref{eq:c0-ruled} (\S\ref{sec:ell-zero-row}).
 \item The $1$--$15\%$ residual after $C_0$ is removed: whether it is
-  $O(\varepsilon^2)$ or an artefact of the grids.
+  $O(\varepsilon^2)$ or an artefact of the grids. Read with
+  \eqref{eq:frame-conditions}, a residual is expected after $C_0$ is removed,
+  because the as-built rank-one sign fails the gravitational condition by
+  $-2v'/k$; whether part of it is a grid artefact is not separated.
 \end{enumerate}
 
 What stands independently of all four: $C_0$ and $C_2$ are one

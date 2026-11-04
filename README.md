@@ -10,7 +10,7 @@ the full linear spectrum with the acoustic peaks and the Silk damping tail
 (F9), in both frames; the integral solution (102) carried with a generic
 4-velocity and specialised back; acceptance criterion 5b closed.
 
-Supplement: **v1.3.26** — `SUPPLEMENTARY-MATERIAL-v1.3.26.tex`. **This is a
+Supplement: **v1.3.27** — `SUPPLEMENTARY-MATERIAL-v1.3.27.tex`. **This is a
 separate version line from the one above and is declared separately on
 purpose.** The line above is the *computational* release; a supplement edition
 records a documentation gate and is **not** an assertion that the repository
@@ -33,9 +33,9 @@ University of Cape Town, 2026, **arXiv:astro-ph/9912072v4**
 
 The supplementary-materials document is included here:
 
-> [SUPPLEMENTARY-MATERIAL-v1.3.26.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.26.pdf)
+> [SUPPLEMENTARY-MATERIAL-v1.3.27.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.27.pdf)
 
-Its source is `SUPPLEMENTARY-MATERIAL-v1.3.26.tex`, **one consolidated file in
+Its source is `SUPPLEMENTARY-MATERIAL-v1.3.27.tex`, **one consolidated file in
 the repository root**, which builds with `pdflatex` alone: the prose carries no
 `\input`, the bibliography is inline, and the only external files are the
 generated assets in `tables/`, `tikz/` and `figures/`. The prose fragments that
@@ -650,7 +650,7 @@ row against `figures/` and `scripts/run_all.py`.
 | **D16** the κ′² in the integrand | the six pieces of (102)'s Newtonian integrand, each against the others. **One term is 93–97% of it** at k ≤ 60 and is **1.8×10⁵ times the physical Doppler source**; the acoustic driving is 0.02% and the ISW 0.18%. **Weight-independent**, so A-2 cannot reach it. Finding **T-94** | `v1.3.0` |
 | **D17** the W-form against (102) | P1-T's boxed integrating-factor form of the line-of-sight solution evaluated beside the released (102), in both frames. If the W-form is frame-invariant where (102) is not, the gap is in the assembly and the by-parts is where it enters; if **both** carry it, the assembly is not the site. **Reads $\mathcal O(1)$ in both columns and is held inconclusive**: the rank-0 row needs $\sigma_0$ and the CDM column needs $S_2$, both referred to P1-T | `v1.3.0` |
 | **D18** the $\kappa'$ ledger on the released code | P1-T's rule — *$\kappa'$ may live in $W$, in $\mathcal V$, or in a derivative of either, **never in a coefficient*** — applied to the arrays this bundle actually builds. Every coefficient is **affine in $\kappa'$**, verified at $\lambda=2$ to $10^{-16}$, so the split into $\kappa'$-free and $\kappa'$-carrying parts is exact. **$C_1$ and $C_1'$ carry a bare $\kappa'$ and it is essentially the whole of them** (share 0.99–1.02; 0.51 at $k=300$ Newtonian); $C_0$, $C_2$, $C_2''$ are clean. Finding **T-101** | `v1.3.0` |
-| **D19** the ℓ=0 row control, on the live coefficients | the acceptance measurement for the monopole-row correction. **All four of its conditions PASS and the repair is still wrong** (**T-107** refuted it on an external gate). That is **M14** as an instrument: a difference-based gate cannot see a defect common to both things differenced. Kept so that a withdrawn variant stays regenerable | `v1.3.0` |
+| **D19** the ℓ=0 row control, on the live coefficients | the acceptance measurement for the monopole-row correction. **All four of its conditions PASS and the repair is still wrong** (**T-107** refuted it on an external gate). Read with the ruling of 3 November, T-107 refutes the restoration *alone*: with Paper 1's rank-one sign the row must carry $a\mathcal B_0$ (supplement, §The $\ell=0$ matching row). That is **M14** as an instrument: a difference-based gate cannot see a defect common to both things differenced. Kept so that a withdrawn variant stays regenerable | `v1.3.0` |
 | **D20** what the two $h$ defects in the scattering rate are worth | **T-108**'s measurement and **T-109**'s evidence, scored against $z_\ast=1088.5$ from the matched external codes — an **external** gate, which is what M14 requires after four difference-based conditions passed on a wrong repair. It is the correction that moved PLANCK's first-peak excess from $+65.8$ to $+29.4$ | `v1.3.0` |
 | **D21** the Sachs–Wolfe scalar, on the live coefficients | Stage 4(a). `c1_identity.py` had checked this against fixtures since `v1.0.0` and it had never been pointed at the production path. It tests $\delta T$, $\Phi_A$ and $C_2'$ and **nothing else** — no $C_0$, no $C_1'$, no dipole. It **passes at 0.68% on Einstein–de Sitter**, which is what moved the search downstream of the source. Finding **T-113** | `v1.3.0` |
 | **D22** the transport identity on live histories | Stage 3's gate, and the first instrument pointed at **transport** rather than at coefficients. The identity closes to $10^{-5}$ to $10^{-7}$ with a *consistent* derivative and fails at **0.4–65%** with the one (106)/(107) supplies — both right separately and **not usable together**. Finding **T-114**. `c3_byparts.py` cannot see this: on fixtures the derivative is consistent by construction | `v1.3.0` |
@@ -952,7 +952,7 @@ are in `provenance/DECISIONS-v1.0.0.md`.
 | Item | Value |
 |---|---|
 | **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMBR lensing in the exact 1+3 covariant radiation hierarchy* — **Paper 1**, University of Cape Town. **arXiv:astro-ph/9912072v4**, [doi:10.48550/arXiv.astro-ph/9912072](https://doi.org/10.48550/arXiv.astro-ph/9912072). Submitted 2026-10-16. CC BY 4.0. **The version suffix is not optional** — the bare identifier has carried three documents: `v2` the legacy 1999 work, `v3` the correction, `v4` this paper |
-| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.3.26.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.26.pdf) |
+| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.3.27.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.27.pdf) |
 | **GitHub repository** | [timgebbie/frame-covariant-cmb-reproducibility](https://github.com/timgebbie/frame-covariant-cmb-reproducibility) |
 | **ZivaHub/Figshare DOI** | [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509) — **live**. The **concept** DOI: it always resolves to the latest version, so it is the one to cite |
 | **Associated antecedent** | Gebbie, T.; Dunsby, P. K. S.; Ellis, G. F. R. (2000). *1+3 covariant cosmic microwave background anisotropies II: the almost-Friedmann–Lemaître model*. Annals of Physics **282**, 321–394. [doi:10.1006/aphy.2000.6034](https://doi.org/10.1006/aphy.2000.6034) |

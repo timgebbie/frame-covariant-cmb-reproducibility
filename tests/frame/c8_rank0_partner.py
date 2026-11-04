@@ -1,6 +1,31 @@
 #!/usr/bin/env python3
 """C8 -- the rank-0 partner.  Settles whether a.B_0 belongs in C_0.
 
+READ WITH THE RULING OF 3 NOVEMBER 2026 (supplement v1.3.23, eq:paper1-source
+and eq:frame-conditions; added 2026-11-04, P1-T).  Everything below this
+paragraph was written with the rank-one gravitational source AS BUILT,
+a.B_1 = +k(dT + Phi_A), and its algebra stands for that source.  Paper 1's
+own source gives the rank-one gravitational term the opposite sign, and the
+exact frame conditions are slot by slot, not across a collapsed bracket:
+
+    P0   Delta C_0 = 0                      rank zero is invariant ALONE
+    P1s  Delta C_1^scatt = kappa' Delta C_2
+    P1g  Delta C_1^grav  = Delta C_2'
+
+Scored from the same frame table, row B's zero below is TWO ERRORS
+COMPENSATING: Delta C_0 = +kv/3 (P0 fails, the row lacks a.B_0) against the
+-(k/3) v that the as-built sign's (k/3) tau_1 brings into -C_1' (part of
+P1g's failure, -2v'/k).  With Paper 1's sign no row of this partition
+vanishes, and the configuration that satisfies all three conditions -- a.B_0
+carried AND the sign corrected -- reads +kv/3 in it.  The partition is
+neither necessary nor sufficient; it is a statement about the collapsed
+bracket, and the gate for the rank-zero row is P0.  C8h-C8k record this.
+So the conclusions "(89)'s row is correctly empty of B_0" and "restoring
+a.B_0 counts the source twice" hold for the as-built sign ONLY: T-107
+refutes the restoration ALONE, and the ruling requires it together with the
+sign.  This is the shape the supplement names more than once: a cancellation
+in a collapsed object read as the identity.
+
 WRITTEN AFTER T-107 REFUTED THE RESTORATION.  P1-B measured that putting
 a.B_0 into C_0 doubles criterion 5b, because (107) already carries the
 monopole source:
@@ -84,7 +109,19 @@ AUDIT_PROSE = (
   'through $j_0\'\'(0)=-\\tfrac13$; $\\tfrac k3\\tau_1$ is the rank-0 source itself. '
   'A leakage term and a source term have no reason to cancel in value, and '
   '$\\tau_1\\to+0.18v$ at superhorizon scales is a fact about the dipole, not a '
-  'failure of this cancellation.')
+  'failure of this cancellation. '
+  'Read with the ruling of 3 November (supplement, eq:paper1-source and '
+  'eq:frame-conditions), everything above holds for the rank-one gravitational '
+  'source as built, $a\\mathcal{B}_1=+k(\\delta T+\\Phi_A)$, and for no other. '
+  'The exact conditions are slot by slot, and rank zero must be invariant alone. '
+  'Scored from the same frame table (C8h--C8k), the zero of the $\\alpha_0$ row is '
+  'two errors compensating: $\\Delta C_0=+\\tfrac13kv$, because the row lacks '
+  '$a\\mathcal{B}_0$, against the $-\\tfrac13kv$ that the as-built sign puts in '
+  '$-C_1\'$, which is part of the gravitational condition failing by $-2v\'/k$. '
+  'With Paper 1\'s sign no row of the partition vanishes, and the one '
+  'configuration satisfying all three conditions, $a\\mathcal{B}_0$ carried '
+  'with the sign corrected, reads $+\\tfrac13kv$ in it. The row is therefore not '
+  'correctly empty, and T-107 refutes the restoration alone.')
 
 import sympy as sp
 from _common import (finish, ETA_0 as E0, W, s, sdot, j, jp, integrate, GRID,
@@ -135,11 +172,11 @@ print(f'  worst residual:  A {r[0]:.2e} | B {r[1]:.2e} | C {r[2]:.2e}')
 
 allok = (
   report('C8a  the printed row leaves a rank-0 shift', A != 0)
-  & report('C8b  alpha_0 with NO B_0 cancels against (k/3)tau_1 in -C_1\'',
+  & report('C8b  as built, alpha_0 with NO B_0 cancels against (k/3)tau_1 in -C_1\'',
            B == 0)
-  & report('C8c  restoring B_0 counts the source twice', C != 0,
+  & report('C8c  as built, restoring B_0 alone counts the source twice', C != 0,
            f'residual {sp.nsimplify(C/(k*v))} k v, equal and opposite to B\'s partner')
-  & report('C8d  and what it leaves is exactly one more copy of the partner',
+  & report('C8d  as built, what it leaves is exactly one more copy of the partner',
            sp.simplify(C - partner) == 0,
            'the restoration adds a source the bracket already held')
   & report('C8e  numerically, only B is at the floor', r[1]*10 < min(r[0], r[2]),
@@ -168,10 +205,79 @@ allok = (allok
            'C_0 is the rank-2 leakage at ell=0, (k/3)tau_1 is the rank-0 source; '
            'T-148 scored a shift against a value'))
 
+# ---- C8h-C8k: the ruling of 3 November, scored from the same frame table.
+# ---- Added 2026-11-04 (P1-T).  The exact conditions are slot by slot
+# ---- (eq:frame-conditions); the partition above is a collapsed-bracket sum.
+# Inputs, all from the frame table the rows above already use, plus the two
+# laws the supplement's frame paragraph reads off this bundle's own
+# transformations:  Delta(dT + Phi_A) = +v'/k  and  Delta C_2 = v/k, with
+# Delta vhat_B = -v/k for the scattering half.
+eta = sp.symbols('eta', positive=True)
+vf  = sp.Function('v')(eta)                  # the frame velocity, a function of eta
+kpf = sp.Function('kappa_p')(eta)            # the Thomson rate kappa'
+dS    = sp.diff(vf, eta)/k                   # Delta(dT + Phi_A)
+dC2   = vf/k                                 # Delta C_2
+dvB   = -vf/k                                # Delta vhat_B
+dB2f, dtau1f = -k*vf, -vf
+dB0f  = sp.Rational(1, 3)*k*vf               # Delta(a.B_0) = -(k/3) Delta tau_1
+
+def conditions(sign, q0):
+    """P0, P1s, P1g and the partition, for C_0 = -(1/3) a.B_2 + q0 a.B_0 and
+    C_1^grav = sign (dT + Phi_A): sign = -1 as built, +1 as Paper 1."""
+    dC0 = sp.Rational(-1, 3)*dB2f + q0*dB0f
+    P0  = sp.simplify(dC0)
+    P1s = sp.simplify(-kpf*dvB - kpf*dC2)            # C_1^scatt = -kappa' vhat_B
+    P1g = sp.simplify(sign*dS - sp.diff(dC2, eta))
+    # -C_1^grav' carries -sign (k/3) tau_1: the partition's partner term
+    part = sp.simplify(dC0 - sign*sp.Rational(1, 3)*k*dtau1f)
+    return P0, P1s, P1g, part
+
+table = [  # the four rows of the supplement's table under eq:paper1-source
+    ('as built                    ', -1,  0),
+    ('rank-one sign corrected alone', +1,  0),
+    ('a.B_0 carried alone (T-105)  ', -1, -1),
+    ('both, as Paper 1             ', +1, -1),
+]
+scored = []
+print()
+print('  the three conditions, slot by slot, and the collapsed partition:')
+for name, sgn, q0 in table:
+    P0, P1s, P1g, part = conditions(sgn, q0)
+    scored.append((P0, P1s, P1g, part))
+    print(f'    {name}  P0 {str(P0):10s} P1s {str(P1s):3s} P1g {str(P1g):30s}'
+          f'  partition {part}')
+vp = sp.diff(vf, eta)
+want_P0  = [k*vf/3, k*vf/3, 0, 0]
+want_P1g = [-2*vp/k, 0, -2*vp/k, 0]
+passing = [i for i, (P0, P1s, P1g, _) in enumerate(scored)
+           if P0 == 0 and P1s == 0 and P1g == 0]
+allok = (allok
+  & report('C8h  as built, B\'s zero is P0 and P1g failing together',
+           scored[0][3] == 0 and scored[0][0] == k*vf/3
+           and sp.simplify(scored[0][2] + 2*vp/k) == 0,
+           'Delta C_0 = +kv/3 against the -kv/3 the as-built sign puts in -C_1\'')
+  & report('C8i  with Paper 1\'s rank-one sign, no row of the partition vanishes',
+           scored[1][3] != 0 and scored[3][3] != 0,
+           f'no B_0: {scored[1][3]};  B_0 carried: {scored[3][3]}')
+  & report('C8j  the table under eq:paper1-source, rank-zero and gravitational '
+           'columns, from the frame table',
+           all(sp.simplify(s[0] - w) == 0 for s, w in zip(scored, want_P0))
+           and all(sp.simplify(s[2] - w) == 0 for s, w in zip(scored, want_P1g))
+           and all(s[1] == 0 for s in scored),
+           'kv/3, kv/3, 0, 0  and  -2v\'/k, 0, -2v\'/k, 0;  P1s 0 throughout')
+  & report('C8k  only a.B_0 carried WITH the sign corrected satisfies all three',
+           passing == [3],
+           'the partition reads +kv/3 there: it is not the condition'))
+
 finish({'shift_printed': str(sp.nsimplify(A/(k*v))),
         'shift_alpha0_no_B0': str(sp.nsimplify(B/(k*v))),
         'shift_alpha0_with_B0': str(sp.nsimplify(C/(k*v))),
         'r_printed': r[0], 'r_alpha0_no_B0': r[1], 'r_alpha0_with_B0': r[2],
         'shift_pairing_free_of_values': str(shift_sum_free),
         'value_pairing': str(value_sum_free),
-        't148_tau1_over_v': src_measured/dC0_measured})
+        't148_tau1_over_v': src_measured/dC0_measured,
+        'ruling_rows': [name.strip() for name, _, _ in table],
+        'ruling_P0': [str(s[0]) for s in scored],
+        'ruling_P1g': [str(s[2]) for s in scored],
+        'ruling_partition': [str(s[3]) for s in scored],
+        'ruling_passing_row': table[passing[0]][0].strip() if passing else None})

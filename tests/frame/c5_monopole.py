@@ -1,7 +1,22 @@
 #!/usr/bin/env python3
 """C5 -- the monopole row, and the dipole shift.   Audit results 7, 8.
 
-SUPERSEDED IN ITS CONCLUSION BY T-107, 2026-10-21.  Every measurement below
+READ WITH THE RULING OF 3 NOVEMBER 2026 (supplement v1.3.23, eq:paper1-source;
+added 2026-11-04, P1-T).  gamma = Delta C_0 / (k^2 Delta C_2) vanishes exactly
+when Delta C_0 = 0, which is the first frame condition, P0, of the
+supplement's eq:frame-conditions.  It vanishes only for the row with a.B_0
+carried, and that is the row Paper 1's source requires once the rank-one
+gravitational term carries Paper 1's sign.  The original reading of this
+check is therefore the right one, and the T-107 reading that follows, which
+recorded gamma's zero as a defect of the gate, is withdrawn: the doubling of
+criterion 5b that T-107 measured is the gravitational condition, P1g, failing
+by -2v'/k under the as-built sign, and no rank-zero test can see a rank-one
+condition.  C5b and C5c assert again from 2026-11-04.  The tau_0 = 0 argument
+for an empty row, quoted below, was made with the rank-one source as built and
+has not been re-derived against Paper 1's sign; nothing here rests on it.
+c8 (C8h-C8k) scores the four configurations against all three conditions.
+
+SUPERSEDED IN ITS CONCLUSION BY T-107, 2026-10-21 (itself withdrawn above).  Every measurement below
 stands.  What was drawn from them does not: gamma pairs Delta C_0 against
 k^2 Delta C_2, and the partner of Delta C_0 is in -C_1' instead -- (107)
 carries +(k/3) tau_1 = -a.B_0 already.  So the restoration that drives gamma
@@ -58,7 +73,16 @@ AUDIT_PROSE = (
   'source twice -- criterion 5b doubles at $98.5$\\%. See **C8**, which scores '
   'the whole rank-0 content of the bracket instead of one coefficient against '
   'another. **M15: a gate built from one coefficient cannot see a '
-  'cancellation distributed across the bracket.**')
+  'cancellation distributed across the bracket.** '
+  'Read with the ruling of 3 November (supplement, eq:paper1-source), that '
+  'conclusion is itself withdrawn. $\\gamma=0$ is $\\Delta C_0=0$, the first '
+  'condition of eq:frame-conditions, and it holds only for the row with '
+  '$a\\mathcal{B}_0$ carried, which is the row Paper 1\'s source requires once '
+  'the rank-one gravitational term carries Paper 1\'s sign. The doubling T-107 '
+  'measured is the gravitational condition failing by $-2v\'/k$ under the sign '
+  'as built, a rank-one failure that no rank-zero test can see. C5b and C5c '
+  'assert again; C8h--C8k score all four configurations against the three '
+  'conditions.')
 import sympy as sp
 from _common import (finish, ETA_0 as E0, W, s, sdot, j, jp, jpp, integrate, GRID, report)
 
@@ -100,14 +124,20 @@ print('     see the docstring.  Delta C_0 = 0 fixes normalisation, not content.'
 # its conclusion.  If either ever stops holding, something has changed in the
 # gamma pairing and DEFECT GONE will say so -- which is what S33(d) is for.
 # **c8 is the gate for the ell=0 row; this is the record of why it had to be.**
+#
+# RESTORED TO 'assert' ON 2026-11-04 (P1-T), read with the ruling of
+# 3 November.  gamma = 0 is P0, Delta C_0 = 0, the first frame condition, and
+# the row it selects is the one Paper 1's source requires with the rank-one
+# sign corrected.  The 2026-10-21 polarity flip recorded the right answer as a
+# defect, because the as-built rank-one sign made the restoration fail on a
+# condition gamma does not measure.  The comment above is kept as the record.
 allok = (report('C5a  a.Delta B_0 cancels (1/3) k^2 Delta C_2 exactly', ok_cancel)
-         & report('C5b  gamma reports zero for the row c8 REFUTES (M15)',
-                  gammas[2] == 0, 'the pairing is wrong, not the arithmetic',
-                  polarity='defect')
-         & report('C5c  and gamma scores it >=10x better than the correct row',
+         & report('C5b  gamma is zero only for the row with B_0 carried: P0 holds there',
+                  gammas[2] == 0 and gammas[0] != 0 and gammas[1] != 0,
+                  'the row eq:paper1-source requires, with the rank-one sign corrected')
+         & report('C5c  and gamma separates that row from the others by at least 10x',
                   r[2]*10 < min(r[0], r[1]),
-                  f'{r[2]:.1e} vs {min(r[0],r[1]):.1e} -- see c8, T-107',
-                  polarity='defect'))
+                  f'{r[2]:.1e} vs {min(r[0],r[1]):.1e} -- c8 C8h-C8k for all three conditions'))
 finish({'gamma_printed': str(gammas[0]), 'gamma_no_B0': str(gammas[1]),
         'gamma_restored': str(gammas[2]), 'r_printed': r[0], 'r_no_B0': r[1],
         'r_restored': r[2]})

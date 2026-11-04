@@ -2,9 +2,9 @@
 
 > **Generated, not transcribed. Do not edit by hand.**
 >
-> Produced by `tests/frame/gen_theory_audit.py` at 2026-10-29 06:20 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
+> Produced by `tests/frame/gen_theory_audit.py` at 2026-11-04 07:57 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
 
-**Status: ALL CHECKS PASS** — 50 assertions across 12 instruments.
+**Status: ALL CHECKS PASS** — 54 assertions across 12 instruments.
 
 ## What this document does not establish — read first
 
@@ -64,7 +64,7 @@ The exact bulk source is $W(C_0-C_1'+C_2'')-\mathcal{V}C_1+2\mathcal{V}C_2'+\dot
 | `worst_derived` | 1.87e-11 |
 | `worst_printed` | 2.55227 |
 
-*Instrument: `tests/frame/c3_byparts.py`, sha256 `2a0bb0f5b24d…`*
+*Instrument: `tests/frame/c3_byparts.py`, sha256 `fb6aa2a02f03…`*
 
 ### The rank-2 slot forced by frame invariance
 
@@ -85,13 +85,13 @@ Requiring $\Delta\tau_\ell=0$ at $\ell\ge2$ for arbitrary boost potential gives 
 
 ### The monopole row and the dipole shift
 
-$a\Delta\mathcal{B}_0=\tfrac13kv=\tfrac13k^2\Delta C_2$ exactly, and $\gamma$ -- which pairs $\Delta C_0$ against $k^2\Delta C_2$ -- vanishes only with $\mathcal{B}_0$ restored. **Both measurements stand and the conclusion drawn from them was wrong.** Finding **T-107**: the partner of $\Delta C_0$ is not in $C_2$ but in $-C_1$′, so $\gamma$ asks the wrong pairing, and the restoration that makes it vanish counts the monopole source twice -- criterion 5b doubles at $98.5$\%. See **C8**, which scores the whole rank-0 content of the bracket instead of one coefficient against another. **M15: a gate built from one coefficient cannot see a cancellation distributed across the bracket.**
+$a\Delta\mathcal{B}_0=\tfrac13kv=\tfrac13k^2\Delta C_2$ exactly, and $\gamma$ -- which pairs $\Delta C_0$ against $k^2\Delta C_2$ -- vanishes only with $\mathcal{B}_0$ restored. **Both measurements stand and the conclusion drawn from them was wrong.** Finding **T-107**: the partner of $\Delta C_0$ is not in $C_2$ but in $-C_1$′, so $\gamma$ asks the wrong pairing, and the restoration that makes it vanish counts the monopole source twice -- criterion 5b doubles at $98.5$\%. See **C8**, which scores the whole rank-0 content of the bracket instead of one coefficient against another. **M15: a gate built from one coefficient cannot see a cancellation distributed across the bracket.** Read with the ruling of 3 November (supplement, eq:paper1-source), that conclusion is itself withdrawn. $\gamma=0$ is $\Delta C_0=0$, the first condition of eq:frame-conditions, and it holds only for the row with $a\mathcal{B}_0$ carried, which is the row Paper 1's source requires once the rank-one gravitational term carries Paper 1's sign. The doubling T-107 measured is the gravitational condition failing by $-2v'/k$ under the sign as built, a rank-one failure that no rank-zero test can see. C5b and C5c assert again; C8h--C8k score all four configurations against the three conditions.
 
 | assertion | verdict |
 |---|---|
 | C5a  a.Delta B_0 cancels (1/3) k^2 Delta C_2 exactly | **PASS** |
-| C5b  gamma reports zero for the row c8 REFUTES (M15) | **DEFECT PRESENT** — the pairing is wrong, not the arithmetic |
-| C5c  and gamma scores it >=10x better than the correct row | **DEFECT PRESENT** — 8.9e-03 vs 3.2e-01 -- see c8, T-107 |
+| C5b  gamma is zero only for the row with B_0 carried: P0 holds there | **PASS** — the row eq:paper1-source requires, with the rank-one sign corrected |
+| C5c  and gamma separates that row from the others by at least 10x | **PASS** — 8.9e-03 vs 3.2e-01 -- c8 C8h-C8k for all three conditions |
 
 | measured | value |
 |---|---|
@@ -102,7 +102,7 @@ $a\Delta\mathcal{B}_0=\tfrac13kv=\tfrac13k^2\Delta C_2$ exactly, and $\gamma$ --
 | `r_no_B0` | 0.32445 |
 | `r_restored` | 0.00888329 |
 
-*Instrument: `tests/frame/c5_monopole.py`, sha256 `b909d3f5df35…`*
+*Instrument: `tests/frame/c5_monopole.py`, sha256 `da6d2c81ad40…`*
 
 ### The Thomson $v^B_a$ slot
 
@@ -143,17 +143,21 @@ Multiplying the transport equation by $W=e^{-\kappa}$ sends the gravitational so
 
 ### The rank-0 partner, and where the monopole source enters
 
-(107) already carries the monopole source: $-C_1'=(\kappa'\hat v_B)'+(a\mathcal{B}_1)'/k$ and $(a\mathcal{B}_1)'/k=(\Phi_A'-\Phi_H')+\tfrac k3\tau_1$, with $\tfrac k3\tau_1=-a\mathcal{B}_0$. So (89)'s $\delta_{\ell0}$ row is **correctly empty** of $\mathcal{B}_0$ and only its normalisation is wrong. With $\alpha_0$ in place of $\alpha_2$, $C_0=-\tfrac13a\mathcal{B}_2$ and its frame shift $+\tfrac13kv$ is cancelled **inside the bracket**, by $\Delta[\tfrac k3\tau_1]$ in $-C_1'$. Restoring $a\mathcal{B}_0$ counts the source twice and leaves the same residual with the opposite sign -- finding T-107, which criterion 5b caught at $98.5$\% and no frame instrument could. **Addendum 2026-10-26.** Finding T-148 scored $C_0$ against $\tfrac k3\tau_1$ and found they do not cancel; both halves of that measurement are right and the pairing is not this one. What cancels is $\Delta C_0+\Delta[\tfrac k3\tau_1]$, two **shifts**, exactly and for any $\tau_1$ whatever, because only the boost law $\Delta\tau_1=-v$ enters. $C_0$ is the rank-2 source leaking into $\ell=0$ through $j_0''(0)=-\tfrac13$; $\tfrac k3\tau_1$ is the rank-0 source itself. A leakage term and a source term have no reason to cancel in value, and $\tau_1\to+0.18v$ at superhorizon scales is a fact about the dipole, not a failure of this cancellation.
+(107) already carries the monopole source: $-C_1'=(\kappa'\hat v_B)'+(a\mathcal{B}_1)'/k$ and $(a\mathcal{B}_1)'/k=(\Phi_A'-\Phi_H')+\tfrac k3\tau_1$, with $\tfrac k3\tau_1=-a\mathcal{B}_0$. So (89)'s $\delta_{\ell0}$ row is **correctly empty** of $\mathcal{B}_0$ and only its normalisation is wrong. With $\alpha_0$ in place of $\alpha_2$, $C_0=-\tfrac13a\mathcal{B}_2$ and its frame shift $+\tfrac13kv$ is cancelled **inside the bracket**, by $\Delta[\tfrac k3\tau_1]$ in $-C_1'$. Restoring $a\mathcal{B}_0$ counts the source twice and leaves the same residual with the opposite sign -- finding T-107, which criterion 5b caught at $98.5$\% and no frame instrument could. **Addendum 2026-10-26.** Finding T-148 scored $C_0$ against $\tfrac k3\tau_1$ and found they do not cancel; both halves of that measurement are right and the pairing is not this one. What cancels is $\Delta C_0+\Delta[\tfrac k3\tau_1]$, two **shifts**, exactly and for any $\tau_1$ whatever, because only the boost law $\Delta\tau_1=-v$ enters. $C_0$ is the rank-2 source leaking into $\ell=0$ through $j_0''(0)=-\tfrac13$; $\tfrac k3\tau_1$ is the rank-0 source itself. A leakage term and a source term have no reason to cancel in value, and $\tau_1\to+0.18v$ at superhorizon scales is a fact about the dipole, not a failure of this cancellation. Read with the ruling of 3 November (supplement, eq:paper1-source and eq:frame-conditions), everything above holds for the rank-one gravitational source as built, $a\mathcal{B}_1=+k(\delta T+\Phi_A)$, and for no other. The exact conditions are slot by slot, and rank zero must be invariant alone. Scored from the same frame table (C8h--C8k), the zero of the $\alpha_0$ row is two errors compensating: $\Delta C_0=+\tfrac13kv$, because the row lacks $a\mathcal{B}_0$, against the $-\tfrac13kv$ that the as-built sign puts in $-C_1'$, which is part of the gravitational condition failing by $-2v'/k$. With Paper 1's sign no row of the partition vanishes, and the one configuration satisfying all three conditions, $a\mathcal{B}_0$ carried with the sign corrected, reads $+\tfrac13kv$ in it. The row is therefore not correctly empty, and T-107 refutes the restoration alone.
 
 | assertion | verdict |
 |---|---|
 | C8a  the printed row leaves a rank-0 shift | **PASS** |
-| C8b  alpha_0 with NO B_0 cancels against (k/3)tau_1 in -C_1' | **PASS** |
-| C8c  restoring B_0 counts the source twice | **PASS** — residual -1/3 k v, equal and opposite to B's partner |
-| C8d  and what it leaves is exactly one more copy of the partner | **PASS** — the restoration adds a source the bracket already held |
+| C8b  as built, alpha_0 with NO B_0 cancels against (k/3)tau_1 in -C_1' | **PASS** |
+| C8c  as built, restoring B_0 alone counts the source twice | **PASS** — residual -1/3 k v, equal and opposite to B's partner |
+| C8d  as built, what it leaves is exactly one more copy of the partner | **PASS** — the restoration adds a source the bracket already held |
 | C8e  numerically, only B is at the floor | **PASS** — 0.0e+00 vs 3.3e-01 |
 | C8f  the shift cancellation is independent of the values | **PASS** — holds for any a.B_2 and any tau_1: only the boost law enters |
 | C8g  the VALUE pairing does not vanish, and is not required to | **PASS** — C_0 is the rank-2 leakage at ell=0, (k/3)tau_1 is the rank-0 source; T-148 scored a shift against a value |
+| C8h  as built, B's zero is P0 and P1g failing together | **PASS** — Delta C_0 = +kv/3 against the -kv/3 the as-built sign puts in -C_1' |
+| C8i  with Paper 1's rank-one sign, no row of the partition vanishes | **PASS** — no B_0: 2*k*v(eta)/3;  B_0 carried: k*v(eta)/3 |
+| C8j  the table under eq:paper1-source, rank-zero and gravitational columns, from the frame table | **PASS** — kv/3, kv/3, 0, 0  and  -2v'/k, 0, -2v'/k, 0;  P1s 0 throughout |
+| C8k  only a.B_0 carried WITH the sign corrected satisfies all three | **PASS** — the partition reads +kv/3 there: it is not the condition |
 
 | measured | value |
 |---|---|
@@ -166,8 +170,13 @@ Multiplying the transport equation by $W=e^{-\kappa}$ sends the gravitational so
 | `shift_pairing_free_of_values` | 0 |
 | `value_pairing` | -aB2_value/3 + k*tau1_value/3 |
 | `t148_tau1_over_v` | 0.176076 |
+| `ruling_rows` | ['as built', 'rank-one sign corrected alone', 'a.B_0 carried alone (T-105)', 'both, as Paper 1'] |
+| `ruling_P0` | ['k*v(eta)/3', 'k*v(eta)/3', '0', '0'] |
+| `ruling_P1g` | ['-2*Derivative(v(eta), eta)/k', '0', '-2*Derivative(v(eta), eta)/k', '0'] |
+| `ruling_partition` | ['0', '2*k*v(eta)/3', '-k*v(eta)/3', 'k*v(eta)/3'] |
+| `ruling_passing_row` | both, as Paper 1 |
 
-*Instrument: `tests/frame/c8_rank0_partner.py`, sha256 `5a7c24974256…`*
+*Instrument: `tests/frame/c8_rank0_partner.py`, sha256 `d32e69897872…`*
 
 ### The admissibility of the by-parts, and what (102) replaces it with
 
@@ -287,8 +296,8 @@ The peak of the visibility is the point where $\kappa''=-\kappa'^2$, so at $\eta
 
 | | |
 |---|---|
-| generated | 2026-10-29 06:20 UTC |
-| python | 3.13.16 |
+| generated | 2026-11-04 07:57 UTC |
+| python | 3.13.18 |
 | numpy | 2.5.3 |
 | scipy | 1.18.1 |
 | sympy | 1.14.0 |
