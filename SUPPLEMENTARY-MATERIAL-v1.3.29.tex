@@ -1,5 +1,24 @@
 % Computational supplement to the associated paper.
 %
+% v1.3.29, 2026-11-04.  Sequential style audit, first batch: the abstract and
+% Part I, against the author's style profile v2.0 and the PI's decisions of
+% 4 November (short object-centred headings, a claim moved into the first
+% sentence; history once, without bold; no governance in the printed text).
+%   - Abstract: the frame-condition result and D44's outcome stated; the
+%     finding counts, fifteen and forty-eight, were stale and are replaced
+%     by the ranges recorded (B-1 to B-17, T-1 to T-190).
+%   - Part I: eleven headings shortened; three bold sentences and two
+%     emphasised slogans unbolded or removed; a stray citation, '236.6' (a
+%     multipole, not a finding), removed; a repeated Paper 2 sentence
+%     removed; C5's analogy updated for its restored reading; the open-items
+%     table's owner column (stream names) replaced by what closes each item,
+%     and its rows brought to D44 (one closed, three updated).
+%   - sec:w-form: a private troubleshooting citation removed from the scoring.
+%   - F9 is redrawn on main from eq:assembly-invariant: its inline caption is
+%     regenerated from captions/F9, F10 is added after it, and the text's F9
+%     references (the falsifier run of 2 November, the qualification
+%     footnote, the first-peak section's opening) say which assembly they read.
+%
 % v1.3.28, 2026-11-04.  D44 scored against the registrations of 3 November,
 % in sec:w-form, as written: (a) and (b) hold on all three backgrounds; (c),
 % restated before the run as a statement about the uncollapsed identity,
@@ -164,7 +183,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.3.28 --- 4 November 2026\\
+\date{Supplement v1.3.29 --- 4 November 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.3.0-dev}
 
 \begin{document}
@@ -185,26 +204,29 @@ This supplement accompanies \emph{Frame covariance of CMBR lensing in the
 exact $1+3$ covariant radiation hierarchy}, Paper~1
 \citep{Gebbie2026Paper1}, and documents an independent Python reconstruction
 of the almost-Friedmann--Lema\^itre calculation of
-\citet{GebbieDunsbyEllis2000}. The calculation is developed from the
-$1+3$ equations rather than adapted from an existing Boltzmann code.
-Part~I sets out the purpose, current situation and future situation. Part~II, \emph{The Physics}, develops the
-physics chain from the hierarchy and source terms to the acoustic
-oscillator, free streaming, matching, the line-of-sight solution and the
-angular spectrum. Part~III records numerical resolution, parameter choices
-and interpretive limits. The accompanying evidence identifies fifteen
-findings concerning the antecedent and forty-eight concerning the
-implementation, without treating an inventory of findings as a
-certification of the physical calculation. The first-order frame law
-requires agreement of the two predicted skies in a common observer frame.
+\citet{GebbieDunsbyEllis2000}, developed from the $1+3$ equations rather than
+adapted from an existing Boltzmann code. Part~I sets out the purpose and the
+current and future situation. Part~II, \emph{The Physics}, develops the chain
+from the hierarchy and its source to the acoustic oscillator, free
+streaming, matching, the line-of-sight solution and the angular spectrum.
+Part~III records numerical resolution, parameter choices and interpretive
+limits. The first-order frame law requires the two predicted skies to agree
+in a common observer frame, and on the line-of-sight integrand it becomes
+three conditions on the matching coefficients. The coefficients as released
+fail two of them. Paper~1's own source satisfies all three, and the assembly
+built from it gives one spectrum in the Newtonian and CDM frames, with an
+acoustic series on Einstein--de~Sitter but not yet on the Planck background.
 The integration-by-parts reconstruction of the published line-of-sight
-solution identifies four discrepancies in the released assembly. Acoustic
-oscillations are present, but the first-peak position, low-$\ell$
-Sachs--Wolfe plateau and secondary-peak structure are not yet recovered.
-CAMB and CLASS provide external comparisons, not inputs or calibration
-targets. The supplement makes no claim of new physics. The identifier
-\texttt{astro-ph/9912072v4} refers to Paper~1; the earlier versions of
-that identifier concern different documents, as recorded in the scientific
-scope.
+solution identifies four discrepancies in the released assembly, and on the
+Planck background the first-peak position, the low-$\ell$ Sachs--Wolfe
+plateau and the secondary peaks are not yet recovered. Findings are recorded
+against the antecedent (B-1 to B-17) and against the implementation (T-1 to
+T-190), and an inventory of findings is not treated as a certification of
+the physical calculation. CAMB and CLASS provide external comparisons, not
+inputs or calibration targets, and the supplement makes no claim of new
+physics. The identifier \texttt{astro-ph/9912072v4} refers to Paper~1; the
+earlier versions of that identifier concern different documents, as recorded
+in the scientific scope.
 \end{abstract}
 
 % === END source expansion: supplementary-materials/abstract-v1.4.0.tex ===
@@ -236,8 +258,8 @@ scope.
 \part{Purpose of This Document}
 \label{part:status}
 
-The purpose of this supplement is to document and independently verify the
-mathematical and computational provenance of \emph{Paper~1},
+This supplement documents and independently verifies the mathematical and
+computational provenance of \emph{Paper~1},
 \emph{Frame covariance of CMBR lensing in the exact $1+3$ covariant
 radiation hierarchy} \citep{Gebbie2026Paper1}, specifically
 \texttt{astro-ph/9912072v4} and the approved manuscript
@@ -307,10 +329,9 @@ statements, numerical measurements and unresolved implementation tests.
 \label{sec:verification-layers}
 
 The checks behind Table~\ref{tab:status} sit at four layers, and the layers
-differ in what kind of physical statement they are able to carry at all.
-Keeping them apart is not administrative bookkeeping. A count of checks that
-pass, taken across layers, is not a statement about the spectrum, and the
-clearest way to overstate this work is to report one as though it were.
+differ in what kind of physical statement they are able to carry at all. A
+count of checks that pass, taken across layers, is therefore not a statement
+about the spectrum.
 
 A build or portability gate carries no physical claim whatever. It reads a
 build log and a file set and it fails on an undefined reference, a float that
@@ -521,8 +542,9 @@ integrated into the repository test harness by
 \path{docs/THEORY-AUDIT.md} is produced by
 \path{tests/frame/gen_theory_audit.py} from their reported evidence.
 A harness or generated report is \emph{not} an additional independent
-proof. In particular, the supersession recorded inside C5 must travel
-with any claim about how many checks ``pass''. Implementation tests,
+proof. In particular, the history recorded inside C5 and C8, a conclusion
+withdrawn on 21 October and restored on 4 November, must travel with any
+claim about how many checks pass. Implementation tests,
 including the evolving two-frame and spectrum pipelines, remain part
 of the \emph{physics} release progression rather than this
 inventory.
@@ -553,40 +575,38 @@ and \path{paper/checks/coherence_gate.py} for the structure. Paper~2 is
 expected to carry its pair, written to the same scope rather than extended to
 cover both papers.
 
-\paragraph{The algebra check is carried in this bundle, and the structure
-check is not.} Naming a file at a path only the authors can reach is the
-defect this document records elsewhere as \textbf{236.6}: a public statement
-about an artefact the public cannot run. The algebra check is therefore
-mirrored here, byte-identical, at
+\paragraph{The algebra check.} The algebra check is carried in this
+bundle, and the structure check is not. Naming a file at a path only the
+authors can reach is a public statement about an artefact the public cannot
+run, so the algebra check is mirrored here, byte-identical, at
 \path{source/source-v1.1.6/independent_checks_v1.1.6.py}, where
 \texttt{IMMUTABLE-\allowbreak{}MANIFEST-\allowbreak{}SHA256.txt} records its digest and a change to it
-is a release-blocking event rather than a routine update. \textbf{The version
-in its name is what makes that safe}: it is the oracle for one frozen paper
-edition, so a later edition brings its own file rather than altering this one.
+is a release-blocking event rather than a routine update. The version in its
+name makes that safe: it is the oracle for one frozen paper edition, so a
+later edition brings its own file rather than altering this one.
 It imports only the standard library, \texttt{numpy} and \texttt{sympy},
 writes its verdicts beside itself and reads nothing, so it runs from a clone
-of this repository alone. \emph{The structure check is deliberately not
-mirrored.} It gates the manuscript build --- it asks whether a build log, a
-\texttt{.bbl} and a \texttt{.bib} exist and whether every heading carries a
-label --- and this bundle holds no manuscript, so here it could only ever
-fail. A gate that cannot pass is one nobody reads.
+of this repository alone. The structure check is not mirrored. It gates the
+manuscript build, asking whether a build log, a \texttt{.bbl} and a
+\texttt{.bib} exist and whether every heading carries a label, and this
+bundle holds no manuscript, so here it could only fail.
 
-\paragraph{The edition the check is an oracle for is carried beside it, in
-one directory named for that edition.}
+\paragraph{The frozen edition.} The edition the check is an oracle for is
+carried beside it, in one directory named for that edition.
 \path{source/source-v1.1.6/TG-FrameCovariantCMBR-v1.1.6-arxiv.zip} is the
 arXiv source bundle for \texttt{v1.1.6-arxiv}, byte-identical to the submitted
 archive and carrying the \texttt{.tex}, the \texttt{.bib}, the \texttt{.bbl}
-and the three figure sources it builds from. \textbf{A check and the thing it
-checks are of no use apart}, so the two sit together in
-\path{source/source-v1.1.6/}, where \texttt{IMMUTABLE-\allowbreak{}MANIFEST-\allowbreak{}SHA256.txt}
-records both digests. \emph{The freeze recorded here is the arXiv freeze and
-not acceptance}: an accepted manuscript, or a second paper, arrives as a
+and the three figure sources it builds from. The check and the edition it
+checks sit together in \path{source/source-v1.1.6/}, where
+\texttt{IMMUTABLE-\allowbreak{}MANIFEST-\allowbreak{}SHA256.txt} records both
+digests. The freeze recorded here is the arXiv freeze and not acceptance: an
+accepted manuscript, or a second paper, arrives as a
 directory of its own and never alters this one, and the version in each name
 is what makes an immutable prefix safe. The edition of 2 November carried the
 two files in separate directories, \path{source-v1/} and \path{source-v2/};
 they were moved together on 3 November.
 
-\paragraph{What the algebra check re-derives, and what it only records.}
+\paragraph{Contents of the algebra check.}
 \path{independent_checks_v1.1.6.py} takes Paper~1's coefficients and identities
 and re-establishes them in sympy from constructions of its own, rather than
 reading them back from the paper. Most of what it does is angular algebra: the
@@ -618,9 +638,8 @@ that the table is internally consistent under the $4+\text{rank}$ rule and does
 not derive it; and Section~I is four counterexamples and qualifications, which
 bound the reading of a result rather than verify one.
 
-\emph{What makes it usable as evidence is that it does not report all of that
-as one number.} Its verdicts are four kinds and they are counted apart, which
-they were not before 2026-10-21:
+The check does not report all of that as one number. Its verdicts are of
+four kinds and are counted apart, which they were not before 21 October:
 
 \begingroup\footnotesize
 \setlength\LTleft{0pt}\setlength\LTright{\fill}\setlength\LTcapwidth{\textwidth}
@@ -663,8 +682,8 @@ $A\!\cdot\!B/2=(B/2)\!\cdot\!A$, which is commutativity of multiplication and
 cannot fail. Conservation requires the lensed spectrum's full second moment,
 including the linear--quadratic cross term, which this file does not compute.
 
-\paragraph{The structure check reads the document rather than the algebra.}
-\path{paper/checks/coherence_gate.py} reads the \LaTeX{}
+\paragraph{The structure check.} The structure check reads the document
+rather than the algebra. \path{paper/checks/coherence_gate.py} reads the \LaTeX{}
 source only and makes no claim about the rendered page. It tests two things:
 that every heading's own words appear somewhere in the body beneath it, and
 that every locating cross-reference --- one whose sentence carries a verb such
@@ -672,11 +691,9 @@ as \emph{derived}, \emph{obtained}, \emph{stated} or \emph{settled} --- names
 the section that actually carries what the sentence claims for it. Exemptions
 are declared in the file with a reason, never passed silently, so a heading
 that legitimately does not repeat its own words is visible as a decision rather
-than as a gap. Paper~2 is expected to carry its counterpart, written to the
-same scope rather than extended to cover both papers.
+than as a gap.
 
-\paragraph{The coherence gate's qualification, which is the same shape as
-C5's.} The file was
+\paragraph{Qualification of the structure check.} The file was
 written on 2026-10-16 and then placed in a directory the Paper~1 repository's
 \texttt{.gitignore} excludes, where it remained until 2026-10-26. It was never
 committed, never reached the public repository, and no stage of the build
@@ -688,7 +705,7 @@ its body, no section refers to itself, and every locating claim names the right
 section. The defect it was written for was therefore repaired before the
 freeze. That is a retrospective reading of a frozen document and not a gate
 that stood over it while it was being written, and the distinction must travel
-with the result in the same way C5's supersession does. Three warnings are
+with the result. Three warnings are
 raised on each line, identically. Twelve labels echo their own headings and
 eighteen section labels are never referenced, both cosmetic. Two headings each
 carry two section labels --- \texttt{sec:hierarchy} with
@@ -748,7 +765,9 @@ An accumulation fraction for a line-of-sight \emph{amplitude} is therefore
 not, without further definition, a fraction of $C_\ell$. The absence of the
 plateau remains a separate spectrum-level finding. Approximation A-1 is
 established as the missing late-time weight; its contribution to the total
-low-$\ell$ morphology still requires a separate test.
+low-$\ell$ morphology still requires a separate test. The assembly of
+\eqref{eq:assembly-invariant} carries the gravitational content at $W$, and
+D44 measures its integrated slot directly (\S\ref{sec:w-form}).
 
 
 \paragraph{Asserted, not gated.}
@@ -774,9 +793,12 @@ or measurement required to resolve them.
 \item The rank-one extra term $(\star)=-H\mathrm D_{\langle
   a}\tilde{\mathrm D}_{b\rangle}\ln T$: two readings, and this bundle chooses
   neither.
-\item The residual peak displacement has no established mechanism.
-  A-3 is ruled out for the $\kappa''$-suppressed configuration and its standing
-  elsewhere is a property of the configuration, not of the project.
+\item The residual peak displacement, and the missing acoustic series on the
+  Planck background, have no established mechanism. A-3 is ruled out for the
+  $\kappa''$-suppressed configuration and its standing elsewhere is a
+  property of the configuration, not of the project. On Einstein--de~Sitter the
+  assembly of \eqref{eq:assembly-invariant} carries the series (D44,
+  \S\ref{sec:w-form}).
 \item The overall low-$\ell$ plateau shape and the secondary peaks have no morphology gate. Two of the
   three morphology failures are presently diagnosed from the spectrum figure.
   The late-share diagnostic addresses one physical contribution, not the
@@ -804,9 +826,9 @@ equations subject to the corrections documented here;
 supplement. The scheduling rule is physical: an envelope correction is
 not advanced while the source assembly it depends on remains disputed.
 
-\paragraph{Source-resolved lensing is a stream and is not scheduled against a
-version.} It should be noted that CAMB and CLASS apply the standard CMB
-lensing transformation to the complete unlensed temperature spectrum using one
+\paragraph{Source-resolved lensing.} Source-resolved lensing is a separate
+line of work and is not scheduled against a version. CAMB and CLASS apply the
+standard CMB lensing transformation to the complete unlensed temperature spectrum using one
 CMB lensing-potential spectrum. This loses the source-distance information of
 late secondary temperature contributions. The numerical bias in specific
 observables remains to be measured. The transformation referred to is the
@@ -819,8 +841,9 @@ this work, and it is recorded here so that the line-of-sight assembly is not
 frozen in a form that discards the source distance before anyone has decided
 whether it is wanted.
 
-\paragraph{The order of operations is part of the result, and nothing here
-shows the residue is zero.} A possible and presently unquantified contribution
+\paragraph{Order of operations.} The order of operations is part of the
+result, and nothing here shows that its residue is zero. A possible and
+presently unquantified contribution
 to the Hubble tension is that standard low- and high-redshift inference
 pipelines may not preserve the complete observer-defined observable, because a
 physical frame is fixed before free streaming, source projection, lensing and
@@ -829,30 +852,29 @@ higher-order mode coupling have been completed. Four operations are involved
 propagation --- and nothing in this document establishes that they commute.
 Where they do not, the order in which a pipeline performs them is part of what
 it reports, and two pipelines agreeing on every parameter can still disagree
-on the observable. The paragraph above is one instance: collapsing the source
+on the observable. Source-resolved lensing is one instance: collapsing the source
 integral before the lensing operation is applied destroys a distinction the
 lensing would otherwise have acted on. No estimate of the residue is offered
 here and none is implied. What is claimed is that the residue is not known to
 be zero, and that a calculation carried along a single physical threading,
 with the order of operations declared, is what would settle it.
 
-\paragraph{The Lean certification is a separate repository and is not yet
-public.}
-The machine-checked certification of Paper~1 is being prepared at
+\paragraph{Lean certification.} The Lean certification is a separate
+repository and is not yet public. The machine-checked certification of Paper~1 is being prepared at
 \texttt{timgebbie/frame-covariant-cmb-lean}, which is a repository in its own
 right and not a directory of this bundle. It is private as this edition is
 written, so no address is given, nothing in this document cites it, and no
 claim here rests on it. Editions before v1.3.19 described a \texttt{lean/}
 directory inside the v1.3.0 workstream; the sources are not there. The
 certification supplements, and does not replace, the Python instruments or the
-Paper~1-to-antecedent provenance network. Lean is \emph{not a separate physics
-milestone} and cannot change the repository's version sequence. A claim is
+Paper~1-to-antecedent provenance network. Lean is not a separate physics
+milestone and cannot change the repository's version sequence. A claim is
 recorded as machine-certified only after its exact theorem statement,
 hypotheses, compilation and correspondence to Paper~1 have been checked.
 Proposed certificates and unverified pilot accounts confer no certification,
 and a repository a reader cannot open is a proposed certificate.
 
-\paragraph{Final editorial verification, after scientific closure.}
+\paragraph{Final editorial verification.}
 After the scientific and provenance gates, a separate final review of
 this supplement will first assess global cohesion, consistency,
 terminology and flow, then examine each section for directness and
@@ -862,8 +884,8 @@ are made. It will not shorten, compress, rederive or silently alter the
 mathematics, physical assumptions, tables, figures or Paper~1 provenance
 network. This is editorial assurance, not a new physics release.
 
-\paragraph{Final document deliverables, after editorial acceptance.}
-The final approved document edition will be distributed in two archives
+\paragraph{Final deliverables.} After editorial acceptance, the final
+approved document edition will be distributed in two archives
 carrying the same supplementary-document version and identical final
 scientific source. The complete \emph{project bundle} will retain the
 reproducibility evidence, provenance, tests, checksums, accepted baselines,
@@ -879,33 +901,41 @@ hashes for every shared file. This is a distinction between distribution
 purposes, not a change to the repository's physics-facing release policy.
 
 \paragraph{Open scientific dependencies.}
-The unresolved checks are ordered by dependency. P1-T denotes a theoretical
-derivation and P1-B denotes an implementation or numerical test.
+The unresolved checks are ordered by dependency. The last column says whether
+an item closes by a derivation, by a measurement, or by both.
 
 \begin{center}\small
 \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X l c@{}}
 \toprule
 \textbf{open item} & \textbf{what would close it} & \textbf{blocked by} &
-  \textbf{owner} \\
+  \textbf{closes by} \\
 \midrule
 carry the late-time sources to the observer under $W$ rather than
   $\mathcal V\mathcal D$ & the late share at $\ell=2$ becomes $O(0.1)$ on
-  \texttt{PLANCK\_MODEL} and stays exactly $0$ on Einstein--de~Sitter & --- &
-  P1-B \\
+  \texttt{PLANCK\_MODEL} and stays exactly $0$ on Einstein--de~Sitter. The
+  assembly of \eqref{eq:assembly-invariant} carries them at $W$, and D44
+  finds $2.7\times10^{-23}$ on Einstein--de~Sitter; the share at $\ell=2$ on
+  \texttt{PLANCK\_MODEL} is not yet reported & --- & measurement \\
 a peak repair that holds the two frames together & CDM and Newtonian peaks
-  within the released $15\%$, not $3.1\times$ apart & --- & P1-B \\
+  within the released $15\%$, not $3.1\times$ apart. Closed by D44: the
+  three slots give one spectrum in both frames, to $4\times10^{-14}$ & --- &
+  measurement \\
 whether A-3 is the remainder once such a repair exists & wire A-3 in: it must
-  move the peak down and must land short of $0.7723\,\ell_A$ & the row above &
-  both \\
+  move the peak down and must land short of $0.7723\,\ell_A$. The criterion
+  is to be restated against the assembly of \eqref{eq:assembly-invariant},
+  whose \texttt{PLANCK\_MODEL} maximum is already at $0.71\,\ell_A$ &
+  restatement & both \\
 whether the $j_\ell'$ counterpart moves the peak & restore that slot alone; it
-  must move the peak down or not at all & --- & P1-B \\
+  must move the peak down or not at all. The assembly of
+  \eqref{eq:assembly-invariant} carries it, in the Doppler slot & --- &
+  measurement \\
 the rank-one extra term $(\star)$ & two readings exist and this bundle chooses
-  neither & --- & P1-T \\
+  neither & --- & derivation \\
 helium, \textbf{Q15} & $\lesssim0.5\%$ at the first peak; material only in the
-  damping tail & scoped to v1.2.0 & P1-B \\
+  damping tail & scoped to v1.2.0 & measurement \\
 the tight-coupling window, \textbf{Q16} & assert
   $\mathcal V(\eta_{\rm couple})/\mathcal V(\eta_*)$ below a stated threshold
-  on every background & --- & P1-B \\
+  on every background & --- & measurement \\
 \bottomrule
 \end{tabularx}
 \end{center}
@@ -2446,7 +2476,11 @@ evidence that the approximation is absent from the result.}
 
 \emph{The peak position is analytically known. Knowing it turns a displacement
 into a budget with named contributors, and closes two candidate mechanisms that
-further measurement would not have closed.}
+further measurement would not have closed.} Since 4 November F9 draws the
+assembly of \eqref{eq:assembly-invariant}, whose first maximum on the Planck
+background is at $0.71\,\ell_A$ (\S\ref{sec:w-form}). The readings in this
+section are of (102), which remains the module default, unless they say
+otherwise.
 
 % ===========================================================================
 \subsection{The sound speed is the antecedent's own, derived and not assumed}
@@ -3450,7 +3484,8 @@ interior minimum between $\ell=300$ and $900$ on each background tried.
 registered as \emph{the spectrum stays localised at recombination and carries
 at least one interior minimum between $\ell=300$ and $\ell=900$}, with a
 second falsifier, \emph{localised but still an envelope}. Run on PLANCK
-through F9's own spectrum, its CDM-frame column is the released column --- one
+through F9's spectrum as then drawn, from (102), its CDM-frame column is the
+released column --- one
 maximum, at $\ell_A$, no trough to $\ell=990$ --- and \textbf{the second
 falsifier fires as written}: the absence of the secondaries is not a weight
 question. Neither run is yet among this bundle's released diagnostics.
@@ -3648,8 +3683,8 @@ $2.5\times10^{-8}$, below D44's stated thresholds of $10^{-12}$ for $C_\ell$
 and $10^{-6}$ per mode; and on
 Einstein--de~Sitter the integrated slot carries a fraction
 $2.7\times10^{-23}$ of the power, so no power is put late where the
-potentials are constant. The competing prediction of TT-004~\S3, that this
-slot would carry late power there, is refuted. The collapsed form, measured
+potentials are constant. A competing prediction, that this slot would carry
+late power there, is refuted. The collapsed form, measured
 alongside, differs between the frames at order one, $1.1$ to $1.6$, as the
 restatement said it would.
 
@@ -5191,9 +5226,11 @@ These are separate conditions from the existence of acoustic
 oscillations in the source or the agreement of two internally shared
 normalisation routes. The repository's current reported spectrum
 therefore remains a diagnostic reconstruction, not a certified
-physical $C_\ell$.\footnote{The current repository README and F9 report
-a deficient low-$\ell$ plateau, missing secondary peaks, and a displaced
-primary peak. Those empirical statements are inherited from the pinned
+physical $C_\ell$.\footnote{Since 4 November F9 draws the assembly of
+\eqref{eq:assembly-invariant}. On the Planck background its odd acoustic peaks
+are present and its even peaks absent, the primary peak sits at
+$0.71\,\ell_A$ against the matched $0.7723$, and the low-$\ell$ plateau is not
+recovered; the README reports the same. Those empirical statements are inherited from the pinned
 repository's recorded runs; they were not reproduced in this supplement
 editing gate. No repair is inferred from the synthetic checks below.}
 
@@ -5748,8 +5785,15 @@ exists in the tree, and what is outstanding is stated rather than omitted.
 \begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{figures/f9-acoustic-spectrum-v1.2.0.pdf}
-\caption[The angular spectrum with the acoustic peaks, in both frames]{\textbf{F9 --- The angular spectrum with the acoustic peaks, in both frames.} \textbf{The release's deliverable} (decision~S1): the angular power spectrum for the three backgrounds this bundle ships --- CDM (Einstein--de Sitter), $\Lambda$CDM, and the stamped Planck~2018 set with a photon-only radiation era whose $\Omega_\gamma h^2$ is \emph{derived} from $T_{\rm CMB}$. Shape, $D_\ell$ renormalised at $\ell=30$, because neither this bundle nor the external codes fixes $A_s$ the same way and an amplitude comparison would measure a normalisation.\\[2pt] \textbf{Panel (a) --- the spectrum.} The peaks and the damping tail come from \emph{Annals~II}'s own equations: the integral solution~(102) with the Bond--Efstathiou transfer function driving the oscillation per mode, and the diffusion scale from \textbf{(dif-damp-correct)} at $f_2=3/4$, which is the antecedent's own corrected coefficient rather than a departure from it (\textbf{T-43}). \textbf{This shows that} the almost-Friedmann--Lemaitre formulation, carried to the damping scale, produces acoustic structure without anything being imported from a Boltzmann code.\\[2pt] \textbf{CAMB and CLASS are drawn as context and are not a target} --- decision~\textbf{S4c}. Criterion~5b is gated on this bundle's own pipeline, (102) against (177)--(179), at $9.5\times10^{-6}$ against $10^{-3}$. The distance to the external codes is large, expected, and \emph{itemised rather than totalled} in \texttt{provenance/CRITERION-5B-v1.md}: $97.8\%$ across the plateau, $137\%$ across the peaks, of which the damping coefficient alone is $17.2\%$. The first peak is quoted from a \emph{parabolic interpolation} through the grid maximum and its neighbours, because the $\ell$ grid steps by 30 across the acoustic band and reading the peak off it directly would assert a precision the sampling does not have.\\[2pt] \textbf{Panel (b) --- the panel a gauge-fixed treatment cannot draw.} The same spectra in \emph{both} frames, from \emph{one} solve: \texttt{coefficient\_sets} returns the Newtonian and CDM triples together, because~(102) is carried with a generic $u^a$ and the frame is chosen at the end. \textbf{This shows that} the frame is a choice made after the derivation rather than an assumption built into its start --- the claim the $1+3$ covariant approach exists to make, drawn here rather than asserted. The median frame gap reaches $40\%$. \textbf{This caption read ``which is a result and not a defect''; that reading is superseded by T-59 and T-74 and is withdrawn.} The gap is now understood as the third symptom of one term --- the bare $\kappa'$ carried inside $C_1$, \textbf{T-101} and \textbf{T-121} --- and not as a property of the formulation. What remains true of the original reading is only this: $C_\ell$ is quadratic in frame-dependent pieces, while the invariance~(102) satisfies is a statement about the total at fixed $k$, measured separately by~D6.\\[2pt]$^{\dagger}$\,\emph{Superseded by findings} \textbf{T-59}\emph{,} \textbf{T-74}\emph{; see} \texttt{provenance/BUNDLE-DEFECTS-v1.md}.\\[2pt]\footnotesize\emph{Evidence category:} acceptance. \emph{Generated by} \texttt{scripts/figure\_f9\_acoustic\_spectrum.py}. \emph{Standalone caption:} \texttt{captions/F9-acoustic-spectrum.md}.}
+\caption[The angular spectrum with the acoustic peaks, in both frames]{\textbf{F9 --- The angular spectrum with the acoustic peaks, in both frames.} \textbf{The angular power spectrum for the three backgrounds this bundle ships} --- CDM (Einstein--de~Sitter), $\Lambda$CDM and the stamped Planck~2018 set --- as shape, $D_\ell$ renormalised at $\ell=30$.\\[2pt] \textbf{The line of sight is the supplement's eq.~\eqref{eq:assembly-invariant}}, built from the coefficients with Paper~1's source signs: the Sachs--Wolfe and Doppler terms where photons scatter, the integrated Sachs--Wolfe term along the path, each invariant under a change of frame, and no coefficient that holds the scattering rate differentiated.\\[2pt] \textbf{Panel (a) --- the spectrum, CDM frame.} The odd acoustic peaks are present, $2\ell_A$ apart; the first is at $\ell\simeq189$ on Planck ($0.71\,\ell_A$), $144$ on $\Lambda$CDM and $165$ on Einstein--de~Sitter. The even peaks are absent, as an oscillator driven by a constant potential and loaded with baryons predicts: the radiation-era driving that sets the peak heights is not yet in the source (\textbf{A-3}). CAMB and CLASS are context, not a target (decision~\textbf{S4c}).\\[2pt] \textbf{Panel (b) --- both frames, from one solve.} The Newtonian and CDM spectra coincide to $3.5\times10^{-14}$ at every multipole: a first-order change of frame moves only the dipole, and here it moves nothing at $\ell\ge2$.\\[2pt]\footnotesize\emph{Evidence category:} acceptance. \emph{Generated by} \texttt{scripts/figure\_f9\_acoustic\_spectrum.py}. \emph{Standalone caption:} \texttt{captions/F9-acoustic-spectrum.md}.}
 \label{fig:f9}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{figures/f10-formation-surface-v1.3.0.pdf}
+\caption[The angular autocorrelation as it forms: $C_\ell(\eta)$]{\textbf{F10 --- The angular autocorrelation as it forms: $C_\ell(\eta)$.} \textbf{The angular autocorrelation at a sequence of conformal times, and the surface it sweeps.} Planck~2018, CDM frame, 25 multipoles from $\ell=2$ to $\ell=300$, fourteen epochs from the start of recombination to today. The line of sight is eq.~\eqref{eq:assembly-invariant} with Paper~1's source signs, each slot accumulated to each epoch; the $\eta_0$ column is the full integral to $1.0\times10^{-13}$.\\[2pt] \textbf{(a)} $D_\ell$ against $\ell$, epoch by epoch, normalised once by the maximum of today's curve. \textbf{(b)} $C_\ell(\eta)/C_\ell(\eta_0)$ over the $(\ell,\eta)$ plane.\\[2pt] \textbf{What it shows.} Above $\ell\simeq30$ the spectrum is laid down while photons scatter, with $5$--$21\%$ of each multipole arriving afterwards from the integrated Sachs--Wolfe term as the potentials decay. At $\ell=2$--$4$ the late integrated Sachs--Wolfe term deposits $22$--$54\%$ of today's $C_\ell$, and at $\ell=5$--$12$ it cancels part of what recombination laid down. Every earlier version of this figure showed no late power at all; the assembly that replaced (102) restores it.\\[2pt]\footnotesize\emph{Evidence category:} diagnostic. \emph{Generated by} \texttt{scripts/figure\_f10\_formation\_surface.py}. \emph{Standalone caption:} \texttt{captions/F10-formation-surface.md}.}
+\label{fig:f10}
 \end{figure}
 
 % === END source expansion: supplementary-materials/figures-v1.3.0.tex ===
