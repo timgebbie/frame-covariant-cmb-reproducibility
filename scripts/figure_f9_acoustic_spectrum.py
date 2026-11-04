@@ -413,15 +413,17 @@ def draw(curves, peaks, frames, gaps) -> int:
     # `symlog` is deliberately **not** used: these are renormalised ratios that
     # stay positive, and a symlog threshold would be a free parameter sitting
     # under a figure whose whole claim is the shape.
+    # **Legend in the north-east, one column, PI 2026-11-04.** In the lower
+    # left it ran across the damping tail and both annotations. The top of
+    # the shared axis is lifted so that the stacked legend sits above every
+    # curve, CAMB's first peak included, instead of on one.
+    top = max(float(np.max(c)) for c in curves.values())
     for ax in axes:
         ax.set_xscale("log")
         ax.set_xlabel(r"multipole $\ell$")
-        # **Legend moved, PI 2026-10-19: it was covering the spectrum.**
-        # Lower left is the empty corner once the acoustic peaks are
-        # present -- the curve rises away from it -- and two columns keep
-        # it short enough not to climb back into the first peak.
-        ax.legend(fontsize=6.4, frameon=False, loc="lower left", ncol=2,
-                  handlelength=2.2, borderaxespad=0.4, columnspacing=1.1)
+        ax.set_ylim(top=1.6 * top)
+        ax.legend(fontsize=6.4, frameon=False, loc="upper right", ncol=1,
+                  handlelength=2.2, borderaxespad=0.4)
     fig.tight_layout()
     written = save_figure(fig, STEM, VERSION)
     if STEM != "f9-acoustic-spectrum":
@@ -439,6 +441,24 @@ def draw(curves, peaks, frames, gaps) -> int:
         print(f"wrote {path.relative_to(ROOT)}")
 
     return 0
+
+
+def readings(ells: np.ndarray, curves: dict, frames: dict) -> tuple[dict, dict]:
+    r"""The first peaks and the frame gaps the figure prints, from the curves.
+
+    **One definition for both branches, and it reads the recorded CSV.** The
+    compute branch used to derive these from the numbers in memory and the
+    replot branch from the CSV, and the two disagreed twice: the replot
+    weighted the $D_\ell$ shape by $\ell(\ell+1)$ a second time, moving the
+    printed first peak from 189 to 278, and a CSV at ten figures reads a frame
+    gap of $3.5\times10^{-14}$ as zero. Both branches now draw from what the
+    CSV holds, written to seventeen figures, so a replot is the figure.
+    """
+    peaks = {n: first_peak(ells, c) for n, c in curves.items()}
+    gaps = {label: (np.abs(frames[label]["cdm"] - frames[label]["newtonian"])
+                    / np.abs(frames[label]["cdm"]))
+            for label, _, _, _ in BACKGROUNDS}
+    return peaks, gaps
 
 
 def load_csv() -> tuple[np.ndarray, dict, dict]:
@@ -607,17 +627,8 @@ def main() -> int:
             print("          Run `python scripts/figure_f9_acoustic_spectrum.py`")
             print("          with no arguments to recompute. Finding T-54.")
             return 1
-        ELLS, curves, frames = load_csv()
-        # The CSV now stores the C_l shape, so the D_l shape peaks are found
-        # on are reconstructed rather than read: D_l/D_30 = [l(l+1)/(30*31)]
-        # * (C_l/C_30), exactly. **Without this the replot branch would find
-        # the first maximum of C_l and call it the acoustic peak**, which is a
-        # different l -- the defect T-54 guards against in a different place.
-        _w = (ELLS * (ELLS + 1.0)) / (30.0 * 31.0)
-        peaks = {n: first_peak(ELLS, c * _w) for n, c in curves.items()}
-        gaps = {label: np.abs(frames[label]["cdm"] - frames[label]["newtonian"])
-                       / np.abs(frames[label]["cdm"])
-                for label, _, _, _ in BACKGROUNDS}
+        ells, curves, frames = load_csv()
+        peaks, gaps = readings(ells, curves, frames)
         print("    replotting from outputs/f9-acoustic-spectrum.csv")
         return draw(curves, peaks, frames, gaps)
 
@@ -698,7 +709,7 @@ def main() -> int:
         cols += [(n, curves[n]) for n in ("CAMB", "CLASS")]
         fh.write("ell," + ",".join(c.replace(",", ";") for c, _ in cols) + "\n")
         for i, l in enumerate(ELLS):
-            fh.write(f"{int(l)}," + ",".join(f"{v[i]:.9e}" for _, v in cols) + "\n")
+            fh.write(f"{int(l)}," + ",".join(f"{v[i]:.17e}" for _, v in cols) + "\n")
     print(f"wrote {out.relative_to(ROOT)}")
     # The partial is scratch and its job is done the moment the real CSV
     # exists. Leaving it would put a second, stale copy of the spectrum in
@@ -706,6 +717,9 @@ def main() -> int:
     # build artefact -- which is what it would be.
     part.path.unlink(missing_ok=True)
 
+    # The figure is drawn from the CSV just written, as `--replot` draws it.
+    ells, curves, frames = load_csv()
+    peaks, gaps = readings(ells, curves, frames)
     return draw(curves, peaks, frames, gaps)
 
 

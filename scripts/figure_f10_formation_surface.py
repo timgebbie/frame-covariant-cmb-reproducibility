@@ -357,7 +357,9 @@ def main() -> int:
 
     _write_csv(acc, sl, eta_star, eta_0, floor)
     print(f"    wrote {CSV.relative_to(ROOT)}")
-    for p in save_figure(_draw(acc, sl, eta_star, eta_0, floor), STEM, VERSION):
+    # Drawn from the CSV just written, exactly as `--replot` draws it, so the
+    # release route's replot reproduces the figure rather than approximating it.
+    for p in save_figure(_draw(*_read_csv()), STEM, VERSION):
         print(f"    wrote {p.relative_to(ROOT)}")
     return 0
 

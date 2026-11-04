@@ -1,14 +1,14 @@
 # 1+3 covariant CMB anisotropies reproducibility bundle
 
-Version: **v1.3.0-dev** — the recombination grid derived from the visibility's
-own width (**S33**), a structural audit of the code, the acoustic modes set
-against *Annals II*'s own 1+3 acoustic equations with Hu & Sugiyama as the
-analytic comparator (**S37**), and **the frame discrepancy localised to one
-site** (**T-82**, **T-85**, **T-86**) with the term that dominates its
-integrand measured (**T-94**). **Last release: v1.2.0** — tagged 2026-10-16:
-the full linear spectrum with the acoustic peaks and the Silk damping tail
-(F9), in both frames; the integral solution (102) carried with a generic
-4-velocity and specialised back; acceptance criterion 5b closed.
+Version: **v1.3.0** — the frame-invariant line of sight. The line-of-sight
+integral is assembled from Paper 1's linear redshift source as a Sachs–Wolfe,
+a Doppler and an integrated slot, each invariant under a change of frame. The
+two frames give one $C_\ell$ to $4\times10^{-14}$ (**D44**), the slots sum back
+to the integral they rearrange (**D45**), and F9 and F10 are drawn from them.
+**Last release: v1.3.0** — 4 November 2026. The previous release, v1.2.0
+(tagged 2026-10-16), brought the full linear spectrum with the acoustic peaks
+and the Silk damping tail (F9) in both frames, the integral solution (102)
+carried with a generic 4-velocity, and acceptance criterion 5b.
 
 Supplement: **v1.3.33** — `SUPPLEMENTARY-MATERIAL-v1.3.33.tex`. **This is a
 separate version line from the one above and is declared separately on
@@ -650,7 +650,7 @@ findings that **change what the code computes**:
 The complete record — fifteen findings, together with the antecedent's deliberate
 approximations and the one lineage note — is in `provenance/`.
 
-## Current situation: v1.3.0-dev
+## Current situation: v1.3.0
 
 This bundle is an **independent Python reconstruction, from first 1+3 covariant
 principles, of the almost-Friedmann–Lemaître results of** T. Gebbie,
@@ -945,7 +945,7 @@ both from the repository root, where the path says which one you meant.
 
 ## Verification status
 
-**Released as v1.2.0; this tree is v1.3.0-dev.** Every artefact carries a
+**Released as v1.3.0; this tree is v1.3.0.** Every artefact carries a
 maturity rung and a release gates on the rung, not on an opinion that the work
 is done (**S27**); `provenance/RELEASE-STATUS-v1.md` carries them and is
 **generated and verified** — a claim whose module, object, test or harness
@@ -985,9 +985,9 @@ only thing that knows, so it carries the check rather than the answer
 (finding **T-30**):
 
 ```
-git tag --list v1.2.0                                  # does it exist
-git log --oneline -1 v1.2.0                            # where does it point
-git merge-base --is-ancestor v1.2.0 HEAD; echo $?      # 0 if it is behind the tip
+git tag --list v1.3.0                                  # does it exist
+git log --oneline -1 v1.3.0                            # where does it point
+git merge-base --is-ancestor v1.3.0 HEAD; echo $?      # 0 if it is behind the tip
 ```
 
 Two reading notes on the manifests. **`PORTABLE-MANIFEST-SHA256.txt` is what

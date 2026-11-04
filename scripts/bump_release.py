@@ -96,8 +96,19 @@ def _edits(target: str, previous: str, today: str,
          f"**Last release: v{target}**"),
         ("README.md", rf"\*\*Released as v{re.escape(previous)};",
          f"**Released as v{target};"),
-        (supplement,
-         rf"\\date\{{\\textbf\{{{re.escape(dev)}\}}", rf"\\date{{\\textbf{{v{target}}}"),
+        # The README carries the check rather than the answer (T-30): three
+        # commands that name the last release, and they move with it.
+        ("README.md", rf"git tag --list v{re.escape(previous)} ",
+         f"git tag --list v{target} "),
+        ("README.md", rf"git log --oneline -1 v{re.escape(previous)} ",
+         f"git log --oneline -1 v{target} "),
+        ("README.md", rf"git merge-base --is-ancestor v{re.escape(previous)} HEAD",
+         f"git merge-base --is-ancestor v{target} HEAD"),
+        # The supplement's \date carries its own edition and, since the
+        # editions started moving faster than the code, the computational
+        # label after it: "Supplement v1.3.31 --- <date> ... computational
+        # v1.3.0-dev}". Only the computational label is the release's to flip.
+        (supplement, rf"computational {re.escape(dev)}\}}", f"computational v{target}}}"),
         ("CITATION.cff", rf'^version: "{re.escape(previous)}"', f'version: "{target}"'),
         ("CITATION.cff", r"^date-released: .*$", f"date-released: {today}"),
         ("CHANGELOG.md", rf"^## \[Unreleased\] — v{re.escape(target)} in preparation$",

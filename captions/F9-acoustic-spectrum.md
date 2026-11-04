@@ -20,7 +20,7 @@ present, $2\\ell_A$ apart; the first is at $\\ell\\simeq189$ on Planck
 ($0.71\\,\\ell_A$), $144$ on $\\Lambda$CDM and $165$ on Einstein--de~Sitter.
 The even peaks are absent, as an oscillator driven by a constant potential and
 loaded with baryons predicts: the radiation-era driving that sets the peak
-heights is not yet in the source (\\textbf{A-3}). CAMB and CLASS are context,
+heights is not yet in the source (\\textbf{A-3}). Below $\\ell\\sim30$ the \\texttt{PLANCK\\_MODEL} curve, its dip near $\\ell=5$ included, carries the incomplete radiation era of approximation \\textbf{A-3}: the potential decays through equality while the oscillator starts from the matter-era adiabatic condition. It is not a prediction of v1.3.0. CAMB and CLASS are context,
 not a target (decision~\\textbf{S4c}).\\\\[2pt]
 \\textbf{Panel (b) --- both frames, from one solve.} The Newtonian and CDM
 spectra coincide to $3.5\\times10^{-14}$ at every multipole: a first-order

@@ -3,7 +3,7 @@
 All notable changes to this bundle are recorded here. The version policy is in
 `README.md` under *Version-control policy*.
 
-## [Unreleased] — v1.3.0 in preparation
+## [1.3.0] — 2026-11-04
 
 ### Added
 
@@ -147,6 +147,15 @@ All notable changes to this bundle are recorded here. The version policy is in
 
 ### Fixed
 
+- **F9's replot did not reproduce F9.** It weighted the $D_\ell$ shape by
+  $\ell(\ell+1)$ a second time, which moved the printed first peak from 189 to
+  278, and it read a frame gap of $3.5\times10^{-14}$ as zero from a CSV written
+  to ten figures. F9 and F10 now draw from the CSV they write, F9's at
+  seventeen figures, so the release route's replot is the figure. F9's legend
+  sits in the north-east, in one column, above every curve.
+- `scripts/bump_release.py` flips the supplement's computational label
+  (`computational v1.3.0-dev`), which is where the `\date` line carries it since
+  the supplement started numbering its own editions.
 - **T-129 — the cached-figure guard digested the code *path*, not the code.**
   `source_fingerprint` hashed every `functions.*` module *present in
   `sys.modules`*, which differs between the compute branch and the `--replot`

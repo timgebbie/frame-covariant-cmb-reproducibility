@@ -119,21 +119,65 @@ ARTEFACTS: list[Artefact] = [
                     "test_the_coefficients_are_exact_rationals_not_floats"),
              note="findings T-17 and T-18"),
     Artefact("D9 - the acoustic scale against the antecedent's own formula",
-             "R", "v1.3.0",
+             "S", "v1.3.0",
              module="functions.spectra.acoustic",
              objects=("sound_speed_squared", "sound_horizon"),
              script="scripts/diagnostic_d9_acoustic_scale.py",
-             tests=("test_the_peak_spacing_disagrees_with_the_antecedents_own_formula",
+             tests=("test_the_derived_start_reproduces_the_antecedents_peak_spacing",
+                    "test_the_peak_spacing_disagrees_with_the_antecedents_own_formula",
                     "test_the_initial_condition_is_imposed_rather_than_adiabatic"),
              note="**Annals II prints this check and the bundle never ran it**: "
                   "l_j = |r_theta/r_s| j pi, with both sides computable here "
-                  "and no external code needed. It disagrees by a factor of "
-                  "2.0-2.8 --- finding T-51, which is Q8's answer. R rather "
-                  "than S because the number it reports is a DEFECT: the "
-                  "instrument is sound and what it measures is not yet fixed. "
-                  "Its tests assert the broken value and are written to FAIL "
-                  "when T-51 is repaired, so the record cannot go out of date "
-                  "quietly --- S33 clause (d) applied to a second finding"),
+                  "and no external code needed. It found T-51: the oscillation "
+                  "started at z = 3000 and discarded half the sound horizon, a "
+                  "spacing 2.0-2.8 times the formula's. Repaired by the per-mode "
+                  "derived start (S40): 191.7 against the formula's 192.7 on "
+                  "Einstein-de Sitter, where Appendix G is exact. The z_max start "
+                  "is kept as the executable control and still reads 2.95"),
+    Artefact("the line of sight in frame-invariant slots, with Paper 1's source",
+             "S", "v1.3.0",
+             module="functions.spectra.line_of_sight",
+             objects=("three_slots", "slots", "kernel_set", "Sources"),
+             script="scripts/figure_f9_acoustic_spectrum.py",
+             tests=("test_paper_1_source_meets_all_three_frame_conditions_at_every_eta",
+                    "test_the_three_slots_give_one_transfer_in_both_frames",
+                    "test_in_a_shear_free_frame_the_integrated_source_is_the_isw_alone",
+                    "test_the_switch_carries_both_corrections_or_neither"),
+             note="the supplement's eq:assembly-invariant: a Sachs-Wolfe slot "
+                  "-Int V G K, a Doppler slot -Int V (vhat_B + C_2) K' and an "
+                  "integrated slot Int W (C_0 - G') K, G = C_1^grav - C_2', each "
+                  "invariant under a change of frame at every eta. Built with "
+                  "Paper 1's eq:B signs (RANK_ONE_SOURCE = 'paper 1'), which meet "
+                  "the three frame conditions to 3.3e-13 (D44); one C_l in both "
+                  "frames to 4.2e-14. D45 sums the slots back to the direct "
+                  "integral: the difference falls by 4.00 when the eta step "
+                  "halves, so the slot weights are verified by an evaluation "
+                  "independent of them"),
+    Artefact("F9 - the angular spectrum on the frame-invariant line of sight",
+             "S", "v1.3.0",
+             module="functions.spectra.two_frame",
+             objects=("covariant_coefficient_sets", "line_of_sight_inputs"),
+             script="scripts/figure_f9_acoustic_spectrum.py",
+             tests=("test_the_covariant_sets_are_paper_1_and_leave_the_default_alone",
+                    "test_the_three_slots_give_one_transfer_in_both_frames"),
+             note="the v1.2.0 figure redrawn from the three slots in place of "
+                  "(102). First maxima 165.4 (EdS), 143.8 (LCDM) and 188.5 "
+                  "(Planck, 0.71 l_A) against CAMB's 206.1 and CLASS's 206.2; the "
+                  "two frames agree to 3.5e-14. The odd series is present, the "
+                  "even peaks absent: the undriven oscillator of A-3. The replot "
+                  "draws from the committed CSV, written to seventeen figures, so "
+                  "it reproduces the figure"),
+    Artefact("F10 - the formation surface: when the spectrum is laid down",
+             "S", "v1.3.0",
+             module="functions.spectra.line_of_sight",
+             objects=("three_slots", "ThreeSlots"),
+             script="scripts/figure_f10_formation_surface.py",
+             tests=("test_the_slots_accumulated_to_eta_0_are_the_slots",),
+             note="each slot accumulated in eta on Planck, both frames; the eta_0 "
+                  "column is the full integral to 1e-13. After the visibility "
+                  "closes the integrated Sachs-Wolfe term deposits 22-54% of "
+                  "today's C_l at l = 2-4, where every F10 drawn from (102) showed "
+                  "none"),
     Artefact("the stamped Planck 2018 set, wired as PLANCK_MODEL", "S", "v1.2.0",
              module="functions.background.flrw",
              objects=("PLANCK_MODEL", "OMEGA_GAMMA_H2"),
