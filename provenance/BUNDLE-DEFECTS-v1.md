@@ -12850,3 +12850,53 @@ moves.
 integrated there from $\kappa'$, with $W$ and $\mathcal V$ both taken from it.
 It moves every transfer at the $10^{-3}$ level, so it lands with the next
 regeneration of the figures rather than beside a run already drawn.
+
+
+## T-192 — The derived start gives a band of Planck modes the matter-era initial condition on a potential that has already decayed
+
+The acoustic pair starts each mode at $k\thinspace r_s(\eta)=\varepsilon$ (**T-51/S40**),
+or at the table's first point when the mode never reaches it, and imposes
+$\delta T=-\tfrac23\Phi_A$, $\tau_1=0$ there. The rule's premise is that a
+super-horizon mode is frozen until it starts. That holds only while the
+potential is constant. `potentials` holds $\Phi$ constant below `md_reference`,
+the line-of-sight grid's start, and on `PLANCK_MODEL` lets it decay after
+(approximation **A-3**). So a mode whose start falls between `md_reference`
+and $\eta_*$ is given the matter-era condition on the decayed potential, while
+its neighbours carry the decay through continuity. On Planck that band is
+$2.7<k<5.4$.
+
+**The Sachs–Wolfe source at last scattering**, $\langle\delta T+\Phi_A\rangle_{\mathcal V}/T(k)$,
+jumps from $0.185$ at $k=2.7$ to $0.296$ at $k=2.8$, and returns to the
+smooth curve by $k=5.4$. Measured, on the released three slots:
+
+| start rule | $D_7/D_{30}$ | $D_{10}/D_{30}$ | $D_{12}/D_{30}$ |
+|---|---:|---:|---:|
+| as built | 0.454 | 0.449 | 0.460 |
+| start no later than `md_reference` | 0.359 | 0.389 | 0.435 |
+| every mode from the table's start | 0.374 | 0.424 | 0.476 |
+
+The as-built rule puts a bump at $\ell\simeq7$–$12$ into F9's Planck curve,
+inside the region v1.3.0 already gives to A-3. ΛCDM, whose potential is
+constant until $\Lambda$, is unaffected.
+
+**It is also what D45 measured as the stored moments' residual.** D45's
+`_rebuilt` integrates (106) from the line-of-sight grid's start. In this band
+the stored $\delta T$ and $\tau_1$ are `np.interp`'s left fill until the mode
+starts, while (106) integrates the potential's decay. Three tests place it:
+
+- raising `ACOUSTIC_POINTS_PER_PERIOD` from 24 to 96 moves the residual by a
+  factor of 1.00, so it is not the resample;
+- halving the line-of-sight step moves it by 1.00 (D45), so it is not the
+  quadrature;
+- anchoring the reconstruction at the mode's own start takes it from up to
+  $1.8\times10^{-1}$ (at $k=3$) to $2$–$9\times10^{-5}$.
+
+(106) is the exact derivative of the stored moment. The residual of
+$1.3\times10^{-2}$ that v1.3.0 records belongs to the start rule, not to
+(106).
+
+**Not repaired here.** The initial condition and the start are the
+oscillator's physics. With the radiation era wired (A-3, v1.4.0) both are
+redefined: the radiation-era adiabatic condition, set where every mode is
+super-horizon. The table records what each rule would do. D45's anchor
+follows with the regeneration.

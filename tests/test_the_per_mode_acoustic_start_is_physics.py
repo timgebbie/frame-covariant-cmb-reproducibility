@@ -133,3 +133,34 @@ def test_a_common_start_does_not_reproduce_the_released_answer(setup):
     )
 
 
+
+
+def test_t192_the_start_rule_breaks_the_sachs_wolfe_source_on_planck(setup):
+    r"""**T-192, pinned and written to FAIL when it is repaired.**
+
+    A mode that reaches $k\,r_s=\varepsilon$ before $\eta_*$ starts there, on
+    the matter-era condition $\delta T=-\tfrac23\Phi_A$. On `PLANCK_MODEL` the
+    potential has already decayed by then (A-3), while a mode that never
+    reaches it starts at the table's first point and carries the decay through
+    continuity. The Sachs--Wolfe source at last scattering therefore jumps
+    where the rule changes branch, near $k=2.75$. When the radiation era's
+    initial condition replaces the rule, this test fails: update T-192 and
+    retire it.
+    """
+    from functions.spectra.two_frame import (
+        covariant_coefficient_sets, line_of_sight_inputs)
+
+    env = setup[0]
+    eta, v = np.asarray(env.eta), np.asarray(env.visibility)
+
+    def source(k: float) -> float:
+        s, _ = line_of_sight_inputs(k, covariant_coefficient_sets(k, env)[0], env)
+        return (float(np.trapezoid(v * s.c1_grav, eta) / np.trapezoid(v, eta))
+                / env.transfer_at(k))
+
+    smooth = abs(source(2.7) / source(2.6) - 1.0)
+    jump = source(2.8) / source(2.7)
+    assert smooth < 1e-2, f"the source is not smooth below the boundary: {smooth:.2e}"
+    assert jump > 1.3, (
+        f"T-192's jump has gone ({jump:.3f}): the start rule or the initial "
+        "condition changed. Update provenance T-192 and retire this test.")
