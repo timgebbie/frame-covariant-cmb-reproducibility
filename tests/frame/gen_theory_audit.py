@@ -227,10 +227,26 @@ text = '\n'.join(o)
 # An artefact whose generation depends on a human remembering a redirection is
 # not generated.  `run_all.py` runs this, and the write is here.
 out = HERE.parents[1] / 'docs' / 'THEORY-AUDIT.md'
+#
+# **Unchanged content is not rewritten (2026-11-04).** The stamp is the only
+# line that moves on every run, and rewriting the file for it alone moved its
+# mtime past the manifests that hash it, so `run_all.py --strict` failed the
+# release-hygiene gate on a document whose every number was unchanged. The
+# comparison ignores the two stamp lines and nothing else.
+def _unstamped(doc: str) -> str:
+    doc = re.sub(r'at \d{4}-\d\d-\d\d \d\d:\d\d UTC', 'at <stamp>', doc)
+    return re.sub(r'^\| generated \| .* \|$', '| generated | <stamp> |', doc,
+                  flags=re.M)
+
 if allok:
     out.parent.mkdir(exist_ok=True)
-    out.write_text(text + '\n', encoding='utf-8', newline='\n')
-    print(f'\nwrote {out.relative_to(HERE.parents[1])}', file=sys.stderr)
+    old = out.read_text(encoding='utf-8') if out.exists() else ''
+    if _unstamped(old) == _unstamped(text + '\n'):
+        print(f'\nunchanged {out.relative_to(HERE.parents[1])} '
+              '(only the stamp would move; not rewritten)', file=sys.stderr)
+    else:
+        out.write_text(text + '\n', encoding='utf-8', newline='\n')
+        print(f'\nwrote {out.relative_to(HERE.parents[1])}', file=sys.stderr)
     if NORMALISED:
         print(f'\n  {len(NORMALISED)} render normalisation(s) applied to '
               'instrument prose on the way in. These are typographic and the\n'

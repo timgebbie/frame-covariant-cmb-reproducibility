@@ -2,7 +2,7 @@
 
 > **Generated, not transcribed. Do not edit by hand.**
 >
-> Produced by `tests/frame/gen_theory_audit.py` at 2026-11-04 11:26 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
+> Produced by `tests/frame/gen_theory_audit.py` at 2026-11-04 16:54 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
 
 **Status: ALL CHECKS PASS** — 54 assertions across 12 instruments.
 
@@ -296,12 +296,12 @@ The peak of the visibility is the point where $\kappa''=-\kappa'^2$, so at $\eta
 
 | | |
 |---|---|
-| generated | 2026-11-04 11:26 UTC |
+| generated | 2026-11-04 16:54 UTC |
 | python | 3.13.18 |
 | numpy | 2.5.3 |
 | scipy | 1.18.1 |
 | sympy | 1.14.0 |
-| generator | `tests/frame/gen_theory_audit.py`, sha256 `e4514b1cb291…` |
+| generator | `tests/frame/gen_theory_audit.py`, sha256 `473b8e9758e5…` |
 
 Annals II is read from `sources/annals/cbrII.tex` and referred to by label — `IBE-source`, `modeibe`, `source-calB`, `find_coef`, `C-B-coef`, `int_soln_damping`, `slowdecoupling`, `slowdecoupling-ng-0`. Paper 1 is referred to by label (`eq:B`, `eq:frame-transf`, `eq:raise`), never by printed number: those differ between the two lines.
 

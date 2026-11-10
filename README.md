@@ -1,155 +1,156 @@
 # 1+3 covariant CMB anisotropies reproducibility bundle
 
 Version: **v1.4.0-dev** — the radiation era on the frame-invariant line of
-sight: the radiation-era potential and the driving it gives the oscillator
-(approximation **A-3**), whose test the supplement registers before the work.
+sight: the radiation-era potential, the driving it gives the acoustic
+oscillator (approximation A-3) and the tight-coupling transition (A-5). The
+supplement registers the test of this work before the work begins.
 **Last release: v1.3.0** — 4 November 2026: the line-of-sight integral
 assembled from Paper 1's linear redshift source as a Sachs–Wolfe, a Doppler
 and an integrated slot, each invariant under a change of frame. The two frames
-give one $C_\ell$ to $4\times10^{-14}$ (**D44**), the slots sum back to the
-integral they rearrange (**D45**), and F9 and F10 are drawn from them.
+give one $C_\ell$ to $4\times10^{-14}$ (D44), the slots sum back to the
+integral they rearrange (D45), and F9 and F10 are drawn from them.
 
-Supplement: **v1.3.33** — `SUPPLEMENTARY-MATERIAL-v1.3.33.tex`. **This is a
-separate version line from the one above and is declared separately on
-purpose.** The line above is the *computational* release; a supplement edition
-records a documentation gate and is **not** an assertion that the repository
-physics release has advanced. `scripts/_versions.py` reads the supplement's
-name from *this* line, never from the computational one, because the two were
-coupled only while they happened to agree.
+Supplement: **v1.4.0** — `SUPPLEMENTARY-MATERIAL-v1.4.0.tex`. The supplement
+has its own version line. An edition records the state of the documentation
+and does not assert that the computational release above has advanced, so
+`scripts/_versions.py` reads the supplement's name from this line and never
+from the computational one.
 
 Supplementary code and materials for: Tim Gebbie, *"Frame covariance of CMBR
-lensing in the exact $1+3$ covariant radiation hierarchy"* (**Paper 1**),
-University of Cape Town, 2026, **arXiv:astro-ph/9912072v4**
+lensing in the exact $1+3$ covariant radiation hierarchy"* (Paper 1),
+University of Cape Town, 2026, arXiv:astro-ph/9912072v4
 ([doi:10.48550/arXiv.astro-ph/9912072](https://doi.org/10.48550/arXiv.astro-ph/9912072)), submitted 2026-10-16, CC BY 4.0.
 
-> **Cite it versioned.** A bare `astro-ph/9912072` resolves to whatever is
-> current, and that identifier has carried **three distinct documents**:
-> **v1/v2** (Dec 1999) the legacy 1999 work, **v3** (3 Oct 2026) **the
-> correction** that withdrew the 1999 claim of a new effect, and **v4**
-> (21 Oct 2026) **Paper 1**. So **`v4` for Paper 1, `v3` for the correction,
-> `v2` for the legacy work** — an unversioned reference to any of them now
-> points at Paper 1 instead.
+> Cite the identifier with its version. `astro-ph/9912072` has carried three
+> documents: v1 and v2 (December 1999), the legacy work; v3 (3 October 2026),
+> the correction that withdrew the 1999 claim of a new effect; and v4
+> (21 October 2026), Paper 1. Cite `v4` for Paper 1, `v3` for the correction
+> and `v2` for the legacy work. An unversioned reference now resolves to
+> Paper 1.
 
 The supplementary-materials document is included here:
 
-> [SUPPLEMENTARY-MATERIAL-v1.3.33.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.33.pdf)
+> [SUPPLEMENTARY-MATERIAL-v1.4.0.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.4.0.pdf)
 
-Its source is `SUPPLEMENTARY-MATERIAL-v1.3.33.tex`, **one consolidated file in
-the repository root**, which builds with `pdflatex` alone: the prose carries no
-`\input`, the bibliography is inline, and the only external files are the
-generated assets in `tables/`, `tikz/` and `figures/`. The prose fragments that
-`scripts/build_supplement.py` used to assemble are gone, and that script needs
-retargeting at the consolidated source.
+Its source, `SUPPLEMENTARY-MATERIAL-v1.4.0.tex`, is one file in the
+repository root, and `scripts/build_supplement.py` builds it with `pdflatex`
+alone: the prose carries no `\input`, the bibliography is inline, and the only
+external files are the generated assets in `tables/`, `tikz/` and `figures/`.
 It carries the scope, the theory-to-computation map, the acceptance spine, the
-conventions and translations tables, and the interpretive limits — read it
-before the code if you want to know what this release does and does not claim.
+conventions and translations tables, the derivation behind each step of the
+chain below, and the interpretive limits. Read it before the code to see what
+this release does and does not claim.
 
-## Key figure: when the spectrum is laid down
+## Key figure: the formation surface
 
-![F10 — the angular autocorrelation as it forms, Planck 2018 in the CDM frame: panel (a) D_ℓ against ℓ at fourteen epochs from the start of recombination to today, normalised to today's maximum; panel (b) the fraction of today's C_ℓ in place over multipole and conformal time](figures/f10-formation-surface-v1.3.0.png)
+![F10 — the angular autocorrelation as it forms, Planck 2018 in the CDM frame: panel (a) D_ell against ell at fourteen conformal times from the start of recombination to today, panel (b) C_ell(eta)/C_ell(eta_0) over the plane of multipole and conformal time past recombination](figures/f10-formation-surface-v1.3.0.png)
 
-**Figure F10** — **the angular autocorrelation at a sequence of conformal
-times, and the surface it sweeps.** Planck 2018, CDM frame, 25 multipoles from
-$\ell=2$ to $300$, fourteen epochs from the start of recombination to today.
-The line of sight is the frame-invariant assembly of step 7 below, each slot
-accumulated to each epoch, and the $\eta_0$ column is the full integral to
-$1.0\times10^{-13}$. **(a)** $D_\ell$ against $\ell$, epoch by epoch,
-normalised once by the maximum of today's curve. **(b)** $C_\ell(\eta)/C_\ell(\eta_0)$
-over the plane of multipole and conformal time. Generated by
-`scripts/figure_f10_formation_surface.py`.
+Figure F10 shows the angular autocorrelation at a sequence of conformal times
+and the surface it sweeps: Planck 2018, CDM frame, 25 multipoles from $\ell=2$
+to $\ell=300$, fourteen epochs from the start of recombination to today. Panel
+(a) is $D_\ell$ against $\ell$ epoch by epoch, normalised once by the maximum
+of today's curve, so it shows growth and shape together. Panel (b) is
+$C_\ell(\eta)/C_\ell(\eta_0)$ over the plane of $\ell$ and
+$(\eta-\eta_\ast)/(\eta_0-\eta_\ast)$. The line of sight is the supplement's
+`eq:assembly-invariant` with Paper 1's source signs, each slot accumulated to
+each epoch, and the $\eta_0$ column reproduces the full integral to
+$1.0\times10^{-13}$. Generated by `scripts/figure_f10_formation_surface.py`
+from `functions/spectra/line_of_sight.py`; the accumulation is committed as
+`outputs/f10-formation-surface.csv`.
 
-> **What it shows.** The late share is the fraction of today's $C_\ell$ that
-> arrives after the visibility has closed, at $(\eta-\eta_\ast)>0.01(\eta_0-\eta_\ast)$.
->
-> * **Above $\ell\simeq30$ the spectrum is laid down while the photons
->   scatter**, and 5–21% of each multipole arrives afterwards, from the
->   integrated Sachs–Wolfe term as the potentials decay.
-> * **At $\ell=2$, 3 and 4 the late integrated Sachs–Wolfe term deposits 54%,
->   37% and 22%** of today's $C_\ell$.
-> * **For $\ell$ from 5 to 12 late power cancels earlier power**, by up to 51%
->   at $\ell=7$. Below $\ell\simeq30$ the potential both slots read carries an
->   incomplete radiation era (approximation **A-3**), so this cancellation is
->   not yet a prediction.
->
-> **Every earlier F10 showed no late power at all.** It was drawn from (102),
-> which carries its bulk under the visibility $\mathcal V=W\kappa'$, and the
-> visibility vanishes once the photons stop scattering, so every late source
-> was multiplied by zero (**T-128**). The integrated slot carries its source
-> under $W$, and the late integrated Sachs–Wolfe term is back. v1.4.0's lead
-> figure, **F11**, is this figure with the radiation era wired.
+Above $\ell\simeq30$ the spectrum is laid down while photons scatter, and 5 to
+21% of each multipole arrives afterwards from the integrated Sachs–Wolfe term
+as the potentials decay. At $\ell=2$ to $4$ the late term deposits 54, 37 and
+22% of today's $C_\ell$, counting what is laid down after
+$(\eta-\eta_\ast)=0.01\thinspace(\eta_0-\eta_\ast)$, when the visibility has closed.
+At $\ell=5$ to $12$ the late share is negative, $-3$ to $-51$% of today's
+$C_\ell$, with the largest cancellation at $\ell=7$: the late term cancels
+part of what recombination laid down. Below $\ell\simeq30$ the potential both
+slots read carries an incomplete radiation era (A-3, step 7 below), so these
+shares are not yet predictions. F11, v1.4.0's lead figure, is this figure
+with the radiation era wired.
 
-## The angular spectrum with the acoustic peaks
+Every earlier version of this figure was drawn from the antecedent's
+line-of-sight solution (102) and showed no late power at all, on every
+background (T-128). (102) carries its integrated term at the visibility
+$\mathcal V$ where the exact integration by parts wants the optical-depth weight
+$W$ (B-17, discrepancy (i)), and $\mathcal V$ vanishes after recombination.
+The assembly that replaced (102) carries that term at $W$ and restores the
+late integrated Sachs–Wolfe effect. Einstein–de Sitter, whose potential is
+exactly constant, is the null control: there the late share must be zero.
 
-![F9 — the normalised angular spectrum for CDM, ΛCDM and the Planck 2018 set, linear-log D_ℓ/D_30, panel (a) in the CDM frame and panel (b) in both frames, against CAMB and CLASS as context](figures/f9-acoustic-spectrum-v1.2.0.png)
+## The angular spectrum
 
-**Figure F9** — **linear-log $D_\ell/D_{30}$**, shape renormalised at
-$\ell=30$, for CDM (Einstein–de Sitter), ΛCDM and the Planck 2018 set, against
-CAMB and CLASS as context (**S4c**). The line of sight is step 7's assembly,
-built from the coefficients with Paper 1's source signs. **(a)** the three
-backgrounds in the **CDM frame**; **(b)** the same spectra in both frames,
-from one solve. Generated by `scripts/figure_f9_acoustic_spectrum.py` and drawn
-from `outputs/f9-acoustic-spectrum.csv`.
+![F9 — the normalised angular spectrum D_ell/D_30 for CDM (Einstein–de Sitter), ΛCDM and the Planck 2018 set on a logarithmic multipole axis, panel (a) in the CDM frame against CAMB and CLASS as context, panel (b) the same spectra in the Newtonian and CDM frames](figures/f9-acoustic-spectrum-v1.2.0.png)
 
-| | Einstein–de Sitter | ΛCDM | Planck | CAMB | CLASS |
-|---|---:|---:|---:|---:|---:|
-| first maximum, $\ell$ | 165.4 | 143.8 | 188.5 | 206.1 | 206.2 |
-| largest gap between the two frames | $1.3\times10^{-14}$ | $3.5\times10^{-14}$ | $1.1\times10^{-14}$ | | |
+Figure F9 is the angular power spectrum for the three backgrounds this bundle
+ships, CDM (Einstein–de Sitter), ΛCDM and the stamped Planck 2018 set, as
+shape: $D_\ell$ renormalised at $\ell=30$. The line of sight is the
+supplement's `eq:assembly-invariant`, built from the coefficients with Paper
+1's source signs: the Sachs–Wolfe and Doppler terms where photons scatter, the
+integrated Sachs–Wolfe term along the path, each invariant under a change of
+frame, and no coefficient that holds the scattering rate differentiated.
+Generated by `scripts/figure_f9_acoustic_spectrum.py` from
+`functions/spectra/line_of_sight.py`, and drawn from
+`outputs/f9-acoustic-spectrum.csv`.
 
-Each maximum is the vertex of a parabola through three multipoles 30 apart, so
-it carries $\pm15$. Planck's is $0.7067\thinspace\ell_A$.
+Panel (a) draws the spectra in the CDM frame. The first maxima are at
+$\ell=165.4$ on Einstein–de Sitter, $143.8$ on ΛCDM and $188.5$ on Planck,
+which is $0.7067\thinspace\ell_A$, against 206.1 for CAMB and 206.2 for CLASS;
+each maximum is the vertex of a parabola through three multipoles 30 apart,
+so it carries $\pm15$. The odd acoustic peaks are present and the even ones
+absent: the second maxima stand at 496 on Einstein–de Sitter and 443 on ΛCDM,
+three times the first, so each is the third peak, where CAMB's maxima are at
+206, 492 and 729; on Planck the third maximum, near $\ell\simeq700$, is too
+shallow for the shared prominence rule. An undriven, baryon-loaded oscillator
+predicts this: with no radiation-era driving the zero point of the
+oscillation is set by the baryon loading, and an even peak stands at about
+$(1+6R)^{-2}$ of its odd neighbours. The driving that sets the peak heights
+is approximation A-3, upstream of the line of sight and v1.4.0's work. Below
+$\ell\simeq30$ the Planck curve carries the same incomplete radiation era:
+the Sachs–Wolfe source at last scattering is 0.187 against $\Phi/3=0.310$,
+the integrated slot, 0.535, enters with the opposite sign, and $D_\ell/D_{30}$
+falls to 0.44 for $\ell$ from 4 to 11 where CAMB holds 0.78. The bump at
+$\ell\simeq7$ to $12$ is the start rule's (T-192). None of that is a
+prediction of v1.3.0.
 
-> **What it shows.**
->
-> * **The two frames give one spectrum.** A first-order change of frame moves
->   only the dipole, and panel (b) moves nothing at $\ell\ge2$. Every F9 drawn
->   from (102) disagreed between the frames by order one.
-> * **The odd acoustic peaks are present and the even ones are absent.** The
->   maxima stand at 165 and 496 on Einstein–de Sitter and at 144 and 443 on
->   ΛCDM. Each second maximum is at three times the first, so it is the third
->   peak, and the second peak is missing. That is an undriven, baryon-loaded
->   oscillator, whose even peaks stand at about $(1+6R)^{-2}$ of their odd
->   neighbours. CAMB's maxima are at 206, 492 and 729. On Planck the third
->   maximum, near $\ell\simeq700$, is too shallow for the shared prominence
->   rule.
-> * **The slots, by multipole (D45).** For $\ell$ from 100 to 400 no pair of
->   slots cancels. On Planck the integrated slot is 1–5% of $C_\ell$ there,
->   and its cross term with the Sachs–Wolfe slot adds 11–16% in phase, as the
->   early integrated Sachs–Wolfe effect should. On D45's grid, 15 apart, the
->   first maximum falls from 225 with the Sachs–Wolfe slot alone, to 210 with
->   the Doppler slot, to 195 with all three.
->
-> **What it does not show: the peak heights, and Planck below $\ell\simeq30$.**
-> The radiation-era potential and its driving are not yet in the source
-> (**A-3**, v1.4.0). On Planck at $k\to0$ the Sachs–Wolfe source at last
-> scattering is 0.187 against $\Phi/3=0.310$, and the integrated slot, 0.535,
-> enters with the opposite sign. The two cancel, and $D_\ell/D_{30}$ falls to
-> 0.44 for $\ell$ from 4 to 11, where CAMB holds 0.78. ΛCDM, without
-> radiation, gives $\Phi/3$ to three figures. CAMB and CLASS agree with each
-> other to 0.3%; they are context, not a target.
+CAMB and CLASS are drawn as context and not as a target (decision **S4c**). They
+share a first peak at $\ell\simeq206$ and agree with each other to 0.3%.
+Acceptance criterion 5b is gated on this bundle's own pipeline: (102) against
+(177)–(179), agreeing to $9.5\times10^{-6}$ against a gate of $10^{-3}$. The
+itemised distance to the external codes, as it stood at v1.2.0, is in
+`provenance/CRITERION-5B-v1.md`.
 
-## The physics, end to end
+Panel (b) draws the same spectra in both frames. Both come from one solve: the
+coefficients are carried with a generic $u^a$ and the frame is chosen at the
+end, so the Newtonian and CDM curves are two projections of the same
+coefficients rather than two calculations. They coincide to
+$3.5\times10^{-14}$ at every multipole. A first-order change of frame moves
+only the dipole, and the figure shows it moving nothing at $\ell\ge2$. A
+gauge-fixed treatment cannot draw this panel, since it fixes the frame at the
+start of the derivation rather than choosing it at the end.
 
-This bundle computes the CMB angular power spectrum from the **exact $1+3$
-covariant radiation hierarchy** — not from a gauge-fixed perturbation theory
-with a covariant gloss. The chain below is the whole of it, and every step
-names the module that implements it.
+## The physics
+
+We compute the CMB angular power spectrum from the exact $1+3$ covariant
+radiation hierarchy, not from a gauge-fixed perturbation theory with a
+covariant gloss. The chain below runs from the hierarchy to $C_\ell$, and each
+step names the module that implements it.
 
 ### Notation
 
-Every symbol used in the chain below is defined here, once, so no equation on
-this page needs another file to be read. Equation numbers in tags are
-*Annals II*'s published ones; the full conventions sheet is
+Every symbol in the chain is defined here once. Equation numbers in the tags
+are those of *Annals II* as published; the full conventions sheet is
 `provenance/conventions.md`.
 
-**$k$ is comoving throughout this README.** Appendix F's recursions and the
+The wavenumber $k$ is comoving throughout. Appendix F's recursions and the
 integral solution (102) are written in the comoving wavenumber, so
-$k_{\rm phys}=k/a$. `functions/harmonics/free_streaming.py` carries the warning
-that a bare $k$ is ambiguous between the two and that they differ by a factor
-$a$ in precisely these equations.
+$k_{\rm phys}=k/a$, and `functions/harmonics/free_streaming.py` records that
+the two differ by a factor $a$ in precisely these equations.
 
-**Two derivatives appear, and step 1 uses both.** An overdot is the derivative
-along the fundamental congruence, $u^a\nabla_a$; a prime is
-$\mathrm d/\mathrm d\eta$, with $\eta$ conformal time.
+An overdot is the derivative along the fundamental congruence, $u^a\nabla_a$;
+a prime is $\mathrm d/\mathrm d\eta$, with $\eta$ conformal time. The transport
+equation of step 1 is written in conformal time throughout.
 
 | symbol | meaning |
 |---|---|
@@ -157,20 +158,21 @@ $\mathrm d/\mathrm d\eta$, with $\eta$ conformal time.
 | $\eta$, $\eta_0$, $\eta_\ast$ | conformal time; today; last scattering. $\Delta\eta\equiv\eta_0-\eta$ and $\Delta\eta_\ast\equiv\eta_0-\eta_\ast$ |
 | $a$, $\mathcal H$ | scale factor; conformal Hubble rate $a'/a$ |
 | $k$, $r_s$ | comoving wavenumber; comoving sound horizon at last scattering |
+| $\ell_A$ | the acoustic scale $\pi r_\theta/r_s$, with $r_\theta$ the comoving distance to last scattering |
 | $\mathrm D_a$ | spatial derivative, projected orthogonal to $u^a$ |
 | $\langle\thinspace \cdots\thinspace \rangle$ | the projected, symmetric, trace-free (PSTF) part of the enclosed indices |
-| $A_\ell$ | the **multi-index** $a_1\ldots a_\ell$ |
-| $A_a$ | the **acceleration** $\dot u_a$ — a different object from $A_\ell$, sharing a letter |
+| $A_\ell$ | the multi-index $a_1\ldots a_\ell$ |
+| $A_a$ | the acceleration $\dot u_a$, a different object from $A_\ell$ that shares a letter |
 | $\tau_{A_\ell}$, $\tau_\ell$ | PSTF temperature multipoles; the mode coefficient of the same |
-| $T$, $\delta T$ | the temperature, *defined* as the monopole of $T(x,e)$; its perturbation |
-| $T_\ell(k)$ | the **transfer function** — carries a multipole index, and is not the temperature |
+| $T$, $\delta T$ | the temperature, defined as the monopole of $T(x,e)$; its perturbation |
+| $T_\ell(k)$ | the transfer function, which carries a multipole index and is not the temperature |
 | $O^{A_\ell}$, $\beta_\ell=\ell!/(2\ell-1)!!$ | the PSTF direction tensor; its normalisation $O^{A_\ell}O_{A_\ell}$. $\beta_0=\beta_1=1$, $\beta_2=\tfrac23$ |
 | $\alpha_\ell=(2\ell+1)/\beta_\ell$ | the normalisation in which (F.4) takes the Ma & Bertschinger form. $\alpha_0=1$, $\alpha_1=3$, $\alpha_2=\tfrac{15}2$ |
 | $\mathcal B_{A_\ell}$, $\mathcal S_{A_\ell}$ | the gravitational source; the in-scattered Thomson source |
-| $\sigma_{ab}$, $\sigma_T$ | the shear; the Thomson cross-section — again one letter, two objects |
+| $\sigma_{ab}$, $\sigma_T$ | the shear; the Thomson cross-section, again one letter for two objects |
 | $\kappa'=an_e\sigma_T$ | differential optical depth, with $n_e$ the free-electron density |
-| $W=e^{-\kappa}$, $\mathcal V=W\kappa'$ | the optical-depth weight; the visibility function |
-| $\mathcal D$, $k_D$ | the diffusion (Silk) damping factor $e^{-(k/k_D)^2}$ and its scale. $\mathcal D$ is **not** $\mathrm D_a$ |
+| $W=e^{-\kappa}$, $\mathcal V=W\kappa'$ | the optical-depth weight; the visibility function, with $W'=\mathcal V$ |
+| $\mathcal D$, $k_D$ | the diffusion (Silk) damping factor $e^{-(k/k_D)^2}$ and its scale. $\mathcal D$ is not $\mathrm D_a$ |
 | $\Phi_A$, $\Phi_H$ | the acceleration and curvature potentials of the frame $u^a$. Each shifts by $(v'+\mathcal Hv)/k$ under a change of frame; their difference, which sets the electric Weyl tensor, does not |
 | $\rho_b$, $\rho_\gamma$, $R=3\rho_b/4\rho_\gamma$ | baryon and photon energy densities; the baryon loading |
 | $\hat v_B$, $q_a$ | the baryon velocity; the energy flux, which the CDM frame sets to zero |
@@ -178,554 +180,575 @@ $\mathrm d/\mathrm d\eta$, with $\eta$ conformal time.
 | $c_\pm$ | coefficients of $\tau_{\ell\pm1}$ in the $O(\ell)$ aberration coupling. Subscripts $\mathrm N$ and $\mathrm{CDM}$ label the two frames throughout |
 | $f_\ell$ | the multipole profile the $O(\ell)$ stencil differentiates, as $\ell\thinspace \partial_\ell f_\ell$ |
 | $C_0,C_1,C_2$; $p_0,p_1,p_2$ | the matching coefficients of (89); their exact rational prefactors |
+| $C_1^{\rm grav}$, $C_1^{\rm scatt}$ | the gravitational and Thomson halves of $C_1$, with $C_1^{\rm scatt}=-\kappa'\hat v_B$ |
+| $K$, $G$ | the kernel $j_\ell(k(\eta_0-\eta))$, a prime on it the derivative in $\eta$; the combination $G\equiv C_1^{\rm grav}-C_2'$ |
 | $j_\ell$, $P(k)$, $C_\ell$ | spherical Bessel function; primordial power; the angular power spectrum |
 
-**Rendering note.** In display equations this file writes `\eta_\ast`, never
-the asterisk form: GitHub runs markdown's emphasis parser before the maths
-renderer, and a literal asterisk opens emphasis intraword. Finding **T-120**.
-For the same reason **no prose on this page may contain a doubled dollar
-sign**, even inside backticks — the renderer counts it as a delimiter, pairs
-it with the next real one, and every display after it inverts with the prose
-around it. The `.tex` sources are unaffected and keep the asterisk form.
+### The chain
 
-**1 — The hierarchy.** The photon distribution is expanded in
-projected, symmetric, trace-free (PSTF) temperature multipoles
-$\tau_{A_\ell}=\tau_{a_1\ldots a_\ell}$ about a chosen 4-velocity $u^a$. The
-exact transport equation is
+#### 1. The hierarchy
 
-$$\dot\tau_{A_\ell}+\tfrac{\ell+1}{2\ell+3}\mathrm D^a\tau_{A_\ell a}-\mathrm D_{\langle a_\ell}\tau_{A_{\ell-1}\rangle}+\kappa'\tau_{A_\ell}=a\mathcal B_{A_\ell}+\kappa'\mathcal S_{A_\ell}\quad(68)$$
+The photon distribution is expanded in PSTF temperature
+multipoles $\tau_{A_\ell}=\tau_{a_1\ldots a_\ell}$ about a chosen 4-velocity
+$u^a$. The exact transport equation is *Annals II*'s Eq. (67), written in
+conformal time:
 
-with $\kappa'=an_e\sigma_T$ the differential optical depth.
-`functions/spectra/` carries it; `tests/` holds the Appendix F chain against
-four external hierarchies.
+$$\tau_{A_\ell}'+a\left[\tfrac{\ell+1}{2\ell+3}\mathrm D^a\tau_{A_\ell a}+\mathrm D_{\langle a_\ell}\tau_{A_{\ell-1}\rangle}\right]+a\mathcal B_{A_\ell}+\kappa'\tau_{A_\ell}=\kappa'\mathcal S_{A_\ell}\quad(67)$$
 
-**2 — The source closes at rank two.** The gravitational source
-$\mathcal B_{A_\ell}$ is **identically zero for $\ell\ge3$**:
+The gravitational source stands on the left, as it does in (67). Both
+streaming couplings carry a plus sign, since both come from the one operator
+$e^a\mathrm D_a$, and only that form reduces to Appendix F's (F.1). `functions/spectra/` carries the equation, and `tests/`
+holds the Appendix F chain against four external hierarchies.
+
+#### 2. The source
+
+The gravitational source closes at rank two. It vanishes identically for
+$\ell\ge3$, and its three ranks are
 
 $$\mathcal B_0=-\tfrac13\mathrm D^a\tau_a,\qquad \mathcal B_a=\mathrm D_a\ln T+A_a,\qquad \mathcal B_{ab}=\sigma_{ab}\quad(68)$$
 
-— a monopole from the dipole divergence, a gradient-plus-acceleration at rank
-one, and **the shear at rank two**. That the chain terminates is what makes a
-closed-form integral solution possible at all, and the shear entry is why this
-repository is called `NonlinearShear`. `functions/spectra/coefficients.py`.
+a monopole from the dipole divergence, a gradient-plus-acceleration at rank
+one, and the shear at rank two. Because the chain terminates, a closed-form
+integral solution exists, and the shear entry is why this repository is called
+`NonlinearShear`. In the mode coefficients *Annals II* defines after its
+Eq. (7), $a\mathcal B_0=-\tfrac k3\tau_1$, $a\mathcal B_1=k(\delta T+\Phi_A)$
+and $a\mathcal B_2=a\sigma$. Paper 1's linear redshift source, its Eq. (37), is
+the same source written on the right, $\mathcal B^{\rm P1}=-\mathcal B$, and it
+stands against the Thomson Doppler term with the opposite sign. The matching's
+rank-one row needs that sign: (89) prints $-(a\mathcal B_1+\kappa'v_B)$, the
+frame conditions of step 7 select $a\mathcal B_1-\kappa'v_B$, and the two
+agree once $a\mathcal B^{\rm P1}_1=-k(\delta T+\Phi_A)$ stands in
+$\mathcal B_1$'s place, which is how the code carries it.
+`functions/spectra/coefficients.py`.
 
-These are *Annals II*'s (68), the source on the left of its (67); in the mode
-coefficients it defines, $a\mathcal B_1=k(\delta T+\Phi_A)$ and
-$a\mathcal B_0=-\tfrac k3\tau_1$. Paper 1's linear redshift source is the same
-source written on the right, $\mathcal B^{\rm P1}=-\mathcal B$, and it stands
-against the Thomson Doppler term with the opposite sign. The matching's
-rank-one row needs that: (89) prints $-(a\mathcal B_1+\kappa'v_B)$, the frame
-conditions select $a\mathcal B_1-\kappa'v_B$, and the two agree once Paper 1's
-$a\mathcal B^{\rm P1}_1=-k(\delta T+\Phi_A)$ stands in $\mathcal B_1$'s place,
-where the coefficients as built carry $+k(\delta T+\Phi_A)$. Step 7 is where
-the difference matters.
+#### 3. The frame law
 
-**3 — The frame law, and what is invariant.** Under a change of fundamental
-congruence $\tilde u^a=u^a+v^a$, GDE99 (37) gives
+Under a change of fundamental congruence
+$\tilde u^a=u^a+v^a$, GDE99 (37) gives
 
 $$\tilde\tau_{A_\ell}=\tau_{A_\ell}-v_{A_\ell}, \qquad v_{A_\ell}\equiv0\ \ (\ell\ge2)\quad(GDE99 37)$$
 
-— only the monopole and dipole move. Every $\ell\ge2$ multipole is a frame
-invariant **at first order**, and not because a boost cannot reach it: those
-multipoles are already first-order small, so what a boost would generate from
-them is second order. Only $\tau_0$ is $O(1)$, which is why the dipole moves
-and nothing above it does. The bundle computes the spectrum **twice** — once
-with $\tilde\sigma_{ab}\simeq0$ (Newtonian) and once in the CDM frame — and the
-two must agree. A disagreement is therefore a defect and not physics, which is
-what **F5** and **D6** measure. `functions/spectra/frame_transform.py`,
-`functions/frames.py`.
+so only the monopole and dipole move. Every multipole with $\ell\ge2$ is a
+frame invariant at first order, and not because a boost cannot reach it: those
+multipoles are already first-order small, so what a boost generates from them
+is second order. Only $\tau_0$ is of order one, which is why the dipole moves
+and nothing above it does. The bundle computes the spectrum in the Newtonian
+frame, $\tilde\sigma_{ab}\simeq0$, and in the CDM frame, and the two must
+agree, so a disagreement is a defect and not physics. F5 and D6 measure that
+for (102), and D44 for the assembly of step 7.
+`functions/spectra/frame_transform.py`, `functions/frames.py`.
 
-**The same $v^a$ acts a second way, and that one does not die at $\ell=2$.**
-The frame law above moves the *moments* against a fixed direction basis; the
-boost also moves the *basis*, which is aberration. Aberration couples
-neighbouring multipoles with coefficients that grow like $\ell$, and the
-difference of the two neighbour weights differs between the frames:
+The same $v^a$ also moves the direction basis, which is aberration, and that
+action does not stop at $\ell=2$. Aberration couples neighbouring multipoles
+with coefficients that grow like $\ell$, and the difference of the two
+neighbour weights differs between the frames:
 
 $$c_+-c_-|_{\mathrm N}=\frac{2(2\ell^2+2\ell-1)}{(2\ell-1)(2\ell+3)}\xrightarrow{\ \ell\to\infty\ }1, \qquad c_+-c_-|_{\mathrm{CDM}}=\frac{3(4\ell^4+8\ell^3-11\ell^2-15\ell+6)}{(2\ell-3)(2\ell-1)(2\ell+3)(2\ell+5)}\xrightarrow{\ \ell\to\infty\ }\tfrac34\quad(Paper 1)$$
 
 Both stencils are unit-normalised, $2\times\tfrac12=1$ and $4\times\tfrac14=1$,
 so the two frames thread different coefficients onto the same
-$\ell\thinspace \partial_\ell f_\ell$. That is frame covariance holding at $O(\ell)$,
-where the moment law has nothing left to say — and the surviving $O(\ell)$
-content is **gravitational lensing together with observer aberration**, which
-is the result Paper 1 is named for. The coefficients are the brackets Paper 1 prints after the $\beta$
-normalisation. *This is not the claim that lensing is a frame effect.*
-It is narrower and better: one $v^a$ acts on the moments and on the direction
-basis, and only the second action survives at large $\ell$.
+$\ell\thinspace \partial_\ell f_\ell$, and frame covariance holds at $O(\ell)$,
+where the moment law has nothing left to say. The surviving $O(\ell)$ content
+is gravitational lensing together with observer aberration, the result Paper 1
+is named for; the coefficients are the brackets Paper 1 prints after the
+$\beta$ normalisation. This does not say that lensing is a frame effect: one
+$v^a$ acts on the moments and on the direction basis, and only the second
+action survives at large $\ell$.
 
-**4 — Decoupling and the acoustic oscillator.** Before last scattering the
-photons and baryons are tightly coupled and the rank-0 and rank-1 multipoles
-obey the acoustic pair (152)/(153),
+#### 4. The acoustic oscillator
+
+Before last scattering photons
+and baryons are tightly coupled, and the rank-0 and rank-1 multipoles obey the
+acoustic pair (152)/(153),
 
 $$\tau_1'=-\frac{R'}{1+R}\tau_1-\frac{k}{1+R}\delta T-k\Phi_A, \qquad \delta T'=-\mathcal H\Phi_A-\Phi_H'+\tfrac k3\tau_1\quad(152, 153)$$
 
-with $R=3\rho_b/4\rho_\gamma$ the baryon loading — the oscillator whose
-$\cos(kr_s)$ is the acoustic peaks. Dropping the $-\mathcal H\Phi_A$ is
-*Annals II*'s own small-scale approximation and is exactly what turns the pair
-into (154); the bundle integrates the pair, not the approximation. The
-recombination history is solved from Peebles' equation and the grid is
-**derived from the visibility's own width**. `functions/spectra/acoustic.py`,
-`decoupling.py`, `peebles.py`.
+with $R$ the baryon loading. Its $\cos(kr_s)$ is the acoustic series. Dropping
+$-\mathcal H\Phi_A$ is *Annals II*'s small-scale approximation, which turns
+the pair into (154), and the released solver integrates the pair with that
+term dropped (`expansion_coupling=False` in every released route). Whether the
+oscillator should carry $-\mathcal H\Phi_A$ is not yet settled. Each mode
+starts where $kr_s=\varepsilon$ (T-51), or at the table's first point when it
+never reaches it, on the matter-era adiabatic condition
+$\delta T=-\tfrac23\Phi_A$, $\tau_1=0$, and is integrated to six times
+$\eta_\ast$, after which its moments are held. On `PLANCK_MODEL` the start rule
+gives a band of modes, $2.7<k<5.4$, the matter-era condition on a potential
+that has already decayed (T-192); the start and the initial condition are
+redefined with the radiation era in v1.4.0. The recombination history is
+solved from Peebles' equation, and the grid is derived from the visibility's
+own width (**S33**). `functions/spectra/acoustic.py`, `decoupling.py`,
+`peebles.py`.
 
-**5 — Free streaming, and where every $\ell\ge3$ comes from.** After decoupling
-$\kappa'\to0$, and by step 2 the gravitational source is identically zero for
-$\ell\ge3$. What is left of step 1 is a pure recursion coupling each multipole
-to its two neighbours — *Annals II* Appendix F (F.3), in conformal time:
+#### 5. Free streaming
+
+After decoupling $\kappa'\to0$, and by step 2 the
+gravitational source vanishes for $\ell\ge3$. What is left of step 1 is a
+recursion coupling each multipole to its two neighbours, *Annals II*
+Appendix F (F.3), in conformal time:
 
 $$-(\beta_\ell\tau_\ell)' =k\left[\frac{\ell+1}{2\ell+3}\thinspace (\beta_{\ell+1}\tau_{\ell+1}) -\frac{\ell}{2\ell-1}\thinspace (\beta_{\ell-1}\tau_{\ell-1})\right]\quad(F.3)$$
 
-**This ladder is the whole of the high-multipole spectrum.** The source supplies
-$\ell=0,1,2$ and nothing else; every multipole above that is streamed up from
-them by this equation. Its closed-form solution is $j_\ell(k(\eta_0-\eta))$,
-which is *why* the kernel in step 6 is a spherical Bessel function rather than
-a fitted window — the projection is not an approximation imposed on the
-hierarchy, it is the hierarchy's own solution. Appendix F writes the recursion
-three ways — (F.1) in proper time with the comoving wavenumber, (F.3) above,
-and (F.4) in the normalisation that makes it the Ma & Bertschinger form. The
-bundle integrates all three **as printed** and privileges none, which is the
-acceptance spine of v1.0.0 and what **F1** reports: four external hierarchies,
-two normalisations, two phase conventions, residuals $\lesssim10^{-13}$. (F.4)
-as printed keeps $(2\ell+1)$ on the left although its own preceding text
-specifies the division — finding **B-2**; the bundle divides.
-`functions/harmonics/free_streaming.py`, `weights.py`, `external.py`.
+The source supplies $\ell=0,1,2$, and every multipole above them is streamed up
+by this recursion. Its closed-form solution is $j_\ell(k(\eta_0-\eta))$, which
+is why the kernel in step 6 is a spherical Bessel function rather than a
+fitted window: the projection is the hierarchy's own solution and not an
+approximation imposed on it. Appendix F writes the recursion three ways: (F.1)
+in proper time with the comoving wavenumber, (F.3) above, and (F.4) in the
+normalisation that makes it the Ma & Bertschinger form. The bundle integrates
+all three as printed and privileges none, which is the acceptance spine of
+v1.0.0 and what F1 reports: four external hierarchies, two normalisations, two
+phase conventions, residuals below $10^{-13}$. (F.4) as printed keeps
+$(2\ell+1)$ on the left although its own preceding text specifies the division
+(B-2); the bundle divides. `functions/harmonics/free_streaming.py`,
+`weights.py`, `external.py`.
 
-**6 — Matching, and the integral solution.** At decoupling the free-streaming
+#### 6. The matching and the integral solution
+
+At decoupling the free-streaming
 solution of step 5 is matched to the source rank by rank, (89), giving three
 coefficients:
 
 $$C_0=p_0\thinspace (a\mathcal B_2),\qquad C_1=p_1\thinspace \tfrac1k\negthinspace \left(a\mathcal B_1+\kappa'\hat v_B\right),\qquad C_2=p_2\thinspace \tfrac1{k^2}(a\mathcal B_2)\quad(89)$$
 
-(89) is the definition and (90) a result, so the bundle solves (89) in exact
-rationals and uses (90) as a check on itself. Solved that way (90)'s $C_0$
-comes out with the opposite sign to the printed one — finding **B-11**,
-traceable to $j_0''(0)=-\tfrac13$ from the ascending series, printed as
-$+\tfrac13$. The coefficients are CGI with respect to a generic $u^a$, so a
-frame choice sets them: Newtonian is $\tilde\sigma_{ab}\approx0$, hence, as
-built, $\tilde C_0\approx\tilde C_2\approx0$ and $\tilde C_1$ alone; CDM is
-$q_a=0$ and keeps all three. With Paper 1's source $C_0$ also carries
-$-a\mathcal B_0=\tfrac k3\tau_1$, which does not vanish in the Newtonian frame
-(step 7). The line-of-sight integral (102) carries them to the
-present:
+(89) is the definition and (90) its result, so the bundle solves (89) in exact
+rationals and uses (90) as a check. Its $\ell=0$ row carries two printing
+defects: it gives the entry $j_0''(0)$ as $+\tfrac13$, where the ascending
+series gives $-\tfrac13$ (B-11), and the rank-two normalisation
+$\alpha_2=\tfrac{15}2$, where $\alpha_0=1$ belongs (B-16). Corrected, the row
+gives $C_0=-\tfrac13a\mathcal B_2$ in place of (90)'s $-\tfrac52a\mathcal B_2$.
+The coefficients are covariant and gauge-invariant with respect to a generic
+$u^a$, so a frame choice sets them. The Newtonian frame is
+$\tilde\sigma_{ab}\simeq0$, so that as built $\tilde C_0\simeq\tilde C_2\simeq0$
+and $\tilde C_1$ stands alone; the CDM frame is $q_a=0$ and keeps all three.
+With Paper 1's source $C_0$ also carries $-a\mathcal B_0=\tfrac k3\tau_1$,
+which does not vanish in the Newtonian frame. *Annals II*'s line-of-sight
+solution (102) carries the coefficients to the present:
 
 $$\frac{\beta_\ell\thinspace \tau_\ell(\eta_0)}{2\ell+1}\simeq[C_2'-C_1]_{\eta_\ast}\mathcal D\thinspace j_\ell(k\Delta\eta_\ast)+kC_2(\eta_\ast)\mathcal D\left[\tfrac{\ell}{2\ell+1}j_{\ell-1}-\tfrac{\ell+1}{2\ell+1}j_{\ell+1}\right]_{k\Delta\eta_\ast}+\int_{\eta_\ast}^{\eta_0}\mathrm d\eta\thinspace \mathcal V e^{-(k/k_D)^2}\lbrace C_0-C_1'+C_2''\rbrace \thinspace j_\ell(k\Delta\eta)\quad(102)$$
 
-The second term has never been evaluated in a released figure: it is the
-rank-two boundary, and $\tilde C_2\equiv0$ in the Newtonian frame. It is also
-the only place in the scheme where the *projection* couples $\ell$ to
-$\ell\pm1$ — a different coupling from step 5's, acting at the boundary rather
-than along the path. `functions/spectra/coefficients.py`,
+Its second term is the rank-two boundary, the only place in (102) where the
+projection couples $\ell$ to $\ell\pm1$, at the boundary rather than along the
+path as in step 5. (102) is kept as built for comparison; v1.3.0 releases the
+assembly of step 7 in its place. `functions/spectra/coefficients.py`,
 `integral_solution.py`.
 
-**7 — The assembly in frame-invariant slots.** A change of frame moves only
-the dipole (step 3), so for every $\ell\ge2$ the line-of-sight integrand
-$W\lbrace C_0K+C_1K'+C_2K''\rbrace$, with $K=j_\ell(k(\eta_0-\eta))$ and a prime
-on $K$ the derivative in $\eta$, may change only by a total derivative. Split
-$C_1$ into its gravitational half and its Thomson half
+#### 7. The frame-invariant assembly
+
+A change of frame moves only the dipole (step 3), so for every $\ell\ge2$ the line-of-sight integrand
+$W\lbrace C_0K+C_1K'+C_2K''\rbrace$ may change only by a total derivative.
+Split $C_1$ into its gravitational half and its Thomson half
 $C_1^{\rm scatt}=-\kappa'\hat v_B$, and use $W'=\kappa'W$. This gives three
 conditions, with no collapse of the visibility:
 
 $$\Delta C_0=0,\qquad \Delta C_1^{\rm scatt}=\kappa'\Delta C_2,\qquad \Delta C_1^{\rm grav}=\Delta C_2'$$
 
-Rank zero is invariant on its own. The Thomson half of rank one pairs with
+Rank zero is invariant on its own, the Thomson half of rank one pairs with
 $C_2$, and the gravitational half pairs with $C_2'$.
 
 The coefficients of step 6 as built satisfy the second condition and fail the
-other two. Paper 1's own source supplies both repairs. Its rank-one
+other two. Paper 1's own source supplies both repairs: its rank-one
 gravitational term stands against the Thomson Doppler term with the opposite
 sign, so the rank-one row carries $a\mathcal B^{\rm P1}_1=-k(\delta T+\Phi_A)$
-where (89) has $a\mathcal B_1$; and its rank-zero source is carried in $C_0$,
-as $-a\mathcal B_0=\tfrac k3\tau_1$. Neither repair works
-alone. With both, and writing $G\equiv C_1^{\rm grav}-C_2'$, the integrand
-rearranges exactly into slots that are each frame-invariant:
+where (89) has $a\mathcal B_1$, and its rank-zero source is carried in $C_0$ as
+$-a\mathcal B_0=\tfrac k3\tau_1$. Neither repair works alone. With both, the
+integrand rearranges exactly into slots that are each frame-invariant:
 
 $$W\lbrace C_0K+C_1K'+C_2K''\rbrace=W(C_0-G')K-\mathcal V\thinspace G\thinspace K-\mathcal V(\hat v_B+C_2)K'+\frac{\mathrm d}{\mathrm d\eta}\left[W(GK+C_2K')\right]$$
 
-The total derivative projects onto $\ell\le1$ only. No coefficient holding the
-rate $\kappa'$ is differentiated, and the rank-two term is integrated by parts
-once, onto its rank-one partner's slot, so $C_2$ stays with $\hat v_B$. (102)
-integrates it by parts twice and differentiates $C_1$ while $C_1$ still holds
-$\kappa'$. That separates the invariant pair $\hat v_B+C_2$ and puts
+The total derivative projects onto $\ell\le1$ only. No coefficient holding
+the rate $\kappa'$ is differentiated, and the rank-two term is integrated by
+parts once, onto its rank-one partner's slot, so $C_2$ stays with $\hat v_B$.
+(102) integrates by parts twice and differentiates $C_1$ while $C_1$ still
+holds $\kappa'$; that separates the invariant pair $\hat v_B+C_2$ and puts
 $\mathcal V\kappa''\hat v_B$ into the bulk, which is why (102)'s spectrum
-differs between the two frames. In a shear-free frame $C_2=0$, and the slots
-reduce to the Sachs–Wolfe, Doppler and integrated Sachs–Wolfe terms.
+differs between the two frames (T-94, T-101). In a shear-free frame $C_2=0$,
+and the slots reduce to the Sachs–Wolfe, Doppler and integrated Sachs–Wolfe
+terms.
 
-The assembly is built: `RANK_ONE_SOURCE = "paper 1"` in `coefficients.py`, and
-`three_slots` in `functions/spectra/line_of_sight.py`. **D44** scores it on three
-backgrounds. Its three conditions hold to $10^{-13}$, and its slots give one
-$C_\ell$ in the Newtonian and CDM frames to $4\times10^{-14}$. On
-Einstein–de Sitter it carries an acoustic series, with maxima at $\ell=165$ and
-$495$ and a trough at $360$. On `PLANCK_MODEL` it has a single maximum, at
-$0.71\thinspace \ell_A$, so the series is not yet recovered where it matters,
-and that loss is not a frame defect. **D45** sums the slots back to the direct
-integral they rearrange: the difference falls by $4.00$ when the step halves,
-so it is the direct integral's quadrature and the slot weights stand.
+The Sachs–Wolfe slot reads the stored oscillator moment under $\mathcal V$.
+Under $W$ stands (106), the pair's own right-hand side evaluated on that
+moment, which on the mode's own grid is the moment's exact derivative. Since
+(106) and $C_0$ are built from the same $\tau_1$, the $\tfrac k3\tau_1$ of
+$-a\mathcal B_0$ in $C_0$ cancels the one in (106) identically, and in the Newtonian frame the integrated slot carries
+$-(\Phi_A'-\Phi_H')$ alone, the integrated Sachs–Wolfe term, whatever the
+moments do after the tight-coupling window.
+
+The assembly is built with `RANK_ONE_SOURCE = "paper 1"` in `coefficients.py`
+and `three_slots` in `functions/spectra/line_of_sight.py`; the module default
+still reads `"as built"`, the antecedent's (102) path. D44 scores the assembly
+on three backgrounds: its three conditions hold to $3.3\times10^{-13}$, and its
+slots give one $C_\ell$ in the Newtonian and CDM frames to $4\times10^{-14}$.
+D45 sums the slots back to the direct integral they rearrange: the difference
+falls by 4.00 when the step halves, so it is the direct integral's quadrature
+and the slot weights stand. On the line-of-sight grid $\int\mathcal V=0.99914$
+on Planck, where it should be 1, because the visibility and the optical depth
+are interpolated separately (T-191); the slots move by at most
+$8\times10^{-4}$ when $\mathcal V$ is replaced by $W'$.
+
 v1.3.0 releases this assembly, with the first maximum on `PLANCK_MODEL` at
-$\ell=188.5$ ($0.7067\thinspace \ell_A$). Below $\ell\simeq30$ on
-`PLANCK_MODEL` the potential both slots read carries an incomplete radiation
-era, which is approximation A-3 and v1.4.0's work, so the curve there is not
-a prediction.
+$\ell=188.5$, $0.7067\thinspace\ell_A$. Below $\ell\simeq30$ on `PLANCK_MODEL` the
+potential both slots read carries an incomplete radiation era (A-3): the
+Sachs–Wolfe source at last scattering is $0.187$ against $\Phi_A/3=0.310$,
+where ΛCDM, with no radiation era, gives $\Phi_A/3$. The start rule of step 4
+adds a bump at $\ell\simeq7$ to $12$ (T-192). The curve there is not a
+prediction.
 
-**8 — The spectrum, and the two routes.** The observable is assembled from
-three factors and nothing else: the primordial power $P(k)$, the transfer
-$T_\ell(k)$ that (102) returns, and the projection $j_\ell$ already inside it.
-*Annals II* §7.2 writes the assembly twice —
+#### 8. The spectrum by two routes
+
+The observable is assembled from three
+factors: the primordial power $P(k)$, the transfer $T_\ell(k)$ the line of
+sight returns, and the projection $j_\ell$ already inside it. *Annals II* §7.2
+writes the assembly twice:
 
 $$C_\ell=\frac2\pi\frac{\beta_\ell^2}{(2\ell+1)^2}\int\frac{\mathrm dk}{k}\thinspace k^3\thinspace  |\tau_\ell(k,\eta_0)|^2\quad(186)$$
 
 $$\langle\tau_{A_\ell}\tau^{A_\ell}\rangle =\frac{\beta_\ell}{2\pi^2}\int k^2\mathrm dk\thinspace |\tau_\ell|^2, \qquad C_\ell=\frac{\Delta_\ell}{2\ell+1}\langle\tau_{A_\ell}\tau^{A_\ell}\rangle, \quad \Delta_\ell=\frac{4\pi\beta_\ell}{2\ell+1}\quad(187, 188)$$
 
-— (186) by the mode route and (187)–(188) by the covariant route. They were
-proved identical before either was implemented, and the bundle computes both
-so the release reports a number rather than a claim: they agree to
+(186) is the mode route and (187)–(188) the covariant route. They were proved
+identical before either was implemented, and the bundle computes both, so the
+release reports a number rather than a claim: they agree to
 $9.5\times10^{-6}$ against a gate of $10^{-3}$, which is acceptance criterion
-5b. **The $\ell$-dependent normalisation cancels exactly.** With
+5b. The $\ell$-dependent normalisation cancels exactly. With
 $T_\ell\equiv\beta_\ell\tau_\ell(\eta_0)/(2\ell+1)=\alpha_\ell^{-1}\tau_\ell$,
 which is what (176) returns, (186) collapses to
 
 $$C_\ell=\frac2\pi\int \mathrm dk\thinspace k^2\thinspace |T_\ell(k)|^2\quad(186 with 176)$$
 
-because $\alpha_\ell=(2\ell+1)/\beta_\ell$ makes the prefactor exactly one —
-asserted as exact rationals, not floating point. That is worth more than
-tidiness: a $\beta_\ell$ or $\alpha_\ell$ slip cannot hide in the spectrum,
-because it would have to survive an identity. And the variable in which it
-vanishes is precisely the one step 5's solution is bare in. **The covariant
-route is the one that generalises**: (186) is a statement about mode
-coefficients and holds only for almost-Robertson–Walker geometries, (187) is a
-multipole mean square and holds generally, which is why every released figure
-plots the multipole quantity. `functions/spectra/angular.py`, `two_route.py`,
-`pipeline.py`.
+because $\alpha_\ell=(2\ell+1)/\beta_\ell$ makes the prefactor exactly one,
+asserted in exact rationals rather than floating point. A slip in $\beta_\ell$
+or $\alpha_\ell$ therefore cannot hide in the spectrum, since it would have to
+survive an identity, and the variable in which the normalisation vanishes is
+the one step 5's solution is bare in. The covariant route is the one that
+generalises: (186) is a statement about mode coefficients and holds only for
+almost-Robertson–Walker geometries, while (187) is a multipole mean square and
+holds generally, which is why every released figure plots the multipole
+quantity. `functions/spectra/angular.py`, `two_route.py`, `pipeline.py`.
 
-### Where the implementation stands
+### Implementation status
 
-**Working, and checked.** The hierarchy against four external treatments; both
-routes to (186) agreeing at $9.5\times10^{-6}$ against a $10^{-3}$ tolerance;
-the Sachs–Wolfe scalar **in the coefficients**, $(\delta T+\Phi_A)-C_2'=\Phi_A/3$
-to 0.68% on EdS (**D21**); the covariant→mode→covariant round trip, identically
-zero in exact arithmetic; the recombination history and the acoustic
-oscillator, whose $(\delta T+\Phi_A)(\eta_\ast)$ tracks $\cos(kr_s)$ in exact
-phase and period. **And the line of sight of step 7.** Its three frame
-conditions hold to $3.3\times10^{-13}$ on all three backgrounds, its slots give
-one $C_\ell$ in both frames to $4.2\times10^{-14}$ (**D44**), and they sum back
-to the integral they rearrange, to the quadrature of that integral (**D45**).
+Working and checked:
 
-**Not yet right, and this is the live work.** On Planck, against CAMB:
+- the hierarchy against four external treatments (F1);
+- both routes to (186), agreeing at $9.5\times10^{-6}$ against a tolerance of
+  $10^{-3}$ (D8);
+- the Sachs–Wolfe scalar in the coefficients,
+  $(\delta T+\Phi_A)-C_2'=\Phi_A/3$, to 0.68% on Einstein–de Sitter (D21);
+- the covariant to mode to covariant round trip, identically zero in exact
+  arithmetic (D2);
+- the recombination history from Peebles' three-level atom, the default
+  since v1.1.0 (S22);
+- the frame conditions with Paper 1's source, to $3.3\times10^{-13}$, and one
+  $C_\ell$ in both frames, to $4\times10^{-14}$ (D44, F9);
+- the slots summed back to the integral they rearrange, with the residual
+  in the direct integral's quadrature (D45);
+- the late integrated Sachs–Wolfe effect (F10).
 
-| | CAMB | this bundle, v1.3.0 |
-|---|---|---|
-| $D_\ell/D_{30}$ for $\ell$ from 7 to 11 | 0.78, a plateau | **0.44**, a dip |
-| first maximum | 206.1 | 188.5 |
-| second and third maxima | 492 and 729 | none that clears the prominence rule |
+Not yet right, and the work of v1.4.0:
 
-All three wait on the same physics, the radiation era (approximation
-**A-3**), and that is v1.4.0:
+- the oscillator is undriven. The potential carries no complete radiation era
+  (A-3), so the even peaks are absent, and the first maximum on Planck sits at
+  $0.7067\thinspace\ell_A$, where the matched external codes put it at
+  $0.7723\thinspace\ell_A$ ($206/266.750$);
+- on Planck below $\ell\simeq30$ the Sachs–Wolfe source at last scattering is
+  0.187 against $\Phi_A/3=0.310$, and the start rule puts a bump at
+  $\ell\simeq7$ to $12$ (T-192);
+- the tight-coupling pair is integrated to six times $\eta_\ast$ and its
+  moments are held after, with no slip, no growing quadrupole and no
+  polarization (A-5);
+- $\int\mathcal V=0.99914$ on the line-of-sight grid (T-191), whose repair
+  integrates one $\kappa$ on that grid; it rides with v1.4.0's regeneration,
+  as does the module default `RANK_ONE_SOURCE`, which becomes Paper 1's
+  signs with the antecedent's (102) pinned to its own.
 
-* **The heights and the even peaks.** With the potential in its matter-era
-  form the oscillator is undriven. Its zero point is set by the baryon
-  loading, and the even peaks are suppressed.
-* **Planck below $\ell\simeq30$.** The potential $\Phi\propto D/a$ falls 7%
-  before $\eta_\ast$ and another 10% by matter domination, while the monopole
-  starts at the matter-era $-\tfrac23\Phi$, and continuity carries the fall of
-  $\Phi_H$ into $\delta T$ one for one. The Sachs–Wolfe source comes out 40%
-  low, and the integrated slot, 2.9 times larger, enters with the opposite
-  sign.
-* **Where each mode starts (T-192).** The start is derived from $kr_s$, and on
-  Planck it puts the modes with $2.7<k<5.4$ on the matter-era initial
-  condition after their potential has already decayed: the Sachs–Wolfe source
-  jumps from 0.185 to 0.296 between $k=2.7$ and $2.8$. The radiation era
-  redefines the start and the initial condition together.
+Before v1.3.0 the released line of sight was (102). It integrates by parts
+onto coefficients that hold the scattering rate, which carried
+$\kappa'\hat v_B$ into its Sachs–Wolfe term and $\mathcal V\kappa''\hat v_B$
+into its bulk, where that one term was 93 to 97% of the integrand (T-94,
+T-101). Its spectrum differed between the frames at order one, and it had no
+late integrated Sachs–Wolfe term. The measured record of that period,
+including the repairs attempted and withdrawn, is
+`provenance/BUNDLE-DEFECTS-v1.md`, and the supplement derives the assembly
+that replaced it.
 
-Two repairs ride with v1.4.0's regeneration. The visibility and the opacity
-are interpolated separately onto the line-of-sight grid, so
-$\int\mathcal V\thinspace{\rm d}\eta=0.99914$ on Planck where it should be 1
-(**T-191**); one $\kappa$ on that grid removes it. And the module default
-`RANK_ONE_SOURCE` becomes Paper 1's signs, with the antecedent's (102) pinned
-to its own.
+### The release sequence
 
-**Why (102) was replaced.** It integrates by parts onto the coefficients, and
-so differentiates a $C_1$ that still holds the scattering rate. That separates
-the frame-invariant pair $\hat v_B+C_2$, puts $\mathcal V\kappa''\hat v_B$ into
-the bulk, where it was 93–97% of the integrand at $k\le60$ (**T-94**), and
-carries the bulk under the visibility, which removes the late integrated
-Sachs–Wolfe term (**T-128**). Its two frames disagreed by order one at every
-multipole. Step 7 is the assembly that replaced it.
-
-> The measured record of every defect, including five repair attempts that
-> failed and were withdrawn, is `provenance/BUNDLE-DEFECTS-v1.md`. **It is
-> deliberately not summarised here**: this README is for the physics and the
-> implementation, and the register is where the working record lives.
-
-### The release sequence, and what v1.5.0 needs from v1.3.0
-
-The arc is one physical question asked at increasing order. **Each release is
-a term put back into the calculation**, and each is the precondition for the
-next — which is why the version numbers track the physics rather than the
-calendar.
+Each release puts one term back into the calculation, and each is the
+precondition for the next, so the version numbers follow the physics.
 
 | | the physical question | the term it puts back, and where | evidence |
 |---|---|---|---|
-| **v1.0.0** | *Is the reconstruction faithful?* Free streaming alone — the $\ell$-coupling of step 1 with the source switched off | the recursion itself: `recursion.py`, `angular.py`, `two_route.py`. Four external hierarchies in two normalisations and two phase conventions; (186) by both routes; the Sachs–Wolfe limit | **F1**, **F3**, **F4** · released |
-| **v1.1.0** | *What does the spectrum need that it does not have?* **A visibility of finite width** — an instantaneous last scattering has no damping tail | Peebles' effective three-level atom replaces equilibrium Saha and becomes the default (**S22**): `peebles.py`, `decoupling.py`. The visibility peak moves $z\simeq1300\to1107$ and widens by $\sim40$%, and **that width is what sets the Silk envelope** | **F6** · released |
-| **v1.2.0** | *Is the antecedent's own algebra self-consistent when evaluated?* **The full linear source**, and (102) carried with a **generic** $u^a$ and specialised back | the complete rank-0/1/2 assembly: `coefficients.py`, `integral_solution.py`, `frame_transform.py`. Criterion 5b closes at $9.5\times10^{-6}$ against $10^{-3}$ | **F9**, **F5**, **F7**, **D8** · released |
-| **v1.3.0** | *Does that assembly produce the right spectrum?* **The acoustic oscillator**, driven on a derived recombination grid (**S33**) and set against *Annals II*'s own (152)/(153) with Hu & Sugiyama as the analytic comparator. (102) could not project it the same way in two frames, so **the line of sight was rebuilt** from Paper 1's source | `acoustic.py`; `line_of_sight.py`, step 7's Sachs–Wolfe, Doppler and integrated slots, each invariant under a change of frame. One $C_\ell$ in both frames to $4\times10^{-14}$, and the odd acoustic peaks; **the even peaks and Planck's low multipoles wait for A-3** | **D9**, **D44**, **D45**, **F9**, **F10** · released |
-| **v1.4.0** | *What is missing from the envelope?* **Radiation-era driving** (**A-3**) and the **tight-coupling transition** — slip and a growing quadrupole (**A-5**) | `peebles.py`, `acoustic.py`: $\Phi$ allowed to decay across equality, each mode started on the initial condition the radiation era sets (**T-192**), $k_D$ evaluated at the baryon loading the oscillator actually runs at, $\Omega_r$ restored to `LCDM_MODEL` — worth 37% in $\ell_A$ | **D10**, **F11** · **current** |
-| **v1.5.0** | *What happens at second order in the shear?* The $\mathcal O(\varepsilon^2\ell)$ couplings §5.5 discards, **kept rather than dropped** | $\tfrac25\mathrm D^c\tau_{ac}$ restored to the dipole equation; $\sigma_{ab}$ enters the oscillator instead of being dropped at $\mathcal O(t_c\varepsilon)$ | **D3** · planned |
+| **v1.0.0** | *Is the reconstruction faithful?* Free streaming alone: the $\ell$-coupling of step 1 with the source switched off | the recursion itself: `recursion.py`, `angular.py`, `two_route.py`. Four external hierarchies in two normalisations and two phase conventions; (186) by both routes; the Sachs–Wolfe limit | F1, F3, F4 · released |
+| **v1.1.0** | *What does the spectrum need that it does not have?* A visibility of finite width, since an instantaneous last scattering has no damping tail | Peebles' effective three-level atom replaces equilibrium Saha and becomes the default (S22): `peebles.py`, `decoupling.py`. The visibility peak moves from $z\simeq1300$ to $1107$ and widens by about 40%, and that width sets the Silk envelope | F6 · released |
+| **v1.2.0** | *Is the antecedent's own algebra self-consistent when evaluated?* The full linear source, and (102) carried with a generic $u^a$ and specialised back | the complete rank-0, 1 and 2 assembly: `coefficients.py`, `integral_solution.py`, `frame_transform.py`. Criterion 5b closes at $9.5\times10^{-6}$ against $10^{-3}$ | F9, F5, F7, D8 · released |
+| **v1.3.0** | *Is the line of sight frame-invariant?* The line-of-sight integral in frame-invariant slots, built from Paper 1's source, with the acoustic oscillator on the derived recombination grid (S33) | `line_of_sight.py`, `RANK_ONE_SOURCE = "paper 1"` in `coefficients.py`, `two_frame.py`, `acoustic.py` | F9, F10, D44, D45 · released |
+| **v1.4.0** | *What drives the oscillator?* Radiation-era driving (A-3) and the tight-coupling transition: slip and a growing quadrupole (A-5) | the radiation-era potential in the oscillator and in both slots, one initial condition and start for every mode (T-192), $k_D$ evaluated at the baryon loading the oscillator runs at, and $\Omega_r$ restored to `LCDM_MODEL` | D10, F11 · **current** |
+| **v1.5.0** | *What happens at second order in the shear?* The $\mathcal O(\varepsilon^2\ell)$ couplings that §5.5 of the antecedent discards, kept | $\tfrac25\mathrm D^c\tau_{ac}$ restored to the dipole equation; $\sigma_{ab}$ enters the oscillator instead of being dropped at $\mathcal O(t_c\varepsilon)$ | D3 · planned |
 
-**v1.5.0 is why the repository is called `NonlinearShear`, and it is why
-v1.3.0 has to be right first.** §5.5 of the antecedent drops the shear
-coupling from the oscillator at $\mathcal O(t_c\varepsilon)$ on the grounds
-that $\sigma_{ab}$ is first order; v1.5.0 is the release that stops assuming
-it. The term it puts back, $\tfrac25\mathrm D^c\tau_{ac}$, enters **the same
-rank-1 slot** whose weight and by-parts structure v1.3.0 measured and then
-rebuilt as frame-invariant slots — so v1.3.0 was not a detour before the
-interesting work, it is what makes the interesting work interpretable.
+v1.5.0 is the release the repository is named for. §5.5 of the antecedent
+drops the shear coupling from the oscillator at $\mathcal O(t_c\varepsilon)$
+on the grounds that $\sigma_{ab}$ is first order, and v1.5.0 stops assuming
+it. The term it restores, $\tfrac25\mathrm D^c\tau_{ac}$, enters the rank-one
+row of the matching, the row v1.3.0 placed in frame-invariant slots, so the
+shear will enter an assembly whose frame behaviour is already measured. The
+shear itself is computed: `cdm_frame_shear` returns $\sigma$, $\dot\sigma$ and
+$\ddot\sigma$, and `tests/` holds Appendix G's $\dot\sigma$ against the Euler
+equation at $10^{-9}$. It does not yet enter the dynamics.
 
-**And the shear is already computed.** `cdm_frame_shear` returns $\sigma$,
-$\dot\sigma$ and $\ddot\sigma$, and `tests/` holds Appendix G's $\dot\sigma$
-against the Euler equation at $10^{-9}$. **The quantity v1.5.0 needs exists
-and is verified; it simply does not yet enter the dynamics.**
-
-## Second figure: the angular power spectrum by two routes
+## Second figure: two routes to the spectrum
 
 ![F3 — the angular power spectrum of Annals II (186), computed by the mode route and by the covariant route](figures/f3-angular-spectrum-v1.0.0.png)
 
-Eq. (186) computed from Eq. (176) by the **mode route** and the **covariant
-route**, agreeing exactly because they are one calculation written twice. This
-is the almost-Friedmann–Lemaître skeleton: no transfer function, no acoustic
-modulation, claimed only over $2\le\ell\le20$ — a range **derived** rather than
-chosen (`scripts/derive_ell_range.py`). Read beside F9 it is the progression in
-one glance.
+Eq. (186) computed from Eq. (176) by the mode route and by the covariant
+route, which agree exactly because they are one calculation written twice.
+This is the almost-Friedmann–Lemaître skeleton: no transfer function and no
+acoustic modulation, claimed only over $2\le\ell\le20$, a range derived rather
+than chosen (`scripts/derive_ell_range.py`). Read beside F9, it shows the
+progression from v1.0.0 to v1.3.0.
 
 ## Third figure: the Appendix F match
 
 ![F1 — the covariant free-streaming recursion against four external hierarchies](figures/f1-appendix-f-v1.0.0.png)
 
-The covariant free-streaming recursion of *Annals II* Appendix F against **Hu &
-Sugiyama** Eq. (6), **Wilson** Eq. (8), **Ma & Bertschinger** Eqs. (49)/(50) and
-**Seljak & Zaldarriaga** Eq. (3d), each read from its own paper and integrated
-as printed. Residuals of $10^{-13}$ to $10^{-14}$ against a $10^{-11}$
-threshold, at overall scale exactly 1. Four independent checks in **two
-normalisations and two phase conventions** — Wilson is written in the imaginary
-convention and so tests the phase, not only the $\ell$-weights. This is the
-bundle's strongest single piece of evidence and it has held unchanged across
-all three releases.
+The covariant free-streaming recursion of *Annals II* Appendix F against Hu &
+Sugiyama Eq. (6), Wilson Eq. (8), Ma & Bertschinger Eqs. (49)/(50) and Seljak
+& Zaldarriaga Eq. (3d), each read from its own paper and integrated as
+printed. Residuals are $10^{-13}$ to $10^{-14}$ against a threshold of
+$10^{-11}$, at overall scale exactly 1, in two normalisations and two phase
+conventions; Wilson is written in the imaginary convention and so tests the
+phase as well as the $\ell$-weights. This comparison has held unchanged since
+v1.0.0.
 
-The free-streaming recursion against each external treatment of (F.1)–(F.4), one
-panel per treatment; four comparisons are four panels, not four colours on one
-axis. Hu & Sugiyama write the recursion in the β normalisation, Ma & Bertschinger
-and Seljak & Zaldarriaga in the α normalisation, which is why Appendix F prints
-both (F.3) and (F.4). **Four panels from five sources**: Wilson & Silk (1981) is
-the earliest and was read from its own page, but at $K=0$ it is Wilson (1983)
-Eq. (8) exactly, so it is credited and not drawn — *Annals II*
-names Wilson & Silk while keying Wilson.
+One panel per treatment: four comparisons are four panels, not four colours on
+one axis. Hu & Sugiyama write the recursion in the $\beta$ normalisation, Ma &
+Bertschinger and Seljak & Zaldarriaga in the $\alpha$ normalisation, which is
+why Appendix F prints both (F.3) and (F.4). Five sources give four panels:
+Wilson & Silk (1981) is the earliest and was read from its own page, but at
+$K=0$ it is Wilson (1983) Eq. (8) exactly, so it is credited and not drawn.
+*Annals II* names Wilson & Silk while keying Wilson.
 
-## Legacy treatment from [Annals of Physics 282, 321 (2000)](https://doi.org/10.1006/aphy.2000.6034)
+## Corrections to the antecedent
 
-This bundle reconstructs its antecedent rather than porting it, and is built to
-find that paper's remaining errors rather than to agree with it. These are the
-findings that **change what the code computes**:
+This bundle reconstructs *Annals II*,
+[Annals of Physics 282, 321 (2000)](https://doi.org/10.1006/aphy.2000.6034),
+rather than porting it, and is built to find that paper's remaining errors
+rather than to agree with it. These findings change what the code computes:
 
-- **B-1** — *Annals I* prints (−1)^ℓ where its own definition gives i^ℓ.
-  Inconsequential for the covariant multipole, which is invariant under the
-  choice; the mode coefficients are not, and the two statements are distinct.
-- **B-2** — (F.4) is algebraically correct but is not in the Ma & Bertschinger
-  form the following sentence identifies it with: the (2ℓ+1)⁻¹ division its text
-  specifies was not applied to the display.
-- **B-3** — the Bessel identity (199) needs [(m/2)!]² in its denominator. It is
-  exact where Γ(m/2+1) = 1, so (201) is unaffected; (204) is low by 11.4% and the
-  D_ℓ of (205) correspondingly high by 12.8%.
-- **B-5** — (201) omits one factor of the comoving distance in the reduction.
-  This is the target of acceptance criterion 5a, so the criterion is stated
-  against the corrected closed form rather than the printed one.
-- **B-8** — (181) carries $+R_\ast\Phi_A$ where (180) gives $-R_\ast\Phi_A$. Both forms are
-  implemented; the printed one is kept as a control.
-- **B-10** — (J.5) prints the transfer function with +1/ν where the fit requires
-  −1/ν. Both forms are implemented, for the same reason.
+- B-1: *Annals I* prints $(-1)^\ell$ where its own definition gives $i^\ell$.
+  The covariant multipole is invariant under the choice and the mode
+  coefficients are not, so the two statements are distinct.
+- B-2: (F.4) is algebraically correct but not in the Ma & Bertschinger form
+  the following sentence identifies it with; the $(2\ell+1)^{-1}$ division its
+  text specifies is not applied to the display.
+- B-3: the Bessel identity (199) needs $[(m/2)!]^2$ in its denominator. It is
+  exact where $\Gamma(m/2+1)=1$, so (201) is unaffected, while (204) is low by
+  11.4% and the $D_\ell$ of (205) correspondingly high by 12.8%.
+- B-5: (201) omits one factor of the comoving distance in the reduction.
+  Acceptance criterion 5a is therefore stated against the corrected closed
+  form.
+- B-8: (181) carries $+R_\ast\Phi_A$ where (180) gives $-R_\ast\Phi_A$. Both
+  forms are implemented, and the printed one is kept as a control.
+- B-10: (J.5) prints the transfer function with $+1/\nu$ where the fit
+  requires $-1/\nu$. Both forms are implemented, for the same reason.
+- B-11 and B-16: (89)'s $\ell=0$ row prints $j_0''(0)$ as $+\tfrac13$ and
+  carries $\alpha_2$ where $\alpha_0$ belongs (step 6).
+- B-17: (102) is not the exact integration by parts of its own integral. It
+  carries the integrated term at $\mathcal V\mathcal D$ where the exact
+  identity wants $W$, which removes the late integrated Sachs–Wolfe effect.
+  The released line of sight no longer uses (102) (step 7).
 
-The complete record — fifteen findings, together with the antecedent's deliberate
-approximations and the one lineage note — is in `provenance/`.
+The complete record, B-1 to B-17, is
+`provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md`, and the antecedent's
+deliberate approximations, A-1 to A-5, are
+`provenance/SOURCE-APPROXIMATIONS-v1.md`.
 
 ## Current situation: v1.4.0-dev
 
-This bundle is an **independent Python reconstruction, from first 1+3 covariant
-principles, of the almost-Friedmann–Lemaître results of** T. Gebbie,
+This bundle is an independent Python reconstruction, from first $1+3$
+covariant principles, of the almost-Friedmann–Lemaître results of T. Gebbie,
 P. K. S. Dunsby and G. F. R. Ellis, *1+3 covariant cosmic microwave background
-anisotropies II: the almost-Friedmann–Lemaître model*, **Annals of Physics 282,
-321–394 (2000)**, [doi:10.1006/aphy.2000.6034](https://doi.org/10.1006/aphy.2000.6034).
-
-It is written bottom-up. It is not a port of, or a wrapper on, an existing
+anisotropies II: the almost-Friedmann–Lemaître model*, Annals of Physics 282,
+321–394 (2000), [doi:10.1006/aphy.2000.6034](https://doi.org/10.1006/aphy.2000.6034).
+It is written bottom-up: it is not a port of, or a wrapper on, an existing
 Boltzmann code, and it inherits no other code's conventions.
 
-**Derived, not transcribed**, wherever the antecedent prints a result that can be
-obtained instead. The FLRW background is integrated from the 1+3 energy
-constraint, so Eqs. (185) and (G.3) are **checks on this bundle rather than
-sources for it** — three of the fifteen recorded findings are disagreements between a
-derived quantity and a printed one, and a port would have inherited all three
-silently. The exceptions are stated where they occur: recombination rests on an
-imported atomic-physics fit, and `functions/spectra/peebles.py` tabulates what is
-derived there and what is not.
+Wherever the antecedent prints a result that can be derived, the bundle
+derives it. The FLRW background is integrated from the $1+3$ energy
+constraint, so Eqs. (185) and (G.3) are checks on this bundle rather than
+sources for it, and B-7 and B-11 are disagreements between a derived quantity
+and a printed one that a port would have inherited silently. The exceptions
+are stated where they occur: recombination rests on an imported atomic-physics
+fit, and `functions/spectra/peebles.py` tabulates what is derived there and
+what is not.
 
-**What each release established, and the term it put back**, is the release-sequence table above; **S22** (Peebles over Saha) and **S33**
-(the grid derived from the visibility's own width) are the two defaults it turns on.
+v1.3.0 released the frame-invariant line of sight (step 7). The v1.4.0-dev line
+wires the radiation era into the oscillator and into both slots, with one
+initial condition and start for every mode, and adds the tight-coupling
+transition; the release sequence above lists what each earlier release put
+back.
 
-### The artefacts, and the physics each one measures
+### Artefacts
 
-Ten figures and twenty-nine diagnostics, each pointed at **one** physical
-question. A figure's version is the release that last changed its *content*, so
-F1, F3 and F4 still read `v1.0.0`. `tests/test_readme_artefacts.py` checks every
-row against `figures/` and `scripts/run_all.py`.
+Ten figures and twenty-nine diagnostics, each aimed at one physical question.
+A figure's suffix is the release in which it was first drawn, so F1, F3 and F4
+read `v1.0.0`, and F9, first drawn at v1.2.0, was redrawn from the v1.3.0
+assembly under the same name. The instruments after D30, among them D44 and
+D45, which score the v1.3.0 assembly, are reported in the supplement; D45
+enters this table when `scripts/run_all.py` runs it.
+`tests/test_readme_artefacts.py` checks every row against `figures/` and
+`scripts/run_all.py`.
 
 | Figure | Evidence for | Version |
 |---|---|---|
-| **F1** Appendix F match | criterion 1 — the free-streaming chain against **four external hierarchies** in four conventions, two normalisations and two phase conventions, residuals $\lesssim10^{-13}$ | `v1.0.0` |
-| **F2** truncation convergence, both frames | **Appendix E made quantitative.** Two quantities that do not shrink together: what a truncation *discards* falls off a cliff in $k$ at $\ell\simeq k\Delta\eta$; what it *destroys* — the shear, and with it ranks 0 and 2 — has **no $\ell_{\max}$ in it**, is **99.93% at $\ell=2$ and 100% by $\ell=600$** (it read 0.54–0.68% and 32% before **T-57**, when the line-of-sight weight was making the dipole the whole transfer; the CDM frame's source *is* the shear, as §VI C says, and removing it destroys the spectrum). Footnote 29 (p. 365) is checked and holds: the cost is **identically zero** in the Newtonian frame, which has no shear to lose. A third panel answers the question of whether the covariant sectors supply an **excess at low $\ell$**: they do not — their share is **0.54% at the quadrupole** and grows with $\ell$, and T-31 shows the frame cannot supply one either | `v1.2.0` |
-| **F3** angular spectrum, both routes | criteria 3 and 4 — (186) by the mode route and the covariant route, agreeing **exactly** since T-17 put the combined coefficients in $\mathbb Q$ | `v1.0.0` |
-| **F4** real-space correlation | the round trip $C_\ell\to C(\theta)\to C_\ell$, residual $<10^{-13}$ | `v1.0.0` |
-| **F5** source decomposition, two frames | **the total is common to both frames and the decomposition is not**, split by rank (S28). The frame disagreement is its own panel and is now **total** — median $9.99\times10^{-1}$, worst $1.00$ over $2\le\ell\le400$, from 42%/7%/11% before **T-57**. That is finding **T-59** | `v1.2.0` |
-| **F6** what each approximation is worth | A-1, A-2 and the small-scale approximation as **ratios**, over six decades — one is a different calculation, one is free where this release claims, one is worst at large scales | `v1.1.0` |
-| **F7** frame specialisation | the generic $u^a$ carried through and the frame chosen at the end — a figure a gauge-fixed treatment cannot draw. **It reports that its own planned claim is false**: the dipole was expected to stand an order of magnitude apart and lands on each curve instead, worst ratio **1.24×**, because (102) builds every $\ell$ from the same three $C_A$ and has no mechanism for answering differently at different $\ell$ (T-31) | `v1.2.0` |
+| **F1** Appendix F match | criterion 1: the free-streaming chain against four external hierarchies in four conventions, two normalisations and two phase conventions, residuals below $10^{-13}$ | `v1.0.0` |
+| **F2** truncation convergence, both frames | Appendix E made quantitative, on (102). What a truncation discards falls off in $k$ at $\ell\simeq k\Delta\eta$; what it destroys, the shear and with it ranks 0 and 2, has no $\ell_{\max}$ in it, and is 99.93% at $\ell=2$ and 100% by $\ell=600$ (T-57). Footnote 29 (p. 365) holds: the cost is identically zero in the Newtonian frame, which has no shear to lose. The covariant sectors supply no excess at low $\ell$: their share is 0.54% at the quadrupole and grows with $\ell$ (T-31) | `v1.2.0` |
+| **F3** angular spectrum, both routes | criteria 3 and 4: (186) by the mode route and the covariant route, agreeing exactly since T-17 put the combined coefficients in $\mathbb Q$ | `v1.0.0` |
+| **F4** real-space correlation | the round trip $C_\ell\to C(\theta)\to C_\ell$, residual below $10^{-13}$ | `v1.0.0` |
+| **F5** source decomposition, two frames | (102) as built: the total is common to both frames and the decomposition by rank is not (S28). (102)'s frame disagreement is total, median $9.99\times10^{-1}$ over $2\le\ell\le400$ (T-59); D44 measures the assembly that replaced it | `v1.2.0` |
+| **F6** what each approximation is worth | A-1, A-2 and the small-scale approximation as ratios over six decades: one is a different calculation, one is free where this release claims, one is worst at large scales | `v1.1.0` |
+| **F7** frame specialisation | the generic $u^a$ carried through (102) and the frame chosen at the end. The dipole was expected to stand an order of magnitude apart and lands on each curve instead, worst ratio 1.24, because (102) builds every $\ell$ from the same three coefficients (T-31) | `v1.2.0` |
 | **F8** coupling schematic | a structural statement, not a measurement: which couplings exist at which order | `v1.1.0` |
-| **F9** angular spectrum with the acoustic peaks | **the deliverable** — $D_\ell/D_{30}$ for CDM, $\Lambda\mathrm{CDM}$ and the Planck set on step 7's line of sight, against CAMB and CLASS as context (**S4c**). One $C_\ell$ in both frames to $3.5\times10^{-14}$; first maxima at 165.4, 143.8 and 188.5 against CAMB's 206.1; the odd peaks present and the even ones absent, which is **A-3**. Drawn from its committed CSV, and `--replot` refuses a CSV this tree did not compute (**T-54**). The file keeps its `v1.2.0` stamp until the v1.4.0 regeneration: the stamp is in the script, and the script is in the fingerprint the CSV is checked against | `v1.2.0` |
-| **F10** formation surface — when the spectrum is laid down | **the spectrum in time**: $C_\ell(\eta)$ on the Planck set, CDM frame, 25 multipoles and fourteen epochs, each slot accumulated to each epoch; the $\eta_0$ column is the full integral to $1.0\times10^{-13}$. The late integrated Sachs–Wolfe term deposits 54%, 37% and 22% of $C_\ell$ at $\ell=2$, 3 and 4, and 5–21% above $\ell=30$. Every F10 drawn from (102) read a late share of **0.0000**, because (102) carries its bulk under the visibility (**T-128**) | `v1.3.0` |
+| **F9** angular spectrum with the acoustic peaks | the release's deliverable: $D_\ell$ for CDM, ΛCDM and the Planck set, shape-normalised at $\ell=30$, from the frame-invariant assembly, against CAMB and CLASS as context (S4c). First maxima at 165.4, 143.8 and 188.5; the two frames agree to $3.5\times10^{-14}$ | `v1.2.0` |
+| **F10** formation surface | $C_\ell(\eta)/C_\ell(\eta_0)$ on Planck, CDM frame, from the three slots. The late integrated Sachs–Wolfe term deposits 22 to 54% of today's $C_\ell$ at $\ell=2$ to $4$ and 5 to 21% above $\ell\simeq30$; the $\eta_0$ column reproduces the full integral to $1.0\times10^{-13}$. Drawn from (102), it showed no late power (T-128) | `v1.3.0` |
 
 | Diagnostic | Evidence for | Version |
 |---|---|---|
 | **D0** $\ell$ range, and B-3 | criterion 5's claimed range, derived rather than chosen: $2\le\ell\le20$ at 5% | `v1.0.0` |
-| **D1** relative-sign control | criterion 4, and criterion 3 in executable form — the $c^2=-1$ branch **diverges**, which is what makes the correct one evidence | `v1.0.0` |
+| **D1** relative-sign control | criterion 4, and criterion 3 in executable form: the $c^2=-1$ branch diverges, which is what makes the correct one evidence | `v1.0.0` |
 | **D2** round-trip residual | criterion 2's kinematic half, identically zero in exact arithmetic | `v1.0.0` |
-| **D5** Sachs–Wolfe limit | criterion 5a at 5%, **and the statement that it cannot discriminate B-5** — the two forms differ by a factor with no $\ell$ dependence | `v1.0.0` |
+| **D5** Sachs–Wolfe limit | criterion 5a at 5%, and the statement that it cannot discriminate B-5: the two forms differ by a factor with no $\ell$ dependence | `v1.0.0` |
 | **D6** (102) in two frames | the frame-invariance measurement F5 rests on, with the residual split by sector | `v1.2.0` |
-| **D7** CDM frame vs energy frame | **T-29** — *Annals II* §4.1 lists them as two of three distinct choices and this bundle conflates them; the tilt is up to 45% of the frame velocity | `v1.2.0` |
-| **D8** criterion 5b's gate | (102) against (177)–(179) on this bundle's own pipeline, **S4c** — 9.544e-06 worst against 10⁻³, over three backgrounds, nine modes and six multipoles | `v1.2.0` |
-| **D9** the acoustic scale | the antecedent's own ℓ_j = \|r_θ/r_s\| jπ, **both sides computable here and never compared** — it disagrees by 2.0–2.8×. Finding **T-51** | `v1.3.0` |
-| **D4** the monopole, and which rank carries C_ℓ | the antecedent's *"there is no monopole temperature anisotropy in the CGI approach"*, made executable — and the instrument that found **T-57**: under the weight every released caller was silently taking, the rank-0 monopole sector is 0.002% of C_ℓ and the rank-1 dipole is 100.5% of it. Runs both weights every time | `v1.3.0` |
-| **D10** what A-3 costs | the released driving freezes Φ below the recombination grid's first point while every mode starts far earlier (**T-51**), so the oscillator crosses the radiation era on a potential that does not decay. Reports which modes have a radiation era to see and how much Φ the frozen form omits — 0.13% at k=10 and 105% at k=600 — and **deliberately stops there**, because the acoustic grid carries 3 to 26 points below equality. Finding **T-64** | `v1.3.0` |
-| **D11** the ℓ=0 driving terms | `d_delta = −Φ_H′ + (k/3)τ₁` and a𝓑₀ = −⅓kτ₁, so a𝓑₀ is a **source, on the right, once** — which settles which side the printed `modeibe` double-counts it on. Φ_H′ is machine zero on EdS and 59% of a𝓑₀ on PLANCK at k=10. Finding **T-79** | `v1.3.0` |
-| **D12** v_B + σ at the source | CAMB's single `g(v_b+σ)` object, differenced between the two columns **before any projection** — no transfer, no j_ℓ, no weight, no validity gate. **9.3×10⁻¹⁶ to 1.8×10⁻¹³** at every k on both backgrounds, so the rank-1 source is frame-consistent and the gap is downstream. Finding **T-82** | `v1.3.0` |
-| **D13** the by-parts 2×2 | the same transport source direct and through its fully integrated-by-parts form, identical endpoints, **both frames**. Both identities hold — the residual falls under refinement, so it is quadrature — and A_N ≠ A_C by 1.0–1.8 of scale. Boundary-against-bulk bookkeeping **excluded**. Finding **T-85** | `v1.3.0` |
-| **D14** the slot repair lattice | the B-slot controls over their full lattice, which is **M11a as a method**: three of four score as failures alone. **Its result is withdrawn** — T-88's improvement was a spurious ×κ′ of 320–682 (**T-93**) — and the diagnostic is kept because a withdrawn number that cannot be regenerated cannot be checked | `v1.3.0` |
-| **D16** the κ′² in the integrand | the six pieces of (102)'s Newtonian integrand, each against the others. **One term is 93–97% of it** at k ≤ 60 and is **1.8×10⁵ times the physical Doppler source**; the acoustic driving is 0.02% and the ISW 0.18%. **Weight-independent**, so A-2 cannot reach it. Finding **T-94** | `v1.3.0` |
-| **D17** the W-form against (102) | P1-T's boxed integrating-factor form of the line-of-sight solution evaluated beside the released (102), in both frames. If the W-form is frame-invariant where (102) is not, the gap is in the assembly and the by-parts is where it enters; if **both** carry it, the assembly is not the site. **Reads $\mathcal O(1)$ in both columns and is held inconclusive**: the rank-0 row needs $\sigma_0$ and the CDM column needs $S_2$, both referred to P1-T | `v1.3.0` |
-| **D18** the $\kappa'$ ledger on the released code | P1-T's rule — *$\kappa'$ may live in $W$, in $\mathcal V$, or in a derivative of either, **never in a coefficient*** — applied to the arrays this bundle actually builds. Every coefficient is **affine in $\kappa'$**, verified at $\lambda=2$ to $10^{-16}$, so the split into $\kappa'$-free and $\kappa'$-carrying parts is exact. **$C_1$ and $C_1'$ carry a bare $\kappa'$ and it is essentially the whole of them** (share 0.99–1.02; 0.51 at $k=300$ Newtonian); $C_0$, $C_2$, $C_2''$ are clean. Finding **T-101** | `v1.3.0` |
-| **D19** the ℓ=0 row control, on the live coefficients | the acceptance measurement for the monopole-row correction. **All four of its conditions PASS and the repair is still wrong** (**T-107** refuted it on an external gate). Read with the ruling of 3 November, T-107 refutes the restoration *alone*: with Paper 1's rank-one sign the row must carry $a\mathcal B_0$ (supplement, §The $\ell=0$ matching row). That is **M14** as an instrument: a difference-based gate cannot see a defect common to both things differenced. Kept so that a withdrawn variant stays regenerable | `v1.3.0` |
-| **D20** what the two $h$ defects in the scattering rate are worth | **T-108**'s measurement and **T-109**'s evidence, scored against $z_\ast=1088.5$ from the matched external codes — an **external** gate, which is what M14 requires after four difference-based conditions passed on a wrong repair. It is the correction that moved PLANCK's first-peak excess from $+65.8$ to $+29.4$ | `v1.3.0` |
-| **D21** the Sachs–Wolfe scalar, on the live coefficients | Stage 4(a). `c1_identity.py` had checked this against fixtures since `v1.0.0` and it had never been pointed at the production path. It tests $\delta T$, $\Phi_A$ and $C_2'$ and **nothing else** — no $C_0$, no $C_1'$, no dipole. It **passes at 0.68% on Einstein–de Sitter**, which is what moved the search downstream of the source. Finding **T-113** | `v1.3.0` |
-| **D22** the transport identity on live histories | Stage 3's gate, and the first instrument pointed at **transport** rather than at coefficients. The identity closes to $10^{-5}$ to $10^{-7}$ with a *consistent* derivative and fails at **0.4–65%** with the one (106)/(107) supplies — both right separately and **not usable together**. Finding **T-114**. `c3_byparts.py` cannot see this: on fixtures the derivative is consistent by construction | `v1.3.0` |
-| **D23** Stage 4(b): the transfer against Sachs–Wolfe as $k\to0$ | the complete transfer against the SW transfer in the superhorizon limit. **The limit exists and is $\ell$-independent**, which excludes every projection defect at once — and it is $9.4\times10^{3}$ (Newtonian) and $-1.10$ (CDM) where it must be 1. The CDM boundary tends to $-0.9999$: **Sachs–Wolfe with the sign reversed**. The reference is built twice and the two agree to $3\times10^{-8}$, so nothing in the ratio is a convention. Finding **T-117** | `v1.3.0` |
-| **D24** the Φ′ sweep: dead, drowned, or unfed | whether the acoustic driving channel is **dead, drowned or merely unfed** — three different repairs, which no single-number gate distinguishes. It scales $(\Phi_A'-\Phi_H')$ and nothing else, because scaling $C_1'$ whole conflates driving with Doppler (**M15** inside a coefficient), and it reports $\ell_{\rm peak}$, so **M16** is satisfied by construction. **Drowned**: $\kappa''\tilde v_B$ is **99.8%** of $\lvert C_1'\rvert$, and restoring the driving alone moves the peak *down*. Finding **T-121** | `v1.3.0` |
-| **D25** the $k$-decomposition of the low-ℓ spectrum | where in $k$ each low-ℓ $C_\ell$ actually comes from — the step between a $k\to0$ result and an ℓ-space claim, which both streams had written as a caveat rather than measured. **The $k\le0.1$ window where T-117's limit holds supplies at most 0.64% of any $C_\ell$, so T-117 is not the plateau.** The *level* of the median contributing $k$ proves nothing — $j_\ell(kr_\theta)$ peaks at $kr_\theta\simeq\ell+0.8\ell^{1/3}$ with a long tail — and only its **shape** survives: monotone decay in ℓ, closed by $\ell=173$. Finding **T-122**, corrected by P1-T | `v1.3.0` |
-| **D26** the bulk-source lattice, screened on G-b | the seven bulk-source controls over their lattice, screened on the **cheap** gate so the expensive one is spent only on survivors. It exists because `BULK_SOURCE_CONTROLS` made all seven reachable from the spectrum at all: before it, one combination was | `v1.3.0` |
-| **D27** gate G-a: the peak position against $\ell_A$ | $\ell_{\rm peak}/\ell_A$ against the target **0.7723** ($206/266.750$) — a spectrum-level quantity, which **M16** requires of any coefficient-level claim. **This gate has never measured the released acoustic peak, and the sentence that stood here was wrong — corrected 2026-11-02.** It read *"it scored a pre-registered prediction and the prediction failed: $[0.55,0.80]$ predicted, 0.0073 measured"*. **The prediction was not scored.** The finder wired to G-a took a global `argmax` over $\ell\ge2$ with no band, and the released spectrum carries a spurious maximum at $\ell\simeq7$ at $9.6\times$ CAMB's plateau (**T-181b**); $0.0073$ is that finder landing on $\ell=8.10$ after interpolation. **A plateau artefact was published under the name of a peak-position gate.** Three peak finders with three different bands were live in the tree and none was tested; they are now one definition in `scripts/_peak.py` with the plateau excluded (**T-184**), and the rerun is outstanding. **The target's re-registration $0.757\to0.7723$ on 2026-10-31 still stands** — it is arithmetic on a denominator the recombination repair moved — **but my stated reason for it being safe does not.** I wrote that the verdict was untouched because $0.0073$ sits two orders below either interval. There was no verdict to be untouched. **What the rerun is expected to return is $\approx0.9994$**, which fails $[0.55,0.80]$ for a different and correct reason: $\ell_1\simeq\ell_A$ is where an *undriven* oscillator's first extremum projects, and **A-3** is the registered reason it would be undriven | `v1.3.0` |
-| **D28** the restoration crosses, at released $\kappa''$ | the configurations that survived D26, run at **released** $\kappa''$ rather than with the knob. Cross B is **the first first-peak this bundle has produced without a knob** — $0.8691$ in the CDM frame — and it is **also the row that refuses adoption**, because the Newtonian frame reads $0.2770$, a factor of **3.1** apart, and $\ell\ge2$ is frame-invariant at first order | `v1.3.0` |
-| **D29** B-17's identity, at released $\kappa''$ | the identity itself, and **the first instrument to implement it**: `slot_weight_split` was taken for the control for discrepancy (i) by both streams and is a different claim — it splits $C_1'$ and leaves $\kappa''\tilde v_B$ where it was (**T-125**). Pre-registered before it ran. Checkpointed row-at-a-time after four long runs were lost to container restarts (**T-127**) | `v1.3.0` |
-| **D30** when the spectrum is laid down | **The instrument behind every F10 drawn from (102), and the one that found T-128.** $C_\ell$ accumulated in conformal time inside the released quadrature, one pass. Two gates: the $\eta_0$ slice must equal the released integral it decomposes, and non-monotonicity is reported rather than assumed. **Late share 0.0000 on all three backgrounds**, where ΛCDM and Planck require $O(0.1)$ and Einstein–de Sitter requires exactly zero — **the EdS null control is the falsifier**. Finding **T-128** | `v1.3.0` |
-| *D3* | *deferred to v1.5.0 (S-b)* — a cross-check, not an acceptance artefact. **Retargeted 2026-10-15, finding T-47**: it was deferred *to v1.1.0*, which shipped without it, so the harness announced a deferral to a release in the past. `run_all.py` now fails on a deferral to an already-released version. **D4 was here and was discharged 2026-10-17**: it had been deferred three times on the reasoning that its stated question was a one-line claim with little room for error, and it turned out to be the only instrument pointed at a different question entirely | — |
+| **D7** CDM frame against energy frame | T-29: *Annals II* §2.4 lists them as distinct choices and the bundle had conflated them; the tilt is up to 45% of the frame velocity | `v1.2.0` |
+| **D8** criterion 5b's gate | (102) against (177)–(179) on this bundle's own pipeline (S4c): $9.544\times10^{-6}$ at worst against $10^{-3}$, over three backgrounds, nine modes and six multipoles | `v1.2.0` |
+| **D9** the acoustic scale | the antecedent's own $\ell_j=\|r_\theta/r_s\|\thinspace j\pi$, both sides computable here and never compared there: it disagrees by 2.0 to 2.8 times (T-51) | `v1.3.0` |
+| **D4** the monopole, and which rank carries $C_\ell$ | the antecedent's statement that there is no monopole temperature anisotropy in the CGI approach, made executable. Under the weight every caller of (102) then took, the rank-0 monopole sector is 0.002% of $C_\ell$ and the rank-1 dipole 100.5% of it (T-57). Runs both weights every time | `v1.3.0` |
+| **D10** what A-3 costs | the released driving holds $\Phi$ constant below the recombination grid's first point while modes start earlier (T-51), so the oscillator crosses the radiation era on a potential that does not decay. Reports which modes have a radiation era to see and how much $\Phi$ the held form omits, 0.13% at $k=10$ and 105% at $k=600$, and stops there, because the acoustic grid carries 3 to 26 points below equality (T-64) | `v1.3.0` |
+| **D11** the $\ell=0$ driving terms | the two driving terms of the $\ell=0$ equation, $-\Phi_H'$ and $\tfrac k3\tau_1$, and $a\mathcal B_0=-\tfrac k3\tau_1$ counted once (T-79). $\Phi_H'$ is machine zero on Einstein–de Sitter and 59% of $a\mathcal B_0$ on Planck at $k=10$ | `v1.3.0` |
+| **D12** $v_B+\sigma$ at the source | CAMB's single $g(v_b+\sigma)$ object differenced between the two frames before any projection: no transfer, no $j_\ell$, no weight. $9.3\times10^{-16}$ to $1.8\times10^{-13}$ at every $k$ on both backgrounds, so the rank-1 source is frame-consistent and (102)'s gap is downstream of it (T-82) | `v1.3.0` |
+| **D13** the by-parts 2×2 | the same transport source direct and through its fully integrated-by-parts form, with identical endpoints, in both frames. Both identities hold, since the residual falls under refinement, and the two frames differ by 1.0 to 1.8 of scale, which excludes boundary-against-bulk bookkeeping (T-85) | `v1.3.0` |
+| **D14** the slot repair lattice | the B-slot controls over their full lattice, three of four scoring as failures alone. Its result is withdrawn: T-88's improvement was a spurious factor of $\kappa'$ between 320 and 682 (T-93). Kept so that a withdrawn number can be regenerated and checked | `v1.3.0` |
+| **D16** the $\kappa'^2$ in the integrand | the six pieces of (102)'s Newtonian integrand, each against the others. One term, $\mathcal V\kappa''\hat v_B$, is 93 to 97% of it at $k\le60$ and $1.8\times10^5$ times the physical Doppler source; the acoustic driving is 0.02% and the ISW 0.18%. It does not depend on the weight, so A-2 cannot reach it (T-94) | `v1.3.0` |
+| **D17** the W-form against (102) | the integrating-factor form of the line-of-sight solution evaluated beside (102), in both frames. It reads $\mathcal O(1)$ in both columns and is held inconclusive: its rank-0 row and its CDM column needed inputs the v1.3.0 assembly later supplied | `v1.3.0` |
+| **D18** the $\kappa'$ ledger | the rule that $\kappa'$ may live in $W$, in $\mathcal V$ or in a derivative of either, and never in a coefficient, applied to (102)'s arrays. Every coefficient is affine in $\kappa'$, verified to $10^{-16}$, so the split is exact; $C_1$ and $C_1'$ carry a bare $\kappa'$ that is essentially the whole of them (share 0.99 to 1.02; 0.51 at $k=300$ Newtonian), and $C_0$, $C_2$, $C_2''$ are clean (T-101) | `v1.3.0` |
+| **D19** the $\ell=0$ row control, on the live coefficients | the acceptance measurement for the monopole-row correction. All four of its conditions pass and the restoration alone is wrong (T-107); with Paper 1's rank-one sign the row must carry $a\mathcal B_0$ (supplement, the $\ell=0$ matching row). A difference-based gate cannot see a defect common to both things differenced (M14) | `v1.3.0` |
+| **D20** the two $h$ defects in the scattering rate | T-108's measurement and T-109's evidence, scored against $z_\ast=1088.5$ from the matched external codes, an external gate as M14 requires. The correction moved Planck's first-peak excess under (102) from $+65.8$ to $+29.4$ | `v1.3.0` |
+| **D21** the Sachs–Wolfe scalar, on the live coefficients | $\delta T$, $\Phi_A$ and $C_2'$ and nothing else: no $C_0$, no $C_1'$, no dipole. It passes at 0.68% on Einstein–de Sitter, which moved the search downstream of the source (T-113) | `v1.3.0` |
+| **D22** the transport identity on live histories | the first instrument pointed at transport rather than at coefficients. The identity closes to $10^{-5}$ to $10^{-7}$ with a consistent derivative and fails at 0.4 to 65% with the one (106)/(107) supplies: both are right separately and not usable together (T-114) | `v1.3.0` |
+| **D23** the transfer against Sachs–Wolfe as $k\to0$ | the complete transfer of (102) against the Sachs–Wolfe transfer in the superhorizon limit. The limit exists and is $\ell$-independent, which excludes every projection defect at once, and as built it is $9.4\times10^{3}$ (Newtonian) and $-1.10$ (CDM) where it must be 1; the CDM boundary tends to $-0.9999$, the Sachs–Wolfe transfer with its sign reversed (T-117). The reference is built twice and the two agree to $3\times10^{-8}$ | `v1.3.0` |
+| **D24** the $\Phi'$ sweep | whether the acoustic driving channel of (102) is dead, drowned or unfed. It scales $(\Phi_A'-\Phi_H')$ and nothing else, and reports $\ell_{\rm peak}$ (M16). Drowned: $\kappa''\tilde v_B$ is 99.8% of $\lvert C_1'\rvert$, and restoring the driving alone moves the peak down (T-121) | `v1.3.0` |
+| **D25** the $k$-decomposition of the low-ℓ spectrum | where in $k$ each $C_\ell$ at low $\ell$ comes from. The window $k\le0.1$, where T-117's limit holds, supplies at most 0.64% of any $C_\ell$, so T-117 is not the plateau. Only the shape of the median contributing $k$ survives, since $j_\ell(kr_\theta)$ peaks at $kr_\theta\simeq\ell+0.8\ell^{1/3}$ with a long tail: monotone decay in $\ell$, closed by $\ell=173$ (T-122) | `v1.3.0` |
+| **D26** the bulk-source lattice, screened on G-b | the seven bulk-source controls over their lattice, screened on the cheap gate so that the expensive one is spent only on survivors | `v1.3.0` |
+| **D27** gate G-a: the peak position against $\ell_A$ | $\ell_{\rm peak}/\ell_A$ against the target $0.7723$ ($206/266.750$), a spectrum-level quantity as M16 requires. Its finder once took a global maximum over $\ell\ge2$ and landed on the plateau artefact at $\ell\simeq8$ (T-181b), so the 0.0073 it reported was not a peak position; the finders are now one definition in `scripts/_peak.py`, with the plateau excluded (T-184) | `v1.3.0` |
+| **D28** the restoration crosses, at released $\kappa''$ | the configurations that survived D26, run at released $\kappa''$. Cross B gives a first peak at $0.8691\thinspace\ell_A$ in the CDM frame and $0.2770$ in the Newtonian frame, a factor of 3.1 apart, and is not adopted, since $\ell\ge2$ is frame-invariant at first order | `v1.3.0` |
+| **D29** B-17's identity, at released $\kappa''$ | the identity itself, and the first instrument to implement it; `slot_weight_split` is a different claim, which splits $C_1'$ and leaves $\kappa''\tilde v_B$ where it was (T-125). Registered before it ran, and checkpointed row by row (T-127) | `v1.3.0` |
+| **D30** when the spectrum is laid down | the formation-surface instrument on (102): $C_\ell$ accumulated in conformal time inside the quadrature, one pass, with the $\eta_0$ slice required to equal the integral it decomposes. The late share is 0.0000 on all three backgrounds, where ΛCDM and Planck require $O(0.1)$ and Einstein–de Sitter requires exactly zero, and the Einstein–de Sitter null control is the falsifier (T-128) | `v1.3.0` |
+| *D3* | *deferred to v1.5.0 (S-b)*: a cross-check, not an acceptance artefact. It was once deferred to v1.1.0, which shipped without it (T-47), and `run_all.py` now fails on a deferral to a released version | — |
 
-### Compute cost: what one spectrum takes
+### Compute cost
 
-**Measured, not estimated** — `scripts/benchmark_single_run.py`, one angular
-correlation function from all the physics at a fixed parameter set, excluding
-the tests, the figures and the manifests. Those measure what it costs to
-*check* the bundle, which is a different question from what it costs to *run*
-it.
+`scripts/benchmark_single_run.py` measures one angular correlation function
+from all the physics at a fixed parameter set, excluding the tests, the
+figures and the manifests, which measure what it costs to check the bundle
+rather than to run it.
 
-*Snapshot: CPython 3.13 on Linux x86_64, numpy 2.5, 2026-10-15; 39 multipoles
-to $\ell=990$, 1433 modes to $k=1500$, `PLANCK_MODEL`. A benchmark is a
-property of a machine, so this is dated and labelled rather than asserted;
-re-run the script anywhere to replace it.*
+*Snapshot: CPython 3.13 on Linux x86_64, numpy 2.5, 2026-10-15, before the
+v1.3.0 assembly; 39 multipoles to $\ell=990$, 1433 modes to $k=1500$,
+`PLANCK_MODEL`. A benchmark is a property of a machine, so it is dated; run
+the script to replace it.*
 
 | stage | seconds | share | why |
 |---|---:|---:|---|
 | background | 0.05 | 0.0% | adaptive quadrature per panel; independent of k and ℓ |
 | recombination history | 0.31 | 0.1% | one stiff Radau solve, then the visibility and opacity |
 | environment and transfer function | 0.44 | 0.1% | the η grid, the potentials, the Bond–Efstathiou shape |
-| Bessel table | 6.85 | 1.5% | j_ℓ(x) tabulated **once** and reused by every mode |
-| **per-mode loop** | **452.47** | **98.3%** | the acoustic solve and the line-of-sight projection, once per k |
+| Bessel table | 6.85 | 1.5% | j_ℓ(x) tabulated once and reused by every mode |
+| per-mode loop | 452.47 | 98.3% | the acoustic solve and the line-of-sight projection, once per k |
 | &nbsp;&nbsp;*of which* coefficients | *239.22* | *52.0%* | solving (152)/(153) and assembling C₀, C₁, C₂ |
 | &nbsp;&nbsp;*of which* projection | *213.24* | *46.3%* | ∫dη against j_ℓ for every ℓ |
 | primordial power | 0.00 | 0.0% | P(k) ~ k^(n_s−4), one array |
 | k quadrature to C_ℓ | 0.01 | 0.0% | one integral per multipole against the stored transfer |
 | C_ℓ → C(θ) | 0.01 | 0.0% | Legendre sum at 721 angles |
-| **TOTAL** | **460.13** | **100%** | **316 ms per mode, over 1433 modes** |
+| total | 460.13 | 100% | 316 ms per mode, over 1433 modes |
 
-**This shows that the cost is in one place, and that the place is not where a
-reader would guess.** Recombination — the physics that took a release to get
-right — is 0.1%. The deliverable the reader actually asked for, $C(\theta)$, is
-0.01 seconds. **Everything is the per-mode loop**, split almost evenly between
-solving the oscillator and projecting it along the line of sight, and it is
-linear in the number of modes because each mode is independent.
+The cost is in the per-mode loop, split almost evenly between solving the
+oscillator and projecting it along the line of sight, and linear in the number
+of modes, since each mode is independent. Recombination is 0.1%, and
+$C(\theta)$ itself takes 0.01 seconds.
 
-**What it means for v1.5.0.** It is the measurement decision **S24** was argued
-on, now broken down: $A_s$ and $n_s$ enter *only* the last two rows, which cost
-$0.01$ s against the $452$ s above them. A sampler that re-runs the whole chain
-per proposal pays four hundred times for something it could store — which is
-why the v1.5.0 interface must expose $T_\ell(k)$ and its grid as a first-class
-product rather than only $C_\ell(\theta)$. **This table is the argument, not an
-illustration of it.**
+Decision S24 was argued on this measurement. $A_s$ and $n_s$ enter only the
+last two rows, which cost 0.01 s against the 452 s above them, so a sampler
+that re-runs the whole chain for each proposal recomputes what it could store.
+The v1.5.0 interface therefore exposes $T_\ell(k)$ and its grid as a product,
+not only $C_\ell(\theta)$. Decision **S30** defers run-time optimisation to a
+dedicated assessment for v2.0.0: the loop is embarrassingly parallel, and
+tuning it before the interface it is measured against exists would optimise
+ahead of the requirement.
 
-**What it does not license.** Decision **S30** defers run-time optimisation to a
-dedicated assessment for v2.0.0, and nothing here overrides that: the loop is
-embarrassingly parallel and obviously so, and that is precisely why tuning it
-now — before the handover this benchmark exists to measure against — would be
-optimising ahead of the requirement.
+## Provenance and decisions
 
-## The contracts this release is bound by
-
-**Summarised; the contracts themselves are in `provenance/`.** They exist so a
-physical claim here can be traced to the equation it came from and the
-measurement that checked it.
+The records behind every physical claim here are in `provenance/`, so that a
+claim can be traced to the equation it came from and the measurement that
+checked it.
 
 | | |
 |---|---|
-| **decisions** | `provenance/DECISIONS-v1.0.0.md` — S (scope), L (lineage), V (visual grammar), D (documents), R (reproducibility) |
-| **what the antecedent gets wrong** | `provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md` — fifteen findings, each with the printed equation beside the corrected one |
-| **what this bundle gets wrong** | `provenance/BUNDLE-DEFECTS-v1.md` |
-| **the approximations, named** | `provenance/SOURCE-APPROXIMATIONS-v1.md` — A-1 to A-5, each with what it costs and where |
-| **conventions and equation numbers** | `provenance/conventions.md`; `provenance/EQUATION-NUMBERS-ANNALS-II-v1.md` maps every label to its **published** number |
+| decisions | `provenance/DECISIONS-v1.0.0.md`: S (scope), L (lineage), V (visual grammar), D (documents), R (reproducibility) |
+| the antecedent's errors | `provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md`: B-1 to B-17, each with the printed equation beside the corrected one |
+| this bundle's errors | `provenance/BUNDLE-DEFECTS-v1.md` |
+| the approximations | `provenance/SOURCE-APPROXIMATIONS-v1.md`: A-1 to A-5, each with what it costs and where |
+| conventions and equation numbers | `provenance/conventions.md`; `provenance/EQUATION-NUMBERS-ANNALS-II-v1.md` maps every label to its published number |
 
-**The ones that constrain the physics, in one line each.**
+The decisions that constrain the physics:
 
-- **S1** — the deliverable is the CDM and $\Lambda\mathrm{CDM}$ angular power spectra in
-  the almost-Friedmann–Lemaître formulation: (186) from (176), **by both the
-  mode route (187)/(188) and the covariant route**. Two routes, because one
-  route cannot check itself.
-- **S15** — *an approximation of the source is not a finding against it.* The
-  antecedent's deliberate narrow choices are **reproduced faithfully** and
-  recorded as A-1…A-5; only defects are corrected. Departing from an
-  approximation is allowed where the source is not the target, and is named at
-  the call site and in the caption.
-- **S26** — the audit half is in scope: relations *Annals II* needs and never
-  wrote — the generic $\dot{\mathcal B}_A$, and the expansion–potential
-  relation that checks them — are **derived here** rather than deferred.
-- **S27** — every artefact carries a maturity rung, and a release gates on the
-  rung rather than on an opinion that the work is done.
-- **S43** — *a default that encodes an approximation must be named at every call
-  site*, enforced by the release gate, because an unstated weight is an
-  unstated approximation.
-- **T-23** — *a derivative comes from a published relation, never from a spline
-  through a stored amplitude*, because mode-expanding a derivative is not
+- **S1**: the deliverable is the CDM and ΛCDM angular power spectra in the
+  almost-Friedmann–Lemaître formulation, (186) from (176), by both the mode
+  route and the covariant route (187)/(188), because one route cannot check
+  itself.
+- **S15**: an approximation of the source is not a finding against it. The
+  antecedent's deliberate narrow choices are reproduced and recorded as A-1 to
+  A-5, and only defects are corrected. A departure from an approximation is
+  allowed where the source is not the target, and is named at the call site
+  and in the caption.
+- **S26**: relations *Annals II* needs and never wrote, the generic
+  $\dot{\mathcal B}_A$ and the expansion–potential relation that checks them,
+  are derived here rather than deferred.
+- **S27**: every artefact carries a maturity rung, and a release gates on the
+  rung.
+- **S43**: a default that encodes an approximation is named at every call site and
+  enforced by the release gate, because an unstated weight is an unstated
+  approximation.
+- **T-23**: a derivative comes from a published relation, never from a spline
+  through a stored amplitude, because mode-expanding a derivative is not
   differentiating a mode amplitude.
 
-**S19** fixes the release order — Paper 1 submitted, then public, then each
-release public as it lands — which is why this repository is public now and
-why v1.5.0 is not on the critical path for it.
+**S19** fixes the release order: Paper 1 submitted, then this repository
+public, then each release public as it lands. That is why the repository is
+public and why v1.5.0 is not on the critical path for Paper 1.
 
-## Future situation: the route to the full spectrum
+## Future situation
 
-**Planned, and not claimed by this release.** v1.4.0 and v1.5.0 are the next
-two terms in the release-sequence table above — the envelope, then second
-order in the shear. Beyond them:
+v1.4.0 and v1.5.0 are the next two rows of the release sequence: the radiation
+era with the tight-coupling transition, then second order in the shear. The
+supplement registers v1.4.0's test before the work begins, on the
+frame-invariant assembly, with the radiation-era $\Phi$ entering the
+oscillator, the Sachs–Wolfe slot and the integrated slot together: on Planck
+the Newtonian and CDM spectra coincide below $10^{-12}$; on Planck the first
+maximum of $D_\ell$ lands at $206\pm6$, with at least one interior minimum
+between $\ell=300$ and $900$; and on every background with $\Omega_r=0$ the
+spectrum does not move, its largest relative change below $10^{-10}$.
+Einstein–de Sitter is the null control, since A-3 cannot act where there is
+no radiation era. F11, the formation surface with the radiation era wired, is
+planned as v1.4.0's lead figure.
 
 | | what it adds, physically |
 |---|---|
-| **v2.0.0** | the **almost-EGS bounds**: how nearly isotropic the radiation has to be for the almost-Friedmann–Lemaître conclusion to hold, which is the theorem this whole line of work rests on and the one quantity the bundle has never bounded. `provenance/ALMOST-EGS-BOUNDS-v1.md` is a table skeleton with no derived bound in it yet |
-| | **possibly a second language.** The per-mode loop is **98.3% of one spectrum** and is embarrassingly parallel, so a compiled implementation is a design question about that loop and nothing else — `CovariantCMBR.jl` is the candidate, and it would be a port of a reconstruction that is already right rather than a second reconstruction |
+| **v2.0.0** | the almost-EGS bounds: how nearly isotropic the radiation has to be for the almost-Friedmann–Lemaître conclusion to hold. This is the theorem the line of work rests on, and the bundle has not yet bounded it; `provenance/ALMOST-EGS-BOUNDS-v1.md` is a table skeleton with no derived bound in it |
+| | possibly a second language. The per-mode loop is 98.3% of one spectrum and embarrassingly parallel, so a compiled implementation is a design question about that loop alone. `CovariantCMBR.jl` is the candidate, and it would port a reconstruction that is already right rather than reconstruct a second time |
 
-**The scheduling rule is physical, not procedural**: an envelope term is not
-touched while the source assembly it sits under is being measured, because
-moving the envelope moves the number the measurement is reading. **A
-second-order correction added to a linear assembly that is not yet right is
-not a correction — it is two unknowns.** That is why v1.4.0 and v1.5.0 follow
-v1.3.0 rather than running beside it.
+An envelope term is not changed while the source assembly beneath it is being
+measured, because moving the envelope moves the number the measurement reads,
+and a second-order term added to a linear assembly that is not yet right adds
+a second unknown. v1.4.0 and v1.5.0 therefore follow v1.3.0 rather than run
+beside it.
 
 ## Scientific boundary
 
@@ -733,20 +756,20 @@ This is an analytical reproducibility bundle for the associated paper and its
 supplement. It is not an empirical calibration, not a parameter-estimation
 pipeline, and not a Boltzmann code for general use.
 
-**No new effect is claimed here, and none is reported.** The exact 1+3 covariant
-radiation multipole hierarchy contains couplings between the shear and the
-temperature multipoles whose coefficient grows linearly in ℓ. Their O(ε²ℓ)
-content is **gravitational lensing together with observer aberration**, with no
-residue. Nothing here is a detection claim.
+No new effect is claimed here, and none is reported. The exact $1+3$
+covariant radiation multipole hierarchy contains couplings between the shear
+and the temperature multipoles whose coefficient grows linearly in $\ell$.
+Their $O(\varepsilon^2\ell)$ content is gravitational lensing together with
+observer aberration, with no residue, and nothing here is a detection claim.
 
-Two statements must travel together, and neither stands alone: the nonlinear
-contribution δτ_NL **matters** — it is not negligible and not an artefact — and
-it **adds nothing**, redistributing power rather than creating it, because
-δτ_NL ∝ ΦΦ makes its contribution to C_ℓ quartic in Φ while the linear C_ℓ is
-quadratic.
+Two statements travel together. The nonlinear contribution
+$\delta\tau_{\rm NL}$ matters: it is not negligible and not an artefact. It
+also adds nothing, redistributing power rather than creating it, because
+$\delta\tau_{\rm NL}\propto\Phi\Phi$ makes its contribution to $C_\ell$
+quartic in $\Phi$ while the linear $C_\ell$ is quadratic.
 
-The bundle reproduces; it does not argue. Any physics claim belongs to the paper,
-and no claim appears here that is not in the paper.
+The bundle reproduces and does not argue. Any physics claim belongs to the
+paper, and no claim appears here that is not in the paper.
 
 ## Repository structure
 
@@ -755,47 +778,43 @@ config/                  Accepted scientific and release configurations
 functions/background/    The FLRW background, integrated from the 1+3 constraint
 functions/frames.py      The frame shift, symbolically, with orders tracked
 functions/harmonics/     PSTF weights, the recursion, and the external hierarchies
-functions/spectra/       Sources, recombination, the acoustic pair, the spectrum
+functions/spectra/       Sources, recombination, the acoustic pair, the line of sight, the spectrum
 functions/plotting/      House visual style, shared by every figure
 scripts/                 Active reproduction and verification commands
 tests/                   Compact claim-bearing regression suite
 tests/frame/             Frame instruments, importing nothing else here
-data/                    No empirical data are required at v1.0.0
+data/                    No empirical data are required
 outputs/                 Machine-readable curve and summary evidence
 figures/                 Versioned PDF/PNG figure pairs
 tables/                  Generated audit tables: equations, parameters, notation
+tikz/                    Generated diagrams for the supplement
 captions/                Standalone captions, and the figure plan for the set
 diagnostics/             Generated scientific acceptance checks
+docs/                    The theory audit the frame instruments write, and the self-assessment
+reference/               External reference spectra the figures draw as context
 source/source-v1.1.6/    Paper 1 at its arXiv freeze, and the algebra check written against it
 provenance/              Theory-to-code traceability and the corrections record
 supplementary-materials/ Compiled computational supplement
 ```
 
-Two suffix conventions operate here, and they are different rules rather than
-one rule applied loosely.
-
-**Figures and tables carry the release they were *introduced* in**, not the one
-that last regenerated them: F6 and F8 carry `-v1.1.0` while the figures
-specified at v1.0.0 keep theirs, and `tables/equations-v1.0.0.tex` keeps its
-suffix through every regeneration. **The supplement carries the release it
-*belongs to*** — decision **S36**, **amended at v1.3.14 to conform to the
-house exemplar** (`github.com/timgebbie/correlation-emergence-reproducibility`).
-Each *release* freezes its own `SUPPLEMENTARY-MATERIAL-vX.Y.Z.tex` in the root
-and the previous ones are kept beside it, exactly as one
-`RELEASE-NOTES-vX.Y.Z.md` is kept per release; a development revision between
-releases **replaces** its predecessor rather than accumulating beside it, which
-is why `SUPPLEMENTARY-MATERIAL-v1.3.0.tex` left the tree when v1.3.14 entered
-it and `SUPPLEMENTARY-MATERIAL-v1.2.0.tex` did not. Its *build output* is not
-kept: there is **one**
+Two suffix conventions operate here, and they are different rules. Figures and
+tables carry the release in which they were first drawn, not the one that
+last regenerated them: F6 and F8 carry `-v1.1.0`, the figures specified at
+v1.0.0 keep theirs, and `tables/equations-v1.0.0.tex` keeps its suffix through
+every regeneration. The supplement carries the release it belongs to (decision
+S36, amended at v1.3.14 to follow the house exemplar,
+`github.com/timgebbie/correlation-emergence-reproducibility`). Each release
+freezes its own `SUPPLEMENTARY-MATERIAL-vX.Y.Z.tex` in the root and the
+previous ones are kept beside it, as one `RELEASE-NOTES-vX.Y.Z.md` is kept per
+release; an edition between releases replaces its predecessor, which is why
+`SUPPLEMENTARY-MATERIAL-v1.2.0.tex` is in the tree and the v1.3.x editions
+before this one are not. The build output is not kept: there is one
 `supplementary-materials/SUPPLEMENTARY-MATERIAL-vX.Y.Z.pdf` in the tree at any
 time, named for the source the build is pointed at, because the rendering of
-record for an earlier release is its release asset and its archived DOI.
-**The document is a single file from v1.3.14**, so there is no
-`figures-vX.Y.Z.tex` and no fragment set: the figure pages are inline, and
-`scripts/make_figure_pages.py` and `scripts/build_supplement.py` both need
-retargeting at the consolidated source. `scripts/check_release_hygiene.py` is the
-gate; finding **T-50** is what happens without it. Public tags and their
-release assets remain unchanged in every case.
+record for an earlier release is its release asset and its archived DOI. The
+document is a single file, with the figure pages inline.
+`scripts/check_release_hygiene.py` is the gate, and T-50 is what happens
+without it. Public tags and their release assets do not change.
 
 ## Installation
 
@@ -813,13 +832,14 @@ python scripts/run_all.py --strict     # regenerate everything, fail on any drif
 python scripts/run_all.py --rerun      # regenerate without the drift gate
 ```
 
-`--strict` is the release route: it regenerates every output, figure and table,
-recomputes the manifests, and fails if any artefact differs from the recorded
-hash. `--rerun` is the development route.
+`--strict` is the release route: it regenerates every output, figure and
+table, recomputes the manifests, and fails if any artefact differs from the
+recorded hash. `--rerun` is the development route.
 
 ```bash
 python scripts/make_tables.py          # regenerate the audit tables
 python scripts/make_figure_pages.py    # regenerate the supplement's figure section
+python scripts/build_supplement.py     # build the supplement PDF
 python scripts/make_manifests.py       # regenerate the two SHA256 manifests
 python scripts/sync_conventions.py     # regenerate provenance/conventions.md
 pytest -q                              # the claim-bearing regression suite
@@ -835,15 +855,15 @@ python tests/frame/doctor.py           # why the suite will or will not run
 `tests/frame/run_all.py` and `scripts/run_all.py` share a name and do
 different things: the first runs the frame instruments and writes
 `docs/THEORY-AUDIT.md`, the second regenerates the bundle's artefacts. Run
-both from the repository root, where the path says which one you meant.
+both from the repository root, where the path says which one is meant.
 
 ## Verification status
 
 **Released as v1.3.0; this tree is v1.4.0-dev.** Every artefact carries a
-maturity rung and a release gates on the rung, not on an opinion that the work
-is done (**S27**); `provenance/RELEASE-STATUS-v1.md` carries them and is
-**generated and verified** — a claim whose module, object, test or harness
-entry is missing fails the run.
+maturity rung, and a release gates on the rung (S27).
+`provenance/RELEASE-STATUS-v1.md` carries the rungs and is generated and
+verified: a claim whose module, object, test or harness entry is missing fails
+the run.
 
 | what is checked | where |
 |---|---|
@@ -853,30 +873,24 @@ entry is missing fails the run.
 | every discretisation in the tree, by walking the AST | `provenance/GRID-REGISTER-v1.md` |
 | the measured defects, including repairs attempted and withdrawn | `provenance/BUNDLE-DEFECTS-v1.md` |
 
-The frame instruments import no project code, and since v1.3.18 that is a
-property the suite enforces rather than a claim this file makes.
+The frame instruments import no project code, and the suite enforces that.
 `tests/frame/_common.py` refuses any `sys.path` entry resolving to a bundle
-directory outside `tests/frame`, and any imported module whose file lies
-under the bundle outside it. It names violations by path rather than by
-module name, exits 2 without emitting a result line, and every record
-carries `independent` and `isolated_interpreter`.
-`FRAME_ALLOW_PROJECT_IMPORTS` opens the gate for a deliberate experiment and
-the record then says so: an escape hatch is allowed, a silent one is not.
-`python tests/frame/doctor.py` reports why the suite will or will not run on
-a given interpreter, using the standard library alone.
+directory outside `tests/frame`, and any imported module whose file lies under
+the bundle outside it. It names a violation by path rather than by module
+name, exits 2 without emitting a result line, and every record carries
+`independent` and `isolated_interpreter`. `FRAME_ALLOW_PROJECT_IMPORTS` opens
+the gate for a deliberate experiment, and the record then says so.
+`python tests/frame/doctor.py` reports why the suite will or will not run on a
+given interpreter, using the standard library alone. The number of instruments
+is in `tests/frame/README.md`, which reads its registry as a glob over the
+directory.
 
-How many instruments there are is in `tests/frame/README.md` and not here.
-That file reads its registry as a glob over the directory, so it cannot
-disagree with what the directory holds; a count repeated in this file could,
-and did.
+A green harness is not a correct spectrum: `run_all.py --strict` reporting
+`CLEAN` says that every registered artefact regenerated and nothing more
+(T-54).
 
-**A green harness is not a correct spectrum.** `run_all.py --strict` reporting
-`CLEAN` says every registered artefact regenerated, nothing more — finding
-**T-54** is the run that printed `CLEAN` over a two-day-old figure.
-
-This file does not assert where the released tag sits; the repository is the
-only thing that knows, so it carries the check rather than the answer
-(finding **T-30**):
+This file does not assert where the released tag sits. The repository carries
+that, so this file carries the check (T-30):
 
 ```
 git tag --list v1.3.0                                  # does it exist
@@ -884,38 +898,37 @@ git log --oneline -1 v1.3.0                            # where does it point
 git merge-base --is-ancestor v1.3.0 HEAD; echo $?      # 0 if it is behind the tip
 ```
 
-Two reading notes on the manifests. **`PORTABLE-MANIFEST-SHA256.txt` is what
-binds** — it excludes the renderings and canonicalises numerics to nine
-significant figures, and a mismatch there is release-blocking; the nine PNGs
-that always report as drifted carry a 5 770-byte `caBX` chunk inserted by the
-desktop bridge, not by anything here, and the `.pdf` of each round-trips
-byte-exact (**T-15**, **T-36**). **AI assistance** is disclosed in
-`provenance/AI-PROVENANCE-v1.md`.
+`PORTABLE-MANIFEST-SHA256.txt` is the manifest that binds: it excludes the
+renderings and canonicalises numerics to nine significant figures, and a
+mismatch there blocks a release. The PNGs that report as drifted on some
+machines carry a 5 770-byte `caBX` chunk inserted by the desktop bridge, not by
+anything here, and the `.pdf` of each round-trips byte-exact (T-15, T-36). AI
+assistance is disclosed in `provenance/AI-PROVENANCE-v1.md`.
 
 ## Version-control policy
 
-Semantic versioning. **`CITATION.cff` states the released version and this
-README's header states the tree version**, so a reader is never told a tree is
-a release. Both are stamped by `scripts/_versions.py`, which is the one module
-that says what version this tree is.
+Semantic versioning. `CITATION.cff` states the released version and this
+README's header states the tree version, so a tree is never presented as a
+release. Both are stamped by `scripts/_versions.py`, the one module that says
+what version this tree is.
 
-**A released tag is never moved** (**S39**), and a patch release is not cut for
-inert content. The full history is in `CHANGELOG.md`; the decisions behind it
-are in `provenance/DECISIONS-v1.0.0.md`.
+A released tag is never moved (S39), and a patch release is not cut for inert
+content. The full history is in `CHANGELOG.md`; the decisions behind it are in
+`provenance/DECISIONS-v1.0.0.md`.
 
 ## DOI, citation and license
 
 | Item | Value |
 |---|---|
-| **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMBR lensing in the exact 1+3 covariant radiation hierarchy* — **Paper 1**, University of Cape Town. **arXiv:astro-ph/9912072v4**, [doi:10.48550/arXiv.astro-ph/9912072](https://doi.org/10.48550/arXiv.astro-ph/9912072). Submitted 2026-10-16. CC BY 4.0. **The version suffix is not optional** — the bare identifier has carried three documents: `v2` the legacy 1999 work, `v3` the correction, `v4` this paper |
-| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.3.33.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.3.33.pdf) |
+| **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMBR lensing in the exact 1+3 covariant radiation hierarchy*, Paper 1, University of Cape Town. arXiv:astro-ph/9912072v4, [doi:10.48550/arXiv.astro-ph/9912072](https://doi.org/10.48550/arXiv.astro-ph/9912072). Submitted 2026-10-16. CC BY 4.0. Cite it with the version suffix: the bare identifier has carried three documents, `v2` the legacy 1999 work, `v3` the correction and `v4` this paper |
+| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.4.0.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.4.0.pdf) |
 | **GitHub repository** | [timgebbie/frame-covariant-cmb-reproducibility](https://github.com/timgebbie/frame-covariant-cmb-reproducibility) |
-| **ZivaHub/Figshare DOI** | [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509) — **live**. The **concept** DOI: it always resolves to the latest version, so it is the one to cite |
+| **ZivaHub/Figshare DOI** | [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509), live. The concept DOI always resolves to the latest version, so it is the one to cite |
 | **Associated antecedent** | Gebbie, T.; Dunsby, P. K. S.; Ellis, G. F. R. (2000). *1+3 covariant cosmic microwave background anisotropies II: the almost-Friedmann–Lemaître model*. Annals of Physics **282**, 321–394. [doi:10.1006/aphy.2000.6034](https://doi.org/10.1006/aphy.2000.6034) |
 | **Code license** | MIT, see [`LICENSE`](LICENSE) |
 | **Supplement, text, figures and tables** | CC BY 4.0, see [`CONTENT-LICENSE.md`](CONTENT-LICENSE.md) |
 
 Citation metadata is in [`CITATION.cff`](CITATION.cff). Its `version` field
 tracks the tag that exists, not the one in preparation: GitHub's *Cite this
-repository* reads it, and a version there that has not been released asserts
-a release nobody can fetch.
+repository* reads it, and a version there that has not been released would
+assert a release nobody can fetch.

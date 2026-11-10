@@ -1,5 +1,29 @@
 % Computational supplement to the associated paper.
 %
+% v1.4.0, 2026-11-10.  The first edition of the v1.4.0-dev line, opened after
+% the v1.3.0 release (tag v1.3.0 on 0fd58a9, supplement v1.3.33).
+%   - The date line's computational label reads v1.4.0-dev.
+%   - Part I says what v1.3.0 released and that v1.4.0 is the radiation era
+%     (A-3) with A-5; the Future situation names F11 as v1.4.0's lead figure
+%     and points to the registered test.  The finding range is T-1 to T-192.
+%   - sec:w-form, the C_1^grav under V.  (106) at the released flags
+%     (expansion_coupling=False; A_B1_PRIME_EXPANSION_TERMS=False, the
+%     comoving-k convention of T-67) is the exact derivative of the stored
+%     moment on the mode's own grid.  Off that grid the moments are held, and
+%     (106) is the pair's right-hand side on the held moments, which W needs:
+%     built from the same tau_1 as C_0, it cancels -aB_0's (k/3) tau_1
+%     identically, so C_0 - G' = -(Phi_A' - Phi_H') to 3e-16 inside and past
+%     the tight-coupling window (registered (b)).  The stored moment
+%     differentiated on the grid misses (b) by 0.09-0.25 inside the window
+%     and by order one past it, so it is D45's sum-back control and not the
+%     pairing.  The 1.3e-2 residual on PLANCK_MODEL is the start rule's
+%     (T-192): neither the acoustic grid (24 -> 96 points per period) nor the
+%     line-of-sight step moves it, and anchoring at each mode's own start
+%     takes it to 2-9e-5.  v1.3.32-33 gave it to -H Phi_A, which neither
+%     expression contains; LCDM's 4e-4 is recorded as not yet attributed.
+%   - T-192 at the Planck low-l sites: F9's bump at l ~ 7-12 is the start
+%     rule's, inside the region v1.3.0 gives to A-3.
+%
 % v1.3.33, 2026-11-04.  The abstract and Part I read for the v1.3.0 release:
 % the coefficients that fail two frame conditions are the antecedent's as
 % built, not the released ones; the released assembly sums back (D45); the
@@ -297,8 +321,8 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.3.33 --- 4 November 2026\\
-  Paper~1 verification ledger and chapter layout; computational v1.3.0}
+\date{Supplement v1.4.0 --- 10 November 2026\\
+  Paper~1 verification ledger and chapter layout; computational v1.4.0-dev}
 
 \begin{document}
 \maketitle
@@ -335,9 +359,10 @@ The integration-by-parts reconstruction of the published line-of-sight
 solution identifies four discrepancies in the antecedent's assembly. On the
 Planck background the first-peak position and the secondary peaks are not yet
 recovered, and below $\ell\simeq30$ the spectrum carries an incomplete
-radiation era, which is approximation A-3 and the work of v1.4.0. Findings are recorded
+radiation era and the start rule that comes with it (T-192), which is
+approximation A-3 and the work of v1.4.0. Findings are recorded
 against the antecedent (B-1 to B-17) and against the implementation (T-1 to
-T-191), and an inventory of findings is not treated as a certification of
+T-192), and an inventory of findings is not treated as a certification of
 the physical calculation. CAMB and CLASS provide external comparisons, not
 inputs or calibration targets, and the supplement makes no claim of new
 physics. The identifier \texttt{astro-ph/9912072v4} refers to Paper~1; the
@@ -419,13 +444,16 @@ are deliberately distinct.}
 \section{Current situation}
 \label{sec:current-situation}
 
-At the pinned README revision the repository is \texttt{v1.3.0-dev};
-\texttt{v1.2.0} is the last tagged release named there. The released
-Python reconstruction has progressed from free-streaming and PSTF mode
-recursions in v1.0.0, through a finite-width scattering visibility in
-v1.1.0, to the full linear source and frame-specialised integral
-assembly in v1.2.0. The present v1.3.0 scientific work concerns the
-acoustic oscillator, its source weighting and line-of-sight projection.
+\texttt{v1.3.0} was tagged on 4 November 2026, and this edition opens the
+supplement's \texttt{v1.4.0-dev} line. The released Python reconstruction
+has progressed from free-streaming and PSTF mode recursions in v1.0.0,
+through a finite-width scattering visibility in v1.1.0 and the full linear
+source and frame-specialised integral assembly in v1.2.0, to the
+line-of-sight integral in frame-invariant slots in v1.3.0, built from
+Paper~1's source and summed back to the integral it rearranges. The
+v1.4.0 work is the radiation era (A-3) with A-5. The pinned README revision
+this section cites was \texttt{v1.3.0-dev}, with \texttt{v1.2.0} the last
+tagged release named there.
 Oscillations have been recovered; the physical spectrum has \emph{not}:
 the primary peak placement, ordinary low-$\ell$ plateau and secondary
 peak structure remain unresolved, in agreement with the repository's
@@ -933,11 +961,13 @@ or measurement required to resolve them.
 \label{sec:future-situation}
 
 \paragraph{Physics-facing development sequence.}
-The v1.3.0 calculation must first resolve the projection and source
-assembly without relaxing the common-physical-endpoint frame test.
+v1.3.0 resolved the source assembly without relaxing the
+common-physical-endpoint frame test: the three slots are each
+frame-invariant and sum back to the integral they rearrange.
 As the README specifies, \texttt{v1.4.0} is reserved for radiation-era
 driving (A-3), the tight-coupling transition and slip/quadrupole terms
-(A-5). \texttt{v1.5.0} then restores the nonlinear shear terms retained
+(A-5); its lead figure is F11, the formation surface with the radiation era
+wired, and its test is registered in \S\ref{sec:first-peak}. \texttt{v1.5.0} then restores the nonlinear shear terms retained
 in the exact $1+3$ hierarchy but absent from the linear oscillator,
 with the intended endpoint being an implementation of the
 full \emph{in-scope} physics introduced in Paper~1, using antecedent
@@ -3886,8 +3916,10 @@ whose background carries no radiation, returns $\Phi_A/3$ to three figures,
 $0.3331$, and $2\Delta\Phi=0.442$ in the integrated slot. F9's
 \texttt{PLANCK\_MODEL} curve below $\ell\simeq30$, its dip near $\ell=5$
 included, is therefore the incomplete radiation era of A-3 and not a
-prediction of v1.3.0; the radiation era is v1.4.0's
-(\S\ref{sec:future-situation}).
+prediction of v1.3.0, and its bump at $\ell\simeq7$--$12$ is the start rule
+that comes with it, which gives a band of modes the matter-era condition on
+a potential that has already decayed (T-192, \S\ref{sec:w-form}). The
+radiation era is v1.4.0's (\S\ref{sec:future-situation}).
 
 \paragraph{The sum-back.} The sum-back asked for on 3 November, the three
 slots and the total derivative against the direct integral mode by mode,
@@ -3907,23 +3939,56 @@ confirms their weights.
 \paragraph{The $C_1^{\rm grav}$ under $\mathcal V$.} The identity is an
 integration by parts of one function, so the $C_1^{\rm grav}$ under
 $\mathcal V$ and the derivative under $W$ have to be one function and its
-derivative. F9 pairs the oscillator's stored $C_1^{\rm grav}$ under
-$\mathcal V$ with (106) under $W$, and (106) integrated from the start does
-not return the stored moment at last scattering: the two differ by
-$4\times10^{-4}$ of the transfer on $\Lambda$CDM and by $1.3\times10^{-2}$ on
-\texttt{PLANCK\_MODEL} at $k\le100$. The oscillator's belongs under
-$\mathcal V$. The Sachs--Wolfe slot is the boundary value
-$(\delta T+\Phi_A)(\eta_*)$, and that is the solution of the pair
-(152)--(153) this bundle integrates and the oscillator's gates certify
-(\S\ref{sec:oscillator}). Under $W$ belongs its exact derivative, the pair's
-own right-hand side on that solution,
-$(\delta T+\Phi_A)'=\Phi_A'-\Phi_H'-\mathcal H\Phi_A+\tfrac k3\tau_1$ in the
-Newtonian frame. (106) is the antecedent's small-scale form of the same
-derivative, without the $-\mathcal H\Phi_A$ that (154) also drops, so the
-residual between the two is the size of that approximation, larger on
-\texttt{PLANCK\_MODEL} at low $k$, where the potential decays. It is recorded,
-not carried: the same rule as \S\ref{sec:oscillator}'s pair and (154). The
-pairing moves F9 by at most $1.3\times10^{-2}$ of the transfer.
+derivative. F9 in v1.3.0 pairs the oscillator's stored $C_1^{\rm grav}$ under
+$\mathcal V$ with (106) under $W$. The stored moment belongs under
+$\mathcal V$: the Sachs--Wolfe slot is the boundary value
+$(\delta T+\Phi_A)(\eta_*)$, the solution of the pair (152)--(153) that this
+bundle integrates and the oscillator's gates certify
+(\S\ref{sec:oscillator}). (106) is that solution's exact derivative on the
+grid the pair is integrated on. The released solver runs with
+\texttt{expansion\_coupling=False}, which drops the $-\mathcal H\Phi_A$ of
+(153) as (154) does, so that in the Newtonian frame
+$(\delta T+\Phi_A)'=\Phi_A'-\Phi_H'+\tfrac k3\tau_1$, and with
+\texttt{A\_B1\_PRIME\_EXPANSION\_TERMS=False}, the comoving-$k$ convention of
+T-67 rather than a dropped term, (106) gives
+$(a\mathcal B_1)'=k(\Phi_A'-\Phi_H')+\tfrac{k^2}3\tau_1$, the same expression
+term for term. Off that grid the two differ. The stored moments are held
+before each mode's start and after the tight-coupling window, and there (106)
+is the pair's right-hand side evaluated on the held moments, which is what $W$
+needs. Since (106) and $C_0$ are built from one $\tau_1$, the $\tfrac k3\tau_1$
+of $-a\mathcal B_0$ in $C_0$ cancels the one in (106) identically: in the
+Newtonian frame $C_0-G'=-(\Phi_A'-\Phi_H')$ to $3\times10^{-16}$, inside the
+window and past it, as the registered condition \emph{(b)} requires. The
+stored moment differentiated on the grid, D45's option (ii), misses
+\emph{(b)} by $0.09$ to $0.25$ inside the window, where it is the derivative
+of a linear resample, and by order one past it, where it leaves the held
+dipole under $W$ along the whole path. It serves D45 as a control on the
+sum-back, in which both sides read the same arrays, and not as the pairing.
+
+(106) integrated from the line-of-sight grid's start does not return the
+stored moment at last scattering: the two differ by $4\times10^{-4}$ of the
+transfer on $\Lambda$CDM and by $1.3\times10^{-2}$ on \texttt{PLANCK\_MODEL}
+at $k\le100$. On \texttt{PLANCK\_MODEL} the difference is the start rule's
+(T-192). Each mode starts where $kr_s=\varepsilon$, or at the table's first
+point if it never reaches it, on the matter-era condition
+$\delta T=-\tfrac23\Phi_A$, $\tau_1=0$. For $2.7<k<5.4$ that start falls after
+the potential has begun to decay (A-3), and before it the stored moments are
+the interpolation's left fill while (106) integrates the decay through them.
+Raising the acoustic grid from $24$ to $96$ points per period moves the
+difference by a factor of $1.00$, and halving the line-of-sight step moves it
+by $1.00$, so it belongs to neither grid; anchoring the reconstruction at each
+mode's own start takes the difference between the two moments to
+$2$--$9\times10^{-5}$. On $\Lambda$CDM, whose potential is constant until
+$\Lambda$, the start rule does not act, and the $4\times10^{-4}$ there is not
+yet attributed. The start rule acts inside the slots as well: on
+\texttt{PLANCK\_MODEL} the Sachs--Wolfe source at last scattering jumps from
+$0.185$ at $k=2.7$ to $0.296$ at $k=2.8$, and F9 carries a bump at
+$\ell\simeq7$--$12$, inside the region v1.3.0 already gives to A-3. The start
+and the initial condition are redefined with the radiation era. v1.3.32 and
+v1.3.33 gave the difference to $-\mathcal H\Phi_A$, which neither expression
+contains. Whether the oscillator should carry $-\mathcal H\Phi_A$ at all is a
+question about the oscillator rather than the pairing, and is not settled
+here.
 
 \paragraph{The relative sign between slots.} The relative sign between slots, which
 no frame test can see, D44 probes by reversing the Doppler slot; the result is
