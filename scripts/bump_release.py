@@ -16,7 +16,9 @@ because the flip was still six hand edits in four files.
 This is the flip, done once, from one argument. The test then checks the result
 rather than catching a mistake nobody had a tool to avoid.
 
-**What `--to` touches, and nothing else.** The six label sites, plus
+**What `--to` touches, and nothing else.** The README's label sites (the
+header, the verification section, the three tag-check commands and the
+release-sequence table's status cell), the supplement's computational label,
 `CITATION.cff` and the changelog heading. It does **not** create the next
 release's supplement: under decision **S36** each release freezes its own
 `SUPPLEMENTARY-MATERIAL-vX.tex` and the previous ones are kept, so starting the
@@ -34,7 +36,8 @@ v1.2.0 successor. **That is finding T-50, and it is this script's own defect
 class arriving from the end it did not cover.** `--open`:
 
 * flips the three README labels to `vX.Y.Z-dev`, leaving `**Last release:**`
-  and `CITATION.cff` alone --- those track the release and must not move;
+  and `CITATION.cff` alone --- those track the release and must not move ---
+  and makes the new line's release-sequence row the one marked current;
 * opens a `## [Unreleased] — vX.Y.Z in preparation` section in the changelog;
 * **leaves the supplement alone.** Since 2026-10-26 the supplement numbers
   its own editions, declared on the README's `Supplement:` line, which
@@ -103,6 +106,12 @@ def _edits(target: str, previous: str, today: str,
          f"git log --oneline -1 v{target} "),
         ("README.md", rf"git merge-base --is-ancestor v{re.escape(previous)} HEAD",
          f"git merge-base --is-ancestor v{target} HEAD"),
+        # The release-sequence table's status cell. It was not a site until
+        # v1.3.0 had been published for six days with its row still reading
+        # *current*: a label this script did not know about is a label that
+        # drifts, which is the whole argument above.
+        ("README.md", rf"^(\| \*\*v{re.escape(target)}\*\* \|.*)· \*\*current\*\* \|$",
+         r"\1· released |"),
         # The supplement's \date carries its own edition and, since the
         # editions started moving faster than the code, the computational
         # label after it: "Supplement v1.3.31 --- <date> ... computational
@@ -129,6 +138,10 @@ def _open_edits(target: str, current: str) -> list[tuple[str, str, str]]:
         ("README.md", rf"^Version: \*\*v{old}\*\*", f"Version: **{dev}**"),
         ("README.md", rf"^## Current situation: v{old}$", f"## Current situation: {dev}"),
         ("README.md", rf"this tree is v{old}\.", f"this tree is {dev}."),
+        # The line being opened becomes the release-sequence table's one
+        # current row; `--to` turns it to *released* when it ships.
+        ("README.md", rf"^(\| \*\*v{re.escape(target)}\*\* \|.*)· planned \|$",
+         r"\1· **current** |"),
     ]
 
 
@@ -155,10 +168,10 @@ def open_release(target: str, dry_run: bool) -> int:
             failures.append(
                 f"{name}: {pattern!r} matched {hits} times, expected {expected}")
             continue
-        before = re.search(pattern, text, re.MULTILINE).group(0)
+        found = re.search(pattern, text, re.MULTILINE)
         bodies[name] = re.sub(pattern, replacement, text, flags=re.MULTILINE)
-        print(f"  {name}\n      - {before}" + (f"  (x{hits})" if hits > 1 else "")
-              + f"\n      + {replacement}")
+        print(f"  {name}\n      - {found.group(0)}" + (f"  (x{hits})" if hits > 1 else "")
+              + f"\n      + {found.expand(replacement)}")
 
     # The changelog's open section, inserted above the most recent dated one.
     changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")

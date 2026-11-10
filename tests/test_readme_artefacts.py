@@ -302,6 +302,44 @@ def test_the_released_version_is_named_consistently_too():
         f"{header.group(1)}. GitHub reads the first of those.")
 
 
+def test_the_release_sequence_table_agrees_with_the_version_labels():
+    """The release-sequence table's status cell is a version label too.
+
+    `bump_release.py` flipped every label it knew of when v1.3.0 shipped, and
+    this cell was not among them, so the README went on calling a published
+    release *current* for six days. Every row up to the last release reads
+    `released`; the open development line, if there is one, is the only row
+    reading `current`; every row after it reads `planned`.
+    """
+    import re
+
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    rows = re.findall(
+        r"^\| \*\*v(\d+\.\d+\.\d+)\*\* \|.*· (released|\*\*current\*\*|planned) \|$",
+        readme, re.MULTILINE)
+    released = re.search(r"\*\*Last release: v([0-9.]+)\*\*", readme).group(1)
+    tree = re.search(r"^Version:\s+\*\*v([0-9.]+(?:-dev)?)\*\*", readme,
+                     re.MULTILINE).group(1)
+    opened = tree.removesuffix("-dev") if tree.endswith("-dev") else None
+
+    def key(version: str) -> tuple[int, ...]:
+        return tuple(int(part) for part in version.split("."))
+
+    named = {version for version, _ in rows}
+    assert released in named and (opened is None or opened in named), (
+        f"the release-sequence table has rows for {sorted(named)} and no row "
+        f"for the last release v{released}"
+        + (f" or the open line v{opened}" if opened else ""))
+    for version, status in rows:
+        want = ("released" if key(version) <= key(released)
+                else "current" if version == opened else "planned")
+        assert status.strip("*") == want, (
+            f"the release-sequence row for v{version} reads {status.strip('*')!r}; "
+            f"with the last release v{released} and this tree v{tree} it must "
+            f"read {want!r}. `scripts/bump_release.py` flips this cell with "
+            f"the other labels.")
+
+
 #: The decisions a reader must know to read the README honestly. Adding one
 #: here is the deliberate act; the test then refuses a README that drops it.
 #: **Not all thirty-five** --- a README that recited the whole contract would be

@@ -11,6 +11,31 @@ All notable changes to this bundle are recorded here. The version policy is in
   flips the tree's three labels and opens this section, and no longer copies,
   renames or deletes the supplement, whose editions are declared on the
   README's `Supplement:` line.
+- `scripts/bump_release.py` flips the README release-sequence table's status
+  cell: `--to` turns the shipped line's row to *released*, and `--open` makes
+  the new line's row the one *current* row. `tests/test_readme_artefacts.py`
+  checks the cell against the header.
+
+### Fixed
+
+- **The README described v1.3.0 as unreleased after it shipped.** The
+  release-sequence table still marked v1.3.0 current, and the F10 and F9
+  sections, their artefact rows and *Where the implementation stands* still
+  described the spectra (102) drew before the release. They now describe the
+  released figures: one $C_\ell$ in both frames, the odd acoustic peaks
+  present and the even ones absent, the late integrated Sachs–Wolfe term
+  restored, and the low multipoles and peak heights that wait for the
+  radiation era (A-3).
+
+### Measured
+
+- **T-192**, `tests/test_the_per_mode_acoustic_start_is_physics.py`. The start
+  of each mode is derived from $kr_s$, and on Planck it puts the modes with
+  $2.7<k<5.4$ on the matter-era initial condition after their potential has
+  decayed: the Sachs–Wolfe source jumps from 0.185 to 0.296 between $k=2.7$
+  and $2.8$. This is what (106)'s departure from the stored moment measured,
+  not a grid. The test is written to fail when the radiation era repairs the
+  start and the initial condition together.
 
 ### Planned
 
