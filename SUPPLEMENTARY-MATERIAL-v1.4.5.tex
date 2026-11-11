@@ -1,5 +1,29 @@
 % Computational supplement to the associated paper.
 %
+% v1.4.5, 2026-11-11.  Sequential style audit, seventh batch: the
+% scattering-strength expansion, the CDM-frame division of (102), Discussion,
+% Implications, Open questions, the almost-EGS bounds, the source-distance
+% sector paragraph, Parameter evidence, Numerical resolution.
+%   - Headings name their object, each claim moved into the paragraph's first
+%     sentence; "What is open" is "Open questions"; italic leads and italic
+%     and bold sentences restated plainly; eq:closed-form and eq:three-shifts
+%     unboxed; eq:kernel-is-cascade carries the definition of K_l and its
+%     slogan moves into the prose; stream and PI references removed.
+%   - Brought to the record.  The CDM-frame division: the printed-coefficient
+%     footnotes folded into the text, Delta C_1's normalisation settled by
+%     T-66, the by-parts repair done in sec:assembly-rederived (B-17) with the
+%     assembly of sec:w-form following, and its four open items closed.
+%     Open questions: Q12 superseded by the assembly and D45, Q13 and Q14
+%     closed by it, Q16 to be superseded by the radiation-era construction
+%     (ruled, not built; on the released path the hold stands), Q17 answered
+%     at the coefficient by D44's registration (a).  The structure-in-l
+%     paragraph states registration (d) per background: odd maxima back on
+%     Einstein-de Sitter and LCDM, one maximum on PLANCK_MODEL.  The late-term
+%     paragraphs carry D44's 2.7e-23 on Einstein-de Sitter; the Lambda
+%     backgrounds' late share is not yet reported.
+%   - Evidence (the figure captions) is left as generated from captions/.
+%   - Equations otherwise unchanged, verified by extraction.
+%
 % v1.4.4, 2026-11-11.  Sequential style audit, sixth batch: The angular
 % spectrum, Comparison and its range, Release progression.
 %   - Headings name their object (ten renamed); the italic lead and the
@@ -426,7 +450,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.4.4 --- 11 November 2026\\
+\date{Supplement v1.4.5 --- 11 November 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.4.0-dev}
 
 \begin{document}
@@ -5852,9 +5876,9 @@ $\beta_\ell\sim6\times10^{-270}$ at $\ell=900$, so $\beta_\ell^2$ underflows to
 zero while $\alpha_\ell^2$ overflows, and their exact ratio of one came back as
 an overflow for every $\ell\ge508$. The bundle's multipole ceiling was
 $507$, set by a quantity equal to one, with no diagnostic and nothing in the
-physics to suggest it. The rule the weights module already stated ---
-\emph{multiply at the point of numerical use, never before a comparison} ---
-is the whole of the repair.
+physics to suggest it. The rule the weights module already stated,
+``multiply at the point of numerical use, never before a comparison'', is
+the whole of the repair.
 
 \paragraph{The multipole mean square.} The mean square \eqref{eq:187-188}
 carries $\beta_\ell\alpha_\ell^2=(2\ell+1)^2/\beta_\ell$, which leaves the
@@ -6449,7 +6473,7 @@ or polarisation.
 % nothing; it can be moved into Paper 2 by moving two files, this and
 % tables/scattering-expansion-v1.3.0.tex. Decision S42.
 % ---------------------------------------------------------------------------
-\section{The scattering-strength expansion, re-derived}
+\section{The scattering-strength expansion}
 \label{sec:scattering-expansion}
 
 \emph{Annals~II} Appendix~C writes the almost-Friedmann--Lema\^{\i}tre
@@ -6470,11 +6494,12 @@ printing $\tau_{(0)}$, $\tau_{(1)}$ and $\tau_{(2)}$. Section~5.5.3,
 \emph{``terms up to $\mathcal O(t_c^3)$''}, so the ceiling is the antecedent's
 and the printed orders stop one short of it.
 
-\subsection{The recursion is geometric}
+\subsection{The closed form}
 
-Write $\mathcal D\equiv\partial_t+e^a\mathrm D_a$ for the derivative along the
-photon path --- which is exactly the pair of terms \eqref{eq:appc-recursion}
-applies to $\tau_{(n-1)}$ --- and $V\equiv v^ae_a$. Then
+The recursion is geometric. Write $\mathcal D\equiv\partial_t+e^a\mathrm D_a$
+for the derivative along the photon path, the pair of terms
+\eqref{eq:appc-recursion} applies to $\tau_{(n-1)}$, and $V\equiv v^ae_a$.
+Then
 \eqref{eq:ibe-thomson} reads $\tau=V-t_c(\mathcal B+\mathcal D\tau)$, so
 \begin{equation}
   \big(1+t_c\mathcal D\big)\tau=V-t_c\mathcal B,
@@ -6485,8 +6510,8 @@ applies to $\tau_{(n-1)}$ --- and $V\equiv v^ae_a$. Then
 and expanding the inverse as a Neumann series in $(-t_c\mathcal D)$ gives a
 closed form at every order:
 \begin{equation}
-  \boxed{\;\tau_{(n)}\;=\;V\;+\;\sum_{m=1}^{n}(-1)^m\,t_c^m
-  \Big[\mathcal D^{m}V+\mathcal D^{m-1}\mathcal B\Big].\;}
+  \tau_{(n)}\;=\;V\;+\;\sum_{m=1}^{n}(-1)^m\,t_c^m
+  \Big[\mathcal D^{m}V+\mathcal D^{m-1}\mathcal B\Big].
   \label{eq:closed-form}
 \end{equation}
 
@@ -6500,8 +6525,9 @@ failing control, in \texttt{tests/test\_scattering\_expansion.py}. The closed
 form was derived from \eqref{eq:appc-recursion} and \emph{then} compared with
 the page, which is the only order in which the comparison carries information.
 
-\paragraph{The closed form holds the scattering time fixed along the path, and
-the antecedent's scheme is what fixes it.} The Neumann series of
+\paragraph{The scattering time along the path.} The closed form holds
+$t_c$ fixed along the path, and the antecedent's scheme is what fixes it. The
+Neumann series of
 $(1+t_c\mathcal D)^{-1}$ runs in powers of the \emph{operator} $t_c\mathcal D$,
 and $(t_c\mathcal D)^2=t_c(\mathcal Dt_c)\mathcal D+t_c^2\mathcal D^2$.
 Iterating \eqref{eq:appc-recursion} directly returns
@@ -6513,12 +6539,13 @@ Appendix~C prints three at first order and six at second, which it could not do
 if the $\mathcal Dt_c$ terms were carried. The reconstruction is faithful to
 the page; the scheme on the page sets $\mathcal Dt_c=0$ without saying so.
 
-\paragraph{At the peak of the visibility the dropped term is the size of the
-term one order below it.} In conformal time $t_c=1/\kappa'$, so along the time
+\paragraph{The dropped term at the visibility peak.} At the peak of the
+visibility the dropped term is the size of the term one order below it. In
+conformal time $t_c=1/\kappa'$, so along the time
 direction $\mathcal Dt_c=-\kappa''/\kappa'^2$. The visibility
 $\mathcal V=\kappa'e^{-\kappa}$ is stationary where
 $\mathcal V'=(\kappa''+\kappa'^2)e^{-\kappa}$ vanishes, and $e^{-\kappa}$ never
-does, so the peak sits exactly at $\kappa''=-\kappa'^2$ --- measured to
+does, so the peak sits exactly at $\kappa''=-\kappa'^2$, measured to
 $7.4\times10^{-15}$ in \texttt{tests/frame/c12\_sampling\_bound.py}. There
 $\mathcal Dt_c=1$, and the dropped $t_c(\mathcal Dt_c)(\mathcal DV)$ is
 $t_c\mathcal DV$, which is the retained first-order term. The second-order
@@ -6527,32 +6554,34 @@ asymptotic at the one epoch it is applied to. Two parameters control it and
 only one is small: $t_ck$ for the gradients, and $t_c\mathcal D\ln t_c$ for
 the time derivative, which is unity at the peak whatever $k$ is.
 
-\subsection{Two consequences the closed form makes immediate}
+\subsection{Two consequences}
 
-\paragraph{The term counts are not chosen.} $\mathcal D^m$ expands into a sum
+\paragraph{The number of terms.} The term counts are not chosen: $\mathcal D^m$
+expands into a sum
 over words in $\{\partial_t,\;e^a\mathrm D_a\}$, so the $t_c^m$ bracket of
 \eqref{eq:closed-form} holds exactly $2^m+2^{m-1}$ terms. Appendix~C prints
 three at first order and six at second; those are $2+1$ and $4+2$.
 Table~\ref{tab:scattering-expansion} lists every term to
 $\mathcal O(t_c^3)$, generated from the same module rather than transcribed.
 
-\paragraph{Order $m$ sources multipoles up to $\ell=m+1$.} Each
-$e^a\mathrm D_a$ carries one direction vector and $V=v^ae_a$ carries one
+\paragraph{The rank reached at order $m$.} Order $m$ sources multipoles up
+to $\ell=m+1$. Each $e^a\mathrm D_a$ carries one direction vector and
+$V=v^ae_a$ carries one
 already, so a word with $g$ gradients seeded by $V$ has $g+1$ factors of
 $e^a$; reduced by Appendix~C's own solid-angle identities, which lower the rank
 two at a time, its highest PSTF part has rank $g+1$. At second order that
 reaches rank three, in the single term
 $e^ce^ae^b\mathrm D_c\mathrm D_av_b$.
 
-Equivalently, and more usefully for the high-$\ell$ question: each gradient
-contributes one power of $k$, so a term of rank $r$ carries $k^{\,r-1}$. The
-expansion parameter is therefore $t_ck$ --- the ratio of the mean free path to
-the wavelength --- and not $t_c$ alone. This shows that the
-truncation is $\ell$-dependent by construction: a cut in rank is a cut in
+Equivalently, for the high-$\ell$ question: each gradient contributes one
+power of $k$, so a term of rank $r$ carries $k^{\,r-1}$. The expansion
+parameter is therefore $t_ck$, the ratio of the mean free path to the
+wavelength, and not $t_c$ alone. The truncation is $\ell$-dependent by
+construction: a cut in rank is a cut in
 $t_ck$, and the order at which the expansion may be stopped falls as $\ell$
 rises.
 
-\subsection{What this costs the oscillator}
+\subsection{The cost to the oscillator}
 
 The near-tight-coupling set of \S7.1 is introduced \emph{``rewritten to first
 order''} and closes with $\tau^{A_\ell}\simeq0$ for all $\ell>2$. At first
@@ -6571,12 +6600,12 @@ a cross term of $\mathcal O(t_c\epsilon)$ between \S5.5.1's almost-Friedmann--Le
 ordering and \S5.5.3's scattering-time ordering. \emph{Annals~II}'s
 Appendix~E, after Ellis--Treciokas--Matravers, states what the discarded
 harmonics hold: if any four consecutive ones vanish exactly then
-$\sigma_{ab}=0$ exactly. This shows that the truncation and the shear
-are not independent --- the residual in the truncated harmonics is where the
-shear lives, and a treatment that sets them to zero has set the shear to zero
-with them.
+$\sigma_{ab}=0$ exactly. The truncation and the shear are therefore not
+independent: the residual in the truncated harmonics is where the shear
+lives, and a treatment that sets them to zero has set the shear to zero with
+them.
 
-\subsection{What appears at second order that does not appear at first}
+\subsection{The second order}
 
 Appendix~C's own solid-angle reduction gives the rank decomposition of the
 source,
@@ -6601,13 +6630,12 @@ $\dot\sigma_{ab}+2H\sigma_{ab}+E_{ab}\approx0$ then gives
   \label{eq:sigma-dot}
 \end{equation}
 so the electric Weyl tensor enters the radiation quadrupole at second
-order in the scattering time, and does not at first. This shows that
-the second-order expansion is not merely a smaller correction of the same kind:
-it introduces a gravitational tidal driving of the quadrupole that the
-first-order treatment has no term for.
+order in the scattering time, and does not at first. The second-order
+expansion is not a smaller correction of the same kind: it introduces a
+gravitational tidal driving of the quadrupole that the first-order treatment
+has no term for.
 
-\paragraph{An open question, stated as a mechanism rather than a result.}
-\emph{Annals~II} flags the regime itself, in a footnote to the sentence about
+\paragraph{Question Q10.} \emph{Annals~II} flags the regime itself, in a footnote to the sentence about
 removing the radiation quadrupole: \emph{``If there are any anisotropic
 contributions such as anisotropic scattering (in the matter frame) or large
 shear (from gravitational waves) at that time this sort of approximation should
@@ -6619,8 +6647,9 @@ horizon. Whether that survives projection as a distinguishable \emph{ringing}
 is open; it is recorded as question~Q10 rather than claimed, because
 nothing here computes it.
 
-\paragraph{What this expansion cannot produce.} \eqref{eq:appc-recursion} is
-linear in $V$ and $\mathcal B$, so \eqref{eq:closed-form} yields terms
+\paragraph{The $\epsilon^2$ terms.} The expansion cannot produce them:
+\eqref{eq:appc-recursion} is linear in $V$ and $\mathcal B$, so
+\eqref{eq:closed-form} yields terms
 of order $t_c^m\epsilon$ and never $\epsilon^2$. Terms of
 $\mathcal O(\varepsilon^2\ell)$ require the quadratic parts of the Boltzmann
 equation that \S5.5.1's almost-Friedmann--Lema\^{\i}tre linearisation discards,
@@ -6630,10 +6659,10 @@ $t_ck$, not on $\epsilon^2$.
 
 \input{tables/scattering-expansion-layout-v1.3.5.tex}
 
-\paragraph{One transcription note.} The fifth term of Appendix~C's $t_c^2$
-bracket is printed as $e^ce^d\mathrm D_c\dot v_b$, which leaves both $d$ and
-$b$ free in a scalar. It is $e^ce^d\mathrm D_c\dot v_d$ --- the time derivative
-taken first and the gradient outside --- forced independently by the four words
+\paragraph{Finding B-15.} The fifth term of Appendix~C's $t_c^2$ bracket
+is printed as $e^ce^d\mathrm D_c\dot v_b$, which leaves both $d$ and $b$
+free in a scalar. It is $e^ce^d\mathrm D_c\dot v_d$, the time derivative
+taken first and the gradient outside, forced independently by the four words
 of $\mathcal D^2$, by the bracket's count of six with the other five
 unambiguous, and by the two direction vectors having nothing else to contract
 with. Recorded as B-15; no computed quantity depends on it.
@@ -6657,26 +6686,23 @@ with. Recorded as B-15; no computed quantity depends on it.
 % C_1, no C_2, no visibility and no line-of-sight integral solution at all.
 % This appendix is about the GDE99 integral solution and is bundle territory.
 % ---------------------------------------------------------------------------
-\section{The CDM-frame division of the integral solution, term by term}
+\section{The CDM-frame division of (102)}
 \label{sec:frame-division}
 
-The integral solution (102) is derived for a general $u^a$ --- the antecedent
-says so immediately after (90), \emph{``Note that these are CGI with respect to
-$u^a$''} --- and then evaluated once, in the Newtonian frame. This appendix
-carries it into the CDM frame instead, coefficient by coefficient, and finds
-that the two frames do not agree. The failure is isolated to one coefficient at
-one power of $k$.
+The integral solution (102) is derived for a general $u^a$, as the
+antecedent says immediately after (90), \emph{``Note that these are CGI with
+respect to $u^a$''}, and then evaluated once, in the Newtonian frame. This
+appendix carries it into the CDM frame instead, coefficient by coefficient,
+and finds that the two frames do not agree; the failure is isolated to one
+coefficient at one power of $k$. The conventions come first, because two of
+the four frame-table entries cannot be reproduced without them.
 
-What this shows is narrower than it looks, and the conventions
-section exists because the first draft of this appendix did not have one.
-
-\subsection{Conventions, stated}
+\subsection{Conventions}
 \label{sec:frame-division-conventions}
 
-Every relation below is in one convention and this subsection fixes it. The
-need for it was raised by the Paper~1 stream, whose check could not reproduce
-two of the four frame-table entries --- correctly, because the entries are in
-the bundle's normalisation and the check was in Paper~1's.
+Every relation below is in one convention, and this subsection fixes it: a
+check made in Paper~1's normalisation could not reproduce two of the four
+frame-table entries, which are in the bundle's.
 
 \paragraph{Wavenumber.} The bundle carries $k\equiv k_{\rm com}$ throughout and
 converts at the point of use, $k_{\rm phys}=k_{\rm com}/a$. Paper~1's C3.1
@@ -6701,15 +6727,15 @@ T-27 in the bundle's record, where the un-reduced form was used by mistake
 and the symptom was a first-order frame change 186 times the quantity it
 corrects at $k=300$.
 
-\paragraph{Consequently, two of the four entries reconcile and one does not.}
-$a\sigma=-k_{\rm com}v$ \emph{is} $\sigma=-k_{\rm phys}v$, so n-t1 agrees with
-Paper~1's $\sigma=-kv$. $\tilde\tau_1\to\tilde\tau_1-v/k$ \emph{is}
+\paragraph{The four entries.} Two of the four reconcile and one does not.
+$a\sigma=-k_{\rm com}v$ is $\sigma=-k_{\rm phys}v$, so n-t1 agrees with
+Paper~1's $\sigma=-kv$. $\tilde\tau_1\to\tilde\tau_1-v/k$ is
 $\tau_a\to\tau_a-v_a$ in the reduced normalisation, so n-t4 agrees. What does
 not reconcile from outside the bundle is the reduced normalisation
 itself: Paper~1 carries no $C_1$, so it cannot adjudicate
 $\tilde\tau_1=v_B/k$, and $\Delta C_1$ below rests on it.
 
-\subsection{What has to hold}
+\subsection{The boost law}
 
 A first-order change of frame is a boost, and a boost changes the observed
 brightness by $\tau\to\tau-v_ae^a$: a pure dipole. In PSTF multipoles,
@@ -6724,16 +6750,15 @@ They do not assert exact equality of the raw multipoles at finite boost:
 Paper~1, Secs.~II~E and VI~B, distinguishes the small-tilt multipole law
 from the exact transformation of the photon distribution. At the specified
 order the predicted $\ell\ge2$ observable must agree after both
-results have been expressed in the same emitter and observer frames.
-The displayed equality signs have not been changed here pending the
-source-convention audit.
+results have been expressed in the same emitter and observer frames. The
+displayed equalities are the first-order law; the exact map is
+\eqref{eq:v139-exact-boost}.
 
 \subsection{The three shifts}
 
-The next displayed coefficients reproduce the historical printed form
-attributed to published \emph{Annals~II} Eq.~(90), not the corrected
-rank-zero result used in the live comparison below. They are retained to
-make the original calculation and the correction traceable.
+The coefficients displayed next are (90)'s printed form, kept so that the
+calculation and its correction are traceable; the corrected rank-zero row is
+\eqref{eq:c0-solved}, and the row of Paper~1's source is \eqref{eq:c0-ruled}.
 
 The printed form is
 \begin{equation}
@@ -6763,10 +6788,9 @@ With $\Delta X\equiv X^{(u)}-X^{(n)}$: $\Delta(a\mathcal B_1)
 =-\mathcal Hv-k\Phi_A=v'$ by the Euler equation, and $\Delta(\kappa'v_B)
 =\kappa'k\,\Delta\tilde\tau_1=-\kappa'v$. Hence
 \begin{equation}
-  \boxed{\;
   \Delta C_0=+\tfrac52\,k\,v,\qquad
   \Delta C_1=-\tfrac1k\big(v'-\kappa'v\big),\qquad
-  \Delta C_2=+\tfrac{v}{k}\;}
+  \Delta C_2=+\tfrac{v}{k}
   \label{eq:three-shifts}
 \end{equation}
 all three in one $v$ and one $k$.
@@ -6788,16 +6812,12 @@ conclusion that the ratio grows as $(k/\mathcal H)^2$ is unchanged, because
 $\Delta C_0$ and $\tfrac1k2v''$ are compared as powers of $k/\mathcal H$ and a
 constant does not move that.
 
-Whether $\Delta C_0$ has a partner was revised twice. On 23 October this
-appendix read the $+\tfrac k3\tau_1$ in $-C_1'$ as a cross-coefficient partner
-of $\Delta C_0$ (T-107), which made $\gamma$ the wrong pairing and
-\texttt{c8\_\allowbreak{}rank0\_\allowbreak{}partner.py} the gate. Read with
-\eqref{eq:frame-conditions} and \eqref{eq:paper1-source}, the original
-statement stands: in the exact identity rank zero must be invariant alone, so
-the as-built $\Delta C_0=+\tfrac{kv}{3}$ is a defect of the row rather than
-half of a cancellation. The $+\tfrac k3\tau_1$ in $-C_1'$ comes from the
-as-built rank-one sign, and \S\ref{sec:ell-zero-row} gives the row and the
-sign that satisfy all three conditions.
+Whether $\Delta C_0$ has a partner in $-C_1'$ was read both ways (T-107,
+M15). With \eqref{eq:frame-conditions} rank zero must be invariant alone, so
+the as-built $\Delta C_0=+\tfrac{kv}{3}$ is a defect of the row and not half
+of a cancellation; the $+\tfrac k3\tau_1$ in $-C_1'$ comes from the as-built
+rank-one sign, and \S\ref{sec:ell-zero-row} gives the row and the sign that
+satisfy all three conditions.
 
 \subsection{The shift of (102)}
 
@@ -6818,30 +6838,26 @@ and \eqref{eq:three-shifts} gives
     +\tfrac1k\big(2v''-(\kappa'v)'\big).
   \label{eq:shift-integrand}
 \end{align}
-\noindent\emph{Historical printed-coefficient result.}\footnote{This is the shift of the historical printed coefficient
-$C_0=-5a\mathcal B_2/2$ and therefore carries $+5kv/2$. If the corrected
-monopole row of Eq.~\eqref{eq:c0-solved} is adopted, its contribution is
-$+kv/3$ instead, and with the row of Paper~1's source, \eqref{eq:c0-ruled},
-it is zero. The historical equation is retained for audit; it must not be
-used as the current frame-shift law.}
-$v$ obeys $v'=-\mathcal Hv-k\Phi_A$, so on sub-horizon scales it changes on the
+\noindent This is the shift of the printed coefficient
+$C_0=-\tfrac52a\mathcal B_2$ and carries $+\tfrac52kv$; with
+\eqref{eq:c0-solved} that contribution is $+kv/3$ and with
+\eqref{eq:c0-ruled} it is zero, so the printed form is kept for the audit and
+is not the current frame-shift law. $v$ obeys $v'=-\mathcal Hv-k\Phi_A$, so
+on sub-horizon scales it changes on the
 Hubble rate: $v'\sim\mathcal Hv$, $v''\sim\mathcal H^2v$. Then
 \begin{equation}
   \frac{\tfrac52kv}{\tfrac1k\,2v''}\;\sim\;\frac54\left(\frac{k}{\mathcal H}\right)^{2},
   \label{eq:no-partner}
 \end{equation}
-and the two boundary shifts are smaller still. For the printed coefficient alone this estimate produces a term of
-order $(k/\mathcal H)^2$ relative to $v''$, but it does not establish a
-failure of the corrected frame transformation. The complete test is the three
-conditions of \eqref{eq:frame-conditions}, slot by slot.\footnote{The
-estimate in Eq.~\eqref{eq:no-partner} uses the superseded coefficient
-$C_0=-5a\mathcal B_2/2$. In the corrected matching its prefactor changes.
-Neither the printed coefficient estimate nor its scaling alone is a complete
-frame-covariance test.}
+and the two boundary shifts are smaller still. For the printed coefficient
+this estimate produces a term of order $(k/\mathcal H)^2$ relative to $v''$;
+it does not establish a failure of the corrected frame transformation, and
+the complete test is the three conditions of \eqref{eq:frame-conditions},
+slot by slot.
 
 
-\paragraph{Corrected coefficient shift and its differentiated partners.}
-For the \emph{stipulated first-order} frame relations of
+\paragraph{The corrected shifts.}
+For the stipulated first-order frame relations of
 \S\ref{sec:frame-division-conventions}, the source-amplitude shifts read
 $\Delta\mathsf A=-kv$ and
 $\Delta\mathsf F=v'-\kappa'v$. Substitution into the
@@ -6854,7 +6870,7 @@ corrected coefficient definitions
  \label{eq:v135-corrected-frame-triple}
 \end{equation}
 The three terms carried by the line-of-sight expression follow by
-\emph{differentiating these complete shifts}, at fixed comoving $k$:
+differentiating these complete shifts, at fixed comoving $k$:
 \begin{align}
  \Delta(C_2'-C_1)&=\frac{v'}k+\frac{v'-\kappa'v}k
                      =\frac{2v'-\kappa'v}{k},\\
@@ -6867,31 +6883,22 @@ The three terms carried by the line-of-sight expression follow by
 The Leibniz expansion on the last line is retained explicitly because
 $\kappa'$ is time-dependent. Equations
 \eqref{eq:v135-corrected-frame-triple}--\eqref{eq:v135-corrected-shift-bracket}
-replace the \emph{printed-coefficient algebra} as the conditional shift of
-the corrected matching; they do not prove that the assembled observable is
-frame invariant. Such a claim requires the frame transformation of all
-sources, weights, projected boundary terms and the integration variable
-in one expression. This paragraph asked for a cross-coefficient cancellation
-to be exhibited on the complete bracket. Read with
-\eqref{eq:frame-conditions}, the test is slot by slot rather than on the
-bracket, and with Paper~1's source all three conditions hold
-(\S\ref{sec:w-form}); the frame equality of the assembled observable is
-registration~(c) there. The source of the frame relations is Paper~1, Secs.~II~E and VI~B, with the
-first-order limitation of its Eq.~(74), together with the 
-\emph{published} Annals~II matching equations as cited provisionally
-here. The latter still require a journal-page comparison.\footnote{The
-$\Delta\mathsf A$ and $\Delta\mathsf F$ assumptions are the frame-convention
-input to this calculation. The code's corresponding field transforms and
-its complete projected line-of-sight frame equality have not yet passed
-an independent present-state repository test; registration~(c) of
-\S\ref{sec:w-form} is that test, scored with D44.}
+replace the printed-coefficient algebra as the conditional shift of the
+corrected matching. They do not by themselves prove the assembled observable
+frame invariant: that needs the frame transformation of all sources,
+weights, projected boundary terms and the integration variable in one
+expression, which is the slot-by-slot test of \eqref{eq:frame-conditions}.
+With Paper~1's source all three conditions hold, and the frame equality of
+the assembled observable is registration \emph{(c)} of \S\ref{sec:w-form},
+scored with D44. The frame relations are Paper~1's, Secs.~II~E and VI~B,
+with the first-order limitation of its Eq.~(74); the matching equations are
+\emph{Annals~II}'s (89)--(90), derived in \S\ref{sec:ell-zero-row}.
 
-\subsection{The $k^2$ is (90)'s, not a mixed convention}
+\subsection{The $k^2$ between $\Delta C_0$ and $\Delta C_2$}
 
-A factor $k^2$ between $\Delta C_0$ and $\Delta C_2$ is exactly what a
-comoving/physical or amplitude/potential mismatch produces, and the Paper~1
-stream was right to require that reading be excluded before the rest stands.
-It is excluded, and not by argument.
+A factor $k^2$ between $\Delta C_0$ and $\Delta C_2$ is what a
+comoving/physical or amplitude/potential mismatch produces, and that reading
+has to be excluded before the rest stands. It is excluded by measurement.
 
 $C_0$ and $C_2$ are the same array. \eqref{eq:C-from-B} divides one
 quantity, $a\mathcal B_2$, by $k^0$ and by $k^2$. Whatever $a\mathcal B_2$ is
@@ -6903,28 +6910,30 @@ at all:
   \qquad\text{(a pure rational).}
 \end{equation}
 Measured at $\eta_*$ on `CDM (Einstein--de Sitter)', `LCDM' and
-`PLANCK\_MODEL', at $k=1,5,20,60,140,300$: $\mathbf{2.5000}$ at every entry.
-That measurement predates 21~October and is the ratio under (89)'s
-\emph{printed} $\delta_{\ell0}$ row. Under the released row today ---
-\texttt{MONOPOLE\_ROW = "corrected"}, \eqref{eq:dc0-corrected} --- the same
-quantity reads $0.333333$ at $k=1,10,60$ on Einstein--de~Sitter and
-\texttt{PLANCK\_MODEL} alike: exactly $\tfrac13$. \emph{Only the
-value moves.} What this subsection's argument needs is that the ratio is a
-pure rational, independent of $k$ and of background, and it still is.
-What the measurement shows is internal consistency, which is not
-correctness --- that was true at $\tfrac52$ and is true at $\tfrac13$.
+`PLANCK\_MODEL', at $k=1,5,20,60,140,300$: $2.5000$ at every entry.
+That measurement predates 21~October and is the ratio under (89)'s printed
+$\delta_{\ell0}$ row. Under the released row, \texttt{MONOPOLE\_ROW =
+"corrected"} and \eqref{eq:dc0-corrected}, the same quantity reads
+$0.333333$ at $k=1,10,60$ on Einstein--de~Sitter and \texttt{PLANCK\_MODEL}
+alike, exactly $\tfrac13$. Only the value moves: the argument needs the ratio
+to be a pure rational, independent of $k$ and of background, and it still
+is. The measurement shows internal consistency, which is not correctness;
+that was true at $\tfrac52$ and is true at $\tfrac13$.
 A mismatch between two different objects does not return a
 background-independent, $k$-independent rational; it drifts. So the
 dominance is $(90)$'s own structure, and a spurious scale factor in
 $a\mathcal B_2$ --- were there one --- would multiply $C_0$ and $C_2$ equally
 and cancel from the ratio entirely.
 
-What this does not exclude is $\Delta C_1$, which is the one shift
-that depends on the reduced normalisation $\tilde\tau_1=v_B/k$ of
-\S\ref{sec:frame-division-conventions}. If that reading is wrong, $\Delta C_1$
-is wrong by $k^2$ --- and the bundle has made exactly that error once already,
-as T-27. Paper~1 cannot adjudicate it, since it carries no $C_1$. It is
-open, and it is the first thing to settle.
+What this does not exclude is $\Delta C_1$, the one shift that depends on
+the reduced normalisation $\tilde\tau_1=v_B/k$ of
+\S\ref{sec:frame-division-conventions}. If that reading is wrong,
+$\Delta C_1$ is wrong by $k^2$, and the bundle made that error once, as
+T-27. Paper~1 cannot adjudicate it, since it carries no $C_1$; T-66 settled
+it in the code: \texttt{solve\_acoustic} returns the dipole in the velocity
+normalisation, which shifts by $-v$, while the reduced $\tilde v_B=v_B/k$
+shifts by $-v/k$, and the released code had applied the reduced boost to the
+un-reduced quantity.
 
 \subsection{Measured}
 
@@ -6953,7 +6962,7 @@ dependence of \eqref{eq:no-partner}. The rank decomposition agrees: $C_0$
 carries $98.6\%$ of $C_\ell$ in the CDM frame and is identically zero in the
 Newtonian one.
 
-\subsection{Why the antecedent never meets this}
+\subsection{The Newtonian evaluation}
 
 (102) is evaluated once, in the Newtonian frame, where \emph{``the vanishing
 shear condition $\tilde\sigma_{ab}\approx0$ implies that $\tilde
@@ -6962,10 +6971,10 @@ the pair vanish together, so the imbalance between them cannot be seen.
 Nothing the antecedent publishes is affected. What is missing is a stated
 condition on a formula labelled frame-general.
 
-\subsection{Three repairs tested, and one of them is untested}
+\subsection{Three repairs}
 
-\paragraph{The dropped lines of (93) are not the counterweight.} (102) is (93)
-with its last two integrals removed. Restoring
+\paragraph{The dropped lines of (93).} They are not the counterweight. (102)
+is (93) with its last two integrals removed. Restoring
 $\int(\kappa'e^{-\kappa})[C_1-2C_2]j_\ell$ and
 $\int((\kappa')^2-\kappa'')e^{-\kappa}C_2j_\ell$ moves the disagreement from
 $72.2$ to $71.6$ at $k=20$ and from $3686.9$ to $3686.8$ at $k=300$.
@@ -6981,23 +6990,26 @@ term commented out of the flat case is the one the open-case extension
 restores, and the frame condition requires it in the flat case too. Where the
 $\tau_0=0$ reading fails is not located (\S\ref{sec:ell-zero-row}).
 
-\paragraph{Undoing the integration by parts: untested, not refuted.} (93) comes
-from a kernel in which the two derivatives act on $\tau^{(0)}_\ell$ and bring
-down $k$, not on the coefficients where they bring down $\mathcal H$. The
-numerical test of this was invalid --- it failed its own control,
-reproducing the by-parts form in the Newtonian frame only to within $10^{-3}$
-to $2.5$ --- because (102) does not differentiate the weight $\mathcal V$ that
-(93) carries inside the integral, so the two are not an exact by-parts pair
-once a weight is present. It remains the most promising repair and it needs
-doing analytically.
+\paragraph{Undoing the integration by parts.} (93) comes from a kernel in
+which the two derivatives act on $\tau^{(0)}_\ell$ and bring down $k$, not
+on the coefficients where they bring down $\mathcal H$. The numerical test of
+this was invalid, since it failed its own control, reproducing the by-parts
+form in the Newtonian frame only to within $10^{-3}$ to $2.5$: (102) does not
+differentiate the weight $\mathcal V$ that (93) carries inside the integral,
+so the two are not an exact by-parts pair once a weight is present. The
+repair was then made analytically. \S\ref{sec:assembly-rederived} finds that
+(102) is not the exact integration by parts of its own integral (B-17), and
+the assembly of \S\ref{sec:w-form} is the form the frame conditions select.
 
-\subsection{What is open}
+\subsection{The four items}
 
+The four items this appendix left open, and how each closed:
 \begin{enumerate}
 \item The reduced normalisation $\tilde\tau_1=v_B/k$, on which
-  $\Delta C_1$ rests and which nothing outside the bundle can adjudicate. The
-  bundle has erred here once (T-27). Settle it by index algebra on (109).
-\item The by-parts step, the one untested repair.
+  $\Delta C_1$ rests and which nothing outside the bundle can adjudicate; the
+  bundle erred here once (T-27). Settled by T-66.
+\item The by-parts step. Done in \S\ref{sec:assembly-rederived}, and the
+  assembly of \S\ref{sec:w-form} follows from it.
 \item Whether $C_0$ belongs in the integrand, which the measurement
   answers empirically and the algebra does not. Closed by the first frame
   condition: it belongs, as \eqref{eq:c0-ruled} (\S\ref{sec:ell-zero-row}).
@@ -7066,15 +7078,16 @@ the one below it and damped before it can act, so that
   \label{eq:tight-coupling-slaving}
 \end{equation}
 
-\paragraph{The monopole and the dipole carry the dynamics, and the quadrupole
-is not negligible.} Figure~\ref{fig:history-flow} states the same thing for
-the tight-coupling panel. At \(O(k/\kappa')\) the quadrupole is the smallest rank
+\paragraph{The quadrupole.} The monopole and the dipole carry the dynamics,
+and the quadrupole is not negligible; Figure~\ref{fig:history-flow} states
+the same thing for the tight-coupling panel. At \(O(k/\kappa')\) the quadrupole is the smallest rank
 that survives tight coupling, and it is what produces diffusion damping and
 the whole of the polarisation. Ranks three and above are smaller again by
 further powers of \(k/\kappa'\).
 
-\paragraph{The distinction between a suppressed rank and a truncated one is
-not cosmetic.} A truncation is a modelling choice, made outside the equations,
+\paragraph{Suppression against truncation.} The distinction between a
+suppressed rank and a truncated one is not cosmetic. A truncation is a
+modelling choice, made outside the equations,
 which can be made wrongly and which must be justified. A suppression is a
 limit the hierarchy takes on its own, with
 \eqref{eq:tight-coupling-slaving} as its statement, and nothing is set to
@@ -7082,30 +7095,31 @@ zero. The exact hierarchy is carried throughout this bundle for that reason:
 the tight-coupling behaviour is a consequence to be derived rather than an
 approximation to be imposed.
 
-\subsection{The kernel is the cascade}
+\subsection{The kernel}
 \label{sec:discussion-cascade}
 
-Once \(\kappa'\) falls below \(k\) nothing damps the higher ranks and power
-cascades upward without limit. That cascade is not computed by integrating the
-hierarchy to high \(\ell\). The free-streaming operator is linear and
-collisionless in that regime, and its solution is known in closed form:
-
+The kernel is the cascade. Once \(\kappa'\) falls below \(k\) nothing damps
+the higher ranks and power cascades upward without limit. That cascade is not
+computed by integrating the hierarchy to high \(\ell\): the free-streaming
+operator is linear and collisionless in that regime, and its solution is
+known in closed form. The kernel
 \begin{equation}
-  j_\ell\bigl(k(\eta_0-\eta)\bigr)\ \ \text{\emph{is} the free-streaming
-  cascade, solved exactly.}
+  K_\ell(\eta,k)=j_\ell\bigl(k(\eta_0-\eta)\bigr)
   \label{eq:kernel-is-cascade}
 \end{equation}
+is the free-streaming cascade, solved exactly.
 
-\paragraph{A source computed at rank two suffices for every observed
-multipole.} The line-of-sight assembly evaluates the source where the
+\paragraph{The source at rank two.} A source computed at rank two suffices
+for every observed multipole. The line-of-sight assembly evaluates the source
+where the
 hierarchy is slaved, at ranks zero, one and two, and hands it to
 \eqref{eq:kernel-is-cascade}. The kernel performs the transfer to
 \(\ell=2000\) and beyond. The depth of the hierarchy and the range of the
 spectrum are therefore unrelated quantities, and extending one does not
 extend the other.
 
-\paragraph{A coefficient in the wrong kernel slot lands at the wrong angular
-scale.} A coefficient placed against \(j_\ell\), against
+\paragraph{The kernel slot.} A coefficient in the wrong kernel slot lands at
+the wrong angular scale. A coefficient placed against \(j_\ell\), against
 \(j_\ell'\) or against \(j_\ell''\) enters the cascade at a different rank and
 produces a different angular dependence. \S\ref{sec:w-form} is an accounting
 of which coefficient belongs at which slot, and the \(\ell\)-leverage of the
@@ -7134,16 +7148,18 @@ The transport carries two weights and they are not interchangeable.
 \end{tabularx}
 \end{center}
 
-\paragraph{Scattering-generated sources ride at the visibility and
-ray-long gravitational sources ride at the transfer.} The Sachs--Wolfe
-monopole and the Doppler dipole exist because scattering put them there, so
+\paragraph{The sources and their weights.} Scattering-generated sources ride
+at the visibility and ray-long gravitational sources at the transfer. The
+Sachs--Wolfe monopole and the Doppler dipole exist because scattering put
+them there, so
 they are deposited in the narrow window where \(\mathcal V\) is non-zero. The
 integrated Sachs--Wolfe contribution exists because the potentials evolve
 along the whole ray, so it accumulates wherever \(W\simeq1\), which is the
 \(82\%\) of the conformal span lying after recombination.
 
-\paragraph{The two weights are related by an identity and are not
-alternatives.} \(W\kappa'=\mathcal V\) holds everywhere, so a term already
+\paragraph{The identity between the weights.} The two weights are related
+by an identity and are not alternatives. \(W\kappa'=\mathcal V\) holds
+everywhere, so a term already
 carrying an explicit factor of the scattering rate is at visibility weight
 whatever it is multiplied by. Reading that identity as a licence to exchange
 the weights removes the late-time contribution entirely, because
@@ -7156,14 +7172,13 @@ derivative rather than as a sample. Exchanging the weights therefore loses
 both ends of the ray: the late-time contribution, and the sample at the
 deposit.
 
-\subsection{One equation, three regimes, and without matching}
+\subsection{Three regimes}
 \label{sec:discussion-regimes}
 
 Metric-perturbation treatments commonly solve the tight-coupling problem and
 the free-streaming problem separately and join the two across recombination.
-\emph{The \(1+3\) covariant formulation never joins anything.} One hierarchy
-holds at every epoch, and the three regimes differ only in which of its terms
-dominates.
+The \(1+3\) covariant formulation joins nothing: one hierarchy holds at every
+epoch, and the three regimes differ only in which of its terms dominates.
 
 Figure~\ref{fig:history-flow} draws them along \(\eta\), together with the
 two weights. Its second, third and fourth panels are the three regimes below;
@@ -7190,28 +7205,29 @@ and supplies the forcing the oscillator inherits.
 \end{tabularx}
 \end{center}
 
-\paragraph{The line-of-sight integral performs the matching exactly, rather
-than by joining.} Its two weights select, for each source, the regime that
-source belongs to, and the integral is taken once over the whole span. No
-boundary conditions are imposed at recombination and no solutions are
-continued across it, so the questions that attend a junction condition --- how
-sharp it is, which quantities are continuous there, what is discarded in the
-transition --- do not arise. What replaces them is the requirement that each
+\paragraph{The matching.} The line-of-sight integral performs the matching
+exactly rather than by joining. Its two weights select, for each source, the
+regime that source belongs to, and the integral is taken once over the whole
+span. No boundary conditions are imposed at recombination and no solutions
+are continued across it, so the questions that attend a junction condition
+(how sharp it is, which quantities are continuous there, what is discarded in
+the transition) do not arise. What replaces them is the requirement that each
 coefficient carry its own weight and its own kernel slot, which is a
 requirement on the assembly rather than on a boundary.
 
-\paragraph{The acoustic oscillator and the projection are therefore one
-calculation and not two.} The oscillator supplies the boundary value
+\paragraph{One calculation.} The acoustic oscillator and the projection are
+therefore one calculation and not two. The oscillator supplies the boundary
+value
 \((\delta\tilde T+\Phi_A)(\eta_*)\) and the kernel supplies its angular
 dependence; the phase of the first carries into the position of the features
 of the second, and the width of the visibility sets how much of that phase
 survives the deposit. An acoustic feature of order \(n\) requires the phase
 \(kr_s\) to be coherent across the deposit window, so successive features are
-lost from the highest order downwards as that window broadens --- a statement
-about the transport, and one that holds whatever the oscillator does.
+lost from the highest order downwards as that window broadens, a statement
+about the transport that holds whatever the oscillator does.
 
-\paragraph{Two widths bound how many acoustic features survive, and neither of
-them can bind.} The first is the deposit window itself, drawn in
+\paragraph{The two widths.} Two widths bound how many acoustic features
+survive, and neither binds. The first is the deposit window itself, drawn in
 Figure~\ref{fig:history-flow} and recorded there at \(\Delta\eta=0.00972\) in
 the code normalisation. The second is the resolution at which the transport is
 sampled, and it is not one resolution. The oscillator is integrated mode by
@@ -7249,7 +7265,7 @@ that is a statement rather than a restatement. The projection integrand is a
 \emph{product} of the source and the kernel, so it carries their sum: the
 fastest component anywhere in it runs at \(k(1+c_s)\), not at \(k\), and the
 step that resolves it is \(\pi/[k(1+c_s)]\). The released grid clears that by
-\(7.61\) --- the tightest of the three margins and still not tight. All three
+\(7.61\), the tightest of the three margins and still not tight. All three
 are independent of \(k\), because each step is itself proportional to
 \(1/k\), and a floor on the sample count can only enlarge them. The order
 \(n\) of a feature therefore does not enter either grid: a feature at
@@ -7260,8 +7276,9 @@ reaches. Editions before v1.3.20 offered the window and the sampling as
 alternatives and closed on the window; the sampling is two things rather than
 one, and the window does not carry the conclusion either.
 
-\paragraph{The deposit window is measured and it suppresses the second feature
-by nine parts in a thousand.} The window's effect on a feature is its own
+\paragraph{The deposit window.} The window is measured, and it suppresses
+the second feature by nine parts in a thousand. Its effect on a feature is
+its own
 Fourier weight at that feature's phase, which needs no assumption about
 whether \(\Delta\eta=0.00972\) is a width or a standard deviation:
 \begin{equation}
@@ -7270,8 +7287,8 @@ whether \(\Delta\eta=0.00972\) is a width or a standard deviation:
      {\int\mathcal V(\eta)\,\mathrm d\eta},
   \label{eq:deposit-coherence}
 \end{equation}
-with \(\mathcal C=1\) a delta-function deposit. Measured in the implementation
-stream on \texttt{PLANCK\_MODEL} with the released history, where
+with \(\mathcal C=1\) a delta-function deposit. Measured on
+\texttt{PLANCK\_MODEL} with the released history, where
 \(r_s(\eta_\ast)=0.03682\) and \(k_1=\pi/r_s=85.3\):
 
 \begin{center}\small
@@ -7292,8 +7309,9 @@ Even the seventeenth feature retains two thirds of its coherence. That is a
 narrow window behaving as a narrow window, and it is not a quantity that
 removes a feature.
 
-\paragraph{What removes a feature is structure in \(\ell\), and no
-discretisation measured here has any.} Five candidates have now been scored
+\paragraph{Structure in \(\ell\).} What removes a feature is structure in
+\(\ell\), and no discretisation measured here has any. Five candidates have
+been scored
 and all five are exonerated: the projection grid at 0.95 per cent and flat in
 \(\ell\); the oscillator grid at 0.28 per cent, rising with feature order
 exactly as the sampling argument predicts and topping out there; diffusion
@@ -7305,13 +7323,16 @@ and is still not it, which says that magnitude was never the right test. A
 smooth multiplicative factor tilts an envelope and leaves the peak-to-trough
 ratio alone by construction, however large it grows, so a feature can only be
 removed by something carrying structure at that feature's position, and
-nothing measured in this bundle carries any. The absence of the secondaries is
-therefore
-a property of the assembly rather than of any grid, and \S\ref{sec:w-form}
-names it: an integration by parts that differentiates a coefficient holding a
-rate and separates $\hat v_B$ from $C_2$, in an assembly whose gravitational
-coefficients fail two of the three frame conditions \eqref{eq:frame-conditions}.
-It closes when an assembly meeting all three is built.
+nothing measured in this bundle carries any. The absence of the secondaries
+was therefore a property of the assembly rather than of any grid: (102) as
+built differentiates a coefficient holding a rate and separates $\hat v_B$
+from $C_2$, and its gravitational coefficients fail two of the three frame
+conditions \eqref{eq:frame-conditions}. The assembly meeting all three
+(\S\ref{sec:w-form}) puts the odd maxima back on Einstein--de~Sitter and
+$\Lambda$CDM and a single maximum on \texttt{PLANCK\_MODEL} (D44, registration
+\emph{(d)}; F9). The even peaks it leaves out are the undriven oscillator's,
+and the radiation era that drives the oscillator is
+\S\ref{sec:a3-construction}'s.
 
 \section{Implications}
 \label{sec:implications}
@@ -7334,8 +7355,9 @@ directly as power, they would grow where those bounds say the secondary
 contribution does not, and the apparent conflict is what
 \S\ref{sec:spectrum} resolves.
 
-\paragraph{The couplings are a remapping operator, and the response enters at
-fourth order.} Expanding the lensed spectrum in the deflection amplitude
+\paragraph{The remapping operator.} The couplings are a remapping operator,
+and the response enters at fourth order. Expanding the lensed spectrum in the
+deflection amplitude
 \(L\), with \(C_0\), \(C_1\) and \(C_2\) the unlensed spectrum and its first
 two derivatives, the flat-sky average of the order-\(L^2\) coefficient is
 \(\tfrac12\ell^2C_0\). The deflection response does not enter there: what
@@ -7354,15 +7376,15 @@ which for a power-law spectrum of index \(\nu\) factorises as
 statements are asserted in \path{source/source-v1.1.6/independent_checks_v1.1.6.py},
 section~H, in exact rationals.
 
-\paragraph{What cancels is the deflection response, and variance conservation is not established.} It establishes that
-the linear source does not produce a term growing as \(\ell^2\) beyond the
-unlensed spectrum, which is what the coupling question asks. It does
-\emph{not} establish that the remapping conserves the total variance. The
-gain-and-loss comparison that appeared to establish conservation was withdrawn
-on 2026-10-21 as a tautology --- it compared \(AB/2\) against \((B/2)A\) ---
-and the instrument now carries the record in its place:
-\emph{quartic scaling alone proves neither conservation nor redistribution.}
-Conservation needs the lensed spectrum's full second moment including the
+\paragraph{The deflection response.} What cancels is the deflection response,
+and variance conservation is not established. The cancellation establishes
+that the linear source does not produce a term growing as \(\ell^2\) beyond
+the unlensed spectrum, which is what the coupling question asks. It does not
+establish that the remapping conserves the total variance. The gain-and-loss
+comparison that appeared to establish conservation was withdrawn on
+2026-10-21 as a tautology, since it compared \(AB/2\) against \((B/2)A\), and
+the instrument now carries the record in its place: ``quartic scaling alone
+proves neither conservation nor redistribution''. Conservation needs the lensed spectrum's full second moment including the
 linear--quadratic cross term, which is not computed in this bundle.
 
 \subsection{The lensing efficiency kernel of a secondary source}
@@ -7371,8 +7393,9 @@ linear--quadratic cross term, which is not computed in this bundle.
 A single remapping of the whole sky carries one efficiency kernel,
 \(W(\chi;\chi_*)=1-\chi/\chi_*\), the kernel appropriate to a source at last
 scattering \citep{LewisChallinor2006}. A secondary anisotropy generated at
-\(\chi_s<\chi_*\) --- integrated Sachs--Wolfe, Rees--Sciama, Doppler --- is
-lensed only by the matter between the observer and \(\chi_s\), so its kernel
+\(\chi_s<\chi_*\), whether integrated Sachs--Wolfe, Rees--Sciama or Doppler,
+is lensed only by the matter between the observer and \(\chi_s\), so its
+kernel
 is \(W(\chi;\chi_s)=1-\chi/\chi_s\).
 
 The ratio of the two is not a constant:
@@ -7409,22 +7432,22 @@ weighting is carried along the ray. The two figures are not independent, and
 their ratio is exact: writing \(x\equiv\chi_s/\chi_*\), the ray-integrated
 over-weighting \(3-2x\) exceeds the peak over-weighting \(2-x\) by
 \((3-2x)/(2-x)\), which is unity at \(x=1\), \(4/3\) at \(x=\tfrac12\), and
-rises to \(3/2\) as \(x\to0\). \emph{Quoting the peak ratio therefore
-understates the over-weighting, and understates it by no more than \(3/2\)
-however near the source lies.}
+rises to \(3/2\) as \(x\to0\). Quoting the peak ratio therefore understates
+the over-weighting, and understates it by no more than \(3/2\) however near
+the source lies.
 
-\paragraph{This is a statement about the kernels and not about any
-solver.} \eqref{eq:kernel-ratio} follows from the two definitions and nothing
-else. Whether a particular Einstein--Boltzmann code inserts the single kernel
+\paragraph{The kernels, not a solver.} This is a statement about the kernels
+and not about any solver. \eqref{eq:kernel-ratio} follows from the two
+definitions and nothing else. Whether a particular Einstein--Boltzmann code inserts the single kernel
 is a property of that code's implementation, and this bundle does not score
 it: criterion~5b compares against CAMB and CLASS at the level of the spectrum
 and does not port either. The bearing is on cross-correlations where a
-secondary is lensed and the lensing weight is carried explicitly ---
-integrated Sachs--Wolfe to lensing cross-power, and lensing tomography ---
-rather than on the primary acoustic peaks, where \(\chi_s=\chi_*\) and
+secondary is lensed and the lensing weight is carried explicitly, integrated
+Sachs--Wolfe to lensing cross-power and lensing tomography, rather than on
+the primary acoustic peaks, where \(\chi_s=\chi_*\) and
 \eqref{eq:kernel-ratio} is unity.
 
-\subsection{What the covariant route supplies, and what is not claimed}
+\subsection{The covariant route}
 \label{sec:implications-novelty}
 
 \begin{center}\small
@@ -7470,11 +7493,11 @@ the threading invariant equal in both threadings, independent of \(k\) and
 \(\eta\), and \path{tests/frame/c4} and \path{c5} score the matching
 coefficients the invariance forces.
 
-\section{What is open}
+\section{Open questions}
 \label{sec:open-questions}
 
-\emph{Each row records an unresolved physical question and its proposed
-acceptance test. The supporting history is in}
+Each row records a physical question and its acceptance test, with what has
+settled it where something has. The supporting history is in
 \texttt{provenance/OPEN-QUESTIONS-v1.0.0.md}.
 
 \begin{center}\small
@@ -7493,18 +7516,21 @@ acceptance test. The supporting history is in}
   second-order source carried at rank two with a tensor initial condition ---
   recorded as a mechanism, not claimed \\
 \textbf{Q11} & The acoustic source has the right phase and the spectrum does
-  not & \emph{Not closed, and its premise is withdrawn as of 31 October 2026.} That the
-  oscillator tracks $\cos(kr_s)$ in exact phase is what an undriven oscillator
-  must do --- \texttt{c10} --- so it does not establish that the source phase
-  is right, and the question as posed assumes what it asks \\
+  not & Its premise is withdrawn (31 October 2026). That the oscillator tracks
+  $\cos(kr_s)$ in exact phase is what an undriven oscillator must do
+  (\texttt{c10}), so it does not establish that the source phase is right,
+  and the question as posed assumes what it asks \\
 \textbf{Q12} & Two implementations of (102) agree at $k=1$ and diverge above
-  $k=3$ & Which of the two reproduces the integral (102) is derived from ---
-  \S\ref{sec:w-form} answers this for the bulk and not for the boundary \\
-\textbf{Q13} & Which construction of $(\kappa'\tilde v_B)'$ is right? & The
-  by-parts identity, term by term, against each construction \\
+  $k=3$ & Superseded. The released line of sight is the assembly of
+  \S\ref{sec:w-form}, derived from the integral term for term, and D45
+  measures that its slots sum back to the integral they rearrange \\
+\textbf{Q13} & Which construction of $(\kappa'\tilde v_B)'$ is right? & Closed
+  by \S\ref{sec:w-form}: the scattering half of $C_1$ is never integrated by
+  parts, so no construction of $(\kappa'\tilde v_B)'$ enters \\
 \textbf{Q14} & Should $C_0$ enter the line-of-sight integrand at all? &
-  \S\ref{sec:ell-zero-row} settles the $\ell=0$ row; whether the resulting
-  $C_0$ belongs in the bulk is the remaining half \\
+  Closed. \S\ref{sec:ell-zero-row} settles the $\ell=0$ row as
+  \eqref{eq:c0-ruled}, which meets the first frame condition, and
+  \eqref{eq:assembly-invariant} carries $C_0$ in its integrated slot \\
 \midrule
 \textbf{Q15} & \textbf{What does omitting helium recombination cost?} The
   recombination history here integrates the hydrogen Peebles equation. Helium
@@ -7513,78 +7539,83 @@ acceptance test. The supporting history is in}
   helium, against the percent-level differences the peak comparison turns on.
   \emph{Not measured} \\
 \textbf{Q16} & \textbf{Is the tight-coupling source frozen late enough?}
-  $\delta T$ and $\tau_1$ are held at $\eta_{\rm couple}=6\eta_*$, which is
-  correct physics --- after decoupling nothing drives the monopole --- on the
-  condition that the visibility has closed by then. & $\mathcal V(\eta_{\rm
-  couple})/\mathcal V(\eta_*)$ on every background. \emph{Nothing currently
-  measures it}, and the recombination history differs between the three \\
+  $\delta T$ and $\tau_1$ are held at $\eta_{\rm couple}=6\eta_*$, after
+  which no scattering drives the pair, on the condition that the visibility
+  has closed by then. & To be superseded. In the radiation-era construction,
+  ruled before it is built, the photons after decoupling are carried by the
+  hierarchy with its gravitational sources of ranks zero and one, and the held
+  pair is not the photons (\S\ref{sec:a3-construction}). On the released path
+  the hold stands and $\mathcal V(\eta_{\rm couple})/\mathcal V(\eta_*)$ is
+  not measured; T-145 measured the hold, and T-147 found that releasing it
+  moves the bracket of (102) by $9$ to $25\%$ without producing a
+  cancellation \\
 \textbf{Q17} & \textbf{Is the frame-shift coefficient right on the background
   where it is predicted in closed form?} On Einstein--de~Sitter the shift is
-  constant, \eqref{eq:eds-boost-constant}, so the \emph{derivative} comparison
-  is zero on both sides and tests nothing there. & Score
-  $\Delta(a\mathcal B_1)$ against $-\tfrac13k\Phi_A$ at the coefficient, not
-  at its derivative, on Einstein--de~Sitter. A measured ratio is then
-  $\Phi_A$, which the background already fixes, so the row has an answer
-  before it is run and is a real test for the first time \\
+  constant, \eqref{eq:eds-boost-constant}, so the derivative comparison is
+  zero on both sides and tests nothing there. & Answered by D44's
+  registration \emph{(a)}: with Paper~1's signs the three frame conditions
+  hold at the coefficients on every background, the gravitational one to
+  $6.1\times10^{-16}$ (\S\ref{sec:w-form}) \\
 \bottomrule
 \end{tabularx}
 \end{center}
 
-\paragraph{Q16 freezes a pair that has nothing left to drive it, so it
-cannot move a peak.} What is frozen is the tight-coupling pair, which after decoupling
-has no scattering to drive it; the line-of-sight integral itself runs to
-$\eta_0$ on a grid whose density is set by the Bessel kernel's own period in
-$\eta$ and gated against aliasing --- finding T-3. A freeze that was
-too early would cut source while the visibility was still live, which is a
-boundary effect and not a projection one.
+\paragraph{The hold and the peaks.} Q16's hold keeps a pair that no
+scattering drives, so it cannot move a peak. What is held is the
+tight-coupling pair; the line-of-sight integral itself runs to $\eta_0$ on a
+grid whose density is set by the Bessel kernel's own period in $\eta$ and
+gated against aliasing (T-3). A hold that began too early would cut source
+while the visibility was still live, which is a boundary effect and not a
+projection one. After decoupling the photons enter the constraint that sets
+$\Phi$, and there the radiation-era construction carries them by the
+hierarchy and not by the held pair (\S\ref{sec:a3-construction}).
 
-\paragraph{One finding that stood beside these is now closed.} T-67 asked
-whether $(a\mathcal B_1)'$ should carry
+\paragraph{Finding T-67.} T-67 asked whether $(a\mathcal B_1)'$ should carry
 $-a\mathcal H\,\delta T-3a\mathcal H\,\Phi_A$ beyond the terms quoted in
-\S\ref{sec:w-form}. \textbf{Refuted by measurement, 2026-10-25}: the terms
-move $(a\mathcal B_1)'$ by $42\%$ and move \emph{both frames identically},
-so they are frame-neutral in the difference and cannot restore frame content
-to a decomposition that lacks it. An earlier form of this paragraph said the
+\S\ref{sec:w-form}. It is refuted by measurement (25 October 2026): the
+terms move $(a\mathcal B_1)'$ by $42\%$ and move both frames identically, so
+they are frame-neutral in the difference and cannot restore frame content to
+a decomposition that lacks it. An earlier form of this paragraph said the
 reduced form was ``unavailable in exactly the regime the low-$\ell$ plateau
-occupies''; that was a costing by magnitude, the test it pointed at came back
-the other way, and it is withdrawn. Every statement of $(a\mathcal B_1)'$ in
-this supplement remains the expansion-terms-off form and says so at its own
-site.
+occupies''; that was a costing by magnitude, and it is withdrawn. Every
+statement of $(a\mathcal B_1)'$ in this supplement is the
+expansion-terms-off form and says so at its own site.
 
-\paragraph{And the late ISW is a weight question before it is a physics one.}
-The effect is already in the formalism: $\Phi'$ enters at rank one through
-$(a\mathcal B_1)'$, hence through the bulk bracket. In any line-of-sight
-assembly it rides on $W=e^{-\kappa}$ --- the photon accumulates $\int\Phi'$
-along the whole path, weighted only by the probability it has not scattered
---- and \eqref{eq:byparts} agrees. (102) carries that bracket at
-$\mathcal V\mathcal D$, and $\mathcal V$ has closed by the time the late ISW
-acts. So discrepancy~(i) of \S\ref{sec:w-form} does not merely insert a
-spurious $\kappa'$; it removes the late ISW. \emph{This is testable on the
-background axis}: $\Phi$ is constant for Einstein--de~Sitter ($K=0$ dust,
-Appendix~G of the antecedent), so EdS has no late ISW to lose, while
-$\Lambda$CDM and \texttt{PLANCK\_MODEL} do. Correcting the weight should lift
-the plateau on the latter two and leave EdS alone.
+\paragraph{The late integrated Sachs--Wolfe term.} The late term is a weight
+question before it is a physics one. The effect is already in the formalism:
+$\Phi'$ enters at rank one through $(a\mathcal B_1)'$, hence through the bulk
+bracket. In any line-of-sight assembly it rides on $W=e^{-\kappa}$, the
+photon accumulating $\int\Phi'$ along the whole path weighted only by the
+probability that it has not scattered, and \eqref{eq:byparts} agrees. (102)
+carries that bracket at $\mathcal V\mathcal D$, and $\mathcal V$ has closed
+by the time the late term acts, so discrepancy~(i) of \S\ref{sec:w-form}
+does not merely insert a spurious $\kappa'$; it removes the late term. This
+is testable on the background axis: $\Phi$ is constant for
+Einstein--de~Sitter ($K=0$ dust, Appendix~G of the antecedent), so that
+background has no late term to lose, while $\Lambda$CDM and
+\texttt{PLANCK\_MODEL} do. Correcting the weight should lift the plateau on
+the latter two and leave Einstein--de~Sitter alone.
 
-That test has now run and the first half of it is confirmed. The
-late-time share of $C_\ell$ --- the fraction accumulated after the visibility
-closes --- is $0.0000$ in all thirty-six curves: six multipoles,
-three backgrounds, both frames. Einstein--de~Sitter is the control and
-$0.0000$ is correct there; $\Lambda$CDM and \texttt{PLANCK\_MODEL} require
-$\mathcal O(0.1)$ and return the same zero. The accumulation reproduces the
-released quadrature at $1.15\times10^{-12}$, so it is that integral decomposed
-and not a second definition of it. A fault in the accumulation would
-annihilate late deposition on every background including the one where zero is
-correct, and a fault manufacturing it would show on EdS; neither signature is
-present. The paragraph above was written before the measurement and is
-confirmed by it.
+The first half of that test is confirmed on (102) as built. The late-time
+share of $C_\ell$, the fraction accumulated after the visibility closes, is
+$0.0000$ in all thirty-six curves: six multipoles, three backgrounds, both
+frames. Einstein--de~Sitter is the control and $0.0000$ is correct there;
+$\Lambda$CDM and \texttt{PLANCK\_MODEL} require $\mathcal O(0.1)$ and return
+the same zero. The accumulation reproduces the released quadrature at
+$1.15\times10^{-12}$, so it is that integral decomposed and not a second
+definition of it. A fault in the accumulation would annihilate late
+deposition on every background including the one where zero is correct, and
+a fault manufacturing it would show on Einstein--de~Sitter; neither
+signature is present.
 
-What remains open is the second half, and it is one run on an
-existing control: with the bracket moved to $W$, the late share at $\ell=2$
-must become non-zero on both $\Lambda$ backgrounds \emph{and must stay
-exactly $0.0000$ on Einstein--de~Sitter}. If it stays zero on the
-$\Lambda$ backgrounds, discrepancy~(i) is not the mechanism and a second
-effect shares its signature. That is the discriminator, and it is what turns
-the reading below from consistent-with into established.
+The second half has run in part. With the integrated term carried at $W$ in
+the assembly of \S\ref{sec:w-form}, the late share on Einstein--de~Sitter is
+$2.7\times10^{-23}$ (D44, registration \emph{(c)}), which is the control
+holding. The late share at $\ell=2$ on the two $\Lambda$ backgrounds is not
+yet reported; it must be non-zero there, and if it stays zero discrepancy~(i)
+is not the mechanism and a second effect shares its signature. That is the
+discriminator, and it is what turns the reading above from consistent-with
+into established.
 
 % === END source expansion: supplementary-materials/questions-open-v1.4.0.tex ===
 
@@ -7598,18 +7629,17 @@ of Stoeger, Maartens \& Ellis, \emph{Ap.~J.} 443, 1 (1995) relaxes that
 to bounds: limits on the CMB multipoles $\tau_{A_\ell}$ become limits on
 $\sigma_{ab}$, $\omega_{ab}$, $\dot u_a$, $E_{ab}$ and $H_{ab}$.
 
-Those bounds are stated in the \emph{covariant multipoles} --- not in mode
-coefficients --- which is what this bundle computes and what a gauge-fixed code
-cannot supply without a translation. Applying them is therefore natural work for
-this formalism, and it is v2.0.0 work, because it is a calibration
-against data rather than an analytical reconstruction.
+Those bounds are stated in the covariant multipoles, not in mode
+coefficients, which is what this bundle computes and what a gauge-fixed code
+cannot supply without a translation. Applying them is work for this
+formalism, and it is v2.0.0 work, because it is a calibration against data
+rather than an analytical reconstruction.
 
-% --------------------------------------------------------------------------
-% v1.3.20: the hypotheses, derived rather than cited.  Audit stage 4, C2.
-\subsection{The bounds require four objects, and three of them are derivatives}
+\subsection{The hypotheses}
 \label{sec:egs-hypotheses}
 
-The step from a bound on the multipoles to a bound on the geometry is one row
+The bounds require four objects, and three of them are derivatives. The step
+from a bound on the multipoles to a bound on the geometry is one row
 of the hierarchy already printed at \eqref{eq:transport-exact}, and it can be
 written out. The rank-two gravitational source is
 $\mathcal B_{ab}=\sigma_{ab}$, on the left of \eqref{eq:transport-exact}, and
@@ -7630,9 +7660,9 @@ argument is in general, in
 these variables it has to pass through this identity, and the hypotheses it
 needs can be read off it.
 
-\paragraph{A bound on the quadrupole alone does not bound the shear.} Four
-objects stand on the right of \eqref{eq:egs-shear-identity} and $\tau_{ab}$ is
-one of them. Of the other three, $\tau'_{ab}$ is a time derivative at the
+\paragraph{The four objects.} A bound on the quadrupole alone does not bound
+the shear. Four objects stand on the right of \eqref{eq:egs-shear-identity}
+and $\tau_{ab}$ is one of them. Of the other three, $\tau'_{ab}$ is a time derivative at the
 same rank, $\mathrm D^c\tau_{abc}$ is a spatial divergence one rank up, and
 $\mathrm D_{\langle a}\tau_{b\rangle}$ is a spatial gradient one rank down.
 What the argument needs is therefore a bound on a band of three consecutive
@@ -7641,8 +7671,8 @@ assumption from a bound on each multipole separately: a sequence can be
 uniformly small and have large derivatives. This document records no bound on
 any of the four, and \S\ref{sec:open-questions} is where that stands.
 
-\paragraph{The collision residual is largest where the quadrupole is made.}
-This release takes $\bar f_2=0$, so $\mathcal S_2=0$ by approximation A-5, and
+\paragraph{The collision residual.} The collision residual is largest where
+the quadrupole is made. This release takes $\bar f_2=0$, so $\mathcal S_2=0$ by approximation A-5, and
 the final term of \eqref{eq:egs-shear-identity} is $-\kappa'\tau_{ab}$ exactly.
 $\kappa'$ is not small near last scattering; it is the rate whose exponential
 integral defines the visibility, and \S\ref{sec:kappa-ledger} places the
@@ -7653,13 +7683,13 @@ free-streaming era and a bound stated through recombination are different
 statements, and only the second has to carry $\kappa'\tau_{ab}$ where
 $\kappa'$ is at its largest.
 
-\paragraph{$\mathrm D_a$ is fixed by the threading, so these hypotheses are
-not threading-invariant.} Every spatial derivative in
+\paragraph{The threading.} $\mathrm D_a$ is fixed by the threading, so
+these hypotheses are not threading-invariant. Every spatial derivative in
 \eqref{eq:egs-shear-identity} is the projected derivative built from
 $h_{ab}=g_{ab}+u_au_b$, and $\tau_{A_\ell}$ is a PSTF tensor about the same
 $u^a$ by \eqref{eq:pstf-expansion}. Both are properties of a threading in the
-sense of \S\ref{sec:frames-specialisation} --- a smooth congruence over a
-region, not a unit vector at an event. Two threadings related by a tilt do not
+sense of \S\ref{sec:frames-specialisation}, a smooth congruence over a
+region and not a unit vector at an event. Two threadings related by a tilt do not
 share $h_{ab}$, so they do not share $\mathrm D_a$, and the statement that the
 multipoles and their spatial gradients are small is indexed by the congruence
 it is made about. An almost-EGS cosmology is not specified until its threading
@@ -7676,8 +7706,9 @@ remove one nor introduce one, so which objects an almost-EGS argument must
 bound was not affected, and how large each contribution is can now be read
 from the identity as it stands.
 
-\paragraph{The exact hierarchy adds terms to this identity and removes none.}
-\eqref{eq:transport-exact} is the reduced transport equation. The exact
+\paragraph{The exact hierarchy.} The exact hierarchy adds terms to this
+identity and removes none. \eqref{eq:transport-exact} is the reduced
+transport equation. The exact
 brightness hierarchy of Paper~1, Eq.~(16) carries acceleration, shear and
 vorticity multiplying the anisotropy multipoles, and this row omits those
 products; restoring them puts further terms on the right of
@@ -7685,12 +7716,12 @@ products; restoring them puts further terms on the right of
 a floor on the number of objects to be bounded, and the three statements above
 are made in the direction that survives the restoration.
 
-\paragraph{The $H_0$ posteriors are where this would show, and the question is
-not posable until the threading is named.} In an explicitly defined almost-EGS
-cosmology --- one whose
-threading is named, whose anisotropy bound is stated with the derivative
-bounds \eqref{eq:egs-shear-identity} requires, and whose collision term is
-declared --- can a unified $1+3$ covariant treatment of collisionless matter
+\paragraph{The $H_0$ posteriors.} The $H_0$ posteriors are where this would
+show, and the question is not posable until the threading is named. In an
+explicitly defined almost-EGS cosmology, one whose threading is named, whose
+anisotropy bound is stated with the derivative bounds
+\eqref{eq:egs-shear-identity} requires, and whose collision term is
+declared, can a unified $1+3$ covariant treatment of collisionless matter
 beyond dust at low redshift and of source-resolved CMB propagation at high
 redshift produce a measurable shift or broadening of the corresponding $H_0$
 posteriors, once both are computed for the same observer congruence and the
@@ -7719,16 +7750,17 @@ Planck (2013--2018)& $\lesssim2500$ & pending & pending \\
 \end{tabular}
 \end{table}
 
-\paragraph{Why the table needs both columns.} The original bounds were
-derived for a CDM model, not for $\Lambda$CDM, and the difference is not
-cosmetic. The argument converts multipole limits into limits on $\sigma/H$ using
+\paragraph{The two columns.} The table needs both columns because the
+original bounds were derived for a CDM model, not for $\Lambda$CDM, and the
+difference is not cosmetic. The argument converts multipole limits into limits on $\sigma/H$ using
 the background expansion, and $\Lambda$ changes $H(z)$ at low redshift. More
 sharply, $\Lambda$ adds a source the original did not have: the late integrated
 Sachs--Wolfe effect contributes to exactly the low-$\ell$ multipoles the COBE
-bounds rest on. In standard CDM it is absent --- $\Phi$ is constant, which this
-bundle's growth factor reproduces to six figures --- and in $\Lambda$CDM it is
-not, $\Phi$ falling to $0.779$ of its early value by today. A low-$\ell$ limit
-therefore constrains a \emph{different combination} in the two models, so a bound
+bounds rest on. In standard CDM it is absent, since $\Phi$ is constant, which
+this bundle's growth factor reproduces to six figures, and in $\Lambda$CDM it
+is not, $\Phi$ falling to $0.779$ of its early value by today. A low-$\ell$
+limit therefore constrains a different combination in the two models, so a
+bound
 quoted for one is not a bound for the other. The CDM column has a published
 precedent; the $\Lambda$CDM column is new.
 
@@ -7789,8 +7821,8 @@ excess separates into two terms of different character:
 \end{equation}
 The first term re-weights the deflectors that do lie in front of the source,
 and it does so by an amount constant along the ray, the two kernels differing
-by $\chi_s^{-1}-\chi_*^{-1}$ at every $\chi$ in $(0,\chi_s)$. \emph{Constant
-along the ray is not constant across the sky.} The factor multiplies
+by $\chi_s^{-1}-\chi_*^{-1}$ at every $\chi$ in $(0,\chi_s)$. Constant along
+the ray is not constant across the sky: the factor multiplies
 $\int_0^{\chi_s}\Phi_{\rm L}$, which varies with $\hat n$, so this term is a
 rescaled deflection field and not a uniform convergence; it is not degenerate
 with a change in the angular diameter distance to the source and it does not
@@ -7807,7 +7839,7 @@ unity for a source at last scattering and rising to three in the limit of a
 source at the observer. Both terms vanish identically at $\chi_s=\chi_*$,
 which is why the acoustic peaks are untouched by any of this.
 
-\paragraph{The geometry is sector-independent and the kernel above is not.}
+The geometry is sector-independent and the kernel above is not.
 \eqref{eq:psi-source-resolved} is a scalar construction: the deflection is the
 gradient of one potential, which is the form the scalar sector takes and is
 the form every expression in this section uses. A vector mode deflects through
@@ -7815,13 +7847,12 @@ a field whose curl part is non-zero, and the gradient of a scalar represents
 no curl at all, so that contribution is absent from $\psi$ by construction
 rather than by smallness. A tensor mode adds a term from the spatial part of
 the connection, which the potential-gradient picture has no slot for either.
-\textbf{What carries to those sectors is the geometric statement} --- a
-contribution generated at $\chi_s$ can be deflected only by matter at
-$\chi<\chi_s$, so its kernel terminates at its own source and a single-kernel
-treatment misweights it in the direction established above. \textbf{What does
-not carry is \eqref{eq:psi-source-resolved} itself}, which would have to be
-rewritten for each sector before any of the sizes quoted here meant anything
-there. This supplement is scalar throughout and makes no vector or tensor
+What carries to those sectors is the geometric statement: a contribution
+generated at $\chi_s$ can be deflected only by matter at $\chi<\chi_s$, so
+its kernel terminates at its own source and a single-kernel treatment
+misweights it in the direction established above. What does not carry is
+\eqref{eq:psi-source-resolved} itself, which would have to be rewritten for
+each sector before any of the sizes quoted here meant anything there. This supplement is scalar throughout and makes no vector or tensor
 claim.
 
 What makes the bias structural rather than a defect of implementation is where
@@ -7865,10 +7896,10 @@ $R(\eta_*)$ and hence the sound speed.
 \subsection{The three backgrounds, side by side}
 \label{sec:model-parameters}
 Table~\ref{tab:model-parameters} is the one place every derived scale of the
-three backgrounds can be read against the others. It exists because a question
-the PI asked --- \emph{is the difference between two panels a parameter
-difference?} --- had no cheap answer while the models were defined in three
-places and compared nowhere.
+three backgrounds can be read against the others. It exists because the
+question \emph{is the difference between two panels a parameter difference?}
+had no cheap answer while the models were defined in three places and
+compared nowhere.
 
 The last three rows distinguish peak-placement errors from other
 spectral-shape discrepancies. Two
@@ -7878,14 +7909,14 @@ look different do not differ by a parameter, and the difference is in
 \texttt{provenance/BUNDLE-DEFECTS-v1.md}.
 
 Two rows carry a known defect and say so rather than being quietly correct for
-a different question. $\Omega_r=0$ is the \emph{control} on Einstein--de~Sitter,
+a different question. $\Omega_r=0$ is the control on Einstein--de~Sitter,
 which is what makes that background the one where A-3 and $T(k)$ are
-identically inapplicable --- and on \textsc{lcdm} it is neither a control nor
-intended, worth $37\%$ in $\ell_A$ through $\eta_*$ at $1.571\times$ and $r_s$
-at $1.610\times$ (findings T-81c, T-83). $k_D$ is the $R=0$
-value, because \texttt{diffusion\_scale} is called with $R$ zeroed while the
-oscillator beside it runs at $R(\eta_*)\simeq0.61$ --- finding T-21,
-measured at $\ell_D=1783$ against $1985$.
+identically inapplicable; on \textsc{lcdm} it is neither a control nor
+intended, and it amounts to $37\%$ in $\ell_A$ through $\eta_*$ at
+$1.571\times$ and $r_s$ at $1.610\times$ (findings T-81c, T-83). $k_D$ is
+the $R=0$ value, because \texttt{diffusion\_scale} is called with $R$ zeroed
+while the oscillator beside it runs at $R(\eta_*)\simeq0.61$ (finding T-21,
+measured at $\ell_D=1783$ against $1985$).
 
 \input{tables/model-parameters-layout-v1.3.5.tex}
 
@@ -7906,31 +7937,32 @@ manifests, and reports any artefact that differs from the recorded hash.
 
 Three manifests serve distinct purposes; the release fingerprint is binding.
 \texttt{PORTABLE-\allowbreak{}MANIFEST-\allowbreak{}SHA256.txt} is the release fingerprint: it
-\emph{excludes the renderings} --- everything under \texttt{figures/} and
-\texttt{supplementary-\allowbreak{}materials/}, and every \texttt{.png} and \texttt{.pdf} ---
+excludes the renderings, everything under \texttt{figures/} and
+\texttt{supplementary-\allowbreak{}materials/} and every \texttt{.png} and \texttt{.pdf},
 and canonicalises numeric output to nine significant figures, so a machine that
 did not generate the artefacts can still satisfy it. A mismatch there is
 release-blocking. \texttt{FILE-\allowbreak{}MANIFEST-\allowbreak{}SHA256.txt} is then a
-\emph{within-machine} drift check, reported by artefact class, where only an
+within-machine drift check, reported by artefact class, where only an
 \texttt{exact}-class mismatch blocks.
 \texttt{IMMUTABLE-\allowbreak{}MANIFEST-\allowbreak{}SHA256.txt} covers frozen reference material, where
 any change is release-blocking. The corrections record is append-guarded rather
 than frozen, because it must take new findings: appending is permitted and
 rewriting recorded bytes is not.
 
-\paragraph{Why nine PNGs always report as drifted.} Every \texttt{.png} written
-into a working copy through the Claude desktop bridge gains a 5\,770-byte
-\texttt{caBX} provenance chunk, inserted immediately after \texttt{IHDR} by that
-application and not by anything in this bundle. The pixels are bit-identical ---
-\texttt{IHDR}, \texttt{pHYs} and every \texttt{IDAT} chunk match exactly --- and
+\paragraph{The nine PNGs.} Nine PNGs always report as drifted. Every
+\texttt{.png} written into a working copy through the Claude desktop bridge
+gains a 5\,770-byte \texttt{caBX} provenance chunk, inserted immediately
+after \texttt{IHDR} by that application and not by anything in this bundle.
+The pixels are bit-identical, \texttt{IHDR}, \texttt{pHYs} and every
+\texttt{IDAT} chunk matching exactly, and
 the \texttt{.pdf} of the same figure round-trips byte-for-byte, as does every
 \texttt{.csv} and every source file. These nine therefore sit in the
 \texttt{rendered} class, are reported and do not block, which is the rule
 finding~T-15 wrote for a different cause with the same shape: fonts,
-freetype and \TeX~Live versions, where \emph{a PNG that differs in hinting
-carries no scientific difference}. The PDF is the authoritative artefact
-of every figure in this bundle; the PNG is a convenience copy. Finding
-T-36. The drift is explained here rather than silenced by
+freetype and \TeX~Live versions, where a PNG that differs in hinting carries
+no scientific difference. The PDF is the authoritative artefact of every
+figure in this bundle, and the PNG is a convenience copy (finding T-36). The
+drift is explained here rather than silenced by
 canonicalising PNGs, because a manifest that stopped reporting a class of change
 for tidiness would stop reporting real ones too.
 
