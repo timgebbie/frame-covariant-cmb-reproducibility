@@ -1,5 +1,19 @@
 % Computational supplement to the associated paper.
 %
+% v1.4.6, 2026-11-11.  The order of the author's style profile v2.0 (v1.6):
+% Discussion, AI disclosure, references, appendices (PI, 11 November).
+%   - Moved after the references, under \appendix and in this order: the
+%     scattering-strength expansion, the CDM-frame division of (102), the
+%     almost-EGS bounds, the source-distance lensing biases, and Part III
+%     (parameter and numerical evidence, numerical resolution, interpretive
+%     limits).  Part II now ends at Discussion, Implications and Open
+%     questions.  The move keeps every character of the moved text; labels
+%     are unchanged, so every reference holds and only numbering moves.
+%   - The abstract's account of the parts and the README's account of the
+%     supplement say where the appendices are.
+%   - Check F of tests/frame/conformity.py now reads every section by the
+%     rule of 4 November (bundle b013aae).
+%
 % v1.4.5, 2026-11-11.  Sequential style audit, seventh batch: the
 % scattering-strength expansion, the CDM-frame division of (102), Discussion,
 % Implications, Open questions, the almost-EGS bounds, the source-distance
@@ -450,7 +464,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.4.5 --- 11 November 2026\\
+\date{Supplement v1.4.6 --- 11 November 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.4.0-dev}
 
 \begin{document}
@@ -476,8 +490,10 @@ adapted from an existing Boltzmann code. Part~I sets out the purpose and the
 current and future situation. Part~II, \emph{The Physics}, develops the chain
 from the hierarchy and its source to the acoustic oscillator, free
 streaming, matching, the line-of-sight solution and the angular spectrum.
-Part~III records numerical resolution, parameter choices and interpretive
-limits. The first-order frame law requires the two predicted skies to agree
+The appendices, after the references, carry the scattering-strength
+expansion, the CDM-frame division of (102), the almost-EGS bounds and the
+source-distance lensing biases, and Part~III, at their end, records
+numerical resolution, parameter choices and interpretive limits. The first-order frame law requires the two predicted skies to agree
 in a common observer frame, and on the line-of-sight integrand it becomes
 three conditions on the matching coefficients. The antecedent's coefficients,
 as built, fail two of them. Paper~1's own source satisfies all three, and the
@@ -6461,573 +6477,6 @@ implemented, that all components have been independently
 certified, or that Paper~1 computes out-of-scope tensor amplitudes
 or polarisation.
 
-% The scattering-strength expansion. SELF-CONTAINED and movable: this
-% line and tables/scattering-expansion-v1.3.0.tex are the whole of it,
-% so relocating it to Paper 2 is a file move. Decision S42.
-
-% === BEGIN exact v1.3.0 source expansion: supplementary-materials/appendix-scattering-expansion-v1.3.0.tex ===
-% ---------------------------------------------------------------------------
-% The scattering-strength expansion, re-derived.
-%
-% SELF-CONTAINED BY DESIGN. This file inputs one generated table and defines
-% nothing; it can be moved into Paper 2 by moving two files, this and
-% tables/scattering-expansion-v1.3.0.tex. Decision S42.
-% ---------------------------------------------------------------------------
-\section{The scattering-strength expansion}
-\label{sec:scattering-expansion}
-
-\emph{Annals~II} Appendix~C writes the almost-Friedmann--Lema\^{\i}tre
-integrated Boltzmann equation for Thomson scattering as
-\begin{equation}
-  \mathcal B+\dot\tau+e^a\mathrm D_a\tau \;\simeq\; t_c^{-1}\big[v^ae_a-\tau\big],
-  \label{eq:ibe-thomson}
-\end{equation}
-inverts it, and approximates the result \emph{``systematically \dots in terms
-of the smallness parameter $t_c$''} by the recursion
-\begin{equation}
-  \tau_{(n)} \;\simeq\; v^ae_a-t_c\Big[\mathcal B+\dot\tau_{(n-1)}
-  +e^a\mathrm D_a\tau_{(n-1)}\Big],
-  \label{eq:appc-recursion}
-\end{equation}
-printing $\tau_{(0)}$, $\tau_{(1)}$ and $\tau_{(2)}$. Section~5.5.3,
-\emph{Expansion in Thompson Scattering Time}, states that the scheme carries
-\emph{``terms up to $\mathcal O(t_c^3)$''}, so the ceiling is the antecedent's
-and the printed orders stop one short of it.
-
-\subsection{The closed form}
-
-The recursion is geometric. Write $\mathcal D\equiv\partial_t+e^a\mathrm D_a$
-for the derivative along the photon path, the pair of terms
-\eqref{eq:appc-recursion} applies to $\tau_{(n-1)}$, and $V\equiv v^ae_a$.
-Then
-\eqref{eq:ibe-thomson} reads $\tau=V-t_c(\mathcal B+\mathcal D\tau)$, so
-\begin{equation}
-  \big(1+t_c\mathcal D\big)\tau=V-t_c\mathcal B,
-  \qquad
-  \tau=\big(1+t_c\mathcal D\big)^{-1}\big(V-t_c\mathcal B\big),
-  \label{eq:closed-operator}
-\end{equation}
-and expanding the inverse as a Neumann series in $(-t_c\mathcal D)$ gives a
-closed form at every order:
-\begin{equation}
-  \tau_{(n)}\;=\;V\;+\;\sum_{m=1}^{n}(-1)^m\,t_c^m
-  \Big[\mathcal D^{m}V+\mathcal D^{m-1}\mathcal B\Big].
-  \label{eq:closed-form}
-\end{equation}
-
-This shows that Appendix~C's recursion is not an open-ended
-approximation scheme but a geometric series with an explicit sum, and that
-$\tau_{(1)}$ and $\tau_{(2)}$ as printed are its first two partial sums.
-Equation~\eqref{eq:closed-form} is implemented in
-\texttt{functions/spectra/scattering\_expansion.py} and checked against the
-printed $\tau_{(1)}$ and $\tau_{(2)}$ term for term, with a deliberately
-failing control, in \texttt{tests/test\_scattering\_expansion.py}. The closed
-form was derived from \eqref{eq:appc-recursion} and \emph{then} compared with
-the page, which is the only order in which the comparison carries information.
-
-\paragraph{The scattering time along the path.} The closed form holds
-$t_c$ fixed along the path, and the antecedent's scheme is what fixes it. The
-Neumann series of
-$(1+t_c\mathcal D)^{-1}$ runs in powers of the \emph{operator} $t_c\mathcal D$,
-and $(t_c\mathcal D)^2=t_c(\mathcal Dt_c)\mathcal D+t_c^2\mathcal D^2$.
-Iterating \eqref{eq:appc-recursion} directly returns
-$t_c(\mathcal Dt_c)\mathcal B$ and $t_c(\mathcal Dt_c)(\mathcal DV)$ at second
-order; neither appears in \eqref{eq:closed-form}, which carries scalar powers
-$t_c^m$ against operator powers $\mathcal D^m$. The term counts say whose
-omission it is. \eqref{eq:closed-form} holds $2^m+2^{m-1}$ terms and
-Appendix~C prints three at first order and six at second, which it could not do
-if the $\mathcal Dt_c$ terms were carried. The reconstruction is faithful to
-the page; the scheme on the page sets $\mathcal Dt_c=0$ without saying so.
-
-\paragraph{The dropped term at the visibility peak.} At the peak of the
-visibility the dropped term is the size of the term one order below it. In
-conformal time $t_c=1/\kappa'$, so along the time
-direction $\mathcal Dt_c=-\kappa''/\kappa'^2$. The visibility
-$\mathcal V=\kappa'e^{-\kappa}$ is stationary where
-$\mathcal V'=(\kappa''+\kappa'^2)e^{-\kappa}$ vanishes, and $e^{-\kappa}$ never
-does, so the peak sits exactly at $\kappa''=-\kappa'^2$, measured to
-$7.4\times10^{-15}$ in \texttt{tests/frame/c12\_sampling\_bound.py}. There
-$\mathcal Dt_c=1$, and the dropped $t_c(\mathcal Dt_c)(\mathcal DV)$ is
-$t_c\mathcal DV$, which is the retained first-order term. The second-order
-remainder is the size of the first order at $\eta_\ast$, so the series is not
-asymptotic at the one epoch it is applied to. Two parameters control it and
-only one is small: $t_ck$ for the gradients, and $t_c\mathcal D\ln t_c$ for
-the time derivative, which is unity at the peak whatever $k$ is.
-
-\subsection{Two consequences}
-
-\paragraph{The number of terms.} The term counts are not chosen: $\mathcal D^m$
-expands into a sum
-over words in $\{\partial_t,\;e^a\mathrm D_a\}$, so the $t_c^m$ bracket of
-\eqref{eq:closed-form} holds exactly $2^m+2^{m-1}$ terms. Appendix~C prints
-three at first order and six at second; those are $2+1$ and $4+2$.
-Table~\ref{tab:scattering-expansion} lists every term to
-$\mathcal O(t_c^3)$, generated from the same module rather than transcribed.
-
-\paragraph{The rank reached at order $m$.} Order $m$ sources multipoles up
-to $\ell=m+1$. Each $e^a\mathrm D_a$ carries one direction vector and
-$V=v^ae_a$ carries one
-already, so a word with $g$ gradients seeded by $V$ has $g+1$ factors of
-$e^a$; reduced by Appendix~C's own solid-angle identities, which lower the rank
-two at a time, its highest PSTF part has rank $g+1$. At second order that
-reaches rank three, in the single term
-$e^ce^ae^b\mathrm D_c\mathrm D_av_b$.
-
-Equivalently, for the high-$\ell$ question: each gradient contributes one
-power of $k$, so a term of rank $r$ carries $k^{\,r-1}$. The expansion
-parameter is therefore $t_ck$, the ratio of the mean free path to the
-wavelength, and not $t_c$ alone. The truncation is $\ell$-dependent by
-construction: a cut in rank is a cut in
-$t_ck$, and the order at which the expansion may be stopped falls as $\ell$
-rises.
-
-\subsection{The cost to the oscillator}
-
-The near-tight-coupling set of \S7.1 is introduced \emph{``rewritten to first
-order''} and closes with $\tau^{A_\ell}\simeq0$ for all $\ell>2$. At first
-order the expansion reaches rank two, so the closure costs nothing and the
-antecedent is consistent. What the rank counting fixes is the price of
-going further: second order reaches the octupole and
-$\mathcal O(t_c^3)$ the hexadecapole, and the closure carried with (152) and
-(153) reaches neither.
-
-That is approximation~A-4 of
-\texttt{provenance/SOURCE-APPROXIMATIONS-v1.md} stated as a rank rather than as
-a dropped term. The term the oscillator derivation discards,
-$-\tfrac25 t_c(1+R)^{-1}\mathrm D^b\mathrm D_{\langle a}u^m_{b\rangle}$, is
-dropped because \emph{``the matter shear is already at least first order''} ---
-a cross term of $\mathcal O(t_c\epsilon)$ between \S5.5.1's almost-Friedmann--Lema\^{\i}tre
-ordering and \S5.5.3's scattering-time ordering. \emph{Annals~II}'s
-Appendix~E, after Ellis--Treciokas--Matravers, states what the discarded
-harmonics hold: if any four consecutive ones vanish exactly then
-$\sigma_{ab}=0$ exactly. The truncation and the shear are therefore not
-independent: the residual in the truncated harmonics is where the shear
-lives, and a treatment that sets them to zero has set the shear to zero with
-them.
-
-\subsection{The second order}
-
-Appendix~C's own solid-angle reduction gives the rank decomposition of the
-source,
-\begin{equation}
-  \int_{4\pi}\!\mathrm d\Omega\;O^{A_\ell}\mathcal B\simeq
-  \delta^\ell_0\Big[-\tfrac{4\pi}{3}\mathrm D_a\tau^a\Big]
-  +\delta^\ell_1\Big[\tfrac{4\pi}{3}\big(\tfrac14\mathrm D^{a_1}\ln\rho_R+A^{a_1}\big)\Big]
-  +\delta^\ell_2\Big[\tfrac{8\pi}{15}\sigma^{a_1a_2}\Big],
-  \label{eq:b-ranks}
-\end{equation}
-so $\mathcal B$ carries the shear in its rank-two part. At first order
-$-t_c\mathcal B$ therefore reproduces the quadrupole
-$\tau_{ab}\simeq-\dot\kappa^{-1}[\sigma_{ab}+\mathrm D_{\langle a}v_{b\rangle}^B]$
-of \S7.1, as it must.
-
-At second order the closed form contributes $+t_c^2\,\mathcal D\mathcal B$, and
-through \eqref{eq:b-ranks} that is $\dot\sigma_{ab}$ at rank two and
-$e^c\mathrm D_c\sigma_{ab}$ at rank three. Appendix~G's
-$\dot\sigma_{ab}+2H\sigma_{ab}+E_{ab}\approx0$ then gives
-\begin{equation}
-  \dot\sigma_{ab}=-2H\sigma_{ab}-E_{ab},
-  \label{eq:sigma-dot}
-\end{equation}
-so the electric Weyl tensor enters the radiation quadrupole at second
-order in the scattering time, and does not at first. The second-order
-expansion is not a smaller correction of the same kind: it introduces a
-gravitational tidal driving of the quadrupole that the first-order treatment
-has no term for.
-
-\paragraph{Question Q10.} \emph{Annals~II} flags the regime itself, in a footnote to the sentence about
-removing the radiation quadrupole: \emph{``If there are any anisotropic
-contributions such as anisotropic scattering (in the matter frame) or large
-shear (from gravitational waves) at that time this sort of approximation should
-be considered with care --- such phenomena would break tight-coupling.''} For a
-tensor mode both $\sigma^{(T)}_{ab}$ and $E^{(T)}_{ab}$ oscillate at the
-gravitational-wave frequency, so \eqref{eq:sigma-dot} drives the second-order
-quadrupole oscillatorily on a scale set by the wave and not by the sound
-horizon. Whether that survives projection as a distinguishable \emph{ringing}
-is open; it is recorded as question~Q10 rather than claimed, because
-nothing here computes it.
-
-\paragraph{The $\epsilon^2$ terms.} The expansion cannot produce them:
-\eqref{eq:appc-recursion} is linear in $V$ and $\mathcal B$, so
-\eqref{eq:closed-form} yields terms
-of order $t_c^m\epsilon$ and never $\epsilon^2$. Terms of
-$\mathcal O(\varepsilon^2\ell)$ require the quadratic parts of the Boltzmann
-equation that \S5.5.1's almost-Friedmann--Lema\^{\i}tre linearisation discards,
-and are the subject of a later release rather than of this appendix. The
-high-$\ell$ sensitivity established above is a separate statement and rests on
-$t_ck$, not on $\epsilon^2$.
-
-\input{tables/scattering-expansion-layout-v1.3.5.tex}
-
-\paragraph{Finding B-15.} The fifth term of Appendix~C's $t_c^2$ bracket
-is printed as $e^ce^d\mathrm D_c\dot v_b$, which leaves both $d$ and $b$
-free in a scalar. It is $e^ce^d\mathrm D_c\dot v_d$, the time derivative
-taken first and the gradient outside, forced independently by the four words
-of $\mathcal D^2$, by the bracket's count of six with the other five
-unambiguous, and by the two direction vectors having nothing else to contract
-with. Recorded as B-15; no computed quantity depends on it.
-
-% === END source expansion: supplementary-materials/appendix-scattering-expansion-v1.3.0.tex ===
-
-
-% === BEGIN exact v1.3.0 source expansion: supplementary-materials/appendix-frame-division-v1.3.0.tex ===
-% ---------------------------------------------------------------------------
-% The CDM-frame division of the GDE99 integral solution, term by term.
-%
-% SELF-CONTAINED BY DESIGN. Inputs nothing, defines nothing, moves as one file.
-%
-% REVISED 2026-10-18 after a check by the Paper 1 stream. The first draft
-% framed this as Paper 1's work-list item 3 on the strength of a sentence
-% quoted in a stream note -- "The CDM-frame division has not been computed
-% term by term" -- which appears in NO release of Paper 1. Paper 1 does
-% compute its own CDM division term by term (Sec. VI A), and that division is
-% a different object: the split of the O(eps^2 ell) source between the
-% aberration operator and the section geometry. Paper 1 contains no C_0, no
-% C_1, no C_2, no visibility and no line-of-sight integral solution at all.
-% This appendix is about the GDE99 integral solution and is bundle territory.
-% ---------------------------------------------------------------------------
-\section{The CDM-frame division of (102)}
-\label{sec:frame-division}
-
-The integral solution (102) is derived for a general $u^a$, as the
-antecedent says immediately after (90), \emph{``Note that these are CGI with
-respect to $u^a$''}, and then evaluated once, in the Newtonian frame. This
-appendix carries it into the CDM frame instead, coefficient by coefficient,
-and finds that the two frames do not agree; the failure is isolated to one
-coefficient at one power of $k$. The conventions come first, because two of
-the four frame-table entries cannot be reproduced without them.
-
-\subsection{Conventions}
-\label{sec:frame-division-conventions}
-
-Every relation below is in one convention, and this subsection fixes it: a
-check made in Paper~1's normalisation could not reproduce two of the four
-frame-table entries, which are in the bundle's.
-
-\paragraph{Wavenumber.} The bundle carries $k\equiv k_{\rm com}$ throughout and
-converts at the point of use, $k_{\rm phys}=k_{\rm com}/a$. Paper~1's C3.1
-declares $k$ \emph{physical}. So a relation printed there as $X=k\,Y$ is
-carried here as $aX=k_{\rm com}Y$, and the scale factor is the conversion, not
-a transcription error.
-
-\paragraph{The frame velocity.} $v^a$ is the relative velocity of the two
-frames, $\tilde u^a\approx u^a+v^a$ with $v_au^a=0$, expanded as $v_a=v\,Q_a$.
-So $v$ is a \emph{velocity amplitude}: it is the $v$ of the Euler equation
-$v'+\mathcal Hv=-k\Phi_A$, which is the frame condition $\tilde A_a=0$, and it
-is the $v$ of $\sigma=-k_{\rm phys}v$. It is not a velocity potential;
-$v_a=\mathcal D_aV$ would put $k$ in the numerator.
-
-\paragraph{The dipole.} The bundle carries the dipole in the \emph{covariant}
-normalisation, $\tilde\tau_1\equiv\tilde v_B=v_B/k$ --- the normalisation (109)
-needs in order to read $-\tilde C_1=(\delta\tilde T+\Phi_A)+\kappa'\tilde v_B$.
-GDE99~(37), $\tilde\tau_a\approx\tau_a-v_a$, therefore reads
-$\tilde\tau_1\to\tilde\tau_1-v/k$ \emph{here} and $\tau_1\to\tau_1-v$ in the
-un-reduced normalisation. The two are the same statement. This is finding
-T-27 in the bundle's record, where the un-reduced form was used by mistake
-and the symptom was a first-order frame change 186 times the quantity it
-corrects at $k=300$.
-
-\paragraph{The four entries.} Two of the four reconcile and one does not.
-$a\sigma=-k_{\rm com}v$ is $\sigma=-k_{\rm phys}v$, so n-t1 agrees with
-Paper~1's $\sigma=-kv$. $\tilde\tau_1\to\tilde\tau_1-v/k$ is
-$\tau_a\to\tau_a-v_a$ in the reduced normalisation, so n-t4 agrees. What does
-not reconcile from outside the bundle is the reduced normalisation
-itself: Paper~1 carries no $C_1$, so it cannot adjudicate
-$\tilde\tau_1=v_B/k$, and $\Delta C_1$ below rests on it.
-
-\subsection{The boost law}
-
-A first-order change of frame is a boost, and a boost changes the observed
-brightness by $\tau\to\tau-v_ae^a$: a pure dipole. In PSTF multipoles,
-\begin{equation}
-  \tau^{(u)}_{A_1}=\tau^{(n)}_{A_1}-v_{A_1},
-  \qquad
-  \tau^{(u)}_{A_\ell}=\tau^{(n)}_{A_\ell}\quad\text{for all }\ell\ge2 .
-  \label{eq:boost-is-a-dipole}
-\end{equation}
-These relations are shorthand at first order in the frame tilt $v^a$.
-They do not assert exact equality of the raw multipoles at finite boost:
-Paper~1, Secs.~II~E and VI~B, distinguishes the small-tilt multipole law
-from the exact transformation of the photon distribution. At the specified
-order the predicted $\ell\ge2$ observable must agree after both
-results have been expressed in the same emitter and observer frames. The
-displayed equalities are the first-order law; the exact map is
-\eqref{eq:v139-exact-boost}.
-
-\subsection{The three shifts}
-
-The coefficients displayed next are (90)'s printed form, kept so that the
-calculation and its correction are traceable; the corrected rank-zero row is
-\eqref{eq:c0-solved}, and the row of Paper~1's source is \eqref{eq:c0-ruled}.
-
-The printed form is
-\begin{equation}
-  -C_0\simeq\tfrac52\,a\mathcal B_2,\qquad
-  -C_1\simeq\tfrac1k\big(a\mathcal B_1+\kappa'v_B\big),\qquad
-  -C_2\simeq\tfrac1{k^2}\,a\mathcal B_2 ,
-  \label{eq:C-from-B}
-\end{equation}
-with $a\mathcal B_1=k\,\delta T+aA$ and $v_B=k\tilde\tau_1$. The frame carries
-four entries, each in \S\ref{sec:frame-division-conventions}'s convention:
-
-\begin{center}
-\begin{tabular}{lll}
-\hline
- & Newtonian $n^a$ & CDM $u^a$ \\
-\hline
-$aA$ & $k\Phi_A$ & $0$ \quad(the frame condition $A_a=0$) \\
-$\delta T$ & $\delta\tilde T$ & $\delta\tilde T-\mathcal Hv/k$ \quad(n-t3) \\
-$\tilde\tau_1$ & $\tilde\tau_1$ & $\tilde\tau_1-v/k$ \quad(n-t4, reduced) \\
-$a\mathcal B_2$ & $0$ & $-kv$ \quad(n-t1, $\sigma=-k_{\rm phys}v$) \\
-\hline
-\end{tabular}
-\end{center}
-
-\noindent
-With $\Delta X\equiv X^{(u)}-X^{(n)}$: $\Delta(a\mathcal B_1)
-=-\mathcal Hv-k\Phi_A=v'$ by the Euler equation, and $\Delta(\kappa'v_B)
-=\kappa'k\,\Delta\tilde\tau_1=-\kappa'v$. Hence
-\begin{equation}
-  \Delta C_0=+\tfrac52\,k\,v,\qquad
-  \Delta C_1=-\tfrac1k\big(v'-\kappa'v\big),\qquad
-  \Delta C_2=+\tfrac{v}{k}
-  \label{eq:three-shifts}
-\end{equation}
-all three in one $v$ and one $k$.
-
-The first entry is superseded (T-104, 23 October). $\Delta C_0=+\tfrac52kv$
-is the shift of (90)'s printed $C_0$. (89)'s $\delta_{\ell0}$ row carries
-$\alpha_2$ where $\alpha_0$ belongs, a factor $\tfrac{15}2$, and solved at its
-own normalisation with zero on the right the row gives
-$C_0=-\tfrac13a\mathcal B_2$, whence
-\begin{equation}
-  \Delta C_0=+\tfrac{kv}{3}\qquad\text{for \eqref{eq:c0-solved}},
-  \label{eq:dc0-corrected}
-\end{equation}
-smaller by $\tfrac{15}2$, and $\Delta C_0=0$ for the row of Paper~1's source,
-\eqref{eq:c0-ruled}. Every scaling below survives with its
-prefactor divided by $\tfrac{15}2$: \eqref{eq:no-partner} becomes
-$\tfrac16(k/\mathcal H)^2$ in place of $\tfrac54(k/\mathcal H)^2$, and the
-conclusion that the ratio grows as $(k/\mathcal H)^2$ is unchanged, because
-$\Delta C_0$ and $\tfrac1k2v''$ are compared as powers of $k/\mathcal H$ and a
-constant does not move that.
-
-Whether $\Delta C_0$ has a partner in $-C_1'$ was read both ways (T-107,
-M15). With \eqref{eq:frame-conditions} rank zero must be invariant alone, so
-the as-built $\Delta C_0=+\tfrac{kv}{3}$ is a defect of the row and not half
-of a cancellation; the $+\tfrac k3\tau_1$ in $-C_1'$ comes from the as-built
-rank-one sign, and \S\ref{sec:ell-zero-row} gives the row and the sign that
-satisfy all three conditions.
-
-\subsection{The shift of (102)}
-
-(102) reads
-\begin{equation}
-  \frac{\beta_\ell\tau_\ell(\eta_0)}{2\ell+1}\simeq
-  \big[C_2'(\eta_*)-C_1(\eta_*)\big]\mathcal D\,j_\ell(x_*)
-  +kC_2(\eta_*)\mathcal D\,j_\ell'(x_*)
-  +\int_{\eta_*}^{\eta_0}\!\!d\eta\;\mathcal V e^{-(k/k_D)^2}
-   \big[C_0-C_1'+C_2''\big]j_\ell(x),
-  \label{eq:102-here}
-\end{equation}
-and \eqref{eq:three-shifts} gives
-\begin{align}
-  \Delta\big[C_2'-C_1\big]_{\eta_*} &= \tfrac1k\big(2v'-\kappa'v\big)\Big|_{\eta_*},\\
-  \Delta\big[kC_2\big]_{\eta_*} &= v(\eta_*),\\
-  \Delta\big[C_0-C_1'+C_2''\big] &= \tfrac52kv
-    +\tfrac1k\big(2v''-(\kappa'v)'\big).
-  \label{eq:shift-integrand}
-\end{align}
-\noindent This is the shift of the printed coefficient
-$C_0=-\tfrac52a\mathcal B_2$ and carries $+\tfrac52kv$; with
-\eqref{eq:c0-solved} that contribution is $+kv/3$ and with
-\eqref{eq:c0-ruled} it is zero, so the printed form is kept for the audit and
-is not the current frame-shift law. $v$ obeys $v'=-\mathcal Hv-k\Phi_A$, so
-on sub-horizon scales it changes on the
-Hubble rate: $v'\sim\mathcal Hv$, $v''\sim\mathcal H^2v$. Then
-\begin{equation}
-  \frac{\tfrac52kv}{\tfrac1k\,2v''}\;\sim\;\frac54\left(\frac{k}{\mathcal H}\right)^{2},
-  \label{eq:no-partner}
-\end{equation}
-and the two boundary shifts are smaller still. For the printed coefficient
-this estimate produces a term of order $(k/\mathcal H)^2$ relative to $v''$;
-it does not establish a failure of the corrected frame transformation, and
-the complete test is the three conditions of \eqref{eq:frame-conditions},
-slot by slot.
-
-
-\paragraph{The corrected shifts.}
-For the stipulated first-order frame relations of
-\S\ref{sec:frame-division-conventions}, the source-amplitude shifts read
-$\Delta\mathsf A=-kv$ and
-$\Delta\mathsf F=v'-\kappa'v$. Substitution into the
-corrected coefficient definitions
-\eqref{eq:v135-coefficient-triple} gives
-\begin{equation}
- \Delta C_0=\frac{kv}{3},\qquad
- \Delta C_1=-\frac{v'-\kappa'v}{k},\qquad
- \Delta C_2=\frac{v}{k}.
- \label{eq:v135-corrected-frame-triple}
-\end{equation}
-The three terms carried by the line-of-sight expression follow by
-differentiating these complete shifts, at fixed comoving $k$:
-\begin{align}
- \Delta(C_2'-C_1)&=\frac{v'}k+\frac{v'-\kappa'v}k
-                     =\frac{2v'-\kappa'v}{k},\\
- \Delta(kC_2)&=v,\\
- \Delta(C_0-C_1'+C_2'')
-     &=\frac{kv}{3}+\frac{v''-(\kappa'v)'}{k}+\frac{v''}{k}\\
-     &=\frac{kv}{3}+\frac{2v''-\kappa''v-\kappa'v'}{k}.
- \label{eq:v135-corrected-shift-bracket}
-\end{align}
-The Leibniz expansion on the last line is retained explicitly because
-$\kappa'$ is time-dependent. Equations
-\eqref{eq:v135-corrected-frame-triple}--\eqref{eq:v135-corrected-shift-bracket}
-replace the printed-coefficient algebra as the conditional shift of the
-corrected matching. They do not by themselves prove the assembled observable
-frame invariant: that needs the frame transformation of all sources,
-weights, projected boundary terms and the integration variable in one
-expression, which is the slot-by-slot test of \eqref{eq:frame-conditions}.
-With Paper~1's source all three conditions hold, and the frame equality of
-the assembled observable is registration \emph{(c)} of \S\ref{sec:w-form},
-scored with D44. The frame relations are Paper~1's, Secs.~II~E and VI~B,
-with the first-order limitation of its Eq.~(74); the matching equations are
-\emph{Annals~II}'s (89)--(90), derived in \S\ref{sec:ell-zero-row}.
-
-\subsection{The $k^2$ between $\Delta C_0$ and $\Delta C_2$}
-
-A factor $k^2$ between $\Delta C_0$ and $\Delta C_2$ is what a
-comoving/physical or amplitude/potential mismatch produces, and that reading
-has to be excluded before the rest stands. It is excluded by measurement.
-
-$C_0$ and $C_2$ are the same array. \eqref{eq:C-from-B} divides one
-quantity, $a\mathcal B_2$, by $k^0$ and by $k^2$. Whatever $a\mathcal B_2$ is
---- physical or comoving, amplitude or potential, correctly transcribed or not
---- it is \emph{the same object in both}, so their ratio carries no convention
-at all:
-\begin{equation}
-  \frac{C_0}{k^2C_2}=\frac{p_0}{p_2}=\frac{5}{3\beta_2}
-  \qquad\text{(a pure rational).}
-\end{equation}
-Measured at $\eta_*$ on `CDM (Einstein--de Sitter)', `LCDM' and
-`PLANCK\_MODEL', at $k=1,5,20,60,140,300$: $2.5000$ at every entry.
-That measurement predates 21~October and is the ratio under (89)'s printed
-$\delta_{\ell0}$ row. Under the released row, \texttt{MONOPOLE\_ROW =
-"corrected"} and \eqref{eq:dc0-corrected}, the same quantity reads
-$0.333333$ at $k=1,10,60$ on Einstein--de~Sitter and \texttt{PLANCK\_MODEL}
-alike, exactly $\tfrac13$. Only the value moves: the argument needs the ratio
-to be a pure rational, independent of $k$ and of background, and it still
-is. The measurement shows internal consistency, which is not correctness;
-that was true at $\tfrac52$ and is true at $\tfrac13$.
-A mismatch between two different objects does not return a
-background-independent, $k$-independent rational; it drifts. So the
-dominance is $(90)$'s own structure, and a spurious scale factor in
-$a\mathcal B_2$ --- were there one --- would multiply $C_0$ and $C_2$ equally
-and cancel from the ratio entirely.
-
-What this does not exclude is $\Delta C_1$, the one shift that depends on
-the reduced normalisation $\tilde\tau_1=v_B/k$ of
-\S\ref{sec:frame-division-conventions}. If that reading is wrong,
-$\Delta C_1$ is wrong by $k^2$, and the bundle made that error once, as
-T-27. Paper~1 cannot adjudicate it, since it carries no $C_1$; T-66 settled
-it in the code: \texttt{solve\_acoustic} returns the dipole in the velocity
-normalisation, which shifts by $-v$, while the reduced $\tilde v_B=v_B/k$
-shifts by $-v/k$, and the released code had applied the reduced boost to the
-un-reduced quantity.
-
-\subsection{Measured}
-
-Both frames from one environment, one acoustic solution and one $k$ grid,
-differing only in the frame (110) specialises to, against the Newtonian
-total's scale over $\ell\in\{2,5,10,50,200\}$:
-
-\begin{center}
-\begin{tabular}{lrrr}
-\hline
-background & $k$ & as assembled & with $C_0$ dropped \\
-\hline
-CDM (Einstein--de Sitter) & 20  & $53.5$   & $0.032$ \\
-                          & 300 & $1719$   & $0.035$ \\
-$\Lambda$CDM              & 20  & $62.8$   & $0.105$ \\
-                          & 300 & $6868$   & $0.154$ \\
-\texttt{PLANCK\_MODEL}    & 20  & $72.2$   & $0.111$ \\
-                          & 300 & $3687$   & $0.058$ \\
-\hline
-\end{tabular}
-\end{center}
-
-\noindent
-Three to four orders of magnitude, to a residual of $1$--$15\%$, with the $k$
-dependence of \eqref{eq:no-partner}. The rank decomposition agrees: $C_0$
-carries $98.6\%$ of $C_\ell$ in the CDM frame and is identically zero in the
-Newtonian one.
-
-\subsection{The Newtonian evaluation}
-
-(102) is evaluated once, in the Newtonian frame, where \emph{``the vanishing
-shear condition $\tilde\sigma_{ab}\approx0$ implies that $\tilde
-C_0(\eta)\approx0$ and $\tilde C_2(\eta)\approx0$''}. Both members of
-the pair vanish together, so the imbalance between them cannot be seen.
-Nothing the antecedent publishes is affected. What is missing is a stated
-condition on a formula labelled frame-general.
-
-\subsection{Three repairs}
-
-\paragraph{The dropped lines of (93).} They are not the counterweight. (102)
-is (93) with its last two integrals removed. Restoring
-$\int(\kappa'e^{-\kappa})[C_1-2C_2]j_\ell$ and
-$\int((\kappa')^2-\kappa'')e^{-\kappa}C_2j_\ell$ moves the disagreement from
-$72.2$ to $71.6$ at $k=20$ and from $3686.9$ to $3686.8$ at $k=300$.
-
-\paragraph{(89)'s $\ell=0$ line.} $a\mathcal B_0\delta_{\ell0}$ is commented
-out of the equation the integral solution solves and restored in the
-open-case extension, which looks like a dropped source. This appendix read it
-as no dropped source: the ansatz must give $\tau_0=0$, and differentiating
-$\int A_0\,d\eta'=0$ yields (89)'s $\ell=0$ line with zero on the right. The
-first frame condition reads it the other way. With Paper~1's rank-one sign
-the line carries $-a\mathcal B_0$ on the right, \eqref{eq:c0-ruled}, so the
-term commented out of the flat case is the one the open-case extension
-restores, and the frame condition requires it in the flat case too. Where the
-$\tau_0=0$ reading fails is not located (\S\ref{sec:ell-zero-row}).
-
-\paragraph{Undoing the integration by parts.} (93) comes from a kernel in
-which the two derivatives act on $\tau^{(0)}_\ell$ and bring down $k$, not
-on the coefficients where they bring down $\mathcal H$. The numerical test of
-this was invalid, since it failed its own control, reproducing the by-parts
-form in the Newtonian frame only to within $10^{-3}$ to $2.5$: (102) does not
-differentiate the weight $\mathcal V$ that (93) carries inside the integral,
-so the two are not an exact by-parts pair once a weight is present. The
-repair was then made analytically. \S\ref{sec:assembly-rederived} finds that
-(102) is not the exact integration by parts of its own integral (B-17), and
-the assembly of \S\ref{sec:w-form} is the form the frame conditions select.
-
-\subsection{The four items}
-
-The four items this appendix left open, and how each closed:
-\begin{enumerate}
-\item The reduced normalisation $\tilde\tau_1=v_B/k$, on which
-  $\Delta C_1$ rests and which nothing outside the bundle can adjudicate; the
-  bundle erred here once (T-27). Settled by T-66.
-\item The by-parts step. Done in \S\ref{sec:assembly-rederived}, and the
-  assembly of \S\ref{sec:w-form} follows from it.
-\item Whether $C_0$ belongs in the integrand, which the measurement
-  answers empirically and the algebra does not. Closed by the first frame
-  condition: it belongs, as \eqref{eq:c0-ruled} (\S\ref{sec:ell-zero-row}).
-\item The $1$--$15\%$ residual after $C_0$ is removed: whether it is
-  $O(\varepsilon^2)$ or an artefact of the grids. Read with
-  \eqref{eq:frame-conditions}, a residual is expected after $C_0$ is removed,
-  because the as-built rank-one sign fails the gravitational condition by
-  $-2v'/k$; whether part of it is a grid artefact is not separated.
-\end{enumerate}
-
-What stands independently of all four: $C_0$ and $C_2$ are one
-$a\mathcal B_2$ over $k^0$ and $k^2$, that ratio is a measured pure rational
-carrying no convention, and (102) in a sheared frame is dominated by the
-member of the pair that the Newtonian specialisation sets to zero.
-
-% === END source expansion: supplementary-materials/appendix-frame-division-v1.3.0.tex ===
-
-
 % The open-questions table, 2026-10-24.
 
 % === BEGIN exact v1.3.0 source expansion: supplementary-materials/questions-open-v1.4.0.tex ===
@@ -7620,6 +7069,705 @@ into established.
 % === END source expansion: supplementary-materials/questions-open-v1.4.0.tex ===
 
 
+\section*{AI-use disclosure}
+AI-assisted tools were used for editorial review, LaTeX consolidation and
+limited algebraic checks. These tools are not sources of physical or
+mathematical authority. The derivations, numerical results and scientific
+interpretations require the independent tests specified in this supplement;
+the author retains responsibility for the scientific content.
+
+% ---------------------------------------------------------------------------
+% BIBLIOGRAPHY, INLINE. The exemplar bundle carries no root .bib
+% (github.com/timgebbie/correlation-emergence-reproducibility), and this
+% document is to be a single file. The six entries below are the expanded
+% natbib output of the former references-v1.3.13.bib, checked entry by entry
+% against the published records: Annals I at Ann. Phys. 282, 285--320 (2000)
+% and Annals II at 282, 321--394 (2000) -- the 2006 year printed for Annals I
+% in some secondary literature is a misprint.
+% ---------------------------------------------------------------------------
+\begin{thebibliography}{12}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Gebbie(2026)]{Gebbie2026Paper1}
+Tim Gebbie.
+\newblock Frame covariance of {CMBR} lensing in the exact {1+3} covariant
+  radiation hierarchy, 2026.
+\newblock URL \url{https://arxiv.org/abs/astro-ph/9912072v4}.
+\newblock Paper 1, version 4; version 3 is the correction, and versions 1--2
+  are historical papers.
+
+\bibitem[Gebbie and Ellis(2000)]{GebbieEllis2000}
+Tim Gebbie and George F.~R. Ellis.
+\newblock {1+3} covariant cosmic microwave background anisotropies {I}:
+  Algebraic relations for mode and multipole expansions.
+\newblock \emph{Annals of Physics}, 282:\penalty0 285--320, 2000.
+\newblock \doi{10.1006/aphy.2000.6033}.
+
+\bibitem[Gebbie et~al.(2000)Gebbie, Dunsby, and Ellis]{GebbieDunsbyEllis2000}
+Tim Gebbie, Peter K.~S. Dunsby, and George F.~R. Ellis.
+\newblock {1+3} covariant cosmic microwave background anisotropies {II}: The
+  almost friedmann--lema\^{i}tre model.
+\newblock \emph{Annals of Physics}, 282:\penalty0 321--394, 2000.
+\newblock \doi{10.1006/aphy.2000.6034}.
+\newblock Citations to equations use the published journal numbering.
+
+\bibitem[Kodama and Sasaki(1984)]{KodamaSasaki1984}
+Hideo Kodama and Misao Sasaki.
+\newblock Cosmological perturbation theory.
+\newblock \emph{Progress of Theoretical Physics Supplement}, 78:\penalty0 1--166,
+  1984.
+\newblock \doi{10.1143/PTPS.78.1}.
+
+\bibitem[Maartens et~al.(1999)Maartens, Gebbie, and
+  Ellis]{MaartensGebbieEllis1999}
+Roy Maartens, Tim Gebbie, and George F.~R. Ellis.
+\newblock Cosmic microwave background anisotropies: Nonlinear dynamics.
+\newblock \emph{Physical Review D}, 59:\penalty0 083506, 1999.
+\newblock \doi{10.1103/PhysRevD.59.083506}.
+\newblock Equation references use the published journal version.
+
+\bibitem[Sachs and Wolfe(1967)]{SachsWolfe1967}
+R.~K. Sachs and A.~M. Wolfe.
+\newblock Perturbations of a cosmological model and angular variations of the
+  microwave background.
+\newblock \emph{Astrophysical Journal}, 147:\penalty0 73--90, 1967.
+\newblock \doi{10.1086/148982}.
+
+\bibitem[Seljak and Zaldarriaga(1996)]{SeljakZaldarriaga1996}
+Uro\v{s} Seljak and Matias Zaldarriaga.
+\newblock A line-of-sight approach to cosmic microwave background anisotropies.
+\newblock \emph{Astrophysical Journal}, 469:\penalty0 437--444, 1996.
+\newblock \doi{10.1086/177793}.
+
+\bibitem[Seljak(1996)]{Seljak1996}
+Uro\v{s} Seljak.
+\newblock Rees-Sciama effect in a cold dark matter universe.
+\newblock \emph{Astrophysical Journal}, 460:\penalty0 549--555, 1996.
+\newblock \doi{10.1086/176991}.
+\newblock arXiv:astro-ph/9506048.
+
+\bibitem[Sanz et~al.(1996)Sanz, Mart\'inez-Gonz\'alez, Cay\'on, Silk, and
+  Sugiyama]{Sanz1996}
+Jos\'e~L. Sanz, Enrique Mart\'inez-Gonz\'alez, Laura Cay\'on, Joseph Silk, and
+  Naoshi Sugiyama.
+\newblock {CMB} radiation power spectrum in {CDM} open universes up to second
+  order perturbations.
+\newblock arXiv:astro-ph/9602148, 1996.
+
+\bibitem[Lewis and Challinor(2006)]{LewisChallinor2006}
+Antony Lewis and Anthony Challinor.
+\newblock Weak gravitational lensing of the {CMB}.
+\newblock \emph{Physics Reports}, 429:\penalty0 1--65, 2006.
+\newblock \doi{10.1016/j.physrep.2006.03.002}.
+\newblock arXiv:astro-ph/0601594.
+
+\bibitem[Bruni et~al.(1997)Bruni, Matarrese, Mollerach, and
+  Sonego]{BruniEtAl1997}
+Marco Bruni, Sabino Matarrese, Silvia Mollerach, and Sebastiano Sonego.
+\newblock Perturbations of spacetime: gauge transformations and gauge
+  invariance at second order and beyond.
+\newblock \emph{Classical and Quantum Gravity}, 14:\penalty0 2585--2606, 1997.
+\newblock \doi{10.1088/0264-9381/14/9/014}.
+\newblock arXiv:gr-qc/9609040.
+
+\bibitem[Beneke and Fidler(2010)]{BenekeFidler2010}
+Martin Beneke and Christian Fidler.
+\newblock Boltzmann hierarchy for the cosmic microwave background at second
+  order including photon polarization.
+\newblock \emph{Physical Review D}, 82:\penalty0 063509, 2010.
+\newblock \doi{10.1103/PhysRevD.82.063509}.
+\newblock arXiv:1003.1834.
+
+\bibitem[Pettinari et~al.(2013)Pettinari, Fidler, Crittenden, Koyama, and
+  Wands]{Pettinari2013}
+Guido~W. Pettinari, Christian Fidler, Robert Crittenden, Kazuya Koyama, and
+  David Wands.
+\newblock The intrinsic bispectrum of the cosmic microwave background.
+\newblock \emph{Journal of Cosmology and Astroparticle Physics}, 2013\penalty0
+  (04):\penalty0 003, 2013.
+\newblock \doi{10.1088/1475-7516/2013/04/003}.
+\newblock arXiv:1302.0832.
+
+\end{thebibliography}
+
+% ===========================================================================
+% Appendices, after the references (author's style profile v2.0, v1.6 order;
+% PI, 11 November 2026).  Labels are unchanged, so every reference holds.
+% ===========================================================================
+\clearpage
+\appendix
+
+% The scattering-strength expansion. SELF-CONTAINED and movable: this
+% line and tables/scattering-expansion-v1.3.0.tex are the whole of it,
+% so relocating it to Paper 2 is a file move. Decision S42.
+
+% === BEGIN exact v1.3.0 source expansion: supplementary-materials/appendix-scattering-expansion-v1.3.0.tex ===
+% ---------------------------------------------------------------------------
+% The scattering-strength expansion, re-derived.
+%
+% SELF-CONTAINED BY DESIGN. This file inputs one generated table and defines
+% nothing; it can be moved into Paper 2 by moving two files, this and
+% tables/scattering-expansion-v1.3.0.tex. Decision S42.
+% ---------------------------------------------------------------------------
+\section{The scattering-strength expansion}
+\label{sec:scattering-expansion}
+
+\emph{Annals~II} Appendix~C writes the almost-Friedmann--Lema\^{\i}tre
+integrated Boltzmann equation for Thomson scattering as
+\begin{equation}
+  \mathcal B+\dot\tau+e^a\mathrm D_a\tau \;\simeq\; t_c^{-1}\big[v^ae_a-\tau\big],
+  \label{eq:ibe-thomson}
+\end{equation}
+inverts it, and approximates the result \emph{``systematically \dots in terms
+of the smallness parameter $t_c$''} by the recursion
+\begin{equation}
+  \tau_{(n)} \;\simeq\; v^ae_a-t_c\Big[\mathcal B+\dot\tau_{(n-1)}
+  +e^a\mathrm D_a\tau_{(n-1)}\Big],
+  \label{eq:appc-recursion}
+\end{equation}
+printing $\tau_{(0)}$, $\tau_{(1)}$ and $\tau_{(2)}$. Section~5.5.3,
+\emph{Expansion in Thompson Scattering Time}, states that the scheme carries
+\emph{``terms up to $\mathcal O(t_c^3)$''}, so the ceiling is the antecedent's
+and the printed orders stop one short of it.
+
+\subsection{The closed form}
+
+The recursion is geometric. Write $\mathcal D\equiv\partial_t+e^a\mathrm D_a$
+for the derivative along the photon path, the pair of terms
+\eqref{eq:appc-recursion} applies to $\tau_{(n-1)}$, and $V\equiv v^ae_a$.
+Then
+\eqref{eq:ibe-thomson} reads $\tau=V-t_c(\mathcal B+\mathcal D\tau)$, so
+\begin{equation}
+  \big(1+t_c\mathcal D\big)\tau=V-t_c\mathcal B,
+  \qquad
+  \tau=\big(1+t_c\mathcal D\big)^{-1}\big(V-t_c\mathcal B\big),
+  \label{eq:closed-operator}
+\end{equation}
+and expanding the inverse as a Neumann series in $(-t_c\mathcal D)$ gives a
+closed form at every order:
+\begin{equation}
+  \tau_{(n)}\;=\;V\;+\;\sum_{m=1}^{n}(-1)^m\,t_c^m
+  \Big[\mathcal D^{m}V+\mathcal D^{m-1}\mathcal B\Big].
+  \label{eq:closed-form}
+\end{equation}
+
+This shows that Appendix~C's recursion is not an open-ended
+approximation scheme but a geometric series with an explicit sum, and that
+$\tau_{(1)}$ and $\tau_{(2)}$ as printed are its first two partial sums.
+Equation~\eqref{eq:closed-form} is implemented in
+\texttt{functions/spectra/scattering\_expansion.py} and checked against the
+printed $\tau_{(1)}$ and $\tau_{(2)}$ term for term, with a deliberately
+failing control, in \texttt{tests/test\_scattering\_expansion.py}. The closed
+form was derived from \eqref{eq:appc-recursion} and \emph{then} compared with
+the page, which is the only order in which the comparison carries information.
+
+\paragraph{The scattering time along the path.} The closed form holds
+$t_c$ fixed along the path, and the antecedent's scheme is what fixes it. The
+Neumann series of
+$(1+t_c\mathcal D)^{-1}$ runs in powers of the \emph{operator} $t_c\mathcal D$,
+and $(t_c\mathcal D)^2=t_c(\mathcal Dt_c)\mathcal D+t_c^2\mathcal D^2$.
+Iterating \eqref{eq:appc-recursion} directly returns
+$t_c(\mathcal Dt_c)\mathcal B$ and $t_c(\mathcal Dt_c)(\mathcal DV)$ at second
+order; neither appears in \eqref{eq:closed-form}, which carries scalar powers
+$t_c^m$ against operator powers $\mathcal D^m$. The term counts say whose
+omission it is. \eqref{eq:closed-form} holds $2^m+2^{m-1}$ terms and
+Appendix~C prints three at first order and six at second, which it could not do
+if the $\mathcal Dt_c$ terms were carried. The reconstruction is faithful to
+the page; the scheme on the page sets $\mathcal Dt_c=0$ without saying so.
+
+\paragraph{The dropped term at the visibility peak.} At the peak of the
+visibility the dropped term is the size of the term one order below it. In
+conformal time $t_c=1/\kappa'$, so along the time
+direction $\mathcal Dt_c=-\kappa''/\kappa'^2$. The visibility
+$\mathcal V=\kappa'e^{-\kappa}$ is stationary where
+$\mathcal V'=(\kappa''+\kappa'^2)e^{-\kappa}$ vanishes, and $e^{-\kappa}$ never
+does, so the peak sits exactly at $\kappa''=-\kappa'^2$, measured to
+$7.4\times10^{-15}$ in \texttt{tests/frame/c12\_sampling\_bound.py}. There
+$\mathcal Dt_c=1$, and the dropped $t_c(\mathcal Dt_c)(\mathcal DV)$ is
+$t_c\mathcal DV$, which is the retained first-order term. The second-order
+remainder is the size of the first order at $\eta_\ast$, so the series is not
+asymptotic at the one epoch it is applied to. Two parameters control it and
+only one is small: $t_ck$ for the gradients, and $t_c\mathcal D\ln t_c$ for
+the time derivative, which is unity at the peak whatever $k$ is.
+
+\subsection{Two consequences}
+
+\paragraph{The number of terms.} The term counts are not chosen: $\mathcal D^m$
+expands into a sum
+over words in $\{\partial_t,\;e^a\mathrm D_a\}$, so the $t_c^m$ bracket of
+\eqref{eq:closed-form} holds exactly $2^m+2^{m-1}$ terms. Appendix~C prints
+three at first order and six at second; those are $2+1$ and $4+2$.
+Table~\ref{tab:scattering-expansion} lists every term to
+$\mathcal O(t_c^3)$, generated from the same module rather than transcribed.
+
+\paragraph{The rank reached at order $m$.} Order $m$ sources multipoles up
+to $\ell=m+1$. Each $e^a\mathrm D_a$ carries one direction vector and
+$V=v^ae_a$ carries one
+already, so a word with $g$ gradients seeded by $V$ has $g+1$ factors of
+$e^a$; reduced by Appendix~C's own solid-angle identities, which lower the rank
+two at a time, its highest PSTF part has rank $g+1$. At second order that
+reaches rank three, in the single term
+$e^ce^ae^b\mathrm D_c\mathrm D_av_b$.
+
+Equivalently, for the high-$\ell$ question: each gradient contributes one
+power of $k$, so a term of rank $r$ carries $k^{\,r-1}$. The expansion
+parameter is therefore $t_ck$, the ratio of the mean free path to the
+wavelength, and not $t_c$ alone. The truncation is $\ell$-dependent by
+construction: a cut in rank is a cut in
+$t_ck$, and the order at which the expansion may be stopped falls as $\ell$
+rises.
+
+\subsection{The cost to the oscillator}
+
+The near-tight-coupling set of \S7.1 is introduced \emph{``rewritten to first
+order''} and closes with $\tau^{A_\ell}\simeq0$ for all $\ell>2$. At first
+order the expansion reaches rank two, so the closure costs nothing and the
+antecedent is consistent. What the rank counting fixes is the price of
+going further: second order reaches the octupole and
+$\mathcal O(t_c^3)$ the hexadecapole, and the closure carried with (152) and
+(153) reaches neither.
+
+That is approximation~A-4 of
+\texttt{provenance/SOURCE-APPROXIMATIONS-v1.md} stated as a rank rather than as
+a dropped term. The term the oscillator derivation discards,
+$-\tfrac25 t_c(1+R)^{-1}\mathrm D^b\mathrm D_{\langle a}u^m_{b\rangle}$, is
+dropped because \emph{``the matter shear is already at least first order''} ---
+a cross term of $\mathcal O(t_c\epsilon)$ between \S5.5.1's almost-Friedmann--Lema\^{\i}tre
+ordering and \S5.5.3's scattering-time ordering. \emph{Annals~II}'s
+Appendix~E, after Ellis--Treciokas--Matravers, states what the discarded
+harmonics hold: if any four consecutive ones vanish exactly then
+$\sigma_{ab}=0$ exactly. The truncation and the shear are therefore not
+independent: the residual in the truncated harmonics is where the shear
+lives, and a treatment that sets them to zero has set the shear to zero with
+them.
+
+\subsection{The second order}
+
+Appendix~C's own solid-angle reduction gives the rank decomposition of the
+source,
+\begin{equation}
+  \int_{4\pi}\!\mathrm d\Omega\;O^{A_\ell}\mathcal B\simeq
+  \delta^\ell_0\Big[-\tfrac{4\pi}{3}\mathrm D_a\tau^a\Big]
+  +\delta^\ell_1\Big[\tfrac{4\pi}{3}\big(\tfrac14\mathrm D^{a_1}\ln\rho_R+A^{a_1}\big)\Big]
+  +\delta^\ell_2\Big[\tfrac{8\pi}{15}\sigma^{a_1a_2}\Big],
+  \label{eq:b-ranks}
+\end{equation}
+so $\mathcal B$ carries the shear in its rank-two part. At first order
+$-t_c\mathcal B$ therefore reproduces the quadrupole
+$\tau_{ab}\simeq-\dot\kappa^{-1}[\sigma_{ab}+\mathrm D_{\langle a}v_{b\rangle}^B]$
+of \S7.1, as it must.
+
+At second order the closed form contributes $+t_c^2\,\mathcal D\mathcal B$, and
+through \eqref{eq:b-ranks} that is $\dot\sigma_{ab}$ at rank two and
+$e^c\mathrm D_c\sigma_{ab}$ at rank three. Appendix~G's
+$\dot\sigma_{ab}+2H\sigma_{ab}+E_{ab}\approx0$ then gives
+\begin{equation}
+  \dot\sigma_{ab}=-2H\sigma_{ab}-E_{ab},
+  \label{eq:sigma-dot}
+\end{equation}
+so the electric Weyl tensor enters the radiation quadrupole at second
+order in the scattering time, and does not at first. The second-order
+expansion is not a smaller correction of the same kind: it introduces a
+gravitational tidal driving of the quadrupole that the first-order treatment
+has no term for.
+
+\paragraph{Question Q10.} \emph{Annals~II} flags the regime itself, in a footnote to the sentence about
+removing the radiation quadrupole: \emph{``If there are any anisotropic
+contributions such as anisotropic scattering (in the matter frame) or large
+shear (from gravitational waves) at that time this sort of approximation should
+be considered with care --- such phenomena would break tight-coupling.''} For a
+tensor mode both $\sigma^{(T)}_{ab}$ and $E^{(T)}_{ab}$ oscillate at the
+gravitational-wave frequency, so \eqref{eq:sigma-dot} drives the second-order
+quadrupole oscillatorily on a scale set by the wave and not by the sound
+horizon. Whether that survives projection as a distinguishable \emph{ringing}
+is open; it is recorded as question~Q10 rather than claimed, because
+nothing here computes it.
+
+\paragraph{The $\epsilon^2$ terms.} The expansion cannot produce them:
+\eqref{eq:appc-recursion} is linear in $V$ and $\mathcal B$, so
+\eqref{eq:closed-form} yields terms
+of order $t_c^m\epsilon$ and never $\epsilon^2$. Terms of
+$\mathcal O(\varepsilon^2\ell)$ require the quadratic parts of the Boltzmann
+equation that \S5.5.1's almost-Friedmann--Lema\^{\i}tre linearisation discards,
+and are the subject of a later release rather than of this appendix. The
+high-$\ell$ sensitivity established above is a separate statement and rests on
+$t_ck$, not on $\epsilon^2$.
+
+\input{tables/scattering-expansion-layout-v1.3.5.tex}
+
+\paragraph{Finding B-15.} The fifth term of Appendix~C's $t_c^2$ bracket
+is printed as $e^ce^d\mathrm D_c\dot v_b$, which leaves both $d$ and $b$
+free in a scalar. It is $e^ce^d\mathrm D_c\dot v_d$, the time derivative
+taken first and the gradient outside, forced independently by the four words
+of $\mathcal D^2$, by the bracket's count of six with the other five
+unambiguous, and by the two direction vectors having nothing else to contract
+with. Recorded as B-15; no computed quantity depends on it.
+
+% === END source expansion: supplementary-materials/appendix-scattering-expansion-v1.3.0.tex ===
+
+
+% === BEGIN exact v1.3.0 source expansion: supplementary-materials/appendix-frame-division-v1.3.0.tex ===
+% ---------------------------------------------------------------------------
+% The CDM-frame division of the GDE99 integral solution, term by term.
+%
+% SELF-CONTAINED BY DESIGN. Inputs nothing, defines nothing, moves as one file.
+%
+% REVISED 2026-10-18 after a check by the Paper 1 stream. The first draft
+% framed this as Paper 1's work-list item 3 on the strength of a sentence
+% quoted in a stream note -- "The CDM-frame division has not been computed
+% term by term" -- which appears in NO release of Paper 1. Paper 1 does
+% compute its own CDM division term by term (Sec. VI A), and that division is
+% a different object: the split of the O(eps^2 ell) source between the
+% aberration operator and the section geometry. Paper 1 contains no C_0, no
+% C_1, no C_2, no visibility and no line-of-sight integral solution at all.
+% This appendix is about the GDE99 integral solution and is bundle territory.
+% ---------------------------------------------------------------------------
+\section{The CDM-frame division of (102)}
+\label{sec:frame-division}
+
+The integral solution (102) is derived for a general $u^a$, as the
+antecedent says immediately after (90), \emph{``Note that these are CGI with
+respect to $u^a$''}, and then evaluated once, in the Newtonian frame. This
+appendix carries it into the CDM frame instead, coefficient by coefficient,
+and finds that the two frames do not agree; the failure is isolated to one
+coefficient at one power of $k$. The conventions come first, because two of
+the four frame-table entries cannot be reproduced without them.
+
+\subsection{Conventions}
+\label{sec:frame-division-conventions}
+
+Every relation below is in one convention, and this subsection fixes it: a
+check made in Paper~1's normalisation could not reproduce two of the four
+frame-table entries, which are in the bundle's.
+
+\paragraph{Wavenumber.} The bundle carries $k\equiv k_{\rm com}$ throughout and
+converts at the point of use, $k_{\rm phys}=k_{\rm com}/a$. Paper~1's C3.1
+declares $k$ \emph{physical}. So a relation printed there as $X=k\,Y$ is
+carried here as $aX=k_{\rm com}Y$, and the scale factor is the conversion, not
+a transcription error.
+
+\paragraph{The frame velocity.} $v^a$ is the relative velocity of the two
+frames, $\tilde u^a\approx u^a+v^a$ with $v_au^a=0$, expanded as $v_a=v\,Q_a$.
+So $v$ is a \emph{velocity amplitude}: it is the $v$ of the Euler equation
+$v'+\mathcal Hv=-k\Phi_A$, which is the frame condition $\tilde A_a=0$, and it
+is the $v$ of $\sigma=-k_{\rm phys}v$. It is not a velocity potential;
+$v_a=\mathcal D_aV$ would put $k$ in the numerator.
+
+\paragraph{The dipole.} The bundle carries the dipole in the \emph{covariant}
+normalisation, $\tilde\tau_1\equiv\tilde v_B=v_B/k$ --- the normalisation (109)
+needs in order to read $-\tilde C_1=(\delta\tilde T+\Phi_A)+\kappa'\tilde v_B$.
+GDE99~(37), $\tilde\tau_a\approx\tau_a-v_a$, therefore reads
+$\tilde\tau_1\to\tilde\tau_1-v/k$ \emph{here} and $\tau_1\to\tau_1-v$ in the
+un-reduced normalisation. The two are the same statement. This is finding
+T-27 in the bundle's record, where the un-reduced form was used by mistake
+and the symptom was a first-order frame change 186 times the quantity it
+corrects at $k=300$.
+
+\paragraph{The four entries.} Two of the four reconcile and one does not.
+$a\sigma=-k_{\rm com}v$ is $\sigma=-k_{\rm phys}v$, so n-t1 agrees with
+Paper~1's $\sigma=-kv$. $\tilde\tau_1\to\tilde\tau_1-v/k$ is
+$\tau_a\to\tau_a-v_a$ in the reduced normalisation, so n-t4 agrees. What does
+not reconcile from outside the bundle is the reduced normalisation
+itself: Paper~1 carries no $C_1$, so it cannot adjudicate
+$\tilde\tau_1=v_B/k$, and $\Delta C_1$ below rests on it.
+
+\subsection{The boost law}
+
+A first-order change of frame is a boost, and a boost changes the observed
+brightness by $\tau\to\tau-v_ae^a$: a pure dipole. In PSTF multipoles,
+\begin{equation}
+  \tau^{(u)}_{A_1}=\tau^{(n)}_{A_1}-v_{A_1},
+  \qquad
+  \tau^{(u)}_{A_\ell}=\tau^{(n)}_{A_\ell}\quad\text{for all }\ell\ge2 .
+  \label{eq:boost-is-a-dipole}
+\end{equation}
+These relations are shorthand at first order in the frame tilt $v^a$.
+They do not assert exact equality of the raw multipoles at finite boost:
+Paper~1, Secs.~II~E and VI~B, distinguishes the small-tilt multipole law
+from the exact transformation of the photon distribution. At the specified
+order the predicted $\ell\ge2$ observable must agree after both
+results have been expressed in the same emitter and observer frames. The
+displayed equalities are the first-order law; the exact map is
+\eqref{eq:v139-exact-boost}.
+
+\subsection{The three shifts}
+
+The coefficients displayed next are (90)'s printed form, kept so that the
+calculation and its correction are traceable; the corrected rank-zero row is
+\eqref{eq:c0-solved}, and the row of Paper~1's source is \eqref{eq:c0-ruled}.
+
+The printed form is
+\begin{equation}
+  -C_0\simeq\tfrac52\,a\mathcal B_2,\qquad
+  -C_1\simeq\tfrac1k\big(a\mathcal B_1+\kappa'v_B\big),\qquad
+  -C_2\simeq\tfrac1{k^2}\,a\mathcal B_2 ,
+  \label{eq:C-from-B}
+\end{equation}
+with $a\mathcal B_1=k\,\delta T+aA$ and $v_B=k\tilde\tau_1$. The frame carries
+four entries, each in \S\ref{sec:frame-division-conventions}'s convention:
+
+\begin{center}
+\begin{tabular}{lll}
+\hline
+ & Newtonian $n^a$ & CDM $u^a$ \\
+\hline
+$aA$ & $k\Phi_A$ & $0$ \quad(the frame condition $A_a=0$) \\
+$\delta T$ & $\delta\tilde T$ & $\delta\tilde T-\mathcal Hv/k$ \quad(n-t3) \\
+$\tilde\tau_1$ & $\tilde\tau_1$ & $\tilde\tau_1-v/k$ \quad(n-t4, reduced) \\
+$a\mathcal B_2$ & $0$ & $-kv$ \quad(n-t1, $\sigma=-k_{\rm phys}v$) \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent
+With $\Delta X\equiv X^{(u)}-X^{(n)}$: $\Delta(a\mathcal B_1)
+=-\mathcal Hv-k\Phi_A=v'$ by the Euler equation, and $\Delta(\kappa'v_B)
+=\kappa'k\,\Delta\tilde\tau_1=-\kappa'v$. Hence
+\begin{equation}
+  \Delta C_0=+\tfrac52\,k\,v,\qquad
+  \Delta C_1=-\tfrac1k\big(v'-\kappa'v\big),\qquad
+  \Delta C_2=+\tfrac{v}{k}
+  \label{eq:three-shifts}
+\end{equation}
+all three in one $v$ and one $k$.
+
+The first entry is superseded (T-104, 23 October). $\Delta C_0=+\tfrac52kv$
+is the shift of (90)'s printed $C_0$. (89)'s $\delta_{\ell0}$ row carries
+$\alpha_2$ where $\alpha_0$ belongs, a factor $\tfrac{15}2$, and solved at its
+own normalisation with zero on the right the row gives
+$C_0=-\tfrac13a\mathcal B_2$, whence
+\begin{equation}
+  \Delta C_0=+\tfrac{kv}{3}\qquad\text{for \eqref{eq:c0-solved}},
+  \label{eq:dc0-corrected}
+\end{equation}
+smaller by $\tfrac{15}2$, and $\Delta C_0=0$ for the row of Paper~1's source,
+\eqref{eq:c0-ruled}. Every scaling below survives with its
+prefactor divided by $\tfrac{15}2$: \eqref{eq:no-partner} becomes
+$\tfrac16(k/\mathcal H)^2$ in place of $\tfrac54(k/\mathcal H)^2$, and the
+conclusion that the ratio grows as $(k/\mathcal H)^2$ is unchanged, because
+$\Delta C_0$ and $\tfrac1k2v''$ are compared as powers of $k/\mathcal H$ and a
+constant does not move that.
+
+Whether $\Delta C_0$ has a partner in $-C_1'$ was read both ways (T-107,
+M15). With \eqref{eq:frame-conditions} rank zero must be invariant alone, so
+the as-built $\Delta C_0=+\tfrac{kv}{3}$ is a defect of the row and not half
+of a cancellation; the $+\tfrac k3\tau_1$ in $-C_1'$ comes from the as-built
+rank-one sign, and \S\ref{sec:ell-zero-row} gives the row and the sign that
+satisfy all three conditions.
+
+\subsection{The shift of (102)}
+
+(102) reads
+\begin{equation}
+  \frac{\beta_\ell\tau_\ell(\eta_0)}{2\ell+1}\simeq
+  \big[C_2'(\eta_*)-C_1(\eta_*)\big]\mathcal D\,j_\ell(x_*)
+  +kC_2(\eta_*)\mathcal D\,j_\ell'(x_*)
+  +\int_{\eta_*}^{\eta_0}\!\!d\eta\;\mathcal V e^{-(k/k_D)^2}
+   \big[C_0-C_1'+C_2''\big]j_\ell(x),
+  \label{eq:102-here}
+\end{equation}
+and \eqref{eq:three-shifts} gives
+\begin{align}
+  \Delta\big[C_2'-C_1\big]_{\eta_*} &= \tfrac1k\big(2v'-\kappa'v\big)\Big|_{\eta_*},\\
+  \Delta\big[kC_2\big]_{\eta_*} &= v(\eta_*),\\
+  \Delta\big[C_0-C_1'+C_2''\big] &= \tfrac52kv
+    +\tfrac1k\big(2v''-(\kappa'v)'\big).
+  \label{eq:shift-integrand}
+\end{align}
+\noindent This is the shift of the printed coefficient
+$C_0=-\tfrac52a\mathcal B_2$ and carries $+\tfrac52kv$; with
+\eqref{eq:c0-solved} that contribution is $+kv/3$ and with
+\eqref{eq:c0-ruled} it is zero, so the printed form is kept for the audit and
+is not the current frame-shift law. $v$ obeys $v'=-\mathcal Hv-k\Phi_A$, so
+on sub-horizon scales it changes on the
+Hubble rate: $v'\sim\mathcal Hv$, $v''\sim\mathcal H^2v$. Then
+\begin{equation}
+  \frac{\tfrac52kv}{\tfrac1k\,2v''}\;\sim\;\frac54\left(\frac{k}{\mathcal H}\right)^{2},
+  \label{eq:no-partner}
+\end{equation}
+and the two boundary shifts are smaller still. For the printed coefficient
+this estimate produces a term of order $(k/\mathcal H)^2$ relative to $v''$;
+it does not establish a failure of the corrected frame transformation, and
+the complete test is the three conditions of \eqref{eq:frame-conditions},
+slot by slot.
+
+
+\paragraph{The corrected shifts.}
+For the stipulated first-order frame relations of
+\S\ref{sec:frame-division-conventions}, the source-amplitude shifts read
+$\Delta\mathsf A=-kv$ and
+$\Delta\mathsf F=v'-\kappa'v$. Substitution into the
+corrected coefficient definitions
+\eqref{eq:v135-coefficient-triple} gives
+\begin{equation}
+ \Delta C_0=\frac{kv}{3},\qquad
+ \Delta C_1=-\frac{v'-\kappa'v}{k},\qquad
+ \Delta C_2=\frac{v}{k}.
+ \label{eq:v135-corrected-frame-triple}
+\end{equation}
+The three terms carried by the line-of-sight expression follow by
+differentiating these complete shifts, at fixed comoving $k$:
+\begin{align}
+ \Delta(C_2'-C_1)&=\frac{v'}k+\frac{v'-\kappa'v}k
+                     =\frac{2v'-\kappa'v}{k},\\
+ \Delta(kC_2)&=v,\\
+ \Delta(C_0-C_1'+C_2'')
+     &=\frac{kv}{3}+\frac{v''-(\kappa'v)'}{k}+\frac{v''}{k}\\
+     &=\frac{kv}{3}+\frac{2v''-\kappa''v-\kappa'v'}{k}.
+ \label{eq:v135-corrected-shift-bracket}
+\end{align}
+The Leibniz expansion on the last line is retained explicitly because
+$\kappa'$ is time-dependent. Equations
+\eqref{eq:v135-corrected-frame-triple}--\eqref{eq:v135-corrected-shift-bracket}
+replace the printed-coefficient algebra as the conditional shift of the
+corrected matching. They do not by themselves prove the assembled observable
+frame invariant: that needs the frame transformation of all sources,
+weights, projected boundary terms and the integration variable in one
+expression, which is the slot-by-slot test of \eqref{eq:frame-conditions}.
+With Paper~1's source all three conditions hold, and the frame equality of
+the assembled observable is registration \emph{(c)} of \S\ref{sec:w-form},
+scored with D44. The frame relations are Paper~1's, Secs.~II~E and VI~B,
+with the first-order limitation of its Eq.~(74); the matching equations are
+\emph{Annals~II}'s (89)--(90), derived in \S\ref{sec:ell-zero-row}.
+
+\subsection{The $k^2$ between $\Delta C_0$ and $\Delta C_2$}
+
+A factor $k^2$ between $\Delta C_0$ and $\Delta C_2$ is what a
+comoving/physical or amplitude/potential mismatch produces, and that reading
+has to be excluded before the rest stands. It is excluded by measurement.
+
+$C_0$ and $C_2$ are the same array. \eqref{eq:C-from-B} divides one
+quantity, $a\mathcal B_2$, by $k^0$ and by $k^2$. Whatever $a\mathcal B_2$ is
+--- physical or comoving, amplitude or potential, correctly transcribed or not
+--- it is \emph{the same object in both}, so their ratio carries no convention
+at all:
+\begin{equation}
+  \frac{C_0}{k^2C_2}=\frac{p_0}{p_2}=\frac{5}{3\beta_2}
+  \qquad\text{(a pure rational).}
+\end{equation}
+Measured at $\eta_*$ on `CDM (Einstein--de Sitter)', `LCDM' and
+`PLANCK\_MODEL', at $k=1,5,20,60,140,300$: $2.5000$ at every entry.
+That measurement predates 21~October and is the ratio under (89)'s printed
+$\delta_{\ell0}$ row. Under the released row, \texttt{MONOPOLE\_ROW =
+"corrected"} and \eqref{eq:dc0-corrected}, the same quantity reads
+$0.333333$ at $k=1,10,60$ on Einstein--de~Sitter and \texttt{PLANCK\_MODEL}
+alike, exactly $\tfrac13$. Only the value moves: the argument needs the ratio
+to be a pure rational, independent of $k$ and of background, and it still
+is. The measurement shows internal consistency, which is not correctness;
+that was true at $\tfrac52$ and is true at $\tfrac13$.
+A mismatch between two different objects does not return a
+background-independent, $k$-independent rational; it drifts. So the
+dominance is $(90)$'s own structure, and a spurious scale factor in
+$a\mathcal B_2$ --- were there one --- would multiply $C_0$ and $C_2$ equally
+and cancel from the ratio entirely.
+
+What this does not exclude is $\Delta C_1$, the one shift that depends on
+the reduced normalisation $\tilde\tau_1=v_B/k$ of
+\S\ref{sec:frame-division-conventions}. If that reading is wrong,
+$\Delta C_1$ is wrong by $k^2$, and the bundle made that error once, as
+T-27. Paper~1 cannot adjudicate it, since it carries no $C_1$; T-66 settled
+it in the code: \texttt{solve\_acoustic} returns the dipole in the velocity
+normalisation, which shifts by $-v$, while the reduced $\tilde v_B=v_B/k$
+shifts by $-v/k$, and the released code had applied the reduced boost to the
+un-reduced quantity.
+
+\subsection{Measured}
+
+Both frames from one environment, one acoustic solution and one $k$ grid,
+differing only in the frame (110) specialises to, against the Newtonian
+total's scale over $\ell\in\{2,5,10,50,200\}$:
+
+\begin{center}
+\begin{tabular}{lrrr}
+\hline
+background & $k$ & as assembled & with $C_0$ dropped \\
+\hline
+CDM (Einstein--de Sitter) & 20  & $53.5$   & $0.032$ \\
+                          & 300 & $1719$   & $0.035$ \\
+$\Lambda$CDM              & 20  & $62.8$   & $0.105$ \\
+                          & 300 & $6868$   & $0.154$ \\
+\texttt{PLANCK\_MODEL}    & 20  & $72.2$   & $0.111$ \\
+                          & 300 & $3687$   & $0.058$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent
+Three to four orders of magnitude, to a residual of $1$--$15\%$, with the $k$
+dependence of \eqref{eq:no-partner}. The rank decomposition agrees: $C_0$
+carries $98.6\%$ of $C_\ell$ in the CDM frame and is identically zero in the
+Newtonian one.
+
+\subsection{The Newtonian evaluation}
+
+(102) is evaluated once, in the Newtonian frame, where \emph{``the vanishing
+shear condition $\tilde\sigma_{ab}\approx0$ implies that $\tilde
+C_0(\eta)\approx0$ and $\tilde C_2(\eta)\approx0$''}. Both members of
+the pair vanish together, so the imbalance between them cannot be seen.
+Nothing the antecedent publishes is affected. What is missing is a stated
+condition on a formula labelled frame-general.
+
+\subsection{Three repairs}
+
+\paragraph{The dropped lines of (93).} They are not the counterweight. (102)
+is (93) with its last two integrals removed. Restoring
+$\int(\kappa'e^{-\kappa})[C_1-2C_2]j_\ell$ and
+$\int((\kappa')^2-\kappa'')e^{-\kappa}C_2j_\ell$ moves the disagreement from
+$72.2$ to $71.6$ at $k=20$ and from $3686.9$ to $3686.8$ at $k=300$.
+
+\paragraph{(89)'s $\ell=0$ line.} $a\mathcal B_0\delta_{\ell0}$ is commented
+out of the equation the integral solution solves and restored in the
+open-case extension, which looks like a dropped source. This appendix read it
+as no dropped source: the ansatz must give $\tau_0=0$, and differentiating
+$\int A_0\,d\eta'=0$ yields (89)'s $\ell=0$ line with zero on the right. The
+first frame condition reads it the other way. With Paper~1's rank-one sign
+the line carries $-a\mathcal B_0$ on the right, \eqref{eq:c0-ruled}, so the
+term commented out of the flat case is the one the open-case extension
+restores, and the frame condition requires it in the flat case too. Where the
+$\tau_0=0$ reading fails is not located (\S\ref{sec:ell-zero-row}).
+
+\paragraph{Undoing the integration by parts.} (93) comes from a kernel in
+which the two derivatives act on $\tau^{(0)}_\ell$ and bring down $k$, not
+on the coefficients where they bring down $\mathcal H$. The numerical test of
+this was invalid, since it failed its own control, reproducing the by-parts
+form in the Newtonian frame only to within $10^{-3}$ to $2.5$: (102) does not
+differentiate the weight $\mathcal V$ that (93) carries inside the integral,
+so the two are not an exact by-parts pair once a weight is present. The
+repair was then made analytically. \S\ref{sec:assembly-rederived} finds that
+(102) is not the exact integration by parts of its own integral (B-17), and
+the assembly of \S\ref{sec:w-form} is the form the frame conditions select.
+
+\subsection{The four items}
+
+The four items this appendix left open, and how each closed:
+\begin{enumerate}
+\item The reduced normalisation $\tilde\tau_1=v_B/k$, on which
+  $\Delta C_1$ rests and which nothing outside the bundle can adjudicate; the
+  bundle erred here once (T-27). Settled by T-66.
+\item The by-parts step. Done in \S\ref{sec:assembly-rederived}, and the
+  assembly of \S\ref{sec:w-form} follows from it.
+\item Whether $C_0$ belongs in the integrand, which the measurement
+  answers empirically and the algebra does not. Closed by the first frame
+  condition: it belongs, as \eqref{eq:c0-ruled} (\S\ref{sec:ell-zero-row}).
+\item The $1$--$15\%$ residual after $C_0$ is removed: whether it is
+  $O(\varepsilon^2)$ or an artefact of the grids. Read with
+  \eqref{eq:frame-conditions}, a residual is expected after $C_0$ is removed,
+  because the as-built rank-one sign fails the gravitational condition by
+  $-2v'/k$; whether part of it is a grid artefact is not separated.
+\end{enumerate}
+
+What stands independently of all four: $C_0$ and $C_2$ are one
+$a\mathcal B_2$ over $k^0$ and $k^2$, that ratio is a measured pure rational
+carrying no convention, and (102) in a sheared frame is dominated by the
+member of the pair that the Newtonian specialisation sets to zero.
+
+% === END source expansion: supplementary-materials/appendix-frame-division-v1.3.0.tex ===
+
+
 \section{The almost-EGS bounds}
 \label{sec:egs}
 The Ehlers--Geren--Sachs theorem states that exact CMB isotropy for all
@@ -8001,130 +8149,5 @@ source independent of the deflection, when the complete remapping terms are
 kept (Paper~1, Sec.~VII, especially Eqs.~(88)--(90)). The contribution
 redistributes angular power under those assumptions.
 
-
-\section*{AI-use disclosure}
-AI-assisted tools were used for editorial review, LaTeX consolidation and
-limited algebraic checks. These tools are not sources of physical or
-mathematical authority. The derivations, numerical results and scientific
-interpretations require the independent tests specified in this supplement;
-the author retains responsibility for the scientific content.
-
-% ---------------------------------------------------------------------------
-% BIBLIOGRAPHY, INLINE. The exemplar bundle carries no root .bib
-% (github.com/timgebbie/correlation-emergence-reproducibility), and this
-% document is to be a single file. The six entries below are the expanded
-% natbib output of the former references-v1.3.13.bib, checked entry by entry
-% against the published records: Annals I at Ann. Phys. 282, 285--320 (2000)
-% and Annals II at 282, 321--394 (2000) -- the 2006 year printed for Annals I
-% in some secondary literature is a misprint.
-% ---------------------------------------------------------------------------
-\begin{thebibliography}{12}
-\providecommand{\natexlab}[1]{#1}
-\providecommand{\url}[1]{\texttt{#1}}
-\expandafter\ifx\csname urlstyle\endcsname\relax
-  \providecommand{\doi}[1]{doi: #1}\else
-  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
-
-\bibitem[Gebbie(2026)]{Gebbie2026Paper1}
-Tim Gebbie.
-\newblock Frame covariance of {CMBR} lensing in the exact {1+3} covariant
-  radiation hierarchy, 2026.
-\newblock URL \url{https://arxiv.org/abs/astro-ph/9912072v4}.
-\newblock Paper 1, version 4; version 3 is the correction, and versions 1--2
-  are historical papers.
-
-\bibitem[Gebbie and Ellis(2000)]{GebbieEllis2000}
-Tim Gebbie and George F.~R. Ellis.
-\newblock {1+3} covariant cosmic microwave background anisotropies {I}:
-  Algebraic relations for mode and multipole expansions.
-\newblock \emph{Annals of Physics}, 282:\penalty0 285--320, 2000.
-\newblock \doi{10.1006/aphy.2000.6033}.
-
-\bibitem[Gebbie et~al.(2000)Gebbie, Dunsby, and Ellis]{GebbieDunsbyEllis2000}
-Tim Gebbie, Peter K.~S. Dunsby, and George F.~R. Ellis.
-\newblock {1+3} covariant cosmic microwave background anisotropies {II}: The
-  almost friedmann--lema\^{i}tre model.
-\newblock \emph{Annals of Physics}, 282:\penalty0 321--394, 2000.
-\newblock \doi{10.1006/aphy.2000.6034}.
-\newblock Citations to equations use the published journal numbering.
-
-\bibitem[Kodama and Sasaki(1984)]{KodamaSasaki1984}
-Hideo Kodama and Misao Sasaki.
-\newblock Cosmological perturbation theory.
-\newblock \emph{Progress of Theoretical Physics Supplement}, 78:\penalty0 1--166,
-  1984.
-\newblock \doi{10.1143/PTPS.78.1}.
-
-\bibitem[Maartens et~al.(1999)Maartens, Gebbie, and
-  Ellis]{MaartensGebbieEllis1999}
-Roy Maartens, Tim Gebbie, and George F.~R. Ellis.
-\newblock Cosmic microwave background anisotropies: Nonlinear dynamics.
-\newblock \emph{Physical Review D}, 59:\penalty0 083506, 1999.
-\newblock \doi{10.1103/PhysRevD.59.083506}.
-\newblock Equation references use the published journal version.
-
-\bibitem[Sachs and Wolfe(1967)]{SachsWolfe1967}
-R.~K. Sachs and A.~M. Wolfe.
-\newblock Perturbations of a cosmological model and angular variations of the
-  microwave background.
-\newblock \emph{Astrophysical Journal}, 147:\penalty0 73--90, 1967.
-\newblock \doi{10.1086/148982}.
-
-\bibitem[Seljak and Zaldarriaga(1996)]{SeljakZaldarriaga1996}
-Uro\v{s} Seljak and Matias Zaldarriaga.
-\newblock A line-of-sight approach to cosmic microwave background anisotropies.
-\newblock \emph{Astrophysical Journal}, 469:\penalty0 437--444, 1996.
-\newblock \doi{10.1086/177793}.
-
-\bibitem[Seljak(1996)]{Seljak1996}
-Uro\v{s} Seljak.
-\newblock Rees-Sciama effect in a cold dark matter universe.
-\newblock \emph{Astrophysical Journal}, 460:\penalty0 549--555, 1996.
-\newblock \doi{10.1086/176991}.
-\newblock arXiv:astro-ph/9506048.
-
-\bibitem[Sanz et~al.(1996)Sanz, Mart\'inez-Gonz\'alez, Cay\'on, Silk, and
-  Sugiyama]{Sanz1996}
-Jos\'e~L. Sanz, Enrique Mart\'inez-Gonz\'alez, Laura Cay\'on, Joseph Silk, and
-  Naoshi Sugiyama.
-\newblock {CMB} radiation power spectrum in {CDM} open universes up to second
-  order perturbations.
-\newblock arXiv:astro-ph/9602148, 1996.
-
-\bibitem[Lewis and Challinor(2006)]{LewisChallinor2006}
-Antony Lewis and Anthony Challinor.
-\newblock Weak gravitational lensing of the {CMB}.
-\newblock \emph{Physics Reports}, 429:\penalty0 1--65, 2006.
-\newblock \doi{10.1016/j.physrep.2006.03.002}.
-\newblock arXiv:astro-ph/0601594.
-
-\bibitem[Bruni et~al.(1997)Bruni, Matarrese, Mollerach, and
-  Sonego]{BruniEtAl1997}
-Marco Bruni, Sabino Matarrese, Silvia Mollerach, and Sebastiano Sonego.
-\newblock Perturbations of spacetime: gauge transformations and gauge
-  invariance at second order and beyond.
-\newblock \emph{Classical and Quantum Gravity}, 14:\penalty0 2585--2606, 1997.
-\newblock \doi{10.1088/0264-9381/14/9/014}.
-\newblock arXiv:gr-qc/9609040.
-
-\bibitem[Beneke and Fidler(2010)]{BenekeFidler2010}
-Martin Beneke and Christian Fidler.
-\newblock Boltzmann hierarchy for the cosmic microwave background at second
-  order including photon polarization.
-\newblock \emph{Physical Review D}, 82:\penalty0 063509, 2010.
-\newblock \doi{10.1103/PhysRevD.82.063509}.
-\newblock arXiv:1003.1834.
-
-\bibitem[Pettinari et~al.(2013)Pettinari, Fidler, Crittenden, Koyama, and
-  Wands]{Pettinari2013}
-Guido~W. Pettinari, Christian Fidler, Robert Crittenden, Kazuya Koyama, and
-  David Wands.
-\newblock The intrinsic bispectrum of the cosmic microwave background.
-\newblock \emph{Journal of Cosmology and Astroparticle Physics}, 2013\penalty0
-  (04):\penalty0 003, 2013.
-\newblock \doi{10.1088/1475-7516/2013/04/003}.
-\newblock arXiv:1302.0832.
-
-\end{thebibliography}
 
 \end{document}
