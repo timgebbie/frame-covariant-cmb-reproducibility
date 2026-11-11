@@ -1,5 +1,28 @@
 % Computational supplement to the associated paper.
 %
+% v1.4.4, 2026-11-11.  Sequential style audit, sixth batch: The angular
+% spectrum, Comparison and its range, Release progression.
+%   - Headings name their object (ten renamed); the italic lead and the
+%     italic and bold sentences restated plainly; eq:cl-reduced unboxed; the
+%     source-expansion marker removed; "released" means v1.3.0's assembly.
+%   - Numbers brought to the record.  The mean-square coefficient
+%     (2l+1)^2/beta_l leaves the double range at l = 1008 (exact rational),
+%     where T-17's record says ~1500; the frame gap of (102) as built is
+%     quoted by its median alone, 15% (F5, D6), and the released assembly's
+%     4e-14 (D44) stands beside it; the external-code distance is the
+%     regenerated table of 31 October, 86.2% across the peaks, not the
+%     pre-repair 137%/97.8%/17.2%; the released peak is quoted at the one
+%     stated ratio, 0.71 l_A on the Planck set, and the gates are said to
+%     pass on (102) as built.
+%   - Release progression: v1.3.0's item and subsection describe the release
+%     (D44, D45, the undriven peaks, T-192) in place of the mid-development
+%     "answer so far"; the theory audit's instrument count is thirteen now;
+%     the 1.2% grid limit is recorded with S33's derivation of the grid.
+%   - Evidence (the figure captions) is left as it is: the captions are
+%     generated from captions/*.md, whose front matter carries the bold
+%     sentences, and that is a caption-file change.
+%   - Equations otherwise unchanged, verified by extraction.
+%
 % v1.4.3, 2026-11-11.  Sequential style audit, fifth batch: the frame
 % discrepancy of (102) and the line-of-sight conformity section.
 %   - Headings name their object (nine subsections renamed, the claims moved
@@ -403,7 +426,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.4.3 --- 11 November 2026\\
+\date{Supplement v1.4.4 --- 11 November 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.4.0-dev}
 
 \begin{document}
@@ -5775,9 +5798,8 @@ and remain open (\S\ref{sec:a3-construction}).
 \section{The angular spectrum}
 \label{sec:spectrum}
 
-\emph{The harmonic normalisation must cancel from the observable. The
-angular power spectrum is quadratic in the transfer function. Both are
-checked explicitly.}
+The harmonic normalisation cancels from the observable, and the angular
+power spectrum is quadratic in the transfer function; both are checked here.
 
 % ===========================================================================
 \subsection{Two published expressions and their normalisation}
@@ -5799,35 +5821,33 @@ The harmonic normalisation cancels, identically. (176) returns
 $T_\ell(k)\equiv\beta_\ell\tau_\ell(\eta_0)/(2\ell+1)=\alpha_\ell^{-1}\tau_\ell$,
 so $\tau_\ell=\alpha_\ell T_\ell$ and \eqref{eq:186} becomes
 \begin{equation}
-  \boxed{C_\ell=\frac2\pi\underbrace{\frac{\beta_\ell^2\alpha_\ell^2}{(2\ell+1)^2}}_{=\,1}
-         \int \mathrm dk\,k^2\,\big|T_\ell(k)\big|^2}\,,
+  C_\ell=\frac2\pi\underbrace{\frac{\beta_\ell^2\alpha_\ell^2}{(2\ell+1)^2}}_{=\,1}
+         \int \mathrm dk\,k^2\,\big|T_\ell(k)\big|^2\,,
   \label{eq:cl-reduced}
 \end{equation}
 because $\alpha_\ell=(2\ell+1)/\beta_\ell$. The $\ell$-dependent
-normalisation of the harmonic expansion vanishes from the observable, which is
-what it must do --- and the variable in which it vanishes is exactly the one
-Appendix~F's free-streaming solution is bare in (\S\ref{sec:free-streaming}).
+normalisation of the harmonic expansion vanishes from the observable, as it
+must, and the variable in which it vanishes is the one Appendix~F's
+free-streaming solution is bare in (\S\ref{sec:free-streaming}).
 \eqref{eq:187-188} reaches the same~1 by a different path through the same
 weights.
 
-That is worth more than tidiness, and it does not establish what it was
-first taken to establish. $\alpha_\ell$ is \emph{defined} as
-$(2\ell+1)/\beta_\ell$, so the product is one for every $\beta_\ell\neq0$: the
-cancellation is a substitution and is insensitive to the value substituted. A
-wrong $\beta_\ell$ does not have to survive it. It passes through untouched,
-carried in both factors at once.
+The identity does not establish what it was first taken to establish.
+$\alpha_\ell$ is \emph{defined} as $(2\ell+1)/\beta_\ell$, so the product is
+one for every $\beta_\ell\neq0$: the cancellation is a substitution and is
+insensitive to the value substituted. A wrong $\beta_\ell$ does not have to
+survive it; it passes through untouched, carried in both factors at once.
 
 What the identity does establish is that the observable is independent of the
-harmonic normalisation, which is what it must be --- and that independence is
-why the spectrum cannot adjudicate the convention. Appendix~F's free-streaming
-comparison tests it, and nothing internal to the spectrum can. The coefficients
-are formed as exact rationals and compared as rationals out to $\ell=2000$ for
-the separate reason T-17 gives below: a tautology in $\mathbb Q$ is a range
-failure in floating point.
+harmonic normalisation, and that independence is why the spectrum cannot
+adjudicate the convention. Appendix~F's free-streaming comparison tests it,
+and nothing internal to the spectrum can. The coefficients are formed as exact
+rationals and compared as rationals out to $\ell=2000$ for the separate reason
+T-17 gives: a tautology in $\mathbb Q$ is a range failure in floating point.
 
-\paragraph{Finding T-17, and it is the cautionary one.} Written in the obvious
-order --- each factor converted to a double, then multiplied --- the identity
-held only while both halves were separately representable.
+\paragraph{Finding T-17.} Written in the obvious order, each factor
+converted to a double and then multiplied, the identity held only while both
+halves were separately representable.
 $\beta_\ell\sim6\times10^{-270}$ at $\ell=900$, so $\beta_\ell^2$ underflows to
 zero while $\alpha_\ell^2$ overflows, and their exact ratio of one came back as
 an overflow for every $\ell\ge508$. The bundle's multipole ceiling was
@@ -5836,16 +5856,17 @@ physics to suggest it. The rule the weights module already stated ---
 \emph{multiply at the point of numerical use, never before a comparison} ---
 is the whole of the repair.
 
-\paragraph{And one of these really is large.} The multipole mean square
-\eqref{eq:187-188} carries $\beta_\ell\alpha_\ell^2=(2\ell+1)^2/\beta_\ell$,
-which leaves the double range near $\ell\simeq1500$. That is the
-quantity and not an artefact of how it is written: in a normalisation where
-$\beta_\ell$ is that small, the mean square is that big. $C_\ell$ itself stays
-finite, because the released route combines the weights in $\mathbb Q$ before
-converting and never forms the intermediate at all.
+\paragraph{The multipole mean square.} The mean square \eqref{eq:187-188}
+carries $\beta_\ell\alpha_\ell^2=(2\ell+1)^2/\beta_\ell$, which leaves the
+double range at $\ell=1008$, where it reaches $10^{308.3}$; the record of T-17
+puts this near $\ell\simeq1500$, and the exact rational says $1008$. The
+quantity is large and not an artefact of how it is written: in a
+normalisation where $\beta_\ell$ is that small, the mean square is that big.
+$C_\ell$ itself stays finite, because the released route combines the weights
+in $\mathbb Q$ before converting and never forms the intermediate at all.
 
 % ===========================================================================
-\subsection{Which of the two is the quantity, and why every figure plots it}
+\subsection{The plotted quantity}
 
 \eqref{eq:186} is a statement about mode coefficients and holds only
 for an almost-Robertson--Walker geometry. \eqref{eq:187-188} is a
@@ -5853,19 +5874,19 @@ multipole mean square and holds generally. They are numerically
 identical here and conceptually are not interchangeable, and
 \S\ref{sec:hierarchy} is where the two objects are separated.
 
-Every released figure plots the multipole quantity. That is not a
-presentational preference: it is the only one of the two that survives leaving
-the almost-Robertson--Walker setting, which is the setting the nonlinear
-extension leaves. \emph{A reconstruction that will be generalised should be
-plotted in the variable that generalises, even where the two agree to machine
-precision.}
+Every released figure plots the multipole quantity, because it is the only
+one of the two that survives leaving the almost-Robertson--Walker setting,
+which is the setting the nonlinear extension leaves. A reconstruction that
+will be generalised is plotted in the variable that generalises, even where
+the two agree to machine precision.
 
 % ===========================================================================
-\subsection{$C_\ell$ is quadratic, and three readings have gone wrong on it}
+\subsection{The quadratic form of $C_\ell$}
 
-Everything upstream of this section is linear in the perturbation.
-$C_\ell$ is not: it is quadratic in the transfer, and three consequences follow
-that have each been misread at least once in this project's record.
+Everything upstream of this section is linear in the perturbation, and
+$C_\ell$ is not: it is quadratic in the transfer, and three consequences
+follow, each of which has been misread at least once in this project's
+record.
 
 First, a decomposition of the transfer is not a decomposition of
 $C_\ell$. Splitting $T_\ell$ into rank-0, rank-1 and rank-2 parts gives
@@ -5875,15 +5896,15 @@ while the autos \emph{alone} are off by $0.10$. The cross terms are not
 a correction to be neglected; they are half the statement.
 
 Second, a frame gap in $C_\ell$ is not a frame gap in the invariant.
-The two released frames differ by a median of $15\%$ over $2\le\ell\le400$ and
-reach $40\%$ at some $\ell$. That is not by itself a defect, because
-$C_\ell$ as computed here is built from frame-dependent pieces while the
-invariance (102) satisfies is a statement about the \emph{total at fixed $k$},
-which diagnostic~D6 measures separately. \emph{What was a defect is the
-separate matter of how large the gap is}: F9's caption read \emph{``which is a
-result and not a defect''} and that reading is withdrawn --- the gap is now
-understood as the third symptom of the bare $\kappa'$ carried inside $C_1$
-(T-101, T-121), and \S\ref{sec:w-form} carries it.
+The two frames of (102) as built differ by a median of $15\%$ over
+$2\le\ell\le400$ (F5, D6). That is not by itself a defect, because $C_\ell$
+as computed there is built from frame-dependent pieces while the invariance
+(102) satisfies is a statement about the total at fixed $k$, which D6
+measures separately. The size of the gap was a defect: an earlier caption of
+F9 read it as a result, that reading is withdrawn (T-101, T-121), and the
+gap is the third symptom of the bare $\kappa'$ carried inside $C_1$. The
+released assembly of \S\ref{sec:w-form} has no such gap, one $C_\ell$ in
+both frames to $4\times10^{-14}$ (D44).
 
 Third, a ratio of two spectra is not a ratio of two amplitudes.
 $D_\ell=\ell(\ell+1)C_\ell/2\pi$ is renormalised at $\ell=30$ in every released
@@ -5893,10 +5914,9 @@ normalisation. Every percentage in this supplement comparing shapes is
 a shape comparison and nothing in it constrains $A_s$.
 
 % ===========================================================================
-\subsection{Criterion 5b, and the two different ``two routes''}
+\subsection{Criterion 5b and the two route comparisons}
 
-There are two route comparisons in this bundle and they check
-different things. Conflating them is easy and would be expensive.
+The two route comparisons in this bundle check different things.
 
 \begin{center}\small
 \begin{tabularx}{\textwidth}{@{}l >{\raggedright\arraybackslash}X l@{}}
@@ -5913,42 +5933,42 @@ different things. Conflating them is easy and would be expensive.
 \end{center}
 
 \noindent
-Criterion 5b is the audit half of the release, and it exists because a
-symbolic recovery is an argument whose arithmetic nobody has run. The
-antecedent writes its integral solution twice and says so --- \emph{``Later we
-will explicitly recover these equations in the Newtonian frame''}, and at the
-end of that recovery, \emph{``This completes the recovery of the standard
-integral solution results using the $1+3$ CGI approach at linear order''}. The
-recovery is carried out on the page, as it should be. Evaluating both forms and
-comparing them had never been done.
+Criterion 5b is the audit half of the release: a symbolic recovery is an
+argument whose arithmetic has not been run. The antecedent writes its
+integral solution twice and says so, \emph{``Later we will explicitly recover
+these equations in the Newtonian frame''}, and at the end of that recovery,
+\emph{``This completes the recovery of the standard integral solution results
+using the $1+3$ CGI approach at linear order''}. The recovery is carried out
+on the page. Evaluating both forms and comparing them had not been done.
 
-\paragraph{What 5b holds fixed, written out rather than left to be noticed.}
-Both routes are given the same background and $\eta$ grid, the same
-recombination history and therefore the same $\kappa'$, visibility and
-$\eta_*$, the same single acoustic solve, the same potentials, the same Bessel
-table, the same diffusion damping --- and the same line-of-sight
-weight, $e^{-\kappa}$, on both sides.
+\paragraph{The shared inputs.} Both routes are given the same
+background and $\eta$ grid, the same recombination history and therefore the
+same $\kappa'$, visibility and $\eta_*$, the same single acoustic solve, the
+same potentials, the same Bessel table, the same diffusion damping, and the
+same line-of-sight weight, $e^{-\kappa}$, on both sides.
 
-That last one is deliberate and it is the largest thing 5b does not
-see. (102) prints $\mathcal V=\kappa'e^{-\kappa}$ and (98) prints
-$e^{-\kappa}$; approximations A-1 and A-2 record the
-difference, and at $C_\ell$ \emph{the two weightings differ by a factor of
-eighty across the Sachs--Wolfe plateau for that reason alone}. Weighting both
-sides alike removes the one thing the comparison is not about, so that what
-remains is the assembly algebra. \emph{It also means 5b's
-$9.5\times10^{-6}$ says nothing whatever about the weight question that
-\S\ref{sec:w-form} is entirely about.}
+The shared weight is the largest thing 5b does not see. (102) prints
+$\mathcal V=\kappa'e^{-\kappa}$ and (98) prints $e^{-\kappa}$; approximations
+A-1 and A-2 record the difference, and at $C_\ell$ the two weightings differ
+by a factor of eighty across the Sachs--Wolfe plateau for that reason alone.
+Weighting both sides alike removes the one thing the comparison is not
+about, so that what remains is the assembly algebra, and 5b's
+$9.5\times10^{-6}$ therefore says nothing about the weight question of
+\S\ref{sec:w-form}.
 
-\paragraph{And it says nothing about agreement with an external code.} CAMB and
-CLASS are drawn as context and are not a target (decision S4c). The
-distance to them is large, expected, and itemised by approximation rather than
-totalled: $97.8\%$ across the plateau, $137\%$ across the peaks, of which the
-damping coefficient alone is $17.2\%$. A bundle gated on an external
-code would be measuring that code; this one is gated on its own two routes and
-reports the distance separately.
+\paragraph{External codes.} 5b says nothing about agreement with an external
+code either. CAMB and CLASS are drawn as context and are not a target
+(decision S4c). The distance to them is large and expected, and it is
+itemised by approximation rather than totalled, in the table of
+\S\ref{sec:comparison}; the released
+assembly's distance is F9's, with first maxima at $165.4$, $143.8$ and
+$188.5$ against the external codes' $206$, and the driving that sets the
+heights is A-3's. A bundle gated on an external code would be measuring that
+code; this one is gated on its own two routes and reports the distance
+separately.
 
 % ===========================================================================
-\subsection{Where the spectrum is gated, and what none of it establishes}
+\subsection{The gates}
 
 \begin{center}\small
 \begin{tabularx}{\textwidth}{@{}l >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X@{}}
@@ -5971,20 +5991,21 @@ two-route $C_\ell$ difference & reported, now bitwise zero since \textbf{T-17}
 \end{center}
 
 \noindent
-No gate in this section validates the assembled spectrum. The basic
-checks above pass, and they pass on an assembly whose first acoustic peak sits
-at $0.6476\,\ell_A$ against a matched $0.7723$. \emph{That is not a
-contradiction and it is the reason the ``does not establish'' column exists}:
-every one of these gates holds fixed, or is indifferent to, precisely the part
-that is wrong. T-3 is the standing statement of why --- a comparison
-that holds an input fixed cannot check that input --- and the spectrum is where
-it bites hardest, because it is the last step and inherits every shared input
-above it.
-
-% === END source expansion: supplementary-materials/section-spectrum-v1.4.0.tex ===
+No gate in this section validates the assembled spectrum. The checks above
+pass, and they pass on (102) as built, whose first acoustic peak sits at
+$0.6476\,\ell_A$ against the matched $0.7723$; the released assembly's first
+maximum sits at $0.71\,\ell_A$ on the Planck set (F9), and none of these
+gates reaches it either. There is no
+contradiction in that, and it is why the table has its third column: every
+one of these gates holds fixed, or is indifferent to, the part that is
+wrong. T-3 is the standing statement
+of why, since a comparison that holds an input fixed cannot check that
+input, and the spectrum is where it bites hardest, because it is the last
+step and inherits every shared input above it.
 
 
 \section{Comparison and its range}
+\label{sec:comparison}
 The $C_\ell$ comparison is Sachs--Wolfe only: (196) descends from (181), in which
 the acoustic modulation $\cos(k r_s)$ is dropped by taking $r_s^*\to0$, and
 \S8.3.2 sets the transfer function to unity. Its accuracy is therefore bounded by
@@ -5996,11 +6017,10 @@ The present implementation is compared with the stamped CAMB and CLASS
 reference spectra held by the repository. The line-of-sight formulation is
 cited to the published literature, including \citet{SeljakZaldarriaga1996}.
 Results are reported in three bands, whose errors have different
-interpretations --- $2\le\ell<30$, cosmic-variance dominated
-and meaningful only binned; $30\le\ell<1000$, the acoustic peaks, where a
-hierarchy or recursion error actually shows; and $1000\le\ell\le2000$, the
-damping tail, where $C_\ell$ is small and fractional differences blow up on a
-vanishing signal. The comparison is made against the
+interpretations: $2\le\ell<30$, cosmic-variance dominated and meaningful
+only binned; $30\le\ell<1000$, the acoustic peaks, where a hierarchy or
+recursion error shows; and $1000\le\ell\le2000$, the damping tail, where
+$C_\ell$ is small and fractional differences grow on a vanishing signal. The comparison is made against the
 corrected closed form.\footnote{The reduction of (200) carries a factor of the
 comoving distance that the displayed (201) does not; substituting $z=k\chi$ gives
 $\chi^{2-n}$, which is $\chi^1$ at $n=1$. The companion result (204) descends
@@ -6013,30 +6033,30 @@ corrected silently and recorded.}
 
 
 \subsection{Criterion 5b's tolerance}
-The tolerance is \emph{measured} rather than chosen; what it is measured against
-changed once it was run. The original rule took the CAMB--CLASS mutual
-difference as the floor, on the ground that no agreement can be claimed tighter
-than two trusted independent codes agree with each other. That floor is
-$0.370\%$ across the acoustic peaks, and this reconstruction stands at $137\%$
-there. It was never going to meet it: (102) is a slow-decoupling solution with
-no polarisation hierarchy, no neutrino anisotropic stress and a
-visibility-weighted line of sight, set against two full Boltzmann codes.
-A criterion that can only be failed is not a criterion.
+The tolerance is measured rather than chosen, and what it is measured
+against changed once it was run. The original rule took the CAMB--CLASS
+mutual difference as the floor, on the ground that no agreement can be
+claimed tighter than two independent codes agree with each other. That floor
+is $0.370\%$ across the acoustic peaks, and (102) as built stands at $86.2\%$
+there, as the table below records: a slow-decoupling solution with no
+polarisation hierarchy, no neutrino anisotropic stress and a
+visibility-weighted line of sight, set against two full Boltzmann codes. A
+criterion that can only be failed is not a criterion.
 
-What \emph{is} gateable is the thing the antecedent writes twice and recovers
-symbolically but never evaluates. Its integral solution appears as (102),
-carried with a generic $u^a$ and specialised afterwards, and again as the source
-assembly (177)--(179), written in the Newtonian frame from the start. The paper
-states the relation and carries it out on the page; what no one has done is to
-compute both forms and compare them, which is the only part of the claim
-arithmetic can settle. Measured here over three
+What can be gated is the relation the antecedent writes twice and recovers
+symbolically without evaluating. Its integral solution appears as (102),
+carried with a generic $u^a$ and specialised afterwards, and again as the
+source assembly (177)--(179), written in the Newtonian frame from the start.
+The paper states the relation and carries it out on the page; computing both
+forms and comparing them is the part of the claim arithmetic can settle, and
+it had not been done. Measured here over three
 backgrounds, nine modes $0.3\le k\le600$ and $2\le\ell\le600$, the two agree to
 $9.5\times10^{-6}$ worst and $2.7\times10^{-8}$ median against a gate of
 $10^{-3}$. The comparison is stated at the transfer level at fixed $k$ with the
 same line-of-sight weight on both sides: at $C_\ell$ the two branches differ by
 a factor of eighty in the plateau, and that difference is the weight the
-line-of-sight integral carries --- a property of what (102) prints, recorded as
-an approximation and measured separately, not a disagreement to be gated away.
+line-of-sight integral carries, a property of what (102) prints, recorded as
+an approximation and measured separately rather than gated away.
 
 The external comparison is still run, still stamped, and reported alongside as
 context. Its value is not a pass mark but an itemisation: how far a $1+3$
@@ -6059,26 +6079,24 @@ testing.
   \texttt{python scripts/compare\_criterion\_5b.py}\emph{.}%
 }
 
-What a self-comparison does not establish is stated here rather than
-left to be inferred, because it is the obvious objection and it is a fair one.
-Both routes are handed the same background, the same recombination history, the
-same acoustic solution, the same potentials and the same damping, and a
-comparison that holds an input fixed cannot check that input. This is not a
-formality: setting the gate turned up an under-resolved recombination grid that
-moves the primary source at $\eta_*$ by $1.2\%$, shared by both routes and
-invisible to the comparison between them. It is recorded, raised, and left for
-the decision it needs rather than changed inside a release.
+A self-comparison does not establish its shared inputs. Both routes are
+handed the same background, the same recombination history, the same
+acoustic solution, the same potentials and the same damping, and a
+comparison that holds an input fixed cannot check that input. Setting the
+gate turned up an under-resolved recombination grid that moves the primary
+source at $\eta_*$ by $1.2\%$, shared by both routes and invisible to the
+comparison between them. It is recorded as a stated limit of v1.2.0, and the
+grid has been derived from the visibility's own width since (S33).
 
 The external codes of criterion 5b are compared in
 \texttt{provenance/EXTERNAL-CODE-COMPARISON-v1.md}, which records what CAMB and
-CLASS each model and --- more to the point --- what the comparison structurally
-cannot settle. Neither carries the $1+3$ covariant formalism, neither
-distinguishes mode from multipole coefficients, and neither carries the
-$O(\varepsilon^2\ell)$ couplings of v1.5.0. So 5b is a check on the
-\emph{linear} reconstruction and is incapable of validating the nonlinear
-extension, which is precisely why v1.0.0 must carry no $O(\ell)$ coupling: if
-one leaked in, the disagreement with CAMB and CLASS would be indistinguishable
-from a bug. The canonical parameter set switches reionisation, lensing and
+CLASS each model and what the comparison cannot settle. Neither carries the
+$1+3$ covariant formalism, neither distinguishes mode from multipole
+coefficients, and neither carries the $O(\varepsilon^2\ell)$ couplings of
+v1.5.0. So 5b is a check on the linear reconstruction and cannot validate
+the nonlinear extension, which is why v1.0.0 must carry no $O(\ell)$
+coupling: if one leaked in, the disagreement with CAMB and CLASS would be
+indistinguishable from a bug. The canonical parameter set switches reionisation, lensing and
 massive neutrinos off, each being physics this bundle does not model.
 
 \section{Evidence}
@@ -6193,10 +6211,9 @@ measure the \emph{implementation} and cannot replace verification
 of the claims of Paper~1.
 
 The release record is retained below, one physical milestone at a
-time, separating what was \emph{achieved} from what was \emph{learned}.
-The qualification of v1.0.0 is therefore precise: it established the
-independent verification baseline and a first free-streaming
-reconstruction; it did \emph{not} implement the full physics of
+time, separating what was achieved from what was learned. v1.0.0
+established the independent verification baseline and a first
+free-streaming reconstruction; it did not implement the full physics of
 Paper~1. Paper~1's equations, especially its corrections of its
 antecedents, remain the pivot for interpreting both classes of tests.
 A later solver regression test becomes evidence for a Paper~1 claim
@@ -6219,12 +6236,14 @@ with the superseded C5 result specifically identified.
         self-consistent when evaluated?} and answered yes, at $10^{-5}$,
         while finding that the question had been answered three times before
         without being measured.
-  \item v1.3.0 asks \emph{where does the frame discrepancy come
-        from?} --- and \S\ref{sec:frame-discrepancy} is the answer so far: not
-        the source, not the by-parts bookkeeping, not the projection, but the
-        slot-and-weight assignment of $C_1$. The question it has \emph{not}
-        answered is whether repairing that assignment also recovers the
-        acoustic peaks, which is a separate defect with a separate signature.
+  \item v1.3.0 asked \emph{where does the frame discrepancy come from?}
+        and answered: not the source, not the by-parts bookkeeping, not the
+        projection, but the slot-and-weight assignment of $C_1$
+        (\S\ref{sec:frame-discrepancy}). Its assembly in frame-invariant
+        slots (\S\ref{sec:w-form}) gives one $C_\ell$ in both frames to
+        $4\times10^{-14}$ (D44); the acoustic peaks it carries are the
+        undriven oscillator's, odd present and even absent, and the driving
+        is v1.4.0's.
 \end{itemize}
 
 
@@ -6245,8 +6264,8 @@ scope, source revision and verification status.
 
 \begin{table}[H]
 \centering\footnotesize
-\caption{\textbf{Python tests relevant to claims or conventions in Paper~1,
-distinguished from solver implementation tests.} Files in this table
+\caption{Python tests relevant to claims or conventions in Paper~1,
+distinguished from solver implementation tests. Files in this table
 were checked at the stated repository tag. The last column
 limits the claim supported; it does not rate the physical accuracy of
 a spectrum. The machine-readable ledger records the exact GitHub
@@ -6296,13 +6315,12 @@ nonlinear aberration or curvature contribution.\\
 \end{tabularx}
 \end{table}
 
-\paragraph{Implementation acceptance tests are a separate inventory.}
-For example, the v1.1.0 Peebles and frame-transformation
-tests (\texttt{test\_peebles.py} and
-\texttt{test\_frame\_transform.py}) check recombination
-and implemented frame transformations.
-They do not retroactively expand the independent Paper~1
-v1.0.0 certificate. Likewise tests for
+\paragraph{Implementation acceptance tests.}
+Implementation acceptance tests are a separate inventory. The v1.1.0
+Peebles and frame-transformation tests (\texttt{test\_peebles.py} and
+\texttt{test\_frame\_transform.py}) check recombination and implemented
+frame transformations, and do not expand the independent Paper~1 v1.0.0
+certificate. Likewise tests for
 \texttt{coefficients.py}, the line-of-sight pipeline, and the
 spectrum's morphology address the later \emph{physics
 implementation}; they are not entered in
@@ -6316,10 +6334,10 @@ at their actual Git tags; importing software-under-test
 never becomes an independent derivation simply because
 the test is mathematically phrased.
 
-\subsection{v1.0.0 --- the reconstruction, and whether it is faithful}
-Achieved. The free-streaming chain of Appendix~F reproduced against
-\emph{four} external hierarchies --- Hu \& Sugiyama Eq.~(6), Wilson Eq.~(8),
-Ma \& Bertschinger Eqs.~(49)/(50), Seljak \& Zaldarriaga Eq.~(3d) --- each read
+\subsection{v1.0.0: the reconstruction}
+Achieved. The free-streaming chain of Appendix~F reproduced against four
+external hierarchies, Hu \& Sugiyama Eq.~(6), Wilson Eq.~(8), Ma \&
+Bertschinger Eqs.~(49)/(50) and Seljak \& Zaldarriaga Eq.~(3d), each read
 from its own paper and integrated as printed, at residuals of
 $10^{-13}$--$10^{-14}$ against a $10^{-11}$ threshold, in two normalisations
 and two phase conventions. The almost-Friedmann--Lemaitre spectrum (186)
@@ -6330,82 +6348,80 @@ antecedent's own equations, independently of any Boltzmann code, and that the
 harmonic phase convention is fixed by the \emph{definition} of $Q_{A_\ell}$
 rather than adopted.
 
-Learned, and it set the pattern for everything after. A coarsened
-$\eta$ grid returned a smooth, plausible spectrum that was $575\%$ wrong while
-the two routes agreed to $10^{-16}$ --- finding T-3. Two
-agreeing routes agree about what they share. That sentence is the single most
-load-bearing lesson in this bundle; it produced \texttt{required\_n\_eta}, it is
-why criterion~5b's gate states its shared inputs explicitly, and it is why the
-grid register exists.
+Learned. A coarsened $\eta$ grid returned a smooth, plausible spectrum that
+was $575\%$ wrong while the two routes agreed to $10^{-16}$ (T-3). Two
+agreeing routes agree about what they share. That is why
+\texttt{required\_n\_eta} exists, why criterion~5b's gate states its shared
+inputs, and why the grid register exists.
 
-\subsection{v1.1.0 --- the recombination that makes peaks possible}
-Achieved. Peebles' effective three-level atom replacing equilibrium
-Saha, and made the default only after being checked standalone against the
-standard ionisation history. Freeze-out at $2.15\times10^{-4}$ against a
-standard $\sim2\times10^{-4}$; the visibility peak moves $z\simeq1300\to1107$
-against a standard $1080$--$1100$, and the function \emph{widens by about
-40\%}. The frame change made numerical rather than symbolic. This shows
-that the width, not the position, is what the spectrum needs: the width sets
-the Silk damping envelope, which is why the acoustic peaks could not be
-attempted before this release.
+\subsection{v1.1.0: recombination}
+Achieved. Peebles' effective three-level atom replacing equilibrium Saha,
+made the default only after being checked standalone against the standard
+ionisation history. Freeze-out at $2.15\times10^{-4}$ against a standard
+$\sim2\times10^{-4}$; the visibility peak moves $z\simeq1300\to1107$ against
+a standard $1080$--$1100$, and the function widens by about $40\%$. The
+frame change made numerical rather than symbolic. The width, not the
+position, is what the spectrum needs: the width sets the Silk damping
+envelope, which is why the acoustic peaks could not be attempted before this
+release.
 
 Learned. \texttt{SAHA} was kept rather than deleted. A known-worse
-alternative that \emph{must} change the answer is evidence; deleting it would
-have left the improvement asserted rather than measured. The same principle
+alternative that must change the answer is evidence; deleting it would have
+left the improvement asserted rather than measured. The same principle
 appears as the negative control in every criterion that claims one.
 
-\subsection{v1.2.0 --- the spectrum with structure, and the audit of it}
-Achieved. The full linear $C_\ell$: acoustic peaks, a Silk damping
-tail, the complete source assembly, and the integral solution~(102) carried
-with a generic $u^a$ and specialised back. Criterion~5b closed at
-$9.5\times10^{-6}$ against a gate of $10^{-3}$. This shows that
-\emph{Annals~II}'s two writings of its own integral solution --- (102)
-specialised, and (177)--(179) assembled --- are the same calculation when
-evaluated, which the paper recovers symbolically and which nobody had ever
-computed.
+\subsection{v1.2.0: the spectrum with structure}
+Achieved. The full linear $C_\ell$: acoustic peaks, a Silk damping tail, the
+complete source assembly, and the integral solution~(102) carried with a
+generic $u^a$ and specialised back. Criterion~5b closed at
+$9.5\times10^{-6}$ against a gate of $10^{-3}$: \emph{Annals~II}'s two
+writings of its own integral solution, (102) specialised and (177)--(179)
+assembled, are the same calculation when evaluated, which the paper recovers
+symbolically and which had not been computed.
 
-Learned, three times over, and they are the same lesson in three
-places. \emph{First}, the tolerance this criterion was written against could
-only ever be failed: a slow-decoupling solution with no polarisation hierarchy
-cannot meet two full Boltzmann codes, and a criterion that can only be failed
-is not a criterion (S4c). \emph{Second}, the figure
-$10^{-5}$ that had stood in the record for the two routes' agreement was never
-measured --- it came from a fixed grid on which both routes were
-\emph{un-converged in the same direction} (T-45). \emph{Third}, the
-gate written to catch all of this printed \texttt{PASS} on a \texttt{nan},
-because \texttt{nan >= gate} is \texttt{False} (T-44). A gate
-is not tested by the run that passes it.
+Learned, three times, and the lesson is one. First, the tolerance this
+criterion was written against could only be failed: a slow-decoupling
+solution with no polarisation hierarchy cannot meet two full Boltzmann codes,
+and a criterion that can only be failed is not a criterion (S4c). Second,
+the figure $10^{-5}$ that had stood in the record for the two routes'
+agreement was never measured; it came from a fixed grid on which both routes
+were unconverged in the same direction (T-45). Third, the gate written to
+catch all of this printed \texttt{PASS} on a \texttt{nan}, because
+\texttt{nan >= gate} is \texttt{False} (T-44). A gate is not tested by the
+run that passes it.
 
-\subsection{v1.3.0 --- the structural audit, and the discrepancy localised}
-Two halves, in the order decision~S37 fixed: the structural audit of
-the code first, the acoustic modes second. The audit produced the generated
-registers this supplement now rests on --- the grid register, which walks the
-abstract syntax tree and \emph{fails} when the code holds a discretisation the
-register does not name; the model table, derived from the \texttt{Background}
-objects the code integrates rather than transcribed from a parameter sheet; and
-the theory audit, generated from six self-contained instruments that import no
-project code.
+\subsection{v1.3.0: the structural audit and the frame-invariant assembly}
+Two halves, in the order decision~S37 fixed: the structural audit of the
+code first, the acoustic modes second. The audit produced the generated
+registers this supplement rests on: the grid register, which walks the
+abstract syntax tree and fails when the code holds a discretisation the
+register does not name; the model table, derived from the
+\texttt{Background} objects the code integrates rather than transcribed from
+a parameter sheet; and the theory audit, generated from self-contained
+instruments that import no project code, six at the time and thirteen now.
 
-The acoustic half did not go as planned, and the record says so. It began as a
-search for the missing peaks and became the localisation in
-\S\ref{sec:frame-discrepancy}, because the frame discrepancy turned out to be
-upstream of the peak question and to admit a cleaner instrument. Two
-defects were separated that had been one symptom: the frame gap, now reduced
-to a single site with both of its boundaries measured; and the peak positions,
-which sit above their own $\ell_A$ on all three backgrounds, in both frames,
-and which the acoustic scale does not explain --- the signs are opposite.
+The acoustic half did not go as planned, and the record says so. It began as
+a search for the missing peaks and became the localisation in
+\S\ref{sec:frame-discrepancy}, because the frame discrepancy was upstream of
+the peak question and admitted a cleaner instrument. Two defects were
+separated that had been one symptom. The frame gap was localised to the
+slot-and-weight assignment of $C_1$ and then removed by the assembly of
+\S\ref{sec:w-form}, which gives one $C_\ell$ in both frames to
+$4\times10^{-14}$ (D44) and sums back to the integral it rearranges (D45).
+The peak heights are the undriven oscillator's, odd peaks present and even
+peaks absent, with the first maximum at $0.71\,\ell_A$ on the Planck set
+against the matched $0.7723$ (F9), and the plateau on that background is not
+recovered (T-192).
 
-What v1.3.0 has not done. It has not repaired the assignment, it has
-not recovered the peaks, and it has not bounded the envelope approximations
-A-3, A-5 and the damping inputs, which are deferred to v1.4.0 precisely because
-changing an envelope term mid-measurement moves the number being measured for
-reasons unrelated to it.
-
-What the arc did not do, and says so. No release has bounded the
-accuracy of the \emph{source} as distinct from the consistency of its
-assembly. The recombination grid moves the primary term by $1.2\%$ and both
-routes of criterion~5b share it, so the criterion cannot see it. That is
-recorded as a stated limit of v1.2.0 and derived immediately after the tag.
+v1.3.0 has not bounded the envelope approximations A-3, A-5 and the damping
+inputs, which are deferred to v1.4.0 because changing an envelope term
+mid-measurement moves the number being measured for reasons unrelated to it;
+the radiation era is v1.4.0's (\S\ref{sec:a3-construction}). No release has
+bounded the accuracy of the source as distinct from the consistency of its
+assembly. The recombination grid moved the primary term by $1.2\%$ and both
+routes of criterion~5b share it, so the criterion cannot see it; that is
+recorded as a stated limit of v1.2.0, and the grid was derived from the
+visibility's own width immediately after the tag (S33).
 
 \paragraph{Planned end of the implementation sequence.}
 The physics-facing objective of v1.5.0 is to bring the \emph{full
