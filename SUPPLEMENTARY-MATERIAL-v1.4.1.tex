@@ -1,5 +1,33 @@
 % Computational supplement to the associated paper.
 %
+% v1.4.1, 2026-11-11.  The radiation era's construction, ruled before it is
+% built, and the registered test restated before any part of it runs.
+%   - sec:a3-construction (new, in sec:first-peak): the potential is solved
+%     with the CDM and the photon-baryon fluid, not supplied; one start eta_i
+%     deep in the radiation era and outside the horizon for every k
+%     (a_i <= 1e-3 a_eq, k_max eta_i <= 1e-2), on the adiabatic growing mode,
+%     eq:radiation-ic (dT = -Phi_i/2, delta_c = delta_b = -(3/2) Phi_i,
+%     tau_1 = v_b = v_c = -(k eta_i/2) Phi_i, Newtonian frame, the velocity
+%     sign of (152)); the matter-era mode where Omega_r = 0.  Phi_H from the
+%     momentum constraint, eq:momentum-constraint, with the energy constraint
+%     as its check, since outside the horizon the comoving density contrast
+%     is O((k eta)^2) Phi.  The photons stay in the constraint after
+%     decoupling, through the hierarchy with its rank-0 and rank-1 sources:
+%     they are 15.8% of the density at eta_* on PLANCK_MODEL (a_*/a_eq =
+%     5.33), and the super-horizon potential falls 2.7% after eta_*
+%     (Kodama and Sasaki, reproduced by integration to 1e-6) where D/a falls
+%     11%.  (J.5) is not applied to the solved potential.
+%   - The registered test restated on 11 November: (g) as registered would
+%     fail for reasons that are not the radiation era ((J.5) on the
+%     Omega_r = 0 backgrounds; baryons tied to the photons), so (g1) the solve
+%     reproduces D/a there to 1e-10 with the baryons as dust, and (g2) those
+%     backgrounds keep the released potential.  Three steps, each scored
+%     against the one before; the k -> 0 Sachs-Wolfe source on PLANCK_MODEL
+%     registered at 0.379 Phi_A(eta_*), the radiation era's integrated term
+%     at -0.055 Phi_A(eta_*).
+%   - The driving potentials and the start: each says what replaces it.
+%   - Kodama and Sasaki (1984) added to the references.
+%
 % v1.4.0, 2026-11-10.  The first edition of the v1.4.0-dev line, opened after
 % the v1.3.0 release (tag v1.3.0 on 0fd58a9, supplement v1.3.33).
 %   - The date line's computational label reads v1.4.0-dev.
@@ -321,7 +349,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.4.0 --- 10 November 2026\\
+\date{Supplement v1.4.1 --- 11 November 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.4.0-dev}
 
 \begin{document}
@@ -2408,7 +2436,9 @@ growth equation,
   \label{eq:growth}
 \end{equation}
 integrated rather than fitted, so that $D\propto a$ in Einstein--de~Sitter is a
-\emph{result} and can be asserted as one.
+\emph{result} and can be asserted as one. On a background that carries
+radiation the v1.4.0 build solves them with the oscillator instead, from one
+start in the radiation era (\S\ref{sec:a3-construction}).
 
 That is the one place the two backgrounds part company. In
 Einstein--de~Sitter $D\propto a$ exactly, so $\Phi$ is constant and
@@ -2514,7 +2544,13 @@ the sound horizon; starting at finite $kr_s$ \emph{imposes} a phase rather than
 inheriting one. The bundle reached $kr_s=10.7$ at $k=600$ --- nearly two full
 cycles in. The grid is derived the same way: $c_s^2\le\tfrac13$ bounds the
 period below by $2\pi\sqrt3/k$, so the sample count is arithmetic rather than a
-knob, at 24 samples per oscillation.
+knob, at 24 samples per oscillation. The rule's premise, that a mode outside
+the sound horizon is frozen until it starts, holds only while the potential
+is constant. On \texttt{PLANCK\_MODEL} the potential decays from the first
+point of the line-of-sight grid, and the modes with $2.7<k<5.4$ start after
+it has begun to fall, on the matter-era condition (T-192). The v1.4.0 build
+replaces the rule with one start in the radiation era for every mode
+(\S\ref{sec:a3-construction}).
 
 One number in this section is a modelling choice and is now stated
 once. Tight coupling is held to end at
@@ -2964,6 +3000,114 @@ suppressed and the CDM and Newtonian peaks required to land at $206\pm6$
 together, is superseded by this one: (102) does not meet
 \eqref{eq:frame-conditions}, so its peaks could not land together, and the
 assembly that does is the one registered here.
+
+\paragraph{The radiation-era construction.}
+\label{sec:a3-construction}
+The radiation era is wired by solving the potential, not by supplying it. The
+CDM and the photon--baryon fluid are integrated with $\Phi$ from one start deep
+in the radiation era, so that one $\Phi(k,\eta)$ enters the oscillator's
+forcing, the Sachs--Wolfe slot and the integrated slot. The alternative,
+\eqref{eq:radiation-potential} joined to $D/a$ through equality by the
+super-horizon factor, interpolates exactly where the modes that set the first
+peak enter the sound horizon. The solved potential carries its own transfer,
+so Bond and Efstathiou's (J.5) is not applied to it; its late-time
+$\Phi(k)/\Phi(k\to0)$ against (J.5) at the same shape parameter is recorded,
+not gated. Three features of the solve are fixed before it is built.
+
+The start and the initial condition are one rule for every mode. The start
+$\eta_i$ lies deep in the radiation era and outside the horizon for every $k$
+the spectrum uses, $a_i\le10^{-3}a_{\rm eq}$ and $k_{\max}\eta_i\le10^{-2}$,
+and the state there is the adiabatic growing mode. In this bundle's
+Newtonian-frame variables, with $\Phi_H=-\Phi_A$ and the velocity sign of
+(152), it is
+\begin{equation}
+  \Phi_A=\Phi_i,\qquad \delta T=-\tfrac12\Phi_i,\qquad
+  \delta_c=\delta_b=-\tfrac32\Phi_i,\qquad
+  \tau_1=v_b=v_c=-\tfrac12\,k\eta_i\,\Phi_i ,
+  \label{eq:radiation-ic}
+\end{equation}
+to order $(k\eta_i)^2$ and $a_i/a_{\rm eq}$. Here $\Phi_i$ is the primordial
+potential, $\tfrac{10}9$ of the matter-era value at $k\to0$ to which the
+released potential is normalised; $\delta_c$ and $\delta_b$ are the CDM and
+baryon density contrasts and $v_c$ and $v_b$ their velocities, all in the
+Newtonian frame. The velocity follows from (152) with $R\to0$,
+$\tau_1'=-k(\delta T+\Phi_A)=-\tfrac12k\Phi_i$. On a background with
+$\Omega_r=0$ the same rule gives the matter-era mode, $\delta T=-\tfrac23\Phi_A$,
+$\delta_c=\delta_b=-2\Phi_A$ and $\tau_1=v_b=v_c=-\tfrac13k\eta_i\Phi_A$. No mode
+then starts after its potential has begun to decay, so T-192 has no band to act
+on. Carrying a super-horizon solution to each mode's own start instead would
+need the same history of every species and add an approximation where $kr_s$
+reaches $\varepsilon$.
+
+The potential is integrated from the momentum constraint,
+\begin{equation}
+  \Phi_H'=\mathcal H\Phi_A
+  +\frac{3\mathcal H^2}{2k}\sum_i\Omega_i(a)\,(1+w_i)\,v_i ,
+  \label{eq:momentum-constraint}
+\end{equation}
+summed over the species the background carries, with $\Omega_i(a)$ the share
+of species $i$ in the critical density at $a$, $w_i$ its equation of state and
+$v_i$ its velocity in the Newtonian frame. The energy constraint,
+$k^2\Phi_H=\tfrac32\mathcal H^2\sum_i\Omega_i(a)\,\Delta_i$ with
+$\Delta_i=\delta_i-3\mathcal H(1+w_i)v_i/k$ the comoving density contrast, is
+its check and not its source. Outside the horizon $\Delta_i$ is of order
+$(k\eta)^2\Phi$, so the energy constraint turns an error of order
+$(k\eta_i)^2$ in \eqref{eq:radiation-ic} into an error of order one in $\Phi$,
+while \eqref{eq:momentum-constraint} is satisfied by it at leading order: in
+the radiation era $\Phi_H'=\Phi_i/\eta-\Phi_i/\eta=0$.
+
+The photons stay in the constraint after decoupling. On
+\texttt{PLANCK\_MODEL} they are $15.8\%$ of the density at $\eta_*$, where
+$a_*/a_{\rm eq}=5.33$ by this bundle's recombination, and outside the horizon
+their perturbation is adiabatic, $\delta_\gamma=\tfrac43\delta_c$. The
+super-horizon potential has then fallen to $0.9254$ of its radiation-era value,
+by the two-fluid solution of \citet{KodamaSasaki1984}, which an integration of
+the potential's own equation reproduces to $10^{-6}$, and it falls by $2.7\%$
+more to matter domination;
+$D/a$ from \eqref{eq:growth}, which treats the radiation as smooth, falls by
+$11\%$ over the same interval. Handing $\Phi$ over to $D/a$ at the start of the
+line-of-sight grid would therefore put the as-built error back into every
+mode outside the horizon at $\eta_*$. The photons are carried by the hierarchy,
+with the gravitational sources of ranks zero and one that
+\eqref{eq:transport-exact} gives them, until their term in
+\eqref{eq:momentum-constraint} falls below a stated fraction of the sum; the
+free-streaming continuation the bundle carries as a control has no
+gravitational source, and the tight-coupling pair held from $6\eta_*$ is not the photons
+after decoupling. Leaving the pair at decoupling is the least of approximation
+A-5, and the slip, the growing quadrupole and the polarization refine that
+transition and are scored after it. The CDM and the baryons, pressureless once
+the baryons are released, are carried to $\eta_0$. After $\eta_*$ the
+free-streaming photons carry anisotropic stress, so $\Phi_A+\Phi_H\neq0$
+there; $\Phi_H=-\Phi_A$ after decoupling is an approximation, named and
+measured in the build.
+
+\paragraph{The registered test, restated.} On 11 November, before any part of
+the construction was built, \emph{(g)} is restated, because as registered it
+would fail for reasons that are not the radiation era. On both backgrounds
+with $\Omega_r=0$ the released potential carries (J.5), which encodes a
+radiation era those backgrounds do not have, and baryons tied to the photons
+do not cluster before decoupling, so the solved $\Phi$ there is neither the
+released potential nor $D/a$. \emph{(g)} becomes two statements. \emph{(g1)}
+On every background with $\Omega_r=0$, with the baryons in the constraint taken
+as pressureless matter, the solved $\Phi$ equals $D/a$ from \eqref{eq:growth},
+the released potential without (J.5), to $10^{-10}$: a null control on the
+solve. \emph{(g2)} Those backgrounds keep the released potential, the
+antecedent's model, so the wiring cannot move them, and their spectra move
+only by the new start, which is measured before anything else. The build is
+scored in three steps, each against the one before: the start alone, on the
+released potential, recorded on every background, with the Sachs--Wolfe source
+on \texttt{PLANCK\_MODEL} smooth in $k$ across $2.7<k<5.4$; the solved
+potential with the baryons as pressureless matter in the constraint, scored by
+\emph{(e)}, \emph{(g1)} and \emph{(g2)}; and the baryons' own term in the
+constraint, after which \emph{(f)} is scored as registered on 4 November.
+Registered for the second step, on \texttt{PLANCK\_MODEL} as $k\to0$: the
+Sachs--Wolfe source at last scattering is
+$2\Phi_A(\eta_*)-\tfrac32\Phi_i=0.379\,\Phi_A(\eta_*)$, against
+$\tfrac13\Phi_A(\eta_*)$ for last scattering deep in the matter era and $0.187$
+against $0.310$ as built, and the integrated slot carries
+$2[\tfrac9{10}\Phi_i-\Phi_A(\eta_*)]=-0.055\,\Phi_A(\eta_*)$ from the radiation
+era, with the late term of $\Lambda$ beside it. Halving $\eta_i$ moves no
+$D_\ell$ by more than $10^{-4}$ of its maximum.
 
 \paragraph{An Einstein--de~Sitter number not yet reconciled.} The released
 Einstein--de~Sitter first peak is reported at $\ell_1=220$ against
@@ -7896,6 +8040,13 @@ Tim Gebbie, Peter K.~S. Dunsby, and George F.~R. Ellis.
 \newblock \emph{Annals of Physics}, 282:\penalty0 321--394, 2000.
 \newblock \doi{10.1006/aphy.2000.6034}.
 \newblock Citations to equations use the published journal numbering.
+
+\bibitem[Kodama and Sasaki(1984)]{KodamaSasaki1984}
+Hideo Kodama and Misao Sasaki.
+\newblock Cosmological perturbation theory.
+\newblock \emph{Progress of Theoretical Physics Supplement}, 78:\penalty0 1--166,
+  1984.
+\newblock \doi{10.1143/PTPS.78.1}.
 
 \bibitem[Maartens et~al.(1999)Maartens, Gebbie, and
   Ellis]{MaartensGebbieEllis1999}
