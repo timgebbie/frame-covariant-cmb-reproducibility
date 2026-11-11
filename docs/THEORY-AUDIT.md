@@ -2,9 +2,9 @@
 
 > **Generated, not transcribed. Do not edit by hand.**
 >
-> Produced by `tests/frame/gen_theory_audit.py` at 2026-11-04 16:54 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
+> Produced by `tests/frame/gen_theory_audit.py` at 2026-11-11 08:09 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
 
-**Status: ALL CHECKS PASS** — 54 assertions across 12 instruments.
+**Status: ALL CHECKS PASS** — 64 assertions across 13 instruments.
 
 ## What this document does not establish — read first
 
@@ -292,11 +292,51 @@ The peak of the visibility is the point where $\kappa''=-\kappa'^2$, so at $\eta
 
 *Instrument: `tests/frame/c12_sampling_bound.py`, sha256 `de53708c3313…`*
 
+### The endpoint map and the late support
+
+A boost and its inverse return a directional temperature to round-off, while the untransformed dipole and quadrupole differ by the amounts the generator $(1-\mu^2)\partial_\mu T-\mu T$ predicts, so the raw multipoles of two frames are not the frame comparison. The optical depth is integrated towards the observer, so $W'=\mathcal V$, and a potential that moves where the scattering rate vanishes reaches $\int Wg$ in full and $\int\mathcal Vg$ not at all. $\mathcal VC_1^{\rm T}$ counts the rate twice and is not a rescaling of $WC_1^{\rm T}$.
+
+| assertion | verdict |
+|---|---|
+| C13a  W C1T = -V vB is an identity | **PASS** — 8.9e-16 |
+| C13a  V C1T is not a rescaling of W C1T (negative control) | **PASS** — ratio spans x245.4, residual 0.21 |
+| C13b  the boost and its inverse return the sky to round-off | **PASS** — 5.6e-16 |
+| C13b  untransformed dipole difference is the predicted one | **PASS** — -1.99952e-03, off by 3.9e-10 |
+| C13b  untransformed quadrupole difference is the predicted one | **PASS** — +3.17938e-06, off by 1.6e-09 |
+| C13b  dT_C/dbeta = (1-mu^2) dT_N/dmu - mu T_N at beta = 0 | **PASS** — 5.0e-09 |
+| C13c  W' = V with the depth integrated towards the observer | **PASS** — 6.7e-08, 4.7e-08 |
+| C13c  a late potential reaches int W g in full | **PASS** — -0.0120000 |
+| C13c  and int V g not at all | **PASS** — 0.0e+00 |
+| C13c  the same step inside the window is seen by V (control) | **PASS** — -0.0260 |
+
+| measured | value |
+|---|---|
+| `ledger_identity` | 8.88e-16 |
+| `ledger_ratio_span` | 245.417 |
+| `ledger_rescaling_residual` | 0.210873 |
+| `ledger_los_once` | 2.35e-05 |
+| `ledger_los_twice` | -3.56e-04 |
+| `beta` | 0.002 |
+| `round_trip` | 5.55e-16 |
+| `dipole_difference` | -0.00199952 |
+| `dipole_predicted` | -0.00199952 |
+| `quadrupole_difference` | 3.18e-06 |
+| `quadrupole_predicted` | 3.18e-06 |
+| `generator_error` | 5.00e-09 |
+| `optical_depth` | 0.373029 |
+| `int_W_g` | -0.012 |
+| `int_V_g` | 0 |
+| `int_V_g_inside_window` | -0.0259713 |
+| `w_prime_error` | 6.71e-08 |
+| `kappa_prime_error` | 4.66e-08 |
+
+*Instrument: `tests/frame/c13_endpoint_and_late_support.py`, sha256 `ffffedf2ab8c…`*
+
 ## Provenance
 
 | | |
 |---|---|
-| generated | 2026-11-04 16:54 UTC |
+| generated | 2026-11-11 08:09 UTC |
 | python | 3.13.18 |
 | numpy | 2.5.3 |
 | scipy | 1.18.1 |

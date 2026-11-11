@@ -1,7 +1,7 @@
-# Frame checks — twelve instruments, for `tests/`
+# Frame checks — thirteen instruments, for `tests/`
 
 **P1-T, 2026-10-19; count corrected and `c9` added 2026-10-26; `c10` and `c11`
-added 2026-10-26; `c12` added 2026-10-29.** Twelve self-contained instruments behind the
+added 2026-10-26; `c12` added 2026-10-29; `c13` added 2026-11-11.** Thirteen self-contained instruments behind the
 frame-covariance conditions, plus the generator that turns them into
 `docs/THEORY-AUDIT.md`.
 
@@ -227,7 +227,7 @@ different suites:
 | `tests/test_frame_checks.py` | P1-B | `c1`–`c7` | **neither `c8` nor `c9` is gated by the bundle's own harness**; both pass `run_all.py` and nothing else |
 
 The first two are globs over this directory now, P1-B's repair of 2026-10-26, so
-all twelve are carried and the thirteenth is carried the day it lands. **The third
+all thirteen are carried and the fourteenth is carried the day it lands. **The third
 became a glob on the afternoon of 2026-10-27** (`33c1c7f`, finding T-155):
 `tests/test_frame_checks.py` discovers `c*.py` here and sorts them by number,
 so the bundle's harness has gated every instrument in this directory since
@@ -263,3 +263,21 @@ because it measures the window rather than the kernel.
 > against*. An error frozen into a grid that is never refined does not appear
 > in a refinement study of a different grid. That is put to P1-B rather than
 > asserted here, because whether the bundle carries it is a run.
+
+## c13 — the endpoint map and the late support
+
+`c13_endpoint_and_late_support.py`, added 2026-11-11. The three synthetic
+controls of the supplement's section *Line-of-sight assembly and repository
+conformity*, which until Supplement v1.4.3 were cited to scripts that were
+never in this tree. Every history is built in the file and every reference
+value is a closed form: the opacity ledger, where $WC_1^{\rm T}=-\mathcal V
+\hat v_B$ is an identity and $\mathcal VC_1^{\rm T}$ counts the rate twice
+and is not a rescaling of it; the endpoint map, where a boost and its inverse
+return a directional temperature to round-off and the untransformed dipole and
+quadrupole differ by what the generator $(1-\mu^2)\partial_\mu T-\mu T$
+predicts, $\beta(-1+\tfrac45c_2)$ and $\tfrac23\beta^2+\tfrac97\beta c_3$;
+and the late support, where the optical depth is integrated towards the
+observer so that $W'=\mathcal V$, and a potential that moves after the rate
+has vanished reaches $\int Wg$ in full and $\int\mathcal Vg$ not at all.
+The control that makes the last a statement about support moves the same step
+inside the scattering window, where $\mathcal V$ does see it.

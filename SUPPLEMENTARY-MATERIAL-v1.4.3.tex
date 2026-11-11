@@ -1,5 +1,32 @@
 % Computational supplement to the associated paper.
 %
+% v1.4.3, 2026-11-11.  Sequential style audit, fifth batch: the frame
+% discrepancy of (102) and the line-of-sight conformity section.
+%   - Headings name their object (nine subsections renamed, the claims moved
+%     into first sentences); the repeated kappa'-flag paragraphs of the
+%     discrepancy section replaced by one pointer to sec:kappa-ledger; the
+%     three boxed equations of the conformity section unboxed; "released"
+%     means v1.3.0's assembly, and where the text meant (102) as built it
+%     says so.
+%   - The conformity section's three synthetic controls were cited to
+%     scripts never in this tree (tools/check-los-v1.3.8.py,
+%     tools/check_endpoints_opacity_v1.3.9.py) and to three audit files not
+%     in it either (REPOSITORY-CONFORMITY-v1.3.8.csv, GATE-v1.3.8-AUDIT.md,
+%     SOURCE-STATUS-v1.3.9.csv).  The controls are now the instrument
+%     tests/frame/c13_endpoint_and_late_support.py, thirteenth of the suite,
+%     with every history built in the file; the endpoint-map differences are
+%     checked against the boost generator's own prediction, and the late
+%     support against a step moved inside the scattering window.  Stale
+%     source-line numbers replaced by the names of the switches.
+%   - Physics read on the way.  The T-145 footnote reported a mechanism that
+%     T-147 had refuted; it now says so, and that the k/3 tau_1 is cancelled
+%     in the released assembly by the a B_0 Paper 1's source carries in C_0
+%     (registration (b)).  The pinned-revision table is kept as the record of
+%     25 October, with one paragraph on what v1.3.0 discharged and what is
+%     still owed; the antecedents subsection no longer calls (89)-(90) and
+%     (102) unverified, since they are derived in this document.
+%   - Equations otherwise unchanged, verified by extraction.
+%
 % v1.4.2, 2026-11-11.  Sequential style audit, fourth batch, against the
 % author's style profile v2.0 and the decisions of 4 November: the last
 % heading of Free streaming, the section on (102)'s integration by parts, and
@@ -376,7 +403,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.4.2 --- 11 November 2026\\
+\date{Supplement v1.4.3 --- 11 November 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.4.0-dev}
 
 \begin{document}
@@ -582,17 +609,19 @@ oscillator's peak spacing and step five by \textbf{G1} against four external
 hierarchies, both of them repository diagnostics rather than frame checks.
 Exactly one row of Table~\ref{tab:status} names an instrument from the set
 below --- step six, where \textbf{c3} measures that (102) is not the exact
-integration by parts of its own integral. What eight of the remaining eleven
+integration by parts of its own integral. What eight of the remaining twelve
 establish sits beneath the table rather than in it: the conditions the
 matching coefficients must satisfy for the frame law to hold, which are prior
 to every row and are the reason a failing row can be localised at all. The
-other three bear on rows without being named in them. \textbf{c10} scores the
+other four bear on rows without being named in them. \textbf{c10} scores the
 phase that step four's row says it does not establish, and finds that a
 criterion of exact phase accepts the undriven oscillator and rejects the
 driven one; \textbf{c11} extends \textbf{c9}'s admissibility condition to a
-by-parts taken against the kernel; and \textbf{c12} states the rate at which a
+by-parts taken against the kernel; \textbf{c12} states the rate at which a
 grid must sample the visibility, which every row that reads a spectrum relies
-on. The inventory below should be read in that light, and not as a count of
+on; and \textbf{c13} carries the endpoint map and the late support of the
+integrated term, on which the frame comparison of
+\S\ref{sec:los-conformity-v138} rests. The inventory below should be read in that light, and not as a count of
 certified steps.
 
 The source tree at the pinned \texttt{v1.3.0-dev} commit also contains
@@ -600,12 +629,12 @@ independent, claim-facing Python instruments that are \emph{absent}
 from the \texttt{v1.0.0}, \texttt{v1.1.0} and \texttt{v1.2.0} tags.
 This is part of the \emph{current} repository situation, not a
 future Lean deliverable and not an increment in the physics-release
-sequence. The twelve instruments in \texttt{tests/frame/} use
+sequence. The thirteen instruments in \texttt{tests/frame/} use
 self-contained kernel, visibility and frame constructions rather than
 importing the spectral solver, and \path{tests/frame/run_all.py} invokes each
 in an isolated subprocess under \texttt{-I}.
 \path{tests/test_frame_checks.py}, which is the bundle's own harness, gates
-all twelve: it discovers them from the directory rather than from a list,
+all thirteen: it discovers them from the directory rather than from a list,
 since 27 October (finding T-155), so an instrument is gated the day it lands.
 Editions v1.3.18 to v1.3.25 said it invoked seven and left \texttt{c8} through
 \texttt{c11} ungated: true when written on the morning of 27 October, and
@@ -731,7 +760,25 @@ width to \(1/\kappa'(\eta_\ast)\) depends on the profile at the four-per-cent
 level and is reported, not asserted. Its first version, withdrawn 2026-10-28,
 laid its grid over the window it meant to undersample and so could not fail;
 the bound is now evaluated at a grid chosen from it to fail and at one chosen
-to meet it, and the check fails if the bound does not tell them apart.\\
+to meet it, and the check fails if the bound does not tell them apart.\\[3pt]
+\texttt{c13\_\allowbreak{}endpoint\_\allowbreak{}and\_\allowbreak{}late\_\allowbreak{}support.py} & Added 2026-11-11.
+The three synthetic controls of \S\ref{sec:los-conformity-v138}, which
+earlier editions cited to scripts outside the tree. The opacity ledger:
+\(WC_1^{\rm T}=-\mathcal V\hat v_B\) is an identity, and
+\(\mathcal VC_1^{\rm T}\) is not a rescaling of it on a history whose rate is
+not constant. The endpoint map: a boost and its inverse return a directional
+temperature to \(5.6\times10^{-16}\), and the untransformed dipole and
+quadrupole differ by the amounts the generator
+\((1-\mu^2)\partial_\mu T-\mu T\) predicts. The late support: with the
+optical depth integrated towards the observer, \(W'=\mathcal V\), and a
+potential that moves after the rate has vanished reaches \(\int Wg\) in full
+and \(\int\mathcal Vg\) not at all, while the same step inside the
+scattering window is seen by \(\mathcal V\)
+& Identities on histories built in the file, not measurements of the bundle.
+The temperature and the potential are chosen test functions, so the numbers
+state where the terms live in \(\eta\) and how two frames' raw multipoles
+differ, not any amplitude in this bundle. The frame comparison it supports
+is the one D44 makes, with both frames' coefficients from one solve.\\
 \end{longtable}
 \endgroup
 
@@ -4896,7 +4943,7 @@ the printed row, returning $O(1)$ --- and it is reported there as not
 conclusive, correctly.
 
 % ===========================================================================
-\section{The frame discrepancy: localisation and triage}
+\section{The frame discrepancy of (102)}
 \footnote{The first-order small-tilt law for the covariant temperature
 multipoles holds for a common direction label. At the order of the
 aberration couplings, comparison of untransformed Newtonian and CDM
@@ -4906,15 +4953,15 @@ Secs.~V--VI, must be included with the endpoint conditions.}
 \label{sec:frame-discrepancy}
 
 \noindent
-This section records the state of the one open defect that the $v1.3.0$ line
-exists to close. It is written to be auditable rather than persuasive: every
-exclusion below carries the instrument that licenses it and a grade, because
-an exclusion without an instrument is an opinion and this project has paid for
-several. The measurements are recorded in
+This section is the record of the frame discrepancy of (102) as built, and of
+how its site was localised before the v1.3.0 assembly removed it
+(\S\ref{sec:w-form}; D44 gives one $C_\ell$ in both frames to
+$4\times10^{-14}$). Every exclusion below carries the instrument that licenses
+it and a grade. The measurements are recorded in
 \texttt{provenance/BUNDLE-DEFECTS-v1.md}, which is authoritative; numbers
 appear here only where the argument cannot be followed without them.
 
-\subsection{The statement being tested}
+\subsection{The invariance tested}
 For $\ell\ge2$ the covariant temperature multipoles are invariant under a
 change of the fundamental congruence at linear order. Writing
 $\tilde u^a = u^a + v^a$ with $v^au_a=0$ and $v^a$ first order, GDE99~(37)
@@ -4926,9 +4973,10 @@ gives
 \end{equation}
 so only the monopole and the dipole move, and every $\ell\ge2$ multipole is a
 frame invariant. The bundle computes the same $C_\ell$ twice --- once in the
-Newtonian frame, $\tilde\sigma_{ab}\simeq0$, and once in the CDM frame --- and
-the two must agree. They do not: the disagreement is total, median
-$9.99\times10^{-1}$ and worst $1.00$ over the released multipole set.
+Newtonian frame, $\tilde\sigma_{ab}\simeq0$, and once in the CDM frame, and
+the two must agree. Under (102) as built they do not: the disagreement is
+total, median $9.99\times10^{-1}$ and worst $1.00$ over the multipole set
+released before v1.3.0.
 
 Equation~\eqref{eq:gde37} is a theorem at linear order, and the order is the
 whole of what it licenses. The multipoles are first order and $C_\ell$ is
@@ -4962,7 +5010,7 @@ measuring a frame-invariant observable failing to be invariant, and the triage
 below is read in that light.
 
 A second measurement points the same way and does not depend on the order
-counting. Under the released weighting the Newtonian branch has no acoustic
+counting. Under (102)'s weighting the Newtonian branch has no acoustic
 maximum on any background, and under the split it acquires one at
 $\ell\simeq68$ that moves by $0.40$\% between Einstein--de~Sitter and
 $\Lambda\mathrm{CDM}$ while the CDM-frame peak moves by $60.0$\%. A feature
@@ -4972,8 +5020,9 @@ follows from dividing one by the other. That measurement is recorded in
 \texttt{diagnostics/d36-frame-invariance-by-weighting.csv}; whether the
 $\ell\simeq68$ feature survives a finer multipole grid is not yet excluded.
 
-\subsection{Triage A --- sites the discrepancy cannot come from}
-Each row names the instrument and a grade. \textsc{theorem} is exact at linear
+\subsection{Excluded sites}
+Triage A lists the sites the discrepancy cannot come from. Each row names the
+instrument and a grade. \textsc{theorem} is exact at linear
 order; \textsc{machine zero} is measured at $10^{-13}$ or better and is
 structurally zero; \textsc{measured} is a number with a stated validity
 condition; \textsc{asserted} is read or reasoned and is usable but not
@@ -4990,15 +5039,15 @@ The Bessel projection & T-71, synthetic control & \textsc{measured} \\
 The $C_1$--$C_2$ boost relation & T-77, $3.3\times10^{-16}$ & \textsc{machine zero} \\
 The by-parts identity itself & \texttt{c3\_byparts.py} and two derivations & \textsc{machine zero} \\
 The oscillator at leading order & register; two external reads & \textsc{measured} \\
-The source's frame consistency & \textbf{T-82} & \textsc{resolved} \\
-Boundary-against-bulk bookkeeping & \textbf{T-85} & \textsc{resolved, excluded} \\
-The additive $\kappa'\tau_0$ route & \textbf{T-79} & \textsc{resolved, closed} \\
+The source's frame consistency & T-82 & \textsc{resolved} \\
+Boundary-against-bulk bookkeeping & T-85 & \textsc{resolved, excluded} \\
+The additive $\kappa'\tau_0$ route & T-79 & \textsc{resolved, closed} \\
 \bottomrule
 \end{tabularx}
 \end{center}
 
-One row was withdrawn from this table on 23 October: \emph{$C_0$'s boost
-behaviour with $\mathcal B_0$ restored}, graded \textsc{machine zero} on T-77
+One row was withdrawn from this table on 23 October: $C_0$'s boost behaviour
+with $\mathcal B_0$ restored, graded \textsc{machine zero} on T-77
 and \texttt{c5\_monopole.py}. Its measurement,
 $a\Delta\mathcal B_0=\tfrac13kv=\tfrac13k^2\Delta C_2$ exactly, stands, and the
 row stays out of this table for a sharper reason than the one given then. As
@@ -5011,14 +5060,14 @@ withdrew it with the sign as built.
 
 \noindent
 Nothing in this table can be moved by a measurement. A result that
-appears to contradict one of these rows is wrong, or the comparison is void ---
+appears to contradict one of these rows is wrong, or the comparison is void,
 most often the latter, through $\ell\gtrsim k\Delta\eta$, where the spherical
 Bessel function is exponentially small and a ratio of two vanishing numbers is
 still a number.
 
-\subsection{The two measurements that closed the upstream end}
+\subsection{The upstream measurements}
 
-\paragraph{The source agrees between the frames (T-82).}
+\paragraph{The source (T-82).} The source agrees between the frames.
 CAMB carries the rank-1 scattering source as a single object $g\,(v_b+\sigma)$.
 Under a boost $v_b\to v_b-v$ while the shear term shifts oppositely, so the sum
 is invariant; a code that never separates them has no frame gap by
@@ -5026,8 +5075,8 @@ construction. This bundle does separate them, so the two columns must produce
 the same sum. In this bundle's slots the combination is
 $\hat v_B + C_2$, with $\hat v_B=\tau_1/k$ the reduced dipole and $C_2 = v/k$,
 since $a\mathcal B_2 = a\sigma = -k v$ and $C_2 = -a\mathcal B_2/k^2$.
-Differencing the two columns, on identical histories and before any
-projection --- no transfer function, no $j_\ell$, no weight, no damping:
+Differencing the two columns on identical histories and before any
+projection, with no transfer function, no $j_\ell$, no weight and no damping,
 \begin{equation}
   \bigl\lvert\Delta(\hat v_B + C_2)\bigr\rvert
   \;\in\;\bigl[\,9.3\times10^{-16},\;1.8\times10^{-13}\,\bigr],
@@ -5038,10 +5087,10 @@ is frame-consistent to fourteen significant figures. Set against a frame gap
 of $100\%$ at the spectrum, the pair says what neither says alone: everything
 between the source and the spectrum is the projection.
 
-\paragraph{The by-parts identity holds in both frames (T-85).}
-With $W=e^{-\kappa}$ and $\mathcal V = W'$ --- the sign this bundle's
-$\kappa$ convention forces, $\kappa$ being accumulated backwards from
-$\eta_0$ --- the transport source obeys, exactly,
+\paragraph{The by-parts identity (T-85).} The by-parts identity holds in
+both frames. With $W=e^{-\kappa}$ and $\mathcal V = W'$, the sign this
+bundle's $\kappa$ convention forces with $\kappa$ accumulated backwards from
+$\eta_0$, the transport source obeys, exactly,
 \begin{equation}
   \int \mathcal V\,M\,j_\ell\,\mathrm d\eta
   \;=\;\Bigl[\,W M j_\ell\,\Bigr]
@@ -5053,8 +5102,8 @@ where $x = k(\eta_0-\eta)$, so $\mathrm dj_\ell/\mathrm d\eta = -k\,j_\ell'(x)$
 and the last sign is $+k$. Evaluating the left side (call it $A$) and the right
 side ($B$) on identical histories and identical endpoints, with $M=-C_1$, in
 each frame gives four numbers. Both identities hold: $\lvert A-B\rvert/\lvert
-A\rvert$ sits at $10^{-3}$--$10^{-2}$ and \emph{falls under grid refinement}
---- $2.83\times10^{-3}\to2.20\times10^{-3}\to2.04\times10^{-3}$ at $(k,\ell)=(10,2)$,
+A\rvert$ sits at $10^{-3}$--$10^{-2}$ and falls under grid refinement,
+$2.83\times10^{-3}\to2.20\times10^{-3}\to2.04\times10^{-3}$ at $(k,\ell)=(10,2)$,
 and $1.105\to0.279\to0.0727$ at $(300,2)$, about $4\times$ per doubling, which
 is second order and is what the trapezoidal rule gives on an oscillatory
 integrand.
@@ -5066,7 +5115,7 @@ $\lvert A_N - A_C\rvert$ is $1.00$ to $1.78$ of scale in every valid cell, with
 the sign reversed between columns: the coefficient definitions carry the whole
 of the gap.
 
-\paragraph{One apparent corroboration, withdrawn.}
+\paragraph{A withdrawn corroboration.}
 At low $k$ the ratio $A_C/A_N$ is independent of $\ell$ to four figures. That
 carries no information about the frames. $\mathcal V$ is a narrow spike, so
 $\int\mathcal V f j_\ell \simeq f(\eta_*)\,j_\ell(x_*)\int\mathcal V$ for
@@ -5074,19 +5123,17 @@ $\int\mathcal V f j_\ell \simeq f(\eta_*)\,j_\ell(x_*)\int\mathcal V$ for
 $f_C(\eta_*)/f_N(\eta_*)$ --- free of $\ell$ by construction. Predicted against
 measured, the two agree to $0.9$--$4.2\%$ for $k\le60$ and fail at $k=300$,
 where the mode oscillates inside the visibility width and the $\ell$-freedom
-correspondingly disappears. The check cost one run and removed a finding rather
-than adding one.
+correspondingly disappears.
 
-\subsection{Triage B --- the one frame-sensitive site that remains}
+\subsection{The frame-sensitive site}
 \label{sec:b-slot}
-Five candidates were open on 18~October. Four are subsumed or
-excluded --- the $\ell=0$ matching row is landed; boundary-against-bulk is
-excluded by T-85; and the dipole boost $-v/k$ and the supplied $C_1'$ are both
-subsumed by T-82, which shows the source they would have corrupted is clean.
-The fifth is the site that remains: $\kappa'v_B$ inside $C_1$ does not
-go away, it \emph{is} the slot and weight assignment of $C_1$, which is why it
-is named here rather than counted among the four. One site remains:
-the slot and weight assignment of $C_1$.
+Triage B leaves one frame-sensitive site, the slot and weight assignment of
+$C_1$. Five candidates were open on 18~October. Four are subsumed or
+excluded: the $\ell=0$ matching row is landed, boundary-against-bulk is
+excluded by T-85, and the dipole boost $-v/k$ and the supplied $C_1'$ are
+both subsumed by T-82, which shows that the source they would have corrupted
+is clean. The fifth, $\kappa'v_B$ inside $C_1$, does not go away: it is the
+slot and weight assignment of $C_1$.
 
 Identity~\eqref{eq:byparts-identity} has three terms and every one of them
 carries the weight $W$. The bundle has two, and neither carries $W$:
@@ -5097,63 +5144,61 @@ carries the weight $W$. The bundle has two, and neither carries $W$:
  & \textbf{the identity requires} & \textbf{\texttt{integral\_solution.py} has} \\
 \midrule
 boundary & $\bigl[W M j_\ell\bigr]$, weight $W=e^{-\kappa}$ &
-  $(C_2'^{*}-C_1^{*})\,\mathcal D(\eta_0,k)\,j_\ell(x_*)$ --- weight
-  $\mathcal D$, a \emph{diffusion} factor, carrying neither $W$ nor
+  $(C_2'^{*}-C_1^{*})\,\mathcal D(\eta_0,k)\,j_\ell(x_*)$, weight
+  $\mathcal D$, a diffusion factor carrying neither $W$ nor
   $\mathcal V$ \\[2pt]
-$j_\ell$ bulk & $-\int W M' j_\ell$, weight $W$, \emph{minus} &
-  $\int \mathcal V\mathcal D\,\{C_0-C_1'+C_2''\}\,j_\ell$ --- weight
-  $\mathcal V\mathcal D$, \emph{plus} \\[2pt]
-$j_\ell'$ bulk & $+k\int W M j_\ell'$, $M$ \emph{undifferentiated} &
-  \textbf{absent. The bulk has no $j_\ell'$ slot.} \\
+$j_\ell$ bulk & $-\int W M' j_\ell$, weight $W$, minus &
+  $\int \mathcal V\mathcal D\,\{C_0-C_1'+C_2''\}\,j_\ell$, weight
+  $\mathcal V\mathcal D$, plus \\[2pt]
+$j_\ell'$ bulk & $+k\int W M j_\ell'$, $M$ undifferentiated &
+  absent: the bulk has no $j_\ell'$ slot \\
 \bottomrule
 \end{tabularx}
 \end{center}
 
 \noindent
-The structural half is the third row. Everything was integrated by parts
-\emph{onto the coefficients} --- $\{C_0-C_1'+C_2''\}$ is (102)'s printed
-bracket, and it is the $W$-weighted by-parts form of
-$\int W\bigl[C_0K+C_1K'+C_2K''\bigr]$ --- and that decomposition is then
-evaluated at $g$ weight, where it is not available. The boundary meanwhile is
+The structural half is the third row. Everything was integrated by parts onto
+the coefficients ($\{C_0-C_1'+C_2''\}$ is (102)'s printed bracket, the
+$W$-weighted by-parts form of $\int W\bigl[C_0K+C_1K'+C_2K''\bigr]$), and
+that decomposition is then evaluated at $g$ weight, where it is not
+available. The boundary meanwhile is
 \emph{Annals~II}'s own \texttt{visibe} collapse: under $\int\mathcal V=1$ the
 $-\mathcal V C_1$ term becomes $C_1(\eta_*)$. So the bundle carries one
 term from each of two incompatible decompositions, and then applies a third
 weight, $\mathcal D$, to one of them.
 
-\paragraph{What the repair is, stated so it can be refuted.}
-Not a split of the slot. A split, \emph{plus} a weight change on each half,
-\emph{plus} a slot the bulk does not currently have:
+\paragraph{The repair as registered.} The repair, stated so that it can be
+refuted, is not a split of the slot alone but a split, a weight change on each
+half, and a slot the bulk does not have:
 \begin{enumerate}\itemsep2pt
-  \item $C_1$'s two contents separate --- $M$'s by-parts residue, and
+  \item $C_1$'s two contents separate: $M$'s by-parts residue, and
         $(v_b+\sigma)$.
-  \item They \emph{arrive under} different weights: $W$ for the gravitational
-        half, $\mathcal V$ for the scattering half. That is an
-        outcome, not an operation, and reading it as one is finding
-        \textbf{T-103} --- the scattering half arrives at $\mathcal V$ weight
-        carried on the \emph{undifferentiated} $\hat v_B$; it is not
-        \emph{multiplied} by $\mathcal V$. Multiplying
+  \item They \emph{arrive under} different weights, $W$ for the gravitational
+        half and $\mathcal V$ for the scattering half. That is an outcome,
+        not an operation, and reading it as one is finding T-103: the
+        scattering half arrives at $\mathcal V$ weight carried on the
+        undifferentiated $\hat v_B$, and is not multiplied by $\mathcal V$. Multiplying
         $C_1^{\rm thom}=-\kappa'\hat v_B$ by $\mathcal V$ applies a second
         $\kappa'$, which is the $320$--$682$ of
         \S\ref{sec:repair-attempts}. See \S\ref{sec:w-form}, where the
         weights fall out of the integrating factor and nothing is multiplied
         by hand.
-  \item The $W$-weighted half needs \emph{both} bulk slots, $j_\ell$ and
+  \item The $W$-weighted half needs both bulk slots, $j_\ell$ and
         $j_\ell'$, because by-parting onto the coefficients is what removed the
         second, and that step is legal only at $W$.
 \end{enumerate}
 The numerics for the missing slot already exist in the file:
 $j_\ell' = \bigl[\ell j_{\ell-1}-(\ell+1)j_{\ell+1}\bigr]/(2\ell+1)$ is built
-inside the rank-2 \emph{boundary} term, which has never been evaluated because
+inside the rank-2 boundary term, which has never been evaluated because
 $C_2$ vanishes in every Newtonian run.
 
 The acceptance condition is stated in advance. The split must leave
 $A_N$ and $A_C$ equal, and must not move the Newtonian column by more than the
-quadrature floor T-85 measured. Frame agreement alone is \emph{not}
-sufficient --- two wrong columns can agree --- so the spectrum adjudicates, and
-it adjudicates last.
+quadrature floor T-85 measured. Frame agreement alone is not sufficient,
+since two wrong columns can agree, so the spectrum adjudicates, and last.
 
-\subsection{Triage C --- frame-blind sites}
-A term $X$ with $\Delta X=0$ passes every frame test for free, so no frame
+\subsection{Frame-blind sites}
+Triage C lists the frame-blind sites. A term $X$ with $\Delta X=0$ passes every frame test for free, so no frame
 instrument can see it. These cannot cause the discrepancy and can ruin the
 spectrum; they are listed so that the two questions are not confused.
 
@@ -5171,8 +5216,8 @@ C4 & the tight-coupling freeze at $6\eta_*$; peak contrast, temperature--Doppler
   balance & open (A-5) \\
 C5 & $k_D$ computed at $R=0$; one $\mathcal D(k)$ across histories; higher
   peaks and the tail & T-81a/c/d, v1.4.0 \\
-C6 & $\mathcal D(k)$ applied to the integrand \emph{at all}; the late ISW &
-  T-81b --- first named mechanism \\
+C6 & $\mathcal D(k)$ applied to the integrand at all; the late ISW &
+  T-81b, the first named mechanism \\
 \bottomrule
 \end{tabularx}
 \end{center}
@@ -5183,13 +5228,13 @@ Diffusion damping is a scattering effect; gravitational redshift accumulated
 after decoupling is not damped by photon diffusion. Scattering damping belongs
 to the scattering half of the source and not to the gravitational half --- so
 the split that fixes the weights fixes the damping in the same stroke. One
-change, three symptoms: the frame gap, the missing late ISW, and the
+change removes three symptoms: the frame gap, the missing late ISW, and the
 $\mathcal D$-on-the-boundary mismatch.
 
 \subsection{Triage by conformal time}
-The same question asked along the photon's history. It localises cleanly, and
-the over-damping sits in two windows --- neither of which is an integration
-limit, since T-85 settled the bookkeeping.
+The same question, asked along the photon's history, localises cleanly, and
+the over-damping sits in two windows, neither of them an integration limit,
+since T-85 settled the bookkeeping.
 
 \begin{center}\small
 \begin{tabularx}{\textwidth}{@{}l >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X@{}}
@@ -5212,52 +5257,50 @@ $\eta_*\to6\eta_*$ & tight-coupled oscillator continued and then frozen; no
   temperature--Doppler balance (C4, A-5) \\
 $6\eta_*\to\eta_0$ & the integrand carries $\mathcal D(k)$ where
   $e^{-\kappa}=1$ and no scattering occurs & the late ISW (C6) \\
-$\eta_0$ & reception: Doppler and aberration & nothing --- \textsc{theorem} \\
+$\eta_0$ & reception: Doppler and aberration & nothing (\textsc{theorem}) \\
 \bottomrule
 \end{tabularx}
 \end{center}
 
 \noindent
-Three consequences are worth drawing out.
+Three consequences follow. The integration range is clean: T-85 settled the
+bookkeeping, so how far the problem has been integrated is no longer a
+candidate.
 
-\emph{The integration range is clean.} T-85 settled the bookkeeping, so how far
-the problem has been integrated is no longer a candidate.
-
-\emph{``Conformal time'' and ``missing radiation'' are one question.} $\eta$ is
-not a free choice: it is fixed by the background. A radiation-free background
+Conformal time and the missing radiation are one question. $\eta$ is not a
+free choice: it is fixed by the background. A radiation-free background
 gives a different $\eta(z)$, hence a different $k\Delta\eta$ at every point,
 hence different Bessel arguments and different peak positions. The $37\%$ in
-$\ell_A$ \emph{is} the conformal-time defect, already measured.
+$\ell_A$ is the conformal-time defect, already measured.
 
-\emph{Over-damping is two substitutions, not a limits error,} and both sit
-after $\eta_*$: an envelope standing in for a visibility of finite width, and
+Over-damping is two substitutions, not a limits error, and both sit after
+$\eta_*$: an envelope standing in for a visibility of finite width, and
 $\mathcal D(k)$ applied to a source generated where no scattering occurs. A
 discriminator is available and was not used until now: Silk damping bites at
 $\ell\simeq1807$, the visibility full-width scale is $\ell\simeq785$, and the
 computed spectrum departs at $\ell\simeq700$. The departure fingerprints
-the width scale, not Silk --- so $k_D$ at $R=0$ is a real defect and is
-\emph{not} what sets where the tail goes wrong.
+the width scale, not Silk, so $k_D$ at $R=0$ is a real defect and is not what
+sets where the tail goes wrong.
 
-\subsection{What would change this account}
-Two outcomes would move it, and both are cheap.
+\subsection{Falsifiers}
+Two outcomes would change this account, and both are cheap.
 
 If the slot read does not match the shape in \S\ref{sec:b-slot}, the
 discrepancy returns to having no named site, which would be the first time
-since 18~October. \emph{It matched}; the table in \S\ref{sec:b-slot} is that
+since 18~October. It matched; the table in \S\ref{sec:b-slot} is that
 read.
 
 If removing $\mathcal D(k)$ from the integrand alone recovers a late ISW, C6 is
 confirmed and C3--C5 reduce to amplitude-only concerns.
 
-\subsection{The repair, attempted five times, and withdrawn}
+\subsection{Five withdrawn repairs}
 \label{sec:repair-attempts}
-Recorded here because five failures carry more information than one
-success would, and because a reader of this document should not have to
-reconstruct them from the register.
+The five attempts are recorded here so that a reader need not reconstruct
+them from the register.
 
 T-86's reading was implemented as four independent controls, every one
 defaulting to \texttt{False}. The first combination closed the frame gap by
-four orders at $\ell\ge50$ for $k\lesssim60$ --- and is withdrawn.
+four orders at $\ell\ge50$ for $k\lesssim60$, and is withdrawn.
 It applied $\mathcal V\,C_1^{\rm thom}$ where (102) applies
 $W\,C_1^{\rm thom}$, and since
 
@@ -5267,36 +5310,18 @@ $$C_1^{\rm thom}=-\kappa'\hat v_B,\qquad W\kappa'=\mathcal V
 the Thomson term is already at visibility weight in (102) as printed
 and there was never a weight to change. The control therefore multiplied it
 by a spurious $\kappa'$, measured at $320$ to $682$. The diagnostic spectrum
-it produced --- first peaks moving from $1.3$--$1.5\,\ell_A$ to
-$0.56\,\ell_A$ --- is withdrawn with it and is retained in
+it produced, with first peaks moving from $1.3$--$1.5\,\ell_A$ to
+$0.56\,\ell_A$, is withdrawn with it and is retained in
 \texttt{diagnostics/} as the record of what the defective variant produces,
 not as evidence.
 
-What the five failures leave standing is a review flag, and it is
-P1-T's. \emph{A coefficient carrying a bare $\kappa'$ is a site where a large
-residual is manufactured the moment it is differentiated, and is worth flagging
-before implementation.} Revised 2026-10-21, finding T-113 and decision
-S48: an earlier form of this paragraph stated it as a prohibition ---
-\emph{``$\kappa'$ may live in $W$, in $\mathcal V$, or in a derivative of
-either, never in a coefficient''} --- and it was read as normative.
-It is not a theorem, because $W(\kappa'\mathcal S)=\mathcal V\mathcal
-S$ is exact: a coefficient \emph{may} hold $\kappa'$, and the defect in (102)
-is wrong weights, signs, boundaries or missing partners rather than the
-presence of $\kappa'$.
-
-The flag is kept because it separates the \emph{legitimate} $\kappa'^2$ inside
-$\dot{\mathcal V}=(\kappa''+\kappa'^2)W$, which comes from differentiating the
-weight, from the illegitimate one, which comes from differentiating a
-coefficient; both look identical in the output and only the provenance
-tells them apart. \texttt{tests/frame/c7\_kappa\_ledger.py} raises it
-structurally, and both of this week's defects would have been flagged by it
-before implementation. What it may no longer do is settle a question on
-its own --- D24 supplies the size the flag cannot:
+What the five failures leave standing is the review flag of
+\S\ref{sec:kappa-ledger}, and D24 supplies the size the flag cannot:
 $\kappa''\tilde v_B$ is $99.8\%$ of $|C_1'|$ in the Newtonian frame and
-$109.8\%$ in CDM, finding T-121.
+$109.8\%$ in CDM (T-121).
 
-\subsection{What one term does to the integrand}
-Measured on the released code, as shares of the summed absolute Newtonian
+\subsection{One term of the integrand}
+Measured on (102) as built, as shares of the summed absolute Newtonian
 integrand:
 
 \begin{center}\small
@@ -5322,35 +5347,20 @@ where the source carries one.
 This is weight-independent. Changing $\mathcal V\to W$ divides every
 term in the bracket by $\kappa'$ uniformly and changes no ratio, so A-2
 cannot reach it. The term exists only because (102) differentiates $C_1$,
-which contains $\kappa'$ --- that is, because the integration by parts was
-taken \emph{onto the coefficients} rather than onto the product.
+which contains $\kappa'$: the integration by parts was taken onto the
+coefficients rather than onto the product.
 
-\subsection{What this section does not establish}
+\subsection{Scope}
 No measurement here is a comparison against an external code, and none is a
 claim that the spectrum is right. The chain establishes that the rank-1 source
 is frame-consistent, that the by-parts identity holds, and that the slot-and-weight
 assignment is where the remaining disagreement lives. It does not
 establish that repairing the assignment closes the gap, and the acceptance
 condition in \S\ref{sec:b-slot} is written so that the repair can fail
-visibly.
+visibly. The assembly of \S\ref{sec:w-form} makes the repair in the form the
+frame conditions select, and D44 measures the gap closed.
 
-% === END source expansion: supplementary-materials/section-frame-discrepancy-v1.3.0.tex ===
-
-
-% Step 7 of the physics chain, 2026-10-24.
-
-% === BEGIN exact v1.3.0 source expansion: supplementary-materials/section-spectrum-v1.4.0.tex ===
-% ---------------------------------------------------------------------------
-% Step 7 of the physics chain: the angular spectrum.
-%
-% Written 2026-10-24T16Z by the Paper 1 stream. The last of the three sections
-% the README's physics chain had and the supplement did not. It also defines
-% sec:spectrum, which other sections had been forward-referencing into nothing.
-%
-% Equations read from the antecedent and from functions/spectra/angular.py and
-% two_route.py. Findings cited, none minted.
-% ---------------------------------------------------------------------------
-
+% ===========================================================================
 \section{Line-of-sight assembly and repository conformity}
 \label{sec:los-conformity-v138}
 
@@ -5363,9 +5373,13 @@ frame covariance is that of \citet{Gebbie2026Paper1}, especially
 Secs.~II--III and V--VI. Paper~1 governs which published antecedent equation and correction is
 used at each step. The journal pages test the fidelity of that assignment;
 where the mapping or derivation has not been independently checked, the
-attribution remains unverified instead of being silently substituted.
+attribution remains unverified instead of being silently substituted. The
+three synthetic controls of this section are the instrument
+\texttt{c13\_\allowbreak{}endpoint\_\allowbreak{}and\_\allowbreak{}late\_\allowbreak{}support.py}
+of \texttt{tests/frame/}, which imports no project code; earlier editions
+cited them to scripts outside the tree.
 
-\subsection{One pre-integrated object and its exact transformation}
+\subsection{The conditional integral}
 
 Keep $u^a$ arbitrary and let $f$ identify the threading only after the
 source has been written. The following is a \emph{conditional} mathematical
@@ -5431,10 +5445,10 @@ applying the derivative identities.
 The scattering term must be counted \emph{once}. If the Thomson part
 of a coefficient is $C_1^{\rm T}=-\kappa'\hat v_B$, then
 \begin{equation}
- \boxed{\quad W C_1^{\rm T}
+ W C_1^{\rm T}
    =-\mathcal V\hat v_B,\qquad
    \mathcal V C_1^{\rm T}
-   =-W(\kappa')^2\hat v_B .\quad}
+   =-W(\kappa')^2\hat v_B .
  \label{eq:v138-opacity-ledger}
 \end{equation}
 These are distinct except at special values of the rate. The first
@@ -5442,14 +5456,17 @@ expression is an algebraic identity, while the second is the result of
 applying an additional visibility factor to an already rate-bearing
 coefficient. Neither expression alone specifies the correct collision
 source: the Thomson hierarchy and the integrating factor must supply
-that choice. The companion negative control in
-\texttt{tools/check-los-v1.3.8.py} demonstrates the difference on
-nonconstant synthetic histories without importing a spectrum model.
+that choice. C13a measures the difference on a history whose rate is not
+constant: the ratio of the second expression to the first is $\kappa'$
+itself, which spans a factor $245$ across the support of the rate, and the
+best constant rescaling of the first onto the second leaves $0.21$ of the
+twice-counted integrand unexplained.
 
-\subsection{What frame agreement must mean}
+\subsection{Frame agreement}
 
-At a fixed measured observer and emitter, the observed distribution
-is independent of the intermediate choice of $u^a$. The small-tilt
+Frame agreement is a statement about the observed distribution at a fixed
+measured observer and emitter: it is independent of the intermediate choice
+of $u^a$. The small-tilt
 multipole rule used in \citet{GebbieDunsbyEllis2000}, and in Paper~1,
 does not assert equality of \emph{raw} frame-labelled high-multipole
 coefficients when the direction bases and endpoints have not been
@@ -5481,19 +5498,20 @@ automatically certify inputs shared by both. The test must therefore
 retain the independently measured low-$\ell$ spectrum and the acoustic
 peak structure as separate physical checks.}
 
-\subsection{Implementation conformity at the pinned repository revision}
+\subsection{The pinned revision}
 
-The repository was inspected read-only at
-\nolinkurl{70f0f44ff8f71f0313a97c17df7fcf0b83d6b753} on
-25~October~2026. The exact file hashes and relevant source-line ranges
-are in \texttt{REPOSITORY-\allowbreak{}CONFORMITY-\allowbreak{}v1.3.8.csv}. The following
-conformity statements are about \emph{code paths}; no new full
-scientific run is implied.
+The repository was inspected read-only at commit
+\nolinkurl{70f0f44ff8f71f0313a97c17df7fcf0b83d6b753} of 25~October~2026,
+which the tree's history carries. The statements in the table are about
+code paths and the switches that select them, named so that they can be
+found at any later revision; no full scientific run is implied. The third
+column is the check that was owed at the inspection, and the paragraph after
+the table records what the release of v1.3.0 has discharged since.
 
 \begin{center}\small
 \begin{tabularx}{\textwidth}{@{}p{0.24\textwidth} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X@{}}
 \toprule
-\textbf{Module / setting} & \textbf{Observed implementation} & \textbf{Scientific check still owed} \\
+\textbf{Module / setting} & \textbf{Observed at the inspection} & \textbf{Check owed at the inspection} \\
 \midrule
 \texttt{coefficients.py} & The frame constructors select the corrected monopole row
 ($C_0=-a\mathcal B_2/3$) through \texttt{MONOPOLE\_ROW}. The direct
@@ -5505,9 +5523,9 @@ identity alone. \\
 boundary and bulk are evaluated separately. Optional switches vary
 weights and add candidate partner terms. & Establish a single physical
 source and both boundary conditions before selecting a switch. \\
-\texttt{two\_frame.py} & The released rank decomposition has
-\texttt{B\_SLOT\_REPAIR=False}; the diagnostic control dictionary is
-empty by default. & Demonstrate a traced, end-to-end test with every
+\texttt{two\_frame.py} & \texttt{transfer\_by\_rank}, the rank
+decomposition released at v1.2.0, has \texttt{B\_SLOT\_REPAIR=False}; the
+control dictionary \texttt{BULK\_SOURCE\_CONTROLS} is empty by default. & Demonstrate a traced, end-to-end test with every
 nondefault source control reported and with both frames mapped to
 common endpoints. \\
 \texttt{pipeline.py} & Gravitational and Doppler weighting can be
@@ -5517,27 +5535,44 @@ source-specific visibility weighting against the chosen physics. \\
 \texttt{frame\_transform.py} & The reduced and unreduced dipoles are
 shifted by different $k$ factors. & Carry the same conventions into the
 matched coefficients, derivatives and observed sky. \\
-\texttt{TAU\_CONTINUATION} & The released value is
-\texttt{freeze}: the rank-one acoustic solution is held after its
-coupling window. A \texttt{free\_stream} branch exists. & Test the physical
+\texttt{TAU\_CONTINUATION} & The default is \texttt{freeze}: the acoustic
+pair is held at its value at the end of the coupling window. A
+\texttt{free\_stream} branch exists, and carries no gravitational source. & Test the physical
 handover and the $C_0$--dipole cancellation before removing the
 late-time visibility suppression. \\
 \bottomrule
 \end{tabularx}
 \end{center}
 
-The by-parts branch currently adds the two $C_2$ weight derivatives
-without explicitly adding $-\mathcal VC_1$ as a separate term; other
-switches reconstruct different brackets. This is a directly located
-source-level nonconformity with \emph{the particular identity}
-\eqref{eq:byparts} when its options are read as an implementation of that
-identity. It does not establish that the default spectrum executes the
-branch.\footnote{At the pinned revision, compare
-\texttt{functions/spectra/integral\_solution.py}, lines 219--229 and
-395--485, with \eqref{eq:v138-source-product}; the default switches are
-recorded in \texttt{functions/spectra/two\_frame.py}, lines 441--485 and
-559--577. The detailed status and negative controls are in
-\texttt{GATE-v1.3.8-AUDIT.md}.}
+The by-parts branch, \texttt{by\_parts\_weight\_terms} in
+\texttt{integral\_solution.py}, adds the two $C_2$ weight derivatives
+without adding $-\mathcal VC_1$ as a separate term; other switches
+reconstruct different brackets. Read as an implementation of
+\eqref{eq:byparts} the branch does not conform to it, and it is a control:
+its default is \texttt{False}, and \texttt{transfer\_by\_rank} reaches it
+only through \texttt{BULK\_SOURCE\_CONTROLS}, which is empty in the released
+path, so the bracket the pinned revision integrates is (102) as
+printed.\footnote{Compare the branch with \eqref{eq:v138-source-product}.
+The default switches are the module constants of
+\texttt{functions/spectra/two\_frame.py} named in the table.}
+
+Since the inspection, v1.3.0 has discharged three of the checks owed. The
+$\ell=0$ row is settled by the frame conditions, C8h--C8k
+(\S\ref{sec:ell-zero-row}), and \texttt{covariant\_coefficient\_sets} sets
+\texttt{RANK\_ONE\_SOURCE} to Paper~1's source at run time, so $C_0$ carries
+$a\mathcal B_0$ on the released route while the module default stays the
+antecedent's. The end-to-end two-frame test exists: D44 draws one $C_\ell$
+in both frames to $4\times10^{-14}$ from the assembly of
+\eqref{eq:assembly-invariant} in \texttt{line\_of\_sight.py}, which places
+the gravitational slots at $W$ and the scattering slot at $\mathcal V$ by
+construction, so no weight switch selects them; and its registration
+\emph{(a)} measures the frame shift of the matched coefficients at
+$10^{-13}$, the check the \texttt{frame\_transform.py} row asked for. Still
+owed are the late integrated term on the $\Lambda$ backgrounds, which no
+registration of \S\ref{sec:w-form} scores; the continuation of the photon
+hierarchy past decoupling, which \S\ref{sec:a3-construction} specifies and
+which is not built; and the spectrum itself, whose peak heights and plateau
+are the radiation era's.
 
 \subsection{Acceptance order for the physical spectrum}
 
@@ -5549,13 +5584,26 @@ For Einstein--de Sitter the late integrated Sachs--Wolfe source must
 vanish under the assumed constant potential; for the $\Lambda$ models
 it must be permitted to accumulate after the visibility has closed.
 A source weighted only by $\mathcal V$ cannot pass that late-time test
-if its potential evolution occurs where $\mathcal V$ is negligible.\footnote{An additional pinned-repository qualification is
-\texttt{TAU\_CONTINUATION="freeze"} in
-\texttt{functions/spectra/pipeline.py}, lines 220--263. Its documentation
-records finding T-145: freezing the dipole past the tight-coupling window
-prevents the $C_0$--dipole cancellation expected at late times, while a
-visibility-weighted bulk hides the residual. The alternative continuation
-has not been accepted through an end-to-end spectrum test in this gate.}
+if its potential evolution occurs where $\mathcal V$ is negligible. The
+assembly of \eqref{eq:assembly-invariant} carries the integrated term at
+$W$, and on Einstein--de~Sitter its slot holds $2.7\times10^{-23}$ of the
+power (registration \emph{(c)}, \S\ref{sec:w-form}); the $\Lambda$
+backgrounds are not scored against this condition in this
+document.\footnote{\texttt{TAU\_CONTINUATION="freeze"} in
+\texttt{functions/spectra/pipeline.py} holds the acoustic pair at its value
+at the end of the coupling window, on the released route as on (102)'s.
+Finding T-145 read the freeze as what prevents the $C_0$--dipole
+cancellation at late times; T-147 re-scored that on $\Lambda$CDM and the
+Planck set and refuted the mechanism, since removing the freeze moves the
+bracket by $9$ to $25\%$ and produces no cancellation on any background. In
+the released assembly the $\tfrac k3\tau_1$ in $-C_1^{\rm grav\prime}$ is
+cancelled by the $a\mathcal B_0$ that Paper~1's source carries in $C_0$,
+which registration \emph{(b)} of \S\ref{sec:w-form} measures to
+$4.6\times10^{-16}$, and no late-time limit of $\tau_1$ is involved. The
+freeze remains a defect in its own right: the \texttt{free\_stream} branch
+carries no gravitational source, and the continuation the radiation era
+asks for is the hierarchy with its rank-zero and rank-one sources
+(\S\ref{sec:a3-construction}).}
 These are separate conditions from the existence of acoustic
 oscillations in the source or the agreement of two internally shared
 normalisation routes. The repository's current reported spectrum
@@ -5569,7 +5617,7 @@ repository's recorded runs; they were not reproduced in this supplement
 editing gate. No repair is inferred from the synthetic checks below.}
 
 
-\subsection{The physical endpoint map: an independent finite-tilt check}
+\subsection{The endpoint map}
 \label{sec:v139-endpoint}
 
 The comparison of two threadings requires a common physical observer and
@@ -5620,28 +5668,30 @@ The inverse comparison is exact. Writing
 $\mu_C(\mu_N)=(\mu_N-\beta)/(1-\beta\mu_N)$, the measured
 sky, brought back to the original physical frame, satisfies
 \begin{equation}
- \boxed{\quad
  T_{N\leftarrow C}(\mu_N)
  =\frac{T_C\!\left(\mu_C(\mu_N)\right)}
         {\gamma(1-\beta\mu_N)}
- =T_N(\mu_N).\quad}
+ =T_N(\mu_N).
  \label{eq:v139-common-endpoint}
 \end{equation}
 This is the kinematic acceptance condition; it does not demonstrate
 that the two calculated radiation histories satisfy it.
-The independent test in
-\path{tools/check_endpoints_opacity_v1.3.9.py} uses
-$\beta=0.002$ and the synthetic directional temperature
+C13b uses $\beta=0.002$ and the synthetic directional temperature
 $T_N/\bar T=1+3\times10^{-4}P_2(\mu)+2\times10^{-4}P_3(\mu)
-+10^{-4}P_4(\mu)$. Its exact boost--inverse-boost discrepancy
-is $3.33\times10^{-16}$ in maximum absolute temperature units.
-The untransformed dipoles differ by $-1.99952\times10^{-3}$,
-and the untransformed quadrupoles by $3.17938\times10^{-6}$.
-These differences are expected: they compare two different physical
-angular bases. The result is an identity check, not a test of the
-CMB transfer or a new frame-invariance measurement of the repository.
++10^{-4}P_4(\mu)$. The boost followed by its inverse returns $T_N$ to
+$5.6\times10^{-16}$ in units of $\bar T$. The untransformed dipoles differ
+by $-1.99952\times10^{-3}$ and the untransformed quadrupoles by
+$3.17938\times10^{-6}$, and both are what \eqref{eq:v139-boost-generator}
+predicts: the generator carries a coefficient $c_\ell$ of $P_\ell$ to
+$\ell-1$ with weight $\ell^2/(2\ell+1)$ and to $\ell+1$ with weight
+$-(\ell+1)^2/(2\ell+1)$, so the dipole moves by
+$\beta(-1+\tfrac45c_2)$ and the quadrupole by
+$\tfrac23\beta^2+\tfrac97\beta c_3$, the first term of which is the
+kinematic quadrupole of the monopole. The two sets of multipoles are taken
+on two angular bases, which is why they differ; the check is of the
+identity, not of the transfer or of the repository's frame invariance.
 
-\subsection{A late-time opacity and driving control}
+\subsection{The late-time control}
 \label{sec:v139-opacity}
 
 The time orientation of the optical depth fixes the sign of the
@@ -5651,8 +5701,8 @@ to the observer and the associated weights by
 \begin{equation}
  \kappa(\eta)=\int_\eta^{\eta_0}q(s)\,\mathrm ds,
  \qquad W=e^{-\kappa},\qquad
- \boxed{\quad W'=qW=\mathcal V,\quad
-          \kappa'_{\text{ordinary derivative}}=-q.\quad}
+ W'=qW=\mathcal V,\quad
+          \kappa'_{\text{ordinary derivative}}=-q.
  \label{eq:v139-opacity-orientation}
 \end{equation}
 The notation $\kappa'$ for the \emph{positive} differential scattering
@@ -5684,48 +5734,42 @@ $0\le\eta\le1$:
 $q=3.4[\max\{1-((\eta-0.25)/0.12)^2,0\}]^3$.
 The potential is constant until $\eta=0.62$ and then decreases by
 $0.006$ under a quintic smoothstep completed at $\eta=0.85$, with
-$\Phi_H=-\Phi_A$. The independent quadrature returns
-$\int Wg\,\mathrm d\eta=-0.0120000$ and
-$\int\mathcal Vg\,\mathrm d\eta=-3.31\times10^{-18}$.
-For an exactly stationary potential the same test gives an integral
-of magnitude below $5\times10^{-18}$. This distinguishes the
-support of a late gravitational source from the support of the
-scattering visibility. The histories are chosen test functions; they
-do not solve the Einstein--matter system and the values are not
-predictions for Einstein--de Sitter or $\Lambda$CDM.
+$\Phi_H=-\Phi_A$. C13c returns $\int Wg\,\mathrm d\eta=-0.0120000$, which
+is $2\Delta\Phi_A$ exactly, and $\int\mathcal Vg\,\mathrm d\eta$ below
+$10^{-15}$. The same step moved inside the scattering window, to
+$0.15\le\eta\le0.35$, gives $\int\mathcal Vg\,\mathrm d\eta=-0.0260$, so the
+null is a statement about where the potential moves and not about an
+integrand that cannot respond. The support of a late gravitational source
+and the support of the scattering visibility are distinguished by this. The
+histories are chosen test functions; they do not solve the Einstein--matter
+system and the values are not predictions for Einstein--de Sitter or
+$\Lambda$CDM.
 
-\subsection{Published antecedents and the remaining scientific gate}
+\subsection{The antecedents and the remaining gate}
 \label{sec:v139-publication}
 
-The published antecedents remain 
-\citet{GebbieEllis2000}, \emph{Annals of Physics} \textbf{282},
-285--320 (2000), DOI \texttt{10.1006/aphy.2000.6033}, and
-\citet{GebbieDunsbyEllis2000}, \emph{Annals of Physics}
-\textbf{282}, 321--394 (2000), DOI
-\texttt{10.1006/aphy.2000.6034}. The journal bibliographic
-records were confirmed for this gate, but its disputed equations
-(especially the normalisation and signs in matching Eqs.~(89),
-(90) and the source assumptions behind (102)) could not be checked
-against the journal page images. Paper~1 v4 supplies the controlling provenance cross-reference, not
-an independent verification of each journal equation.\footnote{Since
-the v1.3.9 gate, the published PDFs of Annals~I, Annals~II and MGE~1999
-have been supplied. A limited v1.3.10 page check confirms the Annals~I
-$\beta_\ell$ and recurrence equations (23)--(24) used by Paper~1
-Table~III. The disputed Annals~II source and matching equations remain
-OPEN pending a separate substantive derivation and comparison.}
-The remaining unverified attributions stay open.
+The published antecedents are \citet{GebbieEllis2000} and
+\citet{GebbieDunsbyEllis2000}, read from the published pages. Paper~1
+supplies the provenance cross-reference and not an independent verification
+of each journal equation. The matching rows (89)--(90) and the source behind
+(102), which the first edition of this section could not check against the
+page images, have since been derived in this document: the $\ell=0$ row in
+\S\ref{sec:ell-zero-row} and the integration by parts of (102) in
+\S\ref{sec:assembly-rederived}, with the defects recorded as B-11, B-16 and
+B-17 in
+\texttt{provenance/\allowbreak{}ANNALS-II-\allowbreak{}ANTECEDENT-\allowbreak{}AND-\allowbreak{}CORRECTIONS-\allowbreak{}v1.md}.
+The Annals~I $\beta_\ell$ and recurrence equations (23)--(24), which Paper~1's
+Table~III uses, are confirmed against the published page.
 
-The pinned software inspection is read-only at Git commit
-\nolinkurl{70f0f44ff8f71f0313a97c17df7fcf0b83d6b753}.
-A fresh cloud checkout was prevented by repository-host DNS
-unavailability, so neither the released spectrum nor the optional
-frame-control branches were run in this gate. The direct code-path
-review from v1.3.8 remains the evidence for the recorded defaults;
-\nolinkurl{SOURCE-STATUS-v1.3.9.csv} separates that inspection from the
-new independent calculations. Before any physical claim can close,
-the journal matching rows, proper/conformal-time rates, common-endpoint
-$C_\ell$ and the low-$\ell$ and peak measurements still require one
-version-pinned, end-to-end scientific run.
+The pinned inspection is read-only at commit
+\nolinkurl{70f0f44ff8f71f0313a97c17df7fcf0b83d6b753}; the released spectrum
+and the frame-control branches were not run for it. Of the runs the first
+edition of this section asked for before a physical claim could close, the
+common-endpoint $C_\ell$ has been made: D44 gives one $C_\ell$ in both
+frames to $4\times10^{-14}$ on Einstein--de~Sitter, $\Lambda$CDM and the
+Planck set (\S\ref{sec:w-form}). The journal matching rows are derived
+above. The low-$\ell$ plateau and the peak heights are the radiation era's
+and remain open (\S\ref{sec:a3-construction}).
 
 
 \section{The angular spectrum}
