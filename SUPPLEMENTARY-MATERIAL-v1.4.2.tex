@@ -1,5 +1,32 @@
 % Computational supplement to the associated paper.
 %
+% v1.4.2, 2026-11-11.  Sequential style audit, fourth batch, against the
+% author's style profile v2.0 and the decisions of 4 November: the last
+% heading of Free streaming, the section on (102)'s integration by parts, and
+% the transport assembly.  The later sections had kept the earlier house
+% voice; they are brought to the voice of Sections 1-12.
+%   - Headings name their object (32 shortened, each claim moved into the
+%     paragraph's first sentence); bold and italic sentences restated plainly;
+%     eq:w-form is no longer boxed; source-expansion markers and comment
+%     blocks naming streams removed.
+%   - "Released" now means v1.3.0's assembly; where the text meant (102) as
+%     built (the 0.9994 l_A peak, the 266.6 row, the 93-97% bulk term) it now
+%     says so, with one sentence placing the rest of the established-results
+%     subsection on (102) and the configurations derived from it.
+%   - Physics read on the way.  The kappa'^2 coefficients in the scattering
+%     half's table carried a stray 1/k against eq:c1-ninety; the expansion
+%     terms of (106) are -k H (dT + 3 Phi_A), as coefficients.py builds them,
+%     not -aH dT - 3aH Phi_A; kappa'' is estimated as -kappa'^2 at the
+%     visibility maximum (c7), 1.5e5 against T-94's 1.8e5, in place of a width
+%     estimate; the sign of kappa' is fixed in decoupling.py, not at a stale
+%     line number; the "S5 repair" is named as the full-boundary configuration
+%     of the table.
+%   - Two citations of files not in this repository removed
+%     (FIGURE-1-AUDIT-v1.3.7.md, REPOSITORY-CONFORMITY-v1.3.8.csv); B-17 named
+%     where the text said "a B- number"; the self-reference of the T-192
+%     sentence points to sec:a3-construction.
+%   - Equations otherwise unchanged, verified by extraction.
+%
 % v1.4.1, 2026-11-11.  The radiation era's construction, ruled before it is
 % built, and the registered test restated before any part of it runs.
 %   - sec:a3-construction (new, in sec:first-peak): the potential is solved
@@ -349,7 +376,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.4.1 --- 11 November 2026\\
+\date{Supplement v1.4.2 --- 11 November 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.4.0-dev}
 
 \begin{document}
@@ -3211,7 +3238,7 @@ rank-zero source appear in different sections and look like different
 objects; they are the same row of the same hierarchy.
 
 % ===========================================================================
-\subsection{The closed form, and why the kernel is a spherical Bessel function}
+\subsection{The closed form}
 
 Appendix~F, p.~380, states the solution directly: \emph{``the solution to the
 mode coefficients with respect to the time-like integration in the flat
@@ -3225,8 +3252,8 @@ and in this bundle the per-multipole normalisation is fixed by the
 recursion and checked rather than assumed
 (\texttt{functions/harmonics/free\_streaming.py}, \texttt{analytic\_projection}).
 
-This is the one fact that makes the line-of-sight solution a solution
-and not an ansatz. The kernel $j_\ell(k\Delta\eta)$ in (102) is not a window
+This makes the line-of-sight solution a solution rather than an ansatz. The
+kernel $j_\ell(k\Delta\eta)$ in (102) is not a window
 chosen for convenience and it is not a projection imposed on the hierarchy
 from outside: it is the hierarchy's own free-streaming solution,
 evaluated along the null cone. Every statement about the $k\to\ell$ map ---
@@ -3310,80 +3337,55 @@ about the spectrum, and reading it as such would be the error the acceptance
 spine exists to prevent --- a reconstruction can be exact and be matched onto
 the wrong source.
 
-% === END source expansion: supplementary-materials/section-free-streaming-v1.4.0.tex ===
-
-
-% P1-T's transport-assembly section, 2026-10-21. It is named for v1.4.0 --- the
-% release whose work it specifies, the ell=0 row and the W-form --- and ships
-% here because the theory has to be on the page before the implementation
-% moves. The name is P1-T's and is kept so their references resolve.
-
-
-% === BEGIN exact source expansion: supplementary-materials/section-assembly-rederived-v1.3.15.tex ===
-% ---------------------------------------------------------------------------
-% THE LINE-OF-SIGHT ASSEMBLY, RE-DERIVED.
-%
-% Written 2026-10-25 by the Paper 1 stream at the PI's direction, after the
-% first-peak budget showed half the displacement was an artefact and half was
-% undriven physics. This section derives where the artefact comes from, and it
-% comes from one operation.
-%
-% Everything here is ANALYSIS: index algebra, residual zero, verified
-% symbolically. No run is scored against it and no measurement establishes it.
-% The measured numbers it accounts for (T-94's 1.8e5, T-101's plateau bump,
-% B-17 (iv)'s empty slot) are cited, not derived from.
-%
-% Placement: immediately before the transport assembly section, which it
-% supersedes in its account of WHY (102) fails rather than THAT it fails.
-% ---------------------------------------------------------------------------
-\section{The line-of-sight assembly, re-derived}
+% ===========================================================================
+\section{The integration by parts in (102)}
 \label{sec:assembly-rederived}
 
-\emph{Three findings in this bundle -- the plateau standing on a scattering
-rate, the bulk carrying a term $1.8\times10^5$ times too large, and the
-$j_\ell'$ slot standing empty -- have been carried as three. They are one
-operation, and this section is the derivation that shows it.}
+Three findings were first carried as three: the plateau of (102)'s spectrum
+standing on a scattering rate (T-101), a bulk term $1.8\times10^5$ times the
+physical Doppler source (T-94), and the $j_\ell'$ slot standing empty
+(B-17~(iv)). They are one operation, an integration by parts applied to a
+coefficient that holds the scattering rate, and this section derives that.
 
 % ===========================================================================
-\subsection{Conventions, so that no sign is assumed}
+\subsection{Conventions}
 
 Write $W(\eta)=e^{-\kappa}$ for the opacity weight and
 \begin{equation}
   \mathcal V\equiv\big|W'\big|,\qquad \int\mathcal V\,\mathrm d\eta=1 ,
   \label{eq:visibility-normalised}
 \end{equation}
-the visibility, which is a normalised probability density. \textbf{Everything
-below is written in $W$ and its derivatives, so that it carries no sign
-convention}; the bundle's own sign for $\kappa'$ is fixed at
-\texttt{integral\_solution.py:205} and none of the structure here depends on
-it. The free-streaming kernel is $K(\eta)=j_\ell\big(k(\eta_0-\eta)\big)$, and
-the only two kernel identities needed are
+the visibility, which is a normalised probability density. Everything below is
+written in $W$ and its derivatives, so the sign the bundle gives $\kappa'$,
+fixed in \texttt{functions/spectra/decoupling.py}, changes none of its
+structure. The free-streaming kernel is $K(\eta)=j_\ell\big(k(\eta_0-\eta)\big)$,
+and the only two kernel identities needed are
 \begin{equation}
   K'=-k\,j_\ell'\big(k(\eta_0-\eta)\big),
   \qquad
   K''=+k^2\,j_\ell''\big(k(\eta_0-\eta)\big).
   \label{eq:kernel-derivatives}
 \end{equation}
-\textbf{A derivative taken on the kernel is a Bessel derivative and costs
-nothing. A derivative taken on a coefficient is a derivative of whatever that
-coefficient contains.} That distinction is the whole of this section.
+A derivative on the kernel is a Bessel derivative. A derivative on a
+coefficient differentiates whatever the coefficient contains, a scattering
+rate included, and the rest of this section follows from that distinction.
 
 % ===========================================================================
-\subsection{The ancestor, and why a by-parts is required at all}
+\subsection{The integrating-factor form}
 
-The hierarchy's integrating-factor solution is the ancestor form
+The hierarchy's integrating-factor solution is
 \begin{equation}
   \tau(\eta_0)=\int\!\mathrm d\eta\;W\big[\,C_0K+C_1K'+C_2K''\,\big],
   \label{eq:ancestor}
 \end{equation}
 with \eqref{eq:kernel-derivatives} placing rank~0 at $j_\ell$, rank~1 at
-$j_\ell'$ and rank~2 at $j_\ell''$. \textbf{In this form no coefficient is
-differentiated and $\kappa''$ cannot arise anywhere.}
+$j_\ell'$ and rank~2 at $j_\ell''$. In this form no coefficient is
+differentiated, and $\kappa''$ cannot arise.
 
-\textbf{But \eqref{eq:ancestor} does not display the Sachs--Wolfe term}, and
-that is why a by-parts is taken. In the $1+3$ formulation the rank-one source
-is a \emph{gradient}: $\mathcal B_a=\mathrm D_a\ln T+A_a$, so
-$a\mathcal B_1=k(\delta\tilde T+\Phi_A)$ and (90) returns
+It does not display the Sachs--Wolfe term, which is why an integration by
+parts is taken. In the $1+3$ formulation the rank-one source is a gradient,
+$\mathcal B_a=\mathrm D_a\ln T+A_a$, so $a\mathcal B_1=k(\delta\tilde T+\Phi_A)$
+and (90) returns
 \begin{equation}
   -C_1=\frac1k\big(a\mathcal B_1+\kappa'v_B\big)
       =(\delta\tilde T+\Phi_A)+\kappa'\hat v_B .
@@ -3396,12 +3398,12 @@ by parts moves it to $K$:
   \int\! W C_1K'\,\mathrm d\eta=\Big[W C_1K\Big]-\int\!\big(WC_1\big)'K\,\mathrm d\eta .
   \label{eq:byparts-rank1}
 \end{equation}
-\textbf{The boundary term is the Sachs--Wolfe term at $j_\ell$.} That is what
-(102)'s ``two boundary terms and one integrated term'' are, and the structure
-is correct. \emph{The by-parts is not optional and it is not the error.}
+The boundary term is the Sachs--Wolfe term at $j_\ell$, which is what (102)'s
+``two boundary terms and one integrated term'' are. That structure is correct,
+and the integration by parts is required rather than in error.
 
 % ===========================================================================
-\subsection{What the exact by-parts protects, and it is a cancellation}
+\subsection{The two halves of $C_1$}
 
 \eqref{eq:c1-ninety} carries two objects of different kinds, and they behave
 differently under \eqref{eq:byparts-rank1}.
@@ -3414,35 +3416,33 @@ T+\Phi_A)$,
    \;+\;\underbrace{W\,(\delta\tilde T+\Phi_A)'}_{\text{at }W}.
   \label{eq:grav-half}
 \end{equation}
-\textbf{The integrated Sachs--Wolfe channel arrives at $W$ automatically},
-carried in $(\delta\tilde T+\Phi_A)'\supset\Phi_A'$. Nothing has to be added
-for it; the exact by-parts produces it.
+The integrated Sachs--Wolfe channel arrives at $W$, carried in
+$(\delta\tilde T+\Phi_A)'\supset\Phi_A'$; the exact integration by parts
+produces it, and nothing has to be added for it.
 
-\paragraph{The scattering half, and this is where everything is decided.}
-With $C_1^{\rm scatt}=-\kappa'\hat v_B$, the weighted coefficient has the
-magnitude and the kernel of the standard Doppler source:
+\paragraph{The scattering half.} With $C_1^{\rm scatt}=-\kappa'\hat v_B$, the
+weighted coefficient has the magnitude and the kernel of the standard Doppler
+source:
 \begin{equation}
   W C_1^{\rm scatt}=-\,\mathcal V\,\hat v_B
   \qquad\text{(up to the sign convention), with }\int\mathcal V=1 .
   \label{eq:doppler-source}
 \end{equation}
-\textbf{It is bounded and normalised, and its derivative is a total derivative
-that integrates to a boundary difference.}
+It is bounded and normalised, and its derivative is a total derivative that
+integrates to a boundary difference.
 
-\emph{That is a statement about the magnitude, and it is not a statement that
-the bundling in (90) is harmless.} \textbf{It is not}: the instrument
-\textbf{c6} measures the frame obstruction the bundling creates. Under a boost
-$\Delta v_B=-v$, the bundled $C_1$ shifts by $-\dot s+\kappa's$, so the Thomson
-piece lands in the \emph{same} $\alpha C_1K'$ slot as the gravitational piece
-and the $K'$ coefficient becomes $2\alpha\mathcal V$, which no
-$(\alpha,\beta,\gamma)$ can cancel. Carried as its own undifferentiated term
-the coefficient is free, invariance fixes it at $c=\alpha$, and the residual
-goes to machine zero. \textbf{c6 and this section measure two consequences of
-one bundling} --- c6 the frame obstruction, this section the $\kappa''$
-artefact that \emph{differentiating} it creates --- \textbf{and the remedy is
-the same in both.}
+Bounded is not the same as harmless. The instrument c6 measures the frame
+obstruction that bundling the Thomson term into $C_1$ creates. Under a boost
+$\Delta v_B=-v$ the bundled $C_1$ shifts by $-\dot s+\kappa's$, so the Thomson
+piece lands in the same $\alpha C_1K'$ slot as the gravitational piece and the
+$K'$ coefficient becomes $2\alpha\mathcal V$, which no $(\alpha,\beta,\gamma)$
+can cancel. Carried as its own undifferentiated term, the coefficient is free,
+invariance fixes it at $c=\alpha$, and the residual goes to machine zero. c6
+measures the frame obstruction of the bundling and this section the
+$\kappa''$ artefact that differentiating it creates, and the remedy is the
+same for both.
 
-Split \eqref{eq:byparts-rank1}'s bulk on this half and the two pieces are,
+Split \eqref{eq:byparts-rank1}'s bulk on this half, and the two pieces are,
 verified symbolically:
 
 \begin{center}\small
@@ -3451,37 +3451,36 @@ verified symbolically:
 \textbf{piece} & \textbf{coefficient of $\kappa''$} &
   \textbf{coefficient of $\kappa'^2$} & \textbf{what it is} \\
 \midrule
-$W'\,C_1^{\rm scatt}$ & $0$ & $+\hat v_Be^{-\kappa}/k$ &
-  the partner, from differentiating the \emph{weight} \\
-$W\,C_1^{\rm scatt\prime}$ & $-\hat v_Be^{-\kappa}/k$ & $0$ &
-  from differentiating the \emph{coefficient} \\
+$W'\,C_1^{\rm scatt}$ & $0$ & $+\hat v_Be^{-\kappa}$ &
+  the partner, from differentiating the weight \\
+$W\,C_1^{\rm scatt\prime}$ & $-\hat v_Be^{-\kappa}$ & $0$ &
+  from differentiating the coefficient \\
 \midrule
-$\big(WC_1^{\rm scatt}\big)'$ \textbf{(exact)} & $-\hat v_Be^{-\kappa}/k$ &
-  $+\hat v_Be^{-\kappa}/k$ &
+$\big(WC_1^{\rm scatt}\big)'$, exact & $-\hat v_Be^{-\kappa}$ &
+  $+\hat v_Be^{-\kappa}$ &
   the two halves of
-  $\mathrm d(-\mathcal V\hat v_B)/\mathrm d\eta$: their \emph{coefficients} are
+  $\mathrm d(-\mathcal V\hat v_B)/\mathrm d\eta$: their coefficients are
   equal and opposite, so the sum goes as $\kappa'^2-\kappa''$ \\
 \bottomrule
 \end{tabularx}
 \end{center}
 
 \noindent
-\textbf{The sum is bounded because it is a total derivative, not because the
-two terms cancel pointwise.} \emph{An earlier form of this paragraph said they
-were ``individually enormous and they cancel''; that is withdrawn.} The gate
-measures the largest ratio of either piece to their sum at only $\simeq8$, and
-\textbf{c7} records that $\kappa''=-\kappa'^2$ holds \emph{at the visibility
-maximum alone}, where $\dot{\mathcal V}=0$ --- so any statement about powers of
-$\kappa'$ is local and not general. What is true without qualification is the
-structural statement: \textbf{the two are the halves of one total derivative of
-a bounded, normalised object, and that is what is protected by taking the
-derivative of the weighted coefficient $(WC_1)'$ rather than of the bare one.}
+The sum is bounded because it is a total derivative, not because its two
+terms cancel pointwise; the statement that they are ``individually enormous
+and they cancel'' is withdrawn. The gate measures the largest ratio of either
+piece to their sum at only $\simeq8$, and c7 records that
+$\kappa''=-\kappa'^2$ holds at the visibility maximum alone, where
+$\dot{\mathcal V}=0$, so a statement about powers of $\kappa'$ is local. What
+holds without qualification is structural: the two are the halves of one total
+derivative of a bounded, normalised object, and taking the derivative of the
+weighted coefficient $(WC_1)'$ rather than of the bare one preserves it.
 
 % ===========================================================================
-\subsection{What (102) does, and it is one operation}
+\subsection{The operation in (102)}
 
-The released bulk is $\mathcal V\big(C_0-C_1'+C_2''\big)$: \textbf{the weight
-outside, the derivative inside}. Against the exact
+(102)'s bulk is $\mathcal V\big(C_0-C_1'+C_2''\big)$: the weight outside the
+derivative, which acts on the coefficient alone. Against the exact
 $(WC_1)'=W'C_1+WC_1'$ that is two departures at once, on the same slot:
 
 \begin{center}\small
@@ -3489,70 +3488,55 @@ $(WC_1)'=W'C_1+WC_1'$ that is two departures at once, on the same slot:
 \toprule
 \textbf{exact} & \textbf{(102)} \\
 \midrule
-$W'C_1$ --- the partner & \textbf{absent}. Dropped entirely \\
-$WC_1'$ --- $\kappa''$ at one power of $e^{-\kappa}$ &
-  replaced by $\mathcal VC_1'$ --- $\kappa''$ at
-  $\kappa'e^{-\kappa}$, \textbf{one extra factor of $\kappa'$} \\
+$W'C_1$, the partner & absent \\
+$WC_1'$, with $\kappa''$ at one power of $e^{-\kappa}$ &
+  replaced by $\mathcal VC_1'$, with $\kappa''$ at $\kappa'e^{-\kappa}$:
+  one extra factor of $\kappa'$ \\
 \bottomrule
 \end{tabularx}
 \end{center}
 
 \noindent
 The ratio of what (102) carries on the $\kappa''$ term to what the exact form
-carries is \textbf{exactly $\kappa'$}, verified symbolically. And the partner
-it should have been summed with is gone.
+carries is exactly $\kappa'$, verified symbolically, and the partner it should
+have been summed with is absent. (102) therefore carries neither the total
+derivative nor either of its halves: one half is rescaled by $\kappa'$, the
+other is deleted, and what remains is a term the exact form does not contain.
 
-\begin{quote}
-\textbf{So (102) carries neither the total derivative nor either of its
-halves.} One half is rescaled by $\kappa'$ and the other is deleted, and what
-remains is a term the exact form does not contain at all.
-\end{quote}
+\paragraph{The magnitude.} What survives is $\mathcal V\kappa''\hat v_B$
+against a physical Doppler source $\mathcal V\hat v_B$, so the ratio is
+$\kappa''$. At the visibility maximum $\kappa''=-\kappa'^2$ (c7), and with
+$\kappa'(\eta_*)=3.82\times10^2$ on Einstein--de~Sitter that is
+$|\kappa''|\simeq1.5\times10^5$ in the bundle's units. T-94 measures
+$1.8\times10^5$: it is $\kappa''$, not an anomaly.
 
-\paragraph{The magnitude follows, and it is the measured one.} What survives
-is $\mathcal V\kappa''\hat v_B$ against a physical Doppler source
-$\mathcal V\hat v_B$, so the ratio is $\kappa''$. With
-$\kappa'(\eta_*)=3.82\times10^2$ on Einstein--de~Sitter and a recombination
-width of order $10^{-2}\eta_*$, $\kappa''\sim2\times10^5$. \textbf{T-94
-measures $1.8\times10^5$}, and that number is no longer an anomaly to be
-explained: it is $\kappa''$.
+\paragraph{The $j_\ell'$ slot and the boundary.} \eqref{eq:byparts-rank1}
+was applied to all of $C_1$. The scattering half was already in final form at
+$K'$ (\eqref{eq:doppler-source}): it is $\mathcal V\hat v_B$ projected
+through $j_\ell'$, the standard Doppler term, and needs no integration by
+parts. Integrating it by parts anyway does two further things. It moves the
+Doppler term out of $j_\ell'$, which is discrepancy B-17~(iv), a term (102)
+removed rather than one missing from it. And it carries $\kappa'\hat v_B$ into
+the boundary term, where the Sachs--Wolfe combination belongs alone. At
+$k=2$--$5$ the $\kappa'$ share of $C_1(\eta_*)$ is measured at
+$1.046$--$1.088$, so at the modes that set the plateau the boundary term holds
+a Doppler term multiplied by a scattering rate of $3.8\times10^2$ where the
+Sachs--Wolfe monopole should be (T-101, T-121). That is the $\ell\simeq7$ bump
+of (102)'s spectrum, and the first of two reasons that spectrum carries no
+peak series in the observer's frame (\S\ref{sec:w-form}).
 
-\paragraph{And the same operation empties the $j_\ell'$ slot and poisons the
-boundary.} \eqref{eq:byparts-rank1} was applied to \emph{all} of $C_1$.
-\eqref{eq:doppler-source} shows the scattering half was already in final form
-at $K'$ --- it is $\mathcal V\hat v_B$ projected through $j_\ell'$, which is
-the standard Doppler term and needs no by-parts at all. By-parting it anyway
-does two further things:
-
-\begin{itemize}\itemsep2pt
-\item \textbf{it moves the Doppler term out of $j_\ell'$}, which is
-  discrepancy B-17~(iv) --- \emph{not a term missing from (102) but a term
-  (102) removed}; and
-\item \textbf{it carries $\kappa'\hat v_B$ into the boundary term}, where the
-  Sachs--Wolfe combination belongs alone. At $k=2$--$5$ the $\kappa'$ share of
-  $C_1(\eta_*)$ is measured at $1.046$--$1.088$, so at the modes that set the
-  plateau \emph{what stands where the Sachs--Wolfe monopole should be is a
-  Doppler term multiplied by a scattering rate of $3.8\times10^2$}. That is
-  findings \textbf{T-101} and \textbf{T-121}, and it is the $\ell\simeq7$
-  bump. It is also the first of two reasons the released spectrum carries no
-  peak series in the observer's frame (\S\ref{sec:w-form}).
-\end{itemize}
-
-\textbf{Three findings, one operation.} B-17~(iv), T-94 and T-101 are not
-independent defects to be repaired separately. They are what happens when a
-by-parts is applied to a sum whose two halves require different treatment.
+B-17~(iv), T-94 and T-101 are therefore one defect rather than three: an
+integration by parts applied to a sum whose two halves require different
+treatment.
 
 % ===========================================================================
-\subsection{The repair, and the condition that makes it a gate}
+\subsection{The split integration by parts}
 
-\begin{quote}
-\textbf{Split $C_1$ before the by-parts.} The gravitational half is a gradient
-and must be by-parted, which produces the Sachs--Wolfe boundary term and the
-integrated Sachs--Wolfe channel at $W$. The scattering half is already
-$\mathcal V\hat v_B$ and must be left at $K'$, where it is the Doppler term at
-$j_\ell'$.
-\end{quote}
-
-Written out, the rank-one assembly is
+The repair splits $C_1$ before the integration by parts. The gravitational
+half is a gradient and is integrated by parts, which produces the
+Sachs--Wolfe boundary term and the integrated Sachs--Wolfe channel at $W$.
+The scattering half is already $\mathcal V\hat v_B$ and stays at $K'$, where
+it is the Doppler term at $j_\ell'$. Written out, the rank-one assembly is
 \begin{equation}
   \int\! WC_1K'
   \;=\;\Big[\underbrace{WC_1^{\rm grav}K}_{\text{Sachs--Wolfe},\ j_\ell}\Big]
@@ -3561,113 +3545,62 @@ Written out, the rank-one assembly is
   \;+\;\int\!\underbrace{WC_1^{\rm scatt}}_{\mathcal V\hat v_B}K' .
   \label{eq:assembly-repaired}
 \end{equation}
-\textbf{No $\kappa''$ appears. No $\kappa'^2$ appears. Every channel is at the
-weight and the kernel the standard assembly puts it at}, and it was derived
-from the covariant ancestor rather than imported.
+No $\kappa''$ and no $\kappa'^2$ appear, every channel sits at the weight and
+the kernel of the standard assembly, and the form is derived from
+\eqref{eq:ancestor} rather than imported. \eqref{eq:assembly-invariant}
+completes it at rank two with Paper~1's source signs, and is the assembly
+v1.3.0 releases (\S\ref{sec:w-form}).
 
-\paragraph{The admissibility condition, which is one assertion.}
-\begin{quote}
-\emph{A coefficient holding a rate may not be carried through an integration by
-parts. It may hold one --- \textbf{c7}'s rule to the contrary was softened on
-2026-10-21, finding \textbf{T-113} and decision \textbf{S48}, because
-$W(\kappa'S)=\mathcal VS$ is exact --- but it may not be differentiated while it
-does. $C_1$ holds one, by (90), so the by-parts may be applied to
-$C_1^{\rm grav}$ and may not be applied to $C_1^{\rm scatt}$.}
-\end{quote}
-That is checkable in the tree --- a coefficient entering a derivative must not
-contain $\kappa'$ --- and it is the gate this defect needed and did not have.
-It is the same shape as M15: a condition that, left unstated, lets an exact
-identity be truncated in a way that discards its largest term.
+\paragraph{The admissibility condition.} A coefficient may hold a rate,
+since $W(\kappa'S)=\mathcal VS$ is exact (T-113 and decision S48, which on
+21 October softened c7's rule to the contrary), but it may not be
+differentiated while it holds one. $C_1$ holds one, by (90), so the
+integration by parts may be applied to $C_1^{\rm grav}$ and not to
+$C_1^{\rm scatt}$. The condition is checkable in the tree, since a coefficient
+entering a derivative must not contain $\kappa'$, and it is the gate this
+defect needed and did not have. It has the shape of M15: a condition that,
+left unstated, lets an exact identity be truncated so that its largest term is
+discarded.
 
-\paragraph{What it does not repair.} \textbf{Nothing here moves the driving.}
+\paragraph{Scope.} Nothing here moves the driving.
 \eqref{eq:assembly-repaired} is the transport assembly; the radiation-era
-driving enters the \emph{boundary value} $(\delta\tilde T+\Phi_A)(\eta_*)$
-through the oscillator's forcing, which is approximation \textbf{A-3} and is
-\S\ref{sec:first-peak}'s subject. The first-peak budget there carries a total
-of $+0.2271$ in $\varphi_1$ between the released configuration and the matched
-comparator, and this section accounts for the artefact alone. The two
-differences $+0.1124$ and $+0.1147$ that total comprises were read in earlier
-editions as two contributions of equal size; that reading is withdrawn at
-\S\ref{sec:first-peak} and no fraction of the total is claimed here.
-% === END source expansion: supplementary-materials/section-assembly-rederived-v1.3.15.tex ===
+driving enters the boundary value $(\delta\tilde T+\Phi_A)(\eta_*)$ through the
+oscillator's forcing, which is approximation A-3 (\S\ref{sec:first-peak}). The
+first-peak budget there carries $+0.2271$ in $\varphi_1$ between the
+configuration it names and the matched comparator, and this section accounts
+for the artefact alone. Earlier editions read the two differences in that
+total, $+0.1124$ and $+0.1147$, as two contributions of equal size; that
+reading is withdrawn in \S\ref{sec:first-peak}, and no fraction of the total
+is claimed here.
 
-% === BEGIN exact v1.3.0 source expansion: supplementary-materials/section-w-form-and-ell-zero-v1.4.0.tex ===
-% ---------------------------------------------------------------------------
-% The transport assembly: the W-form, the ell=0 row, and the kappa' ledger.
-%
-% SELF-CONTAINED BY DESIGN. Inputs one file, the history figure, and defines
-% nothing. Written 2026-10-21 by the Paper 1 stream at the PI's direction.
-%
-% REVISED 2026-10-22, same hand. Three statements in the 10-21 text were
-% carried past their own refutations:
-%   - T-105, the restored a.B_0 row -> WITHDRAWN. Refuted by T-107, by the
-%     tau_0 = 0 constraint that Appendix (frame-division) already carried,
-%     and by criterion 5b doubling at 98.5%. The ell=0 result is now derived
-%     WITHOUT it and is cleaner: C_0 = -(1/3) a.B_2, one correction, T-104.
-%   - the kappa' ledger as a PROHIBITION -> it is a REVIEW FLAG. T-113, S48.
-%     W(kappa' S) = V S is exact, so a coefficient MAY hold kappa'.
-%   - the by-parts slots as ARTEFACTS -> an exact by-parts preserves the
-%     transfer. The slots are a legitimate step performed inexactly; c3
-%     measures that at 2.55227, the generated value.
-% Plus two missing qualifiers: GDE99 (37) is first order, and kappa'' =
-% -kappa'^2 holds at the visibility maximum, not generally.
-%
-% SUPERSESSIONS ARE NOW STATED AT THE POINT OF USE, not collected in this
-% comment where no reader meets them. That is the master file's own pattern
-% (its lines 347-354) and it is better than what this section did.
-%
-% RESHAPED 2026-10-22, second pass, after Coordination ruled that the W-form
-% is a coding standard and not a result and should come out. PARTLY ACCEPTED.
-% The ruling's premise is right -- an exact by-parts preserves the transfer --
-% but 'a correctly by-parted (102)' did not exist in print anywhere, so
-% deleting this would record a defect with no correction, which is not how
-% B-11, B-16 or T-103 were handled.  Resolution: the FINDING now leads.  The
-% exact four-term by-parts is displayed as the correction, the three printed
-% errors are named (c3's own list, not a percentage), and the W-form is
-% DEMOTED to the assembly in which those three cannot be made.  The B- entry
-% text is in claude/stream-P1T-pushback-on-coordination-5-2026-10-22.md.
-%
-% FINDING NUMBERS USED, ALL EXISTING, NONE MINTED HERE: T-72, T-86, T-103,
-% T-104, T-107, T-113, T-117, T-121, T-122, S48, B-11, B-16, T-101/D18, T-88,
-% T-96, T-85, T-66, T-20, A-2, A-3, A-5, D18, D24, D25.
-%
-% REVISED AGAIN 2026-10-23.  T-117 was cited in four places as the measurement
-% the kappa' flag could not supply.  D25/T-122 bounds its window to <=0.64% of
-% any C_l, so it is a mechanism diagnostic and not a spectrum result; D24/T-121
-% is the observable-level number and now leads.  The CDM boundary-sign
-% hypothesis is WITHDRAWN -- EdS -0.9999 against PLANCK +1.270, dropped on P7
-% before it reached a repair -- and the conclusion drawn from it, that one
-% repair cannot reach both frames, is inverted by D24.
-% The bundle stream owns provenance/BUNDLE-DEFECTS-v1.md.
-% ---------------------------------------------------------------------------
+% ===========================================================================
 \section{The transport assembly}
 \label{sec:transport-assembly}
 
-\emph{Section~\ref{sec:w-form} derives the exact integration by parts of
-Eq.~(102) and identifies four discrepancies in the released solution.
-Section~\ref{sec:ell-zero-row} corrects Eq.~(90)'s $C_0$ by a factor
-$\tfrac{15}2$; Section~\ref{sec:kappa-ledger} defines the structural
-pre-implementation check.}
+This section derives the exact integration by parts of Eq.~(102) and the
+four discrepancies it finds in the published solution
+(\S\ref{sec:w-form}), corrects Eq.~(90)'s $C_0$ by a factor $\tfrac{15}2$
+(\S\ref{sec:ell-zero-row}), and defines the structural check applied before
+implementation (\S\ref{sec:kappa-ledger}).
 
 The line-of-sight audit addresses three linked questions: which weight carries which source; what the
 $\ell=0$ matching row of (89) should be; and why every repair attempted on
 (102) so far has moved a weight without moving the term that dominates the
 integrand. The common answer is that (102)'s integration by parts was
-taken onto the coefficients, and that the assembly in which that step never
-arises is the one obtained by multiplying the transport equation by its own
+taken onto the coefficients, and that the assembly in which that step does not
+arise is obtained by multiplying the transport equation by its own
 integrating factor.
 
 \input{tikz/figure-history-flow-v1.3.7.tex}
 
-\paragraph{Figure 1 source qualification.}
+\paragraph{The estimate in Figure 1.}
 The v1.3.6 diagram also gave
 $\tau_{ab}\simeq-(\kappa')^{-1}
 [\sigma_{ab}+\mathrm D_{\langle a}v^B_{b\rangle}]$.
 It is retained as reported, but its proper/conformal-time conversion remains
 open.\footnote{Here $\kappa'$ is a conformal-time rate whereas the unscaled
 kinematic tensors use proper-time derivatives. The published tensor
-relation has not been independently certified; see
-\texttt{FIGURE-1-AUDIT-v1.3.7.md}.}
+relation has not been independently certified.}
 Neither this estimate, the $\bar f_2=0$ approximation nor the proposed
 $W$-form is presented as an independently verified consequence of the exact
 brightness hierarchy. The accepted original TikZ is retained unchanged.
@@ -3679,15 +3612,15 @@ acts at, which is what separates the questions that a frame instrument can see
 from the questions it cannot.
 
 % ===========================================================================
-\subsection{The by-parts, and the assembly that does not need it}
+\subsection{The integration by parts and the invariant assembly}
 \label{sec:w-form}
 
-\paragraph{Done exactly, the by-parts carries three terms beyond the familiar
-bracket.} (102)'s bulk integrand comes from integrating
-$\int W\big(C_0K+C_1K'+C_2K''\big)\,\mathrm d\eta$ by parts \emph{onto the
-coefficients}, with kernel $K(\eta)=j_\ell(k\Delta\eta)$ and
-$\Delta\eta\equiv\eta_0-\eta$. The weight $W=e^{-\kappa}$ sits \emph{inside}
-the integral, so it is differentiated too, and
+\paragraph{The exact integration by parts.} Done exactly, the integration by
+parts carries three terms beyond (102)'s bracket. (102)'s bulk integrand comes
+from integrating $\int W\big(C_0K+C_1K'+C_2K''\big)\,\mathrm d\eta$ by parts
+onto the coefficients, with kernel $K(\eta)=j_\ell(k\Delta\eta)$ and
+$\Delta\eta\equiv\eta_0-\eta$. The weight $W=e^{-\kappa}$ sits inside the
+integral, so it is differentiated too, and
 $W'=\mathcal V$, $\mathcal V'=(\kappa''+\kappa'^2)W$:
 \begin{equation}
   WC_0-(WC_1)'+(WC_2)''
@@ -3725,12 +3658,12 @@ brightness hierarchy.}
 
 
 
-\paragraph{The two weights are not interchangeable, and the kernel each
-one leaves behind is what separates them.} \eqref{eq:byparts} puts the
+\paragraph{The two weights.} The two weights are not interchangeable, and
+the kernel each leaves behind separates them. \eqref{eq:byparts} puts the
 bracket $C_0-C_1'+C_2''$ under $W$ and leaves $-\mathcal VC_1$,
-$2\mathcal VC_2'$ and $\mathcal V'C_2$ beside it. Carrying that bracket
-under $\mathcal V$ instead is \textbf{B-17 discrepancy (i)}, and the
-consequence is not a change of size. Take any coefficient $C$ and apply the
+$2\mathcal VC_2'$ and $\mathcal V'C_2$ beside it. Carrying that bracket under
+$\mathcal V$ instead is B-17's discrepancy~(i), and the consequence is not a
+change of size. Take any coefficient $C$ and apply the
 product rule under each weight in turn:
 \begin{align}
  \int_{\eta_*}^{\eta_0}WCK'\,\mathrm d\eta
@@ -3747,8 +3680,8 @@ product rule under each weight in turn:
 Both boundary terms vanish. $\big[WCK\big]$ does so because $W(\eta_0)=1$
 against $j_\ell(0)=0$ for $\ell\ge1$ at the top and $W\to0$ at the bottom;
 $\big[\mathcal VCK\big]$ does so because the visibility vanishes at both
-ends. \textbf{What differs is the kernel each line puts in the boundary's
-place}, and the two differ in the only property that matters here:
+ends. What differs is the kernel each line puts in the boundary's place,
+and the two differ in the one property that matters here:
 \begin{equation}
   \int_{\eta_*}^{\eta_0}\mathcal V\,\mathrm d\eta=1,
   \qquad
@@ -3757,89 +3690,84 @@ place}, and the two differ in the only property that matters here:
   \label{eq:kernel-weights}
 \end{equation}
 
-\paragraph{A term that reaches the kernel through $K'$ yields no primary
-when it is carried at the visibility, and the restriction to $K'$ is the
-whole of the claim.} \eqref{eq:kernel-weights} is the argument. A kernel of
+\paragraph{Terms at $K'$.} A term that reaches the kernel through $K'$
+yields no primary when it is carried at the visibility, and the claim is
+restricted to $K'$. \eqref{eq:kernel-weights} is the argument. A kernel of
 unit weight reproduces its integrand at the deposit,
 $\int\mathcal Vf\,\mathrm d\eta\to f(\eta_\ast)$, which is the
 $\int\mathcal V=1$ collapse this document uses throughout and is what a
 primary anisotropy \emph{is}: the source at last scattering, carried intact
 to one epoch. A kernel of \emph{zero} weight reproduces nothing. Integrating
 \eqref{eq:weight-v-byparts}'s replacement against a smooth $f$ gives
-$\int\mathcal V'f\,\mathrm d\eta\to-f'(\eta_\ast)$: it acts as a
-\textbf{derivative} rather than as a sample. \textbf{So of two terms reaching
-the kernel through $K'$, the one carried at $W$ yields a primary and the one
-carried at $\mathcal V$ yields the derivative of one.}
+$\int\mathcal V'f\,\mathrm d\eta\to-f'(\eta_\ast)$: it acts as a derivative
+rather than as a sample. Of two terms reaching the kernel through $K'$, the
+one carried at $W$ therefore yields a primary and the one carried at
+$\mathcal V$ the derivative of one. A term carried at $\mathcal V$ against $K$
+itself is untouched by this and samples correctly; that is the Sachs--Wolfe
+channel. Editions before 2 November stated the result without the restriction
+to $K'$, and so claimed it for the monopole too.
 
-\emph{A term carried at $\mathcal V$ against $K$ itself is untouched by this
-and samples correctly} --- that is the Sachs--Wolfe channel. Editions before
-2 November stated the result without the restriction to $K'$, and so claimed
-it for the monopole too.
-
-\paragraph{What the kernel weights do not do is explain the missing series,
-and editions from 31 October to 2 November said that they did.} A derivative
-of a primary is a primary displaced by half a period: $\sin(kr_s)$ has as many
+\paragraph{The weights and the missing series.} The kernel weights do not
+explain the missing series, as editions from 31 October to 2 November said
+they did. A derivative of a primary is a primary displaced by half a period: $\sin(kr_s)$ has as many
 zeros as $\cos(kr_s)$, so a kernel that differentiates moves a peak series and
 cannot erase one. Those editions argued that the factor of $k$ a derivative
 brings tilts rather than features, and concluded an envelope; the conclusion
-does not follow. \textbf{The identities
+does not follow. The identities
 \eqref{eq:weight-w-byparts}--\eqref{eq:kernel-weights} stand as mathematics,
-and the account of the series built on them is withdrawn.} So is the
-attribution that went with it. The term measured at $93$--$97\%$ of the
-released bulk, $\mathcal V\kappa''\hat v_B$, belongs to the admissibility
+and the account of the series built on them is withdrawn, with the
+attribution that went with it. The term measured at $93$--$97\%$ of (102)'s
+bulk, $\mathcal V\kappa''\hat v_B$, belongs to the admissibility
 condition of \S\ref{sec:assembly-rederived} and not to the weight: $C_1$ holds
 $\kappa'\hat v_B$ by (90), so differentiating $C_1$ under either weight
 produces $\kappa''\hat v_B$. It is the bulk face of the operation whose
 boundary face is $\kappa'\hat v_B$ standing in the Sachs--Wolfe slot, and no
 choice of weight removes it.
 
-\paragraph{The series is not a weight question, and both registered
-falsifiers say so.} Editions before 2 November named
+\paragraph{The two falsifiers.} The series is not a weight question, and both
+registered falsifiers say so. Editions before 2 November named
 \texttt{bracket\_\allowbreak{}all\_\allowbreak{}at\_\allowbreak{}w} as the
 falsifier and predicted that it returns a peak series. The prediction was
-withdrawn on 2 November as answerable before it was made: \textbf{D32} had run
-that configuration on 25 October, and \textbf{T-143} says why it cannot
-localise --- carried at $W$ the bracket is integrated along the whole ray,
+withdrawn on 2 November as answerable before it was made: D32 had run that
+configuration on 25 October, and T-143 says why it cannot localise --- carried at $W$ the bracket is integrated along the whole ray,
 where $C_0$ and $C_2$ grow by a factor of $33$ while $W$ falls only to
 $0.368$. Carried through a full $C_\ell$ since, it returns one maximum and no
-interior minimum between $\ell=300$ and $900$ on each background tried.
-\textbf{The prediction failed.} Its replacement,
+interior minimum between $\ell=300$ and $900$ on each background tried, so
+the prediction failed. Its replacement,
 \texttt{isw\_\allowbreak{}only\_\allowbreak{}at\_\allowbreak{}w}, was
 registered as \emph{the spectrum stays localised at recombination and carries
 at least one interior minimum between $\ell=300$ and $\ell=900$}, with a
 second falsifier, \emph{localised but still an envelope}. Run on PLANCK
 through F9's spectrum as then drawn, from (102), its CDM-frame column is the
-released column --- one
-maximum, at $\ell_A$, no trough to $\ell=990$ --- and \textbf{the second
-falsifier fires as written}: the absence of the secondaries is not a weight
-question. Neither run is yet among this bundle's released diagnostics.
+released column of (102), one maximum, at $\ell_A$, and no trough to
+$\ell=990$, and the second falsifier fires as written: the absence of the
+secondaries is not a weight question. Neither run is yet among this bundle's released diagnostics.
 
-\paragraph{The measurements offered for the withdrawn account stand as
-measurements.} The released first peak sits at $0.9994\,\ell_A$; its reading
-as one surviving snapshot of the undriven source goes with the account
-(\S\ref{sec:first-peak}). The released spectrum under
-\texttt{split\_by\_parts} rises to one maximum and decays with no trough. And
-\textbf{D42} separates each coefficient from its pedestal with a running mean
+\paragraph{The measurements kept.} The measurements offered for the
+withdrawn account stand as measurements. The first peak of (102) as built sits
+at $0.9994\,\ell_A$; its reading as one surviving snapshot of the undriven
+source goes with the account (\S\ref{sec:first-peak}). (102)'s spectrum under
+\texttt{split\_by\_parts} rises to one maximum and decays with no trough. D42
+separates each coefficient from its pedestal with a running mean
 one acoustic period wide, a filter with a zero at the acoustic frequency that
 cannot leak the oscillation into the pedestal: $\hat v_B$ and $-C_1$ carry the
 wave at $26.5\%$ and $22.1\%$ modulation, and $C_0$, in the CDM frame, at
 $0.12\%$. Read directly, none of the three crosses zero below $k=600$: each
 oscillates on a pedestal larger than the oscillation.
 
-\noindent
-\textbf{The frame rule for rank zero is now measured.} Under a change of
-frame $C_0$ shifts by $+kv/3$ and $\tfrac k3\tau_1$ by $-kv/3$, so only their
+\paragraph{The rank-zero frame rule.} The frame rule for rank zero is
+measured. Under a change of frame $C_0$ shifts by $+kv/3$ and $\tfrac k3\tau_1$ by $-kv/3$, so only their
 sum is a physical object. The sum agrees between the Newtonian and CDM frames
 to $2.1\times10^{-14}$ over the visibility window for $k=2$--$600$, which is
 double-precision roundoff, while $C_0$ alone is $0$ in the Newtonian frame and
-$185$ in the CDM frame at $k=300$ (\textbf{D42}). $C_0$ is built from the
+$185$ in the CDM frame at $k=300$ (D42). $C_0$ is built from the
 shear, which vanishes in a shear-free frame, so there the bracket \emph{is}
 $\tfrac k3\tau_1$, the photon dipole relative to a shear-free $u^a$, and it
 crosses zero four times below $k=400$, near $106$, $174$, $266$ and $340$
-(\textbf{D42}). \textbf{The source carries the acoustic wave.} A
-statement about $C_0$ alone is a statement about a frame.
+(D42). The source carries the acoustic wave, and a statement about $C_0$ alone
+is a statement about a frame.
 
-\paragraph{What a change of frame requires of the integrand.} At first order
+\paragraph{The frame conditions.} At first order
 a change of frame moves only the dipole, so for every observer the
 multipoles with $\ell\ge2$ of $\int_0^{\eta_0}W\{C_0K+C_1K'+C_2K''\}\,
 \mathrm d\eta$ must not move. With $W(0)=0$, $W(\eta_0)=1$,
@@ -3862,20 +3790,19 @@ the conditions are
   \Delta C_1^{\rm grav}=\Delta C_2' .
   \label{eq:frame-conditions}
 \end{equation}
-\textbf{Rank zero is frame-invariant alone; the scattering half of rank one
-pairs with $C_2$; the gravitational half pairs with $C_2'$.} No
+Rank zero is frame-invariant alone, the scattering half of rank one pairs
+with $C_2$, and the gravitational half pairs with $C_2'$. No
 $\int\mathcal V=1$ collapse enters, so the conditions hold at the
-visibility's finite width. The second is \textbf{T-82}: $\hat v_B+C_2$ agrees
-between the frames to machine precision, and it holds. The first fails: that
-is \textbf{D42}'s $0$ against $185$. The third fails as well, and it can be
+visibility's finite width. The second is T-82: $\hat v_B+C_2$ agrees between
+the frames to machine precision, and it holds. The first fails, by D42's $0$
+against $185$. The third fails as well, and it can be
 read off this bundle's own transformation laws. The moving projector shifts
 $\delta T$ by $-\mathcal Hv/k$, the CDM frame sets $\tilde\Phi_A=0$, and
 $v'+\mathcal Hv=-k\Phi_A$, so $\delta T+\Phi_A$ shifts by $+v'/k$ and
 $C_1^{\rm grav}=-(\delta T+\Phi_A)$ by $-v'/k$; $C_2=v/k$ makes
-$\Delta C_2'=+v'/k$. \textbf{The third condition fails by exactly $2C_2'$.}
+$\Delta C_2'=+v'/k$, so the third condition fails by exactly $2C_2'$.
 
-\paragraph{Where the series is lost, and the repair that is ruled out.}
-(102)'s integration by parts does two things that no weight undoes. It carries
+\paragraph{The lost series.} (102)'s integration by parts does two things that no weight undoes. It carries
 $\kappa'\hat v_B$ into the Sachs--Wolfe slot and, one derivative on,
 $\mathcal V\kappa''\hat v_B$ into the bulk; and by integrating the rank-two
 term by parts twice it separates $C_2$ from $\hat v_B$, the pair the second
@@ -3883,16 +3810,16 @@ condition of \eqref{eq:frame-conditions} binds. In a shear-free frame $C_2$
 vanishes and the separation is invisible. In the CDM frame $\hat v_B$ carries
 $-v/k$, the frame velocity, which is smooth in $k$; separated from $C_2$ and
 multiplied by $\kappa'$ it is a pedestal under the oscillating monopole, and
-the series does not survive it. \textbf{So the missing series and the open
-frame discrepancy of \S\ref{sec:frame-discrepancy} are one defect.}
+the series does not survive it. The missing series and the frame
+discrepancy of \S\ref{sec:frame-discrepancy} are therefore one defect.
 
 \noindent
 What this rules out is a repair at the boundary. (102)'s boundary scalar
 $(C_2'-C_1)\,j_\ell$ is not a free choice of sign: \eqref{eq:byparts} forces
 it from $+C_2K''$, so printing $-C_2'$ there would make the collapsed boundary
 frame-invariant and the boundary no longer the boundary of its own integrand.
-\emph{The defect is upstream, in how the gravitational coefficients carry the
-frame, and Paper~1's own source equation names it.} Its linear redshift
+The defect is upstream, in how the gravitational coefficients carry the
+frame, and Paper~1's own source equation names it. Its linear redshift
 source is
 \begin{equation}
   \mathcal B^{\rm P1}(x,e)\simeq+\tfrac13\mathrm D^a\tau_a
@@ -3937,8 +3864,8 @@ both, as \eqref{eq:paper1-source} & $0$ & $0$ & $0$ & invariant, identically \\
 \bottomrule
 \end{tabular}
 \end{center}
-\textbf{Both corrections together, and neither alone.} That is why T-105 was
-refuted when it was tried by itself: with the rank-one sign as built, $-C_1'$
+Both corrections are needed together, and neither works alone. That is why
+T-105 was refuted when it was tried by itself: with the rank-one sign as built, $-C_1'$
 carries $+\tfrac k3\tau_1$ and the restored $-a\mathcal B_0$ doubles it, which
 is the $98.5\%$ criterion~5b caught; with the sign of
 \eqref{eq:paper1-source}, $-C_1'$ carries $-\tfrac k3\tau_1$ and
@@ -4062,8 +3989,8 @@ $0.3331$, and $2\Delta\Phi=0.442$ in the integrated slot. F9's
 included, is therefore the incomplete radiation era of A-3 and not a
 prediction of v1.3.0, and its bump at $\ell\simeq7$--$12$ is the start rule
 that comes with it, which gives a band of modes the matter-era condition on
-a potential that has already decayed (T-192, \S\ref{sec:w-form}). The
-radiation era is v1.4.0's (\S\ref{sec:future-situation}).
+a potential that has already decayed (T-192). The radiation era is
+v1.4.0's, constructed in \S\ref{sec:a3-construction}.
 
 \paragraph{The sum-back.} The sum-back asked for on 3 November, the three
 slots and the total derivative against the direct integral mode by mode,
@@ -4134,9 +4061,9 @@ contains. Whether the oscillator should carry $-\mathcal H\Phi_A$ at all is a
 question about the oscillator rather than the pairing, and is not settled
 here.
 
-\paragraph{The relative sign between slots.} The relative sign between slots, which
-no frame test can see, D44 probes by reversing the Doppler slot; the result is
-again frame-invariant, with the \texttt{PLANCK\_MODEL} maximum at
+\paragraph{The relative sign between slots.} D44 probes the relative sign
+between slots, which no frame test can see, by reversing the Doppler slot; the
+result is again frame-invariant, with the \texttt{PLANCK\_MODEL} maximum at
 $0.78\,\ell_A$. That configuration is the slot decomposition of coefficients
 that satisfy all three frame conditions but not (89). With $C_2$ reversed,
 (89) ties $C_0$ to the same $a\mathcal B_2$ and requires
@@ -4205,7 +4132,7 @@ verify an exact identity for the stated pre-integrated object; they
 do not by themselves supply a correction to Eq.~(102) or to the
 physical CMB spectrum.}
 
-\paragraph{When the diffusion factor varies with time.}
+\paragraph{A time-dependent diffusion factor.}
 If the assumed pre-integrated source instead carries a multiplicative
 factor $\mathcal D(\eta,k)$, set $P=W\mathcal D$ in
 \eqref{eq:v136-preintegrated}. The exact bulk bracket is then
@@ -4225,19 +4152,16 @@ model of $k_D(\eta)$. In particular, it cannot justify changing the
 released spectrum without checking the underlying physical source.
 
 
-\paragraph{Current repository comparison.}
+\paragraph{The code inspected.}
 The source-level finding that follows was first made against commit
-\texttt{3b01aea8}. In Gate~v1.3.8 the same relevant code paths were
-reinspected at commit \texttt{70f0f44ff8f7} of the public repository;
-the complete commit identifier and file hashes are recorded in
-\texttt{REPOSITORY-\allowbreak{}CONFORMITY-\allowbreak{}v1.3.8.csv}. The distinction between an
-optional code path, the released default and a numerical spectrum remains
-necessary.\footnote{The pinned revision is
+\texttt{3b01aea8} and re-inspected at commit \texttt{70f0f44ff8f7} of the
+public repository. An optional code path, the released default and a
+numerical spectrum remain three different things.\footnote{The pinned revision is
 \nolinkurl{70f0f44ff8f71f0313a97c17df7fcf0b83d6b753} (accessed
 25 October 2026). The branch \texttt{main} is mutable. Source inspection
 alone is not a traced execution of the complete spectrum.}
 
-\paragraph{Source-level branch audit.} The optional integration-by-parts
+\paragraph{The optional by-parts branch.} The optional integration-by-parts
 switch in the current repository has not been shown to implement
 all four terms of \eqref{eq:byparts} in a single, traced run.
 \footnote{Source-level implementation check, repository \texttt{main}
@@ -4251,81 +4175,79 @@ located source-level discrepancy against Eq.~\eqref{eq:byparts}; its
 impact on any released configuration is not established without an
 execution trace of the selected switches.}
 
-\paragraph{What the released solution carries against
-\eqref{eq:byparts}, and it is four things, not three.} The discrepancies are
-recorded in \texttt{functions/spectra/integral\_solution.py} as findings
-T-72 and T-86.\footnote{The algebraic by-parts identity is checked, but the
-released line-of-sight implementation has not been corrected at this gate.
+\paragraph{The four discrepancies.} (102) as built carries four
+discrepancies against \eqref{eq:byparts}, recorded in
+\texttt{functions/\allowbreak{}spectra/\allowbreak{}integral\_\allowbreak{}solution.py}
+as findings T-72 and T-86.\footnote{The algebraic by-parts identity is
+checked, but (102)'s implementation, kept as built for comparison, is not
+corrected.
 Agreement of internal routes using a common weight does not establish the
 physical correctness of that weight.} In order of size:
 
 \begin{center}\small
 \begin{tabular}{@{}clll@{}}
 \toprule
- & the identity wants & the released solution carries & \\
+ & the identity wants & (102) as built carries & \\
 \midrule
 1 & the bracket at weight $W$ & the bracket at weight $\mathcal V\mathcal D$ &
-  $\mathcal V=W\kappa'$, so \textbf{one extra power of the rate} \\
+  $\mathcal V=W\kappa'$, so one extra power of the rate \\
 2 & $-\mathcal VC_1+2\mathcal VC_2'+\mathcal V'C_2$ & absent &
   (102) carries only the bracket \\
 3 & $W(\eta_\ast)$ on the boundary & $\mathcal D(\eta_0,k)$ &
   weight and argument both \\
-4 & $+k\int W\,M\,j_\ell'$ & \emph{no counterpart at all} &
+4 & $+k\int W\,M\,j_\ell'$ & no counterpart &
   the by-parts onto coefficients is legal only at $W$ \\
 \bottomrule
 \end{tabular}
 \end{center}
 
 \noindent
-Row 1 is the one that matters and it is now measured. $\mathcal V$
-already supplies a $\kappa'$, so differentiating a coefficient that itself
-holds $\kappa'$ puts \emph{three} powers of the rate where the identity wants
-two. D24 measures the consequence on the live path:
+Row 1 matters most, and it is measured. $\mathcal V$ already supplies a
+$\kappa'$, so differentiating a coefficient that itself holds $\kappa'$ puts
+three powers of the rate where the identity wants two. D24 measures the consequence on the live path:
 $\kappa''\tilde v_B$ is 99.8\% of $|C_1'|$ in the Newtonian frame and
 109.8\% in CDM, and suppressing it alone moves the CDM first peak from
 a spurious maximum at $\ell=8$ to $\ell=172.75$, i.e. $0.6476\,\ell_A$ against
-the matched $0.7723$. The $\Phi'$ driving channel is not dead; it is
-outvoted --- finding T-121.
+the matched $0.7723$: the $\Phi'$ driving channel is outvoted rather than
+dead (T-121).
 
-\paragraph{What \texttt{c3\_byparts.py} does and does not measure.}
-C3a is the load-bearing one: \eqref{eq:byparts} reproduces the
+\paragraph{The c3 instrument.} \texttt{c3\_byparts.py} measures the
+identity and one variant of it. C3a is the load-bearing check: \eqref{eq:byparts} reproduces the
 integral it comes from to $<10^{-8}$ over fifteen $(\ell,k)$ pairs, so the
-identity is not in question. C3b evaluates a \emph{variant} --- it
-weights the bracket at $W$ and retains $\mathcal V(C_1-2C_2)$ --- so its
-generated value --- 2.55227 --- bounds rows 2 and 3 and is
-blind to row 1, which is the one row whose weight it holds fixed. That number
-is the authoritative one: a bound of $>10^{-2}$ and a prose range of
-\emph{10--250\%} have both been quoted for it elsewhere and neither should be. Its docstring's \emph{``evaluated as
-printed''} should be read as \emph{``evaluated against a variant that differs
+identity is not in question. C3b evaluates a variant, which weights the
+bracket at $W$ and retains $\mathcal V(C_1-2C_2)$, so its generated value,
+2.55227, bounds rows 2 and 3 and is blind to row 1, the one row whose weight it holds fixed. That generated
+number is authoritative; a bound of $>10^{-2}$ and a range of $10$--$250\%$
+quoted for it elsewhere are not. Its docstring's \emph{``evaluated as
+printed''} is to be read as \emph{``evaluated against a variant that differs
 from the printed form in the partner terms''}; the released weight is the
 \texttt{weight} argument, $\mathcal V$ by default, approximation A-2
 and finding T-20.
 
-This is a defect in the antecedent and carries a B- number in
-\texttt{provenance/\allowbreak{}ANNALS-II-\allowbreak{}ANTECEDENT-\allowbreak{}AND-\allowbreak{}CORRECTIONS-\allowbreak{}v1.md} beside B-10 and
-B-11. It is stated here as well because \eqref{eq:byparts} \emph{is} the
-correction, and this supplement prints the correction beside every other defect
-it records --- B-11's sign on $C_0$, T-104's normalisation, T-103's weighting.
-A defect recorded without its correction is not a record.
+This is a defect in the antecedent, B-17 in
+\texttt{provenance/\allowbreak{}ANNALS-II-\allowbreak{}ANTECEDENT-\allowbreak{}AND-\allowbreak{}CORRECTIONS-\allowbreak{}v1.md}.
+It is stated here as well because \eqref{eq:byparts} is its correction, and
+this supplement prints the correction beside every defect it records, as it
+does for B-11's sign on $C_0$, T-104's normalisation and T-103's weighting.
 
-\paragraph{The assembly in which none of the four can be made.} They arise
-only because the by-parts was taken \emph{onto the coefficients}. Multiplying
-the transport equation at rank $\ell$,
+\paragraph{The integrating-factor assembly.} The four discrepancies arise
+only because the integration by parts was taken onto the coefficients, and
+none of them can arise in the assembly the integrating factor gives.
+Multiplying the transport equation at rank $\ell$,
 \begin{equation}
   \tau_\ell' \;+\; (\text{streaming couplings}) \;+\; \kappa'\tau_\ell
   \;=\; -a\mathcal B_\ell \;+\; \kappa'\mathcal S_\ell ,
   \label{eq:transport}
 \end{equation}
-through by $W$ --- with $\kappa$ accumulated backwards from $\eta_0$, so
-$\mathrm d\kappa/\mathrm d\eta=-\kappa'$ and $W'=+\kappa'W=\mathcal V$, the
-sign this bundle's convention forces, stated at
-\S\ref{sec:frame-discrepancy} --- combines the first and third terms exactly
+through by $W$, with $\kappa$ accumulated backwards from $\eta_0$ so that
+$\mathrm d\kappa/\mathrm d\eta=-\kappa'$ and $W'=+\kappa'W=\mathcal V$ (the
+sign this bundle's convention forces, stated in
+\S\ref{sec:frame-discrepancy}), combines the first and third terms exactly
 into $\mathrm d[W\tau_\ell]/\mathrm d\eta$, and gives
 \begin{equation}
-  \boxed{\;
   \frac{\mathrm d}{\mathrm d\eta}\big[W\tau_\ell\big]
   \;+\; W\,(\text{streaming couplings})
-  \;=\; -W\,a\mathcal B_\ell \;+\; \mathcal V\,\mathcal S_\ell \;}
+  \;=\; -W\,a\mathcal B_\ell \;+\; \mathcal V\,\mathcal S_\ell ,
   \label{eq:w-form}
 \end{equation}
 with $\big[W\tau_\ell\big]_{\eta_*}^{\eta_0}=\tau_\ell(\eta_0)-W(\eta_*)
@@ -4335,12 +4257,12 @@ $a\mathcal B_\ell$ is the gravitational source of
 the left, and $\mathcal S_\ell$ the in-scattered Thomson source; both $\kappa'$ in \eqref{eq:transport} are the same $\kappa'$, the
 out-scattering and the in-scattering being two halves of one collision term.
 
-\paragraph{What \eqref{eq:w-form} is, at its true size.} It is not
-different physics. An exact by-parts preserves the transfer, so
+\paragraph{The $W$-form against (102).} \eqref{eq:w-form} is not
+different physics. An exact integration by parts preserves the transfer, so
 \eqref{eq:w-form} and a (102) corrected by \eqref{eq:byparts} give the same
-observable. \emph{An earlier draft of this section called (102)'s bulk slots
-and boundary pair ``artefacts of a step the $W$-form does not take''; that
-overstates and is withdrawn.} What \eqref{eq:w-form} is:
+observable; an earlier draft's description of (102)'s bulk slots and boundary
+pair as ``artefacts of a step the $W$-form does not take'' overstated that and
+is withdrawn. \eqref{eq:w-form} is three things:
 
 \begin{enumerate}\itemsep3pt
 \item The assembly in which none of the four discrepancies above
@@ -4360,7 +4282,7 @@ overstates and is withdrawn.} What \eqref{eq:w-form} is:
 \item The assembly whose boundary term is one object, exponentially
       suppressed at $\eta_*$ --- $\big[W\tau_\ell\big]$, not
       $\big[C_2'-C_1\big]$ plus $kC_2$, carrying $W$ rather than a diffusion
-      factor. D18 measures what the released boundary carries instead:
+      factor. D18 measures what (102)'s boundary carries instead:
       with \texttt{boundary\_weight\_w} \texttt{False}, $C_1(\eta_*)$ enters
       under the diffusion factor alone --- no $W$, no $\mathcal V$ --- so its
       bare $\kappa'(\eta_*)$, $3.82\times10^2$ on Einstein--de~Sitter and
@@ -4368,8 +4290,8 @@ overstates and is withdrawn.} What \eqref{eq:w-form} is:
       suppression at all.
 \end{enumerate}
 
-\paragraph{This supersedes \S\ref{sec:b-slot}'s item~2, and the wording that
-item carries is what T-88 implemented.} That item now reads \emph{``they
+\paragraph{The wording of item~2.} This supersedes \S\ref{sec:b-slot}'s
+item~2, whose wording is what T-88 implemented. That item now reads \emph{``they
 \emph{arrive under} different weights: $W$ for the gravitational half,
 $g=\mathcal V$ for the scattering half''}, corrected at its own site from
 \emph{``take''} --- which is precisely the distinction this paragraph is
@@ -4380,11 +4302,12 @@ multiplying $C_1^{\rm thom}=-\kappa'\hat v_B$ by $\mathcal V$ applies a second
 $\kappa'$, which \S\ref{sec:repair-attempts} measures at $320$ to $682$.
 The scattering half arrives at $\mathcal V$ weight carried on the
 undifferentiated $\hat v_B$; it is not multiplied by $\mathcal V$. Finding
-T-103; the phrasing is the Paper~1 stream's and the correction is
-recorded against it rather than against the implementation that followed it.
+T-103 records the correction against the phrasing rather than against the
+implementation that followed it.
 
-\paragraph{What $\mathcal S_2$ is, and why it cannot be a frame defect.}
-\emph{Annals~II}'s collision term is
+\paragraph{The rank-two scattering source.} $\mathcal S_2$ vanishes in this
+reconstruction, and it cannot be a frame defect. \emph{Annals~II}'s collision
+term is
 $C[\tau]\simeq\sigma_{\rm T}n_E\big(\bar f_1e^av^B_a
 +\bar f_2e^ae^b\tau_{ab}-\tau\big)$ with $\bar f_1=1$ and
 $\bar f_2=0$, so $\mathcal S_2=0$ in this reconstruction. That is
@@ -4512,7 +4435,7 @@ $(a\mathcal B_1)'/k=(\Phi_A'-\Phi_H')+\tfrac k3\tau_1$, so with the rank-one
 source as built a copy of $\tfrac k3\tau_1$ already sits inside the bracket,
 in $-C_1'$. That is the expansion-terms-off form of (106):
 \texttt{coefficients.py} builds $(a\mathcal B_1)'$ with
-$-a\mathcal H\,\delta T-3a\mathcal H\,\Phi_A$ in addition, behind
+$-k\mathcal H(\delta T+3\Phi_A)$ in addition, behind
 \texttt{A\_B1\_PRIME\_EXPANSION\_TERMS}. Whether they belong was finding
 T-67, refuted by measurement on 25 October. Enabling the control changes
 $(a\mathcal B_1)'$ by $42\%$, from $-3.805197\times10^{1}$ to
@@ -4543,7 +4466,7 @@ evidence about the terms, and the two $\Lambda$ rows carry whatever content the
 comparison has. The informative Einstein--de~Sitter statement is the one at
 the coefficient rather than at its derivative, where
 \eqref{eq:eds-boost-constant} predicts $-\tfrac13k\Phi_A$ outright; that row is
-\textbf{Q17} of \S\ref{sec:open-questions}. None of this affects the
+Q17 of \S\ref{sec:open-questions}. None of this affects the
 identification of $\tfrac k3\tau_1$, which is why the reduced form is quoted.
 
 \paragraph{T-105 and T-107.} A draft of this subsection on 22 October carried
@@ -4561,7 +4484,7 @@ $-2v'/k$. Paper~1's source corrects both. Its rank-one gravitational term has
 the opposite sign, so $-C_1'$ carries $-\tfrac k3\tau_1$ and the row's
 $+\tfrac k3\tau_1$ cancels it rather than doubling it. The rank-zero
 coefficient is then the bracket $C_0+\tfrac k3\tau_1$, frame-invariant to
-$2.1\times10^{-14}$ (\textbf{D42}). The table of \S\ref{sec:w-form} shows that
+$2.1\times10^{-14}$ (D42). The table of \S\ref{sec:w-form} shows that
 neither correction works alone, and C8h--C8k in \texttt{c8} reproduce its
 rank-zero and gravitational columns from the frame table. So T-107 refutes the
 restoration alone, and the row is required together with the rank-one sign.
@@ -4604,14 +4527,13 @@ bundle gave T-82 and T-85, applied to itself.
 \subsection{The $\kappa'$ ledger}
 \label{sec:kappa-ledger}
 
-\paragraph{The flag, and it is a flag and not a theorem.
-\textnormal{Revised 2026-10-21, T-113 and S48.}} \emph{A coefficient
-carrying a bare $\kappa'$ is a site where a large residual is manufactured the
-moment it is differentiated, and is worth flagging before implementation.} An
-earlier draft of this subsection printed that as a prohibition --- \emph{``$\kappa'$
-may live in $W$, in $\mathcal V$, or in a derivative of either, never in a
-coefficient''} --- and it was read as normative. It is not a theorem,
-because
+\paragraph{The flag.} The ledger is a review flag, not a theorem (revised
+21 October, T-113 and S48). A coefficient carrying a bare $\kappa'$ is a site
+where a large residual is manufactured the moment it is differentiated, and
+it is flagged before implementation. An earlier draft printed this as a
+prohibition, \emph{``$\kappa'$ may live in $W$, in $\mathcal V$, or in a
+derivative of either, never in a coefficient''}, and it was read as
+normative. It is not a theorem, because
 \begin{equation}
   W\big(\kappa'\mathcal S\big)=\mathcal V\,\mathcal S
   \label{eq:ledger-identity}
@@ -4621,8 +4543,8 @@ $(\kappa'\mathcal S)'=\kappa''\mathcal S+\kappa'\mathcal S'$ is not
 intrinsically spurious. The defect in (102) is wrong weights, signs,
 boundaries or missing partners, not the presence of $\kappa'$.
 
-\paragraph{Why the flag is kept.} It separates two $\kappa'^2$ that are
-indistinguishable in the output. The one inside
+\paragraph{Two sources of $\kappa'^2$.} The flag separates two $\kappa'^2$
+that are indistinguishable in the output. The one inside
 $\mathcal V'=(\kappa''+\kappa'^2)W$ comes from differentiating the
 weight; it is required, and \eqref{eq:w-form} produces it whenever a
 streaming term is integrated. The one from differentiating a
@@ -4633,30 +4555,30 @@ Einstein--de~Sitter and $2.64\times10^2$ on \texttt{PLANCK\_MODEL}, so a
 spurious power of it is two to three orders. What the flag may no
 longer do is settle a question on its own.
 
-\paragraph{(102) as printed trips it, and T-121 is the review.}
-\S\ref{sec:source-derivatives} gives
+\paragraph{(102) against the flag.} (102) as printed trips the flag, and
+T-121 is its review. \S\ref{sec:source-derivatives} gives
 $-C_1\simeq k^{-1}(a\mathcal B_1+\kappa'v_B)$ --- a coefficient holding a bare
 $\kappa'$ --- and (102) then differentiates it.
 \S\ref{sec:frame-discrepancy} measures the consequence:
-$\mathcal V\kappa''\hat v_B$ is $93$--$97\%$ of the released integrand, and
+$\mathcal V\kappa''\hat v_B$ is $93$--$97\%$ of (102)'s integrand, and
 D24 measures $99.8\%$ of $|C_1'|$ in the Newtonian frame and
 $109.8\%$ in CDM on the live path. The flag asks whether that is a defect;
 D24 answers it at the level of the observable. Suppressing
 that one term moves the CDM first peak from a spurious maximum at $\ell=8$ to
-$\ell=172.75$, which is $0.6476\,\ell_A$ against the matched $0.7723$. The
-driving channel is not dead, it is outvoted --- finding T-121. The
-flag was raised on the right site; what it could not supply, and D24 does, is
+$\ell=172.75$, which is $0.6476\,\ell_A$ against the matched $0.7723$: the
+driving channel is outvoted rather than dead (T-121). The flag was raised on
+the right site; what it could not supply, and D24 does, is
 the size.
 
-\emph{A measurement that does not bear on this, and is recorded so it is not
-over-read.} T-117 finds the transfer failing to reduce to
-Sachs--Wolfe as $k\to0$ --- in the Newtonian column $\kappa'v_B/k$ does not
+\paragraph{T-117.} T-117 does not bear on this, and is recorded so that it is
+not over-read. It finds the transfer of (102) failing to reduce to
+Sachs--Wolfe as $k\to0$: in the Newtonian column $\kappa'v_B/k$ does not
 die, and the bulk is then entirely $\int\mathcal V(\kappa'\hat v_B)'j_\ell$
 at $9.46\times10^3$. It is a true defect in a limit with a known answer.
 D25 then bounds the window it holds in to at most $0.64\%$
-of any $C_\ell$, and $0.00\%$ at every $\ell\ge5$ --- finding T-122.
-So the number is a diagnostic of the mechanism and not of the spectrum, and
-nothing here rests on it.
+of any $C_\ell$, and $0.00\%$ at every $\ell\ge5$ (T-122), so the number is a
+diagnostic of the mechanism and not of the spectrum, and nothing here rests
+on it.
 
 \paragraph{A local statement, not a general one.} $\kappa''=-\kappa'^2$ holds
 at the visibility maximum, where $\dot{\mathcal V}=0$. So the reading
@@ -4666,10 +4588,11 @@ concentrates the integrand there. It is not a statement about the integrand at
 arbitrary $\eta$. D24's $99.8$--$109.8\%$ is measured against $|C_1'|$ on the
 live path and is the number to quote for the share.
 
-\paragraph{It is applied before implementation, not after.}
-\texttt{tests/frame/c7\_kappa\_ledger.py} grades an assembly structurally ---
-for each term, whether its coefficient holds $\kappa'$ and at what power ---
-rather than measuring an output. It reports \eqref{eq:w-form} clean, and (102)
+\paragraph{The flag before implementation.} The flag is applied before
+implementation, not after.
+\texttt{tests/\allowbreak{}frame/\allowbreak{}c7\_\allowbreak{}kappa\_\allowbreak{}ledger.py}
+grades an assembly structurally, by whether each term's coefficient holds
+$\kappa'$ and at what power, rather than measuring an output. It reports \eqref{eq:w-form} clean, and (102)
 as printed and T-88's variant as carrying $\kappa'$ in a coefficient at power
 two. Both of the defects of 19--20~October would have been flagged by
 that one check before either was implemented, which is the argument for a
@@ -4680,8 +4603,8 @@ that is wrong in this way measures the defect faithfully and reports a number.
 \subsection{Established results and limitations}
 
 Established. That \eqref{eq:byparts} is the exact by-parts of the
-integral (102) is built from, reproducing it to $<10^{-8}$; that the released
-solution differs from it in four places, of which the bracket's weight is the
+integral (102) is built from, reproducing it to $<10^{-8}$; that (102) as
+built differs from it in four places, of which the bracket's weight is the
 largest and carries one surplus power of $\kappa'$, measured by D24
 at $99.8$--$109.8\%$ of $|C_1'|$; that \eqref{eq:w-form} follows from
 \eqref{eq:transport} by one multiplication and is the assembly in which none
@@ -4694,7 +4617,7 @@ while with the rank-one source as built the restoration alone double counts
 (\S\ref{sec:ell-zero-row}); and that $\mathcal S_2$ is a Triage~C site and
 cannot carry a frame gap at linear order.
 
-Ungated --- Part~I, \S\ref{sec:asserted-not-gated}. That \eqref{eq:w-form}
+Ungated (Part~I, \S\ref{sec:asserted-not-gated}): that \eqref{eq:w-form}
 closes the frame gap. With Paper~1's source the slots of
 \eqref{eq:assembly-invariant} are each frame-invariant, and the measurement of
 that is registration~(c) of \S\ref{sec:w-form}, scored with D44. It
@@ -4705,14 +4628,13 @@ exhaustion of what has been tried, not a measurement. What has
 changed is that the evidence now points at one term in both frames, where an
 earlier draft of this paragraph said it did not. D24 suppresses
 $\kappa''\tilde v_B$ alone and the CDM first peak appears at $\ell=172.75$,
-$0.6476\,\ell_A$ against the matched $0.7723$, where the released setting has a
-spurious maximum at $\ell=8$. \emph{The hypothesis that the CDM column fails
-through a sign in its boundary is withdrawn}: Einstein--de~Sitter gives
+$0.6476\,\ell_A$ against the matched $0.7723$, where (102) as built has a
+spurious maximum at $\ell=8$. The hypothesis that the CDM column fails
+through a sign in its boundary is withdrawn: Einstein--de~Sitter gives
 $-0.9999$ but \texttt{PLANCK\_MODEL} gives $+1.270$, so it is not one sign and
 the $-1$ was a coincidence of that background. What causes the residual
-$0.6476$ against $0.7723$ is taken up below, under \emph{Approximation A-3 is
-not what closes the peak position}; it is not A-3, and D24 is the measurement
-that rules it out.
+$0.6476$ against $0.7723$ is taken up below; it is not A-3, and D24 is the
+measurement that rules it out.
 
 The two peak numbers are not measured the same way, and that bounds
 what their difference can carry. D24 reports the largest maximum
@@ -4728,100 +4650,100 @@ The repair is one estimator applied to both, with the low-$\ell$ maximum
 excluded by construction rather than by an $\ell=30$ floor that happens to
 work.
 
-A-3 answers to three configurations and gives a different answer to
-each, so no statement about it is safe without naming which.
+The rest of this subsection concerns (102) as built and the configurations
+derived from it, which the v1.3.0 assembly replaced; it is kept as the record
+of what each of them showed. A-3 answers to three configurations of (102) and
+gives a different answer to each, so no statement about it is safe without
+naming which.
 
-\emph{And on the released assembly A-3 cannot yet be tested.} The boundary
-value it changes, $(\delta\tilde T+\Phi_A)(\eta_*)$, sits beside
+On (102) A-3 cannot be tested. The boundary value it changes, $(\delta\tilde T+\Phi_A)(\eta_*)$, sits beside
 $\kappa'\hat v_B$, which in the observer's frame carries the frame velocity
 and outweighs it (\S\ref{sec:w-form}). On that assembly a first peak that
 stays near $\ell_A$ when A-3 is enabled would mean the boundary value is
 swamped, not that driving is absent, and a Doppler term in the monopole's
 kernel acts as a quadrature partner only where $\hat v_B$ oscillates, which is
-in a shear-free frame. The released row's agreement to $0.1\%$ below is
+in a shear-free frame. The first row's agreement to $0.1\%$ below is
 therefore a coincidence of positions until A-3 runs on an assembly that meets
 \eqref{eq:frame-conditions}, and its prediction is restated against that
-assembly before the run.
+assembly before the run (\S\ref{sec:first-peak}).
 
 \begin{center}\small
 \begin{tabularx}{\textwidth}{@{}l l >{\raggedright\arraybackslash}X@{}}
 \toprule
 \textbf{configuration} & \textbf{CDM peak} & \textbf{what A-3 does there} \\
 \midrule
-released & $266.6=0.9994\,\ell_A$ & \textbf{accounts for the whole excess}:
+(102) as built & $266.6=0.9994\,\ell_A$ & accounts for the whole excess:
   $266.6/206.1=1.2936$ against $1/0.7723=1.2948$, agreeing to $0.1\%$ \\
-$\kappa''\tilde v_B$ suppressed (\textbf{D24}) & $172.75=0.6476\,\ell_A$ &
-  \textbf{ruled out} --- the peak is already below the driven value and
-  driving moves it further away \\
+$\kappa''\tilde v_B$ suppressed (D24) & $172.75=0.6476\,\ell_A$ &
+  ruled out: the peak is already below the driven value, and driving moves it
+  further away \\
 full boundary at released $\kappa''$ & $236.6=0.8870\,\ell_A$ (CDM) &
-  \textbf{would be the right sign --- but see below: this configuration is not
-  a repair} \\
+  the right sign, but the configuration is not a repair (below) \\
 \bottomrule
 \end{tabularx}
 \end{center}
 
-The third row is a candidate and it fails the one test that costs
-nothing to apply. `slot\_weight\_split' with the two boundary controls puts
+The third row is a candidate, and it fails the one test that costs nothing
+to apply. `slot\_weight\_split' with the two boundary controls puts
 the CDM peak at $0.8870\,\ell_A$ and the \emph{Newtonian} peak at
 $0.2826\,\ell_A$ --- a factor of $3.1$ between two frames whose $\ell\ge2$
 multipoles are equal at first order in $v$ (GDE99~(37)). A
 configuration that moves the CDM peak toward the target while pulling the
 frames $3.1\times$ apart has made the frame disagreement worse, not better,
-and the released path's median gap of $15\%$ is the thing it was supposed to
-close. \emph{So it is not a repair, and nothing below is a result.} The rows
-are kept because the comparison is instructive and because the frame check is
-the cheapest discriminator this section has.
+and (102)'s median gap of $15\%$ is what it was supposed to close. It is not
+a repair, and nothing below is a result. The rows are kept because the
+comparison is instructive and because the frame check is the cheapest
+discriminator this section has.
 
-\emph{The derivation, which is what makes the three rows consistent.} Driving
-moves a peak down: the undriven first
+The three rows are consistent by one derivation. Driving moves a peak down: the undriven first
 compression extremum is $kr_s=\pi$, which projects to $\ell=\ell_A$, and the
 matched external spectrum sits at $0.7723\,\ell_A$. D24, with
 $\kappa''\tilde v_B$ suppressed and A-3 still absent, puts the CDM peak at
-$0.6476\,\ell_A$ --- \emph{already below the driven value} --- so applying A-3
-there moves it further from $0.7723$, not toward it. Three places in this
+$0.6476\,\ell_A$, already below the driven value, so applying A-3 there moves
+it further from $0.7723$, not toward it. Three places in this
 project's record have said the first peak sits where it does because
 radiation-era driving is absent; for that configuration that is
 backwards, and it is withdrawn here.
 
-But the conclusion is conditional on which side of $0.7723$ the peak
-falls, and that is what a repair would decide. A configuration whose CDM peak
-lands \emph{above} $0.7723\,\ell_A$ puts A-3 back in play, because driving then
+The conclusion is conditional on which side of $0.7723$ the peak falls, and
+that is what a repair would decide. A configuration whose CDM peak lands above
+$0.7723\,\ell_A$ puts A-3 back in play, because driving then
 moves it the right way; one landing below leaves A-3 ruled out. A-3's
 standing is therefore a property of the configuration and not of the project,
 and no statement about it is safe without naming which.
 
-What a candidate above $0.7723$ would still have to survive. Against
+A candidate above $0.7723$ would still have a test to survive. Against
 this background the whole distance from an undriven peak to the matched
 spectrum is $\ell_A-206=60.75$ multipoles, or $0.2277\,\ell_A$. A candidate at
-$0.8870$ would leave $236.6-206=30.6$ to cross, so \emph{a full driving
-correction would overshoot it by a factor of $2.0$} --- A-3 could not be the
+$0.8870$ would leave $236.6-206=30.6$ to cross, so a full driving
+correction would overshoot it by a factor of $2.0$: A-3 could not be the
 whole remainder, and wiring it in would have to land short of $0.7723$ rather
 than on it. That is the test to apply to the first candidate that
 holds the two frames together, and it is written here so that it is applied
 rather than re-derived.
 
-\emph{The other known absentee pushes the same way.} \eqref{eq:partner-projection}'s
-$j_\ell'$ counterpart adds power \emph{below} the peak and is missing from
+The other known absentee pushes the same way.
+\eqref{eq:partner-projection}'s $j_\ell'$ counterpart adds power below the
+peak and is missing from
 (102) as well, so the two named absent mechanisms both move the peak down and
 between them need supply only $0.114\,\ell_A$. Neither has an
 instrument that identifies it as the remainder, and the two must be measured
 separately before either is credited, which is M11a.
 
-\paragraph{And a boundary treatment and A-3 compete for the same multipoles,
-which is what the released agreement with $1/0.7723$ does not establish.} The
-released path needs $266.6-206.1=60.5$ multipoles of downward movement and
+\paragraph{A boundary treatment against A-3.} A boundary treatment and A-3
+compete for the same multipoles, which (102)'s agreement with $1/0.7723$ does
+not establish. (102) as built needs $266.6-206.1=60.5$ multipoles of downward movement and
 credits all of them to A-3, agreeing to $0.1\%$. The candidate
 configuration, with A-3 still absent, supplies $266.6-236.6=30.0$ of them ---
 $49.6\%$ --- by changing a weight. It is not a repair, so this does not
 withdraw the A-3 account; what it shows is that the agreement is not evidence
 for A-3, because at least one other thing in the assembly moves the peak by
-half that distance. \textbf{Restating the ratio against one acoustic scale
-made that agreement twenty times tighter and the difficulty twenty times
-worse}: a figure reproduced to $0.1\%$ by a calculation in which a second,
-unrepaired term independently supplies half the distance is not a
-confirmation but a coincidence the document cannot yet account for. It is the
-shape of every over-read in \S\emph{what a gate does not establish}, and it
-is listed there.
+half that distance. Restating the ratio against one acoustic scale made that
+agreement twenty times tighter and the difficulty twenty times worse: a figure
+reproduced to $0.1\%$ by a calculation in which a second,
+unrepaired term independently supplies half the distance is a coincidence the
+document cannot yet account for, not a confirmation. It is the shape of every
+over-read listed in Part~I.
 
 The discriminator, when a frame-consistent candidate exists, is one
 run: wire A-3 into it. If A-3 is the whole remainder the peak lands near
@@ -4830,8 +4752,8 @@ roughly $0.2277\,\ell_A$ from wherever the candidate sits. For a
 candidate at $0.8870$ those are $\ell\simeq206$ against $\ell\simeq170$, $17\%$
 and $36$ multipoles apart. Both ends are already built.
 
-\emph{The displaced projection is ruled out too, by the test that was written
-to decide it.} An earlier form of this paragraph attributed $0.6476$ to
+The displaced projection is ruled out too, by the test written to decide it.
+An earlier form of this paragraph attributed $0.6476$ to
 D25's finding that the median $k$ contributing to a given $\ell$ runs
 $1.5$--$4.2\times$ above $\ell/r_\theta$, and predicted a ratio near
 $1/0.6476=1.544$ at the peak. D25 extended to $\ell=173$ returns
@@ -4842,9 +4764,8 @@ phenomenon: $1.5$--$4.3$ at $\ell=2$, decaying monotonically, and essentially
 closed by the peak. So T-122 does not account for the peak position,
 and that attribution is withdrawn. Nor does it account for the
 plateau, which an earlier form of this sentence left standing: the plateau's
-cause is now measured and it is the weight --- Part~I,
-\S\ref{sec:current-situation}. \emph{The projection at the peak is
-faithful.}
+cause is measured, and it is the weight (Part~I,
+\S\ref{sec:current-situation}). The projection at the peak is faithful.
 
 And the absolute level was never the diagnostic. A median contributing
 wavenumber above $\ell/r_\theta$ is what the kernel produces on its own:
@@ -4865,21 +4786,19 @@ route, which would need $1.57$. It is the right \emph{shape} for the candidate
 below, and it was measured for another purpose, which is the only reason to
 give it any weight at all.
 
-\emph{What that leaves.} With the projection faithful at $\ell=173$, a peak at
-$0.6476\,\ell_A$ places the first extremum at $kr_s\simeq0.6476\pi$ rather than
-$\pi$ --- a phase error of about $-0.35\pi$, \emph{on this configuration and
-not on the released one}. Editions before 31 October 2026 placed it
+With the projection faithful at $\ell=173$, a peak at $0.6476\,\ell_A$ places
+the first extremum at $kr_s\simeq0.6476\pi$ rather than $\pi$, a phase error
+of about $-0.35\pi$ on this configuration and not on (102) as built. Editions before 31 October 2026 placed it
 \emph{between} the oscillator and the transfer, on the ground that the oscillator tracks
 $\cos(kr_s)$ in exact phase (T-71, T-74). That ground is withdrawn at
 \S\ref{sec:oscillator}: exact phase is what an \emph{undriven} oscillator must
-produce, so it leaves every upstream candidate in play. The $-0.35\pi$ is
-\textbf{not yet apportioned}; \eqref{eq:byparts}'s discrepancies are where the
-downstream share sits. The released configuration carries a displacement of
-the opposite sign --- $0.9994\pi$ against the matched $0.7723\pi$ --- and a
+produce, so it leaves every upstream candidate in play. The $-0.35\pi$ is not
+yet apportioned; \eqref{eq:byparts}'s discrepancies are where the downstream
+share sits. (102) as built carries a displacement of the opposite sign --- $0.9994\pi$ against the matched $0.7723\pi$ --- and a
 mechanism inventory owes both.
 
-\paragraph{A quarter-cycle account of that was printed here and is withdrawn
---- finding T-123.} It wrote $C_2=A\cos kr_s$, read $+2\mathcal VC_2'$ against
+\paragraph{The quarter-cycle account.} A quarter-cycle account of that
+displacement was printed here and is withdrawn (T-123). It wrote $C_2=A\cos kr_s$, read $+2\mathcal VC_2'$ against
 the printed $-2\mathcal VC_2$ as a rotation of exactly $\pi/2$, and bounded the
 peak to $(0.5,\,1.0]\,\ell_A$ at a mixture weight $w\simeq2.2$. $C_2$
 does not oscillate. $\mathcal B_2$ is the shear, and in the CDM frame
@@ -4887,12 +4806,12 @@ $a\mathcal B_2=a\sigma=-k_{\rm com}v$ exactly, so $C_2=v/k$ with $v$ the matter
 velocity and $v'+\mathcal Hv=-k\Phi_A$ its equation of motion --- a potential
 on the right-hand side and not an acoustic amplitude, so $v$ runs monotonically
 through matter domination. The premise fails and the bound, the $0.365\pi$ and
-the $w\simeq2.2$ fail with it. \emph{Recorded rather than deleted: two of the
-three tests it specified survive under the mechanism below, and the reason they
-survive is not the reason they were written.}
+the $w\simeq2.2$ fail with it. It is recorded rather than deleted because two
+of the three tests it specified survive under the mechanism below, for a
+reason other than the one they were written for.
 
-\paragraph{The partner group does act on the projection, and exactly.} Project
-the three terms \eqref{eq:byparts} supplies, integrating the third by parts and
+\paragraph{The partner group.} The partner group acts on the projection, and
+exactly. Project the three terms \eqref{eq:byparts} supplies, integrating the third by parts and
 using $\mathrm dj_\ell\big(k(\eta_0-\eta)\big)/\mathrm d\eta=-k\,j_\ell'$:
 \begin{equation}
   \int\!\big(\!-\mathcal VC_1+2\mathcal VC_2'+\dot{\mathcal V}C_2\big)j_\ell\,\mathrm d\eta
@@ -4912,28 +4831,28 @@ That is B-17 (iv) derived rather than observed, and it carries a
 number. At fixed $x=k(\eta_0-\eta)$ the multipole maximising $|j_\ell'|$ lies
 about $37\%$ below the one maximising $|j_\ell|$: $110$ against $173$ at
 $x=178$, $164$ against $266$ at $x=272$. A source given the wrong one of the
-two kernels is not perturbed but \emph{relocated}, by a third of the $\ell$
-axis. T-124.
+two kernels is not perturbed but relocated, by a third of the $\ell$ axis
+(T-124).
 
-The direction is the test. Restoring the $j_\ell'$ term adds power
-\emph{below} the acoustic peak, so on its own it must move a peak down or leave
-it standing. The $\S5$ repair moves the CDM peak \emph{up}. So the
-mover is the weight --- B-17 (i) --- and not this term; if restoring the
+The direction is the test. Restoring the $j_\ell'$ term adds power below
+the acoustic peak, so on its own it must move a peak down or leave it
+standing. The full-boundary configuration of the table above moves the CDM
+peak up, so the mover is the weight, B-17~(i), and not this term; if restoring the
 $j_\ell'$ slot alone moves the peak up, this account is wrong.
 
-And the $j_\ell'$ slot is frame-discriminating, which is what makes it
-worth running. $\tilde C_2\equiv0$ in the Newtonian frame, so
-\eqref{eq:partner-projection}'s middle term \emph{cannot act there at all};
+The $j_\ell'$ slot is also frame-discriminating. $\tilde C_2\equiv0$ in the
+Newtonian frame, so \eqref{eq:partner-projection}'s middle term cannot act
+there;
 the $\mathcal VC_1$ sign is available in both. $0.6476$ is the CDM
 peak. If the Newtonian peak shows a different displacement, that is the
 signature; if both frames displace alike, the $C_2$ route is excluded and the
 $\mathcal VC_1$ sign must carry it. Two numbers, both from runs that already
 exist.
 
-And D24's own table already shows the frames behaving differently,
-which sharpens the test. With $\kappa''$ suppressed the Newtonian column
-peaks at $\ell=8.07$ --- still the spurious low-$\ell$ maximum, \emph{not} an
-acoustic peak --- while CDM peaks at $\ell=172.75$. That is what the frame
+D24's own table already shows the frames behaving differently, which
+sharpens the test. With $\kappa''$ suppressed the Newtonian column peaks at
+$\ell=8.07$, still the spurious low-$\ell$ maximum and not an acoustic peak,
+while CDM peaks at $\ell=172.75$. That is what the frame
 structure predicts: Newtonian has $\tilde C_0\approx\tilde C_2\approx0$, so
 $\tilde C_1$ carries everything and suppressing $\kappa''\tilde v_B$, which is
 $99.8\%$ of $|C_1'|$, leaves no oscillatory source at all. CDM retains $C_0$
@@ -4942,14 +4861,14 @@ $C_2$'s slot is exactly where \eqref{eq:partner-projection} acts.
 
 Two tests survive the withdrawal and neither needs a repair. Restore
 the $j_\ell'$ slot alone in the $\kappa''$-suppressed CDM run and read the
-peak: \eqref{eq:partner-projection} requires it to move \emph{down} or not at
-all, and an upward move refutes the account. Then compare the two frames'
+peak: \eqref{eq:partner-projection} requires it to move down or not at all,
+and an upward move refutes the account. Then compare the two frames'
 displacements, which the $C_2$ route requires to differ because
 $\tilde C_2\equiv0$. Until one of those runs, $0.6476$ has no
 mechanism, and a repair should not be scored against $0.7723$.
 
-Also ungated, and it is a dependency of
-\eqref{eq:c0-solved} --- Part~I, \S\ref{sec:asserted-not-gated}. \eqref{eq:c0-solved} \emph{uses}
+A dependency of \eqref{eq:c0-solved} is also ungated (Part~I,
+\S\ref{sec:asserted-not-gated}). \eqref{eq:c0-solved} uses
 $C_2=-k^{-2}a\mathcal B_2$, which comes from the same solve in which
 B-11 found a sign error and T-104 a normalisation error. The
 $\ell=2$ row returning $h_2''(0)=1$ controls the normalisation and not the
@@ -4960,15 +4879,15 @@ class in $C_2$ would be inherited silently here.
 The acceptance condition, stated in advance so the repair can fail
 visibly. (i)~$A_N=A_C$ to the quadrature floor T-85 measures, neither
 better nor worse; (ii)~the Newtonian column moves by no more than that floor;
-(iii)~\texttt{c7\_\allowbreak{}kappa\_\allowbreak{}ledger.py} reports no coefficient holding $\kappa'$
---- \emph{a review signal that the error class is absent by construction, not a
-proof of correctness}, since \eqref{eq:ledger-identity} makes the ledger a flag;
+(iii)~\texttt{c7\_\allowbreak{}kappa\_\allowbreak{}ledger.py} reports no coefficient holding $\kappa'$,
+a review signal that the error class is absent by construction and not a
+proof of correctness, since \eqref{eq:ledger-identity} makes the ledger a flag;
 (iv)~\texttt{c8\_\allowbreak{}rank0\_\allowbreak{}partner.py}, not $\gamma$, scores the rank-0 content of
 the bracket on the live coefficients; and (v)~the spectrum adjudicates,
 and it adjudicates last, since two wrong columns can agree.
 
-The order is forced, not preferred --- in implementation, not in
-exposition. \S\ref{sec:ell-zero-row} is implemented before
+The order of implementation is forced, though the order of exposition is
+not. \S\ref{sec:ell-zero-row} is implemented before
 \S\ref{sec:w-form}: the $\ell=0$ row sits inside the bracket the $W$-form
 reweights, so a weight correction applied over a $C_0$ that is wrong by
 $\tfrac{15}2$ measures the wrong thing. T-96's second run is that
@@ -4976,11 +4895,7 @@ measurement --- a $W$-form instrument run against coefficients still carrying
 the printed row, returning $O(1)$ --- and it is reported there as not
 conclusive, correctly.
 
-% === END source expansion: supplementary-materials/section-w-form-and-ell-zero-v1.4.0.tex ===
-
-
-
-% === BEGIN exact v1.3.0 source expansion: supplementary-materials/section-frame-discrepancy-v1.3.0.tex ===
+% ===========================================================================
 \section{The frame discrepancy: localisation and triage}
 \footnote{The first-order small-tilt law for the covariant temperature
 multipoles holds for a common direction label. At the order of the
