@@ -18,7 +18,16 @@ collect it — the glob takes `c` followed by a digit, and the instrument count
 is a count of physics. It gates three things: that no maths span in the
 README files is butted against a letter, a digit or a dash; that its own
 regex cannot straddle two spans, which is the control on the first; and the
-supplement's voice, on the sections listed in the file.
+supplement's voice. Since 11 November the voice check reads every section by
+the PI's rule of 4 November: headings at every level short and
+object-centred, no bold sentence in prose (a short tag is the convention),
+none of the banned constructions. A section it does not read is named in
+`EXCLUDED_SECTIONS` with its reason and printed on every run; today that is
+*Evidence*, whose captions are generated from `captions/*.md`. Its exemplars
+are the control in both directions, and three of the verdicts the first
+version asserted are reversed, because the 4 November rule replaced the one
+it encoded. Run against the editions before the audit it fails: 105 headings
+and 34 bold sentences on v1.4.1, 47 headings on v1.4.4.
 
 **Start with `doctor.py` when anything fails.** It imports nothing outside the
 standard library, so it runs where the suite does not, and it reports the
