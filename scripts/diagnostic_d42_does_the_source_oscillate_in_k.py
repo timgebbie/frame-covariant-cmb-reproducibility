@@ -295,7 +295,7 @@ def main() -> int:
     frame_gap = 0.0
 
     for j, k in enumerate(K_GRID):
-        sets = coefficient_sets(float(k), env)
+        sets = coefficient_sets(float(k), env, source="as built")
         cs = sets[FRAMES["cdm"]]
         prim = bulk_source_primitives(float(k), env, cs)
         series["v_b"][j] = _at_star(env, cs.v_b)

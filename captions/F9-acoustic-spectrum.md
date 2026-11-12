@@ -3,29 +3,32 @@ id = "F9"
 order = 9
 title = "The angular spectrum with the acoustic peaks, in both frames"
 script = "scripts/figure_f9_acoustic_spectrum.py"
-artefact = "figures/f9-acoustic-spectrum-v1.2.0.pdf"
+artefact = "figures/f9-acoustic-spectrum-v1.4.0.pdf"
 category = "acceptance"
 caption = """
-\\textbf{The angular power spectrum for the three backgrounds this bundle ships}
---- CDM (Einstein--de~Sitter), $\\Lambda$CDM and the stamped Planck~2018 set ---
-as shape, $D_\\ell$ renormalised at $\\ell=30$.\\\\[2pt]
-\\textbf{The line of sight is the supplement's
-eq.~\\eqref{eq:assembly-invariant}}, built from the coefficients with
-Paper~1's source signs: the Sachs--Wolfe and Doppler terms where photons
-scatter, the integrated Sachs--Wolfe term along the path, each invariant under
-a change of frame, and no coefficient that holds the scattering rate
-differentiated.\\\\[2pt]
-\\textbf{Panel (a) --- the spectrum, CDM frame.} The odd acoustic peaks are
-present, $2\\ell_A$ apart; the first is at $\\ell\\simeq189$ on Planck
-($0.71\\,\\ell_A$), $144$ on $\\Lambda$CDM and $165$ on Einstein--de~Sitter.
-The even peaks are absent, as an oscillator driven by a constant potential and
-loaded with baryons predicts: the radiation-era driving that sets the peak
-heights is not yet in the source (\\textbf{A-3}). Below $\\ell\\sim30$ the \\texttt{PLANCK\\_MODEL} curve, its dip near $\\ell=5$ included, carries the incomplete radiation era of approximation \\textbf{A-3}: the potential decays through equality while the oscillator starts from the matter-era adiabatic condition. It is not a prediction of v1.3.0. CAMB and CLASS are context,
-not a target (decision~\\textbf{S4c}).\\\\[2pt]
-\\textbf{Panel (b) --- both frames, from one solve.} The Newtonian and CDM
-spectra coincide to $3.5\\times10^{-14}$ at every multipole: a first-order
-change of frame moves only the dipole, and here it moves nothing at
-$\\ell\\ge2$.
+The angular power spectrum for the three backgrounds this bundle ships ---
+CDM (Einstein--de~Sitter), $\\Lambda$CDM and the stamped Planck~2018 set --- as
+shape, $D_\\ell$ renormalised at $\\ell=30$. The line of sight is the
+supplement's eq.~\\eqref{eq:assembly-invariant}, built from the coefficients
+with Paper~1's source signs: the Sachs--Wolfe and Doppler terms where photons
+scatter and the integrated Sachs--Wolfe term along the path, each invariant
+under a change of frame, with no coefficient that holds the scattering rate
+differentiated. Since v1.4.0 the visibility and the opacity come from one
+$\\kappa$ on the line-of-sight grid (\\textbf{T-191}).\\\\[2pt]
+\\textbf{(a)} The spectrum in the CDM frame. The odd acoustic peaks are present,
+$2\\ell_A$ apart; the first is at $\\ell\\simeq189$ on Planck ($0.71\\,\\ell_A$),
+$144$ on $\\Lambda$CDM and $165$ on Einstein--de~Sitter. The even peaks are
+absent, as an oscillator driven by a constant potential and loaded with baryons
+predicts, because the radiation-era driving that sets the peak heights is not
+yet in the source (\\textbf{A-3}). Below $\\ell\\sim30$ the
+\\texttt{PLANCK\\_MODEL} curve, its dip near $\\ell=5$ included, carries the
+same incomplete radiation era: the potential decays through equality while the
+oscillator starts from the matter-era adiabatic condition, so the curve there
+is not a prediction. CAMB and CLASS are context, not a target
+(decision~\\textbf{S4c}).\\\\[2pt]
+\\textbf{(b)} Both frames, from one solve. The Newtonian and CDM spectra
+coincide to $3.5\\times10^{-14}$ at every multipole: a first-order change of
+frame moves only the dipole, and here it moves nothing at $\\ell\\ge2$.
 """
 +++
 

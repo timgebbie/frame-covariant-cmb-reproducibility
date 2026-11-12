@@ -21,8 +21,9 @@ preserves rank because $K^a=\\sigma^a{}_be^b$ does. The rank-preserving coupling
 exists only when $K^a$ depends on direction, and is the single structural
 difference between the two frames.\\\\[2pt]
 Both are the same operator $K_\\perp^a\\partial/\\partial e^a$, and the number of
-ranks each reaches is fixed by that one property. \\textbf{That is the whole
-content of the frame argument, visible before any of it is computed.} Decision
+ranks each reaches is fixed by that one property. That property is the whole
+content of the frame argument, and the figure shows it before any of it is
+computed. Decision
 S9 is drawn as well as asserted: every coupling in the solid half is a ratio of
 linear polynomials and tends to a constant, so an $O(\\ell)$ coupling wired in
 early would fail \\texttt{tests/test\\_appendix\\_f\\_chain.py} at large $\\ell$.

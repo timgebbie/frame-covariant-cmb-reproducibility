@@ -83,6 +83,9 @@ from functions.spectra.two_frame import (  # noqa: E402
 
 from _fingerprint import source_fingerprint as _digest  # noqa: E402
 
+#: The release that last changed what this figure shows. T-191's one kappa
+#: does not move it: at k_max = 400 the line-of-sight grid is the recombination
+#: grid's own 8000 points, where the weights were already one function.
 VERSION = "v1.3.0"
 STEM = "f10-formation-surface"
 CSV = ROOT / "outputs" / "f10-formation-surface.csv"
@@ -100,21 +103,13 @@ ELLS = np.unique(np.concatenate([
 K_MAX = 400.0
 
 #: **`--high-res`, 2026-10-26, at the PI's request.** The released axis stops
-#: at $\ell=300$, and on `PLANCK_MODEL` the released first peak is at
-#: $\ell=266.6$ --- so the primary is the *last point on the axis* and the
-#: secondaries are not on the picture at all. From $\ell_A=272.18$ they fall
-#: at $\ell\simeq539$ and $\ell\simeq811$.
-#:
-#: This extends the axis past both and raises $k_{\max}$ to F9's 1500 so the
-#: modes that build them are present. It is **not** the released F10: the
-#: released grid stays exactly as it is, so the committed artefact and its
-#: gate are untouched, and this writes to its own stem.
-#:
-#: **What it will show, said before it runs.** A peak series at the
-#: *displaced* spacing, not CAMB's --- the released primary sits at
-#: $0.980\,\ell_A$ against CAMB's $0.757$, because the radiation driving
-#: (**A-3**) is not wired. Three maxima at the wrong spacing is the first
-#: acoustic series this bundle has drawn and is **not** agreement.
+#: at $\ell=300$; this extends it to $\ell=920$ and raises $k_{\max}$ to F9's
+#: 1500, so the modes that build the second and third peaks are present. It is
+#: **not** the released F10: it writes to its own stem and is not on the
+#: release route. Its one run, on (102) before the frame-invariant line of
+#: sight replaced it, found the secondaries absent rather than displaced (the
+#: register has it); those outputs left the tree in v1.4.0 with the assembly
+#: they were drawn from.
 if "--high-res" in sys.argv:
     ELLS = np.unique(np.concatenate([
         np.array([2, 3, 4, 5, 7, 9, 12, 16, 20, 25, 30]),

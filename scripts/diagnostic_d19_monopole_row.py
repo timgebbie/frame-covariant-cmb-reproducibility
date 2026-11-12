@@ -79,7 +79,7 @@ GAMMA_BAR = 1e-10
 def _sets(env, k: float, row: str):
     was, C.MONOPOLE_ROW = C.MONOPOLE_ROW, row
     try:
-        return coefficient_sets(float(k), env)
+        return coefficient_sets(float(k), env, source="as built")
     finally:
         C.MONOPOLE_ROW = was
 
@@ -143,7 +143,7 @@ def _report() -> None:
                        kappa_second=0.0 * np.asarray(env.kappa_second, dtype=float))
         was, C.MONOPOLE_ROW = C.MONOPOLE_ROW, "corrected"
         try:
-            n_0, _ = coefficient_sets(float(KS[0]), env0)
+            n_0, _ = coefficient_sets(float(KS[0]), env0, source="as built")
         finally:
             C.MONOPOLE_ROW = was
         kpart = _sup(np.asarray(n_c.coefficients.c0, dtype=float)

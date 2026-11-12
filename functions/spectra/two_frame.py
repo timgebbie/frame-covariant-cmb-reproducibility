@@ -51,6 +51,7 @@ from functions.spectra.coefficients import (
     cdm_set,
     gravitational_rank_one,
     newtonian_set,
+    rank_one_source,
 )
 from functions.spectra.line_of_sight import Sources
 from functions.spectra.decoupling import (
@@ -336,7 +337,8 @@ def build_environment(
         a, omega_m=omega_m, omega_lambda=omega_lambda, omega_r=omega_r)
     r = baryon_photon_ratio(a, omega_b_h2=omega_b_h2)
 
-    kappa_prime = np.interp(eta, recombination.eta, recombination.kappa_prime)
+    # T-191: kappa', W and V from one kappa on this grid.
+    kappa_prime, opacity, visibility = recombination.weights_on(eta)
     k_d = diffusion_scale(recombination, r_of_eta=np.zeros_like(recombination.eta),
                           f_2=f_2)
 
@@ -350,8 +352,8 @@ def build_environment(
         r_baryon=r, r_baryon_prime=cH * r,
         kappa_prime=kappa_prime,
         kappa_second=np.gradient(kappa_prime, eta, edge_order=2),
-        visibility=np.interp(eta, recombination.eta, recombination.visibility),
-        opacity=np.interp(eta, recombination.eta, recombination.opacity),
+        visibility=visibility,
+        opacity=opacity,
         line_of_sight_weight=str(line_of_sight_weight),
         acoustic_start=str(acoustic_start), eta_rs=eta_rs,
         r_s_table=r_s_table, md_reference=float(md_reference),
@@ -362,9 +364,16 @@ def build_environment(
 
 
 def coefficient_sets(
-    k_com: float, env: TwoFrameEnvironment
+    k_com: float, env: TwoFrameEnvironment, *, source: str,
 ) -> tuple[CoefficientSet, CoefficientSet]:
     r"""`(newtonian, cdm)` at one $k$, from the same acoustic solution.
+
+    **`source` is named at every call**, because the two choices are two
+    different physical statements and neither may be picked up by default:
+    `"paper 1"` is Paper 1's eq:B, which the frame-invariant line of sight is
+    built from; `"as built"` is the antecedent's matching, which (102) and
+    every instrument that measures (102) are built on. It is applied where
+    the sets are built, and the sets carry it from there.
 
     **Both frames are built from one integration of the acoustic pair**, which
     is the point: the frames differ by the frame, not by the dynamics, so a
@@ -438,13 +447,14 @@ def coefficient_sets(
         kappa_double_prime=env.kappa_second, conformal_hubble=env.conformal_hubble,
         r_baryon=env.r_baryon, r_baryon_prime=env.r_baryon_prime)
 
-    newtonian = newtonian_set(eta, float(k_com), **shared)
     shift = cdm_frame_shift(eta, phi_a, float(k_com), background=bg)
-    cdm = cdm_set(
-        eta, float(k_com), phi_h=phi_h,
-        conformal_hubble_prime=env.conformal_hubble_prime, scale_factor=env.a,
-        rho=env.rho, pressure=env.pressure, v=shift.v, v_prime=shift.v_prime,
-        eta_star=eta_star, **shared)
+    with rank_one_source(source):
+        newtonian = newtonian_set(eta, float(k_com), **shared)
+        cdm = cdm_set(
+            eta, float(k_com), phi_h=phi_h,
+            conformal_hubble_prime=env.conformal_hubble_prime, scale_factor=env.a,
+            rho=env.rho, pressure=env.pressure, v=shift.v, v_prime=shift.v_prime,
+            eta_star=eta_star, **shared)
     return newtonian, cdm
 
 
@@ -564,18 +574,10 @@ def covariant_coefficient_sets(
 
     The coefficients the frame-invariant line of sight is built from: the
     rank-one gravitational source against the Thomson term as Paper 1's eq:B
-    carries it, and $a\mathcal B_0$ in $C_0$ with it. The module default stays
-    the antecedent's, which the routes that reproduce *Annals II* as printed
-    are built on; this is the one place the covariant figures ask for the
-    other, so the choice is made once and not at each call site.
+    carries it, and $a\mathcal B_0$ in $C_0$ with it. The covariant figures and
+    diagnostics call this, so their source is stated once, in its name.
     """
-    from functions.spectra import coefficients as _c
-    held = _c.RANK_ONE_SOURCE
-    _c.RANK_ONE_SOURCE = "paper 1"
-    try:
-        return coefficient_sets(k_com, env)
-    finally:
-        _c.RANK_ONE_SOURCE = held
+    return coefficient_sets(k_com, env, source="paper 1")
 
 
 def line_of_sight_inputs(

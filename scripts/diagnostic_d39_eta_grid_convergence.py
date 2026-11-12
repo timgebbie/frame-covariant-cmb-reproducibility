@@ -126,7 +126,7 @@ def _spectrum(n_eta: int) -> np.ndarray:
 
     acc, dk = np.zeros(ELLS.size), k_com[1] - k_com[0]
     for j, k in enumerate(k_com):
-        s = coefficient_sets(float(k), env)[1]          # CDM frame
+        s = coefficient_sets(float(k), env, source="as built")[1]          # CDM frame
         diffusion = float(np.exp(-((float(k) / env.damping_k) ** 2)))
         res = integral_solution(
             ELLS, coefficients=s.coefficients, c1_prime=s.c1_prime,

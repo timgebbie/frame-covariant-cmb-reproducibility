@@ -28,8 +28,14 @@ PDF belongs beside the other supplementary material. The asymmetry of names is
 therefore deliberate and is handled **here**, once, instead of in a `Move-Item`
 retyped into every commit sequence.
 
-Skips with exit 0 and a stated reason where `pdflatex` is absent. A gate that
-fails on a missing toolchain repeats finding T-4.
+Skips with a stated reason where `pdflatex` is absent, and exits `SKIPPED`
+(3) rather than 0, so that a caller can tell a gate that passed from a gate that
+did not run. A gate that fails on a missing toolchain repeats finding T-4; a
+gate that reports a skip as a pass is how the 35 pt overhang gate went dark
+between v1.3.22 and v1.3.25, while four overhangs stood in a released PDF
+(review of 3 November). `run_all.py`
+counts the skip: it is a failure of the release route, where the supplement is
+built, and a reported line on the development route, where it need not be.
 """
 
 from __future__ import annotations
@@ -46,6 +52,9 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from _versions import supplement_pdf, supplement_source  # noqa: E402
+
+#: The exit status when the build, and with it the overhang gate, did not run.
+SKIPPED = 3
 
 #: **Derived, never typed.** This file named the source and the rendering
 #: literally, and `scripts/make_figure_pages.py` named the third artefact the
@@ -121,9 +130,10 @@ def _errors(log: str) -> list[str]:
 def main() -> int:
     if shutil.which("pdflatex") is None:
         print("SKIP  supplement build: pdflatex is not on PATH")
-        print("      Not a failure. The supplement is built where LaTeX is,")
-        print("      and the release gate is run there.")
-        return 0
+        print("      The build and its 35 pt overhang gate did not run. The")
+        print("      supplement is built where LaTeX is, and the release route")
+        print("      is run there.")
+        return SKIPPED
     if not SOURCE.exists():
         print(f"FAIL  {SOURCE.name} is missing")
         return 1

@@ -277,10 +277,10 @@ def test_an_environment_refuses_a_k_its_eta_grid_cannot_resolve():
 
     env = build_environment(140.0)
     assert env.k_max == 140.0
-    coefficient_sets(140.0, env)                      # at the edge, allowed
+    coefficient_sets(140.0, env, source="as built")                      # at the edge, allowed
 
     with pytest.raises(ValueError) as excinfo:
-        coefficient_sets(420.0, env)
+        coefficient_sets(420.0, env, source="as built")
     message = str(excinfo.value)
     # The message has to carry the number, because "too coarse" is not
     # actionable and "2.0 samples per oscillation" is.
@@ -320,7 +320,7 @@ def test_the_newtonian_frame_leaves_the_shear_sectors_empty_and_the_cdm_frame_do
         x_max=float(140.0 * (env.background.eta_0 - env.eta[0])) + 20.0)
 
     for k in (20.0, 60.0, 140.0):
-        newtonian, cdm = coefficient_sets(float(k), env)
+        newtonian, cdm = coefficient_sets(float(k), env, source="as built")
         flat = transfer_by_rank(ells, float(k), newtonian, env, table)
         tilted = transfer_by_rank(ells, float(k), cdm, env, table)
 
@@ -376,7 +376,7 @@ def test_102_cannot_make_its_frame_response_depend_on_the_multipole():
                 table=table, weight=env.weight, diffusion=diffusion,
                 damping_total=diffusion, eta_star=env.eta_star,
                 eta_0=float(env.background.eta_0)).total
-            for cs in coefficient_sets(float(k), env)
+            for cs in coefficient_sets(float(k), env, source="as built")
         ]
         scale = np.maximum(np.abs(totals[0]), np.abs(totals[1]))
         response = np.abs(totals[1] - totals[0]) / scale
@@ -603,7 +603,7 @@ def test_102_must_carry_the_visibility_and_substituting_the_opacity_wrecks_it():
         total = np.zeros((ells.size, k_com.size))
         rank1 = np.zeros_like(total)
         for j, k in enumerate(k_com):
-            _, cdm = coefficient_sets(float(k), env)
+            _, cdm = coefficient_sets(float(k), env, source="as built")
             parts = transfer_by_rank(ells, float(k), cdm, env, table)
             total[:, j], rank1[:, j] = parts[-1], parts[1]
         power = primordial_power(k_com, n_s=1.0, amplitude=1.0)

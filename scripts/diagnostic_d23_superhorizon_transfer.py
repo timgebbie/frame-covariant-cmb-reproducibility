@@ -169,7 +169,7 @@ def _run(label, bg, obh2, h, gamma):
           f"{'2C_2''':>12} {'kappa''v_B/k':>14} {'rel resid':>11}")
     print("  " + "-" * 84)
     for k in KS:
-        sets = dict(zip(FRAMES, coefficient_sets(float(k), env)))
+        sets = dict(zip(FRAMES, coefficient_sets(float(k), env, source="as built")))
         for frame in FRAMES:
             s = sets[frame]
             c1s = at_star(s.coefficients.c1)
@@ -194,7 +194,7 @@ def _run(label, bg, obh2, h, gamma):
     print("  " + "-" * (18 + 13 * ELLS.size + 38))
     out = {}
     for k in KS:
-        sets = dict(zip(FRAMES, coefficient_sets(float(k), env)))
+        sets = dict(zip(FRAMES, coefficient_sets(float(k), env, source="as built")))
         x_star = float(k) * d_eta
         damping = float(np.exp(-((float(k) / env.damping_k) ** 2)))
         j_star = np.array([float(table(int(l), np.array([x_star]))[0])

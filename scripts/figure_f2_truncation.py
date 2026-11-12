@@ -153,7 +153,7 @@ def compute() -> dict:
     # j_ell alone, so it is the quantity the spectrum is actually built from.
     tail = {}
     for k in K_TAIL:
-        _, cdm = coefficient_sets(float(k), env)
+        _, cdm = coefficient_sets(float(k), env, source="as built")
         parts = transfer_by_rank(ELLS, float(k), cdm, env, table)
         weight = (2.0 * ELLS + 1.0) * parts[-1] ** 2
         total = float(np.trapezoid(weight, ELLS))
@@ -174,7 +174,7 @@ def compute() -> dict:
     full = {f: np.zeros(shape) for f in ("newtonian", "cdm")}
     rank1 = {f: np.zeros(shape) for f in ("newtonian", "cdm")}
     for j, k in enumerate(K_COM):
-        for name, cs in zip(("newtonian", "cdm"), coefficient_sets(float(k), env)):
+        for name, cs in zip(("newtonian", "cdm"), coefficient_sets(float(k), env, source="as built")):
             parts = transfer_by_rank(ELLS_COST, float(k), cs, env, table)
             full[name][:, j] = parts[-1]
             rank1[name][:, j] = parts[1]

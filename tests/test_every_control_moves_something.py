@@ -95,7 +95,7 @@ def fixture():
         omega_r=LCDM_MODEL.omega_r, omega_b_h2=0.0224,
         transfer_gamma=0.48, hubble_h=0.5, f_2=F2_DEFAULT,
         line_of_sight_weight="printed")
-    s = coefficient_sets(K, env)[1]
+    s = coefficient_sets(K, env, source="as built")[1]
     needed = required_multipoles(ELLS)
     eta_0 = float(env.background.eta_0)
     table = BesselTable.build(

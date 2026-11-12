@@ -99,7 +99,7 @@ def _report() -> None:
         print(f"\n{'='*86}\n  {label}\n{'='*86}")
 
         for k in KS:
-            n_, c_ = coefficient_sets(float(k), env)
+            n_, c_ = coefficient_sets(float(k), env, source="as built")
             diffusion = float(np.exp(-((float(k) / env.damping_k) ** 2)))
             common = dict(table=table, weight=env.weight, diffusion=diffusion,
                           damping_total=diffusion, eta_star=env.eta_star,

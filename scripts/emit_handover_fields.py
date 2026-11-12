@@ -108,9 +108,8 @@ def main() -> int:
     eta = np.linspace(recombination.eta[0], model.eta_0, n_eta)
     phi_a, phi_h = potentials(model, eta)
     aH = model.conformal_hubble(model.a_of_eta(eta))
-    opacity = np.interp(eta, recombination.eta, recombination.opacity)
-    kappa_prime = np.interp(eta, recombination.eta, recombination.kappa_prime)
-    visibility = np.interp(eta, recombination.eta, recombination.visibility)
+    # T-191: kappa', W and V from one kappa on this grid.
+    kappa_prime, opacity, visibility = recombination.weights_on(eta)
 
     inside = eta <= 6.0 * recombination.eta_star
     acoustic = solve_acoustic(

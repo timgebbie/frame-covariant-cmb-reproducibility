@@ -319,6 +319,26 @@ class RecombinationHistory:
         """
         return float(np.trapezoid(self.visibility, self.eta))
 
+    def weights_on(self, eta: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+        r"""$(\kappa', W, \mathcal V)$ on another grid, from one $\kappa$ --- finding **T-191**.
+
+        $\kappa'$ is interpolated onto `eta`, and $\kappa$ is integrated from
+        it **on that grid**, so $W=e^{-\kappa}$ and $\mathcal V=\kappa'W$ are a
+        function and its derivative there, as eq:assembly-invariant needs.
+        Every line-of-sight grid used to interpolate $W$ and $\mathcal V$
+        separately, which gives two functions: on Planck's F9 grid
+        $\int\mathcal V\,{\rm d}\eta=0.99914$ against
+        $W(\eta_0)-W(\eta_{\rm start})=1$, a floor under the slots' sum-back
+        that does not fall with the step. On this history's own grid the
+        result is this history's arrays, exactly.
+        """
+        eta = np.asarray(eta, dtype=float)
+        kappa_prime = np.interp(eta, self.eta, self.kappa_prime)
+        forward = np.concatenate(([0.0], cumulative_trapezoid(kappa_prime, eta)))
+        kappa = forward[-1] - forward + float(np.interp(eta[-1], self.eta, self.kappa))
+        opacity = np.exp(-kappa)
+        return kappa_prime, opacity, kappa_prime * opacity
+
     def weight(self, which: Weighting) -> np.ndarray:
         """The weight the integrated gravitational source carries.
 

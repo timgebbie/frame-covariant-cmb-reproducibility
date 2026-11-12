@@ -130,7 +130,7 @@ def compute() -> dict:
     # --- the observable, over the full k grid -------------------------
     transfer = {f: np.zeros((ELLS.size, K_COM.size)) for f in ("newtonian", "cdm")}
     for j, k in enumerate(K_COM):
-        sets = dict(zip(("newtonian", "cdm"), coefficient_sets(float(k), env)))
+        sets = dict(zip(("newtonian", "cdm"), coefficient_sets(float(k), env, source="as built")))
         diffusion = float(np.exp(-((float(k) / env.damping_k) ** 2)))
         for name, cs in sets.items():
             transfer[name][:, j] = integral_solution(
@@ -149,7 +149,7 @@ def compute() -> dict:
     #     the per-mode answer does not have.
     per_k = {}
     for k in K_PROBE:
-        sets = dict(zip(("newtonian", "cdm"), coefficient_sets(float(k), env)))
+        sets = dict(zip(("newtonian", "cdm"), coefficient_sets(float(k), env, source="as built")))
         diffusion = float(np.exp(-((float(k) / env.damping_k) ** 2)))
         t = {name: integral_solution(
                 ELLS, coefficients=cs.coefficients, c1_prime=cs.c1_prime,

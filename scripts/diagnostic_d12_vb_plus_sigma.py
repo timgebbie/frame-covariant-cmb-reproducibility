@@ -72,7 +72,7 @@ def _report() -> None:
               f" {'|d(v_b - C_2)|':>16s} {'|d(v_b + C_2)|':>16s}")
         print("  " + "-" * 66)
         for k in KS:
-            n_, c_ = coefficient_sets(float(k), env)
+            n_, c_ = coefficient_sets(float(k), env, source="as built")
             # **CoefficientSet.v_b is the UN-REDUCED dipole** --- both sets
             # store `v_b = k * vb_t` (coefficients.py:677, 983), while C_2 is
             # v/k. Differencing them as stored is M4, and the first run of
@@ -111,7 +111,7 @@ def _report() -> None:
                                 omega_b_h2=obh2, hubble_h=h,
                                 line_of_sight_weight="printed")
         for k in KS:
-            n_, c_ = coefficient_sets(float(k), env)
+            n_, c_ = coefficient_sets(float(k), env, source="as built")
             diff = (np.asarray(n_.v_b, float) - np.asarray(c_.v_b, float)) / float(k)
             boost = np.asarray(c_.coefficients.c2, float)      # = v/k
             res = diff - boost

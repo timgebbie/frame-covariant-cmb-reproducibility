@@ -174,3 +174,63 @@ def test_the_live_supplement_exists_and_the_frozen_ones_are_kept():
         "S36 keeps the frozen `.tex`, not the build outputs --- the rendering "
         "of record for an earlier release is its release asset and its "
         "archived DOI.")
+
+
+def _history(repo: Path):
+    """A git runner for a throwaway history with stated commit times."""
+    import os
+
+    def git(*args: str, date: str | None = None) -> None:
+        env = dict(os.environ, GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@example.org",
+                   GIT_COMMITTER_NAME="t", GIT_COMMITTER_EMAIL="t@example.org")
+        if date:
+            env.update(GIT_AUTHOR_DATE=date, GIT_COMMITTER_DATE=date)
+        subprocess.run(["git", "-C", str(repo), *args], check=True,
+                       capture_output=True, env=env)
+    return git
+
+
+def test_a_merged_input_older_than_the_pdf_is_caught(tmp_path):
+    r"""**The control the review of 3 November asked for.** A branch changes an `\input`
+    before the PDF is rebuilt on `main`, and is merged after. Its commit is
+    older than the PDF's, so the commit clock called the PDF current; the PDF
+    was not built from the input `main` now holds. The verdict compares the
+    input's contents at the PDF's commit with its contents now, and no time
+    enters it. A byte-identical restore of the input is current again (T-183's
+    case, with no special branch).
+    """
+    from check_release_hygiene import stale_inputs
+
+    repo = tmp_path / "history"
+    repo.mkdir()
+    git = _history(repo)
+    git("init", "-q", "-b", "main")
+    (repo / "master.tex").write_text("\\input{table.tex}\n", encoding="utf-8")
+    (repo / "table.tex").write_text("one\n", encoding="utf-8")
+    (repo / "doc.pdf").write_bytes(b"%PDF built from one")
+    git("add", ".")
+    git("commit", "-q", "-m", "A", date="2026-01-01T00:00:00+00:00")
+    git("checkout", "-q", "-b", "side")
+    (repo / "table.tex").write_text("two\n", encoding="utf-8")
+    git("commit", "-q", "-am", "B: the input moves, early", date="2026-01-02T00:00:00+00:00")
+    git("checkout", "-q", "main")
+    (repo / "doc.pdf").write_bytes(b"%PDF rebuilt from one")
+    git("commit", "-q", "-am", "C: the PDF is rebuilt, later", date="2026-01-03T00:00:00+00:00")
+    git("merge", "-q", "--no-edit", "side", date="2026-01-04T00:00:00+00:00")
+
+    sources = [repo / "master.tex", repo / "table.tex"]
+    stale, by_git, by_clock = stale_inputs(repo, repo / "doc.pdf", sources)
+    assert [s.name for s in stale] == ["table.tex"], (
+        "a merged input that predates the PDF's rebuild passed the gate: the "
+        "verdict is reading a clock, not the contents (review of 3 November)")
+    assert (by_git, by_clock) == (2, 0)
+
+    (repo / "table.tex").write_text("one\n", encoding="utf-8")
+    git("commit", "-q", "-am", "D: a byte-identical restore", date="2026-01-05T00:00:00+00:00")
+    stale, _, _ = stale_inputs(repo, repo / "doc.pdf", sources)
+    assert stale == [], "a byte-identical restore was called stale (T-183)"
+
+    (repo / "table.tex").write_text("three, not yet committed\n", encoding="utf-8")
+    stale, by_git, by_clock = stale_inputs(repo, repo / "doc.pdf", sources)
+    assert [s.name for s in stale] == ["table.tex"] and by_clock == 1, (
+        "an uncommitted edit must be judged by its own clock, and it is newer")

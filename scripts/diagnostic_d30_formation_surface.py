@@ -128,7 +128,7 @@ def _surface(label, bg, obh2, h, gamma):
     acc = {f: np.zeros((ELLS.size, sl.size)) for f in FRAMES}
     gate1 = 0.0
     for j, k in enumerate(k_com):
-        sets = dict(zip(FRAMES, coefficient_sets(float(k), env)))
+        sets = dict(zip(FRAMES, coefficient_sets(float(k), env, source="as built")))
         diffusion = float(np.exp(-((float(k) / env.damping_k) ** 2)))
         for f in FRAMES:
             s = sets[f]

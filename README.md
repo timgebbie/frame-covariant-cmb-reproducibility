@@ -82,7 +82,7 @@ exactly constant, is the null control: there the late share must be zero.
 
 ## The angular spectrum
 
-![F9 — the normalised angular spectrum D_ell/D_30 for CDM (Einstein–de Sitter), ΛCDM and the Planck 2018 set on a logarithmic multipole axis, panel (a) in the CDM frame against CAMB and CLASS as context, panel (b) the same spectra in the Newtonian and CDM frames](figures/f9-acoustic-spectrum-v1.2.0.png)
+![F9 — the normalised angular spectrum D_ell/D_30 for CDM (Einstein–de Sitter), ΛCDM and the Planck 2018 set on a logarithmic multipole axis, panel (a) in the CDM frame against CAMB and CLASS as context, panel (b) the same spectra in the Newtonian and CDM frames](figures/f9-acoustic-spectrum-v1.4.0.png)
 
 Figure F9 is the angular power spectrum for the three backgrounds this bundle
 ships, CDM (Einstein–de Sitter), ΛCDM and the stamped Planck 2018 set, as
@@ -375,8 +375,9 @@ $-(\Phi_A'-\Phi_H')$ alone, the integrated Sachs–Wolfe term, whatever the
 moments do after the tight-coupling window.
 
 The assembly is built with `RANK_ONE_SOURCE = "paper 1"` in `coefficients.py`
-and `three_slots` in `functions/spectra/line_of_sight.py`; the module default
-still reads `"as built"`, the antecedent's (102) path. D44 scores the assembly
+and `three_slots` in `functions/spectra/line_of_sight.py`. Since v1.4.0 that
+is the module default, and the antecedent's (102) path names `"as built"`
+where its coefficients are built. D44 scores the assembly
 on three backgrounds: its three conditions hold to $3.3\times10^{-13}$, and its
 slots give one $C_\ell$ in the Newtonian and CDM frames to $4\times10^{-14}$.
 D45 sums the slots back to the direct integral they rearrange: the difference
@@ -442,7 +443,10 @@ Working and checked:
   $C_\ell$ in both frames, to $4\times10^{-14}$ (D44, F9);
 - the slots summed back to the integral they rearrange, with the residual
   in the direct integral's quadrature (D45);
-- the late integrated Sachs–Wolfe effect (F10).
+- the late integrated Sachs–Wolfe effect (F10);
+- one $\kappa$ on every line-of-sight grid, so the visibility is the
+  opacity's derivative there and $\int\mathcal V$ meets $W(\eta_0)-W(\eta_{\rm start})$
+  to quadrature (T-191, v1.4.0).
 
 Not yet right, and the work of v1.4.0:
 
@@ -455,11 +459,7 @@ Not yet right, and the work of v1.4.0:
   $\ell\simeq7$ to $12$ (T-192);
 - the tight-coupling pair is integrated to six times $\eta_\ast$ and its
   moments are held after, with no slip, no growing quadrupole and no
-  polarization (A-5);
-- $\int\mathcal V=0.99914$ on the line-of-sight grid (T-191), whose repair
-  integrates one $\kappa$ on that grid; it rides with v1.4.0's regeneration,
-  as does the module default `RANK_ONE_SOURCE`, which becomes Paper 1's
-  signs with the antecedent's (102) pinned to its own.
+  polarization (A-5).
 
 Before v1.3.0 the released line of sight was (102). It integrates by parts
 onto coefficients that hold the scattering rate, which carried
@@ -605,10 +605,10 @@ enters this table when `scripts/run_all.py` runs it.
 | **F3** angular spectrum, both routes | criteria 3 and 4: (186) by the mode route and the covariant route, agreeing exactly since T-17 put the combined coefficients in $\mathbb Q$ | `v1.0.0` |
 | **F4** real-space correlation | the round trip $C_\ell\to C(\theta)\to C_\ell$, residual below $10^{-13}$ | `v1.0.0` |
 | **F5** source decomposition, two frames | (102) as built: the total is common to both frames and the decomposition by rank is not (S28). (102)'s frame disagreement is total, median $9.99\times10^{-1}$ over $2\le\ell\le400$ (T-59); D44 measures the assembly that replaced it | `v1.2.0` |
-| **F6** what each approximation is worth | A-1, A-2 and the small-scale approximation as ratios over six decades: one is a different calculation, one is free where this release claims, one is worst at large scales | `v1.1.0` |
+| **F6** the cost of each approximation | A-1, A-2 and the small-scale approximation as ratios over six decades: one is a different calculation, one is free where this release claims, one is worst at large scales | `v1.1.0` |
 | **F7** frame specialisation | the generic $u^a$ carried through (102) and the frame chosen at the end. The dipole was expected to stand an order of magnitude apart and lands on each curve instead, worst ratio 1.24, because (102) builds every $\ell$ from the same three coefficients (T-31) | `v1.2.0` |
 | **F8** coupling schematic | a structural statement, not a measurement: which couplings exist at which order | `v1.1.0` |
-| **F9** angular spectrum with the acoustic peaks | the release's deliverable: $D_\ell$ for CDM, ΛCDM and the Planck set, shape-normalised at $\ell=30$, from the frame-invariant assembly, against CAMB and CLASS as context (S4c). First maxima at 165.4, 143.8 and 188.5; the two frames agree to $3.5\times10^{-14}$ | `v1.2.0` |
+| **F9** angular spectrum with the acoustic peaks | the release's deliverable: $D_\ell$ for CDM, ΛCDM and the Planck set, shape-normalised at $\ell=30$, from the frame-invariant assembly, against CAMB and CLASS as context (S4c). First maxima at 165.4, 143.8 and 188.5; the two frames agree to $3.5\times10^{-14}$ | `v1.4.0` |
 | **F10** formation surface | $C_\ell(\eta)/C_\ell(\eta_0)$ on Planck, CDM frame, from the three slots. The late integrated Sachs–Wolfe term deposits 22 to 54% of today's $C_\ell$ at $\ell=2$ to $4$ and 5 to 21% above $\ell\simeq30$; the $\eta_0$ column reproduces the full integral to $1.0\times10^{-13}$. Drawn from (102), it showed no late power (T-128) | `v1.3.0` |
 
 | Diagnostic | Evidence for | Version |

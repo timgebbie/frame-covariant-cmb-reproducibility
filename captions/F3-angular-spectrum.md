@@ -7,14 +7,14 @@ artefact = "figures/f3-angular-spectrum-v1.0.0.pdf"
 category = "recovery"
 caption = """
 Eq.~(186) computed from Eq.~(176), for the standard-CDM model of \\S8.3.2 and for
-$\\Lambda$CDM, which \\emph{Annals~II} does not treat. \\textbf{Upper panel:}
+$\\Lambda$CDM, which \\emph{Annals~II} does not treat. The upper panel shows
 $D_\\ell=\\ell(\\ell+1)C_\\ell/2\\pi$, each normalised to its own $\\ell=2$ value, so
 that the comparison is of \\emph{shape} and not of an amplitude neither model
-fixes here. \\textbf{Lower panel:} the fractional difference between the mode
+fixes here. The lower panel shows the fractional difference between the mode
 route of (186) and the covariant route of (187) with (188). Those two are
 identical analytically, so the panel is a check on the arithmetic and not on the
-physics --- and it is worth having, because it caught a factor of four in this
-bundle's own harmonic weights before any figure was drawn. It sits at
+physics. That check caught a factor of four in this bundle's own harmonic
+weights before any figure was drawn. It sits at
 $10^{-16}$, five orders below the $10^{-11}$ acceptance threshold.
 """
 +++

@@ -155,7 +155,7 @@ def bundle_spectrum(f_2: float) -> tuple[np.ndarray, dict]:
     for j, k in enumerate(K_COM):
         if j < start:
             continue
-        _, cdm = coefficient_sets(float(k), env)
+        _, cdm = coefficient_sets(float(k), env, source="as built")
         transfer[:, j] = transfer_by_rank(ELLS, float(k), cdm, env, table)[-1]
         if (j + 1) % 50 == 0 or j + 1 == K_COM.size:
             held = np.vstack([transfer, np.full((1, K_COM.size), j + 1.0)])

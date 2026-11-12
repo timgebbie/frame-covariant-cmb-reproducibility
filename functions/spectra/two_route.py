@@ -63,7 +63,7 @@ from functions.spectra.acoustic import (
 )
 from functions.spectra.bessel_table import BesselTable
 from functions.spectra.coefficients import (
-    newtonian_c1_prime, newtonian_coefficients, reduce_dipole)
+    newtonian_c1_prime, newtonian_coefficients, rank_one_source, reduce_dipole)
 from functions.spectra.decoupling import RecombinationHistory, diffusion_scale
 from functions.spectra.integral_solution import integral_solution, required_multipoles
 from functions.spectra.pipeline import (
@@ -216,9 +216,8 @@ def two_route_transfer(
     md_reference = float(rec.eta[0])
     phi_a, phi_h = potentials(bg, eta, constant_below=md_reference)
     aH = bg.conformal_hubble(bg.a_of_eta(eta))
-    kp = np.interp(eta, rec.eta, rec.kappa_prime)
-    vis = np.interp(eta, rec.eta, rec.visibility)
-    opa = np.interp(eta, rec.eta, rec.opacity)
+    # T-191: kappa', W and V from one kappa on this grid.
+    kp, opa, vis = rec.weights_on(eta)
     k_d = float(diffusion_scale(rec, r_of_eta=rec.kappa_prime * 0.0)(rec.eta_star))
 
     # **T-58.** This read `float(eta[-1])` --- $\eta_0$ --- until 2026-10-17,
@@ -289,15 +288,19 @@ def two_route_transfer(
     # rather than defaulted, because MONOPOLE_ROW decides whether it is used
     # and a caller that cannot supply it cannot take the corrected row.
     # B-16, B-17.
-    coefficients = newtonian_coefficients(eta, k, delta_t=delta_t, phi_a=phi_a,
-                                          kappa_prime=kp, v_b=vb_t,
-                                          a_b0=-(float(k) / 3.0) * tau_1)
-    c1_prime = newtonian_c1_prime(
-        eta, k, delta_t=delta_t, phi_a=phi_a,
-        phi_a_prime=CubicSpline(eta, phi_a).derivative(1)(eta),
-        phi_h_prime=CubicSpline(eta, phi_h).derivative(1)(eta),
-        tau_1=tau_1, conformal_hubble=aH,
-        kappa_prime_v_b_prime=CubicSpline(eta, kp * vb_t).derivative(1)(eta))
+    # (102) is the antecedent's, so its coefficients are built as the
+    # antecedent built them: criterion 5b compares (102) with (177)-(179), not
+    # Paper 1's source with them.
+    with rank_one_source("as built"):
+        coefficients = newtonian_coefficients(eta, k, delta_t=delta_t, phi_a=phi_a,
+                                              kappa_prime=kp, v_b=vb_t,
+                                              a_b0=-(float(k) / 3.0) * tau_1)
+        c1_prime = newtonian_c1_prime(
+            eta, k, delta_t=delta_t, phi_a=phi_a,
+            phi_a_prime=CubicSpline(eta, phi_a).derivative(1)(eta),
+            phi_h_prime=CubicSpline(eta, phi_h).derivative(1)(eta),
+            tau_1=tau_1, conformal_hubble=aH,
+            kappa_prime_v_b_prime=CubicSpline(eta, kp * vb_t).derivative(1)(eta))
     generic = integral_solution(
         ells, coefficients=coefficients, table=table, weight=opa,
         diffusion=damping, damping_total=damping, eta_star=rec.eta_star,

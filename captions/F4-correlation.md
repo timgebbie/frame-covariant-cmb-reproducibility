@@ -9,12 +9,12 @@ caption = """
 $C(\\theta)=\\sum_\\ell\\frac{2\\ell+1}{4\\pi}C_\\ell P_\\ell(\\cos\\theta)$, the
 real-space view of Figure~3: the same content read as a correlation between two
 directions separated by $\\theta$ rather than as power at a multipole.
-\\textbf{Upper panel:} $C(\\theta)/C(0)$ for standard CDM and $\\Lambda$CDM,
+The upper panel shows $C(\\theta)/C(0)$ for standard CDM and $\\Lambda$CDM,
 summed over $2\\le\\ell\\le20$ --- the range Figure~3 claims, bounded by (186)
 dropping the acoustic modulation. Summing further would draw multipoles this
 release does not stand behind, and a real-space curve hides which $\\ell$
 contributed, so the restriction is made in the transform rather than in this
-caption. \\textbf{Lower panel:} the Legendre round trip
+caption. The lower panel shows the Legendre round trip
 $C_\\ell\\to C(\\theta)\\to C_\\ell$, at $4\\times10^{-14}$ and
 $7\\times10^{-14}$ against an acceptance of $10^{-13}$. It tests the transform
 and \\emph{not} the spectrum --- the two share their $C_\\ell$ --- which is the

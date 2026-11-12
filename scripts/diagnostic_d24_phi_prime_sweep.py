@@ -186,7 +186,7 @@ def spectra_both_frames(env, table, k_com, power):
     """
     transfer = {f: np.zeros((ELLS.size, k_com.size)) for f in FRAMES}
     for j, k in enumerate(k_com):
-        sets = dict(zip(FRAMES, coefficient_sets(float(k), env)))
+        sets = dict(zip(FRAMES, coefficient_sets(float(k), env, source="as built")))
         for f in FRAMES:
             transfer[f][:, j] = transfer_by_rank(ELLS, float(k), sets[f],
                                                  env, table)[-1]
@@ -209,9 +209,9 @@ def kappa_second_share(env, k: float, frame: str) -> float:
     i = int(np.argmax(np.asarray(env.visibility, dtype=float)))
     try:
         _co.KAPPA_SECOND_LAMBDA = keep
-        live = dict(zip(FRAMES, coefficient_sets(float(k), env)))[frame]
+        live = dict(zip(FRAMES, coefficient_sets(float(k), env, source="as built")))[frame]
         _co.KAPPA_SECOND_LAMBDA = 0.0
-        off = dict(zip(FRAMES, coefficient_sets(float(k), env)))[frame]
+        off = dict(zip(FRAMES, coefficient_sets(float(k), env, source="as built")))[frame]
     finally:
         _co.KAPPA_SECOND_LAMBDA = keep
     a = float(np.asarray(live.c1_prime, dtype=float)[i])
@@ -232,7 +232,7 @@ def controls(env) -> bool:
         keep = _co.PHI_PRIME_DRIVING_LAMBDA
         try:
             _co.PHI_PRIME_DRIVING_LAMBDA = float(lam)
-            return dict(zip(FRAMES, coefficient_sets(k, env)))
+            return dict(zip(FRAMES, coefficient_sets(k, env, source="as built")))
         finally:
             _co.PHI_PRIME_DRIVING_LAMBDA = keep
 

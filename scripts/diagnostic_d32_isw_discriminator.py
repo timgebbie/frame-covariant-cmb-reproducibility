@@ -206,10 +206,10 @@ def _late_share(label, bg, obh2, h, gamma) -> tuple[dict, float]:
     acc = {f: np.zeros((ELLS.size, sl.size)) for f in FRAMES}
     gate, dk = 0.0, k_com[1] - k_com[0]
     for j, k in enumerate(k_com):
-        sets = dict(zip(FRAMES, coefficient_sets(float(k), env)))
+        sets = dict(zip(FRAMES, coefficient_sets(float(k), env, source="as built")))
         if _tf.BULK_SOURCE_CONTROLS.get("isw_only_at_w"):
             _co.PHI_PRIME_DRIVING_LAMBDA = 0.0
-            off = dict(zip(FRAMES, coefficient_sets(float(k), env)))
+            off = dict(zip(FRAMES, coefficient_sets(float(k), env, source="as built")))
             _co.PHI_PRIME_DRIVING_LAMBDA = 1.0
         else:
             off = {}

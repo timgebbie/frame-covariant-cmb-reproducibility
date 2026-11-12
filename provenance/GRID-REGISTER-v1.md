@@ -60,7 +60,7 @@ template the other rows are measured against.
 
 ### `mode_eta` — one acoustic mode's own integration grid, from its derived start
 
-`functions/spectra/pipeline.py:583`, `np.linspace`
+`functions/spectra/pipeline.py:582`, `np.linspace`
 
 `required_acoustic_points(k, eta_couple - start)` at 24 samples per
 acoustic oscillation, on a floor of 512. Arithmetic, not a knob: delta_T goes
@@ -73,7 +73,7 @@ spanning a factor of two thousand in k, which is why no number is chosen.
 
 ### `eta` — the eta grid for the two-frame evaluation of (102): F2, F5, F7
 
-`functions/spectra/two_frame.py:318`, `np.linspace`
+`functions/spectra/two_frame.py:319`, `np.linspace`
 
 `required_n_eta(k_max, span)` when `n_eta is None`, which is how every
 figure calls it, and `check_k` RAISES when a caller asks for a mode the grid
@@ -83,7 +83,7 @@ nothing in the bundle does.
 
 ### `mode_eta` — one acoustic mode's integration grid on the (102) generic-u^a route
 
-`functions/spectra/two_frame.py:399`, `np.linspace`
+`functions/spectra/two_frame.py:408`, `np.linspace`
 
 The same construction as `pipeline.py::mode_eta` and in the same
 release, because **T-51 had one instance per route**: `pipeline.run`,
@@ -108,7 +108,7 @@ it derived.
 
 ### `mode_eta` — one acoustic mode's integration grid inside criterion 5b's gate
 
-`functions/spectra/two_route.py:235`, `np.linspace`
+`functions/spectra/two_route.py:234`, `np.linspace`
 
 `required_acoustic_points`, floored at the gate's own `n_eta` so that
 the mode grid is never coarser than the line-of-sight grid it is interpolated
@@ -314,7 +314,7 @@ which is far inside the band 460 already carries.
 
 ### `k_com` — the k grid of D44's spectra
 
-`scripts/diagnostic_d44_the_line_of_sight_in_invariant_slots.py:181`, `np.linspace`
+`scripts/diagnostic_d44_the_line_of_sight_in_invariant_slots.py:177`, `np.linspace`
 
 F9's grid, from the same `required_k_points` per background (T-56), so
 the two instruments sample C_l alike and `required_k_points` raises where the
@@ -322,7 +322,7 @@ period of j_l^2 cannot be met.
 
 ### `k_com` — the k grid of D45's cross-spectra
 
-`scripts/diagnostic_d45_the_slots_sum_back.py:127`, `np.linspace`
+`scripts/diagnostic_d45_the_slots_sum_back.py:137`, `np.linspace`
 
 F9's grid, from the same `required_k_points` per background (T-56), so
 the cross-spectra add to the spectrum F9 draws.
@@ -339,7 +339,7 @@ the last place a grid may be chosen by eye.
 
 ### `k_com` — the k grid F10's accumulation is integrated over
 
-`scripts/figure_f10_formation_surface.py:170`, `np.linspace`
+`scripts/figure_f10_formation_surface.py:165`, `np.linspace`
 
 `required_k_points(K_MAX, r_theta)`, K_MAX = 300, matching D30
 exactly so the figure and the diagnostic behind it are the same measurement.
@@ -350,7 +350,7 @@ it.
 
 ### `k_com` — the k grid the released angular spectrum is integrated on
 
-`scripts/figure_f9_acoustic_spectrum.py:146`, `np.linspace`
+`scripts/figure_f9_acoustic_spectrum.py:152`, `np.linspace`
 
 `required_k_points(1500, r_theta)`, per background because r_theta is.
 **Was `np.arange(0.05, 1500.0, np.pi/3)` until 2026-10-17** --- 0.96 samples
@@ -506,7 +506,7 @@ refining the grid cannot change what counts as the pedestal.
 
 ### `CONDITION_K` — the modes at which D44 checks the frame conditions on the coefficients
 
-`scripts/diagnostic_d44_the_line_of_sight_in_invariant_slots.py:104`, `np.arange`
+`scripts/diagnostic_d44_the_line_of_sight_in_invariant_slots.py:109`, `np.arange`
 
 k = 2..400 in steps of 2: each mode is an independent pointwise check
 of an identity between two coefficient sets, not a quadrature node, so there
@@ -515,7 +515,7 @@ acoustic band to beyond the second trough on all three backgrounds.
 
 ### `ELLS` — the multipoles D44 reads the acoustic series on
 
-`scripts/diagnostic_d44_the_line_of_sight_in_invariant_slots.py:100`, `np.arange`
+`scripts/diagnostic_d44_the_line_of_sight_in_invariant_slots.py:105`, `np.arange`
 
 Linear in l at 15 from 30 to 1200, with the plateau points 2-25 below.
 The rule is the acoustic spacing: a series spaced near l_A ~ 270 is sampled
@@ -525,7 +525,7 @@ the spacing, 7.5, printed beside it by `first_acoustic_peak`.
 
 ### `CROSS_ELLS` — the multipoles at which D45 splits C_l into the slots' auto- and cross-spectra
 
-`scripts/diagnostic_d45_the_slots_sum_back.py:105`, `np.arange`
+`scripts/diagnostic_d45_the_slots_sum_back.py:115`, `np.arange`
 
 D44's multipoles, the plateau points 2-25 and then l = 30-1200 in steps of
 15, so that the two instruments read the same series by the same maxima. The
@@ -534,7 +534,7 @@ a sign change of a cross-term can fall between samples unseen.
 
 ### `SUM_BACK_K` — the modes at which D45 sums the three slots back to the direct integral
 
-`scripts/diagnostic_d45_the_slots_sum_back.py:99`, `np.linspace`
+`scripts/diagnostic_d45_the_slots_sum_back.py:109`, `np.linspace`
 
 Forty modes in each of k = 2-100, 100-400 and 400-1500, the bands in which
 the step k*d(eta) of the line-of-sight quadrature changes regime. Each mode is
@@ -614,7 +614,7 @@ Set by the transform length, not chosen. The FFT's own grid is the k grid of its
 
 ### `master` — the grid Phi_A and Phi_H are splined on, shared by every mode
 
-`functions/spectra/pipeline.py:574`, `np.logspace`
+`functions/spectra/pipeline.py:573`, `np.logspace`
 
 16384 logarithmic samples from the earliest acoustic start to
 eta_couple. **It carries no physical scale of its own**: it resamples a
@@ -774,7 +774,7 @@ and not on a copy of it.
 
 ### `ELLS` — the multipoles F10's surface is drawn over
 
-`scripts/figure_f10_formation_surface.py:122`, `np.arange`
+`scripts/figure_f10_formation_surface.py:117`, `np.arange`
 
 Dense below 30, then stepping by 20 to 300. **This is the axis the
 first version of F10 threw away**, and the reason the rebuild exists: the
@@ -786,7 +786,7 @@ damping tail is F9's and is not drawn.
 
 ### `LEVELS` — the filled contour levels of F10's panel (b)
 
-`scripts/figure_f10_formation_surface.py:139`, `np.linspace`
+`scripts/figure_f10_formation_surface.py:134`, `np.linspace`
 
 `linspace(0.0, 1.0, 21)` --- **a set of drawing levels, not a
 discretisation of anything continuous**, which is what `index` is for. It is
@@ -803,7 +803,7 @@ level set that stopped at 0.90 could not show the thing the figure is for.
 
 ### `post` — the conformal times F10 samples AFTER recombination
 
-`scripts/figure_f10_formation_surface.py:166`, `np.geomspace`
+`scripts/figure_f10_formation_surface.py:161`, `np.geomspace`
 
 `eta_* + geomspace(span*1e-4, span, N_SLICES-4)`, ten slices.
 Geometric because the visibility is narrow and a linear grid would put every
@@ -813,7 +813,7 @@ distinguishable and enough to read a progression.
 
 ### `pre` — the conformal times F10 samples ACROSS recombination
 
-`scripts/figure_f10_formation_surface.py:165`, `np.linspace`
+`scripts/figure_f10_formation_surface.py:160`, `np.linspace`
 
 `linspace(eta_floor, eta_star, 4)`. **Linear, not geometric, and
 deliberately so**: the PI asked for the autocorrelation *just before
@@ -874,7 +874,7 @@ Selection only, with the dipole prepended so the probe is on the figure.
 
 ### `ELLS` — the multipoles F9 is drawn at
 
-`scripts/figure_f9_acoustic_spectrum.py:91`, `np.arange`
+`scripts/figure_f9_acoustic_spectrum.py:97`, `np.arange`
 
 Linear at 30 across the acoustic band. Each ell is an independent
 quadrature, so this selects which points are drawn and changes no value ---

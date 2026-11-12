@@ -124,7 +124,7 @@ def _late(bg, obh2, h, gamma, zero):
     acc = np.zeros((ELLS.size, sl.size))
     dk = k_com[1] - k_com[0]
     for j, k in enumerate(k_com):
-        s = coefficient_sets(float(k), env)[1]          # CDM frame
+        s = coefficient_sets(float(k), env, source="as built")[1]          # CDM frame
         diffusion = float(np.exp(-((float(k) / env.damping_k) ** 2)))
         extra = dict(split_by_parts=True,
                      by_parts_weight_terms=zero not in (

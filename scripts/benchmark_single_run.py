@@ -141,7 +141,7 @@ def main() -> int:
                "the acoustic solve and the line-of-sight projection, once per k"):
         for j, k in enumerate(K_COM):
             t0 = time.perf_counter()
-            _, cdm = coefficient_sets(float(k), env)
+            _, cdm = coefficient_sets(float(k), env, source="as built")
             t1 = time.perf_counter()
             transfer[:, j] = transfer_by_rank(ELLS, float(k), cdm, env, table)[-1]
             t2 = time.perf_counter()

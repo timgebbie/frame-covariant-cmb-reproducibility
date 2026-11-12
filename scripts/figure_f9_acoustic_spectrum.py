@@ -81,7 +81,13 @@ from functions.plotting.style import (  # noqa: E402
     use_house_style,
 )
 
-VERSION = "v1.2.0"
+#: The release that last changed what this figure shows. v1.4.0: one kappa on
+#: the line-of-sight grid (T-191) moves every transfer at the 1e-3 level.
+VERSION = "v1.4.0"
+
+#: The external spectra's own stamp: the CAMB and CLASS runs of v1.2.0
+#: (`reference/REFERENCE-STAMP-v1.2.0.md`), which a new F9 does not rerun.
+REFERENCE_VERSION = "v1.2.0"
 
 #: Linear across the acoustic band, as `compare_criterion_5b.py` is and for the
 #: same reason: the peaks sit near 200, 410 and 610, and a logarithmic grid
@@ -204,7 +210,7 @@ def spectrum(background, omega_b_h2: float,
             continue
         if lattice:
             sets = dict(zip(("newtonian", "cdm"),
-                            coefficient_sets(float(k), env)))
+                            coefficient_sets(float(k), env, source="as built")))
             for name, coefficients in sets.items():
                 transfer[name][:, j] = transfer_by_rank(
                     ELLS, float(k), coefficients, env, table)[-1]
@@ -258,7 +264,7 @@ def shape_d(ell: np.ndarray, cl: np.ndarray) -> np.ndarray:
 
 def reference(name: str) -> tuple[np.ndarray, np.ndarray]:
     ell, cl = [], []
-    with (ROOT / "reference" / f"{name}-tt-{VERSION}.csv").open(encoding="utf-8") as fh:
+    with (ROOT / "reference" / f"{name}-tt-{REFERENCE_VERSION}.csv").open(encoding="utf-8") as fh:
         for row in csv.reader(fh):
             if not row or row[0].startswith("#") or row[0] == "ell":
                 continue
@@ -372,7 +378,6 @@ def draw(curves, peaks, frames, gaps) -> int:
     # on claiming a peak.
     ours = peaks["PLANCK_MODEL"]
     if np.isfinite(ours):
-        ax.axvline(ours, color=INK["muted"], lw=0.8, ls=SERIES_DASH[4], zorder=1)
         said = f"first peak $\\ell\\simeq{ours:.0f}$"
     else:
         said = "no interior maximum above $\\ell=30$"
@@ -424,6 +429,12 @@ def draw(curves, peaks, frames, gaps) -> int:
         ax.set_ylim(top=1.6 * top)
         ax.legend(fontsize=6.4, frameon=False, loc="upper right", ncol=1,
                   handlelength=2.2, borderaxespad=0.4)
+    # The first-peak marker stops just above the curves, so it no longer runs
+    # through the legend in the space the lifted axis leaves for it.
+    if np.isfinite(ours):
+        lo, hi = axes[0].get_ylim()
+        axes[0].axvline(ours, ymax=(1.05 * top - lo) / (hi - lo),
+                        color=INK["muted"], lw=0.8, ls=SERIES_DASH[4], zorder=1)
     fig.tight_layout()
     written = save_figure(fig, STEM, VERSION)
     if STEM != "f9-acoustic-spectrum":
@@ -665,10 +676,12 @@ def main() -> int:
                   f"{STEM}-partial.csv]", flush=True)
         else:
             both = spectrum(background, omega_b_h2, hubble_h)
+            # At full precision: the two frames agree to 1e-14, so a resumed
+            # background kept at ten digits read a frame gap of zero.
             for i, l in enumerate(ELLS):
                 part.add(label, fingerprint=stamp, ell=int(l),
-                         cdm=f"{both['cdm'][i]:.9e}",
-                         newtonian=f"{both['newtonian'][i]:.9e}")
+                         cdm=repr(float(both['cdm'][i])),
+                         newtonian=repr(float(both['newtonian'][i])))
         frames[label] = {n: shape(ELLS, cl) for n, cl in both.items()}
         curves[label] = frames[label]["cdm"]
         # **Peaks are found on D_l, drawn on C_l.** The acoustic peak

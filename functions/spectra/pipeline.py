@@ -503,9 +503,8 @@ def run(
     aH = background.conformal_hubble(a)
     r = baryon_photon_ratio(a, omega_b_h2=omega_b_h2)
 
-    kappa_prime = np.interp(eta, recombination.eta, recombination.kappa_prime)
-    visibility = np.interp(eta, recombination.eta, recombination.visibility)
-    opacity = np.interp(eta, recombination.eta, recombination.opacity)
+    # T-191: kappa', W and V from one kappa on this grid.
+    kappa_prime, opacity, visibility = recombination.weights_on(eta)
     gravitational_weight = visibility if weighting is Weighting.ANNALS_II else opacity
     # A-1 is the gravitational weight, A-2 the Doppler weight: two approximations,
     # recorded separately, and until now driven by one knob. See T-19.

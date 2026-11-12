@@ -354,6 +354,15 @@ DIAGNOSTICS: list[tuple[str, str]] = [
     # ratio, which is M15 and the lesson of T-147 and T-148.
     ("D35 which bracket term accumulates",
      "scripts/diagnostic_d35_which_term_accumulates.py"),
+    # **D44 and D45 are split for F9's reason and carry F9's guard.** Their
+    # per-mode runs take hours and checkpoint outside the tree; `--report`
+    # writes every number the report prints to CSVs stamped with the sources,
+    # and the harness rewrites the report and the figure from those alone.
+    # `--replot` refuses a stamp this tree did not compute (T-54).
+    ("D44 the line of sight in frame-invariant slots, scored as registered",
+     "scripts/diagnostic_d44_the_line_of_sight_in_invariant_slots.py --replot"),
+    ("D45 the slots summed back to the integral they rearrange",
+     "scripts/diagnostic_d45_the_slots_sum_back.py --replot"),
 ]
 
 
@@ -432,6 +441,7 @@ def main() -> int:
     args = ap.parse_args()
 
     failures: list[str] = []
+    not_run: list[str] = []
 
     stale = check_deferrals()
     if stale:
@@ -504,7 +514,17 @@ def main() -> int:
     # one released artefact nothing here generated. Built and gated now, which
     # also retires the hand-typed rename on the way out. Skips cleanly without
     # a LaTeX toolchain.
-    if run([sys.executable, "scripts/build_supplement.py"], "supplement"):
+    # **A skipped build is counted, not passed --- review of 3 November.** Without
+    # `pdflatex` the build and its overhang gate do not run; that used to exit
+    # 0 here, so a hand-built PDF with a 101 pt overhang stood on `main` with
+    # every report green. The release route builds the supplement, so a skip
+    # fails it; the development route reports it.
+    from build_supplement import SKIPPED as SUPPLEMENT_SKIPPED
+    built = run([sys.executable, "scripts/build_supplement.py"], "supplement")
+    if built == SUPPLEMENT_SKIPPED:
+        not_run.append("the supplement build and its 35 pt overhang gate "
+                       "(pdflatex is not on PATH)")
+    elif built:
         failures.append("supplement")
 
     print("\n--- provenance " + "-" * 46)
@@ -539,6 +559,10 @@ def main() -> int:
         failures.append("tests")
 
     print("\n" + "=" * 60)
+    for gate in not_run:
+        print(f"NOT RUN — {gate}")
+    if not_run and args.strict:
+        failures.append(f"{len(not_run)} gate(s) not run")
     if failures:
         print("NOT CLEAN — " + ", ".join(failures))
         return 1

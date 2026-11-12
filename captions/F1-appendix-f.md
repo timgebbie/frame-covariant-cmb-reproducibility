@@ -9,9 +9,9 @@ caption = """
 The covariant free-streaming recursion of \\emph{Annals~II} Appendix~F, integrated
 from a unit monopole, against four external treatments of the same hierarchy.
 Each is transcribed from its own paper, never through Appendix~F.
-\\textbf{Upper panels, context:} the reconstruction and the external form at
+The upper panels give context: the reconstruction and the external form at
 $\\ell=5$; they coincide. The panels do \\emph{not} share a vertical scale, because
-two normalisations are on display. \\textbf{Lower panels, the claim:}
+two normalisations are on display. The lower panels carry the claim,
 $\\max_\\eta|\\mathrm{external}-\\mathrm{reconstruction}|$ against $\\ell$, with the
 acceptance threshold marked. Hu \\& Sugiyama write the recursion in the $\\beta$
 normalisation and Ma \\& Bertschinger and Seljak \\& Zaldarriaga in the $\\alpha$

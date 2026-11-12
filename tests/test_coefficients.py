@@ -26,6 +26,7 @@ from functions.spectra.coefficients import (
     c0_from_the_match,
     match_coefficients,
     newtonian_coefficients,
+    rank_one_source,
 )
 
 ETA = np.linspace(0.11, 3.3, 11)
@@ -35,6 +36,16 @@ PHI = np.linspace(0.21, 0.04, 11)
 KP = np.linspace(232.0, 0.0, 11)
 VB = np.linspace(-1.9, -0.2, 11)
 SIGMA = np.linspace(0.31, 0.02, 11)
+
+
+@pytest.fixture(autouse=True)
+def _the_antecedents_matching():
+    """These tests check the antecedent's matching and its (102) as printed,
+    so they build under its rank-one source. Since v1.4.0 the module default
+    is Paper 1's, and a test that checks (89)-(109) or (102) names the source
+    it checks rather than inheriting one."""
+    with rank_one_source("as built"):
+        yield
 
 
 def _match(**kw):
@@ -656,7 +667,7 @@ def test_the_ranks_add_to_the_total_in_the_transfer_but_not_in_cl():
     transfer = {r: np.zeros((ells.size, k_com.size)) for r in (-1, 0, 1, 2)}
     newtonian_rank = {r: np.zeros((ells.size, k_com.size)) for r in (-1, 0, 1, 2)}
     for j, k in enumerate(k_com):
-        newtonian, energy = coefficient_sets(float(k), env)
+        newtonian, energy = coefficient_sets(float(k), env, source="as built")
         for r, values in transfer_by_rank(ells, float(k), energy, env, table).items():
             transfer[r][:, j] = values
         for r, values in transfer_by_rank(ells, float(k), newtonian, env, table).items():

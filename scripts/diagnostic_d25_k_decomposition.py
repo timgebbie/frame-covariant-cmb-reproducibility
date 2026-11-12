@@ -116,7 +116,7 @@ def _decompose(label, bg, obh2, h, gamma) -> None:
 
     transfer = {f: np.zeros((ELLS.size, k_com.size)) for f in FRAMES}
     for j, k in enumerate(k_com):
-        sets = dict(zip(FRAMES, coefficient_sets(float(k), env)))
+        sets = dict(zip(FRAMES, coefficient_sets(float(k), env, source="as built")))
         for f in FRAMES:
             transfer[f][:, j] = transfer_by_rank(ELLS, float(k), sets[f],
                                                  env, table)[-1]

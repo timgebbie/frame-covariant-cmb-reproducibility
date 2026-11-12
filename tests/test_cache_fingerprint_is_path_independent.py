@@ -44,6 +44,8 @@ from _fingerprint import source_fingerprint  # noqa: E402
 CACHED = [
     "scripts/figure_f9_acoustic_spectrum.py",
     "scripts/figure_f10_formation_surface.py",
+    "scripts/diagnostic_d44_the_line_of_sight_in_invariant_slots.py",
+    "scripts/diagnostic_d45_the_slots_sum_back.py",
 ]
 
 #: Imported lazily inside `build_environment`, which is what exposed T-129.
@@ -179,3 +181,30 @@ def test_the_old_rule_would_have_missed_the_lazy_module(script: str):
         "module, so T-129 cannot be demonstrated and this test is measuring "
         "nothing. Check that LAZY names a module that is actually hashed.")
     assert source_fingerprint(ROOT / script) == source_fingerprint(ROOT / script)
+
+
+@pytest.mark.parametrize("script,rel", [
+    ("diagnostic_d44_the_line_of_sight_in_invariant_slots", "CSV_REL"),
+    ("diagnostic_d45_the_slots_sum_back", "CSV_REL"),
+])
+def test_the_diagnostic_replot_refuses_a_foreign_stamp(script, rel, tmp_path,
+                                                       monkeypatch, capsys):
+    """D44 and D45 redraw from their CSVs only when this tree wrote them.
+
+    The release route calls `--replot`, so the guard is what stands between a
+    stale table and a report printed over it --- T-54's failure, which F9 and
+    F10 already refuse. A CSV stamped by other code is refused, and nothing
+    is written.
+    """
+    module = importlib.import_module(script)
+    monkeypatch.setattr(module, "ROOT", tmp_path)
+    for name in ("CSV_REL", "SUMMARY_REL", "MODES_REL", "TXT_REL"):
+        if hasattr(module, name):
+            target = tmp_path.joinpath(*getattr(module, name))
+            target.parent.mkdir(parents=True, exist_ok=True)
+            if name != "TXT_REL":
+                target.write_text("# sources: 0000000000000000\nheader\n",
+                                  encoding="utf-8")
+    assert module._from_csvs() is None
+    assert "REFUSED" in capsys.readouterr().out
+    assert not tmp_path.joinpath(*module.TXT_REL).exists()

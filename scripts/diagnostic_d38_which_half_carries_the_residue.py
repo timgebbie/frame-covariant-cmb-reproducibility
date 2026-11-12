@@ -131,7 +131,7 @@ def _accumulate(bg, zero, split):
     acc = np.zeros((ELLS.size, sl.size))
     dk = k_com[1] - k_com[0]
     for j, k in enumerate(k_com):
-        s = coefficient_sets(float(k), env)[1]                 # CDM frame
+        s = coefficient_sets(float(k), env, source="as built")[1]                 # CDM frame
         diffusion = float(np.exp(-((float(k) / env.damping_k) ** 2)))
         # **The half is blanked in BOTH arms, not only the split one.**
         # $\Delta S=S_{\rm split}-S_{\rm released}$ is the object; a half

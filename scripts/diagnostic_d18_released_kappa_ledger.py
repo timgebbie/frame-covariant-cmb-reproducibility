@@ -90,7 +90,7 @@ def _scaled_sets(env, k: float, lam: float):
     kp = np.asarray(env.kappa_prime, dtype=float)
     kpp = np.asarray(env.kappa_second, dtype=float)
     scaled = replace(env, kappa_prime=lam * kp, kappa_second=lam * kpp)
-    return coefficient_sets(float(k), scaled)
+    return coefficient_sets(float(k), scaled, source="as built")
 
 
 def _split(arr1, arr0):

@@ -37,6 +37,7 @@ as a preference.
 
 from __future__ import annotations
 
+from contextlib import contextmanager
 from dataclasses import dataclass
 from fractions import Fraction
 from functools import lru_cache
@@ -165,7 +166,36 @@ MONOPOLE_ROW: str = "corrected"
 #: $a\mathcal B_0$ alone (T-105) leaves $\Delta C_1^{\rm grav}-\Delta C_2'$ at
 #: $-2v'/k$. With both, $-C_1'$ carries $-\tfrac k3\tau_1$ and the carried
 #: $a\mathcal B_0$ cancels it, so no photon dipole rides along the ray.
-RANK_ONE_SOURCE: str = "as built"
+#:
+#: **The default is Paper 1's since v1.4.0.** The antecedent's routes ---
+#: (102), criterion 5b's comparison, and every instrument that measures them
+#: --- name `"as built"` where their coefficients are built
+#: (`two_frame.coefficient_sets(..., source=...)`, `two_route`), so what they
+#: report does not move. Use `rank_one_source` to choose for a block of code.
+RANK_ONE_SOURCE: str = "paper 1"
+
+_RANK_ONE_CHOICES = ("as built", "paper 1")
+
+
+@contextmanager
+def rank_one_source(choice: str):
+    r"""Build under `choice` for the duration of a block, then restore.
+
+    The setting is read when a coefficient set is **built**: the set stores
+    $a\mathcal B_1$ already signed, and `gravitational_rank_one` reads it back
+    from the set. So a block needs to cover the construction and nothing after
+    it.
+    """
+    global RANK_ONE_SOURCE
+    if choice not in _RANK_ONE_CHOICES:
+        raise ValueError(f"RANK_ONE_SOURCE must be one of {_RANK_ONE_CHOICES}; "
+                         f"got {choice!r}")
+    held = RANK_ONE_SOURCE
+    RANK_ONE_SOURCE = choice
+    try:
+        yield
+    finally:
+        RANK_ONE_SOURCE = held
 
 
 def rank_one_gravitational(gradient: np.ndarray) -> np.ndarray:
@@ -281,12 +311,17 @@ def match_coefficients(
         q0_b2, q0_b0 = _solved_match_corrected()
         c0 = float(q0_b2) * a_b2
         if restore_b0:
-            # T-107: REFUTED. Kept regenerable, never default.
+            # Paper 1's source carries a B_0 with its rank-one sign; T-105's
+            # variant carried it under the as-built sign, was refuted by
+            # T-107, and is kept regenerable (D14's reason).
             if a_b0 is None:
                 raise ValueError(
-                    "restore_b0 needs `a_b0`. It is the refuted variant of "
-                    "T-105 and is kept only so that the measurement which "
-                    "refuted it can be reproduced --- D14's reason.")
+                    "C_0 carries a B_0 here and no `a_b0` was supplied. Under "
+                    "RANK_ONE_SOURCE = 'paper 1', the default since v1.4.0, "
+                    "it is Paper 1's rank-zero source, a B_0 = -(k/3) tau_1; "
+                    "with MONOPOLE_ROW = 'corrected+b0' it is T-105's refuted "
+                    "variant. A caller building the antecedent's matching "
+                    "names it: `with rank_one_source('as built')`.")
             c0 = c0 + float(q0_b0) * np.asarray(a_b0, dtype=float)
     else:
         c0 = prefactor * a_b2
@@ -899,7 +934,8 @@ def gravitational_rank_one(cs: "CoefficientSet") -> tuple[np.ndarray, np.ndarray
 
 
 __all__ += ["CoefficientSet", "tau_1_prime", "newtonian_set",
-            "RANK_ONE_SOURCE", "rank_one_gravitational", "gravitational_rank_one"]
+            "RANK_ONE_SOURCE", "rank_one_source", "rank_one_gravitational",
+            "gravitational_rank_one"]
 
 
 def cdm_frame_shear(

@@ -106,7 +106,7 @@ def _spectrum():
     acc = {f: np.zeros(ELLS.size) for f in FRAME_INDEX}
     dk = k_com[1] - k_com[0]
     for j, k in enumerate(k_com):
-        sets = coefficient_sets(float(k), env)
+        sets = coefficient_sets(float(k), env, source="as built")
         diffusion = float(np.exp(-((float(k) / env.damping_k) ** 2)))
         for f, which in FRAME_INDEX.items():
             s = sets[which]

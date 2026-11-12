@@ -303,7 +303,12 @@ def main() -> int:
             blocking = label == "immutable" or "exact" in by_class
             print(f"{'FAIL' if blocking else 'DRIFT'}  {manifest.name} "
                   f"does not match the tree")
-            for klass in ("exact", "numeric", "rendered"):
+            # `bounded` is listed too. A residual's bytes move on every machine
+            # by design, and a drift report that leaves them out says the file
+            # did not move when it did: F1's residuals regenerated different
+            # bytes on the v1.3.0 release route and this listing named only its
+            # two renderings.
+            for klass in ("exact", "numeric", "rendered", "bounded"):
                 for name in by_class.get(klass, []):
                     state = ("added" if name not in have
                              else "removed" if name not in want else "changed")

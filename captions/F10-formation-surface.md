@@ -6,8 +6,8 @@ script = "scripts/figure_f10_formation_surface.py"
 artefact = "figures/f10-formation-surface-v1.3.0.pdf"
 category = "diagnostic"
 caption = """
-\\textbf{The angular autocorrelation at a sequence of conformal times, and the
-surface it sweeps.} Planck~2018, CDM frame, 25 multipoles from $\\ell=2$ to
+The angular autocorrelation at a sequence of conformal times, and the
+surface it sweeps. Planck~2018, CDM frame, 25 multipoles from $\\ell=2$ to
 $\\ell=300$, fourteen epochs from the start of recombination to today. The line
 of sight is eq.~\\eqref{eq:assembly-invariant} with Paper~1's source signs,
 each slot accumulated to each epoch; the $\\eta_0$ column is the full integral
@@ -15,11 +15,13 @@ to $1.0\\times10^{-13}$.\\\\[2pt]
 \\textbf{(a)} $D_\\ell$ against $\\ell$, epoch by epoch, normalised once by the
 maximum of today's curve. \\textbf{(b)} $C_\\ell(\\eta)/C_\\ell(\\eta_0)$ over
 the $(\\ell,\\eta)$ plane.\\\\[2pt]
-\\textbf{What it shows.} Above $\\ell\\simeq30$ the spectrum is laid down while
+Above $\\ell\\simeq30$ the spectrum is laid down while
 photons scatter, with $5$--$21\\%$ of each multipole arriving afterwards from
 the integrated Sachs--Wolfe term as the potentials decay. At $\\ell=2$--$4$ the
 late integrated Sachs--Wolfe term deposits $22$--$54\\%$ of today's $C_\\ell$,
-and at $\\ell=5$--$12$ it cancels part of what recombination laid down. Every
+and at $\\ell=5$--$12$ it cancels part of what recombination laid down. Below
+$\\ell\\simeq30$ the potential carries an incomplete radiation era
+(\\textbf{A-3}), so that cancellation is not yet a prediction. Every
 earlier version of this figure showed no late power at all; the assembly that
 replaced (102) restores it.
 """

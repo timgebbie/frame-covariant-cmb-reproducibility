@@ -130,7 +130,7 @@ def absolute(transfer: np.ndarray, route) -> float:
 def test_the_released_route_agrees_with_the_gated_one(k, environment, arbiter):
     """F9's route against (177)--(179), the comparison nothing was making."""
     env, table = environment
-    newtonian = coefficient_sets(float(k), env)[0]
+    newtonian = coefficient_sets(float(k), env, source="as built")[0]
     row = transfer_by_rank(ELLS, float(k), newtonian, env, table)[-1]
     worst = relative(row, arbiter[k])
     # **T-70**: either gate passing is agreement. The absolute one is what
@@ -159,7 +159,7 @@ def test_the_printed_lower_limit_fails_this_gate(k, environment, arbiter):
     `transfer_by_rank` again, the test above fails and this one explains it.
     """
     env, table = environment
-    newtonian = coefficient_sets(float(k), env)[0]
+    newtonian = coefficient_sets(float(k), env, source="as built")[0]
     diffusion = float(np.exp(-((float(k) / env.damping_k) ** 2)))
     printed_limit = integral_solution(
         ELLS, coefficients=newtonian.coefficients, table=table,

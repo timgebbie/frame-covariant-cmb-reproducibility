@@ -1,0 +1,53 @@
+# sources: e04721a9bf61a8f3
+background,quantity,value
+EdS,"conditions, as built, rank zero",1.0
+EdS,"conditions, as built, scattering",1.0192605576501347e-13
+EdS,"conditions, as built, gravitational",1.8383317565026258
+EdS,"conditions, as built, integrated source vs ISW",208388367699.16287
+EdS,"conditions, paper 1, rank zero",1.2924395283742423e-13
+EdS,"conditions, paper 1, scattering",1.0192605576501347e-13
+EdS,"conditions, paper 1, gravitational",6.014659101096329e-16
+EdS,"conditions, paper 1, integrated source vs ISW",4.593457703045568e-16
+EdS,"per mode, three",2.5356631523250638e-08
+EdS,"per mode, slot sw",8.957342593147326e-15
+EdS,"per mode, slot dop",1.8105404131981915e-13
+EdS,"per mode, slot isw",2.535663673919868e-08
+EdS,"per mode, five",1.7711441950642055
+EdS,"per mode, direct",1.547655904778454
+EdS,"per mode, five vs three (CDM)",1.7711441949690878
+EdS,"per mode, identity (c)",1.6423200844315622
+EdS,l_A,190.58075476636682
+LCDM,"conditions, as built, rank zero",1.0
+LCDM,"conditions, as built, scattering",2.5931932994542234e-13
+LCDM,"conditions, as built, gravitational",1.5736269534294154
+LCDM,"conditions, as built, integrated source vs ISW",100.13143760014174
+LCDM,"conditions, paper 1, rank zero",3.2536546288313625e-13
+LCDM,"conditions, paper 1, scattering",2.5931932994542234e-13
+LCDM,"conditions, paper 1, gravitational",6.052367576429423e-16
+LCDM,"conditions, paper 1, integrated source vs ISW",4.507810938103805e-16
+LCDM,"per mode, three",1.7298761739458059e-10
+LCDM,"per mode, slot sw",2.9602659484454083e-16
+LCDM,"per mode, slot dop",8.059807841066119e-16
+LCDM,"per mode, slot isw",1.7298761739458059e-10
+LCDM,"per mode, five",0.2098131545660994
+LCDM,"per mode, direct",1.3756447098711233
+LCDM,"per mode, five vs three (CDM)",0.9999001510822421
+LCDM,"per mode, identity (c)",1.2163997644102775
+LCDM,l_A,170.47612635437775
+PLANCK,"conditions, as built, rank zero",1.0
+PLANCK,"conditions, as built, scattering",2.580219848262087e-13
+PLANCK,"conditions, as built, gravitational",1.406912845872115
+PLANCK,"conditions, as built, integrated source vs ISW",17.900838169824002
+PLANCK,"conditions, paper 1, rank zero",2.781121611506894e-13
+PLANCK,"conditions, paper 1, scattering",2.580219848262087e-13
+PLANCK,"conditions, paper 1, gravitational",5.53974168319745e-16
+PLANCK,"conditions, paper 1, integrated source vs ISW",4.4066429503962006e-16
+PLANCK,"per mode, three",1.976005841899544e-10
+PLANCK,"per mode, slot sw",1.3852618231944011e-15
+PLANCK,"per mode, slot dop",8.722566075681053e-16
+PLANCK,"per mode, slot isw",1.976005841899544e-10
+PLANCK,"per mode, five",0.18157825200477967
+PLANCK,"per mode, direct",1.3226607779996526
+PLANCK,"per mode, five vs three (CDM)",0.9994201579129787
+PLANCK,"per mode, identity (c)",1.087845440176488
+PLANCK,l_A,266.7500996089751

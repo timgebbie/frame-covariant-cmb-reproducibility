@@ -58,7 +58,7 @@ RESIDUAL_FLOOR = 1e-12
 
 def both_frames(k: float, env, table: BesselTable, ells: np.ndarray) -> dict:
     """(102) evaluated in the Newtonian frame and in the CDM frame."""
-    newtonian, cdm = coefficient_sets(float(k), env)
+    newtonian, cdm = coefficient_sets(float(k), env, source="as built")
     diffusion = float(np.exp(-((float(k) / env.damping_k) ** 2)))
     common = dict(table=table, weight=env.weight, diffusion=diffusion,
                   damping_total=diffusion, eta_star=env.eta_star,

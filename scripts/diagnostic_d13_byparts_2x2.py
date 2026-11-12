@@ -109,7 +109,7 @@ def _report() -> None:
               f" | {'|A_N-A_C|/max':>13s}")
         print("  " + "-" * 104)
         for k in KS:
-            n_, c_ = coefficient_sets(float(k), env)
+            n_, c_ = coefficient_sets(float(k), env, source="as built")
             M_N = -np.asarray(n_.coefficients.c1, dtype=float)
             M_C = -np.asarray(c_.coefficients.c1, dtype=float)
             for ell in ELLS:
@@ -128,7 +128,7 @@ def _report() -> None:
         print(f"  {'k':>5s} {'l':>4s} {'|A-B|/|A| @1x':>15s} {'@2x':>12s} {'@4x':>12s}")
         print("  " + "-" * 50)
         for k in (10.0, 300.0):
-            n_, _ = coefficient_sets(float(k), env)
+            n_, _ = coefficient_sets(float(k), env, source="as built")
             M_N = -np.asarray(n_.coefficients.c1, dtype=float)
             for ell in (2, 200):
                 row = []

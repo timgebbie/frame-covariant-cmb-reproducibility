@@ -403,6 +403,100 @@ def check_generated_artefacts_are_current(failures: list[str]) -> str:
     return f"      theory audit covers {named}/{instruments} instruments."
 
 
+def document_inputs(master: Path) -> list[Path]:
+    r"""What the document reads: the master, its `\input`s and the figures it
+    draws, read from the master itself.
+
+    **The sources are what the document inputs, read from the document ---
+    corrected 2026-10-26.** This used to be every `.tex` under `tables/` and
+    `supplementary-materials/` plus the master; since v1.3.14 the supplement is
+    one file that inputs the tables and nothing else, and a directory listing
+    gave it a false dependency on `figures-v1.3.0.tex`, which nothing reads.
+    **The figures were missing from it --- 2026-11-11.** A regenerated
+    `\includegraphics` file changes what the PDF shows as surely as an edited
+    table does, and the v1.3.0 release rebuilt the PDF by hand for exactly
+    that reason.
+    """
+    if not master.is_file():
+        return []
+    text = master.read_text(encoding="utf-8")
+    found = [master]
+    for rel in re.findall(r"\\input\{([^}]+)\}", text):
+        q = ROOT / (rel if rel.endswith(".tex") else rel + ".tex")
+        if q.is_file():
+            found.append(q)
+    for rel in re.findall(r"\\includegraphics(?:\[[^]]*\])?\{([^}]+)\}", text):
+        q = ROOT / rel
+        if q.is_file() and q not in found:
+            found.append(q)
+    return found
+
+
+def _git(root: Path, *args: str) -> subprocess.CompletedProcess | None:
+    try:
+        return subprocess.run(["git", "-C", str(root), *args],
+                              capture_output=True, text=True, timeout=30)
+    except (OSError, subprocess.SubprocessError):
+        return None
+
+
+def _committed_clean(root: Path, rel: str) -> bool:
+    """Tracked, and identical in the working tree to what HEAD records."""
+    status = _git(root, "status", "--porcelain", "--", rel)
+    tracked = _git(root, "ls-files", "--error-unmatch", "--", rel)
+    return bool(status and tracked and status.returncode == 0
+                and not status.stdout.strip() and tracked.returncode == 0)
+
+
+def stale_inputs(root: Path, pdf: Path,
+                 sources: list[Path]) -> tuple[list[Path], int, int]:
+    r"""The inputs *pdf* was not built from, and how each verdict was reached.
+
+    **Contents, not clocks, wherever git can speak for both files --- review
+    of 3 November.** The question is whether an input has moved since the
+    PDF was built, and git answers it exactly: the input's blob at the commit
+    that last touched the PDF against its blob at `HEAD`. Equal means the PDF
+    was built from what the tree now holds. **No time enters.** The commit
+    clock this replaced (T-182) records when a commit was *made*, not when it
+    reached `main`, so a branch made before the PDF's rebuild and merged after
+    it carried a newer input past a clock that called it older; and the mtime
+    pre-filter in front of it consulted the verdict on whatever subset of the
+    inputs a clone happened to stamp later. The same rule settles T-183's case,
+    a byte-identical restore, without a special branch: the blobs are equal.
+
+    **mtime is the whole answer where git cannot speak**: an input or a PDF
+    edited and not yet committed, or untracked. An uncommitted edit is the
+    recurrence this gate was built for, and its own clock is the only witness.
+
+    An input that did not exist at the PDF's commit has moved by definition;
+    so has a renamed one, which moves the master that names it.
+    Returns `(stale, judged_by_git, judged_by_clock)`.
+    """
+    pdf_rel = pdf.relative_to(root).as_posix()
+    c_pdf = None
+    if _committed_clean(root, pdf_rel):
+        r = _git(root, "log", "-1", "--format=%H", "--", pdf_rel)
+        c_pdf = (r.stdout.strip() or None) if r and r.returncode == 0 else None
+    stale: list[Path] = []
+    by_git = by_clock = 0
+    for src in sources:
+        rel = src.relative_to(root).as_posix()
+        if c_pdf is not None and _committed_clean(root, rel):
+            by_git += 1
+            then = _git(root, "rev-parse", "--verify", "--quiet", f"{c_pdf}:{rel}")
+            now = _git(root, "rev-parse", "--verify", "--quiet", f"HEAD:{rel}")
+            same = (then is not None and now is not None and then.returncode == 0
+                    and now.returncode == 0 and then.stdout.strip()
+                    and then.stdout.strip() == now.stdout.strip())
+            if not same:
+                stale.append(src)
+        else:
+            by_clock += 1
+            if src.stat().st_mtime > pdf.stat().st_mtime:
+                stale.append(src)
+    return stale, by_git, by_clock
+
+
 def check_built_artefacts_are_not_stale(failures: list[str]) -> str:
     r"""**A built artefact older than its source is a label pointing at the past.**
 
@@ -450,148 +544,19 @@ def check_built_artefacts_are_not_stale(failures: list[str]) -> str:
     #: the grid register makes about discretisations: read the fact from the
     #: thing that states it.
     master = supplement_source(ROOT)
-    sources = [master] if master.is_file() else []
-    if master.is_file():
-        for rel in re.findall(r"\\input\{([^}]+)\}",
-                              master.read_text(encoding="utf-8")):
-            p = ROOT / (rel if rel.endswith(".tex") else rel + ".tex")
-            if p.is_file():
-                sources.append(p)
-    # **mtime is the pre-filter; the commit clock is the verdict --- finding
-    # T-182, P1-B, 2026-10-31.** This is the T-171 correction applied to the
-    # branch that was left out of it.
-    #
-    # `git clone` stamps every file it checks out at one instant, so on a
-    # fresh clone the ordering between a PDF and its sources is a coin flip
-    # at sub-second resolution and carries **no information about the tree**.
-    # Measured on `main` at `12beba8`: this branch reported the v1.3.19 PDF
-    # "0.0 h older than 9 of its sources" and told the reader to rebuild a
-    # 1.5 MB binary, while by commit time the PDF is **21.7 hours newer than
-    # all eleven** sources the document inputs, and none of the eleven is
-    # newer than it. The instruction would have landed a no-op binary to
-    # satisfy an artefact of the checkout.
-    #
-    # So the question "which way round" --- which is still the right question,
-    # and is why this is not a hash check --- is put to the clock that
-    # survives a clone. **mtime is kept as the pre-filter and as the whole
-    # answer wherever git cannot speak**: a source edited in a working tree
-    # and not yet committed has no commit newer than the PDF's, and that
-    # uncommitted edit is precisely the recurrence this check exists to catch,
-    # so an untracked or modified source is trusted to mtime exactly as before.
-    def _committed_at(path: Path) -> int | None:
-        """Commit time of *path*, or None if git cannot answer for it."""
-        rel = path.relative_to(ROOT).as_posix()
-        try:
-            r = subprocess.run(
-                ["git", "-C", str(ROOT), "log", "-1", "--format=%ct", "--", rel],
-                capture_output=True, text=True, timeout=30)
-            d = subprocess.run(
-                ["git", "-C", str(ROOT), "status", "--porcelain", "--", rel],
-                capture_output=True, text=True, timeout=30)
-        except (OSError, subprocess.SubprocessError):
-            return None
-        if r.returncode or d.returncode or not r.stdout.strip():
-            return None
-        if d.stdout.strip():          # modified or untracked: mtime is the truth
-            return None
-        return int(r.stdout.strip())
-
-    def _commit_of(path: Path) -> str | None:
-        """The sha of the commit that last touched *path*, or None."""
-        rel = path.relative_to(ROOT).as_posix()
-        try:
-            r = subprocess.run(
-                ["git", "-C", str(ROOT), "log", "-1", "--format=%H", "--", rel],
-                capture_output=True, text=True, timeout=30)
-        except (OSError, subprocess.SubprocessError):
-            return None
-        return r.stdout.strip() or None if not r.returncode else None
-
-    def _unmoved_since(path: Path, commit: str | None) -> bool:
-        """Does *path* hold the same bytes now as it did at *commit*?
-
-        **The whole of T-183 is that this question is cheap and the gate was
-        not asking it.** `git rev-parse <commit>:<path>` is the blob sha the
-        tree recorded then; `HEAD:<path>` is the one it records now. Equal
-        means content-identical, and it costs two `rev-parse` calls.
-
-        False on any uncertainty --- an unreadable commit, an untracked file,
-        a working-tree edit --- because the failure this gate exists to catch
-        is a source that moved, and a *missed* staleness is worse than a
-        spurious one. The caller only reaches here for a source the commit
-        clock has already flagged, so False restores the previous behaviour
-        exactly.
-        """
-        if commit is None:
-            return False
-        rel = path.relative_to(ROOT).as_posix()
-        try:
-            d = subprocess.run(
-                ["git", "-C", str(ROOT), "status", "--porcelain", "--", rel],
-                capture_output=True, text=True, timeout=30)
-            if d.returncode or d.stdout.strip():
-                return False            # a working-tree edit is a real move
-            then = subprocess.run(
-                ["git", "-C", str(ROOT), "rev-parse", f"{commit}:{rel}"],
-                capture_output=True, text=True, timeout=30)
-            now = subprocess.run(
-                ["git", "-C", str(ROOT), "rev-parse", f"HEAD:{rel}"],
-                capture_output=True, text=True, timeout=30)
-        except (OSError, subprocess.SubprocessError):
-            return False
-        if then.returncode or now.returncode:
-            return False
-        a, b = then.stdout.strip(), now.stdout.strip()
-        return bool(a) and a == b
-
+    sources = document_inputs(master)
     for pdf in pdfs:
-        t_pdf = pdf.stat().st_mtime
-        flagged = [p for p in sources if p.stat().st_mtime > t_pdf]
-        g_pdf = _committed_at(pdf)
-        c_pdf = _commit_of(pdf)
-        if g_pdf is not None:
-            kept = []
-            for p in flagged:
-                g_src = _committed_at(p)
-                if g_src is None or g_src > g_pdf:
-                    # **T-183, and it is T-171's principle reaching the one
-                    # branch that argued it could not.** The paragraph above
-                    # says there is no cheap content test here, and that is
-                    # true of the PDF and false of the SOURCE: git holds the
-                    # source's blob sha at every commit. If the source reads
-                    # identically now and at the commit that last touched the
-                    # PDF, **the source has not moved**, whatever the commit
-                    # clock says, and a PDF cannot be stale against a source
-                    # that has not moved.
-                    #
-                    # Found by walking into it. On 2026-10-31 a revert of a
-                    # bad push restored `SUPPLEMENTARY-MATERIAL-v1.3.21.tex`
-                    # to a byte-identical copy of what the committed PDF was
-                    # built from. That revert is a newer commit touching the
-                    # source, so the clock said stale and the remedy was to
-                    # rebuild and commit 1.6 MB of pdflatex timestamps --- the
-                    # **same no-op binary T-182 exists to prevent**, reached
-                    # by the branch T-182 installed. A rename-only commit, a
-                    # whitespace-identical restore and a `git revert` all do
-                    # this, and all of them are content-identical.
-                    if _unmoved_since(p, c_pdf):
-                        continue
-                    kept.append(p)
-            dropped = len(flagged) - len(kept)
-            flagged = kept
-            if dropped:
-                notes.append(f"{pdf.name}: {dropped} mtime-only ordering(s) "
-                             f"overruled by the commit clock")
-        newer = sorted(p.relative_to(ROOT).as_posix() for p in flagged)
+        stale, by_git, by_clock = stale_inputs(ROOT, pdf, sources)
+        newer = sorted(s.relative_to(ROOT).as_posix() for s in stale)
         if newer:
-            lead = max(p.stat().st_mtime for p in flagged) - t_pdf
             failures.append(
-                f"{pdf.relative_to(ROOT).as_posix()} is {lead/3600:.1f} h "
-                f"older than {len(newer)} of its sources "
+                f"{pdf.relative_to(ROOT).as_posix()} was not built from "
+                f"{len(newer)} of its {len(sources)} inputs as they stand "
                 f"({', '.join(newer[:3])}{'…' if len(newer) > 3 else ''}). "
                 f"Run scripts/build_supplement.py.")
         else:
-            notes.append(f"{pdf.name} newer than all {len(sources)} sources")
+            notes.append(f"{pdf.name} is the build of all {len(sources)} inputs "
+                         f"({by_git} by git contents, {by_clock} by clock)")
 
     # **For the MANIFESTS, mtime is the pre-filter and the digest is the
     # verdict --- finding T-171, 2026-10-29.** The paragraph above is right

@@ -82,7 +82,7 @@ def _report() -> None:
         print(f"  {'k':>5} {'frame':<10} {'ratio at eta_*':>16} {'worst, super-horizon':>22}")
         print("  " + "-" * 60)
         for k in KS:
-            n_, c_ = coefficient_sets(float(k), env)
+            n_, c_ = coefficient_sets(float(k), env, source="as built")
             for frame, s in (("newtonian", n_), ("cdm", c_)):
                 a_b1 = np.asarray(s.a_b1, dtype=float)
                 c2p = (np.zeros_like(eta) if s.c2_prime is None

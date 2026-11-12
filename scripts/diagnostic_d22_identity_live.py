@@ -121,7 +121,7 @@ def _report() -> None:
               f" {'C1p consistent':>16} {'|A-R|/scale':>13}")
         print("  " + "-" * 72)
         for k in KS:
-            n_, c_ = coefficient_sets(float(k), env)
+            n_, c_ = coefficient_sets(float(k), env, source="as built")
             x = float(k) * (eta_0 - eta)
             needed = sorted(set(sum(([l - 1, l, l + 1] for l in ELLS), [])))
             table = BesselTable.build(ell_max=max(needed), x_max=float(np.max(x)) * 1.01,

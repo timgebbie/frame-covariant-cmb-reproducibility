@@ -44,7 +44,7 @@ WHAT IS MEASURED
 
     CAMB and CLASS enter only after all of the above is scored, as context.
 
-sources: ff97a11a7d4f9c19
+sources: e04721a9bf61a8f3
 
 1. COEFFICIENTS, k = 2..400: largest relative frame shift over W > 1e-10
                        rank zero  scattering  gravitational  (b) source-ISW
@@ -57,9 +57,9 @@ sources: ff97a11a7d4f9c19
 
 2-3. PER MODE, max over modes of max_l |T_N - T_C| / max_l |T|; each slot against the whole
      three-slot transfer, so a slot that is zero to rounding reads as rounding
-   EdS      three 2.5e-08  slot sw 9.4e-15  slot dop 1.8e-13  slot isw 2.5e-08  five 1.8e+00  direct 1.5e+00  five vs three (CDM) 1.8e+00  identity (c) 1.6e+00
-   LCDM     three 1.7e-10  slot sw 3.1e-16  slot dop 8.0e-16  slot isw 1.7e-10  five 2.1e-01  direct 1.4e+00  five vs three (CDM) 1.0e+00  identity (c) 1.2e+00
-   PLANCK   three 2.0e-10  slot sw 1.4e-15  slot dop 8.8e-16  slot isw 2.0e-10  five 1.8e-01  direct 1.3e+00  five vs three (CDM) 1.0e+00  identity (c) 1.1e+00
+   EdS      three 2.5e-08  slot sw 9.0e-15  slot dop 1.8e-13  slot isw 2.5e-08  five 1.8e+00  direct 1.5e+00  five vs three (CDM) 1.8e+00  identity (c) 1.6e+00
+   LCDM     three 1.7e-10  slot sw 3.0e-16  slot dop 8.1e-16  slot isw 1.7e-10  five 2.1e-01  direct 1.4e+00  five vs three (CDM) 1.0e+00  identity (c) 1.2e+00
+   PLANCK   three 2.0e-10  slot sw 1.4e-15  slot dop 8.7e-16  slot isw 2.0e-10  five 1.8e-01  direct 1.3e+00  five vs three (CDM) 1.0e+00  identity (c) 1.1e+00
 
 4. C_l (Paper 1's signs). Frame residual max_l |C_N - C_C| / C_N; maxima and troughs of D_l;
    first maximum / l_A.
@@ -71,7 +71,7 @@ sources: ff97a11a7d4f9c19
      reversed  frame residual 1.6e-14
        Newtonian maxima [165.0, 510.0]  troughs [360.0]  first 169 = 0.89 l_A
        CDM       maxima [165.0, 510.0]  troughs [360.0]  first 169 = 0.89 l_A
-     five      frame residual 1.6e-03
+     five      frame residual 8.3e-04
        Newtonian maxima [165.0, 495.0]  troughs [360.0]  first 165 = 0.87 l_A
        CDM       maxima [165.0, 495.0]  troughs [360.0]  first 165 = 0.87 l_A
      direct    frame residual 5.5e-01
@@ -86,7 +86,7 @@ sources: ff97a11a7d4f9c19
      reversed  frame residual 3.8e-14
        Newtonian maxima [150.0, 450.0]  troughs []  first 149 = 0.87 l_A
        CDM       maxima [150.0, 450.0]  troughs []  first 149 = 0.87 l_A
-     five      frame residual 1.2e-03
+     five      frame residual 2.2e-04
        Newtonian maxima [150.0, 450.0]  troughs []  first 145 = 0.85 l_A
        CDM       maxima [150.0, 450.0]  troughs []  first 145 = 0.85 l_A
      direct    frame residual 4.9e-01
@@ -101,7 +101,7 @@ sources: ff97a11a7d4f9c19
      reversed  frame residual 3.7e-14
        Newtonian maxima [210.0]  troughs []  first 208 = 0.78 l_A
        CDM       maxima [210.0]  troughs []  first 208 = 0.78 l_A
-     five      frame residual 1.9e-03
+     five      frame residual 3.6e-04
        Newtonian maxima [195.0]  troughs []  first 189 = 0.71 l_A
        CDM       maxima [195.0]  troughs []  first 189 = 0.71 l_A
      direct    frame residual 7.4e-01

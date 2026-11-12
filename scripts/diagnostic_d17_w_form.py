@@ -169,7 +169,7 @@ def _report() -> None:
             ells=np.unique(np.concatenate([[e - 1, e, e + 1] for e in ELLS])))
         print(f"\n{'='*84}\n  {label}\n{'='*84}")
         for k in KS:
-            n_, c_ = coefficient_sets(float(k), env)
+            n_, c_ = coefficient_sets(float(k), env, source="as built")
             d = float(np.exp(-((float(k) / env.damping_k) ** 2)))
             phi_a = np.asarray(env.phi_a, float) * env.transfer_at(float(k))
             # sigma on the REDUCED sources: C_1 = p1 (B1 + kappa' S1),

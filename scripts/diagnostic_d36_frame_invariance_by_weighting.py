@@ -170,7 +170,7 @@ def _measure(bg, obh2, h, gamma, controls):
     acc = {f: np.zeros(ELLS.size) for f in FRAMES}
     gate, dk = 0.0, k_com[1] - k_com[0]
     for j, k in enumerate(k_com):
-        sets = dict(zip(FRAMES, coefficient_sets(float(k), env)))
+        sets = dict(zip(FRAMES, coefficient_sets(float(k), env, source="as built")))
         diffusion = float(np.exp(-((float(k) / env.damping_k) ** 2)))
         common = dict(table=table, weight=env.weight, diffusion=diffusion,
                       damping_total=diffusion, eta_star=eta_star,

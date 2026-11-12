@@ -76,7 +76,7 @@ def _report() -> None:
         print(f"{'='*78}")
 
         for k in KS:
-            n_, _ = coefficient_sets(float(k), env)
+            n_, _ = coefficient_sets(float(k), env, source="as built")
             tk = env.transfer_at(float(k))
             vhat = np.asarray(n_.v_b, dtype=float) / float(k)   # v_b is UN-reduced
             vhat_p = np.asarray(n_.v_b_prime, dtype=float) / float(k)

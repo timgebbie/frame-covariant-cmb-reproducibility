@@ -212,3 +212,33 @@ def test_the_damping_uses_dif_damp_correct_and_f2_reaches_all_three_coefficients
     # them. T-39's RATIO -- what f_2 is worth -- is unchanged by it.
     assert abs(corrected - 556.11) < 1.0
     assert abs(corrected / tight - 0.866) < 0.005
+
+
+def test_t191_one_kappa_makes_the_visibility_the_derivative_of_the_opacity():
+    r"""**Finding T-191.** On a line-of-sight grid, $W$ and $\mathcal V$ come
+    from one $\kappa$ integrated there, so they are a function and its
+    derivative and $\int\mathcal V-[W]$ is quadrature: it falls by four when
+    the step halves. Interpolating the two separately, as every grid did
+    before v1.4.0, froze the recombination grid's own trapezoid bias into
+    every finer grid --- $8.6\times10^{-4}$ on Planck at any step.
+    """
+    from functions.background.flrw import PLANCK_MODEL, PLANCK_OMEGA_B_H2
+
+    history = RecombinationHistory.build(PLANCK_MODEL, omega_b_h2=PLANCK_OMEGA_B_H2)
+    kp, op, vi = history.weights_on(history.eta)
+    assert np.array_equal(kp, history.kappa_prime)
+    assert np.array_equal(op, history.opacity)
+    assert np.array_equal(vi, history.visibility)
+
+    gaps, frozen = [], []
+    for n in (16000, 32000, 64000):
+        eta = np.linspace(history.eta[0], history.background.eta_0, n)
+        kp, op, vi = history.weights_on(eta)
+        assert np.array_equal(vi, kp * op)
+        gaps.append(abs(np.trapezoid(vi, eta) - (op[-1] - op[0])))
+        old_v = np.interp(eta, history.eta, history.visibility)
+        old_w = np.interp(eta, history.eta, history.opacity)
+        frozen.append(abs(np.trapezoid(old_v, eta) - (old_w[-1] - old_w[0])))
+    for coarse, fine in zip(gaps, gaps[1:]):
+        assert 3.9 < coarse / fine < 4.1
+    assert min(frozen) > 0.9 * max(frozen)      # the floor the repair removes

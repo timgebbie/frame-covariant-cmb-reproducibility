@@ -15,6 +15,44 @@ All notable changes to this bundle are recorded here. The version policy is in
   cell: `--to` turns the shipped line's row to *released*, and `--open` makes
   the new line's row the one *current* row. `tests/test_readme_artefacts.py`
   checks the cell against the header.
+- **`RANK_ONE_SOURCE` defaults to Paper 1's signs.** The two-frame sets take
+  no default: `two_frame.coefficient_sets` requires `source`, which is
+  `"as built"` for (102) and every instrument that measures it, and
+  `"paper 1"` for the frame-invariant line of sight
+  (`covariant_coefficient_sets`). `two_route` builds (102) under
+  `"as built"`, and `coefficients.rank_one_source` is the one way to choose
+  for a block of code. Nothing (102) reports moves.
+- **D44 and D45 enter `run_all.py`.** `--report` writes every number the
+  report prints to CSVs stamped with the sources. `--replot` rewrites the
+  report and the figure from them alone and refuses a stamp this tree did not
+  compute (T-54), as F9 and F10 do.
+- **D45's stored-moment rows start at each mode's own start** (T-192). Before
+  the start the stored moment is held, so the comparison measures (106)
+  against the stored moment and not the start rule.
+- F9's first-peak marker stops just above the curves, below the legend.
+- `make_manifests.py --check` lists a residual file's drift with the
+  renderings'. F1's residuals regenerate different digits on every machine by
+  design, which keeps them out of the binding manifest; the drift report left
+  them out as well and so said they had not moved. That is what the v1.3.0
+  release route saw as F1's drift: two renderings and a residual bound, none
+  of them release-blocking.
+- **The PDF gate reads contents, not clocks.** `check_release_hygiene.py`
+  judges each input of the supplement by its git blob at the PDF's last commit
+  against its blob now, wherever git can speak for both, and by mtime only for
+  an uncommitted file. The commit clock it replaced called a PDF current
+  against a branch made before the rebuild and merged after it; a test now
+  builds that history and requires the gate to fail on it. The figures the
+  supplement draws count among its inputs.
+- **A skipped supplement build is counted.** Without `pdflatex`,
+  `build_supplement.py` exits 3 instead of 0, and `run_all.py` reports the
+  build and its overhang gate as not run: a failure of `--strict`, a reported
+  line of `--rerun`.
+- **F9 carries the v1.4.0 stamp**, the release that last changed what it
+  shows; its files, caption, README links and the supplement's include follow.
+  D44 and D45 write their v1.4.0 reports.
+- The figure captions are restyled to the supplement's voice: claims are
+  stated as the captions' own sentences rather than set in bold, and F6 is
+  *The cost of each approximation*.
 
 ### Fixed
 
@@ -26,6 +64,26 @@ All notable changes to this bundle are recorded here. The version policy is in
   present and the even ones absent, the late integrated Sachs–Wolfe term
   restored, and the low multipoles and peak heights that wait for the
   radiation era (A-3).
+- **T-191: one $\kappa$ on every line-of-sight grid.**
+  `RecombinationHistory.weights_on` interpolates $\kappa'$ onto a grid and
+  integrates $\kappa$ there, so $W=e^{-\kappa}$ and $\mathcal V=\kappa'W$ are
+  one function and its derivative on it. `two_frame`, `pipeline`,
+  `two_route` and the handover emission all use it. On Planck the separate
+  interpolation left $\int\mathcal V-[W]$ at $-8.6\times10^{-4}$ at every
+  step. It now falls by four per halving: $-2.1\times10^{-4}$,
+  $-5.4\times10^{-5}$ and $-1.3\times10^{-5}$ at 16 000, 32 000 and 64 000
+  points. A grid of 8000 points, which serves every $k_{\max}$ up to about 670,
+  is the recombination grid's own and does not move. So F9, D44 and D45 are
+  recomputed at v1.4.0, and F10 is not.
+- F9's per-background checkpoint kept ten digits, so a background resumed
+  from it read the two frames' $10^{-14}$ gap as zero. It keeps every digit
+  now. The released F9 was computed without resuming and is unaffected.
+
+### Removed
+
+- The high-resolution F10 of 26 October (two renderings and a CSV). It was
+  drawn from (102), which the frame-invariant line of sight replaced, and
+  nothing cited it. `--high-res` remains.
 
 ### Measured
 
@@ -36,6 +94,18 @@ All notable changes to this bundle are recorded here. The version policy is in
   and $2.8$. This is what (106)'s departure from the stored moment measured,
   not a grid. The test is written to fail when the radiation era repairs the
   start and the initial condition together.
+- **D45 at v1.4.0, with one $\kappa$.** On Planck $\int\mathcal V\thinspace{\rm d}\eta$
+  is 0.999833 at the released step and 0.999958 at half of it, where
+  $W(\eta_0)-W(\eta_{\rm start})=1$: the floor is gone and what remains falls by
+  four. Replacing $\mathcal V$ by $W'$ now moves the slots by at most
+  $1.5\times10^{-4}$, from $8\times10^{-4}$. The stored $C_1^{\rm grav}$ under
+  $\mathcal V$ against (106) integrated from each mode's own start differs by
+  $6.7\times10^{-4}$ of the transfer on Planck at $k\le100$; integrated from the
+  grid's start it was $1.3\times10^{-2}$, which was T-192.
+- **F9 at v1.4.0.** One $\kappa$ moves the spectrum's shape by at most
+  $1.2\times10^{-3}$ on Planck and $4\times10^{-4}$ on the other two
+  backgrounds. The first maxima stay at 165.4, 143.8 and 188.5, and the two
+  frames still agree to $1.3$, $3.5$ and $1.1\times10^{-14}$.
 
 ### Planned
 

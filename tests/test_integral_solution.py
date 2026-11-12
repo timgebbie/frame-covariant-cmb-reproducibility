@@ -19,6 +19,7 @@ from functions.spectra.coefficients import (
     match_coefficients,
     newtonian_c1_prime,
     newtonian_coefficients,
+    rank_one_source,
 )
 from functions.spectra.decoupling import RecombinationHistory, diffusion_scale
 from functions.spectra.integral_solution import (
@@ -40,6 +41,16 @@ K = 60.0
 ELLS = np.array([2, 5, 10, 50, 200])
 
 
+@pytest.fixture(autouse=True)
+def _the_antecedents_matching():
+    """These tests check the antecedent's matching and its (102) as printed,
+    so they build under its rank-one source. Since v1.4.0 the module default
+    is Paper 1's, and a test that checks (89)-(109) or (102) names the source
+    it checks rather than inheriting one."""
+    with rank_one_source("as built"):
+        yield
+
+
 @pytest.fixture(scope="module")
 def setup():
     bg = LCDM_MODEL
@@ -47,9 +58,7 @@ def setup():
     eta = np.linspace(rec.eta[0], bg.eta_0, 4000)
     phi_a, phi_h = potentials(bg, eta)
     aH = bg.conformal_hubble(bg.a_of_eta(eta))
-    kp = np.interp(eta, rec.eta, rec.kappa_prime)
-    vis = np.interp(eta, rec.eta, rec.visibility)
-    opa = np.interp(eta, rec.eta, rec.opacity)
+    kp, opa, vis = rec.weights_on(eta)
     k_d = float(diffusion_scale(rec, r_of_eta=rec.kappa_prime * 0.0)(rec.eta_star))
     inside = eta <= 6.0 * rec.eta_star
     ac = solve_acoustic(K, eta[inside], background=bg, phi_a=phi_a[inside],

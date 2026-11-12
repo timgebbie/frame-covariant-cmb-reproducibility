@@ -100,7 +100,7 @@ def compute() -> dict:
                 for frame in ("newtonian", "cdm")}
 
     for j, k in enumerate(K_COM):
-        sets = dict(zip(("newtonian", "cdm"), coefficient_sets(float(k), env)))
+        sets = dict(zip(("newtonian", "cdm"), coefficient_sets(float(k), env, source="as built")))
         for frame, coefficients in sets.items():
             parts = transfer_by_rank(ELLS, float(k), coefficients, env, table)
             for r, values in parts.items():

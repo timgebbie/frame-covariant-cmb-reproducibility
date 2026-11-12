@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-r"""F6 — what each approximation is worth, as a ratio to the fuller result.
+r"""F6 — the cost of each approximation, as a ratio to the fuller result.
 
     python scripts/figure_f6_approximations.py
 
@@ -140,7 +140,7 @@ def draw(rows: list[dict]) -> plt.Figure:
     ax.set_ylabel(r"$C_\ell^{\mathrm{approximate}}\,/\,C_\ell^{\mathrm{fuller}}$")
     ax.set_xlim(2, float(ELLS.max()))
 
-    fig.suptitle("F6   What each approximation is worth", x=0.012, y=0.962,
+    fig.suptitle("F6   The cost of each approximation", x=0.012, y=0.962,
                  ha="left", fontsize=10, color=INK["primary"])
     fig.text(
         0.012, 0.900,
