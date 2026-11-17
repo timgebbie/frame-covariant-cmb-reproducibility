@@ -124,7 +124,8 @@ def _env(index: int, k_max: float = K_MAX):
         k_max, omega_m=bg.omega_m, omega_lambda=bg.omega_lambda,
         omega_r=bg.omega_r, omega_b_h2=omega_b_h2,
         transfer_gamma=shape_parameter(bg.omega_m, h), hubble_h=h,
-        f_2=F2_DEFAULT, line_of_sight_weight="printed")
+        f_2=F2_DEFAULT, line_of_sight_weight="printed",
+        acoustic_start="radiation era")
 
 
 def _rel(a, b, mask=slice(None)) -> float:

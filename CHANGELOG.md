@@ -5,6 +5,44 @@ All notable changes to this bundle are recorded here. The version policy is in
 
 ## [Unreleased] — v1.4.0 in preparation
 
+### The radiation era, step 1: one start
+
+The construction is the supplement's `sec:a3-construction`, built in three
+registered steps, each scored against the one before. Step 1 is the start
+alone, on the released potential.
+
+- **Every mode starts at one $\eta_i$**, deep in the radiation era and
+  outside every horizon. On Planck $\eta_i=6.7\times10^{-6}$, where
+  $k_{\max}\eta_i=10^{-2}$ binds before $a_i=10^{-3}a_{\rm eq}$ does.
+- **The state there is the adiabatic growing mode:** $\delta T=-\tfrac12\Phi_A$
+  and $\tau_1=-\tfrac12k\eta_i\Phi_A$, or the matter-era mode where
+  $\Omega_r=0$. The code is `acoustic.common_start_eta`,
+  `acoustic.adiabatic_growing_mode` and `acoustic_start="radiation era"`, set by
+  F9, F10, D44 and D45. The instruments that measure (102) keep the derived
+  start.
+- **T-192 repaired.** Planck's Sachs–Wolfe source at last scattering, over
+  $T(k)$, is smooth across $2.7<k<5.4$: 0.3513, 0.3510, 0.3508, 0.3488, 0.3453
+  and 0.3408 at $k=2.6$, 2.7, 2.8, 3.5, 4.5 and 5.5. The derived start jumped
+  from 0.185 to 0.296. As $k\to0$ the source is
+  $2\Phi_A-\tfrac32\Phi_A(\eta_i)$ under the visibility.
+- **T-193, found and repaired.** The derived start set $\tau_1=0$, which is not
+  the growing mode. On Einstein–de Sitter it moved $(\delta T+\Phi_A)(\eta_*)$
+  by up to 13% at $k=60$; given the growing mode's dipole, the derived start
+  agrees with the one start to $1.5\times10^{-3}$.
+- **F9 at step 1**, recorded on every background:
+  - the first maxima are 159.6, 139.9 and 188.1 ($0.705\thinspace\ell_A$),
+    from 165.4, 143.8 and 188.5;
+  - the two frames agree to $3.3\times10^{-14}$;
+  - on Planck $D_\ell/D_{30}$ for $\ell$ from 4 to 11 is 0.54 to 0.62, where
+    it was 0.44 and CAMB holds 0.78.
+
+  The Ω_r = 0 backgrounds move only by the start, as the restated (g2)
+  requires; their move is T-193's. F10, D44 and D45 carry the step-1 start
+  and are recomputed once, after step 3.
+- F9's first-peak annotation sits in the empty upper left of panel (a), off
+  CAMB's curve. The comment on `TAU_CONTINUATION` states T-147's measurement
+  in place of the reading T-147 refuted.
+
 ### Changed
 
 - `scripts/bump_release.py --open` follows the supplement's edition scheme: it

@@ -51,7 +51,7 @@ finely.
 
 ### `eta` — the line-of-sight integration grid for C_ell
 
-`functions/spectra/pipeline.py:499`, `np.linspace`
+`functions/spectra/pipeline.py:504`, `np.linspace`
 
 `required_n_eta(k_max, span)` at 12 samples per j_ell oscillation, and
 `run` RAISES rather than accepting an n_eta below it --- *"Pass n_eta=None to
@@ -60,7 +60,7 @@ template the other rows are measured against.
 
 ### `mode_eta` — one acoustic mode's own integration grid, from its derived start
 
-`functions/spectra/pipeline.py:582`, `np.linspace`
+`functions/spectra/pipeline.py:587`, `np.linspace`
 
 `required_acoustic_points(k, eta_couple - start)` at 24 samples per
 acoustic oscillation, on a floor of 512. Arithmetic, not a knob: delta_T goes
@@ -73,7 +73,7 @@ spanning a factor of two thousand in k, which is why no number is chosen.
 
 ### `eta` — the eta grid for the two-frame evaluation of (102): F2, F5, F7
 
-`functions/spectra/two_frame.py:319`, `np.linspace`
+`functions/spectra/two_frame.py:325`, `np.linspace`
 
 `required_n_eta(k_max, span)` when `n_eta is None`, which is how every
 figure calls it, and `check_k` RAISES when a caller asks for a mode the grid
@@ -83,7 +83,7 @@ nothing in the bundle does.
 
 ### `mode_eta` — one acoustic mode's integration grid on the (102) generic-u^a route
 
-`functions/spectra/two_frame.py:408`, `np.linspace`
+`functions/spectra/two_frame.py:421`, `np.linspace`
 
 The same construction as `pipeline.py::mode_eta` and in the same
 release, because **T-51 had one instance per route**: `pipeline.run`,
@@ -314,7 +314,7 @@ which is far inside the band 460 already carries.
 
 ### `k_com` — the k grid of D44's spectra
 
-`scripts/diagnostic_d44_the_line_of_sight_in_invariant_slots.py:177`, `np.linspace`
+`scripts/diagnostic_d44_the_line_of_sight_in_invariant_slots.py:178`, `np.linspace`
 
 F9's grid, from the same `required_k_points` per background (T-56), so
 the two instruments sample C_l alike and `required_k_points` raises where the
@@ -322,7 +322,7 @@ period of j_l^2 cannot be met.
 
 ### `k_com` — the k grid of D45's cross-spectra
 
-`scripts/diagnostic_d45_the_slots_sum_back.py:137`, `np.linspace`
+`scripts/diagnostic_d45_the_slots_sum_back.py:138`, `np.linspace`
 
 F9's grid, from the same `required_k_points` per background (T-56), so
 the cross-spectra add to the spectrum F9 draws.
@@ -339,7 +339,7 @@ the last place a grid may be chosen by eye.
 
 ### `k_com` — the k grid F10's accumulation is integrated over
 
-`scripts/figure_f10_formation_surface.py:165`, `np.linspace`
+`scripts/figure_f10_formation_surface.py:166`, `np.linspace`
 
 `required_k_points(K_MAX, r_theta)`, K_MAX = 300, matching D30
 exactly so the figure and the diagnostic behind it are the same measurement.
@@ -350,7 +350,7 @@ it.
 
 ### `k_com` — the k grid the released angular spectrum is integrated on
 
-`scripts/figure_f9_acoustic_spectrum.py:152`, `np.linspace`
+`scripts/figure_f9_acoustic_spectrum.py:153`, `np.linspace`
 
 `required_k_points(1500, r_theta)`, per background because r_theta is.
 **Was `np.arange(0.05, 1500.0, np.pi/3)` until 2026-10-17** --- 0.96 samples
@@ -373,7 +373,7 @@ adaptive refinement restarts rather than the accuracy. Nothing rests on it.
 
 ### `eta` — the samples r_s(eta) = Int_0^eta c_s deta is accumulated on
 
-`functions/spectra/acoustic.py:163`, `np.logspace`
+`functions/spectra/acoustic.py:213`, `np.logspace`
 
 **Logarithmic, and that is not a style choice.** c_s -> 1/sqrt(3) as
 eta -> 0 while the span to eta_* covers five decades, so a uniform grid spends
@@ -614,7 +614,7 @@ Set by the transform length, not chosen. The FFT's own grid is the k grid of its
 
 ### `master` — the grid Phi_A and Phi_H are splined on, shared by every mode
 
-`functions/spectra/pipeline.py:573`, `np.logspace`
+`functions/spectra/pipeline.py:578`, `np.logspace`
 
 16384 logarithmic samples from the earliest acoustic start to
 eta_couple. **It carries no physical scale of its own**: it resamples a
@@ -803,7 +803,7 @@ level set that stopped at 0.90 could not show the thing the figure is for.
 
 ### `post` — the conformal times F10 samples AFTER recombination
 
-`scripts/figure_f10_formation_surface.py:161`, `np.geomspace`
+`scripts/figure_f10_formation_surface.py:162`, `np.geomspace`
 
 `eta_* + geomspace(span*1e-4, span, N_SLICES-4)`, ten slices.
 Geometric because the visibility is narrow and a linear grid would put every
@@ -813,7 +813,7 @@ distinguishable and enough to read a progression.
 
 ### `pre` — the conformal times F10 samples ACROSS recombination
 
-`scripts/figure_f10_formation_surface.py:160`, `np.linspace`
+`scripts/figure_f10_formation_surface.py:161`, `np.linspace`
 
 `linspace(eta_floor, eta_star, 4)`. **Linear, not geometric, and
 deliberately so**: the PI asked for the autocorrelation *just before

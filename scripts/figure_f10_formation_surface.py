@@ -150,7 +150,8 @@ def _accumulate():
         omega_lambda=PLANCK_MODEL.omega_lambda, omega_r=PLANCK_MODEL.omega_r,
         omega_b_h2=PLANCK_OMEGA_B_H2,
         transfer_gamma=shape_parameter(PLANCK_MODEL.omega_m, PLANCK_H),
-        hubble_h=PLANCK_H, f_2=F2_DEFAULT, line_of_sight_weight="printed")
+        hubble_h=PLANCK_H, f_2=F2_DEFAULT, line_of_sight_weight="printed",
+        acoustic_start="radiation era")
     eta_star, eta_0 = float(env.eta_star), float(env.background.eta_0)
     floor = float(env.eta[0])
 

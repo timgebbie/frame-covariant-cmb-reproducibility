@@ -128,7 +128,8 @@ def _env(index: int, n_eta: int | None = None):
         K_MAX, omega_m=bg.omega_m, omega_lambda=bg.omega_lambda,
         omega_r=bg.omega_r, omega_b_h2=omega_b_h2,
         transfer_gamma=shape_parameter(bg.omega_m, h), hubble_h=h,
-        f_2=F2_DEFAULT, line_of_sight_weight="printed", n_eta=n_eta)
+        f_2=F2_DEFAULT, line_of_sight_weight="printed", n_eta=n_eta,
+        acoustic_start="radiation era")
 
 
 def _grid(env) -> np.ndarray:
@@ -191,7 +192,8 @@ def sum_back_mode(k: float, env) -> tuple[dict[str, float], dict]:
                       eta_0=float(env.background.eta_0))
     out: dict[str, float] = {}
     kept: dict = {}
-    start = acoustic_start_eta(float(k), env.eta_rs, env.r_s_table)
+    start = (env.eta_i if env.acoustic_start == "radiation era"
+             else acoustic_start_eta(float(k), env.eta_rs, env.r_s_table))
     for frame, cs in zip("NC", covariant_coefficient_sets(k, env)):
         s, _ = line_of_sight_inputs(k, cs, env)
         built = three_slots(kern, s).transfer()      # as F9 builds it

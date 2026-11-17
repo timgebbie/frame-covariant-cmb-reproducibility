@@ -12900,3 +12900,38 @@ oscillator's physics. With the radiation era wired (A-3, v1.4.0) both are
 redefined: the radiation-era adiabatic condition, set where every mode is
 super-horizon. The table records what each rule would do. D45's anchor
 follows with the regeneration.
+
+## T-193 — The derived start set the dipole to zero, which is not the growing mode, on every background
+
+**T-192's start rule had a second defect, independent of the potential's
+decay.** At the mode's start the acoustic pair took $\delta T=-\tfrac23\Phi_A$
+and $\tau_1=0$. The growing mode carries a dipole from the moment it exists:
+(152) with $R\to0$ gives $\tau_1'=-k(\delta T+\Phi_A)$, so on the matter-era
+mode $\tau_1=-\tfrac13k\eta\thinspace\Phi_A$, and at the start, $k\thinspace r_s=0.1$, that is
+not negligible. A zero dipole there is the growing mode plus a decaying
+admixture of order $k\thinspace r_s$, and the admixture shifts the acoustic phase.
+
+**Measured on Einstein–de Sitter**, where the potential is exactly constant and
+nothing else can move: $(\delta T+\Phi_A)(\eta_*)$ for one mode, three ways.
+
+| $k$ | derived start, $\tau_1=0$ | derived start, growing mode | one radiation-era start |
+|---:|---:|---:|---:|
+| 20 | $+0.27144$ | $+0.25558$ | $+0.25416$ |
+| 60 | $-0.19941$ | $-0.22943$ | $-0.22911$ |
+| 100 | $-0.62454$ | $-0.62664$ | $-0.62517$ |
+| 300 | $-0.87656$ | $-0.87396$ | $-0.87263$ |
+| 600 | $-0.33627$ | $-0.34485$ | $-0.34617$ |
+
+Given the growing mode's dipole, the derived start agrees with the one start to
+within $1.5\times10^{-3}$, inside the $(k\thinspace r_s)^2=10^{-2}$ that a start at
+$k\thinspace r_s=0.1$ still owes. With
+the dipole at zero it is off by up to 13% at $k=60$. **On F9 the zero dipole was
+worth 3.5% of the first maximum on Einstein–de Sitter, $165.4\to159.6$, and
+2.7% on ΛCDM, $143.8\to139.9$; the shape moved by up to 7.4%.**
+
+**Repaired by step 1 of the radiation era's construction**
+(`sec:a3-construction`). Every mode starts at one $\eta_i$, deep in the
+radiation era and outside every horizon ($k_{\max}\eta_i=10^{-2}$), on the
+adiabatic growing mode including its dipole: `adiabatic_growing_mode` and
+`acoustic_start="radiation era"`. The derived start stays the antecedent's,
+for the instruments that measure (102), and keeps both of its defects there.

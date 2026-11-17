@@ -136,16 +136,20 @@ def test_a_common_start_does_not_reproduce_the_released_answer(setup):
 
 
 def test_t192_the_start_rule_breaks_the_sachs_wolfe_source_on_planck(setup):
-    r"""**T-192, pinned and written to FAIL when it is repaired.**
+    r"""**T-192, and it stays pinned on the start that carries it.**
 
     A mode that reaches $k\,r_s=\varepsilon$ before $\eta_*$ starts there, on
     the matter-era condition $\delta T=-\tfrac23\Phi_A$. On `PLANCK_MODEL` the
     potential has already decayed by then (A-3), while a mode that never
     reaches it starts at the table's first point and carries the decay through
     continuity. The Sachs--Wolfe source at last scattering therefore jumps
-    where the rule changes branch, near $k=2.75$. When the radiation era's
-    initial condition replaces the rule, this test fails: update T-192 and
-    retire it.
+    where the rule changes branch, near $k=2.75$.
+
+    **Since step 1 of the radiation era the covariant figures do not use this
+    start**: every mode starts at one $\eta_i$ deep in the radiation era, and
+    `test_one_start_makes_the_sachs_wolfe_source_smooth_across_t192s_band`
+    holds the repair. The derived start remains the antecedent's, and this test
+    holds what it does.
     """
     from functions.spectra.two_frame import (
         covariant_coefficient_sets, line_of_sight_inputs)
@@ -162,5 +166,83 @@ def test_t192_the_start_rule_breaks_the_sachs_wolfe_source_on_planck(setup):
     jump = source(2.8) / source(2.7)
     assert smooth < 1e-2, f"the source is not smooth below the boundary: {smooth:.2e}"
     assert jump > 1.3, (
-        f"T-192's jump has gone ({jump:.3f}): the start rule or the initial "
-        "condition changed. Update provenance T-192 and retire this test.")
+        f"T-192's jump has gone from the derived start ({jump:.3f}): the "
+        "antecedent's start rule or its initial condition changed.")
+
+
+# ---------------------------------------------------------------------------
+# Step 1 of the radiation era: one start for every mode (sec:a3-construction)
+# ---------------------------------------------------------------------------
+
+
+def test_the_one_start_is_deep_in_the_radiation_era_and_outside_every_horizon():
+    r"""$a_i\le10^{-3}a_{\rm eq}$ and $k_{\max}\eta_i\le10^{-2}$, read from the
+    background's own $\eta(a)$; where $\Omega_r=0$ the horizon condition alone."""
+    from functions.background.flrw import CDM_MODEL
+    from functions.spectra.acoustic import (
+        RADIATION_ERA_START_A_FRACTION, RADIATION_ERA_START_K_ETA, common_start_eta)
+
+    eta_i = common_start_eta(PLANCK_MODEL, K_MAX)
+    a_eq = PLANCK_MODEL.omega_r / PLANCK_MODEL.omega_m
+    assert float(PLANCK_MODEL.a_of_eta(eta_i)) <= RADIATION_ERA_START_A_FRACTION * a_eq * (1 + 1e-6)
+    assert K_MAX * eta_i <= RADIATION_ERA_START_K_ETA * (1 + 1e-12)
+    assert common_start_eta(CDM_MODEL, K_MAX) == pytest.approx(RADIATION_ERA_START_K_ETA / K_MAX)
+
+
+def test_the_growing_mode_starts_on_its_own_trajectory():
+    r"""eq:radiation-ic. With $R\to0$, (152) gives $\tau_1'=-k(\delta T+\Phi_A)$,
+    which is $-\tfrac12k\Phi$ in the radiation era and $-\tfrac13k\Phi$ in the
+    matter era, so the initial $\tau_1$ is that line at $\eta_i$."""
+    from functions.spectra.acoustic import adiabatic_growing_mode
+
+    d_t, tau = adiabatic_growing_mode(3.0, 1e-5, 2.0, radiation_era=True)
+    assert d_t == pytest.approx(-1.0) and tau == pytest.approx(-(3.0 * 1e-5 / 2.0) * 2.0)
+    assert tau == pytest.approx(-3.0 * 1e-5 * (d_t + 2.0))
+    d_t, tau = adiabatic_growing_mode(3.0, 1e-5, 2.0, radiation_era=False)
+    assert d_t == pytest.approx(-4.0 / 3.0)
+    assert tau == pytest.approx(-3.0 * 1e-5 * (d_t + 2.0))
+
+
+def test_one_start_makes_the_sachs_wolfe_source_smooth_across_t192s_band():
+    r"""**T-192, repaired by step 1 of the radiation era's construction.**
+
+    Every mode starts at one $\eta_i$ deep in the radiation era on the
+    adiabatic growing mode, so no mode starts after its potential has begun to
+    decay. On the released potential the Sachs--Wolfe source at last
+    scattering is then smooth across $2.7<k<5.4$, where the derived start
+    jumps by 60\%, and as $k\to0$ it is $2\Phi_A-\tfrac32\Phi_A(\eta_i)$ read
+    under the visibility: the start's $-\tfrac12\Phi$, with the potential's
+    fall carried into $\delta T$ by continuity.
+    """
+    from functions.spectra.two_frame import (
+        covariant_coefficient_sets, line_of_sight_inputs)
+
+    env = build_environment(
+        K_MAX, omega_m=PLANCK_MODEL.omega_m,
+        omega_lambda=PLANCK_MODEL.omega_lambda, omega_r=PLANCK_MODEL.omega_r,
+        omega_b_h2=PLANCK_OMEGA_B_H2,
+        transfer_gamma=shape_parameter(PLANCK_MODEL.omega_m, PLANCK_H),
+        hubble_h=PLANCK_H, f_2=F2_DEFAULT, line_of_sight_weight="printed",
+        acoustic_start="radiation era")
+    eta, v = np.asarray(env.eta), np.asarray(env.visibility)
+
+    def source(k: float) -> float:
+        s, _ = line_of_sight_inputs(k, covariant_coefficient_sets(k, env)[0], env)
+        return (float(np.trapezoid(v * s.c1_grav, eta) / np.trapezoid(v, eta))
+                / env.transfer_at(k))
+
+    ks = [2.6, 2.7, 2.8, 3.5, 4.5, 5.5]
+    values = np.array([source(k) for k in ks])
+    steps = np.abs(values[1:] / values[:-1] - 1.0)
+    assert np.all(np.diff(values) < 0.0), f"not monotone across the band: {values}"
+    assert steps[:2].max() < 2e-3, f"a step at k = 2.6-2.8: {steps[:2]}"
+    assert steps.max() < 2e-2, f"a step across the band: {steps}"
+
+    # Outside the horizon, continuity carries the potential's fall into dT one
+    # for one, so dT + Phi_A = 2 Phi_A - (3/2) Phi_A(eta_i), read under the
+    # visibility as the source is.
+    early = float(potentials(env.background, np.array([env.eta_i, env.eta_i * 2.0]),
+                             constant_below=env.md_reference)[0][0])
+    mean = float(np.trapezoid(v * np.asarray(env.phi_a), eta) / np.trapezoid(v, eta))
+    assert source(0.05) == pytest.approx((2.0 * mean - 1.5 * early) / early, abs=2e-3)
+

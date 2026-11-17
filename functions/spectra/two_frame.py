@@ -39,6 +39,8 @@ from functions.background.flrw import Background
 from functions.spectra.acoustic import (
     TIGHT_COUPLING_FACTOR as ACOUSTIC_TIGHT_COUPLING_FACTOR,
     acoustic_start_eta,
+    adiabatic_growing_mode,
+    common_start_eta,
     required_acoustic_points,
     sound_horizon_from_zero,
     baryon_photon_ratio, solve_acoustic,
@@ -196,6 +198,10 @@ class TwoFrameEnvironment:
     #: `two_route` --- and all three began in the same place, which is why no
     #: comparison among them could see it. T-3's lesson, in triplicate.
     acoustic_start: str = "derived"
+    #: **`"radiation era"`: one start for every mode** (sec:a3-construction),
+    #: $\eta_i$ with $a_i\le10^{-3}a_{\rm eq}$ and $k_{\max}\eta_i\le10^{-2}$, on
+    #: the adiabatic growing mode. 0 for the other two starts, which do not use it.
+    eta_i: float = 0.0
     #: The tabulated $r_s(\eta)$ from the big bang, and the single reference
     #: $\Phi_A$ is normalised at. `None` only on an environment built before
     #: these existed, which nothing now does.
@@ -325,9 +331,12 @@ def build_environment(
     eta_rs, r_s_table = sound_horizon_from_zero(
         background, float(eta_star), omega_b_h2=omega_b_h2)
     md_reference = float(recombination.eta[0])
-    derived = str(acoustic_start) == "derived"
-    if str(acoustic_start) not in ("derived", "z_max"):
-        raise ValueError("acoustic_start is 'derived' (S40) or 'z_max' (the control)")
+    derived = str(acoustic_start) in ("derived", "radiation era")
+    if str(acoustic_start) not in ("derived", "z_max", "radiation era"):
+        raise ValueError("acoustic_start is 'radiation era' (A-3's one start), "
+                         "'derived' (S40) or 'z_max' (the control)")
+    eta_i = (common_start_eta(background, float(k_max))
+             if str(acoustic_start) == "radiation era" else 0.0)
 
     phi_a, phi_h = (potentials(background, eta, constant_below=md_reference)
                     if derived else potentials(background, eta))
@@ -355,7 +364,7 @@ def build_environment(
         visibility=visibility,
         opacity=opacity,
         line_of_sight_weight=str(line_of_sight_weight),
-        acoustic_start=str(acoustic_start), eta_rs=eta_rs,
+        acoustic_start=str(acoustic_start), eta_i=float(eta_i), eta_rs=eta_rs,
         r_s_table=r_s_table, md_reference=float(md_reference),
         k_max=float(k_max), transfer_gamma=float(transfer_gamma),
         hubble_h=float(hubble_h), apply_transfer=bool(apply_transfer),
@@ -399,19 +408,26 @@ def coefficient_sets(
     eta_couple = min(float(bg.eta_0), TIGHT_COUPLING_FACTOR * eta_star)
     inside = eta <= eta_couple
 
-    if env.acoustic_start == "derived":
+    if env.acoustic_start in ("derived", "radiation era"):
         # **T-51/S40: the start is k's, not z_max's, and so is the grid.**
         # T(k) still multiplies Phi *before* the integration (finding T-37) ---
         # it is independent of eta, so scaling the mode's own potentials by the
-        # same number is exact.
-        start = acoustic_start_eta(float(k_com), env.eta_rs, env.r_s_table)
+        # same number is exact. Under "radiation era" every mode starts at the
+        # one eta_i, on the adiabatic growing mode (sec:a3-construction), so no
+        # mode starts after its potential has begun to decay (T-192).
+        one_start = env.acoustic_start == "radiation era"
+        start = (env.eta_i if one_start
+                 else acoustic_start_eta(float(k_com), env.eta_rs, env.r_s_table))
         mode_eta = np.linspace(
             start, eta_couple, required_acoustic_points(float(k_com), eta_couple - start))
         mode_a, mode_h = potentials(bg, mode_eta, constant_below=env.md_reference)
+        initial = (adiabatic_growing_mode(
+            float(k_com), start, float(mode_a[0] * t_k),
+            radiation_era=float(bg.omega_r) > 0.0) if one_start else None)
         acoustic = solve_acoustic(
             float(k_com), mode_eta, background=bg,
             phi_a=mode_a * t_k, phi_h=mode_h * t_k,
-            omega_b_h2=env.omega_b_h2, expansion_coupling=False)
+            omega_b_h2=env.omega_b_h2, expansion_coupling=False, initial=initial)
         # `np.interp` holds the end value past `eta_couple`, which **is** the
         # freeze the tight-coupling window calls for.
         delta_t = np.interp(eta, mode_eta, acoustic.delta_T)

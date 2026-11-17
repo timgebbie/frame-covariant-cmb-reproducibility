@@ -14,20 +14,22 @@ with Paper~1's source signs: the Sachs--Wolfe and Doppler terms where photons
 scatter and the integrated Sachs--Wolfe term along the path, each invariant
 under a change of frame, with no coefficient that holds the scattering rate
 differentiated. Since v1.4.0 the visibility and the opacity come from one
-$\\kappa$ on the line-of-sight grid (\\textbf{T-191}).\\\\[2pt]
+$\\kappa$ on the line-of-sight grid (\\textbf{T-191}), and every mode starts at
+one time deep in the radiation era, on the adiabatic growing mode
+(\\textbf{T-192}, \\textbf{T-193}).\\\\[2pt]
 \\textbf{(a)} The spectrum in the CDM frame. The odd acoustic peaks are present,
-$2\\ell_A$ apart; the first is at $\\ell\\simeq189$ on Planck ($0.71\\,\\ell_A$),
-$144$ on $\\Lambda$CDM and $165$ on Einstein--de~Sitter. The even peaks are
+$2\\ell_A$ apart; the first is at $\\ell\\simeq188$ on Planck ($0.71\\,\\ell_A$),
+$140$ on $\\Lambda$CDM and $160$ on Einstein--de~Sitter. The even peaks are
 absent, as an oscillator driven by a constant potential and loaded with baryons
 predicts, because the radiation-era driving that sets the peak heights is not
 yet in the source (\\textbf{A-3}). Below $\\ell\\sim30$ the
 \\texttt{PLANCK\\_MODEL} curve, its dip near $\\ell=5$ included, carries the
-same incomplete radiation era: the potential decays through equality while the
-oscillator starts from the matter-era adiabatic condition, so the curve there
-is not a prediction. CAMB and CLASS are context, not a target
+same incomplete radiation era: the oscillator now starts in the radiation era,
+but the potential it and the slots read is still the matter-era one, so the
+curve there is not a prediction. CAMB and CLASS are context, not a target
 (decision~\\textbf{S4c}).\\\\[2pt]
 \\textbf{(b)} Both frames, from one solve. The Newtonian and CDM spectra
-coincide to $3.5\\times10^{-14}$ at every multipole: a first-order change of
+coincide to $3.3\\times10^{-14}$ at every multipole: a first-order change of
 frame moves only the dipole, and here it moves nothing at $\\ell\\ge2$.
 """
 +++
@@ -41,8 +43,8 @@ covariant line of sight, for three backgrounds, in two frames.
 
 | | EdS | ΛCDM | Planck |
 |---|---:|---:|---:|
-| first peak, ℓ | 165 | 144 | 189 |
-| largest frame gap, any ℓ | 1.3e-14 | 3.5e-14 | 1.1e-14 |
+| first peak, ℓ | 160 | 140 | 188 |
+| largest frame gap, any ℓ | 2.9e-14 | 3.3e-14 | 3.3e-14 |
 
 The odd acoustic peaks are present and spaced by twice ℓ_A. The even peaks are
 absent: with no radiation-era driving the oscillation's zero point is set by

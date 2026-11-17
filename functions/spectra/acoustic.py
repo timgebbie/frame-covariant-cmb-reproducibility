@@ -60,6 +60,10 @@ __all__ = [
     "sachs_wolfe_at_last_scattering_printed",
     "ADIABATIC_MONOPOLE",
     "TIGHT_COUPLING_FACTOR",
+    "RADIATION_ERA_START_A_FRACTION",
+    "RADIATION_ERA_START_K_ETA",
+    "common_start_eta",
+    "adiabatic_growing_mode",
 ]
 
 #: Where the tight-coupling oscillator stops and its last value is held: the
@@ -106,6 +110,52 @@ ACOUSTIC_START_EPSILON = 0.1
 #: The adiabatic initial condition §7.1.2 uses:
 #: dT(0,k) ~ (1/3) Delta(0,k) ~ -(2/3) Phi_A(0,k), flat adiabatic CDM.
 ADIABATIC_MONOPOLE = -2.0 / 3.0
+
+#: **One start for every mode, deep in the radiation era and outside the
+#: horizon** --- the supplement's sec:a3-construction (11 November). The start
+#: $\eta_i$ satisfies $a_i\le10^{-3}a_{\rm eq}$ and $k_{\max}\eta_i\le10^{-2}$,
+#: and the state there is the adiabatic growing mode (`adiabatic_growing_mode`).
+#: No mode then starts after its potential has begun to decay, which is what
+#: the derived start did to Planck's $2.7<k<5.4$ band (T-192).
+RADIATION_ERA_START_A_FRACTION = 1e-3
+RADIATION_ERA_START_K_ETA = 1e-2
+
+
+def common_start_eta(background: Background, k_max: float) -> float:
+    r"""$\eta_i$, the one start every mode shares: $a_i\le10^{-3}a_{\rm eq}$ and
+    $k_{\max}\eta_i\le10^{-2}$.
+
+    Where $\Omega_r=0$ there is no equality, and the horizon condition alone
+    sets it: the matter-era growing mode is exact at any $\eta$ outside the
+    horizon. Read from the background's own $\eta(a)$, so the start is the
+    background's and not an analytic radiation-era form beside it.
+    """
+    if not k_max > 0.0:
+        raise ValueError("k_max must be positive")
+    eta_k = RADIATION_ERA_START_K_ETA / float(k_max)
+    omega_r = float(background.omega_r)
+    if omega_r <= 0.0:
+        return eta_k
+    a_eq = omega_r / float(background.omega_m)
+    eta_a = float(background.eta_of_a(RADIATION_ERA_START_A_FRACTION * a_eq))
+    return min(eta_k, eta_a)
+
+
+def adiabatic_growing_mode(
+    k_com: float, eta_i: float, phi_a_i: float, *, radiation_era: bool,
+) -> tuple[float, float]:
+    r"""$(\delta T,\tau_1)$ at $\eta_i$: eq:radiation-ic, or the matter-era mode.
+
+    In the radiation era $\delta T=-\tfrac12\Phi_A$ and
+    $\tau_1=-\tfrac12k\eta_i\Phi_A$; where $\Omega_r=0$, $\delta T=-\tfrac23\Phi_A$
+    and $\tau_1=-\tfrac13k\eta_i\Phi_A$. Both to order $(k\eta_i)^2$. The
+    velocity is (152) with $R\to0$, $\tau_1'=-k(\delta T+\Phi_A)$, integrated
+    from the big bang, so its sign is this bundle's.
+    """
+    phi = float(phi_a_i)
+    if radiation_era:
+        return -0.5 * phi, -0.5 * float(k_com) * float(eta_i) * phi
+    return ADIABATIC_MONOPOLE * phi, -float(k_com) * float(eta_i) * phi / 3.0
 
 
 def baryon_photon_ratio(

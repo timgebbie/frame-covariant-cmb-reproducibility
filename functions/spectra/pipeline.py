@@ -232,12 +232,17 @@ def required_k_points(
 #: of the solver rather than physics. Measured: the bracket at $\eta_0$ is
 #: 1.04--1.18 times $C_0$ on EdS at every $k$, where it should be zero.
 #:
-#: **It has been invisible since v1.0.0** because the released bulk rides at
+#: **It was invisible until 25 October** because (102) carries its bulk at
 #: $\mathcal V\mathcal D$ and $\mathcal V$ is zero after recombination, so the
 #: frozen partner and the growing $C_0$ are both annihilated before they can
-#: disagree. B-17 (i) and this are therefore one coupled pair: the weight
-#: hides the freeze and removing the weight exposes it. **That is why no
-#: weight repair has been adoptable.**
+#: disagree. **T-147 refuted the reading this comment used to give**, that the
+#: freeze is why no weight repair was adoptable: releasing it moves (102)'s
+#: bracket by 9 to 25% and produces the cancellation on no background. The
+#: cancellation comes from Paper 1's source signs (`RANK_ONE_SOURCE`), which
+#: D44 measures. The frame-invariant line of sight reads the photon moments
+#: only under $\mathcal V$, inside the window, and its integrated slot's
+#: source in the Newtonian frame is $-(\Phi_A'-\Phi_H')$, so the freeze does
+#: not enter it.
 #:
 #: `"free_stream"` is the physics the freeze stands in for. Inside the window
 #: the photons are a fluid and the tight-coupling solution is right; outside
