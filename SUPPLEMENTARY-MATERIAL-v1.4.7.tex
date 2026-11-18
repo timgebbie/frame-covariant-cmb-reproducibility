@@ -1,5 +1,32 @@
 % Computational supplement to the associated paper.
 %
+% v1.4.7, 2026-11-18.  The photons' anisotropic stress, and the edition
+% advanced for the captions regenerated under the v1.4.6 name.
+%   - sec:a3-construction: the constraint eq:stress-constraint,
+%     k^2 (Phi_A + Phi_H) = (8/5) H^2 Omega_gamma tau_2, derived from Annals
+%     II's potentials (eq:stress-potentials), MGE99's brightness moments
+%     (eq:photon-stress) and Paper 1's mode rule with Annals I's harmonic
+%     normalisation.  The sign belongs to the phase of (F.1), whose monopole
+%     is -dT; the hand-over from the pair takes -dT as that monopole.  The
+%     size outside the horizon after decoupling, eq:stress-superhorizon,
+%     -(4/15) Omega_gamma(eta_*) at sqrt 2 eta_* in a matter era and -0.042
+%     near 1.6 eta_* on PLANCK_MODEL, is registered for the second step.  The
+%     construction closes Phi_A with the constraint.
+%   - The first and second steps recorded: the source smooth across T-192's
+%     band (T-193), and (g2) for the later steps measured against the first;
+%     the second step's registrations met (D46), and the start the solve
+%     integrates is the growing mode on both constraints (T-194), the printed
+%     eq:radiation-ic being its leading order.  The energy constraint is the
+%     evolution's check and the start's condition.
+%   - Current state brought to the second step where the text said otherwise:
+%     the conformity section's footnote (its governance sentence removed),
+%     Discussion's even peaks, and the asserted-not-gated item, which is now
+%     the heights.
+%   - The frame-check inventory: c14, fourteen instruments.
+%   - Evidence regenerated from the restyled captions (bundle ad9bd77) and
+%     read under check F; the F9 maxima at v1.3.0 and with the new start.
+%   - Equations otherwise unchanged.
+%
 % v1.4.6, 2026-11-11.  The order of the author's style profile v2.0 (v1.6):
 % Discussion, AI disclosure, references, appendices (PI, 11 November).
 %   - Moved after the references, under \appendix and in this order: the
@@ -464,7 +491,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.4.6 --- 11 November 2026\\
+\date{Supplement v1.4.7 --- 18 November 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.4.0-dev}
 
 \begin{document}
@@ -672,19 +699,21 @@ oscillator's peak spacing and step five by \textbf{G1} against four external
 hierarchies, both of them repository diagnostics rather than frame checks.
 Exactly one row of Table~\ref{tab:status} names an instrument from the set
 below --- step six, where \textbf{c3} measures that (102) is not the exact
-integration by parts of its own integral. What eight of the remaining twelve
+integration by parts of its own integral. What eight of the remaining thirteen
 establish sits beneath the table rather than in it: the conditions the
 matching coefficients must satisfy for the frame law to hold, which are prior
 to every row and are the reason a failing row can be localised at all. The
-other four bear on rows without being named in them. \textbf{c10} scores the
+other five bear on rows without being named in them. \textbf{c10} scores the
 phase that step four's row says it does not establish, and finds that a
 criterion of exact phase accepts the undriven oscillator and rejects the
 driven one; \textbf{c11} extends \textbf{c9}'s admissibility condition to a
-by-parts taken against the kernel; \textbf{c12} states the rate at which a
+by-parts taken against the kernel; and \textbf{c12} states the rate at which a
 grid must sample the visibility, which every row that reads a spectrum relies
-on; and \textbf{c13} carries the endpoint map and the late support of the
-integrated term, on which the frame comparison of
-\S\ref{sec:los-conformity-v138} rests. The inventory below should be read in that light, and not as a count of
+on. Two carry derivations that later sections rest on: \textbf{c13} the
+endpoint map and the late support of the integrated term, for the frame
+comparison of \S\ref{sec:los-conformity-v138}, and \textbf{c14} the photons'
+anisotropic stress, with which the radiation-era construction of
+\S\ref{sec:a3-construction} closes $\Phi_A$. The inventory below should be read in that light, and not as a count of
 certified steps.
 
 The source tree at the pinned \texttt{v1.3.0-dev} commit also contains
@@ -692,12 +721,12 @@ independent, claim-facing Python instruments that are \emph{absent}
 from the \texttt{v1.0.0}, \texttt{v1.1.0} and \texttt{v1.2.0} tags.
 This is part of the \emph{current} repository situation, not a
 future Lean deliverable and not an increment in the physics-release
-sequence. The thirteen instruments in \texttt{tests/frame/} use
+sequence. The fourteen instruments in \texttt{tests/frame/} use
 self-contained kernel, visibility and frame constructions rather than
 importing the spectral solver, and \path{tests/frame/run_all.py} invokes each
 in an isolated subprocess under \texttt{-I}.
 \path{tests/test_frame_checks.py}, which is the bundle's own harness, gates
-all thirteen: it discovers them from the directory rather than from a list,
+all fourteen: it discovers them from the directory rather than from a list,
 since 27 October (finding T-155), so an instrument is gated the day it lands.
 Editions v1.3.18 to v1.3.25 said it invoked seven and left \texttt{c8} through
 \texttt{c11} ungated: true when written on the morning of 27 October, and
@@ -841,7 +870,21 @@ scattering window is seen by \(\mathcal V\)
 The temperature and the potential are chosen test functions, so the numbers
 state where the terms live in \(\eta\) and how two frames' raw multipoles
 differ, not any amplitude in this bundle. The frame comparison it supports
-is the one D44 makes, with both frames' coefficients from one solve.\\
+is the one D44 makes, with both frames' coefficients from one solve.\\[3pt]
+\texttt{c14\_\allowbreak{}photon\_\allowbreak{}anisotropic\_\allowbreak{}stress.py} & Added 2026-11-11.
+The constraint \eqref{eq:stress-constraint} with which the radiation-era
+construction closes \(\Phi_A\), term by term: the moment
+\(\pi_{ab}=\tfrac{8\pi}{15}\Pi_{ab}\) and the linearised
+\(\pi_{ab}=\tfrac8{15}\rho_\gamma\tau_{ab}\) by quadrature on the sphere; the
+mode rule \(\mathrm D_{\langle a}\mathrm D_{b\rangle}X=-(k/a)^2XQ_{ab}\), the
+phase of (F.1) and its monopole \(-\delta T\), symbolically on a plane wave;
+and the size of \(\Phi_A+\Phi_H\) outside the horizon after decoupling,
+\(-\tfrac4{15}\Omega_\gamma(\eta_*)\) at \(\sqrt2\,\eta_*\) in a matter era
+and \(-0.042\) near \(1.6\,\eta_*\) on \texttt{PLANCK\_MODEL}
+& The size is an estimate, with decoupling instantaneous and the potential of
+\citet{KodamaSasaki1984}; the build measures it. A hierarchy's phase paired
+with the constraint's sign is the negative control: the other phase gives
+the other sign.\\
 \end{longtable}
 \endgroup
 
@@ -1107,10 +1150,14 @@ or measurement required to resolve them.
 \item The rank-one extra term $(\star)=-H\mathrm D_{\langle
   a}\tilde{\mathrm D}_{b\rangle}\ln T$: two readings, and this bundle chooses
   neither.
-\item The residual peak displacement, and the missing acoustic series on the
-  Planck background, have no established mechanism. A-3 is ruled out for the
-  $\kappa''$-suppressed configuration and its standing elsewhere is a
-  property of the configuration, not of the project. On Einstein--de~Sitter the
+\item The heights of the acoustic series on the Planck background. The
+  displacement of the first maximum and the missing even peaks were the
+  radiation era's: with the potential solved through it
+  (\S\ref{sec:a3-construction}) the first maximum is at $204.6$ against CAMB's
+  $206.1$ and the even peaks appear, while the heights, $15$ to $25\%$ low
+  between $\ell=60$ and $550$, are scored as \emph{(f)} after the third step. A-3 was ruled out for
+  (102)'s $\kappa''$-suppressed configuration, a property of that
+  configuration and not of the project. On Einstein--de~Sitter the
   assembly of \eqref{eq:assembly-invariant} carries the series (D44,
   \S\ref{sec:w-form}).
 \item The overall low-$\ell$ plateau shape and the secondary peaks have no morphology gate. Two of the
@@ -3176,6 +3223,17 @@ on. Carrying a super-horizon solution to each mode's own start instead would
 need the same history of every species and add an approximation where $kr_s$
 reaches $\varepsilon$.
 
+These expressions are the growing mode's leading order, and the solve does
+not start from them as they stand. It starts from the growing mode placed on
+both constraints: $\Phi_A$ and $\Phi_A'$ from the two-fluid solution of
+\citet{KodamaSasaki1984}, $v$ from \eqref{eq:momentum-constraint}, and
+$\delta T$ from the energy constraint below, with $\delta_c=\delta_b=3\delta T$.
+Integrated through \eqref{eq:momentum-constraint}, the leading-order
+expressions leave $\Phi(\eta_*)$ at $0.9853\,\Phi_i$ on \texttt{PLANCK\_MODEL}
+at every $\eta_i$, against $0.9254$ (T-194): their error of order
+$a_i/a_{\rm eq}$ violates the energy constraint, and outside the horizon the
+violation grows as $\eta$.
+
 The potential is integrated from the momentum constraint,
 \begin{equation}
   \Phi_H'=\mathcal H\Phi_A
@@ -3187,11 +3245,13 @@ of species $i$ in the critical density at $a$, $w_i$ its equation of state and
 $v_i$ its velocity in the Newtonian frame. The energy constraint,
 $k^2\Phi_H=\tfrac32\mathcal H^2\sum_i\Omega_i(a)\,\Delta_i$ with
 $\Delta_i=\delta_i-3\mathcal H(1+w_i)v_i/k$ the comoving density contrast, is
-its check and not its source. Outside the horizon $\Delta_i$ is of order
-$(k\eta)^2\Phi$, so the energy constraint turns an error of order
-$(k\eta_i)^2$ in \eqref{eq:radiation-ic} into an error of order one in $\Phi$,
-while \eqref{eq:momentum-constraint} is satisfied by it at leading order: in
-the radiation era $\Phi_H'=\Phi_i/\eta-\Phi_i/\eta=0$.
+the evolution's check and not its source: outside the horizon $\Delta_i$ is of
+order $(k\eta)^2\Phi$, so as a source it would turn an error of order
+$(k\eta_i)^2$ into an error of order one in $\Phi$. At the start it is a
+condition, and the one that fixes $\delta T$.
+\eqref{eq:radiation-ic} satisfies \eqref{eq:momentum-constraint} at leading
+order, in the radiation era $\Phi_H'=\Phi_i/\eta-\Phi_i/\eta=0$, and that order
+is not enough for the start (T-194).
 
 The photons stay in the constraint after decoupling. On
 \texttt{PLANCK\_MODEL} they are $15.8\%$ of the density at $\eta_*$, where
@@ -3214,9 +3274,92 @@ after decoupling. Leaving the pair at decoupling is the least of approximation
 A-5, and the slip, the growing quadrupole and the polarization refine that
 transition and are scored after it. The CDM and the baryons, pressureless once
 the baryons are released, are carried to $\eta_0$. After $\eta_*$ the
-free-streaming photons carry anisotropic stress, so $\Phi_A+\Phi_H\neq0$
-there; $\Phi_H=-\Phi_A$ after decoupling is an approximation, named and
-measured in the build.
+free-streaming photons carry anisotropic stress, and the construction closes
+$\Phi_A$ with it.
+
+\paragraph{The anisotropic stress.} The coefficient follows from three $1+3$
+relations. \emph{Annals~II} defines the potentials by the electric Weyl
+tensor and the anisotropic stress,
+$E_{ab}-\tfrac12\pi_{ab}\approx\mathrm D_{\langle a}\mathrm D_{b\rangle}\Phi_A$
+and
+$E_{ab}+\tfrac12\pi_{ab}\approx-\mathrm D_{\langle a}\mathrm D_{b\rangle}\Phi_H$
+(Paper~1, Table~III, row C2.5), with $8\pi G=1$, so that
+\begin{equation}
+  \pi_{ab}\approx-\mathrm D_{\langle a}\mathrm D_{b\rangle}(\Phi_A+\Phi_H) ,
+  \label{eq:stress-potentials}
+\end{equation}
+and $\Phi_H=-\Phi_A$ is exact wherever nothing carries anisotropic stress. Of
+the species this bundle carries only the photons do: the CDM is pressureless,
+the baryons are a perfect fluid, and no background carries neutrinos. The
+photons' stress is the quadrupole of their brightness,
+$\pi^\gamma_{ab}=\tfrac{8\pi}{15}\Pi_{ab}$, and to first order in the
+anisotropy $\tau_{A_\ell}\simeq(\pi/\rho_\gamma)\Pi_{A_\ell}$
+\citep{MaartensGebbieEllis1999}, as Paper~1 restates both, so
+\begin{equation}
+  \pi^\gamma_{ab}\simeq\tfrac8{15}\,\rho_\gamma\,\tau_{ab} .
+  \label{eq:photon-stress}
+\end{equation}
+In modes Paper~1 writes a scalar by the coefficient of its gradient,
+$\mathrm D_aX=(k/a)XQ_a$, and with \emph{Annals~I}'s
+$Q_{A_\ell}=(-k/a)^{-\ell}\mathrm D_{\langle A_\ell\rangle}Q$ that coefficient
+is minus the scalar's own, so that
+$\mathrm D_{\langle a}\mathrm D_{b\rangle}X=-(k/a)^2XQ_{ab}$, with
+$\tau_{ab}=\tau_2Q_{ab}$ on the same harmonic; \emph{Annals~II}'s dust case,
+$E_{ab}=(k/a)^2\Phi_HQ_{ab}$ with $\Phi_A=-\Phi_H$, is this rule applied. With
+$\rho_\gamma=3H^2\Omega_\gamma(a)$, \eqref{eq:stress-potentials} and
+\eqref{eq:photon-stress} give
+\begin{equation}
+  k^2(\Phi_A+\Phi_H)=\tfrac85\,\mathcal H^2\,\Omega_\gamma(a)\,\tau_2 ,
+  \label{eq:stress-constraint}
+\end{equation}
+with $k$ comoving. The sign belongs to the harmonic phase. In this phase the
+free-streaming rows are those of (F.1),
+$\tau_2'=k\tau_1-\tfrac9{35}k\tau_3$ and
+$\tau_1'=-k(\delta T+\Phi_A)-\tfrac4{15}k\tau_2$, and the monopole (F.1)
+carries is $-\delta T$: (F.1) at $\ell=0$ reads $\tau_0'=-\tfrac k3\tau_1$
+where \eqref{eq:pair-conformal} reads $\delta T'=\tfrac k3\tau_1-\Phi_H'$,
+because $\delta T$ is the coefficient of the gradient of $\ln T$ and (F.1)'s
+$\tau_0$ the coefficient of $\ln T$ itself. A hierarchy carried in the other
+phase reverses $\tau_2$, and with it the sign of \eqref{eq:stress-constraint}.
+At the hand-over from the pair to the hierarchy the monopole is therefore
+$-\delta T$, or the hierarchy is carried in the pair's phase at every rank;
+taking $\delta T$ as the monopole of (F.1) starts rank zero and rank one in
+opposite phase.
+
+Before decoupling Thomson scattering holds $\tau_2$ at order $k/\kappa'$ of
+the dipole, so outside the horizon $\Phi_A+\Phi_H$ is of order
+$\Omega_\gamma\mathcal H/\kappa'$ of $\Phi_A$ and $\Phi_H=-\Phi_A$ holds to
+that order. After $\eta_*$ the photons free-stream and build $\tau_2$ from the
+dipole. Outside the horizon, in a matter era with $\Phi_A$ constant,
+$\tau_1=-\tfrac13k\eta\Phi_A$, so $\tau_2=-\tfrac16k^2(\eta^2-\eta_*^2)\Phi_A$
+and \eqref{eq:stress-constraint} gives
+\begin{equation}
+  \frac{\Phi_A+\Phi_H}{\Phi_A}
+  =-\tfrac4{15}\,\mathcal H^2\Omega_\gamma\,(\eta^2-\eta_*^2)
+  =-\tfrac{16}{15}\,\Omega_\gamma(\eta_*)\,\frac{\eta_*^2}{\eta^2}
+   \Big(1-\frac{\eta_*^2}{\eta^2}\Big),
+  \label{eq:stress-superhorizon}
+\end{equation}
+largest in magnitude at $\eta=\sqrt2\,\eta_*$, where it is
+$-\tfrac4{15}\Omega_\gamma(\eta_*)$. The ratio is of two scalars, so it does
+not depend on the harmonic phase, and its sign is the covariant one: with the
+photons' dipole falling with the matter, $\tau_{ab}'=-a\mathrm D_{\langle
+a}\tau_{b\rangle}$ grows along $\mathrm D_{\langle a}\mathrm D_{b\rangle}\Phi_A$,
+and \eqref{eq:stress-potentials} then makes $\Phi_H$ the larger potential in
+magnitude. On \texttt{PLANCK\_MODEL}, where $\Omega_\gamma(\eta_*)=0.158$, an
+integration on the matter and radiation background with the potential of
+\citet{KodamaSasaki1984} gives $-0.042$ at $\eta=1.6\,\eta_*$ and $-0.004$ by
+$10\,\eta_*$, and it recovers \eqref{eq:stress-superhorizon} when last
+scattering lies deep in the matter era
+(\texttt{tests/frame/c14\_\allowbreak{}photon\_\allowbreak{}anisotropic\_\allowbreak{}stress.py}).
+
+The construction closes $\Phi_A$ with \eqref{eq:stress-constraint} rather than
+with $\Phi_A=-\Phi_H$, which is its value at $\tau_2=0$; the hierarchy that
+keeps the photons in \eqref{eq:momentum-constraint} carries $\tau_2$ already.
+The numbers registered below for the second step do not move at $k\to0$. At
+$\eta_*$ the photons are tightly coupled, and the stress enters the
+integrated slot as $(\Phi_A+\Phi_H)'$, whose integral along the path vanishes
+outside the horizon because $\Phi_A+\Phi_H$ is zero at both ends.
 
 \paragraph{The registered test, restated.} On 11 November, before any part of
 the construction was built, \emph{(g)} is restated, because as registered it
@@ -3244,7 +3387,29 @@ $\tfrac13\Phi_A(\eta_*)$ for last scattering deep in the matter era and $0.187$
 against $0.310$ as built, and the integrated slot carries
 $2[\tfrac9{10}\Phi_i-\Phi_A(\eta_*)]=-0.055\,\Phi_A(\eta_*)$ from the radiation
 era, with the late term of $\Lambda$ beside it. Halving $\eta_i$ moves no
-$D_\ell$ by more than $10^{-4}$ of its maximum.
+$D_\ell$ by more than $10^{-4}$ of its maximum. The first step is on the
+main line: the Sachs--Wolfe source on \texttt{PLANCK\_MODEL} is smooth across
+the band, $0.3510$ to $0.3508$ at $k=2.7$--$2.8$, and the backgrounds with
+$\Omega_r=0$ moved by their start alone, whose dipole the earlier rule set to
+zero rather than to the growing mode (T-193). \emph{(g2)} for the second and
+third steps is therefore measured against the first. Registered with them, outside
+the horizon after $\eta_*$ on \texttt{PLANCK\_MODEL}:
+$(\Phi_A+\Phi_H)/\Phi_A$ is negative throughout and reaches $-0.042$ near
+$1.6\,\eta_*$, the value and the place each to within $20\%$, which is the
+allowance for the estimate's instantaneous decoupling. The second step is on
+the main line as well (D46). It carries the photons in the pair's phase at
+every rank, so \eqref{eq:stress-constraint} enters with the opposite sign, and
+it meets each registration: $\Phi(\eta_*)=0.92539\,\Phi_i$, the two-fluid value
+to $3\times10^{-10}$; the Sachs--Wolfe source at $k\to0$ is
+$0.37906\,\Phi_A(\eta_*)$; the integrated term from the radiation era is
+$-0.05473\,\Phi_A(\eta_*)$ on the $\Lambda$-free twin of
+\texttt{PLANCK\_MODEL}, where the formula gives $-0.05487$, the difference
+being the photons' free streaming after $\eta_*$; \emph{(e)} holds to
+$3.2\times10^{-15}$, \emph{(g1)} to $2.6\times10^{-11}$ and \emph{(g2)} bit for
+bit; halving $\eta_i$ moves $D_\ell$ by $4.0\times10^{-7}$ of its maximum; and
+$(\Phi_A+\Phi_H)/\Phi_A$ reaches $-0.0432$ at $1.63\,\eta_*$. With the stress the
+energy constraint closes to $10^{-11}$ as $R\to0$, and with $\Phi_A=-\Phi_H$ it
+fails at $2$ to $4\times10^{-4}$.
 
 \paragraph{An Einstein--de~Sitter number not yet reconciled.} The released
 Einstein--de~Sitter first peak is reported at $\ell_1=220$ against
@@ -5669,15 +5834,17 @@ asks for is the hierarchy with its rank-zero and rank-one sources
 (\S\ref{sec:a3-construction}).}
 These are separate conditions from the existence of acoustic
 oscillations in the source or the agreement of two internally shared
-normalisation routes. The repository's current reported spectrum
-therefore remains a diagnostic reconstruction, not a certified
-physical $C_\ell$.\footnote{Since 4 November F9 draws the assembly of
-\eqref{eq:assembly-invariant}. On the Planck background its odd acoustic peaks
-are present and its even peaks absent, the primary peak sits at
-$0.71\,\ell_A$ against the matched $0.7723$, and the low-$\ell$ plateau is not
-recovered; the README reports the same. Those empirical statements are inherited from the pinned
-repository's recorded runs; they were not reproduced in this supplement
-editing gate. No repair is inferred from the synthetic checks below.}
+normalisation routes. The released spectrum is therefore a reconstruction
+of the line of sight and not yet the physical $C_\ell$.\footnote{F9 draws the
+assembly of \eqref{eq:assembly-invariant} since 4 November. At v1.3.0 its odd
+acoustic peaks were present on the Planck background and its even peaks
+absent, the first maximum was at $0.71\,\ell_A$ against the matched $0.7723$,
+and the low-$\ell$ plateau was not recovered. With the potential solved through
+the radiation era (\S\ref{sec:a3-construction}) the first maximum is at $204.6$
+against CAMB's $206.1$, the even peaks appear near $510$ and $690$, the curve
+below $\ell=30$ lies within $1.4\%$ of CAMB's shape, and the heights are $15$
+to $25\%$ low between $\ell=60$ and $550$. The synthetic checks below infer no
+repair.}
 
 
 \subsection{The endpoint map}
@@ -6002,8 +6169,9 @@ code either. CAMB and CLASS are drawn as context and are not a target
 itemised by approximation rather than totalled, in the table of
 \S\ref{sec:comparison}; the released
 assembly's distance is F9's, with first maxima at $165.4$, $143.8$ and
-$188.5$ against the external codes' $206$, and the driving that sets the
-heights is A-3's. A bundle gated on an external code would be measuring that
+$188.5$ at v1.3.0 and $159.6$, $139.9$ and $188.1$ with the radiation era's
+start (T-193), against the external codes' $206$, and the driving that sets
+the heights is A-3's. A bundle gated on an external code would be measuring that
 code; this one is gated on its own two routes and reports the distance
 separately.
 
@@ -6767,9 +6935,10 @@ from $C_2$, and its gravitational coefficients fail two of the three frame
 conditions \eqref{eq:frame-conditions}. The assembly meeting all three
 (\S\ref{sec:w-form}) puts the odd maxima back on Einstein--de~Sitter and
 $\Lambda$CDM and a single maximum on \texttt{PLANCK\_MODEL} (D44, registration
-\emph{(d)}; F9). The even peaks it leaves out are the undriven oscillator's,
-and the radiation era that drives the oscillator is
-\S\ref{sec:a3-construction}'s.
+\emph{(d)}; F9). The even peaks it leaves out are the undriven oscillator's:
+with the potential solved through the radiation era
+(\S\ref{sec:a3-construction}) they appear on \texttt{PLANCK\_MODEL}, near $510$
+and $690$, and the first maximum moves to $204.6$ against CAMB's $206.1$.
 
 \section{Implications}
 \label{sec:implications}

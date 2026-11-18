@@ -209,9 +209,8 @@ SUPPLEMENT = sorted(ROOT.glob('SUPPLEMENTARY-MATERIAL-v*.tex'), key=_version)
 
 #: Sections the gate does not read, each with its reason.  Meant to shrink.
 EXCLUDED_SECTIONS = {
-    'Evidence': 'the figure captions, generated from captions/*.md; their '
-                'voice is repaired in the caption files and the block '
-                'regenerated, not in the pasted copy',
+    # empty since 18 November: the captions were restyled in captions/*.md and
+    # Evidence regenerated from them, so every section is read.
 }
 
 BANNED = ('worth naming', 'worth saying', 'worth stating', 'worth drawing',
@@ -317,6 +316,11 @@ _HEAD = re.compile(r'\\(section|subsection|subsubsection|paragraph)\{'
                    r'((?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*)\}')
 _BOLD = re.compile(r'\\textbf\{((?:[^{}]|\{[^{}]*\})*)\}')
 
+#: A float's bold lead is its title, a heading in form, and not prose: it is
+#: set apart from the bold-sentence count. Caption titles come from
+#: captions/*.md and are not under the heading test here.
+_CAPTION_TITLE = re.compile(r'(\\caption(?:\[[^\]]*\])?\{)\\textbf\{(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\}')
+
 
 def bold_sentences(prose):
     return [b for b in _BOLD.findall(prose) if len(_words(b)) > BOLD_MAX_WORDS]
@@ -350,7 +354,7 @@ def check_voice():
         if name in EXCLUDED_SECTIONS:
             print('       excluded  %s: %s' % (name, EXCLUDED_SECTIONS[name]))
             continue
-        prose = _TABLE.sub('', body)
+        prose = _CAPTION_TITLE.sub(r'\1', _TABLE.sub('', body))
         for b in bold_sentences(prose):
             bad.append('%s: bold sentence in prose -- a short tag is the '
                        'convention, a sentence is the failure\n         %s'
@@ -377,6 +381,12 @@ def check_voice():
     # the controls: the tests must reproduce every verdict stated above
     wrong = [tl for tl, good in TITLE_EXEMPLARS if bool(title_failures(tl)) == good]
     wrong += [b for b, good in BOLD_EXEMPLARS if bool(bold_sentences(b)) == good]
+    # the caption exemption sets aside the title and nothing else
+    probe = (r'\caption[x]{\textbf{F1 --- A title of many words in a row.} '
+             r'Body text \textbf{and a bold sentence of many words} after.}')
+    left = bold_sentences(_CAPTION_TITLE.sub(r'\1', probe))
+    if len(left) != 1 or not left[0].startswith('and a bold sentence'):
+        wrong.append('caption exemption: %r' % (left,))
     if wrong:
         bad.append('CONTROL FAILED -- the tests no longer reproduce the stated '
                    'verdicts on %d exemplar(s). They are measuring something '

@@ -10,7 +10,7 @@ and an integrated slot, each invariant under a change of frame. The two frames
 give one $C_\ell$ to $4\times10^{-14}$ (D44), the slots sum back to the
 integral they rearrange (D45), and F9 and F10 are drawn from them.
 
-Supplement: **v1.4.6** — `SUPPLEMENTARY-MATERIAL-v1.4.6.tex`. The supplement
+Supplement: **v1.4.7** — `SUPPLEMENTARY-MATERIAL-v1.4.7.tex`. The supplement
 has its own version line. An edition records the state of the documentation
 and does not assert that the computational release above has advanced, so
 `scripts/_versions.py` reads the supplement's name from this line and never
@@ -30,9 +30,9 @@ University of Cape Town, 2026, arXiv:astro-ph/9912072v4
 
 The supplementary-materials document is included here:
 
-> [SUPPLEMENTARY-MATERIAL-v1.4.6.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.4.6.pdf)
+> [SUPPLEMENTARY-MATERIAL-v1.4.7.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.4.7.pdf)
 
-Its source, `SUPPLEMENTARY-MATERIAL-v1.4.6.tex`, is one file in the
+Its source, `SUPPLEMENTARY-MATERIAL-v1.4.7.tex`, is one file in the
 repository root, and `scripts/build_supplement.py` builds it with `pdflatex`
 alone: the prose carries no `\input`, the bibliography is inline, and the only
 external files are the generated assets in `tables/`, `tikz/` and `figures/`.
@@ -400,13 +400,14 @@ are interpolated separately (T-191); the slots move by at most
 $8\times10^{-4}$ when $\mathcal V$ is replaced by $W'$.
 
 v1.3.0 releases this assembly, with the first maximum on `PLANCK_MODEL` at
-$\ell=188.5$, $0.7067\thinspace\ell_A$. Below $\ell\simeq30$ on `PLANCK_MODEL` the
-potential both slots read carries an incomplete radiation era (A-3): the
-Sachs–Wolfe source at last scattering is $0.187$ against $\Phi_A/3=0.310$,
-where ΛCDM, with no radiation era, gives $\Phi_A/3$. The start rule of step 4
-adds a bump at $\ell\simeq7$ to $12$ (T-192). The curve there is not a
-prediction. v1.4.0's one radiation-era start removes the bump, and its solved
-potential brings the curve there to within 1.4% of CAMB's shape (step 2).
+$\ell=188.5$, $0.7067\thinspace\ell_A$. At v1.3.0 the potential both slots read
+carried an incomplete radiation era (A-3): on `PLANCK_MODEL` the Sachs–Wolfe
+source at last scattering was $0.187$ against $\Phi_A/3=0.310$, where ΛCDM,
+with no radiation era, gives $\Phi_A/3$, and the start rule of step 4 added a
+bump at $\ell\simeq7$ to $12$ (T-192). v1.4.0's one radiation-era start removes
+the bump, and its solved potential gives the Sachs–Wolfe source the registered
+$0.379\thinspace\Phi_A(\eta_\ast)$ at large scales and brings the curve below
+$\ell\simeq30$ to within 1.4% of CAMB's shape (step 2).
 
 #### 8. The spectrum by two routes
 
@@ -945,7 +946,7 @@ content. The full history is in `CHANGELOG.md`; the decisions behind it are in
 | Item | Value |
 |---|---|
 | **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMBR lensing in the exact 1+3 covariant radiation hierarchy*, Paper 1, University of Cape Town. arXiv:astro-ph/9912072v4, [doi:10.48550/arXiv.astro-ph/9912072](https://doi.org/10.48550/arXiv.astro-ph/9912072). Submitted 2026-10-16. CC BY 4.0. Cite it with the version suffix: the bare identifier has carried three documents, `v2` the legacy 1999 work, `v3` the correction and `v4` this paper |
-| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.4.6.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.4.6.pdf) |
+| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.4.7.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.4.7.pdf) |
 | **GitHub repository** | [timgebbie/frame-covariant-cmb-reproducibility](https://github.com/timgebbie/frame-covariant-cmb-reproducibility) |
 | **ZivaHub/Figshare DOI** | [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509), live. The concept DOI always resolves to the latest version, so it is the one to cite |
 | **Associated antecedent** | Gebbie, T.; Dunsby, P. K. S.; Ellis, G. F. R. (2000). *1+3 covariant cosmic microwave background anisotropies II: the almost-Friedmann–Lemaître model*. Annals of Physics **282**, 321–394. [doi:10.1006/aphy.2000.6034](https://doi.org/10.1006/aphy.2000.6034) |

@@ -1,4 +1,4 @@
-# Frame checks — thirteen instruments, for `tests/`
+# Frame checks — fourteen instruments, for `tests/`
 
 **P1-T, 2026-10-19; count corrected and `c9` added 2026-10-26; `c10` and `c11`
 added 2026-10-26; `c12` added 2026-10-29; `c13` added 2026-11-11.** Thirteen self-contained instruments behind the
@@ -22,8 +22,11 @@ supplement's voice. Since 11 November the voice check reads every section by
 the PI's rule of 4 November: headings at every level short and
 object-centred, no bold sentence in prose (a short tag is the convention),
 none of the banned constructions. A section it does not read is named in
-`EXCLUDED_SECTIONS` with its reason and printed on every run; today that is
-*Evidence*, whose captions are generated from `captions/*.md`. Its exemplars
+`EXCLUDED_SECTIONS` with its reason and printed on every run; since
+18 November there is none, because the captions were restyled in
+`captions/*.md` and *Evidence* regenerated from them. A float's bold lead is
+its title and is set apart from the bold-sentence count, with a control that
+the exemption takes the title and nothing else. Its exemplars
 are the control in both directions, and three of the verdicts the first
 version asserted are reversed, because the 4 November rule replaced the one
 it encoded. Run against the editions before the audit it fails: 105 headings
@@ -236,7 +239,7 @@ different suites:
 | `tests/test_frame_checks.py` | P1-B | `c1`–`c7` | **neither `c8` nor `c9` is gated by the bundle's own harness**; both pass `run_all.py` and nothing else |
 
 The first two are globs over this directory now, P1-B's repair of 2026-10-26, so
-all thirteen are carried and the fourteenth is carried the day it lands. **The third
+all fourteen are carried and the fifteenth is carried the day it lands. **The third
 became a glob on the afternoon of 2026-10-27** (`33c1c7f`, finding T-155):
 `tests/test_frame_checks.py` discovers `c*.py` here and sorts them by number,
 so the bundle's harness has gated every instrument in this directory since
@@ -290,3 +293,21 @@ observer so that $W'=\mathcal V$, and a potential that moves after the rate
 has vanished reaches $\int Wg$ in full and $\int\mathcal Vg$ not at all.
 The control that makes the last a statement about support moves the same step
 inside the scattering window, where $\mathcal V$ does see it.
+
+## c14 — the photons' anisotropic stress
+
+`c14_photon_anisotropic_stress.py`, added 2026-11-11. The constraint with
+which the radiation-era construction closes $\Phi_A$, derived from the $1+3$
+relations alone: *Annals II*'s potentials, $E_{ab}\mp\tfrac12\pi_{ab}$, give
+$\pi_{ab}=-\mathrm D_{\langle a}\mathrm D_{b\rangle}(\Phi_A+\Phi_H)$; MGE99's
+brightness moments give $\pi_{ab}=\tfrac8{15}\rho_\gamma\tau_{ab}$; and Paper 1's
+mode rule, with *Annals I*'s harmonic normalisation, gives
+$k^2(\Phi_A+\Phi_H)=\tfrac85\mathcal H^2\Omega_\gamma\tau_2$ in the phase of
+(F.1), whose monopole is $-\delta T$. **The sign belongs to the phase**: a
+hierarchy in the other phase reverses $\tau_2$ and the sign with it, and that
+pairing is the negative control. The phase-free check is the size outside the
+horizon after decoupling, where $(\Phi_A+\Phi_H)/\Phi_A$ is negative: the
+matter-era closed form peaks at $-\tfrac4{15}\Omega_\gamma(\eta_\ast)$ at
+$\sqrt2\eta_\ast$, and on the Planck background the integration gives $-0.042$
+near $1.6\eta_\ast$.
+

@@ -2,9 +2,9 @@
 
 > **Generated, not transcribed. Do not edit by hand.**
 >
-> Produced by `tests/frame/gen_theory_audit.py` at 2026-11-11 08:09 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
+> Produced by `tests/frame/gen_theory_audit.py` at 2026-11-18 08:15 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
 
-**Status: ALL CHECKS PASS** — 64 assertions across 13 instruments.
+**Status: ALL CHECKS PASS** — 73 assertions across 14 instruments.
 
 ## What this document does not establish — read first
 
@@ -102,7 +102,7 @@ $a\Delta\mathcal{B}_0=\tfrac13kv=\tfrac13k^2\Delta C_2$ exactly, and $\gamma$ --
 | `r_no_B0` | 0.32445 |
 | `r_restored` | 0.00888329 |
 
-*Instrument: `tests/frame/c5_monopole.py`, sha256 `da6d2c81ad40…`*
+*Instrument: `tests/frame/c5_monopole.py`, sha256 `658440e27f33…`*
 
 ### The Thomson $v^B_a$ slot
 
@@ -176,7 +176,7 @@ Multiplying the transport equation by $W=e^{-\kappa}$ sends the gravitational so
 | `ruling_partition` | ['0', '2*k*v(eta)/3', '-k*v(eta)/3', 'k*v(eta)/3'] |
 | `ruling_passing_row` | both, as Paper 1 |
 
-*Instrument: `tests/frame/c8_rank0_partner.py`, sha256 `d32e69897872…`*
+*Instrument: `tests/frame/c8_rank0_partner.py`, sha256 `2820e0968cdb…`*
 
 ### The admissibility of the by-parts, and what (102) replaces it with
 
@@ -332,11 +332,40 @@ A boost and its inverse return a directional temperature to round-off, while the
 
 *Instrument: `tests/frame/c13_endpoint_and_late_support.py`, sha256 `ffffedf2ab8c…`*
 
+### The photons' anisotropic stress
+
+With the potentials defined by $E_{ab}\mp\tfrac12\pi_{ab}$ and the photons' stress $\pi_{ab}=\tfrac8{15}\rho_\gamma\tau_{ab}$ from their brightness, $k^2(\Phi_A+\Phi_H)=\tfrac85\mathcal H^2\Omega_\gamma\tau_2$ in the phase of (F.1), whose monopole is $-\delta T$. Outside the horizon after decoupling the free-streaming quadrupole makes $(\Phi_A+\Phi_H)/\Phi_A$ negative, peaking at $-\tfrac4{15}\Omega_\gamma(\eta_\ast)$ at $\sqrt2\eta_\ast$ in a matter era and at $-0.042$ near $1.6\eta_\ast$ on the Planck background.
+
+| assertion | verdict |
+|---|---|
+| C14a  pi_ab = (8 pi/15) Pi_ab on the PSTF basis | **PASS** — -4.4e-16 |
+| C14a  pi_ab = (8/15) rho_gamma tau_ab to first order in the anisotropy | **PASS** — 0.5333333 |
+| C14b  D_<a D_b> X = -k^2 X Q_ab for the gradient coefficient | **PASS** |
+| C14b  Annals II's dust case E_ab = k^2 Phi_H Q_ab is the rule applied | **PASS** |
+| C14b  free streaming in this phase: tau_2' = k tau_1, tau_0' = -(k/3) tau_1 | **PASS** |
+| C14b  the monopole of (F.1) is minus the gradient variable dT | **PASS** — -1 |
+| C14c  matter-era control recovers -(4/15) Omega_g(eta_*) at sqrt(2) eta_* | **PASS** — 1.0000, 1.418 |
+| C14c  PLANCK_MODEL extremum -0.042 near 1.6 eta_*, negative as the covariant sign requires | **PASS** — -0.0423 at 1.64 |
+| C14c  the opposite phase paired with [C14] reverses the sign (negative control) | **PASS** — +0.0423 |
+
+| measured | value |
+|---|---|
+| `delta_2` | 1.67552 |
+| `stress_ratio` | 0.533333 |
+| `matter_era_extremum` | -2.67e-05 |
+| `matter_era_at` | 1.41828 |
+| `planck_extremum` | -0.0422804 |
+| `planck_at` | 1.64468 |
+| `planck_at_10` | -0.00393705 |
+| `opposite_phase` | 0.0422804 |
+
+*Instrument: `tests/frame/c14_photon_anisotropic_stress.py`, sha256 `f1a6e562e3dc…`*
+
 ## Provenance
 
 | | |
 |---|---|
-| generated | 2026-11-11 08:09 UTC |
+| generated | 2026-11-18 08:15 UTC |
 | python | 3.13.18 |
 | numpy | 2.5.3 |
 | scipy | 1.18.1 |
