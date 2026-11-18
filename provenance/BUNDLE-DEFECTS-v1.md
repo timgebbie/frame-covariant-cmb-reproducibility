@@ -12995,3 +12995,76 @@ re-measured at the next full regeneration. Repaired in
 `pipeline._continue_by_free_streaming`: the dipole changes sign going in and
 coming out. The step-2 solve hands the pair to its own hierarchy in the pair's
 normalisation, $\sigma_\ell=(-1)^\ell\tau_\ell$, and was right from the start.
+
+## T-196 — F2's generator has aborted on its own damping gate since the scattering-rate correction, and F5 and F7 sat on the same grid with no gate
+
+**F2 could not be built at the v1.3.0 tag or at any commit after it.** Its
+$k$ grid stopped at 1900, and its own gate requires
+$e^{-(k_{\max}/k_D)^2}<10^{-2}$ before the lower panel, the shear sector's
+integrand, which peaks at $k_D/2$, is trusted. The scattering-rate units
+correction (T-109) moved the diffusion scale from 754.6 to 888.9 (890.3 at
+`main`), and at that $k_D$ the gate needs $k_{\max}\ge1910.4$: the generator
+computed for seven minutes and raised. The committed F2 was written before the
+correction and was never regenerated, so it showed numbers its code could no
+longer produce, and no gate saw either fact.
+
+| commit | $k_D$ | $e^{-(1900/k_D)^2}$ | gate |
+|---|---:|---:|---|
+| before T-109 | 754.64 | $1.77\times10^{-3}$ | passes |
+| T-109 | 888.92 | $1.04\times10^{-2}$ | fails |
+| `main` | 890.25 | $1.05\times10^{-2}$ | fails |
+
+**F5 and F7 carried the same 1900 grid with the same justification and no
+gate at all.** Their comments read $k_D=871.4$ and an envelope of
+$8.6\times10^{-3}$; at today's $k_D$ it was $1.05\times10^{-2}$, and they drew
+anyway.
+
+**Repaired:** the three grids run to 2000, where the envelope is
+$6.5\times10^{-3}$; F5 and F7 check the gate against their environment's own
+$k_D$ as F2 does, so the next move of $k_D$ stops them instead of passing
+through; the comments carry today's $k_D$. Found by an external health check
+run on a clean clone, not by the bundle; T-197 is why.
+
+## T-197 — Five figures shipped numbers their code no longer produces, and only two figures could have said so
+
+**Only F9 and F10 stamped their CSVs with the code that wrote them.** On a
+clean clone at `1d11e6b` every gate passed, and the generators of F3, F4, F5,
+F6 and F7 reproduced none of their committed numbers: by factors of $10^1$ to
+$10^4$ that vary within one model, with sign changes in F4. The committed CSVs
+were written in mid-October, before the line-of-sight weight, the dipole's
+normalisation, the scattering rate and the source signs were settled; the
+figures were not regenerated after any of them. Control: F3 regenerated at the
+commit that wrote its CSV reproduces it byte for byte, so the drift is the
+tree's and not the toolchain's.
+
+**What the regenerated figures show is not what the shipped ones did.** The
+largest change is A-2's: the default weight on (178) and (179) flipped to the
+printed visibility on 19 October, and every figure on (102) or (176) had been
+drawn under the opacity weight before it. Regenerated:
+
+- F3: under the visibility the Doppler source of (178) carries the spectrum.
+  $D_\ell/D_2$ falls to $0.25$ (standard CDM) and $0.34$ ($\Lambda$CDM) at
+  $\ell=6$ and to $1.7$ and $1.3\times10^{-3}$ at $\ell=252$, with no
+  Sachs–Wolfe plateau, which is A-2's post-T-66 table (T-69) and not the
+  plateau the shipped figure drew. The two routes agree to the last bit (T-17).
+- F5: the two frames' totals differ by a median of 89% over $2\le\ell\le400$,
+  worst 99.9% (T-59); the shipped figure read 15% and its own subtitle said the
+  total was common to both frames.
+- F2: the cost of $\sigma_{ab}\to0$ is 0.03--1.3% to $\ell=20$ and 33.8% at
+  $\ell=600$; the shipped caption read 0.54--0.68% and 32.6%.
+- F6: the small-scale approximation leaves $10^{-9}$ to $10^{-7}$ of $C_\ell$
+  at $\ell\le7$, which the figure's $10^{-3}$ floor drew as a flat line.
+- F7: the dipole stands on each curve at $1.00\times$ (shipped: $1.25\times$),
+  and T-31 stands.
+
+**Repaired:** every generated CSV --- F1 to F7 beside F9 and F10, and D44, D45
+and D46 --- carries `# sources:` with the digest of `functions/` and its own
+generator (`scripts/_fingerprint.stamp`). F4 also names the F3 it summed.
+`check_release_hygiene.py` fails on a generated CSV with no stamp and lists
+every stamp the tree no longer computes, with a control in
+`tests/test_release_hygiene.py`; the release route regenerates or replots and
+refuses what it cannot replot. F1 to F7 and F10 are regenerated in the same
+change, their axes and annotations are taken from the data where a range or a
+word had been fixed for the old numbers, and their captions say what they now
+show. D44 and D45 are listed stale until they are recomputed on the solved
+potential.

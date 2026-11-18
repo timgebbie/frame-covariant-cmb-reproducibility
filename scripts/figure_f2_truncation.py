@@ -59,6 +59,9 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from _fingerprint import stamp as _stamp  # noqa: E402
 
 import matplotlib  # noqa: E402
 
@@ -95,21 +98,25 @@ ELLS_COST = np.unique(np.round(np.logspace(np.log10(2.0), np.log10(600.0), 16)).
 #: $\pi/\Delta\eta$ in $k$, so the grid must be linear and this is three samples
 #: per oscillation. Refining it to $\pi/6$ moves the lower panel by 0.02%.
 #:
-#: **It runs to 1900, not to 420, and that is finding T-32.** The diffusion scale
-#: is $k_D=871.4$, so a grid stopping at 420 stops where
+#: **It runs to 2000, not to 420, and that is finding T-32.** The diffusion scale
+#: is $k_D=890.3$, so a grid stopping at 420 stops where
 #: $e^{-(k/k_D)^2}=0.79$ --- almost nothing has damped yet. The shear sector
 #: carries an extra factor of $k$ in the transfer, so at $n_s=1$ its
-#: $k$-integrand goes as $k\,e^{-2(k/k_D)^2}$ and **peaks at $k=k_D/2\simeq436$,
+#: $k$-integrand goes as $k\,e^{-2(k/k_D)^2}$ and **peaks at $k=k_D/2\simeq445$,
 #: outside that grid**, while the scalar sector's has long since fallen: the
 #: rank-0/2 sectors need a tail that rank 1 does not. On the 420 grid this
-#: figure's $\ell=600$ number read 40.5%; it converges to 28.7%. 1900 is where
-#: the bundle's own gate passes, $e^{-(k_{\max}/k_D)^2}<10^{-2}$ --- the
-#: readiness test **T-16** wrote down during v1.0.0 and dated to v1.2.0.
+#: figure's $\ell=600$ number read 40.5%; it converged to 28.7% then. The
+#: bundle's own gate is $e^{-(k_{\max}/k_D)^2}<10^{-2}$ --- the readiness test
+#: **T-16** wrote down during v1.0.0 and dated to v1.2.0 --- and it needs
+#: $k_{\max}\ge1910.4$ at today's $k_D$. **This grid stopped at 1900 until
+#: finding T-196:** the scattering-rate correction (T-109) moved $k_D$ from 754.6
+#: to 888.9, past what 1900 could hold, and from then on, v1.3.0's tag
+#: included, this generator aborted on its own gate after seven minutes.
 #:
 #: The sampling was tested first and came back clean. That is the trap: a
 #: quadrature has two edges, and refining the one the integrand's mass is not at
 #: cannot see the one it is.
-K_COM = np.arange(0.05, 1900.0, np.pi / 3.0)
+K_COM = np.arange(0.05, 2000.0, np.pi / 3.0)
 
 #: The gate `K_COM` is set by, restated here so the figure checks it rather than
 #: inheriting it. `pipeline.SpectrumRun.k_grid_reaches_damping_scale` is the same
@@ -291,14 +298,15 @@ def draw(data: dict) -> plt.Figure:
 
     cdm = 100.0 * data["cost"]["cdm"]
     lo, hi = (100.0 * v for v in data["plateau"])
+    # Every number in it is computed (T-197: the word "flat" was typed for a
+    # range that the regenerated cost does not have).
     ax_b.annotate(
-        f"the cost has **no $\\ell_{{\\max}}$ in it**: a function of $\\ell$, not of the "
-        f"truncation.\nFlat at {lo:.1f}–{hi:.1f}% while the monopole dominates, then "
-        f"rising to **{cdm[-1]:.0f}%**\nby $\\ell={int(ELLS_COST[-1])}$ as the velocity term "
-        "takes over — worst exactly where\na truncation is put, and raising "
-        "$\\ell_{\\max}$ returns none of it.".replace("**", ""),
-        xy=(0.035, 0.055), xycoords="axes fraction", fontsize=7.0,
-        color=INK["secondary"], va="bottom", ha="left")
+        f"the cost has no $\\ell_{{\\max}}$ in it: a function of $\\ell$,\n"
+        f"not of the truncation. {lo:.2f}–{hi:.1f}% up to $\\ell=20$, then\n"
+        f"rising to {cdm[-1]:.0f}% by $\\ell={int(ELLS_COST[-1])}$ — worst exactly "
+        "where a\ntruncation is put, and raising $\\ell_{\\max}$ returns none of it.",
+        xy=(0.98, 0.10), xycoords="axes fraction", fontsize=7.0,
+        color=INK["secondary"], va="bottom", ha="right")
     # The figure's numerical standing, on the figure. T-32.
     ax_b.annotate(
         f"$k_{{\\max}}={K_COM.max():.0f}$: $e^{{-(k_{{\\max}}/k_D)^2}}="
@@ -328,12 +336,14 @@ def draw(data: dict) -> plt.Figure:
                     "gauge-fixed treatment\n"
                     "cannot have  [% of $C_\\ell$]")
     ax_c.set_ylim(bottom=0.0)
+    least = int(np.argmin(share))
     ax_c.annotate(
-        "a $1+3$ excess at low $\\ell$ would appear here, and does not:\n"
-        "these sectors are smallest at the quadrupole and grow\nwith $\\ell$. "
-        "The frame cannot supply one either — T-31.",
-        xy=(0.035, 0.045), xycoords="axes fraction", fontsize=7.0,
-        color=INK["secondary"], va="bottom", ha="left")
+        "a $1+3$ excess at low $\\ell$ would appear here,\nand does not: these "
+        f"sectors are smallest at\n$\\ell={int(ELLS_COST[low][least])}$, "
+        f"{share[least]:.2f}%, and grow with $\\ell$. The\nframe cannot supply "
+        "one either — T-31.",
+        xy=(0.035, 0.95), xycoords="axes fraction", fontsize=7.0,
+        color=INK["secondary"], va="top", ha="left")
 
     fig.suptitle("F2   Truncation: what it discards, and what it destroys",
                  x=0.012, y=0.968, ha="left", fontsize=10, color=INK["primary"])
@@ -358,6 +368,7 @@ def main() -> int:
 
     out = ROOT / "outputs" / "f2-truncation.csv"
     with out.open("w", encoding="utf-8", newline="\n") as fh:
+        fh.write(_stamp(__file__))
         fh.write("# truncation: the discarded tail, and the cost of sigma -> 0\n")
         fh.write("quantity,k_com,ell,value\n")
         for k, above in sorted(data["tail"].items()):

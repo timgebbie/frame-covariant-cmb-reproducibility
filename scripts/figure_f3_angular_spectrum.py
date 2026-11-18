@@ -15,12 +15,14 @@ is the verification that exists today: the fractional difference between the two
 routes, which are identical analytically. Two hues, one per model; the route
 difference is drawn in the ink colour because it belongs to neither.
 
-**What this figure does not yet show.** There is no comparison against an
-external code: criterion 5b compares against CAMB and CLASS with a measured
-tolerance, and that is not run here. Recombination is equilibrium Saha, which
-places last scattering but decouples too sharply. **The peak position and
-amplitude are therefore not yet trustworthy; the shape is.** The caption says so,
-and the figure is marked a release candidate until 5b is met.
+**What this figure shows, since it was regenerated on 18 November 2026
+(T-197).** (176) is integrated as printed, with (178) and (179) at the
+visibility (A-1, A-2; the printed weight has been the default since 19
+October). Under that weight the Doppler source of (178) carries the spectrum
+and there is no Sachs-Wolfe plateau, which is A-2's post-T-66 measurement
+(T-69): D_l/D_2 falls to a minimum near l=6 and steeply beyond l=40. The
+claim is the integration of (186) over 2 <= l <= 20, and the route check; the
+released spectrum is F9's frame-invariant assembly.
 """
 
 from __future__ import annotations
@@ -33,6 +35,9 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from _fingerprint import stamp as _stamp  # noqa: E402
 
 from functions.background.flrw import CDM_MODEL, LCDM_MODEL  # noqa: E402
 from functions.plotting.style import (  # noqa: E402
@@ -95,7 +100,7 @@ def compute():
         print(f"      damping {run.damping_at_k_max:.3f} at the grid edge: the grid "
               f"{'reaches' if run.reaches_diffusion_scale else 'stops short of'} the Silk "
               f"scale. The CLAIMED range l<={CLAIMED_ELL_MAX} does not "
-              f"need it; F2's k grid, which does, runs to 1900 (T-32).")
+              f"need it; F2's k grid, which does, runs to 2000 (T-32, T-196).")
         rows.append({
             "label": label, "slot": slot, "run": run,
             "d_ell": run.spectrum.d_ell(),
@@ -126,7 +131,10 @@ def draw(rows) -> plt.Figure:
     # bottom of the frame. Log shows plateau and peak at once, which is the shape
     # the figure is about.
     top.set_ylabel(r"$D_\ell\,/\,D_2$")
-    top.set_ylim(0.4, 60.0)
+    # The axis is the data's, not a range fixed for an earlier shape: the
+    # regenerated spectrum falls two decades below D_2 (T-197).
+    shapes = np.concatenate([row["d_ell"] / row["d_ell"][0] for row in rows])
+    top.set_ylim(float(shapes.min()) / 2.0, float(shapes.max()) * 12.0)
     top.legend(frameon=False, loc="upper left", borderaxespad=0.0)
     top.axhline(1.0, color=INK["grid"], lw=0.8, zorder=1)
 
@@ -139,9 +147,9 @@ def draw(rows) -> plt.Figure:
                    alpha=0.45, lw=0, zorder=0)
     top.axvline(CLAIMED_ELL_MAX, color=INK["muted"], lw=0.9,
                 ls=(0, (1.5, 1.8)), zorder=2)
-    top.text(CLAIMED_ELL_MAX * 1.15, 0.47,
+    top.text(CLAIMED_ELL_MAX * 1.15, float(shapes.min()) * 1.3,
              f"beyond $\\ell={CLAIMED_ELL_MAX}$ the formalism, not the\n"
-             "integration, is out of range --- (186) drops\n"
+             "integration, is out of range — (186) drops\n"
              "the acoustic modulation",
              fontsize=6.8, color=INK["muted"], va="bottom", ha="left")
 
@@ -152,6 +160,12 @@ def draw(rows) -> plt.Figure:
     bot.text(2.3, 1.6e-11, r"acceptance threshold  $10^{-11}$",
              fontsize=7.4, color=INK["muted"], va="bottom")
     bot.set_ylim(1e-18, 1e-8)
+    worst = max(float(row["gap"].max()) for row in rows)
+    bot.text(2.3, 3e-17,
+             "identical to the last bit, drawn at the floor: since T-17\n"
+             "both routes combine their weights as exact rationals" if worst == 0.0
+             else f"worst {worst:.1e}",
+             fontsize=7.4, color=INK["muted"], va="bottom")
 
     fig.suptitle(
         "F3   The angular power spectrum from Annals II (186), by two routes",
@@ -164,12 +178,15 @@ def draw(rows) -> plt.Figure:
         "arithmetic, not on the physics.",
         ha="left", va="top", fontsize=7.6, color=INK["secondary"],
     )
+    claimed = max(row["run"].cl_truncation_sensitivity(ell_max=CLAIMED_ELL_MAX)
+                  for row in rows)
     fig.text(
         0.012, 0.098,
-        "CLAIMED OVER $2\\leq\\ell\\leq20$ TO 5%, and shaded beyond. The binding limit is the formalism,\n"
-        "not the integration: (186) drops the acoustic modulation, which costs 4.75% at $\\ell=20$ and grows.\n"
-        "The $k$-grid truncation is looser at this tolerance, reaching 5% at $\\ell\\simeq50$; at 1% the two\n"
-        "invert. Recombination is equilibrium Saha. Criterion 5b, against CAMB and CLASS, is v1.2.0.",
+        "CLAIMED OVER $2\\leq\\ell\\leq20$ TO 5%, and shaded beyond: the integration of (186), not the\n"
+        "spectrum. (186) drops the acoustic modulation, which costs 4.75% at $\\ell=20$ and grows; dropping\n"
+        f"the top 10% of the $k$ grid moves $\\ell\\leq20$ by {claimed:.0e}. (176) is taken as printed, (178) and\n"
+        "(179) at the visibility, and under that weight the Doppler source carries the spectrum: there is\n"
+        "no Sachs–Wolfe plateau (A-2, T-69). The released spectrum is F9's frame-invariant assembly.",
         ha="left", va="top", fontsize=7.2, color=INK["muted"],
     )
     return fig
@@ -182,6 +199,7 @@ def main() -> int:
 
     out = ROOT / "outputs" / "f3-angular-spectrum.csv"
     with out.open("w", encoding="utf-8", newline="\n") as fh:
+        fh.write(_stamp(__file__))
         fh.write("model,ell,C_ell_mode,C_ell_covariant,D_ell\n")
         for row in rows:
             s = row["run"].spectrum

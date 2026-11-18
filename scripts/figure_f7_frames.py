@@ -22,16 +22,17 @@ the frame lives and $\ell\ge2$ is where it does not" --- GDE99 Eq. (37),
 $\tilde\tau_a=\tau_a-v_a$, with $\tau_{A_\ell}$ unchanged for $\ell\ge2$.
 
 Measured, **the dipole sits on the same curve as every other multipole**:
-9.91% at $k=20$ against a median of 9.92% over $\ell=2$--$400$; 3.92% against
-3.88% at $k=60$; 4.29% against 3.44% at $k=140$. **Worst ratio 1.25x**, where
-the plan expected an order of magnitude.
+114.5% at $k=20$ against a median of 114.6% over $\ell=2$--$400$; 162.3%
+against 161.9% at $k=60$; 101.3% against 101.4% at $k=140$. **Worst ratio
+1.00x**, where the plan expected an order of magnitude. (Regenerated 18
+November 2026, T-197. The figure it replaced read 9.91%, 3.92% and 4.29%, from
+before the line-of-sight weight and the dipole's normalisation were settled,
+and a worst ratio of 1.25x.)
 
-Those figures moved in the third decimal when T-32 and T-34 were fixed --- the
-$\eta$ grid is now sized for $k=1900$ rather than for $k=140$, so the
-line-of-sight integral at the probe modes has 81 samples per $j_\ell$
-oscillation where it had 6. **The finding did not move**, which is the point: it
-is structural, and a better-resolved quadrature of the same structure returns
-the same answer.
+The numbers moved and **the finding did not**, which is the point: it is
+structural, and a better-resolved quadrature of the same structure, on a grid
+sized for $k=2000$ rather than for $k=140$ (T-32, T-34, T-196), returns the same
+answer.
 
 The reason is structural rather than numerical. (102) builds **every** multipole
 from the same three $\ell$-independent coefficients $C_0,C_1,C_2$, projected
@@ -64,6 +65,9 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from _fingerprint import stamp as _stamp  # noqa: E402
 
 import matplotlib  # noqa: E402
 
@@ -97,13 +101,18 @@ ELLS = np.unique(np.concatenate([
 
 #: Linear at $dk=\pi/3$, as F5 uses. A logarithmic grid aliases the
 #: line-of-sight integrand at high $k$ however many points it has.
-#: **Runs to 1900, not 420 --- finding T-32.** The diffusion scale is
-#: $k_D=871.4$, so a grid stopping at 420 stops where $e^{-(k/k_D)^2}=0.79$,
+#: **Runs to 2000, not 420 --- findings T-32 and T-196.** The diffusion scale
+#: is $k_D=890.3$, so a grid stopping at 420 stops where $e^{-(k/k_D)^2}=0.80$,
 #: and the shear sector's $k$-integrand, carrying an extra factor of $k$, peaks
-#: at $k_D/2\simeq436$ --- outside it. Rank 1 does not need that tail and ranks
-#: 0 and 2 do. $e^{-(k_{\max}/k_D)^2}=8.6\times10^{-3}$ here, which is the gate
-#: **T-16** wrote down during v1.0.0 and dated to v1.2.0.
-K_COM = np.arange(0.05, 1900.0, np.pi / 3.0)
+#: at $k_D/2\simeq445$ --- outside it. Rank 1 does not need that tail and ranks
+#: 0 and 2 do. $e^{-(k_{\max}/k_D)^2}=6.5\times10^{-3}$ here, inside the gate
+#: **T-16** wrote down during v1.0.0, which `compute` checks against the
+#: environment's own $k_D$. At 1900 it read $1.05\times10^{-2}$ once the
+#: scattering-rate correction (T-109) moved $k_D$, and nothing here checked.
+K_COM = np.arange(0.05, 2000.0, np.pi / 3.0)
+
+#: The T-16 gate, checked where the grid is used rather than inherited (F2's).
+DAMPING_GATE = 1e-2
 
 #: The modes the lower panel probes. Chosen across the range rather than at
 #: the best one: a claim shown at its most favourable k is a claim about that k.
@@ -121,6 +130,12 @@ def compute() -> dict:
     # shape. The lower panel, which is what T-31 is about, is evaluated only at
     # `K_PROBE` and was never affected; the upper panel was.
     env = build_environment(float(K_COM.max()), line_of_sight_weight="printed")
+    damping = float(np.exp(-((K_COM.max() / env.damping_k) ** 2)))
+    if damping >= DAMPING_GATE:
+        raise ValueError(
+            f"k_max={K_COM.max():.0f} leaves exp[-(k_max/k_D)^2]={damping:.2e} "
+            f"at k_D={env.damping_k:.1f}; ranks 0 and 2 need the tail past "
+            f"k_D/2. Findings T-32 and T-196.")
     needed = required_multipoles(ELLS)
     table = BesselTable.build(
         ell_max=int(needed.max()), ells=needed,
@@ -185,12 +200,12 @@ def draw(data: dict) -> plt.Figure:
     cl, per_k = data["cl"], data["per_k"]
 
     # ---- (a) the observable in both specialisations --------------------
-    # **The two curves nearly overlie**, so labelling them on the line puts the
-    # text on the other one. Direct-labelled in the corner instead, each with a
-    # short rule in its own colour and dash so the eye matches by both channels.
+    # Direct-labelled in the empty lower corner, each with a short rule in its
+    # own colour and dash so the eye matches by both channels. (The two curves
+    # used to nearly overlie; regenerated, they differ by up to two decades.)
     for frame, slot, label, y in (
-            ("newtonian", 1, r"Newtonian frame, $\tilde\sigma_{ab}=0$", 0.93),
-            ("cdm", 2, r"CDM frame, $A_a=0$", 0.855)):
+            ("newtonian", 1, r"Newtonian frame, $\tilde\sigma_{ab}=0$", 0.31),
+            ("cdm", 2, r"CDM frame, $A_a=0$", 0.235)):
         ax_a.loglog(ELLS, np.abs(d_ell(ELLS, cl[frame])), color=SERIES[slot],
                     ls=SERIES_DASH[slot], lw=1.9, solid_capstyle="round", zorder=3)
         ax_a.plot([0.055, 0.115], [y, y], transform=ax_a.transAxes,
@@ -201,8 +216,8 @@ def draw(data: dict) -> plt.Figure:
     ax_a.set_ylabel(r"$\ell(\ell+1)C_\ell/2\pi$")
     ax_a.annotate("the specialisation is made at the end, not at the start —\n"
                   "a gauge-fixed treatment has nothing left to vary here",
-                  xy=(0.965, 0.07), xycoords="axes fraction", fontsize=7.0,
-                  color=INK["secondary"], va="bottom", ha="right")
+                  xy=(0.40, 0.04), xycoords="axes fraction", fontsize=7.0,
+                  color=INK["secondary"], va="bottom", ha="left")
 
     # ---- (b) the frame response at fixed k, dipole marked --------------
     for (k, rel), slot in zip(sorted(per_k.items()), (1, 2, 3)):
@@ -225,7 +240,7 @@ def draw(data: dict) -> plt.Figure:
         f"{max(data['ratios']):.1f}×.\n"
         "(102) builds every $\\ell$ from the same three $C_A$, so its\n"
         "frame response cannot depend on $\\ell$ — T-31".replace("**", ""),
-        xy=(0.035, 0.07), xycoords="axes fraction", fontsize=7.0,
+        xy=(0.035, 0.45), xycoords="axes fraction", fontsize=7.0,
         color=INK["secondary"], va="bottom", ha="left")
 
     for ax in (ax_a, ax_b):
@@ -252,6 +267,7 @@ def main() -> int:
 
     out = ROOT / "outputs" / "f7-frames.csv"
     with out.open("w", encoding="utf-8", newline="\n") as fh:
+        fh.write(_stamp(__file__))
         fh.write("# C_l in two frames, and the per-mode frame response\n")
         fh.write("quantity,k_com,ell,value\n")
         for frame in ("newtonian", "cdm"):

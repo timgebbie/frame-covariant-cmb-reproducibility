@@ -141,6 +141,18 @@ designed to catch.
 > ($D_{200}=0.008$ against $0.096$). The discriminator is structure versus no
 > structure, not correctness.
 
+> **Amended 2026-11-18, findings T-196 and T-197. The default is the printed
+> weight, and has been since 19 October** (`4f85414`: `line_of_sight_weight`
+> defaults to `"printed"`, and F3 integrates (176) at `Weighting.ANNALS_II`).
+> The two status lines of this entry were written before that commit and say
+> the bundle is on the opacity weight; they are kept as written. F3 to F7 were
+> not regenerated after the flip until 18 November, so the figures that shipped
+> at v1.3.0 were the opacity-weighted ones under scripts that no longer drew
+> them. Regenerated on the printed weight, F3's standard-CDM spectrum falls to
+> $0.25$ of $D_2$ at $\ell=6$ and to $1.7\times10^{-3}$ at $\ell=252$: the shape
+> the table above measured. The released spectrum does not use (176); it is the
+> frame-invariant assembly (F9, D44).
+
 A-1 records that *Annals II* weights the integrated sources with the visibility
 $\mathcal V=\kappa'e^{-\kappa}$ by deliberate choice, and that this cannot carry
 a late integrated Sachs–Wolfe term. A-2 is the sharper consequence, on the

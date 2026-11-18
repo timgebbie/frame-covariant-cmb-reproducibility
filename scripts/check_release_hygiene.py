@@ -608,6 +608,75 @@ def check_built_artefacts_are_not_stale(failures: list[str]) -> str:
     return "      " + "; ".join(notes) + "; manifests newer than their files."
 
 
+#: Every generated CSV and the generator whose digest it must carry. **T-197:**
+#: five figures went out at v1.3.0 with numbers their code no longer produced,
+#: and nothing could see it, because only F9 and F10 carried a stamp. A stamp
+#: is required on every one; a stamp the tree no longer computes is listed,
+#: because development changes `functions/` before it regenerates, and the
+#: release route regenerates and refuses what it cannot replot.
+STAMPED = (
+    ("outputs/f1-appendix-f-residuals.csv", "scripts/figure_f1_appendix_f.py"),
+    ("outputs/f2-truncation.csv", "scripts/figure_f2_truncation.py"),
+    ("outputs/f3-angular-spectrum.csv", "scripts/figure_f3_angular_spectrum.py"),
+    ("outputs/f4-correlation.csv", "scripts/figure_f4_correlation.py"),
+    ("outputs/f5-sources.csv", "scripts/figure_f5_sources.py"),
+    ("outputs/f6-approximations.csv", "scripts/figure_f6_approximations.py"),
+    ("outputs/f7-frames.csv", "scripts/figure_f7_frames.py"),
+    ("outputs/f9-acoustic-spectrum.csv", "scripts/figure_f9_acoustic_spectrum.py"),
+    ("outputs/f10-formation-surface.csv", "scripts/figure_f10_formation_surface.py"),
+    ("diagnostics/d44-line-of-sight-invariant-slots.csv",
+     "scripts/diagnostic_d44_the_line_of_sight_in_invariant_slots.py"),
+    ("diagnostics/d44-line-of-sight-invariant-slots-summary.csv",
+     "scripts/diagnostic_d44_the_line_of_sight_in_invariant_slots.py"),
+    ("diagnostics/d45-the-slots-sum-back.csv",
+     "scripts/diagnostic_d45_the_slots_sum_back.py"),
+    ("diagnostics/d45-the-slots-sum-back-per-mode.csv",
+     "scripts/diagnostic_d45_the_slots_sum_back.py"),
+    ("diagnostics/d46-the-solved-potential.csv",
+     "scripts/diagnostic_d46_the_solved_potential.py"),
+)
+
+#: A generated CSV computed from another generated CSV names the stamp it read.
+#: F4 is F3's $C_\ell$ summed, so a regenerated F3 makes F4 stale as surely as
+#: F4's own code changing does.
+READS = (("outputs/f4-correlation.csv", "outputs/f3-angular-spectrum.csv"),)
+
+
+def check_generated_csvs_are_stamped(failures: list[str]) -> str:
+    """Every generated CSV names the code that wrote it; the stale ones are listed."""
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from _fingerprint import source_fingerprint, stamp_of
+    stale: list[str] = []
+    for csv_rel, script_rel in STAMPED:
+        csv_path, script = ROOT / csv_rel, ROOT / script_rel
+        if not csv_path.is_file() or not script.is_file():
+            failures.append(f"{csv_rel} or its generator {script_rel} is missing.")
+            continue
+        carried = stamp_of(csv_path)
+        if not carried:
+            failures.append(
+                f"{csv_rel} carries no '# sources:' stamp, so nothing can tell "
+                f"whether {script_rel} still produces it (T-197).")
+            continue
+        if carried != source_fingerprint(script):
+            stale.append(csv_rel)
+    for derived_rel, source_rel in READS:
+        derived = ROOT / derived_rel
+        if not derived.is_file():
+            continue
+        with derived.open(encoding="utf-8") as fh:
+            reads = [line for line in fh.readlines()[:4] if line.startswith("# reads:")]
+        if not reads:
+            failures.append(f"{derived_rel} does not name the {source_rel} it read.")
+        elif (not reads[0].rstrip().endswith(stamp_of(ROOT / source_rel))
+              and derived_rel not in stale):
+            stale.append(derived_rel)
+    if stale:
+        return (f"      {len(STAMPED) - len(stale)}/{len(STAMPED)} generated CSVs carry this "
+                f"tree's stamp; to regenerate before a release: {', '.join(stale)}.")
+    return f"      {len(STAMPED)}/{len(STAMPED)} generated CSVs carry this tree's stamp."
+
+
 def main() -> int:
     failures: list[str] = []
     checked = check_encoding(failures)
@@ -618,6 +687,7 @@ def main() -> int:
     artefacts = check_no_build_artefacts(failures)
     audited = check_generated_artefacts_are_current(failures)
     freshness = check_built_artefacts_are_not_stale(failures)
+    stamps = check_generated_csvs_are_stamped(failures)
 
     if failures:
         print(f"FAIL  {len(failures)} release-hygiene problem(s):")
@@ -638,6 +708,7 @@ def main() -> int:
     print(artefacts)
     print(audited)
     print(freshness)
+    print(stamps)
     return 0
 
 

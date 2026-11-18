@@ -791,6 +791,17 @@ between 0.99 and 1.00 is the entire late integrated Sachs--Wolfe budget. A
 level set that stopped at 0.90 could not show the thing the figure is for."""
 
 [[grid]]
+key = "scripts/figure_f10_formation_surface.py::levels"
+what = "the filled contour levels of F10's panel (b) above 1, when the data go there"
+status = "index"
+note = """`LEVELS` extended by `arange(1.05, top + 0.05, 0.05)`, where `top` is
+the largest $C_\\ell(\\eta)/C_\\ell(\\eta_0)$ on the surface. **Drawing levels,
+as `LEVELS` is.** Added when F10 was regenerated on the one radiation-era start
+(T-197): from $\\ell=2$ to 25 the late term now cancels power, so a multipole
+stands above today's value between the visibility closing and today, and the
+panel's ceiling at 1 had hidden it. Equal to `LEVELS` when nothing exceeds 1."""
+
+[[grid]]
 key = "scripts/diagnostic_d39_eta_grid_convergence.py::k_com"
 what = "the k grid D39 integrates over"
 status = "derived"

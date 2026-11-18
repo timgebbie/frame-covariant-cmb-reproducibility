@@ -234,3 +234,51 @@ def test_a_merged_input_older_than_the_pdf_is_caught(tmp_path):
     stale, by_git, by_clock = stale_inputs(repo, repo / "doc.pdf", sources)
     assert [s.name for s in stale] == ["table.tex"] and by_clock == 1, (
         "an uncommitted edit must be judged by its own clock, and it is newer")
+
+
+def test_a_generated_csv_without_its_stamp_is_refused(tmp_path, monkeypatch):
+    """**T-197.** F3 to F7 went out at v1.3.0 with numbers their code no longer
+    produced, by up to four orders of magnitude, and every gate passed: only F9
+    and F10 named the code that wrote them. A generated CSV with no stamp must
+    fail; one whose stamp this tree no longer computes is listed for
+    regeneration and does not fail, because development moves `functions/`
+    before it regenerates and the release route replots or regenerates.
+    """
+    import check_release_hygiene as gate
+    from _fingerprint import source_fingerprint, stamp
+
+    script = "scripts/figure_f7_frames.py"
+    body = "frame,ell,value\nnewtonian,2,1.0\n"
+    csv_path = tmp_path / "generated.csv"
+
+    def verdict(text: str, reads=()) -> tuple[list[str], str]:
+        csv_path.write_text(text, encoding="utf-8")
+        monkeypatch.setattr(gate, "STAMPED", ((str(csv_path), script),))
+        monkeypatch.setattr(gate, "READS", reads)
+        failures: list[str] = []
+        return failures, gate.check_generated_csvs_are_stamped(failures)
+
+    failures, note = verdict(stamp(ROOT / script) + body)
+    assert failures == [] and "1/1" in note, (failures, note)
+
+    failures, note = verdict("# sources: 0000000000000000\n" + body)
+    assert failures == [] and csv_path.name in note, (
+        "a stamp this tree does not compute must be named for regeneration")
+    assert source_fingerprint(ROOT / script) != "0000000000000000"
+
+    failures, _ = verdict(body)
+    assert len(failures) == 1 and "carries no '# sources:' stamp" in failures[0], (
+        "an unstamped generated CSV passed the gate: that is T-197, the class "
+        "the stamp exists to close")
+
+    # A CSV summed from another names the stamp it read (F4 from F3).
+    source = tmp_path / "source.csv"
+    source.write_text("# sources: 1111111111111111\n" + body, encoding="utf-8")
+    own = stamp(ROOT / script)
+    failures, note = verdict(own + body, reads=((str(csv_path), str(source)),))
+    assert len(failures) == 1 and "does not name" in failures[0], failures
+    failures, note = verdict(own + "# reads: x at 2222222222222222\n" + body,
+                             reads=((str(csv_path), str(source)),))
+    assert failures == [] and csv_path.name in note, (
+        "a CSV summed from a source that has since been regenerated must be "
+        "named for regeneration")

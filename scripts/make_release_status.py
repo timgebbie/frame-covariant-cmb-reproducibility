@@ -174,10 +174,11 @@ ARTEFACTS: list[Artefact] = [
              script="scripts/figure_f10_formation_surface.py",
              tests=("test_the_slots_accumulated_to_eta_0_are_the_slots",),
              note="each slot accumulated in eta on Planck, both frames; the eta_0 "
-                  "column is the full integral to 1e-13. After the visibility "
-                  "closes the integrated Sachs-Wolfe term deposits 22-54% of "
-                  "today's C_l at l = 2-4, where every F10 drawn from (102) showed "
-                  "none"),
+                  "column is the full integral to 2e-14. After the visibility "
+                  "closes the integrated Sachs-Wolfe term deposits 1-15% of "
+                  "today's C_l above l = 30 and cancels 4-48% of it at l = 2-25 "
+                  "(regenerated 18 November 2026, T-197), where every F10 drawn "
+                  "from (102) showed none"),
     Artefact("the stamped Planck 2018 set, wired as PLANCK_MODEL", "S", "v1.2.0",
              module="functions.background.flrw",
              objects=("PLANCK_MODEL", "OMEGA_GAMMA_H2"),
@@ -205,7 +206,8 @@ ARTEFACTS: list[Artefact] = [
                   "7.1.1 --- the PI's call 2026-10-14. The frame disagreement is "
                   "its own panel. **Superseded by T-57 and T-59**: it read 47% at l=2, "
                   "7% at l=102, 13% at l=405 and median 15% and is now "
-                  "TOTAL -- median 9.99e-1, worst 1.00. The l>=2 "
+                  "TOTAL -- median 0.89, worst 0.999, regenerated 18 November "
+                  "2026 under the printed weight (T-197). The l>=2 "
                   "multipoles are frame-invariant by theorem, so that "
                   "is a defect and not a result; it is localised to the "
                   "slot-and-weight assignment of C_1 (T-82, T-85, T-86) "
@@ -222,13 +224,15 @@ ARTEFACTS: list[Artefact] = [
              script="scripts/figure_f2_truncation.py",
              note="Appendix E made quantitative in both frames. What a "
                   "truncation discards falls off a per-k cliff at l ~ k dEta; "
-                  "what it destroys has no l_max in it at all, is flat at "
-                  "**99.93% at l=2 and 100% by l=600 post-T-57** (it read 0.54-0.68% "
-                  "to l~20 and 32% by l=600 before it, and 0.8-0.9% / 29% "
-                  "before T-37 wired the transfer function). Footnote 29 "
-                  "p.365 checked and upheld: identically zero in the Newtonian "
-                  "frame, which has no shear to lose. Its k grid runs to 1900 "
-                  "rather than 420 --- finding T-32"),
+                  "what it destroys has no l_max in it at all: 0.06% at l=2 "
+                  "and 34% by l=600 under the printed weight, regenerated 18 "
+                  "November 2026 (T-197). It read 99.93% / 100% under the "
+                  "opacity weight after T-57, 0.54-0.68% to l~20 and 32% by "
+                  "l=600 before it, and 0.8-0.9% / 29% before T-37 wired the "
+                  "transfer function. Footnote 29 p.365 checked and upheld: "
+                  "identically zero in the Newtonian frame, which has no shear "
+                  "to lose. Its k grid runs to 2000 rather than 420 --- "
+                  "findings T-32 and T-196"),
     Artefact("F7 - frame specialisation", "S", "v1.2.0",
              module="functions.spectra.two_frame",
              objects=("build_environment", "coefficient_sets"),
@@ -236,10 +240,10 @@ ARTEFACTS: list[Artefact] = [
              script="scripts/figure_f7_frames.py",
              note="reports that its own planned claim is false: the dipole was "
                   "to stand an order of magnitude apart and lands on each curve "
-                  "instead, worst ratio 1.25x **in this file and 1.24x in README.md -- "
-                  "UNADJUDICATED, T-87**; the authoritative value is "
-                  "figure_f7_frames.py's own .2f print and both copies are "
-                  "regenerated from it when F7 next runs. (102) builds every l from "
+                  "instead, worst ratio 1.00x as regenerated 18 November 2026 "
+                  "(T-197; it read 1.25x here and 1.24x in README.md before, "
+                  "T-87), from figure_f7_frames.py's own .2f print. (102) "
+                  "builds every l from "
                   "the same three C_A --- finding T-31. Its environment is built "
                   "for the k grid rather than the probe modes --- finding T-34"),
     Artefact("F9 - the angular spectrum with the acoustic peaks, both frames",

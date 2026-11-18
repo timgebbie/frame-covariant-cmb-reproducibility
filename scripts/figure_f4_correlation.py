@@ -38,6 +38,9 @@ from scipy.special import eval_legendre
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from _fingerprint import data_lines, stamp as _stamp, stamp_of  # noqa: E402
 
 import matplotlib  # noqa: E402
 
@@ -90,9 +93,8 @@ def load_spectrum() -> dict[str, tuple[np.ndarray, np.ndarray]]:
     Recomputing here would compare two runs of the same code and call the
     agreement a check. The figure reads what F3 wrote.
     """
-    rows = list(csv.DictReader(
-        (ROOT / "outputs" / "f3-angular-spectrum.csv").open(encoding="utf-8")
-    ))
+    with (ROOT / "outputs" / "f3-angular-spectrum.csv").open(encoding="utf-8") as fh:
+        rows = list(csv.DictReader(data_lines(fh)))
     out: dict[str, tuple[list[int], list[float]]] = {}
     for r in rows:
         ell = int(r["ell"])
@@ -206,6 +208,12 @@ def main() -> int:
 
     out = ROOT / "outputs" / "f4-correlation.csv"
     with out.open("w", encoding="utf-8", newline="\n") as fh:
+        # Its own code, and the F3 it was computed from: F4 is F3's C_l
+        # summed, so a regenerated F3 makes it stale as surely as its own
+        # code changing does.
+        fh.write(_stamp(__file__))
+        fh.write(f"# reads: outputs/f3-angular-spectrum.csv at "
+                 f"{stamp_of(ROOT / 'outputs' / 'f3-angular-spectrum.csv')}\n")
         fh.write(f"# C(theta) summed over {ELL_MIN} <= l <= {ELL_MAX}, "
                  f"the range F3 claims\n")
         fh.write("model,theta_deg,c_theta\n")

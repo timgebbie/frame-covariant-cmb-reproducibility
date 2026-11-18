@@ -15,8 +15,8 @@ dropping the acoustic modulation. Summing further would draw multipoles this
 release does not stand behind, and a real-space curve hides which $\\ell$
 contributed, so the restriction is made in the transform rather than in this
 caption. The lower panel shows the Legendre round trip
-$C_\\ell\\to C(\\theta)\\to C_\\ell$, at $4\\times10^{-14}$ and
-$7\\times10^{-14}$ against an acceptance of $10^{-13}$. It tests the transform
+$C_\\ell\\to C(\\theta)\\to C_\\ell$, at $7.9\\times10^{-14}$ for both
+models against an acceptance of $10^{-13}$. It tests the transform
 and \\emph{not} the spectrum --- the two share their $C_\\ell$ --- which is the
 same caution Figure~3's residual panel carries and for the same reason.
 """

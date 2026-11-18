@@ -35,6 +35,9 @@ from matplotlib.lines import Line2D
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from _fingerprint import stamp as _stamp  # noqa: E402
 
 from functions.harmonics.external import (  # noqa: E402
     APPENDIX_F,
@@ -169,6 +172,7 @@ def main() -> int:
     out = ROOT / "outputs"
     out.mkdir(exist_ok=True)
     with (out / "f1-appendix-f-residuals.csv").open("w", encoding="utf-8", newline="\n") as fh:
+        fh.write(_stamp(__file__))
         fh.write("form,appendix_f_equation,source,scale,ell,residual\n")
         for row in rows:
             for ell, r in enumerate(row["resid"]):

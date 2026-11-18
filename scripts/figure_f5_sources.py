@@ -46,6 +46,9 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from _fingerprint import stamp as _stamp  # noqa: E402
 
 import matplotlib  # noqa: E402
 
@@ -72,16 +75,22 @@ from functions.spectra.two_frame import (  # noqa: E402
 
 ELLS = np.unique(np.round(np.logspace(np.log10(2.0), np.log10(400.0), 16)).astype(int))
 
-#: **Linear at $dk=\pi/6$, as F3 uses.** A logarithmic grid aliases the
+#: **Linear at $dk=\pi/3$, as F2 uses** (three samples per oscillation of
+#: $j_\ell(k\Delta\eta)$; F3 halves it). A logarithmic grid aliases the
 #: line-of-sight integrand at high $k$ however many points it has, and this
 #: project has made that mistake once already (the S24 sweep).
-#: **Runs to 1900, not 420 --- finding T-32.** The diffusion scale is
-#: $k_D=871.4$, so a grid stopping at 420 stops where $e^{-(k/k_D)^2}=0.79$,
+#: **Runs to 2000, not 420 --- findings T-32 and T-196.** The diffusion scale
+#: is $k_D=890.3$, so a grid stopping at 420 stops where $e^{-(k/k_D)^2}=0.80$,
 #: and the shear sector's $k$-integrand, carrying an extra factor of $k$, peaks
-#: at $k_D/2\simeq436$ --- outside it. Rank 1 does not need that tail and ranks
-#: 0 and 2 do. $e^{-(k_{\max}/k_D)^2}=8.6\times10^{-3}$ here, which is the gate
-#: **T-16** wrote down during v1.0.0 and dated to v1.2.0.
-K_COM = np.arange(0.05, 1900.0, np.pi / 3.0)
+#: at $k_D/2\simeq445$ --- outside it. Rank 1 does not need that tail and ranks
+#: 0 and 2 do. $e^{-(k_{\max}/k_D)^2}=6.5\times10^{-3}$ here, inside the gate
+#: **T-16** wrote down during v1.0.0, which `compute` checks against the
+#: environment's own $k_D$. At 1900 it read $1.05\times10^{-2}$ once the
+#: scattering-rate correction (T-109) moved $k_D$, and nothing here checked.
+K_COM = np.arange(0.05, 2000.0, np.pi / 3.0)
+
+#: The T-16 gate, checked where the grid is used rather than inherited (F2's).
+DAMPING_GATE = 1e-2
 
 RANK_LABEL = {0: r"rank 0   $C_0$", 1: r"rank 1   $C_1$", 2: r"rank 2   $C_2$"}
 RANK_SLOT = {0: 3, 1: 1, 2: 2}
@@ -89,6 +98,12 @@ RANK_SLOT = {0: 3, 1: 1, 2: 2}
 
 def compute() -> dict:
     env = build_environment(float(K_COM.max()), line_of_sight_weight="printed")
+    damping = float(np.exp(-((K_COM.max() / env.damping_k) ** 2)))
+    if damping >= DAMPING_GATE:
+        raise ValueError(
+            f"k_max={K_COM.max():.0f} leaves exp[-(k_max/k_D)^2]={damping:.2e} "
+            f"at k_D={env.damping_k:.1f}; ranks 0 and 2 need the tail past "
+            f"k_D/2. Findings T-32 and T-196.")
     needed = required_multipoles(ELLS)
     table = BesselTable.build(
         ell_max=int(needed.max()), ells=needed,
@@ -161,11 +176,15 @@ def draw(data: dict) -> plt.Figure:
                                ("cdm", 2, "CDM frame")):
         ax_a.loglog(ELLS, np.abs(d_ell(ELLS, cl[frame][-1])), color=SERIES[slot],
                     ls=SERIES_DASH[slot], lw=1.9, solid_capstyle="round", zorder=3)
-        # Labelled where the two curves are **furthest apart**, not at the end,
-        # where they converge and the text lands on the line.
-        j = int(np.argmax(np.abs(residual)))
+        # Labelled where the two curves are **furthest apart** between l=10
+        # and 60, each on the side facing the other, so both labels sit in the
+        # gap between the curves rather than off the axis.
+        inner = np.flatnonzero((ELLS >= 10) & (ELLS <= 60))
+        j = int(inner[np.argmax(np.abs(residual[inner]))])
+        above = (np.abs(d_ell(ELLS, cl[frame][-1])[j])
+                 > np.abs(d_ell(ELLS, cl["cdm" if slot == 1 else "newtonian"][-1])[j]))
         ax_a.annotate(label, xy=(ELLS[j], abs(d_ell(ELLS, cl[frame][-1])[j])),
-                      xytext=(12, 15 if slot == 1 else -17),
+                      xytext=(12, -17 if above else 15),
                       textcoords="offset points", fontsize=7.0,
                       color=INK["secondary"], ha="left")
     ax_a.set_ylabel(r"$\ell(\ell+1)C_\ell/2\pi$" + "\n(total)")
@@ -180,7 +199,7 @@ def draw(data: dict) -> plt.Figure:
         f"{100 * residual[0]:.0f}% at $\\ell={int(ELLS[0])}$, "
         f"{100 * residual.min():.0f}% at $\\ell={best}$, "
         f"{100 * residual[-1]:.0f}% at $\\ell={int(ELLS[-1])}$",
-        xy=(0.035, 0.12), xycoords="axes fraction", fontsize=7.0,
+        xy=(0.40, 0.12), xycoords="axes fraction", fontsize=7.0,
         color=INK["secondary"], va="bottom", ha="left")
 
     # ---- (b) the decomposition ----------------------------------------
@@ -197,7 +216,7 @@ def draw(data: dict) -> plt.Figure:
     ax_b.annotate(
         "dotted: the Newtonian frame, where rank 1 carries\n"
         r"everything and $C_0\equiv C_2\equiv0$ — that is (110)",
-        xy=(0.035, 0.10), xycoords="axes fraction", fontsize=7.0,
+        xy=(0.035, 0.58), xycoords="axes fraction", fontsize=7.0,
         color=INK["secondary"], va="bottom", ha="left")
     ax_b.set_ylabel(r"$\ell(\ell+1)C_\ell/2\pi$" + "\n(CDM frame, by rank)")
 
@@ -223,22 +242,26 @@ def draw(data: dict) -> plt.Figure:
     ax_c.annotate(
         f"the three auto-spectra alone miss the total by {data['autos_gap']:.0%}:\n"
         r"$C_\ell$ is quadratic in the source, so the ranks do not add",
-        xy=(0.035, 0.94), xycoords="axes fraction", fontsize=7.0,
-        color=INK["secondary"], va="top", ha="left")
+        xy=(0.035, 0.06), xycoords="axes fraction", fontsize=7.0,
+        color=INK["secondary"], va="bottom", ha="left")
 
     for ax in axes:
         ax.set_xlim(float(ELLS.min()), float(ELLS.max()))
 
     fig.suptitle("F5   The source decomposition in two frames, by rank",
                  x=0.012, y=0.980, ha="left", fontsize=10, color=INK["primary"])
+    # **Computed, not typed (T-197).** This line used to say the total is
+    # common to both frames; regenerated, the two totals differ by a median of
+    # 89%, which is T-59's finding about (102) and why v1.3.0 replaced it.
     fig.text(
         0.012, 0.945,
-        "The total is common to both frames and the decomposition is not. Split "
-        "by rank, which is what the match (89) produces\nand is defined in every "
-        "frame — not by the primary/Doppler/integrated split of §7.1.1, which "
-        "exists only after the\nNewtonian choice has emptied the shear sector. "
-        "**The agreement is measured and it is not exact**: the second panel is "
-        "the\ngap, and it is drawn rather than described.".replace("**", ""),
+        f"(102)'s two frames do not share a total: they differ by a median of "
+        f"{np.median(residual):.0%} over $2\\leq\\ell\\leq{int(ELLS[-1])}$ (T-59),\n"
+        "which is why v1.3.0 replaced it with the frame-invariant assembly (D44). "
+        "Split by rank, which is what the\nmatch (89) produces and is defined in "
+        "every frame — not by the primary/Doppler/integrated split of §7.1.1,\n"
+        "which exists only after the Newtonian choice has emptied the shear "
+        "sector. The second panel is the gap.",
         ha="left", va="top", fontsize=7.4, color=INK["secondary"],
     )
     return fig
@@ -249,6 +272,7 @@ def main() -> int:
 
     out = ROOT / "outputs" / "f5-sources.csv"
     with out.open("w", encoding="utf-8", newline="\n") as fh:
+        fh.write(_stamp(__file__))
         fh.write("# C_l by rank in two frames, covariant route, standard CDM\n")
         fh.write("frame,rank,ell,cl\n")
         for frame in ("newtonian", "cdm"):

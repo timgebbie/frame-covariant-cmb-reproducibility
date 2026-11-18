@@ -624,7 +624,8 @@ def test_the_appendix_f_residuals_are_below_their_stated_ceiling():
 
     ceiling = 5.0e-13
     path = Path(__file__).resolve().parents[1] / "outputs" / "f1-appendix-f-residuals.csv"
-    rows = list(csv.DictReader(path.open(encoding="utf-8")))
+    with path.open(encoding="utf-8") as fh:
+        rows = list(csv.DictReader(line for line in fh if not line.startswith("#")))
     assert rows, "the residual record is empty"
 
     worst = {}

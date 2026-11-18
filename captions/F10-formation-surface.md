@@ -11,17 +11,18 @@ surface it sweeps. Planck~2018, CDM frame, 25 multipoles from $\\ell=2$ to
 $\\ell=300$, fourteen epochs from the start of recombination to today. The line
 of sight is eq.~\\eqref{eq:assembly-invariant} with Paper~1's source signs,
 each slot accumulated to each epoch; the $\\eta_0$ column is the full integral
-to $1.0\\times10^{-13}$.\\\\[2pt]
+to $1.7\\times10^{-14}$.\\\\[2pt]
 \\textbf{(a)} $D_\\ell$ against $\\ell$, epoch by epoch, normalised once by the
 maximum of today's curve. \\textbf{(b)} $C_\\ell(\\eta)/C_\\ell(\\eta_0)$ over
 the $(\\ell,\\eta)$ plane.\\\\[2pt]
 Above $\\ell\\simeq30$ the spectrum is laid down while
-photons scatter, with $5$--$21\\%$ of each multipole arriving afterwards from
-the integrated Sachs--Wolfe term as the potentials decay. At $\\ell=2$--$4$ the
-late integrated Sachs--Wolfe term deposits $22$--$54\\%$ of today's $C_\\ell$,
-and at $\\ell=5$--$12$ it cancels part of what recombination laid down. Below
-$\\ell\\simeq30$ the potential carries an incomplete radiation era
-(\\textbf{A-3}), so that cancellation is not yet a prediction. Every
+photons scatter, with $1$--$15\\%$ of each multipole arriving afterwards from
+the integrated Sachs--Wolfe term as the potentials decay. From $\\ell=2$ to $25$
+the late term cancels $4$--$48\\%$ of today's $C_\\ell$, $32\\%$ at the
+quadrupole: those multipoles stood higher as the visibility closed, which
+panel~(b) shows above $1$. Below $\\ell\\simeq30$ the potential is the released
+one, with an incomplete radiation era (\\textbf{A-3}), so that cancellation is
+not yet a prediction; Figure~11 is this figure on the solved potential. Every
 earlier version of this figure showed no late power at all; the assembly that
 replaced (102) restores it.
 """
@@ -45,10 +46,14 @@ the right of recombination, which is the late integrated Sachs–Wolfe effect.
 
 | | |
 |---|---|
-| late share at ℓ = 2, 3, 4 | **+0.54, +0.37, +0.22** |
-| late share at ℓ = 5–12 | **−0.03 to −0.51** (late power cancels earlier power) |
-| late share above ℓ = 30 | **+0.05 to +0.21** |
-| η₀ column against the full integral | 1.0e-13 |
+| late share at ℓ = 2, 3, 4 | **−0.32, −0.41, −0.46** |
+| late share at ℓ = 5–25 | **−0.48 to −0.04** (late power cancels earlier power) |
+| late share above ℓ = 30 | **+0.01 to +0.15**, largest at ℓ = 80 |
+| η₀ column against the full integral | 1.7e-14 |
+
+Regenerated on 18 November 2026 (T-197), on the one radiation-era start of
+v1.4.0's first step and the released potential. At v1.3.0 the quadrupole's
+late share read +0.54.
 
 The late share is the fraction of today's C_ℓ laid down after
 (η − η\*) = 0.01 (η₀ − η\*), when the visibility has closed.

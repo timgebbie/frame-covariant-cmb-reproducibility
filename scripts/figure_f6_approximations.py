@@ -51,6 +51,9 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from _fingerprint import stamp as _stamp  # noqa: E402
 
 import matplotlib  # noqa: E402
 
@@ -120,8 +123,15 @@ def draw(rows: list[dict]) -> plt.Figure:
                alpha=0.30, lw=0, zorder=0)
     ax.axhline(1.0, color=INK["muted"], lw=0.9, ls=(0, (2, 2)), zorder=2)
 
+    # **The axis is the data's (T-197).** It was clipped at 1e-3, which drew the
+    # small-scale approximation as a flat line where it sits at 1e-9.
+    lowest = min(float(np.min(row["ratio"][row["ratio"] > 0])) for row in rows)
+    highest = max(float(np.max(row["ratio"])) for row in rows)
+    floor = lowest / 3.0
+    decades = int(np.ceil(np.log10(highest / lowest)))
+    ax.set_ylim(floor, highest * 3.0)
     for row in rows:
-        ax.loglog(ELLS, np.maximum(row["ratio"], 1e-3), color=SERIES[row["slot"]],
+        ax.loglog(ELLS, np.maximum(row["ratio"], floor), color=SERIES[row["slot"]],
                   ls=SERIES_DASH[row["slot"]], lw=1.9, solid_capstyle="round",
                   zorder=3)
         # **Direct labels, not a legend.** Two of the four palette slots sit
@@ -132,7 +142,7 @@ def draw(rows: list[dict]) -> plt.Figure:
         # one another. Nudged apart rather than moved into a legend, because
         # two of the four slots are below 3:1 contrast and a key would make the
         # reader match them back by colour.
-        ax.annotate(row["label"], xy=(ELLS[-1], max(row["ratio"][-1], 1e-3)),
+        ax.annotate(row["label"], xy=(ELLS[-1], max(row["ratio"][-1], floor)),
                     xytext=(6, LABEL_OFFSET[row["slot"]]), textcoords="offset points",
                     fontsize=7.0, color=INK["secondary"], va="center", ha="left")
 
@@ -145,7 +155,7 @@ def draw(rows: list[dict]) -> plt.Figure:
     fig.text(
         0.012, 0.900,
         "A flat line at 1 is an approximation that costs nothing. **The three do "
-        "not have comparable weights**, and the axis spans six\ndecades rather "
+        f"not have comparable weights**, and the axis spans {decades}\ndecades rather "
         "than cropping them to look alike: one is a different calculation, one is "
         "free where this release makes claims,\nand one is worst at large scales, "
         "exactly as its name predicts. Shaded: beyond $\\ell=20$, which this "
@@ -160,6 +170,7 @@ def main() -> int:
 
     out = ROOT / "outputs" / "f6-approximations.csv"
     with out.open("w", encoding="utf-8", newline="\n") as fh:
+        fh.write(_stamp(__file__))
         fh.write("# C_l(approximate)/C_l(fuller), standard CDM\n")
         fh.write("approximation,ell,ratio\n")
         for row in rows:

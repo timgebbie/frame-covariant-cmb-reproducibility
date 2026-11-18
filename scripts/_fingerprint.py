@@ -46,6 +46,34 @@ import pathlib
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 
+#: The first line of every generated CSV: the digest of the code that wrote it.
+STAMP_PREFIX = "# sources: "
+
+
+def stamp(script: pathlib.Path | str) -> str:
+    """The stamp line a generator writes first into its CSV, newline included."""
+    return f"{STAMP_PREFIX}{source_fingerprint(script)}\n"
+
+
+def stamp_of(path: pathlib.Path | str) -> str:
+    """The digest a generated file carries in its leading comments, or '' if none."""
+    path = pathlib.Path(path)
+    if not path.is_file():
+        return ""
+    with path.open(encoding="utf-8") as fh:
+        for line in fh:
+            if not line.startswith("#"):
+                break
+            if line.startswith(STAMP_PREFIX.rstrip()):
+                return line[len(STAMP_PREFIX.rstrip()):].strip()
+    return ""
+
+
+def data_lines(fh):
+    """A generated CSV's lines with the stamp and every comment line dropped."""
+    return (line for line in fh if not line.startswith("#"))
+
+
 def source_fingerprint(script: pathlib.Path | str) -> str:
     """A 16-hex digest of `functions/` plus `script`, independent of the run.
 

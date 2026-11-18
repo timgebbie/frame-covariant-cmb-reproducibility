@@ -10,12 +10,18 @@ Eq.~(186) computed from Eq.~(176), for the standard-CDM model of \\S8.3.2 and fo
 $\\Lambda$CDM, which \\emph{Annals~II} does not treat. The upper panel shows
 $D_\\ell=\\ell(\\ell+1)C_\\ell/2\\pi$, each normalised to its own $\\ell=2$ value, so
 that the comparison is of \\emph{shape} and not of an amplitude neither model
-fixes here. The lower panel shows the fractional difference between the mode
-route of (186) and the covariant route of (187) with (188). Those two are
-identical analytically, so the panel is a check on the arithmetic and not on the
-physics. That check caught a factor of four in this bundle's own harmonic
-weights before any figure was drawn. It sits at
-$10^{-16}$, five orders below the $10^{-11}$ acceptance threshold.
+fixes here. (176) is integrated as printed, with (178) and (179) at the
+visibility (A-1, A-2), and under that weight the Doppler source of (178)
+carries the spectrum: $D_\\ell/D_2$ falls to $0.25$ for standard CDM and $0.34$
+for $\\Lambda$CDM at $\\ell=6$, returns to $0.72$ and $0.74$ at $\\ell=20$, and
+falls to $1.7$ and $1.3\\times10^{-3}$ at $\\ell=252$. There is no Sachs--Wolfe plateau
+(A-2, T-69); the released spectrum is the frame-invariant assembly of Figure~9.
+The lower panel shows the fractional difference between the mode route of (186)
+and the covariant route of (187) with (188). Those two are identical
+analytically, so the panel is a check on the arithmetic and not on the physics.
+That check caught a factor of four in this bundle's own harmonic weights before
+any figure was drawn. Since T-17 both routes combine their weights as exact
+rationals, and they agree to the last bit.
 """
 +++
 
@@ -26,63 +32,52 @@ one number per multipole trustworthy: the background from the $1+3$ constraint,
 recombination and the visibility, the acoustic pair (152)/(153), the three
 sources (177)--(179), and the line-of-sight integral (176).
 
-## What the figure claims
+## What the figure shows
 
-**The shape.** A Sachs--Wolfe plateau at low $\ell$ and a rise beyond it. Over
-$2\le\ell\le20$ --- the range D0 independently adopts from the dropped acoustic
-modulation --- standard CDM is flat to within 30%. $\Lambda$CDM's ratio of the
-largest $D_\ell$ to $D_2$ is $7.15$ and standard CDM's is $60.9$, and the
-difference between them is the $\chi_*$ lever arm: $\Lambda$CDM's larger
-$\chi_*$ maps a given $\ell$ to a smaller $k$, so it climbs more slowly. This
-formulation carries no matter transfer function and (178)'s Doppler term carries
-an explicit factor of $k$, so power keeps rising until diffusion damping bites
---- which, on this $k$ grid, it never does.
+**Regenerated on 18 November 2026 (T-197).** Until then the committed figure
+was the spectrum under the opacity weight $e^{-\kappa}$ of (98), drawn in
+mid-October; the script had computed (176) at the printed visibility since the
+default flipped on 19 October (A-2), and nothing re-ran it.
 
-**That the two routes agree.** $3\times10^{-16}$ and $4\times10^{-16}$ for the two
-models. The harmonic normalisation cancels out of (186) exactly once (176) is
-written in $\alpha_\ell^{-1}\tau_\ell$, and that cancellation is asserted in exact
-rationals rather than checked numerically.
+**The shape.** Under the visibility the Doppler source of (178) carries the
+spectrum, which is the object A-2 names: $\mathcal V\kappa'\sim\kappa'^2e^{-\kappa}$.
+$D_\ell/D_2$ falls to $0.25$ (standard CDM) and $0.34$ ($\Lambda$CDM) at
+$\ell=6$, returns to $0.72$ and $0.74$ by $\ell=20$, reaches $0.76$ near
+$\ell=30$, and falls to $1.7$ and $1.3\times10^{-3}$ at $\ell=252$. There is no
+Sachs--Wolfe plateau. A-2's post-T-66 table (T-69) measured the same shape on
+all three backgrounds, and the opacity weight's plateau without acoustic
+structure beside it.
+
+**That the two routes agree.** To the last bit on both models: since T-17 the
+combined coefficients of (186) and of (187) with (188) are formed in exact
+rationals, so the two routes are one arithmetic, and the lower panel's line is
+drawn at its floor.
 
 ## What the figure does not claim
 
-**The peak position and amplitude are not yet trustworthy.** Three reasons, all
-stated rather than discovered later:
-
-1. **No external comparison has been run.** Criterion 5b compares against CAMB
-   and CLASS with a tolerance measured as their mutual difference. Until that is
-   done, nothing here has been checked against an independent code.
-2. **Recombination is equilibrium Saha.** It places last scattering within a few
-   percent in redshift and is enough to exercise every weight in the problem, but
-   it decouples too sharply and too early. Peebles' effective three-level atom is
-   required before 5b can be met.
-3. **The $k$ grid is truncated, not converged.** It stops at $k_{\max}=420$
-   where $\exp[-(k/k_D)^2]$ is still $0.89$ for CDM and $0.78$ for
-   $\Lambda$CDM: the integral ends while the source is still contributing
-   nearly its full weight. Measured against a grid four times longer, that
-   costs $0.1$% at $\ell=2$, $5$% at $\ell=50$, $11$% at $\ell=200$ and
-   $24$% at $\ell=400$. Reaching the cut-off needs $k_{\max}\gtrsim3100$ and
-   a correspondingly finer $\eta$ grid, which this line-of-sight implementation
-   cannot do in reasonable time --- an architecture problem, named in **T-3**
-   and owned by v1.2.0, not a parameter to be nudged.
+1. **That this is the spectrum.** The released spectrum is the frame-invariant
+   assembly of F9 (v1.3.0), which replaced (176)'s line of sight. F3 is the
+   antecedent's formalism integrated as printed, and the route check.
+2. **Anything beyond $\ell=20$.** (186) drops the acoustic modulation, which
+   costs 4.75% at $\ell=20$ and grows (`scripts/derive_ell_range.py`).
+3. **A converged tail.** The $k$ grid stops at $k_{\max}=420$, where
+   $e^{-(k/k_D)^2}$ is $0.77$ for standard CDM and $0.50$ for $\Lambda$CDM.
+   Dropping its top 10% moves $D_\ell$ by $2\times10^{-8}$ over the claimed range
+   and by $1.9\times10^{-3}$ and $7\times10^{-5}$ out to $\ell=400$; the
+   script prints both on every run.
 
 An earlier version of this caption read the $\Lambda$CDM ratio as $36$ against
 CDM's $5.8$ and called the first of those wrong. **Both numbers were artefacts**
 of an aliased line-of-sight integrand, finding **T-3**; the one that looked
-right was as wrong as the one that looked wrong. The values above are measured
-on the corrected grid.
+right was as wrong as the one that looked wrong.
 
-## The weighting used, and why it is not (178)'s
+## The weighting used
 
-The integrated sources are weighted by the opacity $e^{-\kappa}$ of (98), not by
-the visibility $\mathcal V$ of (178). Both are the antecedent's own; (98) is the
-earlier and less approximated. With $\mathcal V$ there is **no Sachs--Wolfe
-plateau at all** --- $D_\ell\propto\ell^2$ across the whole range, because
-$\mathcal V\kappa'\sim\kappa'^2e^{-\kappa}$ swamps the primary source by six
-orders of magnitude. Recorded as approximation **A-2** in
-`provenance/SOURCE-APPROXIMATIONS-v1.md`, with the measured comparison, and
-explicitly **not** as a finding against (178): the mapping between the tilde
-variables of §5 and the untilded ones of (98) has not been derived in full here,
-and $\tilde v_B=\tilde\tau_1$ is the reading that would have to be revisited.
+(178) and (179) at the visibility $\mathcal V$, as printed, since 19 October.
+Before then the integrated sources carried the opacity $e^{-\kappa}$ of (98),
+on a measurement taken before T-66 corrected $\kappa'\tilde v_B$ by a factor of
+$k$; T-69 found that basis void, and `provenance/SOURCE-APPROXIMATIONS-v1.md`
+records both weights' spectra under **A-2**.
 
 ## Release status
 

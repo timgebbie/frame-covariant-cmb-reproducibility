@@ -15,16 +15,19 @@ its approximations (decision~S15); they are recorded as \\textbf{A-n} in
 \\texttt{provenance/SOURCE-APPROXIMATIONS-v1.md}, deliberately apart from the
 defects recorded as \\textbf{B-n}. This is the one place their cost is a number
 rather than an adjective.\\\\[2pt]
-The three costs differ by orders of magnitude, so the axis spans six
+The three costs differ by orders of magnitude, so the axis spans fifteen
 decades rather than cropping them to look alike. The
-visibility weighting on the gravitational source (A-1) runs to
-$10^4$--$10^6$: it is a \\emph{different calculation}, not a perturbation of
-one, which is why \\texttt{Weighting} has no default. Stipulating $k_D$ at
-last scattering costs under $0.1\\%$ across the claimed range and about $5\\%$ by
-$\\ell=400$, so the release takes the cheap choice only where it makes no
-claim that depends on it. The small-scale approximation, dropping
-$-aH\\Phi_A$ from~(153) and so producing the printed oscillator~(154), departs
-from unity most at \\emph{large} scales, which is what its name predicts.
+visibility weighting on the gravitational source (A-1) runs from
+$4\\times10^{5}$ at the quadrupole to $60$ near $\\ell=300$: it is a
+\\emph{different calculation}, not a perturbation of one, which is why
+\\texttt{Weighting} has no default. Stipulating $k_D$ at last scattering costs
+under $10^{-6}$ across the claimed range and under $10^{-4}$ out to
+$\\ell=400$. The small-scale approximation, dropping $-aH\\Phi_A$ from~(153) and
+so producing the printed oscillator~(154), departs from unity most at
+\\emph{large} scales, which is what its name predicts: at $\\ell\\le7$ it leaves
+$10^{-9}$ to $10^{-7}$ of $C_\\ell$, and from $\\ell\\simeq18$ it is within
+$30\\%$ of unity. Regenerated on 18 November 2026 (\\textbf{T-197}); the
+figure it replaced was drawn under the opacity weight.
 \\\\[2pt]
 One correction is kept because it nearly became this figure. The $k_D$
 series was first computed with $k_D(\\eta)$ along the whole ray. After last

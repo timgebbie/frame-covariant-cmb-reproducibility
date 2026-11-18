@@ -95,7 +95,8 @@ MARKDOWN = _rendered_markdown()
 #: Lower these as files are cleaned. Raising one requires saying why in the
 #: commit, which is the whole mechanism.
 COSMETIC_BASELINE = {
-    "test_no_bare_asterisk_in_inline_maths": 17,  # 18 -> 17, 2026-11-02: Coordination cleared docs/CUSTODY.md (21f7260)
+    # 17 -> 16, 2026-11-18: README.md cleared with the regenerated figures' rows.
+    "test_no_bare_asterisk_in_inline_maths": 16,  # 18 -> 17, 2026-11-02: Coordination cleared docs/CUSTODY.md (21f7260)
     "test_no_inline_maths_immediately_after_a_hyphen": 12,
     #: **P1-T's #9, 2026-10-27.** Frozen at 11 files rather than enforced at
     #: zero, and the reason is not timidity: **163 of the 218 instances are in

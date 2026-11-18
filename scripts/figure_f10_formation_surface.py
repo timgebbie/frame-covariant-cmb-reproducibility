@@ -295,9 +295,15 @@ def _draw(acc, sl, eta_star, eta_0, floor):
     # rejected for the same reason the mesh failed: a flat tabletop with a
     # cliff at one edge spends the plot on the region where nothing happens,
     # and any viewing angle that shows the cliff hides part of it.
-    field = np.clip(frac, 0.0, 1.0)
-    mesh = ax.contourf(x, ELLS, field, levels=LEVELS,
-                       cmap="Greys", vmin=0.0, vmax=1.0, extend="neither")
+    # **Clipped at the data's ceiling, not at 1 (T-197).** Where the late
+    # term cancels part of what recombination laid down, a multipole holds
+    # more than today's value in between, and a ceiling at 1 hid it.
+    top = max(1.0, float(np.nanmax(frac)))
+    levels = LEVELS if top <= 1.0 else np.append(
+        LEVELS, np.arange(LEVELS[-1] + 0.05, top + 0.05, 0.05))
+    field = np.clip(frac, 0.0, levels[-1])
+    mesh = ax.contourf(x, ELLS, field, levels=levels,
+                       cmap="Greys", vmin=0.0, vmax=levels[-1], extend="neither")
     lines = ax.contour(x, ELLS, field, levels=LABELLED,
                        colors=INK["primary"], linewidths=0.7)
     ax.clabel(lines, fmt=lambda v: f"{v:.2f}", fontsize=6.5, inline=True)
@@ -309,7 +315,9 @@ def _draw(acc, sl, eta_star, eta_0, floor):
     ax.set_title(r"(b)  $C_\ell(\eta)/C_\ell(\eta_0)$, the surface",
                  fontsize=9)
     cb = fig.colorbar(mesh, ax=ax, pad=0.02)
-    cb.set_label("fraction of today's value", fontsize=7.5)
+    cb.set_label("fraction of today's value" + (
+        "; above 1 before the late term cancels it" if top > 1.0 else ""),
+        fontsize=7.5)
     cb.ax.tick_params(labelsize=7)
 
     fig.suptitle("F10  the angular autocorrelation as it forms — Planck 2018, "
@@ -321,10 +329,16 @@ def _draw(acc, sl, eta_star, eta_0, floor):
     late = _late_share(acc[FRAME], sl, eta_star, eta_0)
     low = float(late[int(np.argmin(np.abs(ELLS - 2)))])
     high = float(np.max(np.abs(late[ELLS >= 30])))
+    # Signed: since the one radiation-era start the late term at l = 2
+    # cancels power rather than depositing it, and "deposits -32%" said so
+    # badly.
+    late_c2 = (f"still deposits {low:.0%} of today's $C_2$" if low >= 0.0
+               else f"removes {-low:.0%} of today's $C_2$, which stood that "
+                    f"much higher as the visibility closed")
     fig.text(0.5, 0.015,
              f"After the visibility closes the integrated Sachs–Wolfe term "
-             f"still deposits {low:.0%} of today's $C_2$; above $\\ell=30$ "
-             f"at most {high:.0%} of any multipole arrives that late.",
+             f"{late_c2}; above $\\ell=30$ at most {high:.0%} of any "
+             f"multipole arrives that late.",
              ha="center", fontsize=7.5, color=INK["muted"])
     fig.tight_layout(rect=(0, 0.055, 1, 0.94))
     return fig

@@ -5,6 +5,42 @@ All notable changes to this bundle are recorded here. The version policy is in
 
 ## [Unreleased] — v1.4.0 in preparation
 
+### The figures regenerated, and every generated CSV names the code that wrote it
+
+- **F2 builds again (T-196).** Its $k$ grid stopped at 1900, and once the
+  scattering-rate correction moved $k_D$ to 890.3 its own damping gate needed
+  $k_{\max}\ge1910.4$: from before the v1.3.0 tag the generator computed for
+  seven minutes and raised. The grid runs to 2000, where
+  $e^{-(k_{\max}/k_D)^2}=6.5\times10^{-3}$. F5 and F7 sat on the same grid with
+  no gate; they now check it against their environment's own $k_D$.
+- **Every generated CSV carries `# sources:` (T-197)**, the digest of
+  `functions/` and its generator: F1 to F7 beside F9, F10, D44, D45 and D46, and
+  F4 also names the F3 it summed. `check_release_hygiene.py` fails on an
+  unstamped generated CSV and lists every stamp the tree no longer computes,
+  with a control in `tests/test_release_hygiene.py`.
+- **F1 to F7 and F10 regenerated.** F3 to F7 had been drawn in mid-October,
+  before the line-of-sight weight, the dipole's normalisation, the scattering
+  rate and the source signs were settled, and under the opacity weight on
+  (178) and (179); the printed weight has been the default since 19 October
+  (A-2). Regenerated:
+  - F3: the Doppler source of (178) carries the spectrum. $D_\ell/D_2$ falls to
+    $0.25$ (standard CDM) and $0.34$ ($\Lambda$CDM) at $\ell=6$ and to $1.7$
+    and $1.3\times10^{-3}$ at $\ell=252$, with no Sachs–Wolfe plateau (A-2,
+    T-69). The two routes agree to the last bit;
+  - F5: the two frames' totals differ by a median of 89%, worst 99.9% (T-59);
+  - F2: $\sigma_{ab}\to0$ costs 0.06% at $\ell=2$ and 34% at $\ell=600$;
+  - F6: the small-scale approximation leaves $10^{-9}$ to $10^{-7}$ of
+    $C_\ell$ at $\ell\le7$;
+  - F7: the dipole stands on each curve at $1.00\times$, and T-31 stands;
+  - F10, on the one radiation-era start and the released potential: the late
+    term deposits 1 to 15% above $\ell\simeq30$ and cancels 4 to 48% of
+    today's $C_\ell$ from $\ell=2$ to 25, 32% at the quadrupole.
+
+  Axes, floors and annotations that had been fixed for the old numbers are
+  taken from the data, and the captions, the README and the release status say
+  what the figures now show. D44 and D45 are listed stale until they are
+  recomputed on the solved potential.
+
 ### The radiation era, step 3: the baryons' own term, and the registered test
 
 Step 3 of `sec:a3-construction`, and the test registered on 4 November scored

@@ -21,7 +21,7 @@ being possible.
 | **derived** | 30 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
 | **measured** | 8 | a chosen literal whose convergence has been measured, with the number stated. |
 | **described** | 19 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
-| **index** | 34 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
+| **index** | 35 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
 
 ## open — 1
 
@@ -454,7 +454,7 @@ side of anything the grid could contribute.
 
 ### `eta` — the free-streaming integration grid for F1's four external hierarchies
 
-`scripts/figure_f1_appendix_f.py:69`, `np.linspace`
+`scripts/figure_f1_appendix_f.py:72`, `np.linspace`
 
 `linspace(0, 20, 1200)`. Its own residuals are the measurement: the
 four external recursions match at 1e-13 to 1e-14 at scale exactly 1, which no
@@ -598,7 +598,7 @@ Taken from `required_n_eta` via the same derivation the pipeline uses; the emiss
 
 ### `K_COM` — the k quadrature grid for the truncation-convergence figure
 
-`scripts/figure_f2_truncation.py:112`, `np.arange`
+`scripts/figure_f2_truncation.py:119`, `np.arange`
 
 `arange(0.05, 1900.0, pi/3)`. The limit is 1900 and not 420 because of
 finding **T-32**: every v1.2.0 figure had been drawn on a grid stopping at the
@@ -608,7 +608,7 @@ conflates them.
 
 ### `K_COM` — the k quadrature grid for the released angular spectrum
 
-`scripts/figure_f3_angular_spectrum.py:54`, `np.arange`
+`scripts/figure_f3_angular_spectrum.py:59`, `np.arange`
 
 `arange(0.05, 420.0, pi/6)` --- **linear, and that is the rule, not a
 preference**: a logarithmic k grid aliases the integrand at high k however many
@@ -618,23 +618,23 @@ measured sufficiency instead of a choice.
 
 ### `K_COM` — the k quadrature grid for the source-decomposition figure
 
-`scripts/figure_f5_sources.py:84`, `np.arange`
+`scripts/figure_f5_sources.py:90`, `np.arange`
 
 As F2, raised to 1900 by finding T-32.
 
 ### `K_COM` — the k quadrature grid for the approximation-impact figure
 
-`scripts/figure_f6_approximations.py:79`, `np.arange`
+`scripts/figure_f6_approximations.py:82`, `np.arange`
 
 As F3, and deliberately the same grid: F6 reports RATIOS against the F3 configuration, and a ratio taken across two grids measures the grids.
 
 ### `K_COM` — the k quadrature grid for the frame-specialisation figure
 
-`scripts/figure_f7_frames.py:106`, `np.arange`
+`scripts/figure_f7_frames.py:112`, `np.arange`
 
 As F2, raised to 1900 by finding T-32, with `check_k` guarding the probe modes after T-34.
 
-## index — 34
+## index — 35
 
 ### `phase` — the i^ell phase factor
 
@@ -859,6 +859,17 @@ whether anything arrives after the visibility closes, and the difference
 between 0.99 and 1.00 is the entire late integrated Sachs--Wolfe budget. A
 level set that stopped at 0.90 could not show the thing the figure is for.
 
+### `levels` — the filled contour levels of F10's panel (b) above 1, when the data go there
+
+`scripts/figure_f10_formation_surface.py:303`, `np.arange`
+
+`LEVELS` extended by `arange(1.05, top + 0.05, 0.05)`, where `top` is
+the largest $C_\ell(\eta)/C_\ell(\eta_0)$ on the surface. **Drawing levels,
+as `LEVELS` is.** Added when F10 was regenerated on the one radiation-era start
+(T-197): from $\ell=2$ to 25 the late term now cancels power, so a multipole
+stands above today's value between the visibility closing and today, and the
+panel's ceiling at 1 had hidden it. Equal to `LEVELS` when nothing exceeds 1.
+
 ### `post` — the conformal times F10 samples AFTER recombination
 
 `scripts/figure_f10_formation_surface.py:162`, `np.geomspace`
@@ -884,49 +895,49 @@ and interpolated onto these abscissae.
 
 ### `ell` — the multipoles F1 compares
 
-`scripts/figure_f1_appendix_f.py:120`, `np.arange`
+`scripts/figure_f1_appendix_f.py:123`, `np.arange`
 
 Consecutive integers to `ELL_COMPARED`.
 
 ### `ELLS` — the multipoles F2's tail panel is drawn at
 
-`scripts/figure_f2_truncation.py:91`, `np.logspace`
+`scripts/figure_f2_truncation.py:94`, `np.logspace`
 
 Each ell is evaluated independently of the others, so the selection sets which points appear and no value.
 
 ### `ELLS_COST` — the multipoles F2's cost panel is drawn at
 
-`scripts/figure_f2_truncation.py:92`, `np.logspace`
+`scripts/figure_f2_truncation.py:95`, `np.logspace`
 
 Sixteen rather than thirty, because the cost panel is the expensive one. Selection only.
 
 ### `ELLS` — the multipoles F3 is drawn at
 
-`scripts/figure_f3_angular_spectrum.py:49`, `np.logspace`
+`scripts/figure_f3_angular_spectrum.py:54`, `np.logspace`
 
 Selection only; each ell is an independent quadrature.
 
 ### `THETA_DEG` — the angular abscissa of the correlation function
 
-`scripts/figure_f4_correlation.py:76`, `np.linspace`
+`scripts/figure_f4_correlation.py:79`, `np.linspace`
 
 `linspace(0, 180, 721)` --- a quarter-degree plotting abscissa. C(theta) is evaluated pointwise from the C_ell, so this sets the drawn resolution and no computed value.
 
 ### `ELLS` — the multipoles F5 is drawn at
 
-`scripts/figure_f5_sources.py:73`, `np.logspace`
+`scripts/figure_f5_sources.py:76`, `np.logspace`
 
 Selection only.
 
 ### `ELLS` — the multipoles F6 is drawn at
 
-`scripts/figure_f6_approximations.py:78`, `np.logspace`
+`scripts/figure_f6_approximations.py:81`, `np.logspace`
 
 Selection only.
 
 ### `ELLS` — the multipoles F7 is drawn at
 
-`scripts/figure_f7_frames.py:96`, `np.logspace`
+`scripts/figure_f7_frames.py:100`, `np.logspace`
 
 Selection only, with the dipole prepended so the probe is on the figure.
 
