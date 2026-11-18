@@ -411,7 +411,9 @@ def draw(curves, peaks, frames, gaps) -> int:
     ax.annotate(
         "one solve, frame chosen at the end\n"
         f"largest frame gap {worst:.1e}",
-        xy=(0.985, 0.30), xycoords="axes fraction", ha="right", va="top",
+        # Upper left, as panel (a)'s: with the radiation era solved the Planck
+        # curve's second and third peaks fill the lower right.
+        xy=(0.015, 0.975), xycoords="axes fraction", ha="left", va="top",
         fontsize=7.2, color=INK["secondary"])
     ax.set_title("(b) the same spectra, both frames", fontsize=9, loc="left")
 

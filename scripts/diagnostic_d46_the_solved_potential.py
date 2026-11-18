@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-r"""D46 --- the solved potential, step 2 of sec:a3-construction, scored as registered.
+r"""D46 --- the solved potential of sec:a3-construction, scored as registered.
 
 QUESTION
     With the potential integrated from one start deep in the radiation era
-    (`functions.spectra.radiation_era`), baryons as pressureless matter in the
-    constraint, does the solve reproduce the registered numbers, do its own
-    checks hold, and does the spectrum depend on the start?
+    (`functions.spectra.radiation_era`), and the baryons carrying their own
+    term in the constraint, does the solve reproduce the registered numbers,
+    do its own checks hold, and does the spectrum depend on the start?
 
 WHAT IS MEASURED, on PLANCK_MODEL unless named
     1. THE START (T-194). $\Phi_A(\eta_*)/\Phi_i$ at $k=10^{-3}$ from the
@@ -18,20 +18,27 @@ WHAT IS MEASURED, on PLANCK_MODEL unless named
        $\Lambda$-free twin (same $a_{\rm eq}$, flat, last scattering at
        PLANCK's $a_*/a_{\rm eq}$), against $2[\tfrac9{10}\Phi_i-\Phi_A(\eta_*)]
        /\Phi_A(\eta_*)=-0.055$; and on PLANCK itself, where $\Lambda$'s late
-       term stands beside it.
+       term stands beside it. Two checks of the photons after $\eta_*$ that no
+       choice of phase can hide: the extremum of $(\Phi_A+\Phi_H)/\Phi_A$,
+       negative, near $1.6\eta_*$, against $-0.042$ from the two-fluid
+       potential with decoupling taken instantaneous; and the dipole in the
+       constraint against the matter era's $-(k\eta/3)\Phi_A$.
     3. THE CHECKS, per mode on a logarithmic $k$ grid: where the photons
        leave the constraint; the energy constraint over the sum of its terms'
-       magnitudes at $\eta_*$ and at the exit, and the same with the baryon
-       loading removed from (152), which is the control that says what the
-       residual is; the photons' stress $(\Phi_A+\Phi_H)/\Phi_A$; and the
-       hierarchy closed at twice `STEP_TWO_ELL_MAX`.
-    4. THE TRANSFER (ruling 1, recorded, not gated): $\Phi_A(\eta_0,k)/
-       \Phi_A(\eta_0,k\to0)$ against (J.5) at the shape parameter F9 uses.
+       magnitudes at $\eta_*$ and at the exit; the same with the baryons
+       moving with the CDM in the constraint (step 2's construction), and with
+       $\Phi_A=-\Phi_H$ after $\eta_*$; the photons' stress
+       $(\Phi_A+\Phi_H)/\Phi_A$; and the hierarchy closed at twice
+       `STEP_TWO_ELL_MAX`.
+    4. THE TRANSFER, recorded and not gated, as sec:a3-construction asks:
+       $\Phi_A(\eta_0,k)/\Phi_A(\eta_0,k\to0)$ against (J.5) at the shape
+       parameter F9 uses.
     5. THE SPECTRUM, on F9's $\ell$ and $k$ grids with F9's damping and three
        slots: the largest $|\Delta D_\ell|$ over the largest $D_\ell$ when
        $\eta_i$ halves, against $10^{-4}$; the frame gap (e); and what the
        photons' anisotropic stress does to $D_\ell$, by the control
-       $\Phi_A=-\Phi_H$ after $\eta_*$ (ruling 2: named and measured).
+       $\Phi_A=-\Phi_H$ after $\eta_*$, the approximation the supplement names
+       and asks to be measured.
 
 Part 5 checkpoints per mode outside the tree (`D46_CACHE`, or the system
 temporary directory), keyed on the sources. `--report` writes every number the
@@ -118,6 +125,11 @@ KEY_RAD_REG = "registered: 2[(9/10) Phi_i - Phi_A(eta_*)]/Phi_A(eta_*)"
 KEY_TWIN = "twin Phi_A(eta_0)/Phi_i"
 KEY_PLANCK_ISW = "PLANCK integrated term, radiation era and Lambda"
 KEY_PLANCK_END = "PLANCK Phi_A(eta_0)/Phi_i"
+KEY_STRESS = "extremum of (Phi_A + Phi_H)/Phi_A after eta_*"
+KEY_STRESS_AT = "where, in units of eta_*"
+
+#: Where the dipole in the constraint is set against the matter era's.
+DIPOLE_TIMES = (3.0, 10.0, 30.0)
 
 
 def planck_environment(**kw):
@@ -191,6 +203,19 @@ def the_registered_numbers(env) -> dict:
     star = m.phi_a_star
     weyl = m.phi_a - m.phi_h
     twin_weyl = t.phi_a - t.phi_h
+    # The two phase checks, on a grid fine enough to place the extremum.
+    eta = np.linspace(env.eta_star, float(bg.eta_0), 20001)
+    fine = solve_mode(K_SUPERHORIZON, bg, eta, eta_i=env.eta_i,
+                      eta_star=env.eta_star, eta_couple=6 * env.eta_star,
+                      phi_i=SOLVED_PHI_I, omega_b_h2=env.omega_b_h2)
+    stress = (fine.phi_a + fine.phi_h) / fine.phi_a
+    at = int(np.argmin(stress))
+    dipole = {}
+    for times in DIPOLE_TIMES:
+        e = times * env.eta_star
+        dipole[f"dipole over -(k eta/3) Phi_A at {times:g} eta_*"] = float(
+            np.interp(e, eta, fine.photon_dipole)
+            / (-(K_SUPERHORIZON * e / 3.0) * np.interp(e, eta, fine.phi_a)))
     return {
         "Phi_A(eta_*)/Phi_i": star / phi_i,
         KEY_SW: (m.delta_t_star + m.phi_a_star) / star,
@@ -201,6 +226,9 @@ def the_registered_numbers(env) -> dict:
         KEY_PLANCK_ISW: float(
             (weyl[-1] - np.interp(env.eta_star, m.eta, weyl)) / star),
         KEY_PLANCK_END: float(m.phi_a[-1] / phi_i),
+        KEY_STRESS: float(stress[at]),
+        KEY_STRESS_AT: float(eta[at] / env.eta_star),
+        **dipole,
     }
 
 
@@ -208,22 +236,19 @@ def the_checks(env) -> dict[str, np.ndarray]:
     """Part 3, per mode on CHECK_K."""
     rows = {key: [] for key in (
         "eta_exit", "energy residual at eta_*", "energy residual at exit",
-        "energy residual at eta_*, R -> 0", "stress max after eta_*",
+        "energy residual at eta_*, baryons as dust", "stress max after eta_*",
         "stress at exit", "hierarchy at 2 ell_max, max |dPhi_A|/max |Phi_A|",
-        "energy residual at exit, R -> 0",
-        "energy residual at exit, R -> 0 and Phi_A = -Phi_H")}
+        "energy residual at exit, Phi_A = -Phi_H")}
     for k in CHECK_K:
         m = solve(env, k)
-        bare = solve(env, k, omega_b_h2=1e-12)
-        flat = solve(env, k, omega_b_h2=1e-12, anisotropic_stress=False)
+        dust = solve(env, k, baryons="dust")
+        flat = solve(env, k, anisotropic_stress=False)
         wide = solve(env, k, ell_max=2 * STEP_TWO_ELL_MAX)
-        rows["energy residual at exit, R -> 0"].append(bare.energy_residual_exit)
-        rows["energy residual at exit, R -> 0 and Phi_A = -Phi_H"].append(
-            flat.energy_residual_exit)
+        rows["energy residual at exit, Phi_A = -Phi_H"].append(flat.energy_residual_exit)
         rows["eta_exit"].append(m.eta_exit)
         rows["energy residual at eta_*"].append(m.energy_residual_star)
         rows["energy residual at exit"].append(m.energy_residual_exit)
-        rows["energy residual at eta_*, R -> 0"].append(bare.energy_residual_star)
+        rows["energy residual at eta_*, baryons as dust"].append(dust.energy_residual_star)
         rows["stress max after eta_*"].append(m.stress_max)
         rows["stress at exit"].append(m.stress_exit)
         rows["hierarchy at 2 ell_max, max |dPhi_A|/max |Phi_A|"].append(
@@ -313,7 +338,7 @@ def compute() -> dict:
     found["checks"] = the_checks(env)
     print("    4. the transfer", flush=True)
     found["transfer"] = the_transfer(env)
-    print("    5. the start halved, on F9's grids", flush=True)
+    print("    5. the spectrum, on F9's grids", flush=True)
     found["halved"] = the_start_halved(env)
     return found
 
@@ -369,7 +394,7 @@ def _from_csv() -> tuple[dict, str] | None:
 
 def report(found: dict, stamp: str) -> int:
     say = print
-    say("D46 --- the solved potential, step 2, on PLANCK_MODEL")
+    say("D46 --- the solved potential, on PLANCK_MODEL")
     say(f"sources: {stamp}")
     s = found["start"]
     say("\n1. THE START (T-194): Phi_A(eta_*)/Phi_i at k = 1e-3")
@@ -388,19 +413,23 @@ def report(found: dict, stamp: str) -> int:
     say(f"   the twin's Phi_A(eta_0) = {r[KEY_TWIN]:.6f} Phi_i")
     say(f"   PLANCK's integrated term, radiation era and Lambda: {r[KEY_PLANCK_ISW]:+.5f} "
         f"Phi_A(eta_*); Phi_A(eta_0) = {r[KEY_PLANCK_END]:.5f} Phi_i")
+    say(f"   (Phi_A + Phi_H)/Phi_A after eta_*: extremum {r[KEY_STRESS]:+.4f} at "
+        f"{r[KEY_STRESS_AT]:.2f} eta_*   (two-fluid estimate -0.042 near 1.6 eta_*)")
+    say("   the dipole in the constraint over -(k eta/3) Phi_A: " + ", ".join(
+        f"{r[f'dipole over -(k eta/3) Phi_A at {t:g} eta_*']:.4f} at {t:g} eta_*"
+        for t in DIPOLE_TIMES))
     c = found["checks"]
     say("\n3. THE CHECKS, per mode")
-    say("   E is the energy constraint over the sum of its terms' magnitudes;"
-        " R -> 0 removes the baryon loading from (152)")
-    say("        k  eta_exit  E(eta_*)  E(exit)  | R->0: E(eta_*)  E(exit)  no stress"
-        "  | stress max  at exit | 2 ell_max")
+    say("   E is the energy constraint over the sum of its terms' magnitudes; 'as dust'"
+        " is step 2's construction, 'no stress' sets Phi_A = -Phi_H after eta_*")
+    say("        k  eta_exit  E(eta_*)  E(exit)  | as dust: E(eta_*) | no stress: E(exit)"
+        " | stress max  at exit | 2 ell_max")
     for i, k in enumerate(CHECK_K):
         say(f"   {k:8.3g} {c['eta_exit'][i]:7.4f}  {c['energy residual at eta_*'][i]:+.1e}"
             f"  {c['energy residual at exit'][i]:+.1e}"
-            f"  |  {c['energy residual at eta_*, R -> 0'][i]:+.1e}"
-            f"  {c['energy residual at exit, R -> 0'][i]:+.1e}"
-            f"  {c['energy residual at exit, R -> 0 and Phi_A = -Phi_H'][i]:+.1e}"
-            f"  |  {c['stress max after eta_*'][i]:.2e}  {c['stress at exit'][i]:+.1e}"
+            f"  |      {c['energy residual at eta_*, baryons as dust'][i]:+.1e}"
+            f"     |        {c['energy residual at exit, Phi_A = -Phi_H'][i]:+.1e}"
+            f"     |  {c['stress max after eta_*'][i]:.2e}  {c['stress at exit'][i]:+.1e}"
             f" | {c['hierarchy at 2 ell_max, max |dPhi_A|/max |Phi_A|'][i]:.1e}")
     t = found["transfer"]
     say("\n4. THE TRANSFER at eta_0, solved against (J.5) (recorded, not gated)")

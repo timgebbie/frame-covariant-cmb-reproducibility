@@ -20,7 +20,7 @@ being possible.
 | **open** | 1 | a chosen literal whose convergence is **not** established. This status is the point of the register. |
 | **derived** | 30 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
 | **measured** | 8 | a chosen literal whose convergence has been measured, with the number stated. |
-| **described** | 18 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
+| **described** | 19 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
 | **index** | 34 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
 
 ## open — 1
@@ -329,7 +329,7 @@ the cross-spectra add to the spectrum F9 draws.
 
 ### `k_com` — the k grid D46's spectrum part is integrated on: F9's
 
-`scripts/diagnostic_d46_the_solved_potential.py:247`, `np.linspace`
+`scripts/diagnostic_d46_the_solved_potential.py:272`, `np.linspace`
 
 `required_k_points(1500, r_theta)` on PLANCK_MODEL, exactly F9's grid
 (T-56), so the halving is read on the quadrature the figure uses.
@@ -407,7 +407,7 @@ measured rather than assumed.
 
 ### `ell` — the multipoles of the photon hierarchy after eta_*, 0..ell_max
 
-`functions/spectra/radiation_era.py:229`, `np.arange`
+`functions/spectra/radiation_era.py:247`, `np.arange`
 
 An index array whose length is the truncation `STEP_TWO_ELL_MAX = 32`,
 closed by Ma and Bertschinger's free-streaming truncation. Measured on
@@ -460,7 +460,7 @@ side of anything the grid could contribute.
 four external recursions match at 1e-13 to 1e-14 at scale exactly 1, which no
 under-resolved grid produces.
 
-## described — 18
+## described — 19
 
 ### `K_COM` — the k grid the cost benchmark is measured on
 
@@ -561,7 +561,7 @@ every mode on a grid with half the step.
 
 ### `CHECK_K` — the modes D46 checks the solve at, 1e-3..1500, 25 logarithmic
 
-`scripts/diagnostic_d46_the_solved_potential.py:106`, `np.geomspace`
+`scripts/diagnostic_d46_the_solved_potential.py:113`, `np.geomspace`
 
 Not a quadrature: each mode is checked on its own (energy and stress
 constraints, exit, truncation). Logarithmic because the checks change
@@ -569,10 +569,20 @@ character with k eta_* rather than with k.
 
 ### `TRANSFER_K` — the modes at which the solved late-time transfer is set beside (J.5)
 
-`scripts/diagnostic_d46_the_solved_potential.py:109`, `np.geomspace`
+`scripts/diagnostic_d46_the_solved_potential.py:116`, `np.geomspace`
 
 Not a quadrature: the comparison sec:a3-construction records and does
 not gate. Thirteen logarithmic modes from 0.1 to 1500 in the bundle's units.
+
+### `eta` — where D46 reads the photons after eta_* at k = 1e-3: the stress's extremum and the dipole
+
+`scripts/diagnostic_d46_the_solved_potential.py:207`, `np.linspace`
+
+Not a quadrature: the solve's own output grid, from eta_* to eta_0 in
+20001 points, spacing 1.6e-4, which is 0.2% of eta_*. The extremum of
+(Phi_A + Phi_H)/Phi_A is read at a grid point, so its place carries that
+resolution and its value a relative error below 1e-6 there; the dipole is
+interpolated at 3, 10 and 30 eta_*.
 
 ### `k` — the k quadrature grid for the Sachs-Wolfe limit
 
@@ -659,7 +669,7 @@ grids spanning three decades in their lower limit.
 
 ### `_KS_N` — the orders of Kodama and Sasaki's series, n = 4..19
 
-`functions/spectra/radiation_era.py:114`, `np.arange`
+`functions/spectra/radiation_era.py:122`, `np.arange`
 
 Exact integer orders of the binomial series of sqrt(1+y). Used below
 y = 0.1, where the first omitted term is below 1e-16 and the closed form's
@@ -809,7 +819,7 @@ and not on a copy of it.
 
 ### `ELLS` — the multipoles D46's spectrum part is evaluated at: F9's
 
-`scripts/diagnostic_d46_the_solved_potential.py:100`, `np.arange`
+`scripts/diagnostic_d46_the_solved_potential.py:107`, `np.arange`
 
 F9's own ELLS, so the eta_i halving and the frame gap are measured on
 the spectrum F9 draws. Each ell is an independent quadrature.

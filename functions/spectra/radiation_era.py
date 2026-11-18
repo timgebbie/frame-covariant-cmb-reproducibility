@@ -1,9 +1,10 @@
-r"""The radiation era's construction, step 2: the potential solved, not supplied.
+r"""The radiation era's construction: the potential solved, not supplied.
 
-The supplement's `sec:a3-construction`. Every mode starts at one $\eta_i$ deep in
-the radiation era and outside every horizon (`acoustic.common_start_eta`), on
-the adiabatic growing mode, and the potential is **integrated with the matter
-and the photons** rather than supplied to the oscillator:
+The supplement's `sec:a3-construction`, steps 2 and 3. Every mode starts at one
+$\eta_i$ deep in the radiation era and outside every horizon
+(`acoustic.common_start_eta`), on the adiabatic growing mode, and the potential
+is **integrated with the matter and the photons** rather than supplied to the
+oscillator:
 
     Phi_H' = H Phi_A + (3 H^2 / 2k) sum_i Omega_i(a) (1 + w_i) v_i     (momentum: the source)
     k^2 Phi_H = (3/2) H^2 sum_i Omega_i(a) Delta_i,
@@ -19,23 +20,28 @@ critical density at $a$. The bundle's radiation is photons alone
 $\theta_i=-kv_i$, the map under which the three constraints above are theirs
 term by term:
 
-    matter:   delta_m' = k v_m - 3 Phi_H',   v_m' = -H v_m - k Phi_A
+    CDM:      delta_c' = k v_c - 3 Phi_H',   v_c' = -H v_c - k Phi_A
     photons:  dT' = -Phi_H' + (k/3) tau_1                                (153), expansion coupling dropped
               tau_1' = -(R'/(1+R)) tau_1 - (k/(1+R)) dT - k Phi_A        (152)
+    baryons:  tied to the pair before eta_*, v_b = tau_1 and
+              delta_b' = k tau_1 - 3 Phi_H'; dust from eta_* on
 
-Step 2 takes the baryons as pressureless matter in the constraint: they move
-with the CDM there, and the photons keep their baryon loading $R$ in (152).
-The baryons' own term in the constraint is step 3. **The step-2 system is
-therefore not closed at order $R$**: the momentum the photons give the baryons
-through $R$ is not in the constraint, where the baryons move with the CDM, so
-the energy constraint fails inside the horizon --- by up to 3% of its terms at
-$\eta_*$ on `PLANCK_MODEL` --- and holds to $10^{-10}$ with $R\to0$ (D46). That
-residual is the baryons' own term, measured before it is added.
+**The baryons carry their own term (step 3).** Their weight in both
+constraints is $W_b=\tfrac43RW_\gamma$, the one that makes (152)'s loading $R$
+and the constraint a single momentum budget, so the system is closed and the
+energy constraint holds to $10^{-10}$ at every $k$. At $\eta_*$ they are released
+as dust from the pair's velocity. Step 2's construction, the baryons moving
+with the CDM in the constraint while (152) loads the photons with them, is kept
+as `baryons="dust"`: it is the null control of the restated (g1) on the
+backgrounds without radiation, and on PLANCK it leaves the momentum the photons
+give the baryons out of the constraint, which opened the energy constraint by up
+to 3% of its terms at $\eta_*$ (D46 at step 2).
 
 **After $\eta_*$ the photons are a hierarchy with gravitational sources.** In
 the velocity normalisation of (152)--(153), $\sigma_\ell=(-1)^\ell\tau_\ell$ with
 $\tau_\ell$ the covariant multipoles of (F.1), so $\sigma_0=\delta T$ and
-$\sigma_1=\tau_1$ hand over without a rescale, and
+$\sigma_1=\tau_1$ hand over as they stand --- the pair's phase at every rank,
+which pairs with the stress constraint's $-\tfrac85$ --- and
 
     sigma_l' = k [ w_l sigma_{l+1} - sigma_{l-1} ] - delta_{l0} Phi_H' - delta_{l1} k Phi_A,
     w_l = (l+1)^2 / [(2l+3)(2l+1)],
@@ -46,8 +52,9 @@ truncation. With $\sigma_2=\tfrac{15}2\Theta_2$ in their Legendre
 normalisation, their $k^2(\phi-\psi)=12\pi Ga^2(\bar\rho+\bar P)\sigma$ is the
 stress constraint above, coefficient and sign. **$\Phi_A$ is taken from it**,
 so its residual vanishes by construction and the energy constraint is the
-check on the whole solve. The photons are carried until their term in the
-momentum constraint falls below `PHOTON_EXIT_FRACTION` of the sum, measured on
+check on the whole solve; it holds to $10^{-11}$ with the stress and fails at
+$2$ to $4\times10^{-4}$ without it. The photons are carried until their term in
+the momentum constraint falls below `PHOTON_EXIT_FRACTION` of the sum, measured on
 the envelope $\sqrt{\sigma_1^2+3\sigma_0^2}$ so that a node of the dipole cannot
 end them early; the matter is carried to $\eta_0$.
 
@@ -97,8 +104,9 @@ __all__ = [
     "solve_mode",
 ]
 
-#: Ruling 2's stated fraction: the photons leave the constraint once their term
-#: in the momentum constraint is below this share of the sum.
+#: The supplement's stated fraction (sec:a3-construction): the photons leave the
+#: constraint once their term in the momentum constraint is below this share of
+#: the sum.
 PHOTON_EXIT_FRACTION = 1e-4
 
 #: Where the photon hierarchy is closed after $\eta_*$. Measured on
@@ -156,19 +164,19 @@ def kodama_sasaki(y: np.ndarray | float) -> tuple[np.ndarray, np.ndarray]:
 
 def growing_mode(k_com: float, background: Background, eta_i: float,
                  phi_i: float) -> np.ndarray:
-    r"""The state $(\Phi_H,\delta_m,v_m,\delta T,\tau_1)$ at $\eta_i$, on both constraints.
+    r"""The state $(\Phi_H,\delta_c,v_c,\delta T,\tau_1,\delta_b,v_b)$ at $\eta_i$, on both constraints.
 
     $\Phi_A$ and $\Phi_A'$ are the two-fluid solution's (`kodama_sasaki`), or
     $\Phi_i$ and 0 where $\Omega_r=0$. The common velocity
-    $v_m=\tau_1$ then follows from the momentum constraint, and with the
-    adiabatic $\delta_m=3\delta T$ the energy constraint gives
+    $v_c=v_b=\tau_1$ then follows from the momentum constraint, and with the
+    adiabatic $\delta_c=\delta_b=3\delta T$ the energy constraint gives
 
     $$\delta T=\frac{\mathcal Hv}{k}+\frac{k^2\Phi_H}{3W_m+4W_\gamma},$$
 
     $W_i=\tfrac32\mathcal H^2\Omega_i(a)$. In the radiation era this is
     eq:radiation-ic, $\delta T=-\tfrac12\Phi_i$ and $\tau_1=-\tfrac12k\eta_i\Phi_i$,
     corrected at order $a_i/a_{\rm eq}$ and $(k\eta_i)^2$; on an $\Omega_r=0$
-    background it is the matter-era mode, $\delta_m=-2\Phi_i-\tfrac16(k\eta_i)^2\Phi_i$
+    background it is the matter-era mode, $\delta_c=-2\Phi_i-\tfrac16(k\eta_i)^2\Phi_i$
     exactly. Why the corrections are not optional is finding T-194, in the
     module docstring.
     """
@@ -186,12 +194,12 @@ def growing_mode(k_com: float, background: Background, eta_i: float,
     phi_h = -phi_a
     v = k * (phi_h_prime - h * phi_a) / (w_m + 4.0 / 3.0 * w_g)
     d_t = h * v / k + k**2 * phi_h / (3.0 * w_m + 4.0 * w_g)
-    return np.array([phi_h, 3.0 * d_t, v, d_t, v])
+    return np.array([phi_h, 3.0 * d_t, v, d_t, v, 3.0 * d_t, v])
 
 
 @dataclass(frozen=True)
 class SolvedMode:
-    r"""One mode of step 2 on the requested grid, with its checks.
+    r"""One mode of the solve on the requested grid, with its checks.
 
     `delta_t` and `tau_1` are the photon pair the line of sight reads (held
     after `eta_couple`); `phi_a_prime` and `phi_h_prime` are evaluated from
@@ -205,10 +213,20 @@ class SolvedMode:
     phi_h: np.ndarray
     phi_a_prime: np.ndarray
     phi_h_prime: np.ndarray
-    delta_m: np.ndarray
-    v_m: np.ndarray
+    #: The CDM's density contrast and velocity; the CDM frame is `v_c`'s.
+    delta_c: np.ndarray
+    v_c: np.ndarray
+    #: The baryons': tied to the photon pair before $\eta_*$, dust after.
+    #: Under `baryons="dust"` they move with the CDM in the constraint.
+    delta_b: np.ndarray
+    v_b: np.ndarray
     delta_t: np.ndarray
     tau_1: np.ndarray
+    #: The photons as the constraint carries them: the pair before $\eta_*$,
+    #: the hierarchy's $\sigma_1$ and $\sigma_2$ after it, and NaN once they
+    #: have left the constraint.
+    photon_dipole: np.ndarray
+    photon_quadrupole: np.ndarray
     #: $\Phi_A$ at $\eta_*$ and the photon pair's $\delta T$ there.
     phi_a_star: float
     delta_t_star: float
@@ -257,7 +275,7 @@ def _integrate_in_log_a(rhs, a0, a1, y0, *, events, rtol, atol, k):
     sol = solve_ivp(rhs, (math.log(a0), math.log(a1)), y0, method="DOP853",
                     rtol=rtol, atol=atol, dense_output=True, events=events)
     if not sol.success:
-        raise RuntimeError(f"step-2 integration failed at k={k}: {sol.message}")
+        raise RuntimeError(f"the solve failed at k={k}: {sol.message}")
     return _LogASolution(sol)
 
 
@@ -271,6 +289,7 @@ def solve_mode(
     eta_couple: float,
     phi_i: float = 1.0,
     omega_b_h2: float = 0.0224,
+    baryons: str = "own",
     ell_max: int = STEP_TWO_ELL_MAX,
     exit_fraction: float = PHOTON_EXIT_FRACTION,
     anisotropic_stress: bool = True,
@@ -283,9 +302,16 @@ def solve_mode(
     the constraint to $\eta_*$; the hierarchy from $\eta_*$, handed
     $(\delta T,\tau_1,0,\dots)$, until the photons leave the constraint; the
     matter alone after. The line of sight's pair runs beside them to
-    `eta_couple` and is held there. `anisotropic_stress=False` sets
-    $\Phi_A=-\Phi_H$ after $\eta_*$, the approximation ruling 2 asks to be named
-    and measured; it is a control, not a physics switch.
+    `eta_couple` and is held there.
+
+    `baryons="own"` is step 3: the baryons carry their own term in both
+    constraints, with the weight $W_b=\tfrac43RW_\gamma$ that makes the pair's
+    baryon loading $R$ and the constraint one momentum budget, and they are
+    released as dust at $\eta_*$ from the pair's velocity. `"dust"` is step 2,
+    the baryons moving with the CDM in the constraint, and (g1)'s null
+    control. `anisotropic_stress=False` sets $\Phi_A=-\Phi_H$ after $\eta_*$, the
+    approximation the supplement names and asks to be measured. Both are
+    controls.
     """
     k = float(k_com)
     eta = np.asarray(eta, dtype=float)
@@ -296,6 +322,8 @@ def solve_mode(
         raise ValueError("the output grid must lie in [eta_i, eta_0]")
     if ell_max < 3:
         raise ValueError("ell_max must be at least 3")
+    if baryons not in ("own", "dust"):
+        raise ValueError("baryons is 'own' (step 3) or 'dust' (step 2, (g1)'s control)")
     eta_couple = min(float(eta_couple), eta_0)
 
     eta_of_a = background.eta_of_a
@@ -304,16 +332,23 @@ def solve_mode(
     c_m = 1.5 * h0**2 * o_m
     c_g = 1.5 * h0**2 * o_r
     r_per_a = float(baryon_photon_ratio(1.0, omega_b_h2=omega_b_h2))
+    # The baryons' weight, W_b = (4/3) R W_gamma: the one that makes (152)'s
+    # loading and the constraint a single momentum budget. Where Omega_r = 0
+    # the pair carries no weight and the baryons take omega_b_h2's share of
+    # the matter through R's own normalisation, which is the same statement.
+    c_b = (4.0 / 3.0) * r_per_a * c_g if baryons == "own" else 0.0
+    c_c = c_m - c_b
     # (8/5) H^2 Omega_gamma / k^2 = (16/15) W_gamma / k^2, times a^2.
     stress_per_a2 = (16.0 / 15.0) * c_g / k**2 if anisotropic_stress else 0.0
     w_l = _free_streaming_weights(ell_max)
     lm = ell_max
+    tied = baryons == "own"
 
     def background_at(x):
-        """a, H, W_m, W_gamma, R at x = ln a: the background's closed forms."""
+        """a, H, W_gamma, R at x = ln a: the background's closed forms."""
         a = math.exp(x)
         h = h0 * math.sqrt(o_r / (a * a) + o_m / a + o_k + o_l * a * a)
-        return a, h, c_m / a, c_g / (a * a), r_per_a * a
+        return a, h, c_g / (a * a), r_per_a * a
 
     def pair(h, r, d_t, tau, d_phi_h, phi_a, active):
         if not active:
@@ -321,23 +356,29 @@ def solve_mode(
         return (-d_phi_h + k / 3.0 * tau,
                 -(h * r / (1.0 + r)) * tau - k / (1.0 + r) * d_t - k * phi_a)
 
+    def dust(h, d_phi_h, phi_a, v):
+        return k * v - 3.0 * d_phi_h, -h * v - k * phi_a
+
     # Each right-hand side is d/d(eta), divided by H to make it d/d(ln a).
     def tight(x, y):
-        phi_h, d_m, v_m, d_t, tau = y
-        a, h, w_m, w_g, r = background_at(x)
+        phi_h, d_c, v_c, d_t, tau, d_b, v_b = y
+        a, h, w_g, r = background_at(x)
         phi_a = -phi_h
-        d_phi_h = h * phi_a + (w_m * v_m + 4.0 / 3.0 * w_g * tau) / k
-        d_pair = pair(h, r, d_t, tau, d_phi_h, phi_a, True)
-        return np.array([d_phi_h, k * v_m - 3.0 * d_phi_h, -h * v_m - k * phi_a,
-                         d_pair[0], d_pair[1]]) / h
+        d_phi_h = h * phi_a + (c_c / a * v_c + c_b / a * v_b
+                               + 4.0 / 3.0 * w_g * tau) / k
+        p = pair(h, r, d_t, tau, d_phi_h, phi_a, True)
+        b = (k * tau - 3.0 * d_phi_h, p[1]) if tied else dust(h, d_phi_h, phi_a, v_b)
+        return np.array([d_phi_h, *dust(h, d_phi_h, phi_a, v_c), p[0], p[1],
+                         b[0], b[1]]) / h
 
     def free(active):
         def rhs(x, y):
-            phi_h, d_m, v_m, d_t, tau = y[:5]
-            s = y[5:]
-            a, h, w_m, w_g, r = background_at(x)
+            phi_h, d_c, v_c, d_t, tau, d_b, v_b = y[:7]
+            s = y[7:]
+            a, h, w_g, r = background_at(x)
             phi_a = -phi_h - stress_per_a2 / (a * a) * s[2]
-            d_phi_h = h * phi_a + (w_m * v_m + 4.0 / 3.0 * w_g * s[1]) / k
+            d_phi_h = h * phi_a + (c_c / a * v_c + c_b / a * v_b
+                                   + 4.0 / 3.0 * w_g * s[1]) / k
             ds = np.empty_like(s)
             ds[:-1] = k * w_l[:-1] * s[1:]
             ds[0] -= d_phi_h
@@ -345,32 +386,33 @@ def solve_mode(
             ds[1] -= k * phi_a
             ds[-1] = (-k * (2.0 * lm + 1.0) / lm * s[-2]
                       - (lm + 1.0) / float(eta_of_a(a)) * s[-1])
-            d_pair = pair(h, r, d_t, tau, d_phi_h, phi_a, active)
             out = np.empty_like(y)
-            out[:5] = (d_phi_h, k * v_m - 3.0 * d_phi_h, -h * v_m - k * phi_a,
-                       d_pair[0], d_pair[1])
-            out[5:] = ds
+            out[:7] = (d_phi_h, *dust(h, d_phi_h, phi_a, v_c),
+                       *pair(h, r, d_t, tau, d_phi_h, phi_a, active),
+                       *dust(h, d_phi_h, phi_a, v_b))
+            out[7:] = ds
             return out / h
         return rhs
 
     def matter(active):
         def rhs(x, y):
-            phi_h, d_m, v_m, d_t, tau = y
-            a, h, w_m, w_g, r = background_at(x)
+            phi_h, d_c, v_c, d_t, tau, d_b, v_b = y
+            a, h, w_g, r = background_at(x)
             phi_a = -phi_h
-            d_phi_h = h * phi_a + w_m * v_m / k
-            d_pair = pair(h, r, d_t, tau, d_phi_h, phi_a, active)
-            return np.array([d_phi_h, k * v_m - 3.0 * d_phi_h, -h * v_m - k * phi_a,
-                             d_pair[0], d_pair[1]]) / h
+            d_phi_h = h * phi_a + (c_c / a * v_c + c_b / a * v_b) / k
+            return np.array([d_phi_h, *dust(h, d_phi_h, phi_a, v_c),
+                             *pair(h, r, d_t, tau, d_phi_h, phi_a, active),
+                             *dust(h, d_phi_h, phi_a, v_b)]) / h
         return rhs
 
     def exit_event(x, y):
-        phi_h, d_m, v_m = y[0], y[1], y[2]
-        s0, s1, s2 = y[5], y[6], y[7]
-        a, h, w_m, w_g, r = background_at(x)
+        phi_h, v_c, v_b = y[0], y[2], y[6]
+        s0, s1, s2 = y[7], y[8], y[9]
+        a, h, w_g, r = background_at(x)
         phi_a = -phi_h - stress_per_a2 / (a * a) * s2
         photons = 4.0 / 3.0 * w_g * math.sqrt(s1 * s1 + 3.0 * s0 * s0) / k
-        total = abs(h * phi_a) + abs(w_m * v_m / k) + 4.0 / 3.0 * w_g * abs(s1) / k
+        total = (abs(h * phi_a) + abs(c_c / a * v_c / k) + abs(c_b / a * v_b / k)
+                 + 4.0 / 3.0 * w_g * abs(s1) / k)
         return photons - exit_fraction * total
     exit_event.terminal = True
     exit_event.direction = -1
@@ -389,11 +431,14 @@ def solve_mode(
     pieces = []      # (phase, pair active, a0, a1, solution)
     sol = integrate(tight, a_i, a_star, growing_mode(k, background, eta_i, phi_i))
     pieces.append(("tight", True, a_i, a_star, sol))
+    # At eta_* the baryons are released with the pair's velocity, and the
+    # photons in the constraint become the hierarchy, handed (dT, tau_1, 0...).
     # Where Omega_r = 0 the photons carry no weight in the constraint, so they
     # have none to leave it with: the matter goes on alone from eta_*.
     photons = c_g > 0.0
-    y = (np.concatenate((sol.y[:, -1], sol.y[3:5, -1], np.zeros(ell_max - 1)))
-         if photons else sol.y[:, -1])
+    y = sol.y[:, -1].copy()
+    if photons:
+        y = np.concatenate((y, y[3:5], np.zeros(ell_max - 1)))
     a, a_exit = a_star, (a_end if photons else a_star)
     for a_stop, active in ((a_couple, True), (a_end, False)):
         if a >= a_stop:
@@ -404,26 +449,28 @@ def solve_mode(
             pieces.append(("free", active, a, a_reached, sol))
             y, a = sol.y[:, -1], a_reached
             if sol.status == 1:
-                photons, a_exit, y = False, a, y[:5]
+                photons, a_exit, y = False, a, y[:7]
         if not photons and a < a_stop:
             sol = integrate(matter(active), a, a_stop, y)
             pieces.append(("matter", active, a, a_stop, sol))
             y, a = sol.y[:, -1], a_stop
 
     return _assemble(k, background, eta, pieces, a_star=a_star, a_exit=a_exit,
-                     stress_per_a2=stress_per_a2, w_l=w_l, c_m=c_m, c_g=c_g)
+                     stress_per_a2=stress_per_a2, w_l=w_l, c_c=c_c, c_b=c_b,
+                     c_g=c_g, tied=tied)
 
 
-def _derived(k, background, phase, a, state, stress_per_a2, w_l, c_m, c_g):
+def _derived(k, background, phase, a, state, stress_per_a2, w_l, c_c, c_b, c_g,
+             tied):
     """Phi_A, Phi_H', Phi_A' and the energy residual from a state, vectorised in a."""
     a = np.asarray(a, dtype=float)
     h = np.asarray(background.conformal_hubble(a), dtype=float)
-    w_m, w_g = c_m / a, c_g / a**2
-    phi_h, d_m, v_m, d_t, tau = state[:5]
+    w_c, w_b, w_g = c_c / a, c_b / a, c_g / a**2
+    phi_h, d_c, v_c, d_t, tau, d_b, v_b = state[:7]
     if phase == "free":
-        s0, s1, s2, s3 = state[5], state[6], state[7], state[8]
+        s0, s1, s2, s3 = state[7], state[8], state[9], state[10]
         phi_a = -phi_h - stress_per_a2 / a**2 * s2
-        d_phi_h = h * phi_a + (w_m * v_m + 4.0 / 3.0 * w_g * s1) / k
+        d_phi_h = h * phi_a + (w_c * v_c + w_b * v_b + 4.0 / 3.0 * w_g * s1) / k
         d_s2 = k * (w_l[2] * s3 - s1)
         phi_a_prime = -d_phi_h - stress_per_a2 / a**2 * (d_s2 - 2.0 * h * s2)
         photon_d, photon_v = s0, s1
@@ -431,27 +478,29 @@ def _derived(k, background, phase, a, state, stress_per_a2, w_l, c_m, c_g):
         phi_a = -phi_h
         photon_v = tau if phase == "tight" else 0.0 * tau
         photon_d = d_t if phase == "tight" else 0.0 * d_t
-        d_phi_h = h * phi_a + (w_m * v_m + 4.0 / 3.0 * w_g * photon_v) / k
+        d_phi_h = h * phi_a + (w_c * v_c + w_b * v_b + 4.0 / 3.0 * w_g * photon_v) / k
         phi_a_prime = -d_phi_h
-    terms = (k**2 * phi_h, w_m * d_m, 3.0 * w_m * h * v_m / k,
-             4.0 * w_g * photon_d, 4.0 * w_g * h * photon_v / k)
-    energy = terms[0] - (terms[1] - terms[2] + terms[3] - terms[4])
+    terms = (k**2 * phi_h, w_c * d_c, 3.0 * w_c * h * v_c / k, w_b * d_b,
+             3.0 * w_b * h * v_b / k, 4.0 * w_g * photon_d, 4.0 * w_g * h * photon_v / k)
+    energy = terms[0] - (terms[1] - terms[2] + terms[3] - terms[4] + terms[5] - terms[6])
     size = sum(np.abs(x) for x in terms)
     return phi_a, d_phi_h, phi_a_prime, energy / np.maximum(size, 1e-300)
 
 
 def _assemble(k, background, eta, pieces, *, a_star, a_exit, stress_per_a2,
-              w_l, c_m, c_g) -> SolvedMode:
+              w_l, c_c, c_b, c_g, tied) -> SolvedMode:
     n = eta.size
-    out = {name: np.empty(n) for name in (
-        "phi_a", "phi_h", "phi_a_prime", "phi_h_prime", "delta_m", "v_m",
-        "delta_t", "tau_1", "stress")}
+    names = ("phi_a", "phi_h", "phi_a_prime", "phi_h_prime", "delta_c", "v_c",
+             "delta_t", "tau_1", "delta_b", "v_b", "photon_dipole",
+             "photon_quadrupole", "stress")
+    out = {name: np.empty(n) for name in names}
     # The grid is read in a through the background's own a(eta), at the end
     # points of each phase exactly, so a point on a boundary takes the later
     # phase and the last point the last.
     a_grid = np.minimum(np.asarray(background.a_of_eta(eta), dtype=float), 1.0)
     filled = np.zeros(n, dtype=bool)
     last = len(pieces) - 1
+    extra = (stress_per_a2, w_l, c_c, c_b, c_g, tied)
     for i, (phase, _active, a0, a1, sol) in enumerate(pieces):
         inside = ((a_grid >= a0 * (1 - 1e-14)) & ((a_grid < a1) | (i == last))
                   & ~filled)
@@ -459,12 +508,21 @@ def _assemble(k, background, eta, pieces, *, a_star, a_exit, stress_per_a2,
             continue
         a = np.clip(a_grid[inside], a0, a1)
         state = sol.sol(a)
-        phi_a, d_phi_h, phi_a_prime, _ = _derived(
-            k, background, phase, a, state, stress_per_a2, w_l, c_m, c_g)
+        phi_a, d_phi_h, phi_a_prime, _ = _derived(k, background, phase, a, state, *extra)
         out["phi_a"][inside], out["phi_h"][inside] = phi_a, state[0]
         out["phi_a_prime"][inside], out["phi_h_prime"][inside] = phi_a_prime, d_phi_h
-        out["delta_m"][inside], out["v_m"][inside] = state[1], state[2]
+        out["delta_c"][inside], out["v_c"][inside] = state[1], state[2]
         out["delta_t"][inside], out["tau_1"][inside] = state[3], state[4]
+        out["delta_b"][inside], out["v_b"][inside] = state[5], state[6]
+        if phase == "free":
+            out["photon_dipole"][inside] = state[8]
+            out["photon_quadrupole"][inside] = state[9]
+        elif phase == "tight":
+            out["photon_dipole"][inside] = state[4]
+            out["photon_quadrupole"][inside] = 0.0
+        else:
+            out["photon_dipole"][inside] = np.nan
+            out["photon_quadrupole"][inside] = np.nan
         out["stress"][inside] = (phi_a + state[0]) / phi_a
         filled |= inside
 
@@ -473,7 +531,7 @@ def _assemble(k, background, eta, pieces, *, a_star, a_exit, stress_per_a2,
             if phase == phase_wanted and a0 <= a_wanted <= a1 * (1 + 1e-14):
                 state = sol.sol(min(a_wanted, a1))
                 return state, _derived(k, background, phase, np.array([a_wanted]),
-                                       state[:, None], stress_per_a2, w_l, c_m, c_g)
+                                       state[:, None], *extra)
         return None, None
 
     state_star, derived_star = at("tight", a_star)

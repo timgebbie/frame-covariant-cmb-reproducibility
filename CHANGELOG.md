@@ -5,6 +5,55 @@ All notable changes to this bundle are recorded here. The version policy is in
 
 ## [Unreleased] — v1.4.0 in preparation
 
+### The radiation era, step 3: the baryons' own term, and the registered test
+
+Step 3 of `sec:a3-construction`, and the test registered on 4 November scored
+after it, as registered.
+
+- **The baryons carry their own term in both constraints**
+  (`radiation_era.solve_mode`, `baryons="own"`, the default):
+  - their weight is $W_b=\tfrac43RW_\gamma$, so (152)'s loading and the
+    constraint are one momentum budget;
+  - they move with the photon pair until $\eta_*$, $v_b=\tau_1$ and
+    $\delta_b'=k\tau_1-3\Phi_H'$, and are released there as dust from the
+    pair's velocity;
+  - the CDM is carried separately, and the CDM frame is its velocity.
+
+  Step 2's construction stays as `baryons="dust"`, the null control of (g1).
+- **The energy constraint closes.** The solve never integrates it, and it now
+  holds to $3.5\times10^{-10}$ of its terms at $\eta_*$ at every $k$ and to
+  $5\times10^{-11}$ where the photons leave, where step 2 left it open by up
+  to 3% (D46).
+- **The registered test, scored on F9 and D46:**
+  - (e): on Planck the two frames agree to $7\times10^{-15}$ at every
+    multipole, and D46's spectrum to $1.5\times10^{-15}$ of its maximum;
+  - (f): the first maximum of $D_\ell$ is at 205.5, against $206\pm6$. By the
+    shared prominence rule the maxima stand at $\ell=210$, 480 and 720, with
+    the first interior minimum at 360, between 300 and 900. CAMB's fall on the
+    same multipoles;
+  - (g1): unchanged, $2.6\times10^{-11}$; (g2): Einstein–de Sitter and ΛCDM
+    are bit-identical to steps 1 and 2.
+- **F9 at step 3, Planck:**
+  - relative to $\ell=30$ the heights are within 6.4% of CAMB's at the three
+    maxima, with an rms difference of 6.2% over $30\le\ell\le990$ and 15% at
+    most, at $\ell=840$ in the damping tail;
+  - below $\ell\simeq30$ the curve lies within 1.7% of CAMB's shape;
+  - the baryons' own term raised the heights by up to 30% from step 2's.
+- **Recorded beside the test (D46):**
+  - halving $\eta_i$ moves $D_\ell$ by $1.6\times10^{-5}$ of its maximum,
+    against the registered $10^{-4}$;
+  - the photons' anisotropic stress moves $D_\ell$ by 1.3% of its maximum;
+  - $(\Phi_A+\Phi_H)/\Phi_A$ after $\eta_*$ outside the horizon has its
+    extremum at $-0.0432$ at $1.63\eta_*$, against $-0.042$ near $1.6\eta_*$
+    from the two-fluid potential with decoupling taken instantaneous;
+  - the dipole in the constraint tends to the matter era's
+    $-(k\eta/3)\Phi_A$, at 1.154, 1.057 and 1.024 times it at 3, 10 and 30
+    $\eta_*$;
+  - the solved late-time transfer stands within 12% of (J.5) from $k=0.1$ to
+    1500, now that the baryons do not cluster before $\eta_*$.
+- F9's note in panel (b) sits in the upper left, clear of the Planck curve's
+  second and third peaks.
+
 ### The radiation era, step 2: the potential solved
 
 Step 2 of `sec:a3-construction`: on a background with radiation, each mode's

@@ -1,4 +1,4 @@
-r"""Step 2 of sec:a3-construction: the potential solved with the matter and the photons.
+r"""Steps 2 and 3 of sec:a3-construction: the potential solved with the matter and the photons.
 
 Every number asserted here is a statement about physics the solve must
 reproduce, measured against something the solve does not use: Kodama and
@@ -64,7 +64,8 @@ def test_the_start_lies_on_both_constraints(planck):
     """T-194: the start is the growing mode on the momentum AND the energy constraint."""
     bg, eta_i, _ = planck
     for k in (1e-3, 15.0, K_MAX):
-        phi_h, d_m, v, d_t, tau = growing_mode(k, bg, eta_i, 1.0)
+        phi_h, d_m, v, d_t, tau, d_b, v_b = growing_mode(k, bg, eta_i, 1.0)
+        assert (d_b, v_b) == (d_m, v)          # adiabatic: the baryons with the CDM
         a = float(bg.a_of_eta(eta_i))
         h = float(bg.conformal_hubble(a))
         w_m, w_g = float(matter_weight(bg, a)), float(photon_weight(bg, a))
@@ -147,7 +148,7 @@ def test_g1_the_solve_is_d_over_a_where_omega_r_vanishes(background):
     eta = np.linspace(eta_i, background.eta_0, 41)
     reference = _heath_d_over_a(background, eta)
     for k in (0.05, 300.0):
-        m = _solve(background, eta_i, float(rec.eta_star), k, eta=eta)
+        m = _solve(background, eta_i, float(rec.eta_star), k, eta=eta, baryons="dust")
         assert np.max(np.abs(m.phi_a - reference)) < 1e-10
 
 
@@ -166,21 +167,35 @@ def test_g2_the_wiring_cannot_move_a_background_without_radiation(background):
         assert np.array_equal(a.shift.v, b.shift.v)
 
 
-def test_the_energy_constraint_closes_without_the_baryon_loading(planck):
-    """The solve is consistent: with R -> 0 the energy constraint holds to 1e-9.
+def test_the_energy_constraint_closes_with_the_baryons_own_term(planck):
+    """Step 3: with the baryons' own term the energy constraint holds to 1e-9 at every k.
 
-    With R the step-2 system is not closed --- the photons' momentum given to
-    the baryons is not in the constraint, where they move with the CDM --- and
-    the residual is the baryons' own term, which step 3 adds. Asserted, so the
-    step that removes it has to say so.
+    Step 2's construction, the baryons moving with the CDM in the constraint
+    while (152) loads the photons with them, leaves the momentum the photons
+    give the baryons out of the constraint, and its residual is the baryons'
+    term; with the loading removed it closes too. Both are asserted, so the
+    construction that would reopen the gap has to say so.
     """
     bg, eta_i, eta_star = planck
-    for k in (1.0, 30.0, 300.0):
-        bare = _solve(bg, eta_i, eta_star, k, omega_b_h2=1e-12)
-        assert abs(bare.energy_residual_star) < 1e-9
-        assert abs(bare.energy_residual_exit) < 1e-9
-    loaded = _solve(bg, eta_i, eta_star, 30.0)
-    assert abs(loaded.energy_residual_star) > 1e-3
+    for k in (1.0, 30.0, 300.0, 1000.0):
+        own = _solve(bg, eta_i, eta_star, k)
+        assert abs(own.energy_residual_star) < 1e-9
+        assert abs(own.energy_residual_exit) < 1e-9
+    dust = _solve(bg, eta_i, eta_star, 30.0, baryons="dust")
+    assert abs(dust.energy_residual_star) > 1e-3
+    bare = _solve(bg, eta_i, eta_star, 30.0, baryons="dust", omega_b_h2=1e-12)
+    assert abs(bare.energy_residual_star) < 1e-9
+
+
+def test_the_baryons_are_tied_before_eta_star_and_dust_after(planck):
+    """Before eta_* the baryons move with the photon pair; after it they are released."""
+    bg, eta_i, eta_star = planck
+    eta = np.linspace(eta_i, bg.eta_0, 801)
+    m = _solve(bg, eta_i, eta_star, 100.0, eta=eta)
+    before, after = eta < eta_star, eta > 1.5 * eta_star
+    assert np.max(np.abs(m.v_b[before] - m.tau_1[before])) < 1e-9 * np.max(np.abs(m.tau_1))
+    assert np.max(np.abs(m.delta_b[before] - 3 * m.delta_t[before])) < 1e-9
+    assert np.max(np.abs(m.v_b[after] - m.tau_1[after])) > 1e-2 * np.max(np.abs(m.tau_1))
 
 
 def test_the_energy_constraint_sees_the_photons_stress(planck):
@@ -188,12 +203,49 @@ def test_the_energy_constraint_sees_the_photons_stress(planck):
     bg, eta_i, eta_star = planck
     eta = np.linspace(eta_i, bg.eta_0, 801)   # stress_max is read on the grid
     for k in (1.0, 10.0):
-        with_stress = _solve(bg, eta_i, eta_star, k, eta=eta, omega_b_h2=1e-12)
-        without = _solve(bg, eta_i, eta_star, k, eta=eta, omega_b_h2=1e-12,
-                         anisotropic_stress=False)
+        with_stress = _solve(bg, eta_i, eta_star, k, eta=eta)
+        without = _solve(bg, eta_i, eta_star, k, eta=eta, anisotropic_stress=False)
         assert abs(with_stress.energy_residual_exit) < 1e-9
         assert abs(without.energy_residual_exit) > 1e-5
         assert 0.03 < with_stress.stress_max < 0.05
+
+
+def test_the_photons_stress_has_the_sign_no_phase_can_hide(planck):
+    """After decoupling, outside the horizon, (Phi_A + Phi_H)/Phi_A is negative.
+
+    The free-streaming quadrupole grows against the potential's gradient, so
+    the stress makes Phi_A + Phi_H opposite to Phi_A whichever phase the
+    hierarchy is carried in. The two-fluid potential with decoupling taken
+    instantaneous puts the extremum at -0.042 near 1.6 eta_*; held to 20%.
+    """
+    bg, eta_i, eta_star = planck
+    eta = np.linspace(eta_star, bg.eta_0, 4001)
+    m = _solve(bg, eta_i, eta_star, 1e-3, eta=eta)
+    ratio = (m.phi_a + m.phi_h) / m.phi_a
+    at = int(np.argmin(ratio))
+    assert ratio.max() <= 1e-12
+    assert -0.042 * 1.2 < ratio[at] < -0.042 * 0.8
+    assert 1.3 < eta[at] / eta_star < 1.9
+
+
+def test_the_dipole_after_decoupling_tends_to_the_matter_era_velocity(planck):
+    """Outside the horizon the photons' dipole tends to -(k eta/3) Phi_A.
+
+    With the rank-0 and rank-1 rows in one phase the dipole moves as
+    -k(dT + Phi_A) = -k Phi_A/3 in the matter era; with them in reversed
+    phases it would move five times as fast.
+    """
+    bg, eta_i, eta_star = planck
+    k = 1e-3
+    eta = np.linspace(eta_star, bg.eta_0, 4001)
+    m = _solve(bg, eta_i, eta_star, k, eta=eta)
+    ratios = []
+    for times in (3.0, 10.0, 30.0):
+        e = times * eta_star
+        ratios.append(np.interp(e, eta, m.photon_dipole)
+                      / (-(k * e / 3.0) * np.interp(e, eta, m.phi_a)))
+    assert ratios[0] > ratios[1] > ratios[2] > 1.0
+    assert ratios[2] < 1.03
 
 
 def test_the_photons_leave_the_constraint_only_where_they_may(planck):

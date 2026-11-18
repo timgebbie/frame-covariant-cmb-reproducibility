@@ -211,7 +211,7 @@ class TwoFrameEnvironment:
     #: $\eta_i$ with $a_i\le10^{-3}a_{\rm eq}$ and $k_{\max}\eta_i\le10^{-2}$, on
     #: the adiabatic growing mode. 0 for the other two starts, which do not use it.
     eta_i: float = 0.0
-    #: **`"solved"`: step 2 of sec:a3-construction.** Each mode's potential is
+    #: **`"solved"`: sec:a3-construction, steps 2 and 3.** Each mode's potential is
     #: integrated with the matter and the photons from `eta_i`
     #: (`radiation_era.solve_mode`), and that one $\Phi(k,\eta)$ drives the
     #: oscillator and fills the Sachs--Wolfe and integrated slots; (J.5) is not
@@ -358,7 +358,7 @@ def build_environment(
              if str(acoustic_start) == "radiation era" else 0.0)
     if str(potential) not in ("released", "solved"):
         raise ValueError("potential is 'released' (D/a with (J.5)) or 'solved' "
-                         "(sec:a3-construction, step 2)")
+                         "(sec:a3-construction)")
     if str(potential) == "solved" and str(acoustic_start) != "radiation era":
         raise ValueError("the solved potential starts every mode at the one "
                          "eta_i: it needs acoustic_start='radiation era'")
@@ -403,7 +403,7 @@ class ModeHistory:
     r"""One mode on the line-of-sight grid: what **both** frames are built from.
 
     The potentials and their derivatives, the photon pair the slots read, and
-    the shift to the CDM frame. `solved` is the step-2 solve when the potential
+    the shift to the CDM frame. `solved` is the solve when the potential
     was solved for this mode, and `None` on the released path.
     """
 
@@ -455,7 +455,7 @@ def mode_history(k_com: float, env: TwoFrameEnvironment,
         TAU_CONTINUATION, _continue_by_free_streaming)
 
     if solves_potential(env):
-        # **Step 2 of sec:a3-construction.** The potential, the matter and the
+        # **sec:a3-construction.** The potential, the CDM, the baryons and the
         # photons are one integration from eta_i; the pair the slots read is
         # that integration's to eta_* and continues beside the hierarchy to
         # eta_couple, as at step 1. No (J.5): the solve carries its own transfer.
@@ -469,8 +469,8 @@ def mode_history(k_com: float, env: TwoFrameEnvironment,
         # The CDM frame is the CDM's own velocity from the same solve, with
         # v' from its defining condition, never from a spline of v.
         shift = FrameShift(
-            eta=eta, v=mode.v_m,
-            v_prime=-env.conformal_hubble * mode.v_m - k * mode.phi_a,
+            eta=eta, v=mode.v_c,
+            v_prime=-env.conformal_hubble * mode.v_c - k * mode.phi_a,
             k_com=k, conformal_H=env.conformal_hubble, target="cdm")
         return ModeHistory(
             phi_a=mode.phi_a, phi_h=mode.phi_h, phi_a_prime=mode.phi_a_prime,
