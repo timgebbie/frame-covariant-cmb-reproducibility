@@ -129,7 +129,7 @@ def _env(index: int, n_eta: int | None = None):
         omega_r=bg.omega_r, omega_b_h2=omega_b_h2,
         transfer_gamma=shape_parameter(bg.omega_m, h), hubble_h=h,
         f_2=F2_DEFAULT, line_of_sight_weight="printed", n_eta=n_eta,
-        acoustic_start="radiation era")
+        acoustic_start="radiation era", potential="solved")
 
 
 def _grid(env) -> np.ndarray:

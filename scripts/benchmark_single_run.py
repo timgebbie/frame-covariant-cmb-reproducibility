@@ -52,10 +52,12 @@ from functions.spectra.integral_solution import required_multipoles  # noqa: E40
 from functions.spectra.pipeline import (  # noqa: E402
     primordial_power, required_k_points)
 from functions.spectra.transfer import shape_parameter  # noqa: E402
+from functions.spectra.line_of_sight import kernel_set, three_slots  # noqa: E402
 from functions.spectra.two_frame import (  # noqa: E402
     build_environment,
     coefficient_sets,
-    transfer_by_rank,
+    line_of_sight_inputs,
+    mode_history,
 )
 
 #: The release configuration, not a reduced one. A benchmark run on a grid
@@ -115,7 +117,8 @@ def main() -> int:
             K_MAX, omega_m=background.omega_m,
             omega_lambda=background.omega_lambda, omega_r=background.omega_r,
             omega_b_h2=PLANCK_OMEGA_B_H2, transfer_gamma=gamma,
-            hubble_h=PLANCK_H, f_2=F2_DEFAULT, line_of_sight_weight="printed")
+            hubble_h=PLANCK_H, f_2=F2_DEFAULT, line_of_sight_weight="printed",
+            acoustic_start="radiation era", potential="solved")
 
     # **Derived here and not at module scope, because the rule needs the
     # environment.** `required_k_points` resolves the j_ell^2 period from the
@@ -134,19 +137,30 @@ def main() -> int:
             ell_max=int(needed.max()), ells=needed,
             x_max=float(K_MAX * (env.background.eta_0 - env.eta[0])) + 20.0)
 
-    coefficient_time = 0.0
-    projection_time = 0.0
+    # **The released path, retargeted 2026-11-18.** One mode is the potential
+    # solved through the radiation era with the matter and the photons
+    # (sec:a3-construction), the frame's coefficients built from it, and the
+    # three frame-invariant slots projected along the line of sight: F9's
+    # computation in the CDM frame. Until then this timed (102)'s path, which
+    # v1.3.0 replaced.
+    solve_time = coefficient_time = projection_time = 0.0
+    eta_0 = float(env.background.eta_0)
     transfer = np.zeros((ELLS.size, K_COM.size))
     with stage("per-mode loop (total)",
-               "the acoustic solve and the line-of-sight projection, once per k"):
+               "the radiation-era solve, the coefficients and the projection, once per k"):
         for j, k in enumerate(K_COM):
             t0 = time.perf_counter()
-            _, cdm = coefficient_sets(float(k), env, source="as built")
+            history = mode_history(float(k), env)
             t1 = time.perf_counter()
-            transfer[:, j] = transfer_by_rank(ELLS, float(k), cdm, env, table)[-1]
+            _, cdm = coefficient_sets(float(k), env, source="paper 1", history=history)
+            sources, damping = line_of_sight_inputs(float(k), cdm, env)
             t2 = time.perf_counter()
-            coefficient_time += t1 - t0
-            projection_time += t2 - t1
+            kern = kernel_set(ELLS, float(k), eta=env.eta, eta_0=eta_0, table=table)
+            transfer[:, j] = three_slots(kern, sources).transfer(damping)
+            t3 = time.perf_counter()
+            solve_time += t1 - t0
+            coefficient_time += t2 - t1
+            projection_time += t3 - t2
 
     with stage("primordial power", "P(k) ~ k^{n_s-4}, one array"):
         power = primordial_power(K_COM, n_s=PLANCK_N_S, amplitude=1.0)
@@ -171,10 +185,10 @@ def main() -> int:
         print(f"  {name:34s} {seconds:9.2f} {share:6.1f}%")
     print(f"  {'':34s} {'-' * 9} {'-' * 7}")
     print(f"  {'TOTAL':34s} {total:9.2f} {100.0:6.1f}%")
-    print(f"\n  inside the per-mode loop: coefficients {coefficient_time:.2f} s, "
-          f"projection {projection_time:.2f} s")
-    print(f"  per mode: {1000 * (coefficient_time + projection_time) / K_COM.size:.1f} ms "
-          f"over {K_COM.size} modes")
+    print(f"\n  inside the per-mode loop: the solve {solve_time:.2f} s, coefficients "
+          f"{coefficient_time:.2f} s, projection {projection_time:.2f} s")
+    per_mode = solve_time + coefficient_time + projection_time
+    print(f"  per mode: {1000 * per_mode / K_COM.size:.1f} ms over {K_COM.size} modes")
 
     out = ROOT / "outputs" / "benchmark-single-run.csv"
     with out.open("w", encoding="utf-8", newline="\n") as fh:
@@ -188,6 +202,8 @@ def main() -> int:
         for name, seconds, share, why in rows:
             fh.write(f'"{name}",{seconds:.4f},{share:.2f},"{why}"\n')
         fh.write(f'"TOTAL",{total:.4f},100.00,""\n')
+        fh.write(f'"  of which: the radiation-era solve",{solve_time:.4f},'
+                 f'{100 * solve_time / total:.2f},"inside the per-mode loop"\n')
         fh.write(f'"  of which: coefficients",{coefficient_time:.4f},'
                  f'{100 * coefficient_time / total:.2f},"inside the per-mode loop"\n')
         fh.write(f'"  of which: projection",{projection_time:.4f},'

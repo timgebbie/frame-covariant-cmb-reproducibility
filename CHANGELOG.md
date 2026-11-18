@@ -5,6 +5,33 @@ All notable changes to this bundle are recorded here. The version policy is in
 
 ## [Unreleased] — v1.4.0 in preparation
 
+### D44 and D45 on the solved potential, and what one spectrum costs now
+
+- **D44 and D45 read the solved potential** (`potential="solved"`), and D44's
+  check (b) compares the integrated source with each mode's own
+  $-(\Phi_A'-\Phi_H')$ from `mode_history`, the one place a mode's dynamics
+  are computed, where it read the released potential times $T(k)$.
+- **D44:** the three conditions hold to $3.0\times10^{-13}$ and (b) to
+  $4\times10^{-16}$ on all three backgrounds, and the slots give one $C_\ell$
+  in both frames to $3.9\times10^{-14}$. **On Planck the assembly carries the
+  series:** maxima of $D_\ell$ by the shared prominence rule at
+  $\ell=210$, 480, 705 and 990 with the first trough at 375, the first maximum
+  at $0.77\thinspace\ell_A$, where on the released potential it carried a single
+  maximum at $0.71\thinspace\ell_A$ and no trough. The integrated slot's
+  auto-spectrum is at most 0.38 of $C_\ell$, at the quadrupole.
+- **D45:** the sum-back residual falls by 4.00 with the step on ΛCDM and Planck
+  in both frames, so it is the direct integral's quadrature; $\int\mathcal V$
+  on Planck is 0.99983 against 1 and also falls by four. At the first maximum
+  twice the cross-spectrum of the Sachs–Wolfe and integrated slots adds 21% of
+  $C_\ell$, in phase; from $\ell=2$ to 10 it is $-0.38$ to $-0.27$. The maxima
+  are the same with and without the integrated slot.
+- **Compute cost, re-measured on the released path** (README, *Compute cost*):
+  `benchmark_single_run.py` times the radiation-era solve, the coefficients and
+  the three slots per mode in the CDM frame, where it had timed (102)'s path.
+  One spectrum, 4480 modes to $k=1500$ and 39 multipoles to 990, takes 2152 s
+  on one core: 479 ms per mode, 77.5% of it the solve and 21.2% the
+  projection.
+
 ### F11: the formation surface with the radiation era solved, v1.4.0's lead figure
 
 - `scripts/figure_f10_formation_surface.py --radiation-era` draws F10's two

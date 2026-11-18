@@ -1,15 +1,16 @@
 # one angular correlation function, all the physics, no tests
-# CPython 3.13.16 on Linux x86_64, numpy 2.5.3, 2026-10-27
+# CPython 3.13.18 on Linux x86_64, numpy 2.5.3, 2026-11-18
 # 39 multipoles to 990, 4480 modes to 1500
 stage,seconds,share_percent,why
-"background",0.0617,0.00,"one adaptive quadrature per panel; independent of k and l"
-"recombination history",0.4533,0.02,"a stiff Radau solve for Peebles, then the visibility and opacity"
-"environment and transfer function",0.5784,0.03,"the eta grid, the potentials and the Bond-Efstathiou shape"
-"Bessel table",6.3986,0.29,"j_l(x) tabulated once, 12 samples per oscillation, reused by every mode"
-"per-mode loop (total)",2200.5676,99.66,"the acoustic solve and the line-of-sight projection, once per k"
+"background",0.0353,0.00,"one adaptive quadrature per panel; independent of k and l"
+"recombination history",0.4406,0.02,"a stiff Radau solve for Peebles, then the visibility and opacity"
+"environment and transfer function",0.4627,0.02,"the eta grid, the potentials and the Bond-Efstathiou shape"
+"Bessel table",6.9139,0.32,"j_l(x) tabulated once, 12 samples per oscillation, reused by every mode"
+"per-mode loop (total)",2143.8226,99.63,"the radiation-era solve, the coefficients and the projection, once per k"
 "primordial power",0.0001,0.00,"P(k) ~ k^{n_s-4}, one array"
-"k quadrature to C_l",0.0095,0.00,"one integral over k per multipole against the stored transfer"
-"C_l -> C(theta)",0.0140,0.00,"Legendre sum at 721 angles; the deliverable the reader asked for"
-"TOTAL",2208.0836,100.00,""
-"  of which: coefficients",1311.1717,59.38,"inside the per-mode loop"
-"  of which: projection",889.3817,40.28,"inside the per-mode loop"
+"k quadrature to C_l",0.0068,0.00,"one integral over k per multipole against the stored transfer"
+"C_l -> C(theta)",0.0063,0.00,"Legendre sum at 721 angles; the deliverable the reader asked for"
+"TOTAL",2151.6886,100.00,""
+"  of which: the radiation-era solve",1668.5805,77.55,"inside the per-mode loop"
+"  of which: coefficients",18.0333,0.84,"inside the per-mode loop"
+"  of which: projection",457.1949,21.25,"inside the per-mode loop"

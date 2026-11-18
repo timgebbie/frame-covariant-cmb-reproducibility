@@ -94,7 +94,7 @@ from functions.spectra.pipeline import (  # noqa: E402
     primordial_power, required_k_points)
 from functions.spectra.transfer import shape_parameter  # noqa: E402
 from functions.spectra.two_frame import (  # noqa: E402
-    build_environment, coefficient_sets, line_of_sight_inputs,
+    build_environment, coefficient_sets, line_of_sight_inputs, mode_history,
     transfer_by_rank)
 from make_model_table import MODELS, row  # noqa: E402
 
@@ -125,7 +125,7 @@ def _env(index: int, k_max: float = K_MAX):
         omega_r=bg.omega_r, omega_b_h2=omega_b_h2,
         transfer_gamma=shape_parameter(bg.omega_m, h), hubble_h=h,
         f_2=F2_DEFAULT, line_of_sight_weight="printed",
-        acoustic_start="radiation era")
+        acoustic_start="radiation era", potential="solved")
 
 
 def _rel(a, b, mask=slice(None)) -> float:
@@ -142,7 +142,8 @@ def conditions(index: int, choice: str) -> dict[str, float]:
                          "integrated source vs ISW"), 0.0)
     with coefficients.rank_one_source(choice):
         for k in CONDITION_K:
-            n, c = coefficient_sets(float(k), env, source=choice)
+            history = mode_history(float(k), env)
+            n, c = coefficient_sets(float(k), env, source=choice, history=history)
             gn, _ = gravitational_rank_one(n)
             gc, _ = gravitational_rank_one(c)
             c2p_n = np.zeros_like(env.eta) if n.c2_prime is None else n.c2_prime
@@ -154,8 +155,9 @@ def conditions(index: int, choice: str) -> dict[str, float]:
             out["gravitational"] = max(out["gravitational"], _rel(
                 gn - c2p_n, gc - c.c2_prime, on))
             s, _ = line_of_sight_inputs(float(k), n, env)
-            isw = -env.transfer_at(float(k)) * (
-                np.asarray(env.phi_a_prime) - np.asarray(env.phi_h_prime))
+            # The mode's own potential: on PLANCK the solved one, elsewhere
+            # the released one times T(k), from the one place both are built.
+            isw = -(np.asarray(history.phi_a_prime) - np.asarray(history.phi_h_prime))
             src = s.c0 - s.c1_grav_prime + s.c2_second
             out["integrated source vs ISW"] = max(
                 out["integrated source vs ISW"],

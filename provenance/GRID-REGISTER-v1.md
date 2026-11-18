@@ -314,7 +314,7 @@ which is far inside the band 460 already carries.
 
 ### `k_com` — the k grid of D44's spectra
 
-`scripts/diagnostic_d44_the_line_of_sight_in_invariant_slots.py:178`, `np.linspace`
+`scripts/diagnostic_d44_the_line_of_sight_in_invariant_slots.py:180`, `np.linspace`
 
 F9's grid, from the same `required_k_points` per background (T-56), so
 the two instruments sample C_l alike and `required_k_points` raises where the
@@ -464,7 +464,7 @@ under-resolved grid produces.
 
 ### `K_COM` — the k grid the cost benchmark is measured on
 
-`scripts/benchmark_single_run.py:126`, `np.linspace`
+`scripts/benchmark_single_run.py:129`, `np.linspace`
 
 The release grid, matching F9 exactly. A benchmark run on a grid nobody ships measures a calculation nobody performs.
 
@@ -678,13 +678,13 @@ well conditioned.
 
 ### `ELLS` — the multipoles the cost benchmark projects onto
 
-`scripts/benchmark_single_run.py:81`, `np.arange`
+`scripts/benchmark_single_run.py:83`, `np.arange`
 
 The release selection, matching F9. The per-mode projection cost scales with how many multipoles are asked for, so this is the number the 98.3% share is a share of.
 
 ### `THETA_DEG` — the angular abscissa the benchmark transforms onto
 
-`scripts/benchmark_single_run.py:83`, `np.linspace`
+`scripts/benchmark_single_run.py:85`, `np.linspace`
 
 `linspace(0, 180, 721)`, a quarter-degree abscissa matching F4. It is in the benchmark because C(theta) is the deliverable a reader asks for; it costs 0.01 s, which is the point.
 

@@ -401,14 +401,20 @@ The assembly is built with `RANK_ONE_SOURCE = "paper 1"` in `coefficients.py`
 and `three_slots` in `functions/spectra/line_of_sight.py`. Since v1.4.0 that
 is the module default, and the antecedent's (102) path names `"as built"`
 where its coefficients are built. D44 scores the assembly
-on three backgrounds: its three conditions hold to $3.3\times10^{-13}$, and its
-slots give one $C_\ell$ in the Newtonian and CDM frames to $4\times10^{-14}$.
-D45 sums the slots back to the direct integral they rearrange: the difference
-falls by 4.00 when the step halves, so it is the direct integral's quadrature
-and the slot weights stand. On the line-of-sight grid $\int\mathcal V=0.99914$
-on Planck, where it should be 1, because the visibility and the optical depth
-are interpolated separately (T-191); the slots move by at most
-$8\times10^{-4}$ when $\mathcal V$ is replaced by $W'$.
+on three backgrounds, on the solved potential since 18 November: its three
+conditions hold to $3.0\times10^{-13}$, the integrated source equals each
+mode's own $-(\Phi_A'-\Phi_H')$ to $4\times10^{-16}$, and the slots give one
+$C_\ell$ in the Newtonian and CDM frames to $4\times10^{-14}$. On Planck the
+assembly now carries the series: maxima of $D_\ell$ by the shared prominence
+rule at $\ell=210$, 480, 705 and 990, with the first trough at 375, where on the
+released potential it carried a single maximum. D45 sums the slots back to the
+direct integral they rearrange: the difference falls by 4.00 when the step
+halves, on ΛCDM and Planck in both frames, so it is the direct integral's
+quadrature and the slot weights stand. Since T-191 the visibility and the
+optical depth come from one $\kappa$ on the line-of-sight grid:
+$\int\mathcal V=0.99983$ on Planck against $W(\eta_0)-W(\eta_{\rm start})=1$,
+a quadrature residual that falls by four with the step, and the slots move by
+at most $3\times10^{-3}$ when $\mathcal V$ is replaced by $W'$.
 
 v1.3.0 releases this assembly, with the first maximum on `PLANCK_MODEL` at
 $\ell=188.5$, $0.7067\thinspace\ell_A$. At v1.3.0 the potential both slots read
@@ -464,7 +470,7 @@ Working and checked:
   arithmetic (D2);
 - the recombination history from Peebles' three-level atom, the default
   since v1.1.0 (S22);
-- the frame conditions with Paper 1's source, to $3.3\times10^{-13}$, and one
+- the frame conditions with Paper 1's source, to $3.0\times10^{-13}$, and one
   $C_\ell$ in both frames, to $4\times10^{-14}$ (D44, F9);
 - the slots summed back to the integral they rearrange, with the residual
   in the direct integral's quadrature (D45);
@@ -623,7 +629,7 @@ and on Planck the solved potential.
 
 ### Artefacts
 
-Ten figures and twenty-nine diagnostics, each aimed at one physical question.
+Eleven figures and twenty-nine diagnostics, each aimed at one physical question.
 A figure's suffix is the release in which it was first drawn, so F1, F3 and F4
 read `v1.0.0`, and F9, first drawn at v1.2.0, was redrawn from the v1.3.0
 assembly under the same name. The instruments after D30, among them D44 and
@@ -686,32 +692,39 @@ from all the physics at a fixed parameter set, excluding the tests, the
 figures and the manifests, which measure what it costs to check the bundle
 rather than to run it.
 
-*Snapshot: CPython 3.13 on Linux x86_64, numpy 2.5, 2026-10-15, before the
-v1.3.0 assembly; 39 multipoles to $\ell=990$, 1433 modes to $k=1500$,
-`PLANCK_MODEL`. A benchmark is a property of a machine, so it is dated; run
-the script to replace it.*
+*Snapshot: CPython 3.13 on Linux x86_64 (two cores), numpy 2.5, 2026-11-18,
+on the released path of v1.4.0-dev: each mode's potential solved through the
+radiation era, the frame's coefficients built from it, and the three
+frame-invariant slots projected, in the CDM frame; 39 multipoles to
+$\ell=990$, 4480 modes to $k=1500$, `PLANCK_MODEL`. A benchmark is a property
+of a machine, so it is dated; run the script to replace it.*
 
 | stage | seconds | share | why |
 |---|---:|---:|---|
-| background | 0.05 | 0.0% | adaptive quadrature per panel; independent of k and ℓ |
-| recombination history | 0.31 | 0.1% | one stiff Radau solve, then the visibility and opacity |
-| environment and transfer function | 0.44 | 0.1% | the η grid, the potentials, the Bond–Efstathiou shape |
-| Bessel table | 6.85 | 1.5% | j_ℓ(x) tabulated once and reused by every mode |
-| per-mode loop | 452.47 | 98.3% | the acoustic solve and the line-of-sight projection, once per k |
-| &nbsp;&nbsp;*of which* coefficients | *239.22* | *52.0%* | solving (152)/(153) and assembling C₀, C₁, C₂ |
-| &nbsp;&nbsp;*of which* projection | *213.24* | *46.3%* | ∫dη against j_ℓ for every ℓ |
+| background | 0.04 | 0.0% | adaptive quadrature per panel; independent of k and ℓ |
+| recombination history | 0.44 | 0.0% | a stiff Radau solve for Peebles, then the visibility and opacity |
+| environment and transfer function | 0.46 | 0.0% | the η grid, the released potentials, the Bond–Efstathiou shape |
+| Bessel table | 6.91 | 0.3% | j_ℓ(x) tabulated once and reused by every mode |
+| per-mode loop | 2143.82 | 99.6% | the radiation-era solve, the coefficients and the projection, once per k |
+| &nbsp;&nbsp;*of which* the radiation-era solve | *1668.58* | *77.5%* | the potential with the CDM, the baryons and the photons, from η_i |
+| &nbsp;&nbsp;*of which* coefficients | *18.03* | *0.8%* | assembling C₀, C₁, C₂ in the frame from the solved mode |
+| &nbsp;&nbsp;*of which* projection | *457.19* | *21.2%* | the three slots, ∫dη against j_ℓ for every ℓ |
 | primordial power | 0.00 | 0.0% | P(k) ~ k^(n_s−4), one array |
 | k quadrature to C_ℓ | 0.01 | 0.0% | one integral per multipole against the stored transfer |
 | C_ℓ → C(θ) | 0.01 | 0.0% | Legendre sum at 721 angles |
-| total | 460.13 | 100% | 316 ms per mode, over 1433 modes |
+| total | 2151.69 | 100% | 479 ms per mode, over 4480 modes |
 
-The cost is in the per-mode loop, split almost evenly between solving the
-oscillator and projecting it along the line of sight, and linear in the number
-of modes, since each mode is independent. Recombination is 0.1%, and
+The cost is in the per-mode loop, and three quarters of it is now the
+radiation-era solve, which v1.3.0 did not have. The previous snapshot, on
+2026-10-15 and on (102)'s path, measured 316 ms per mode over 1433 modes: one
+spectrum now takes 36 minutes where it took 8, from more modes (the $k$ grid
+derived since T-56) and a dearer mode. The projection is a fifth, and assembling the
+coefficients from the solved mode is under 1%. It is linear in the number of
+modes, since each mode is independent. Recombination is 0.02%, and
 $C(\theta)$ itself takes 0.01 seconds.
 
-Decision S24 was argued on this measurement. $A_s$ and $n_s$ enter only the
-last two rows, which cost 0.01 s against the 452 s above them, so a sampler
+Decision S24 was argued on the 2026-10-15 measurement. $A_s$ and $n_s$ enter
+only the last two rows, which cost 0.01 s against the 2144 s above them, so a sampler
 that re-runs the whole chain for each proposal recomputes what it could store.
 The v1.5.0 interface therefore exposes $T_\ell(k)$ and its grid as a product,
 not only $C_\ell(\theta)$. Decision **S30** defers run-time optimisation to a
@@ -778,8 +791,9 @@ their released potential, and so their spectra, do not change with the
 wiring. Einstein–de Sitter is the null control, since A-3 cannot act where
 there is no radiation era. The construction is built, in its three registered
 steps, and the test passes as registered. F11, the formation surface with the
-radiation era solved, is v1.4.0's lead figure; D44 and D45 read the released
-potential until they are recomputed on the solved one.
+radiation era solved, is v1.4.0's lead figure, and D44 and D45 read the
+solved potential: on Planck the assembly carries the series, its maxima at
+$\ell=210$, 480, 705 and 990.
 
 | | what it adds, physically |
 |---|---|
