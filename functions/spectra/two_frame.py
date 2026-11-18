@@ -61,7 +61,7 @@ from functions.spectra.decoupling import (
     RecombinationHistory,
     diffusion_scale,
 )
-from functions.spectra.frame_transform import cdm_frame_shift
+from functions.spectra.frame_transform import FrameShift, cdm_frame_shift
 from functions.spectra.integral_solution import integral_solution
 from functions.spectra.pipeline import N_ETA_FLOOR, required_n_eta
 from functions.spectra.potentials import (
@@ -69,16 +69,20 @@ from functions.spectra.potentials import (
     potential_derivative,
     potentials,
 )
+from functions.spectra.radiation_era import SolvedMode, solve_mode
 from functions.spectra.transfer import (
     ANNALS_II_GAMMA,
     transfer_function,
 )
 
 __all__ = [
+    "ModeHistory",
+    "SOLVED_PHI_I",
     "TwoFrameEnvironment",
     "build_environment",
     "cl_cross",
     "coefficient_sets",
+    "mode_history",
     "transfer_by_rank",
 ]
 
@@ -91,6 +95,11 @@ TIGHT_COUPLING_FACTOR = ACOUSTIC_TIGHT_COUPLING_FACTOR
 #: $c/H_0$ in Mpc for $h=1$. The bundle works in units of $c/H_0$, the fit of
 #: (J.5) works in Mpc$^{-1}$, and this is the only place the two meet.
 HUBBLE_RADIUS_MPC = 2997.92458
+
+#: $\Phi_i$ for the solved potential: the primordial value, $\tfrac{10}9$ of the
+#: matter-era $k\to0$ value the released potential is normalised to, so the
+#: two potentials carry one amplitude and step 2 is scored against step 1 at it.
+SOLVED_PHI_I = 10.0 / 9.0
 
 @dataclass(frozen=True)
 class TwoFrameEnvironment:
@@ -202,6 +211,15 @@ class TwoFrameEnvironment:
     #: $\eta_i$ with $a_i\le10^{-3}a_{\rm eq}$ and $k_{\max}\eta_i\le10^{-2}$, on
     #: the adiabatic growing mode. 0 for the other two starts, which do not use it.
     eta_i: float = 0.0
+    #: **`"solved"`: step 2 of sec:a3-construction.** Each mode's potential is
+    #: integrated with the matter and the photons from `eta_i`
+    #: (`radiation_era.solve_mode`), and that one $\Phi(k,\eta)$ drives the
+    #: oscillator and fills the Sachs--Wolfe and integrated slots; (J.5) is not
+    #: applied to it. Only on a background with radiation: where $\Omega_r=0$
+    #: the released potential is kept, which is the restated (g2). Under
+    #: `"solved"` the `phi_*` fields above stay the released potential, and a
+    #: mode's own is `mode_history(k, env)`'s.
+    potential: str = "released"
     #: The tabulated $r_s(\eta)$ from the big bang, and the single reference
     #: $\Phi_A$ is normalised at. `None` only on an environment built before
     #: these existed, which nothing now does.
@@ -281,6 +299,7 @@ def build_environment(
     line_of_sight_weight: str = "printed",
     acoustic_start: str = "derived",
     recombination_n_eta: int | None = None,
+    potential: str = "released",
 ) -> TwoFrameEnvironment:
     r"""The $k$-independent half: background, recombination, potentials.
 
@@ -337,6 +356,12 @@ def build_environment(
                          "'derived' (S40) or 'z_max' (the control)")
     eta_i = (common_start_eta(background, float(k_max))
              if str(acoustic_start) == "radiation era" else 0.0)
+    if str(potential) not in ("released", "solved"):
+        raise ValueError("potential is 'released' (D/a with (J.5)) or 'solved' "
+                         "(sec:a3-construction, step 2)")
+    if str(potential) == "solved" and str(acoustic_start) != "radiation era":
+        raise ValueError("the solved potential starts every mode at the one "
+                         "eta_i: it needs acoustic_start='radiation era'")
 
     phi_a, phi_h = (potentials(background, eta, constant_below=md_reference)
                     if derived else potentials(background, eta))
@@ -364,7 +389,8 @@ def build_environment(
         visibility=visibility,
         opacity=opacity,
         line_of_sight_weight=str(line_of_sight_weight),
-        acoustic_start=str(acoustic_start), eta_i=float(eta_i), eta_rs=eta_rs,
+        acoustic_start=str(acoustic_start), eta_i=float(eta_i),
+        potential=str(potential), eta_rs=eta_rs,
         r_s_table=r_s_table, md_reference=float(md_reference),
         k_max=float(k_max), transfer_gamma=float(transfer_gamma),
         hubble_h=float(hubble_h), apply_transfer=bool(apply_transfer),
@@ -372,28 +398,84 @@ def build_environment(
     )
 
 
-def coefficient_sets(
-    k_com: float, env: TwoFrameEnvironment, *, source: str,
-) -> tuple[CoefficientSet, CoefficientSet]:
-    r"""`(newtonian, cdm)` at one $k$, from the same acoustic solution.
+@dataclass(frozen=True)
+class ModeHistory:
+    r"""One mode on the line-of-sight grid: what **both** frames are built from.
 
-    **`source` is named at every call**, because the two choices are two
-    different physical statements and neither may be picked up by default:
-    `"paper 1"` is Paper 1's eq:B, which the frame-invariant line of sight is
-    built from; `"as built"` is the antecedent's matching, which (102) and
-    every instrument that measures (102) are built on. It is applied where
-    the sets are built, and the sets carry it from there.
+    The potentials and their derivatives, the photon pair the slots read, and
+    the shift to the CDM frame. `solved` is the step-2 solve when the potential
+    was solved for this mode, and `None` on the released path.
+    """
 
-    **Both frames are built from one integration of the acoustic pair**, which
-    is the point: the frames differ by the frame, not by the dynamics, so a
-    difference between them that came from two separate integrations would be a
-    difference between two integrations.
+    phi_a: np.ndarray
+    phi_h: np.ndarray
+    phi_a_prime: np.ndarray
+    phi_h_prime: np.ndarray
+    delta_t: np.ndarray
+    tau_1: np.ndarray
+    shift: FrameShift
+    solved: SolvedMode | None = None
+
+
+def solves_potential(env: TwoFrameEnvironment) -> bool:
+    r"""Whether `env`'s modes carry the solved potential: `"solved"` and $\Omega_r>0$.
+
+    Where $\Omega_r=0$ the released potential is kept --- the restated (g2) ---
+    so the wiring cannot move those backgrounds.
+    """
+    return env.potential == "solved" and float(env.background.omega_r) > 0.0
+
+
+def mode_history(k_com: float, env: TwoFrameEnvironment,
+                 **solve_options) -> ModeHistory:
+    r"""One mode's potentials, photon pair and CDM velocity on `env.eta`.
+
+    **The one place a mode's dynamics are computed**, so the two frames, the
+    spectrum and every diagnostic that reads a mode's $\Phi$ read the same one.
+    Before this existed the potential a diagnostic read was `env.phi_a` times
+    $T(k)$, a copy of what `coefficient_sets` built --- right while there was
+    one potential, and silently the wrong one once a mode's potential is solved.
+
+    `solve_options` reach `radiation_era.solve_mode` --- a control such as
+    `anisotropic_stress=False` is measured through this one definition rather
+    than through a copy of it --- and are refused where nothing is solved.
 
     Every caller reaches the $\eta$ grid through here, so this is where the grid
     is checked against the $k$ it is being used at --- finding **T-34**.
     """
     env.check_k(k_com)
     eta, eta_star, bg = env.eta, env.eta_star, env.background
+    k = float(k_com)
+    if solve_options and not solves_potential(env):
+        raise ValueError(f"{sorted(solve_options)} configure the solved potential, "
+                         "and this environment carries the released one")
+    eta_couple = min(float(bg.eta_0), TIGHT_COUPLING_FACTOR * eta_star)
+    # Imported at call time: `pipeline` imports this module.
+    from functions.spectra.pipeline import (
+        TAU_CONTINUATION, _continue_by_free_streaming)
+
+    if solves_potential(env):
+        # **Step 2 of sec:a3-construction.** The potential, the matter and the
+        # photons are one integration from eta_i; the pair the slots read is
+        # that integration's to eta_* and continues beside the hierarchy to
+        # eta_couple, as at step 1. No (J.5): the solve carries its own transfer.
+        mode = solve_mode(k, bg, eta, eta_i=env.eta_i, eta_star=float(eta_star),
+                          eta_couple=eta_couple, phi_i=SOLVED_PHI_I,
+                          omega_b_h2=env.omega_b_h2, **solve_options)
+        delta_t, tau_1 = mode.delta_t, mode.tau_1
+        if TAU_CONTINUATION == "free_stream":
+            delta_t, tau_1 = _continue_by_free_streaming(
+                k, eta, eta_couple, delta_t, tau_1)
+        # The CDM frame is the CDM's own velocity from the same solve, with
+        # v' from its defining condition, never from a spline of v.
+        shift = FrameShift(
+            eta=eta, v=mode.v_m,
+            v_prime=-env.conformal_hubble * mode.v_m - k * mode.phi_a,
+            k_com=k, conformal_H=env.conformal_hubble, target="cdm")
+        return ModeHistory(
+            phi_a=mode.phi_a, phi_h=mode.phi_h, phi_a_prime=mode.phi_a_prime,
+            phi_h_prime=mode.phi_h_prime, delta_t=delta_t, tau_1=tau_1,
+            shift=shift, solved=mode)
 
     # **T(k) enters here, before the acoustic integration --- finding T-37.**
     # Not afterwards, and not folded into the primordial power: Phi *drives* the
@@ -405,7 +487,6 @@ def coefficient_sets(
     phi_a, phi_h = env.phi_a * t_k, env.phi_h * t_k
     phi_a_prime, phi_h_prime = env.phi_a_prime * t_k, env.phi_h_prime * t_k
 
-    eta_couple = min(float(bg.eta_0), TIGHT_COUPLING_FACTOR * eta_star)
     inside = eta <= eta_couple
 
     if env.acoustic_start in ("derived", "radiation era"):
@@ -439,9 +520,6 @@ def coefficient_sets(
         # every instrument this week uses, silently kept freezing while the
         # knob read `free_stream`. That is T-125's shape a third time, and a
         # second copy of a physics choice is how it keeps happening.
-        # Imported at call time: `pipeline` imports this module.
-        from functions.spectra.pipeline import (
-            TAU_CONTINUATION, _continue_by_free_streaming)
         if TAU_CONTINUATION == "free_stream":
             delta_t, tau_1 = _continue_by_free_streaming(
                 float(k_com), eta, eta_couple, delta_t, tau_1)
@@ -457,20 +535,46 @@ def coefficient_sets(
             return out
 
         delta_t, tau_1 = freeze(acoustic.delta_T), freeze(acoustic.tau_1)
+    return ModeHistory(
+        phi_a=phi_a, phi_h=phi_h, phi_a_prime=phi_a_prime, phi_h_prime=phi_h_prime,
+        delta_t=delta_t, tau_1=tau_1,
+        shift=cdm_frame_shift(eta, phi_a, float(k_com), background=bg))
+
+
+def coefficient_sets(
+    k_com: float, env: TwoFrameEnvironment, *, source: str,
+    history: ModeHistory | None = None,
+) -> tuple[CoefficientSet, CoefficientSet]:
+    r"""`(newtonian, cdm)` at one $k$, from one `mode_history`.
+
+    **`source` is named at every call**, because the two choices are two
+    different physical statements and neither may be picked up by default:
+    `"paper 1"` is Paper 1's eq:B, which the frame-invariant line of sight is
+    built from; `"as built"` is the antecedent's matching, which (102) and
+    every instrument that measures (102) are built on. It is applied where
+    the sets are built, and the sets carry it from there.
+
+    **Both frames are built from one integration**, which is the point: the
+    frames differ by the frame, not by the dynamics, so a difference between
+    them that came from two separate integrations would be a difference between
+    two integrations. A caller that already holds the mode's `history` passes
+    it, and the mode is not integrated twice.
+    """
+    h = mode_history(k_com, env) if history is None else history
+    eta = env.eta
     shared = dict(
-        delta_t=delta_t, phi_a=phi_a, phi_a_prime=phi_a_prime,
-        phi_h_prime=phi_h_prime, tau_1=tau_1, kappa_prime=env.kappa_prime,
+        delta_t=h.delta_t, phi_a=h.phi_a, phi_a_prime=h.phi_a_prime,
+        phi_h_prime=h.phi_h_prime, tau_1=h.tau_1, kappa_prime=env.kappa_prime,
         kappa_double_prime=env.kappa_second, conformal_hubble=env.conformal_hubble,
         r_baryon=env.r_baryon, r_baryon_prime=env.r_baryon_prime)
 
-    shift = cdm_frame_shift(eta, phi_a, float(k_com), background=bg)
     with rank_one_source(source):
         newtonian = newtonian_set(eta, float(k_com), **shared)
         cdm = cdm_set(
-            eta, float(k_com), phi_h=phi_h,
+            eta, float(k_com), phi_h=h.phi_h,
             conformal_hubble_prime=env.conformal_hubble_prime, scale_factor=env.a,
-            rho=env.rho, pressure=env.pressure, v=shift.v, v_prime=shift.v_prime,
-            eta_star=eta_star, **shared)
+            rho=env.rho, pressure=env.pressure, v=h.shift.v, v_prime=h.shift.v_prime,
+            eta_star=env.eta_star, **shared)
     return newtonian, cdm
 
 
@@ -526,7 +630,7 @@ B_SLOT_REPAIR: bool = False
 BULK_SOURCE_CONTROLS: dict[str, bool] = {}
 
 
-def bulk_source_primitives(k_com, env, coefficients) -> dict:
+def bulk_source_primitives(k_com, env, coefficients, history=None) -> dict:
     r"""The four arrays `integral_solution`'s bulk-source controls require.
 
     **Extracted 2026-10-25, finding T-131.** Every one of the seven controls
@@ -548,6 +652,12 @@ def bulk_source_primitives(k_com, env, coefficients) -> dict:
     $-C_1'=(\kappa'\hat v_B)'+(a\mathcal B_1)'/k$, and **never** by
     differentiating a stored amplitude --- finding T-23.
     """
+    # Under the solved potential the ISW content is the mode's own $\Phi'$, read
+    # from its history; `env.phi_*` is the released potential (T-125's class
+    # otherwise: a control reading the potential the spectrum does not use).
+    _solved = None
+    if solves_potential(env):
+        _solved = mode_history(k_com, env) if history is None else history
     kp = np.asarray(env.kappa_prime, dtype=float)
     v_b = np.asarray(coefficients.v_b, dtype=float)
     a_b1_prime = np.asarray(coefficients.a_b1_prime, dtype=float)
@@ -577,9 +687,12 @@ def bulk_source_primitives(k_com, env, coefficients) -> dict:
         # $T(k)$ is applied here as `coefficient_sets` applies it to every
         # potential it builds from (T-37); without it this array is the
         # $k\to0$ potential at every $k$ while the rest of $C_1'$ is not.
-        c1_prime_isw=-env.transfer_at(k_com)
-        * (np.asarray(env.phi_a_prime, dtype=float)
-           - np.asarray(env.phi_h_prime, dtype=float)),
+        c1_prime_isw=(
+            -(np.asarray(_solved.phi_a_prime) - np.asarray(_solved.phi_h_prime))
+            if _solved is not None else
+            -env.transfer_at(k_com)
+            * (np.asarray(env.phi_a_prime, dtype=float)
+               - np.asarray(env.phi_h_prime, dtype=float))),
     )
 
 

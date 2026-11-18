@@ -14,19 +14,23 @@ with Paper~1's source signs: the Sachs--Wolfe and Doppler terms where photons
 scatter and the integrated Sachs--Wolfe term along the path, each invariant
 under a change of frame, with no coefficient that holds the scattering rate
 differentiated. Since v1.4.0 the visibility and the opacity come from one
-$\\kappa$ on the line-of-sight grid (\\textbf{T-191}), and every mode starts at
+$\\kappa$ on the line-of-sight grid (\\textbf{T-191}), every mode starts at
 one time deep in the radiation era, on the adiabatic growing mode
-(\\textbf{T-192}, \\textbf{T-193}).\\\\[2pt]
-\\textbf{(a)} The spectrum in the CDM frame. The odd acoustic peaks are present,
-$2\\ell_A$ apart; the first is at $\\ell\\simeq188$ on Planck ($0.71\\,\\ell_A$),
-$140$ on $\\Lambda$CDM and $160$ on Einstein--de~Sitter. The even peaks are
-absent, as an oscillator driven by a constant potential and loaded with baryons
-predicts, because the radiation-era driving that sets the peak heights is not
-yet in the source (\\textbf{A-3}). Below $\\ell\\sim30$ the
-\\texttt{PLANCK\\_MODEL} curve, its dip near $\\ell=5$ included, carries the
-same incomplete radiation era: the oscillator now starts in the radiation era,
-but the potential it and the slots read is still the matter-era one, so the
-curve there is not a prediction. CAMB and CLASS are context, not a target
+(\\textbf{T-192}, \\textbf{T-193}), and on Planck each mode's potential is
+solved with the matter and the photons from that start, from a state on both
+constraints (\\textbf{T-194}), so one $\\Phi(k,\\eta)$ drives the oscillator
+and fills both slots.\\\\[2pt]
+\\textbf{(a)} The spectrum in the CDM frame. On Planck the first peak is at
+$\\ell\\simeq205$ ($0.77\\,\\ell_A$), against 206 for CAMB and CLASS, and the
+even peaks appear: a shallow second maximum near $\\ell=510$ and a third near
+690. The heights, relative to $\\ell=30$, are 15--25\\% below CAMB's between
+$\\ell=60$ and 550, with the baryons still moving with the CDM in the
+constraint; their own term is the next step. Below $\\ell\\simeq30$ the
+\\texttt{PLANCK\\_MODEL} curve lies within 1.4\\% of CAMB's shape.
+Einstein--de~Sitter and $\\Lambda$CDM have no radiation era and keep the
+released potential: their first peaks stay at $\\ell\\simeq160$ and $140$, and
+an undriven, baryon-loaded oscillator gives them odd peaks alone
+(\\textbf{A-3}). CAMB and CLASS are context, not a target
 (decision~\\textbf{S4c}).\\\\[2pt]
 \\textbf{(b)} Both frames, from one solve. The Newtonian and CDM spectra
 coincide to $3.3\\times10^{-14}$ at every multipole: a first-order change of
@@ -43,10 +47,15 @@ covariant line of sight, for three backgrounds, in two frames.
 
 | | EdS | ΛCDM | Planck |
 |---|---:|---:|---:|
-| first peak, ℓ | 160 | 140 | 188 |
+| first peak, ℓ | 160 | 140 | 205 |
 | largest frame gap, any ℓ | 2.9e-14 | 3.3e-14 | 3.3e-14 |
 
-The odd acoustic peaks are present and spaced by twice ℓ_A. The even peaks are
+On Planck the potential is solved with the matter and the photons from one
+start deep in the radiation era (step 2 of the radiation era's construction),
+and the even peaks appear beside the odd ones: a shallow second maximum near
+ℓ = 510 and a third near 690, with the first at 204.6 against CAMB's 206.1.
+Below ℓ ≈ 30 the curve lies within 1.4 per cent of CAMB's shape. On
+Einstein–de Sitter and ΛCDM, which have no radiation era, the even peaks are
 absent: with no radiation-era driving the oscillation's zero point is set by
 baryon loading, which suppresses the rarefaction peaks to a few per cent of the
 compression peaks. That is approximation **A-3**, and it is upstream of the
@@ -54,8 +63,9 @@ line of sight.
 
 ## What it does not say
 
-* **It does not say the heights are right.** They are not, and CAMB's second
-  peak is the clearest place to see it.
+* **It does not say the heights are right.** On Planck they are 15 to 25 per
+  cent below CAMB's between ℓ = 60 and 550, with the baryons still moving with
+  the CDM in the constraint; their own term is the next step.
 * **CAMB and CLASS are context and not a target** (**S4c**): they share a first
   peak at ℓ ≈ 206 and agree with each other to 0.3 per cent.
 

@@ -271,12 +271,15 @@ def _continue_by_free_streaming(k, eta, eta_couple, delta_T, tau_1):
     and (F.3) builds the rest. Injecting a shear that the fluid solution does
     not contain would be inventing initial data.
 
-    $\tau_0=\delta_T$ and $\tau_1$ is in the **velocity** normalisation that
-    `solve_acoustic` returns (finding T-66), which is `covariant` here: (F.1)'s
-    $\tau_\ell$, the normalisation `free_stream` takes its `initial` in and
-    returns through `.covariant()`. No rescale is applied, and that is a
-    statement rather than an omission --- if the two ever diverge this comment
-    is where it is wrong.
+    $\tau_0=\delta_T$, and $\tau_1$ is in the **velocity** normalisation that
+    `solve_acoustic` returns (finding T-66). **That is not (F.1)'s sign
+    (finding T-195).** (153) reads $\delta T'=+\tfrac k3\tau_1$ and (F.1)
+    continued to $\ell=0$ reads $\tau_0'=-\tfrac k3\tau_1$, so the pair's
+    multipoles are $(-1)^\ell$ times (F.1)'s and the dipole changes sign at
+    the handover. Without it the continuation started every mode with its
+    monopole's slope reversed --- the oscillation run backwards from
+    `eta_couple`. This comment said no rescale was applied and that it would
+    be where the two diverged; it was.
 
     Returns the two arrays with everything at or below `eta_couple` untouched,
     so the tight-coupling era is bit-identical to the released path and only
@@ -290,12 +293,12 @@ def _continue_by_free_streaming(k, eta, eta_couple, delta_T, tau_1):
     grid = np.concatenate([[float(eta_couple)], np.asarray(eta)[after]])
     initial = np.zeros(TAU_CONTINUATION_ELL_MAX + 1)
     initial[0] = float(np.interp(eta_couple, eta, delta_T))
-    initial[1] = float(np.interp(eta_couple, eta, tau_1))
+    initial[1] = -float(np.interp(eta_couple, eta, tau_1))      # T-195
     sol = free_stream(float(k), grid, ell_max=TAU_CONTINUATION_ELL_MAX,
                       normalisation="covariant", initial=initial)
     out_t, out_1 = np.array(delta_T, dtype=float), np.array(tau_1, dtype=float)
     out_t[after] = sol.values[1:, 0]
-    out_1[after] = sol.values[1:, 1]
+    out_1[after] = -sol.values[1:, 1]                            # T-195
     return out_t, out_1
 
 

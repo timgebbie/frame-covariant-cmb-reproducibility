@@ -18,10 +18,10 @@ being possible.
 | status | count | means |
 |---|---|---|
 | **open** | 1 | a chosen literal whose convergence is **not** established. This status is the point of the register. |
-| **derived** | 29 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
-| **measured** | 7 | a chosen literal whose convergence has been measured, with the number stated. |
-| **described** | 16 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
-| **index** | 32 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
+| **derived** | 30 | computed from a physical scale by code that **raises** if the scale cannot be met. The only status that cannot silently degrade. |
+| **measured** | 8 | a chosen literal whose convergence has been measured, with the number stated. |
+| **described** | 18 | a chosen literal governed by a stated rule, with a guard elsewhere that can fail. |
+| **index** | 34 | an exact integer or index array — not a discretisation. Listed so the exclusion is on the record rather than by nobody looking. |
 
 ## open — 1
 
@@ -37,7 +37,7 @@ share this history, so a grid shift moves them together and cancels. Finding
 **T-46**, question **Q7**, decision **S33** --- derived immediately after the
 v1.2.0 tag. v1.2.0 ships it as a stated limit.
 
-## derived — 29
+## derived — 30
 
 ### `x` — the x grid j_ell(x) is tabulated on
 
@@ -51,7 +51,7 @@ finely.
 
 ### `eta` — the line-of-sight integration grid for C_ell
 
-`functions/spectra/pipeline.py:504`, `np.linspace`
+`functions/spectra/pipeline.py:507`, `np.linspace`
 
 `required_n_eta(k_max, span)` at 12 samples per j_ell oscillation, and
 `run` RAISES rather than accepting an n_eta below it --- *"Pass n_eta=None to
@@ -60,7 +60,7 @@ template the other rows are measured against.
 
 ### `mode_eta` — one acoustic mode's own integration grid, from its derived start
 
-`functions/spectra/pipeline.py:587`, `np.linspace`
+`functions/spectra/pipeline.py:590`, `np.linspace`
 
 `required_acoustic_points(k, eta_couple - start)` at 24 samples per
 acoustic oscillation, on a floor of 512. Arithmetic, not a knob: delta_T goes
@@ -73,7 +73,7 @@ spanning a factor of two thousand in k, which is why no number is chosen.
 
 ### `eta` — the eta grid for the two-frame evaluation of (102): F2, F5, F7
 
-`functions/spectra/two_frame.py:325`, `np.linspace`
+`functions/spectra/two_frame.py:344`, `np.linspace`
 
 `required_n_eta(k_max, span)` when `n_eta is None`, which is how every
 figure calls it, and `check_k` RAISES when a caller asks for a mode the grid
@@ -83,7 +83,7 @@ nothing in the bundle does.
 
 ### `mode_eta` — one acoustic mode's integration grid on the (102) generic-u^a route
 
-`functions/spectra/two_frame.py:421`, `np.linspace`
+`functions/spectra/two_frame.py:502`, `np.linspace`
 
 The same construction as `pipeline.py::mode_eta` and in the same
 release, because **T-51 had one instance per route**: `pipeline.run`,
@@ -327,6 +327,13 @@ period of j_l^2 cannot be met.
 F9's grid, from the same `required_k_points` per background (T-56), so
 the cross-spectra add to the spectrum F9 draws.
 
+### `k_com` — the k grid D46's spectrum part is integrated on: F9's
+
+`scripts/diagnostic_d46_the_solved_potential.py:247`, `np.linspace`
+
+`required_k_points(1500, r_theta)` on PLANCK_MODEL, exactly F9's grid
+(T-56), so the halving is read on the quadrature the figure uses.
+
 ### `k_com` — the k grid D4 integrates C_ell by rank on
 
 `scripts/diagnostic_d4_monopole.py:102`, `np.linspace`
@@ -350,7 +357,7 @@ it.
 
 ### `k_com` — the k grid the released angular spectrum is integrated on
 
-`scripts/figure_f9_acoustic_spectrum.py:153`, `np.linspace`
+`scripts/figure_f9_acoustic_spectrum.py:159`, `np.linspace`
 
 `required_k_points(1500, r_theta)`, per background because r_theta is.
 **Was `np.arange(0.05, 1500.0, np.pi/3)` until 2026-10-17** --- 0.96 samples
@@ -360,7 +367,7 @@ Int dk j_l^2/k = 1/(2 l (l+1)). Finding **T-56**: the eta grid was derived from
 the oscillation it resolves and the k grid never was, though it is the same
 kernel read along the other axis.
 
-## measured — 7
+## measured — 8
 
 ### `u` — the panel division of the conformal-time integral eta(a)
 
@@ -397,6 +404,16 @@ this low can matter against the 51-64% that finding **T-51** is about.
 `max_step=20`, so it sets the OUTPUT sampling and not the integration accuracy.
 It feeds the same interpolation chain as the row above it, which is why it is
 measured rather than assumed.
+
+### `ell` — the multipoles of the photon hierarchy after eta_*, 0..ell_max
+
+`functions/spectra/radiation_era.py:229`, `np.arange`
+
+An index array whose length is the truncation `STEP_TWO_ELL_MAX = 32`,
+closed by Ma and Bertschinger's free-streaming truncation. Measured on
+PLANCK_MODEL against 128: the three-slot transfer moves by at most 6e-5 of the
+mode's own maximum, at k >= 500 where the damping factor is below 0.45; 9e-6
+at k = 200 and 5e-14 at k = 30. D46 repeats the comparison on the potential.
 
 ### `grid` — the acoustic grid D10 scopes A-3 on, and measures the inadequacy of
 
@@ -443,7 +460,7 @@ side of anything the grid could contribute.
 four external recursions match at 1e-13 to 1e-14 at scale exactly 1, which no
 under-resolved grid produces.
 
-## described — 16
+## described — 18
 
 ### `K_COM` — the k grid the cost benchmark is measured on
 
@@ -542,6 +559,21 @@ an independent check of an identity, not a quadrature node, so there is
 nothing to converge in k; the eta step is converged instead, by repeating
 every mode on a grid with half the step.
 
+### `CHECK_K` — the modes D46 checks the solve at, 1e-3..1500, 25 logarithmic
+
+`scripts/diagnostic_d46_the_solved_potential.py:106`, `np.geomspace`
+
+Not a quadrature: each mode is checked on its own (energy and stress
+constraints, exit, truncation). Logarithmic because the checks change
+character with k eta_* rather than with k.
+
+### `TRANSFER_K` — the modes at which the solved late-time transfer is set beside (J.5)
+
+`scripts/diagnostic_d46_the_solved_potential.py:109`, `np.geomspace`
+
+Not a quadrature: the comparison sec:a3-construction records and does
+not gate. Thirteen logarithmic modes from 0.1 to 1500 in the bundle's units.
+
 ### `k` — the k quadrature grid for the Sachs-Wolfe limit
 
 `scripts/diagnostic_d5_sachs_wolfe.py:77`, `np.arange`
@@ -592,7 +624,7 @@ As F3, and deliberately the same grid: F6 reports RATIOS against the F3 configur
 
 As F2, raised to 1900 by finding T-32, with `check_k` guarding the probe modes after T-34.
 
-## index — 32
+## index — 34
 
 ### `phase` — the i^ell phase factor
 
@@ -614,7 +646,7 @@ Set by the transform length, not chosen. The FFT's own grid is the k grid of its
 
 ### `master` — the grid Phi_A and Phi_H are splined on, shared by every mode
 
-`functions/spectra/pipeline.py:578`, `np.logspace`
+`functions/spectra/pipeline.py:581`, `np.logspace`
 
 16384 logarithmic samples from the earliest acoustic start to
 eta_couple. **It carries no physical scale of its own**: it resamples a
@@ -624,6 +656,15 @@ over it. Convergence is `potentials`' own, measured at its `GROWTH_SAMPLES`
 row, not this spline's: Phi_A(eta_*) for PLANCK_MODEL agrees to twelve figures
 between 4096 and 16384 internal samples, and to twelve figures across input
 grids spanning three decades in their lower limit.
+
+### `_KS_N` — the orders of Kodama and Sasaki's series, n = 4..19
+
+`functions/spectra/radiation_era.py:114`, `np.arange`
+
+Exact integer orders of the binomial series of sqrt(1+y). Used below
+y = 0.1, where the first omitted term is below 1e-16 and the closed form's
+cancellation costs under 2e-13, so the two branches meet where both are
+well conditioned.
 
 ### `ELLS` — the multipoles the cost benchmark projects onto
 
@@ -765,6 +806,13 @@ lands 0.62 of a grid step from the sample it was fitted around -- a finder on a
 node rather than on a peak, which is D24's shape. D36's own grid is IMPORTED
 rather than reproduced, so the coarse comparison runs on the registered array
 and not on a copy of it.
+
+### `ELLS` — the multipoles D46's spectrum part is evaluated at: F9's
+
+`scripts/diagnostic_d46_the_solved_potential.py:100`, `np.arange`
+
+F9's own ELLS, so the eta_i halving and the frame gap are measured on
+the spectrum F9 draws. Each ell is an independent quadrature.
 
 ### `ELLS` — the multipoles criterion 5a is stated over
 

@@ -12935,3 +12935,63 @@ radiation era and outside every horizon ($k_{\max}\eta_i=10^{-2}$), on the
 adiabatic growing mode including its dipole: `adiabatic_growing_mode` and
 `acoustic_start="radiation era"`. The derived start stays the antecedent's,
 for the instruments that measure (102), and keeps both of its defects there.
+
+## T-194 — The radiation-era start at leading order excites a solution the momentum constraint carries and the energy constraint forbids
+
+**eq:radiation-ic is the adiabatic growing mode to leading order in
+$a_i/a_{\rm eq}$ and $(k\eta_i)^2$, and integrated through the momentum
+constraint that is not enough.** Step 2 integrates $\Phi_H$ from
+eq:momentum-constraint with the matter and the photons. That system has one
+solution more than the physical one: outside the horizon in the radiation era,
+$\Phi\propto\delta T\propto\eta$, with the energy constraint violated in
+proportion. A start that satisfies the energy constraint only to order
+$a_i/a_{\rm eq}$ puts an admixture of that order into this solution, and it
+grows by $a_{\rm eq}/a_i$ before equality. The error at $\eta_\ast$ is then of
+order one in the admixture's coefficient and **independent of $\eta_i$**, so
+the registered test that halves $\eta_i$ cannot see it.
+
+**Measured on `PLANCK_MODEL` at $k=10^{-3}$**, $\Phi_A(\eta_\ast)/\Phi_i$
+against Kodama and Sasaki's two-fluid value 0.9253872 at
+$a_\ast/a_{\rm eq}=5.328$:
+
+| start | at $\eta_i$ | at $\eta_i/2$ | at $\eta_i/4$ |
+|---|---:|---:|---:|
+| eq:radiation-ic at leading order | 0.9853225 | 0.9853193 | 0.9853178 |
+| the same mode on both constraints | 0.9253872 | 0.9253872 | 0.9253872 |
+
+The leading-order start is 6.0% high and moves by $5\times10^{-6}$ between
+$\eta_i$ and $\eta_i/4$, and the energy constraint, the solve's own check,
+stands at 9% of its terms at $\eta_\ast$. The start on both constraints agrees
+with Kodama and Sasaki to $3\times10^{-10}$ at all three.
+
+**Repaired before step 2 was released**, in `radiation_era.growing_mode`:
+$\Phi_A(\eta_i)$ and $\Phi_A'(\eta_i)$ from the two-fluid solution, the common
+velocity from the momentum constraint, and $\delta T$ from the energy constraint
+with the adiabatic $\delta_m=3\delta T$. In the radiation era that is
+eq:radiation-ic at leading order; the bundle uses the same mode, placed on both
+constraints. D46 part 1 carries the table.
+
+## T-195 — The free-streaming continuation handed the dipole over with its sign reversed
+
+**`TAU_CONTINUATION = "free_stream"`, the control beside the released freeze,
+started every mode's continuation running backwards.** The pair (152)--(153)
+carries $\tau_1$ in the velocity normalisation, with $\delta T'=+\tfrac k3\tau_1$;
+(F.1) continued to $\ell=0$ reads $\tau_0'=-\tfrac k3\tau_1$. The two sets of
+multipoles therefore differ by $(-1)^\ell$, and `_continue_by_free_streaming`
+handed $\tau_1$ to the covariant hierarchy unchanged. Its docstring said no
+rescale was applied and that, if the two ever diverged, the docstring was
+where it was wrong.
+
+**Measured at the handover**, $k=50$, no gravity: the pair's
+$\delta T'=+6.6667$; the continuation as handed over began with
+$\tau_0'=-6.6673$, and with the dipole's sign changed with $+6.6660$.
+
+**What it touched.** The released path holds the pair (`"freeze"`) and never
+reached the control, so no released figure moves. The control's numbers do:
+D33's third configuration, (98)'s ISW at $W$ with the free-streamed source, and
+the re-scoring in T-147 that released the freeze ran on the reversed
+continuation, so their free-streaming numbers are void as measured and are
+re-measured at the next full regeneration. Repaired in
+`pipeline._continue_by_free_streaming`: the dipole changes sign going in and
+coming out. The step-2 solve hands the pair to its own hierarchy in the pair's
+normalisation, $\sigma_\ell=(-1)^\ell\tau_\ell$, and was right from the start.

@@ -915,3 +915,54 @@ note = """D44's multipoles, the plateau points 2-25 and then l = 30-1200 in step
 15, so that the two instruments read the same series by the same maxima. The
 step is some eighteen samples per acoustic period, so neither a maximum nor
 a sign change of a cross-term can fall between samples unseen."""
+
+# ---------------------------------------------------------------------------
+# The radiation era, step 2: the solved potential and its diagnostic.
+# ---------------------------------------------------------------------------
+[[grid]]
+key = "functions/spectra/radiation_era.py::_KS_N"
+what = "the orders of Kodama and Sasaki's series, n = 4..19"
+status = "index"
+note = """Exact integer orders of the binomial series of sqrt(1+y). Used below
+y = 0.1, where the first omitted term is below 1e-16 and the closed form's
+cancellation costs under 2e-13, so the two branches meet where both are
+well conditioned."""
+
+[[grid]]
+key = "functions/spectra/radiation_era.py::ell"
+what = "the multipoles of the photon hierarchy after eta_*, 0..ell_max"
+status = "measured"
+note = """An index array whose length is the truncation `STEP_TWO_ELL_MAX = 32`,
+closed by Ma and Bertschinger's free-streaming truncation. Measured on
+PLANCK_MODEL against 128: the three-slot transfer moves by at most 6e-5 of the
+mode's own maximum, at k >= 500 where the damping factor is below 0.45; 9e-6
+at k = 200 and 5e-14 at k = 30. D46 repeats the comparison on the potential."""
+
+[[grid]]
+key = "scripts/diagnostic_d46_the_solved_potential.py::ELLS"
+what = "the multipoles D46's spectrum part is evaluated at: F9's"
+status = "index"
+note = """F9's own ELLS, so the eta_i halving and the frame gap are measured on
+the spectrum F9 draws. Each ell is an independent quadrature."""
+
+[[grid]]
+key = "scripts/diagnostic_d46_the_solved_potential.py::k_com"
+what = "the k grid D46's spectrum part is integrated on: F9's"
+status = "derived"
+note = """`required_k_points(1500, r_theta)` on PLANCK_MODEL, exactly F9's grid
+(T-56), so the halving is read on the quadrature the figure uses."""
+
+[[grid]]
+key = "scripts/diagnostic_d46_the_solved_potential.py::CHECK_K"
+what = "the modes D46 checks the solve at, 1e-3..1500, 25 logarithmic"
+status = "described"
+note = """Not a quadrature: each mode is checked on its own (energy and stress
+constraints, exit, truncation). Logarithmic because the checks change
+character with k eta_* rather than with k."""
+
+[[grid]]
+key = "scripts/diagnostic_d46_the_solved_potential.py::TRANSFER_K"
+what = "the modes at which the solved late-time transfer is set beside (J.5)"
+status = "described"
+note = """Not a quadrature: the comparison sec:a3-construction records and does
+not gate. Thirteen logarithmic modes from 0.1 to 1500 in the bundle's units."""

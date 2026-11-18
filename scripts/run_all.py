@@ -363,6 +363,12 @@ DIAGNOSTICS: list[tuple[str, str]] = [
      "scripts/diagnostic_d44_the_line_of_sight_in_invariant_slots.py --replot"),
     ("D45 the slots summed back to the integral they rearrange",
      "scripts/diagnostic_d45_the_slots_sum_back.py --replot"),
+    # D46 scores step 2 of sec:a3-construction, the solved potential, as
+    # registered: the start (T-194), the k -> 0 numbers, the energy and stress
+    # constraints per mode, the transfer against (J.5), and F9's spectrum with
+    # eta_i halved. Its spectrum part checkpoints outside the tree, as D44's.
+    ("D46 the solved potential, step 2, scored as registered",
+     "scripts/diagnostic_d46_the_solved_potential.py --replot"),
 ]
 
 

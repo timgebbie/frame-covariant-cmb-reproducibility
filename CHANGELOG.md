@@ -5,6 +5,86 @@ All notable changes to this bundle are recorded here. The version policy is in
 
 ## [Unreleased] — v1.4.0 in preparation
 
+### The radiation era, step 2: the potential solved
+
+Step 2 of `sec:a3-construction`: on a background with radiation, each mode's
+potential is integrated with the matter and the photons from the one start,
+with the baryons as pressureless matter in the constraint, and that one
+$\Phi(k,\eta)$ drives the oscillator and fills the Sachs–Wolfe and integrated
+slots. (J.5) is not applied to it.
+
+- **The solve** (`functions/spectra/radiation_era.py`):
+  - $\Phi_H$ from the momentum constraint, with the energy constraint as its
+    check;
+  - the CDM and baryons as dust, $\delta'=kv-3\Phi_H'$ and
+    $v'=-\mathcal Hv-k\Phi_A$;
+  - the photon pair (152)–(153) until $\eta_*$, then a hierarchy with the
+    rank-0 and rank-1 gravitational sources, carried until the photons' term in
+    the momentum constraint falls below $10^{-4}$ of the sum;
+  - after $\eta_*$, $\Phi_A$ from the photons' anisotropic stress,
+    $k^2(\Phi_A+\Phi_H)=-\tfrac85\mathcal H^2\Omega_\gamma\tau_2$.
+
+  It is integrated in $\ln a$ with the background's closed-form
+  $\mathcal H(a)$, and normalised so that the matter-era potential at $k\to0$
+  is 1, as the released one is ($\Phi_i=\tfrac{10}9$).
+- **Wiring.** `two_frame.mode_history` is the one place a mode's potentials,
+  photon pair and CDM velocity are computed, and `coefficient_sets` builds both
+  frames from it. Use `build_environment(potential="solved")`. The CDM frame
+  is the solve's own CDM velocity. Where $\Omega_r=0$ the released potential is
+  kept, so those backgrounds cannot move (the restated (g2)). The line of sight
+  still reads the photon pair held from $6\eta_*$, as at step 1.
+- **The CDM frame carries the photons' stress.** Appendix G's shear equation
+  takes $\pi=k^2_{\rm phys}(\Phi_A+\Phi_H)$, which is zero wherever
+  $\Phi_H=-\Phi_A$. The frame guard is read against the mode's own scale where
+  $v'$ passes through zero.
+- **T-194, found and repaired before the solve was released.** The
+  leading-order start excites a solution that the momentum constraint carries
+  and the energy constraint forbids. It grows as $a$ in the radiation era, and
+  it left $\Phi(\eta_*)$ 6% high on Planck at every $\eta_i$. The start now lies
+  on both constraints.
+- **T-195, found and repaired.** The free-streaming continuation, a control,
+  handed over the dipole with its sign reversed. No released figure used it.
+- **Scored as registered** (D46, F9):
+  - (e): the two frames give one $D_\ell$ to $3.2\times10^{-15}$ of its maximum (D46),
+    and F9's worst multipole on Planck agrees to $1.1\times10^{-14}$;
+  - (g1): the solve equals $D/a$ to $2.6\times10^{-11}$ on both $\Omega_r=0$
+    backgrounds, against Heath's integral at the exact $a(\eta)$;
+  - (g2): Einstein–de Sitter and ΛCDM are unchanged, bit for bit;
+  - at $k\to0$ on Planck:
+    - $\Phi(\eta_*)=0.9253872\thinspace\Phi_i$, Kodama and Sasaki's value to
+      $3\times10^{-10}$;
+    - the Sachs–Wolfe source is $0.37906\thinspace\Phi_A(\eta_*)$;
+    - the radiation era's integrated term is
+      $-0.05473\thinspace\Phi_A(\eta_*)$, against the registered $-0.05487$;
+      the difference is the photons' free streaming, which the two-fluid
+      value does not carry;
+  - halving $\eta_i$ moves $D_\ell$ by $4.0\times10^{-7}$ of its maximum, against $10^{-4}$.
+- **The energy constraint as step 2's measure of step 3.** With the baryon
+  loading removed from (152) it closes to $10^{-10}$ at every $k$. With the
+  loading it fails by up to 3% of its terms at $\eta_*$, because the momentum
+  the photons give the baryons is not in the constraint, where the baryons move
+  with the CDM. That residual is the baryons' own term.
+- **The photons' stress.** After $\eta_*$, $(\Phi_A+\Phi_H)/\Phi_A$ reaches
+  4.3% outside the horizon. Without it the energy constraint fails at
+  $2\times10^{-4}$ to $4\times10^{-4}$; with it the constraint closes. On F9's
+  spectrum the stress moves $D_\ell$ by 1.6%, and $D_2$ by $-9.8\times10^{-4}$ of its maximum.
+- **F9 at step 2**, on Planck:
+  - the first maximum is at 204.6 ($0.767\thinspace\ell_A$), from 188.1,
+    against CAMB's 206.1 and CLASS's 206.2;
+  - the even peaks appear, a shallow second maximum near 510 and a third near
+    690;
+  - below $\ell\simeq30$ the curve lies within 1.4% of CAMB's shape, where it
+    lay at 0.54 to 0.62 against 0.78;
+  - the heights are 15 to 25% below CAMB's between $\ell=60$ and 550.
+
+  Einstein–de Sitter and ΛCDM are bit-identical to step 1. (f) is recorded
+  here and scored after step 3, as registered.
+- The solved late-time $\Phi(k)/\Phi(k\to0)$ is recorded against (J.5) at the
+  shape parameter F9 uses, without a gate. It stands above (J.5): by 24% at
+  $k=60$ and 40% at $k=136$. Two things contribute: equality here is at
+  $z=5756$, because the radiation is photons alone, and at step 2 the baryons
+  cluster with the CDM.
+
 ### The radiation era, step 1: one start
 
 The construction is the supplement's `sec:a3-construction`, built in three

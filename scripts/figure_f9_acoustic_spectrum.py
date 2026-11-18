@@ -122,6 +122,12 @@ K_MAX = 1500.0
 STEM = "f9-acoustic-spectrum"
 CSV_PATH_REL = ("outputs", "f9-acoustic-spectrum.csv")
 
+#: **The solved potential, step 2 of sec:a3-construction.** On PLANCK each
+#: mode's $\Phi$ is integrated with the matter and the photons from the one
+#: start; the two $\Omega_r=0$ backgrounds keep the released potential, which
+#: is the restated (g2), so their curves cannot move.
+POTENTIAL = "solved"
+
 BACKGROUNDS = [
     ("CDM (Einstein-de Sitter)", CDM_MODEL, 0.0224, 0.5),
     (r"$\Lambda$CDM", LCDM_MODEL, 0.0224, 0.7),
@@ -148,7 +154,7 @@ def spectrum(background, omega_b_h2: float,
         omega_lambda=background.omega_lambda, omega_r=background.omega_r,
         omega_b_h2=omega_b_h2, transfer_gamma=gamma, hubble_h=hubble_h,
         f_2=F2_DEFAULT, line_of_sight_weight="printed",
-        acoustic_start="radiation era")
+        acoustic_start="radiation era", potential=POTENTIAL)
     r_theta = float(env.background.eta_0 - env.eta_star)
     k_com = np.linspace(0.05, K_MAX, required_k_points(K_MAX, r_theta))
     print(f"      r_theta = {r_theta:.4f}, k to {K_MAX:.0f} in {k_com.size} modes "
@@ -183,7 +189,7 @@ def spectrum(background, omega_b_h2: float,
         float(background.omega_m), float(background.omega_lambda),
         float(background.omega_r), float(omega_b_h2), float(hubble_h),
         sorted(dict(_tf.BULK_SOURCE_CONTROLS).items()),
-        bool(_tf.B_SLOT_REPAIR), int(k_com.size), float(K_MAX),
+        bool(_tf.B_SLOT_REPAIR), int(k_com.size), float(K_MAX), POTENTIAL,
         "lattice, as built" if lattice else "three slots, paper 1"))
     key = hashlib.sha256(
         (source_fingerprint() + config).encode("utf-8")).hexdigest()[:16]

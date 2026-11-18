@@ -948,6 +948,8 @@ def cdm_frame_shear(
     conformal_hubble: np.ndarray,
     rho: np.ndarray,
     pressure: np.ndarray | float = 0.0,
+    phi_a_prime: np.ndarray | None = None,
+    phi_h_prime: np.ndarray | None = None,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     r"""$\sigma$, $\dot\sigma$, $\ddot\sigma$ in the CDM frame, $A_a=0$.
 
@@ -1004,10 +1006,25 @@ def cdm_frame_shear(
     sigma = -k_phys * np.asarray(v, dtype=float)
     # E = D_<a D_b> Phi_A with C3.5's lambda = +1 and C4.2's r = -1.
     electric = -0.5 * k_phys**2 * (phi_a - phi_h)
+    # **The anisotropic stress, which (G) carries and the released potential
+    # never had.** In the Newtonian frame (G) reads $-\mathcal D_{\langle a}A_{b\rangle}
+    # +E_{ab}=\tfrac12\pi_{ab}$, and with the same $\lambda$ and $r$ that is
+    # $\pi=k_{\rm phys}^2(\Phi_A+\Phi_H)$: zero, exactly, wherever $\Phi_H=-\Phi_A$,
+    # and the photons' stress after $\eta_*$ once the potential is solved
+    # (sec:a3-construction). Without it $\dot\sigma$ misses $\tfrac12\pi$ and
+    # the frame stops closing --- which is what the guard in `cdm_set` caught.
+    stress = k_phys**2 * (phi_a + phi_h)
+    stress_dot = 0.0
+    if phi_a_prime is not None and phi_h_prime is not None:
+        cH = np.asarray(conformal_hubble, dtype=float)
+        stress_dot = (float(k_com) ** 2 / a**3) * (
+            np.asarray(phi_a_prime, dtype=float) + np.asarray(phi_h_prime, dtype=float)
+            - 2.0 * cH * (phi_a + phi_h))
 
     sigma_dot, sigma_ddot = generic_shear_derivatives(
         sigma=sigma, electric_weyl=electric, conformal_hubble=conformal_hubble,
         scale_factor=a, rho=rho, pressure=pressure,
+        anisotropic_stress=stress, anisotropic_stress_dot=stress_dot,
     )
     return sigma, sigma_dot, sigma_ddot
 
@@ -1190,7 +1207,8 @@ def cdm_set(
     # --- rank two: the sector that is empty in the Newtonian frame -----------
     sigma, sigma_dot, sigma_ddot = cdm_frame_shear(
         k, v=v, phi_a=phi_a, phi_h=phi_h, scale_factor=scale_factor,
-        conformal_hubble=cH, rho=rho, pressure=pressure)
+        conformal_hubble=cH, rho=rho, pressure=pressure,
+        phi_a_prime=phi_a_prime, phi_h_prime=phi_h_prime)
 
     # **Evaluated through $v$, checked through Appendix G --- finding T-26.**
     # $a\mathcal B_2=a\sigma=-k_{\rm com}v$ exactly ((31) and C4.2 with
@@ -1230,7 +1248,13 @@ def cdm_set(
     # still held to account where it can be: (a sigma)' = a'sigma + a^2 sigma-dot
     # must be -k v'. Only the second derivative cancels (T-26).
     a_sigma_prime = a * cH * sigma + a**2 * sigma_dot
-    if not np.allclose(a_sigma_prime, -k * vp, rtol=1e-9, atol=0.0):
+    # **Relative to the mode's own scale where $v'$ passes through zero.** On
+    # the solved potential the CDM velocity turns over in the $\Lambda$ era, and
+    # at the grid point nearest that zero a pointwise `rtol` alone failed at an
+    # absolute difference of $10^{-15}$ on a quantity of order $10^{-3}$. The
+    # floor is $10^{-12}$ of $\max|kv'|$, so everywhere else the test is as tight.
+    scale = float(np.max(np.abs(k * vp))) if np.size(vp) else 0.0
+    if not np.allclose(a_sigma_prime, -k * vp, rtol=1e-9, atol=1e-12 * scale):
         raise ValueError(
             "Appendix G's sigma-dot and the Euler equation disagree on "
             "(a sigma)'; the CDM frame no longer closes")
