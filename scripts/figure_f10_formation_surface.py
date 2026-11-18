@@ -54,7 +54,10 @@ numbers this tree did not compute (**T-54**, **T-129**).
 """
 from __future__ import annotations
 
+import hashlib
+import os
 import sys
+import tempfile
 from pathlib import Path
 
 import numpy as np
@@ -89,7 +92,6 @@ from _fingerprint import source_fingerprint as _digest  # noqa: E402
 VERSION = "v1.3.0"
 STEM = "f10-formation-surface"
 CSV = ROOT / "outputs" / "f10-formation-surface.csv"
-# placeholder; --high-res retargets both below once ELLS is settled
 
 #: The $\ell$ axis, and it must carry the plateau AND the first peak or the
 #: figure cannot show the thing it is about. Dense below 30 where the plateau
@@ -102,22 +104,30 @@ ELLS = np.unique(np.concatenate([
 #: tail is F9's subject and it arrives with everything else.
 K_MAX = 400.0
 
-#: **`--high-res`, 2026-10-26, at the PI's request.** The released axis stops
-#: at $\ell=300$; this extends it to $\ell=920$ and raises $k_{\max}$ to F9's
-#: 1500, so the modes that build the second and third peaks are present. It is
-#: **not** the released F10: it writes to its own stem and is not on the
-#: release route. Its one run, on (102) before the frame-invariant line of
-#: sight replaced it, found the secondaries absent rather than displaced (the
-#: register has it); those outputs left the tree in v1.4.0 with the assembly
-#: they were drawn from.
-if "--high-res" in sys.argv:
+#: The potential both slots read, and the title. F10 keeps the released one.
+POTENTIAL = "released"
+TITLE = "F10  the angular autocorrelation as it forms — Planck 2018, CDM frame"
+
+#: **F11 is this figure with the radiation era solved: `--radiation-era`.**
+#: v1.4.0's lead figure, in the PI's plan of 2026-11-04. Both slots read the
+#: potential solved through the radiation era (sec:a3-construction), and the
+#: axis runs to $\ell=910$ with $k_{\max}$ at F9's 1500, so the modes that build
+#: the second and third maxima are present. That axis is the one `--high-res`
+#: added on 2026-10-26 at the PI's request; its one run, on (102), found the
+#: secondaries absent, and its outputs left the tree with (102). It writes its
+#: own stem and CSV, and the release route replots it as it does F10.
+if "--radiation-era" in sys.argv:
     ELLS = np.unique(np.concatenate([
         np.array([2, 3, 4, 5, 7, 9, 12, 16, 20, 25, 30]),
         np.arange(40, 301, 10),
         np.arange(310, 921, 15)]))
     K_MAX = 1500.0
-    STEM = STEM + "-high-res"
-    CSV = ROOT / "outputs" / "f10-formation-surface-high-res.csv"
+    POTENTIAL = "solved"
+    VERSION = "v1.4.0"
+    STEM = "f11-formation-surface"
+    CSV = ROOT / "outputs" / "f11-formation-surface.csv"
+    TITLE = ("F11  the angular autocorrelation as it forms, the radiation era "
+             "solved — Planck 2018, CDM frame")
 
 #: **Low granulation in time, as the PI specified.** Fourteen epochs is
 #: enough to read a progression and few enough that each curve is
@@ -151,7 +161,7 @@ def _accumulate():
         omega_b_h2=PLANCK_OMEGA_B_H2,
         transfer_gamma=shape_parameter(PLANCK_MODEL.omega_m, PLANCK_H),
         hubble_h=PLANCK_H, f_2=F2_DEFAULT, line_of_sight_weight="printed",
-        acoustic_start="radiation era")
+        acoustic_start="radiation era", potential=POTENTIAL)
     eta_star, eta_0 = float(env.eta_star), float(env.background.eta_0)
     floor = float(env.eta[0])
 
@@ -172,7 +182,30 @@ def _accumulate():
 
     acc = {f: np.zeros((ELLS.size, sl.size)) for f in FRAMES}
     gate, dk = 0.0, k_com[1] - k_com[0]
+    # **Checkpointed per mode, as F9 is (T-187).** On the solved potential the
+    # accumulation is the better part of an hour, longer than the container
+    # is reliably kept. The key names the code and the configuration, and the
+    # file lives outside the tree, so a run resumes only from itself.
+    config = repr((POTENTIAL, float(K_MAX), tuple(int(l) for l in ELLS),
+                   int(N_SLICES), int(k_com.size)))
+    key = hashlib.sha256((_digest(__file__) + config).encode("utf-8")).hexdigest()[:16]
+    cache = Path(os.environ.get("F10_MODE_CACHE", tempfile.gettempdir())) \
+        / f"{STEM}-modes-{key}.npz"
+    start = 0
+    if cache.exists():
+        try:
+            held = np.load(cache)
+            if held["cdm"].shape == acc["cdm"].shape:
+                acc = {f: held[f].copy() for f in FRAMES}
+                start, gate = int(held["done"]), float(held["gate"])
+                print(f"      resuming at mode {start} of {k_com.size} ({cache.name})",
+                      flush=True)
+        except Exception as exc:     # a bad cache is a recompute, not an error
+            print(f"      mode cache unreadable ({exc}); recomputing")
+            start = 0
     for j, k in enumerate(k_com):
+        if j < start:
+            continue
         kern = kernel_set(ELLS, float(k), eta=env.eta, eta_0=eta_0, table=table)
         for f, cs in zip(FRAMES, covariant_coefficient_sets(float(k), env)):
             sources, damping = line_of_sight_inputs(float(k), cs, env)
@@ -184,6 +217,10 @@ def _accumulate():
             scale = max(float(np.max(np.abs(full))), 1e-300)
             gate = max(gate, float(np.max(np.abs(laid[:, -1] - full))) / scale)
             acc[f] += (k ** 2 * power[j]) * laid ** 2 * dk
+        if (j + 1) % 100 == 0 or j + 1 == k_com.size:
+            tmp = cache.with_suffix(".tmp.npz")
+            np.savez(tmp, done=j + 1, gate=gate, **acc)
+            os.replace(tmp, cache)   # atomic: a kill mid-write keeps the old
         if j % 200 == 0:
             print(f"      k {k:7.1f} of {K_MAX:.0f}", flush=True)
     return acc, sl, eta_star, eta_0, floor, gate
@@ -320,8 +357,7 @@ def _draw(acc, sl, eta_star, eta_0, floor):
         fontsize=7.5)
     cb.ax.tick_params(labelsize=7)
 
-    fig.suptitle("F10  the angular autocorrelation as it forms — Planck 2018, "
-                 "CDM frame", fontsize=10)
+    fig.suptitle(TITLE, fontsize=10)
     # **The reading is computed, never typed** (T-161 was a typed sentence
     # that drifted from its own picture). The late share is the fraction of
     # today's C_l that arrives after (eta - eta_*) = 0.01 (eta_0 - eta_*),

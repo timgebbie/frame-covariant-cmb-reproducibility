@@ -5,6 +5,27 @@ All notable changes to this bundle are recorded here. The version policy is in
 
 ## [Unreleased] — v1.4.0 in preparation
 
+### F11: the formation surface with the radiation era solved, v1.4.0's lead figure
+
+- `scripts/figure_f10_formation_surface.py --radiation-era` draws F10's two
+  panels with both slots on the potential solved through the radiation era,
+  to $\ell=910$ and $k_{\max}=1500$, F9's. The accumulation checkpoints per
+  mode outside the tree (`F10_MODE_CACHE`) and took 54 minutes on one core;
+  the $\eta_0$ column is the full integral to $3.4\times10^{-14}$.
+- The acoustic series is in place at decoupling, at an eighth of today's
+  height. The late integrated Sachs–Wolfe term deposits a positive share at
+  every multipole: 21% of $C_2$, 6% at $\ell=16$, 19% at $\ell=90$ where the
+  potential is still decaying after decoupling, 8% at the first maximum, and
+  under 2% from $\ell\simeq330$. On the released potential (F10) the same
+  count is negative from $\ell=2$ to 25: that cancellation was the incomplete
+  radiation era's.
+- F11 moves from `DEFERRED` to `STAGES` in `run_all.py`, replotted from its
+  stamped CSV, and is the README's key figure. `--high-res`, whose outputs
+  left the tree with (102), is retired into it.
+- `provenance/RELEASE-STATUS-v1.md` regenerates again. F9's status row named a
+  test renamed at Stage A, so `make_release_status.py` had refused since then,
+  and the notes of the previous change had not reached the generated file.
+
 ### The figures regenerated, and every generated CSV names the code that wrote it
 
 - **F2 builds again (T-196).** Its $k$ grid stopped at 1900, and once the
@@ -313,7 +334,7 @@ alone, on the released potential.
 ### Planned
 
 - **F11**, the formation surface with the radiation era wired, as the lead
-  figure. F10 and F9 keep their identifiers and files and move down by their
+  figure (drawn 18 November 2026; see above). F10 and F9 keep their identifiers and files and move down by their
   captions' `order`. Registered as deferred to v1.4.0 in `run_all.py`, so the
   release refuses to ship without it.
 

@@ -593,12 +593,12 @@ distinguishable and enough to read a progression."""
 key = "scripts/figure_f10_formation_surface.py::k_com"
 what = "the k grid F10's accumulation is integrated over"
 status = "derived"
-note = """`required_k_points(K_MAX, r_theta)`, K_MAX = 300, matching D30
-exactly so the figure and the diagnostic behind it are the same measurement.
-The figure carries D30's gate 1 too --- the eta_0 column against the released
-quadrature, 1.2e-12 --- and refuses to write either the CSV or the picture if
-it fails, so an aliased grid stops the artefact rather than appearing in
-it."""
+note = """`required_k_points(K_MAX, eta_0 - eta_*)`, K_MAX = 400 for F10 and
+1500 for F11 (`--radiation-era`), F9's. It was 300 when it matched D30, and
+the figure carries D30's gate 1 still --- the eta_0 column against the full
+quadrature, $10^{-9}$ asserted, $1.7\\times10^{-14}$ measured for F10 on
+18 November 2026 --- and refuses to write either the CSV or the picture if it
+fails, so an aliased grid stops the artefact rather than appearing in it."""
 
 [[grid]]
 key = "scripts/diagnostic_d32_isw_discriminator.py::sl"
@@ -631,7 +631,8 @@ plateau is a statement about ell-dependence at fixed eta, so a figure that
 samples six multipoles and normalises each one cannot show it. Dense at low
 ell because that is where the plateau's shape is; to 300 because the first
 acoustic peak must be on the picture for the frozen shape to be legible. The
-damping tail is F9's and is not drawn."""
+damping tail is F9's and is not drawn. Under `--radiation-era` (F11) it steps
+by 10 to 300 and by 15 to 910, so the second and third maxima are on it."""
 
 [[grid]]
 key = "scripts/diagnostic_d33_w_path_integral.py::ELLS"

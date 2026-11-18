@@ -346,14 +346,14 @@ the last place a grid may be chosen by eye.
 
 ### `k_com` — the k grid F10's accumulation is integrated over
 
-`scripts/figure_f10_formation_surface.py:166`, `np.linspace`
+`scripts/figure_f10_formation_surface.py:176`, `np.linspace`
 
-`required_k_points(K_MAX, r_theta)`, K_MAX = 300, matching D30
-exactly so the figure and the diagnostic behind it are the same measurement.
-The figure carries D30's gate 1 too --- the eta_0 column against the released
-quadrature, 1.2e-12 --- and refuses to write either the CSV or the picture if
-it fails, so an aliased grid stops the artefact rather than appearing in
-it.
+`required_k_points(K_MAX, eta_0 - eta_*)`, K_MAX = 400 for F10 and
+1500 for F11 (`--radiation-era`), F9's. It was 300 when it matched D30, and
+the figure carries D30's gate 1 still --- the eta_0 column against the full
+quadrature, $10^{-9}$ asserted, $1.7\times10^{-14}$ measured for F10 on
+18 November 2026 --- and refuses to write either the CSV or the picture if it
+fails, so an aliased grid stops the artefact rather than appearing in it.
 
 ### `k_com` — the k grid the released angular spectrum is integrated on
 
@@ -832,7 +832,7 @@ the spectrum F9 draws. Each ell is an independent quadrature.
 
 ### `ELLS` — the multipoles F10's surface is drawn over
 
-`scripts/figure_f10_formation_surface.py:117`, `np.arange`
+`scripts/figure_f10_formation_surface.py:123`, `np.arange`
 
 Dense below 30, then stepping by 20 to 300. **This is the axis the
 first version of F10 threw away**, and the reason the rebuild exists: the
@@ -840,11 +840,12 @@ plateau is a statement about ell-dependence at fixed eta, so a figure that
 samples six multipoles and normalises each one cannot show it. Dense at low
 ell because that is where the plateau's shape is; to 300 because the first
 acoustic peak must be on the picture for the frozen shape to be legible. The
-damping tail is F9's and is not drawn.
+damping tail is F9's and is not drawn. Under `--radiation-era` (F11) it steps
+by 10 to 300 and by 15 to 910, so the second and third maxima are on it.
 
 ### `LEVELS` — the filled contour levels of F10's panel (b)
 
-`scripts/figure_f10_formation_surface.py:134`, `np.linspace`
+`scripts/figure_f10_formation_surface.py:144`, `np.linspace`
 
 `linspace(0.0, 1.0, 21)` --- **a set of drawing levels, not a
 discretisation of anything continuous**, which is what `index` is for. It is
@@ -861,7 +862,7 @@ level set that stopped at 0.90 could not show the thing the figure is for.
 
 ### `levels` — the filled contour levels of F10's panel (b) above 1, when the data go there
 
-`scripts/figure_f10_formation_surface.py:303`, `np.arange`
+`scripts/figure_f10_formation_surface.py:340`, `np.arange`
 
 `LEVELS` extended by `arange(1.05, top + 0.05, 0.05)`, where `top` is
 the largest $C_\ell(\eta)/C_\ell(\eta_0)$ on the surface. **Drawing levels,
@@ -872,7 +873,7 @@ panel's ceiling at 1 had hidden it. Equal to `LEVELS` when nothing exceeds 1.
 
 ### `post` — the conformal times F10 samples AFTER recombination
 
-`scripts/figure_f10_formation_surface.py:162`, `np.geomspace`
+`scripts/figure_f10_formation_surface.py:172`, `np.geomspace`
 
 `eta_* + geomspace(span*1e-4, span, N_SLICES-4)`, ten slices.
 Geometric because the visibility is narrow and a linear grid would put every
@@ -882,7 +883,7 @@ distinguishable and enough to read a progression.
 
 ### `pre` — the conformal times F10 samples ACROSS recombination
 
-`scripts/figure_f10_formation_surface.py:161`, `np.linspace`
+`scripts/figure_f10_formation_surface.py:171`, `np.linspace`
 
 `linspace(eta_floor, eta_star, 4)`. **Linear, not geometric, and
 deliberately so**: the PI asked for the autocorrelation *just before

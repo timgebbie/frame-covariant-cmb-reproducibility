@@ -59,6 +59,13 @@ STAGES: list[tuple[str, str]] = [
     # repeat here.
     ("F10 formation surface: when the spectrum is laid down",
      "scripts/figure_f10_formation_surface.py --replot"),
+    # **F11 is F10 with the radiation era solved, v1.4.0's lead figure.** Split
+    # as F10 is and under the same guard: the accumulation on the solved
+    # potential is the better part of an hour, lands in
+    # outputs/f11-formation-surface.csv, which is committed, and the harness
+    # redraws from it.
+    ("F11 formation surface with the radiation era",
+     "scripts/figure_f10_formation_surface.py --radiation-era --replot"),
 ]
 
 #: Deferred to v1.1.0. A control is not evidence, so the diagnostics here are
@@ -112,11 +119,10 @@ DEFERRED: dict[str, tuple[str, str]] = {
     # different question entirely, and nothing in the deferral records what
     # else it would have measured.
     "D3  source terms against k": ("v1.5.0", "S45"),   # S-b, renumbered T-87/S45
-    # **F11, the PI's figure plan for v1.4.0 (2026-11-04).** F10 redrawn with
-    # the radiation era wired (A-3), as the lead figure; F10 and F9 keep their
-    # identifiers and move down by caption order. Deferred as data so that
-    # `check_deferrals` refuses v1.4.0 without it.
-    "F11 formation surface with the radiation era": ("v1.4.0", "PI 2026-11-04"),
+    # **F11 was here and is DISCHARGED**, drawn 2026-11-18: the PI's figure
+    # plan for v1.4.0 (2026-11-04), F10 with the radiation era solved, is in
+    # STAGES above. It is removed rather than left with a stale target, as F6
+    # and F8 were; the deferral held v1.4.0 until it was done.
     # **T-51 was here and is DISCHARGED**, fixed 2026-10-16 within hours
     # of being registered. It is removed rather than left with a stale
     # target --- which is the same rule F6 and F8 were removed under, and

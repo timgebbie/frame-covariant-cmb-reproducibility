@@ -158,7 +158,7 @@ ARTEFACTS: list[Artefact] = [
              module="functions.spectra.two_frame",
              objects=("covariant_coefficient_sets", "line_of_sight_inputs"),
              script="scripts/figure_f9_acoustic_spectrum.py",
-             tests=("test_the_covariant_sets_are_paper_1_and_leave_the_default_alone",
+             tests=("test_the_covariant_sets_are_paper_1_and_leave_the_setting_alone",
                     "test_the_three_slots_give_one_transfer_in_both_frames"),
              note="the v1.2.0 figure redrawn from the three slots in place of "
                   "(102). First maxima 165.4 (EdS), 143.8 (LCDM) and 188.5 "
@@ -179,6 +179,19 @@ ARTEFACTS: list[Artefact] = [
                   "today's C_l above l = 30 and cancels 4-48% of it at l = 2-25 "
                   "(regenerated 18 November 2026, T-197), where every F10 drawn "
                   "from (102) showed none"),
+    Artefact("F11 - the formation surface with the radiation era solved",
+             "R", "v1.4.0",
+             module="functions.spectra.radiation_era",
+             objects=("solve_mode",),
+             script="scripts/figure_f10_formation_surface.py",
+             tests=("test_the_slots_accumulated_to_eta_0_are_the_slots",
+                    "test_e_the_two_frames_agree_under_the_solved_potential"),
+             note="F10 with both slots on the potential solved through the "
+                  "radiation era, to l = 910, v1.4.0's lead figure; the eta_0 "
+                  "column is the full integral to 3e-14. The late integrated "
+                  "Sachs-Wolfe term deposits a positive share at every "
+                  "multipole, 21% of C_2 and 19% at l = 90, where on the "
+                  "released potential it cancels 4-48% from l = 2 to 25"),
     Artefact("the stamped Planck 2018 set, wired as PLANCK_MODEL", "S", "v1.2.0",
              module="functions.background.flrw",
              objects=("PLANCK_MODEL", "OMEGA_GAMMA_H2"),

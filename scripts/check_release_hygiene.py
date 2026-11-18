@@ -624,6 +624,7 @@ STAMPED = (
     ("outputs/f7-frames.csv", "scripts/figure_f7_frames.py"),
     ("outputs/f9-acoustic-spectrum.csv", "scripts/figure_f9_acoustic_spectrum.py"),
     ("outputs/f10-formation-surface.csv", "scripts/figure_f10_formation_surface.py"),
+    ("outputs/f11-formation-surface.csv", "scripts/figure_f10_formation_surface.py"),
     ("diagnostics/d44-line-of-sight-invariant-slots.csv",
      "scripts/diagnostic_d44_the_line_of_sight_in_invariant_slots.py"),
     ("diagnostics/d44-line-of-sight-invariant-slots-summary.csv",
