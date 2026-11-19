@@ -2,7 +2,7 @@
 """C5 -- the monopole row, and the dipole shift.   Audit results 7, 8.
 
 READ WITH THE RULING OF 3 NOVEMBER 2026 (supplement v1.3.23, eq:paper1-source;
-added 2026-11-04).  gamma = Delta C_0 / (k^2 Delta C_2) vanishes exactly
+added 2026-11-04, P1-T).  gamma = Delta C_0 / (k^2 Delta C_2) vanishes exactly
 when Delta C_0 = 0, which is the first frame condition, P0, of the
 supplement's eq:frame-conditions.  It vanishes only for the row with a.B_0
 carried, and that is the row Paper 1's source requires once the rank-one
@@ -37,7 +37,7 @@ Boost:  DC_2 = v/k;  B_0 = -(1/3) D^a tau_a  and  tau~_a = tau_a - v_a
 They cancel exactly, giving gamma = 0.  Dropping B_0 leaves gamma = +1/3;
 the printed row (5/beta_2 * 1/3 = +5/2) leaves gamma = -5/2.
 
-**WHAT THIS CHECK CANNOT SEE** -- 2026-10-19, on request.
+**WHAT THIS CHECK CANNOT SEE** -- P1-T, 2026-10-19.
 Delta C_0 = 0 constrains how B_0 MOVES, not what it IS.  It fixes the
 multiplicative normalisation exactly -- scale a.B_0 by lambda and the
 cancellation closes only at lambda = 1 -- but any ADDITIVE boost-invariant
@@ -125,7 +125,7 @@ print('     see the docstring.  Delta C_0 = 0 fixes normalisation, not content.'
 # gamma pairing and DEFECT GONE will say so -- which is what S33(d) is for.
 # **c8 is the gate for the ell=0 row; this is the record of why it had to be.**
 #
-# RESTORED TO 'assert' ON 2026-11-04, read with the ruling of
+# RESTORED TO 'assert' ON 2026-11-04 (P1-T), read with the ruling of
 # 3 November.  gamma = 0 is P0, Delta C_0 = 0, the first frame condition, and
 # the row it selects is the one Paper 1's source requires with the rank-one
 # sign corrected.  The 2026-10-21 polarity flip recorded the right answer as a

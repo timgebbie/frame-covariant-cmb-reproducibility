@@ -2,7 +2,7 @@
 """C8 -- the rank-0 partner.  Settles whether a.B_0 belongs in C_0.
 
 READ WITH THE RULING OF 3 NOVEMBER 2026 (supplement v1.3.23, eq:paper1-source
-and eq:frame-conditions; added 2026-11-04).  Everything below this
+and eq:frame-conditions; added 2026-11-04, P1-T).  Everything below this
 paragraph was written with the rank-one gravitational source AS BUILT,
 a.B_1 = +k(dT + Phi_A), and its algebra stands for that source.  Paper 1's
 own source gives the rank-one gravitational term the opposite sign, and the
@@ -26,7 +26,7 @@ refutes the restoration ALONE, and the ruling requires it together with the
 sign.  This is the shape the supplement names more than once: a cancellation
 in a collapsed object read as the identity.
 
-WRITTEN AFTER T-107 REFUTED THE RESTORATION.  It was measured that putting
+WRITTEN AFTER T-107 REFUTED THE RESTORATION.  P1-B measured that putting
 a.B_0 into C_0 doubles criterion 5b, because (107) already carries the
 monopole source:
 
@@ -206,7 +206,7 @@ allok = (allok
            'T-148 scored a shift against a value'))
 
 # ---- C8h-C8k: the ruling of 3 November, scored from the same frame table.
-# ---- Added 2026-11-04.  The exact conditions are slot by slot
+# ---- Added 2026-11-04 (P1-T).  The exact conditions are slot by slot
 # ---- (eq:frame-conditions); the partition above is a collapsed-bracket sum.
 # Inputs, all from the frame table the rows above already use, plus the two
 # laws the supplement's frame paragraph reads off this bundle's own

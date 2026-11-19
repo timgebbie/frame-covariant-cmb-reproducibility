@@ -993,3 +993,12 @@ Citation metadata is in [`CITATION.cff`](CITATION.cff). Its `version` field
 tracks the tag that exists, not the one in preparation: GitHub's *Cite this
 repository* reads it, and a version there that has not been released would
 assert a release nobody can fetch.
+
+### AI use
+
+This bundle was developed with a large language model
+(Anthropic's Claude), used under the supervision and
+review of T. Gebbie, the responsible author. Attribution
+tags such as `P1-T` and `P1-B` in its files name working
+roles and not authors. The record is
+[`provenance/AI-PROVENANCE-v1.md`](provenance/AI-PROVENANCE-v1.md).

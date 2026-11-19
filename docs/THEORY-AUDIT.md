@@ -2,7 +2,7 @@
 
 > **Generated, not transcribed. Do not edit by hand.**
 >
-> Produced by `tests/frame/gen_theory_audit.py` at 2026-11-19 06:31 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
+> Produced by `tests/frame/gen_theory_audit.py` at 2026-11-19 08:37 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
 
 **Status: ALL CHECKS PASS** — 76 assertions across 14 instruments.
 
@@ -102,7 +102,7 @@ $a\Delta\mathcal{B}_0=\tfrac13kv=\tfrac13k^2\Delta C_2$ exactly, and $\gamma$ --
 | `r_no_B0` | 0.32445 |
 | `r_restored` | 0.00888329 |
 
-*Instrument: `tests/frame/c5_monopole.py`, sha256 `658440e27f33…`*
+*Instrument: `tests/frame/c5_monopole.py`, sha256 `e0979b704f47…`*
 
 ### The Thomson $v^B_a$ slot
 
@@ -176,7 +176,7 @@ Multiplying the transport equation by $W=e^{-\kappa}$ sends the gravitational so
 | `ruling_partition` | ['0', '2*k*v(eta)/3', '-k*v(eta)/3', 'k*v(eta)/3'] |
 | `ruling_passing_row` | both, as Paper 1 |
 
-*Instrument: `tests/frame/c8_rank0_partner.py`, sha256 `2820e0968cdb…`*
+*Instrument: `tests/frame/c8_rank0_partner.py`, sha256 `d32e69897872…`*
 
 ### The admissibility of the by-parts, and what (102) replaces it with
 
@@ -368,7 +368,7 @@ With the potentials defined by $E_{ab}\mp\tfrac12\pi_{ab}$ and the photons' stre
 
 | | |
 |---|---|
-| generated | 2026-11-19 06:31 UTC |
+| generated | 2026-11-19 08:37 UTC |
 | python | 3.13.18 |
 | numpy | 2.5.3 |
 | scipy | 1.18.1 |
