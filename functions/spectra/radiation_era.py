@@ -9,16 +9,18 @@ oscillator:
     Phi_H' = H Phi_A + (3 H^2 / 2k) sum_i Omega_i(a) (1 + w_i) v_i     (momentum: the source)
     k^2 Phi_H = (3/2) H^2 sum_i Omega_i(a) Delta_i,
         Delta_i = delta_i - 3 H (1 + w_i) v_i / k                       (energy: the check)
-    k^2 (Phi_A + Phi_H) = -(8/5) H^2 Omega_gamma(a) tau_2               (the photons' stress)
+    k^2 (Phi_A + Phi_H) = -(8/5) H^2 Omega_gamma(a) sigma_2             (the photons' stress)
 
 with $H$ the conformal Hubble rate and $\Omega_i(a)$ each species' share of the
 critical density at $a$. The bundle's radiation is photons alone
 ($N_{\rm eff}=0$), so the stress constraint has one term.
 
-**The species, in this bundle's Newtonian-frame variables.** They follow from Ma
-& Bertschinger's conformal Newtonian gauge by $\psi=\Phi_A$, $\phi=-\Phi_H$ and
-$\theta_i=-kv_i$, the map under which the three constraints above are theirs
-term by term:
+**The species, in this bundle's Newtonian-frame variables.** They are derived
+in 1+3: from the pair (152)--(153), eq:momentum-constraint, the energy
+constraint and eq:stress-constraint (`sec:a3-construction`), with the hierarchy
+from eq:transport-exact. Ma & Bertschinger's conformal Newtonian gauge agrees
+with them term by term under $\psi=\Phi_A$, $\phi=-\Phi_H$ and
+$\theta_i=-kv_i$, which makes it the comparator and not the derivation:
 
     CDM:      delta_c' = k v_c - 3 Phi_H',   v_c' = -H v_c - k Phi_A
     photons:  dT' = -Phi_H' + (k/3) tau_1                                (153), expansion coupling dropped
@@ -38,10 +40,12 @@ give the baryons out of the constraint, which opened the energy constraint by up
 to 3% of its terms at $\eta_*$ (D46 at step 2).
 
 **After $\eta_*$ the photons are a hierarchy with gravitational sources.** In
-the velocity normalisation of (152)--(153), $\sigma_\ell=(-1)^\ell\tau_\ell$ with
-$\tau_\ell$ the covariant multipoles of (F.1), so $\sigma_0=\delta T$ and
+the velocity normalisation of (152)--(153), $\sigma_\ell=(-1)^{\ell+1}\tau_\ell$
+with $\tau_\ell$ the covariant multipoles of (F.1), the overall sign fixed by
+*Annals I*'s harmonics (`sec:a3-construction`), so $\sigma_0=\delta T$ and
 $\sigma_1=\tau_1$ hand over as they stand --- the pair's phase at every rank,
-which pairs with the stress constraint's $-\tfrac85$ --- and
+which pairs with the stress constraint's $-\tfrac85$ on $\sigma_2=-\tau_2$,
+the supplement's $+\tfrac85$ on $\tau_2$ --- and
 
     sigma_l' = k [ w_l sigma_{l+1} - sigma_{l-1} ] - delta_{l0} Phi_H' - delta_{l1} k Phi_A,
     w_l = (l+1)^2 / [(2l+3)(2l+1)],

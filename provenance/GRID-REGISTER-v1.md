@@ -51,7 +51,7 @@ finely.
 
 ### `eta` — the line-of-sight integration grid for C_ell
 
-`functions/spectra/pipeline.py:507`, `np.linspace`
+`functions/spectra/pipeline.py:517`, `np.linspace`
 
 `required_n_eta(k_max, span)` at 12 samples per j_ell oscillation, and
 `run` RAISES rather than accepting an n_eta below it --- *"Pass n_eta=None to
@@ -60,7 +60,7 @@ template the other rows are measured against.
 
 ### `mode_eta` — one acoustic mode's own integration grid, from its derived start
 
-`functions/spectra/pipeline.py:590`, `np.linspace`
+`functions/spectra/pipeline.py:600`, `np.linspace`
 
 `required_acoustic_points(k, eta_couple - start)` at 24 samples per
 acoustic oscillation, on a floor of 512. Arithmetic, not a knob: delta_T goes
@@ -380,7 +380,7 @@ adaptive refinement restarts rather than the accuracy. Nothing rests on it.
 
 ### `eta` — the samples r_s(eta) = Int_0^eta c_s deta is accumulated on
 
-`functions/spectra/acoustic.py:213`, `np.logspace`
+`functions/spectra/acoustic.py:216`, `np.logspace`
 
 **Logarithmic, and that is not a style choice.** c_s -> 1/sqrt(3) as
 eta -> 0 while the span to eta_* covers five decades, so a uniform grid spends
@@ -407,7 +407,7 @@ measured rather than assumed.
 
 ### `ell` — the multipoles of the photon hierarchy after eta_*, 0..ell_max
 
-`functions/spectra/radiation_era.py:247`, `np.arange`
+`functions/spectra/radiation_era.py:251`, `np.arange`
 
 An index array whose length is the truncation `STEP_TWO_ELL_MAX = 32`,
 closed by Ma and Bertschinger's free-streaming truncation. Measured on
@@ -649,7 +649,7 @@ Set by the transform length, not chosen. The FFT's own grid is the k grid of its
 
 ### `master` — the grid Phi_A and Phi_H are splined on, shared by every mode
 
-`functions/spectra/pipeline.py:581`, `np.logspace`
+`functions/spectra/pipeline.py:591`, `np.logspace`
 
 16384 logarithmic samples from the earliest acoustic start to
 eta_couple. **It carries no physical scale of its own**: it resamples a
@@ -662,7 +662,7 @@ grids spanning three decades in their lower limit.
 
 ### `_KS_N` — the orders of Kodama and Sasaki's series, n = 4..19
 
-`functions/spectra/radiation_era.py:122`, `np.arange`
+`functions/spectra/radiation_era.py:126`, `np.arange`
 
 Exact integer orders of the binomial series of sqrt(1+y). Used below
 y = 0.1, where the first omitted term is below 1e-16 and the closed form's

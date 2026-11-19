@@ -32,6 +32,7 @@ from scipy.special import gamma
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from functions.background.flrw import OMEGA_GAMMA_H2  # noqa: E402
 from functions.spectra.sachs_wolfe import (  # noqa: E402
     bessel_integral_numeric,
 )
@@ -40,7 +41,7 @@ OUT = ROOT / "diagnostics" / "ell-range-v1.0.0.txt"
 
 # --- Annals II §8.3.2 model -------------------------------------------------
 H, OMEGA_B, Z_STAR = 0.5, 0.05, 1100.0
-OMEGA_GAMMA_H2 = 2.47e-5  # photon density parameter today
+# OMEGA_GAMMA_H2, the photon density today, is the background's (flrw), from T_0
 TOLERANCES = (0.01, 0.02, 0.05, 0.10)
 ADOPTED_TOLERANCE = 0.05
 

@@ -271,15 +271,25 @@ def _continue_by_free_streaming(k, eta, eta_couple, delta_T, tau_1):
     and (F.3) builds the rest. Injecting a shear that the fluid solution does
     not contain would be inventing initial data.
 
-    $\tau_0=\delta_T$, and $\tau_1$ is in the **velocity** normalisation that
-    `solve_acoustic` returns (finding T-66). **That is not (F.1)'s sign
-    (finding T-195).** (153) reads $\delta T'=+\tfrac k3\tau_1$ and (F.1)
-    continued to $\ell=0$ reads $\tau_0'=-\tfrac k3\tau_1$, so the pair's
-    multipoles are $(-1)^\ell$ times (F.1)'s and the dipole changes sign at
-    the handover. Without it the continuation started every mode with its
-    monopole's slope reversed --- the oscillation run backwards from
-    `eta_couple`. This comment said no rescale was applied and that it would
-    be where the two diverged; it was.
+    $\tau_1$ is in the **velocity** normalisation that `solve_acoustic`
+    returns (finding T-66). **The pair's multipoles are $(-1)^{\ell+1}$ times
+    (F.1)'s, and the sign is fixed, not chosen** (the supplement's
+    `sec:a3-construction`): *Annals II* puts the pair on *Annals I*'s
+    harmonics, whose $\mathrm D^bQ_{ab}$ relation holds for
+    $Q_a=-(a/k)\mathrm D_aQ$ alone, so the dipole is one object in both and
+    (F.1)'s monopole is $\tau_0=-\delta T$. (153) reads
+    $\delta T'=+\tfrac k3\tau_1$ where (F.1) continued to $\ell=0$ reads
+    $\tau_0'=-\tfrac k3\tau_1$. So the **monopole** changes sign at the
+    handover, in and out, and the dipole passes as it stands: what is carried
+    is (F.1) at every rank, and a quadrupole read from it has (F.1)'s sign.
+
+    Before T-195 neither turned, and every mode started with its monopole's
+    slope reversed. T-195 turned the dipole instead, which hands over the right
+    phase between rank zero and rank one with every rank of (F.1) reversed. It
+    returned $\delta T$ and $\tau_1$ correctly, since the hierarchy here
+    carries no source and only those two come back, and the two choices return
+    them bit for bit; the quadrupole it carried had the other sign (T-195,
+    amended 2026-11-19).
 
     Returns the two arrays with everything at or below `eta_couple` untouched,
     so the tight-coupling era is bit-identical to the released path and only
@@ -292,13 +302,13 @@ def _continue_by_free_streaming(k, eta, eta_couple, delta_T, tau_1):
         return delta_T, tau_1
     grid = np.concatenate([[float(eta_couple)], np.asarray(eta)[after]])
     initial = np.zeros(TAU_CONTINUATION_ELL_MAX + 1)
-    initial[0] = float(np.interp(eta_couple, eta, delta_T))
-    initial[1] = -float(np.interp(eta_couple, eta, tau_1))      # T-195
+    initial[0] = -float(np.interp(eta_couple, eta, delta_T))    # tau_0 = -dT
+    initial[1] = float(np.interp(eta_couple, eta, tau_1))       # shared
     sol = free_stream(float(k), grid, ell_max=TAU_CONTINUATION_ELL_MAX,
                       normalisation="covariant", initial=initial)
     out_t, out_1 = np.array(delta_T, dtype=float), np.array(tau_1, dtype=float)
-    out_t[after] = sol.values[1:, 0]
-    out_1[after] = -sol.values[1:, 1]                            # T-195
+    out_t[after] = -sol.values[1:, 0]
+    out_1[after] = sol.values[1:, 1]
     return out_t, out_1
 
 
