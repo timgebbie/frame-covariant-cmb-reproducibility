@@ -1,16 +1,16 @@
 # 1+3 covariant CMB anisotropies reproducibility bundle
 
 Version: **v1.4.0-dev** — the radiation era on the frame-invariant line of
-sight: the radiation-era potential, the driving it gives the acoustic
-oscillator (approximation A-3) and the tight-coupling transition (A-5). The
-supplement registers the test of this work before the work begins.
+sight: the radiation-era potential and the driving it gives the acoustic
+oscillator (approximation A-3). The supplement registered the test of this
+work before the work began, and the test passes.
 **Last release: v1.3.0** — 4 November 2026: the line-of-sight integral
 assembled from Paper 1's linear redshift source as a Sachs–Wolfe, a Doppler
 and an integrated slot, each invariant under a change of frame. The two frames
 give one $C_\ell$ to $4\times10^{-14}$ (D44), the slots sum back to the
 integral they rearrange (D45), and F9 and F10 are drawn from them.
 
-Supplement: **v1.4.8** — `SUPPLEMENTARY-MATERIAL-v1.4.8.tex`. The supplement
+Supplement: **v1.4.9** — `SUPPLEMENTARY-MATERIAL-v1.4.9.tex`. The supplement
 has its own version line. An edition records the state of the documentation
 and does not assert that the computational release above has advanced, so
 `scripts/_versions.py` reads the supplement's name from this line and never
@@ -30,9 +30,9 @@ University of Cape Town, 2026, arXiv:astro-ph/9912072v4
 
 The supplementary-materials document is included here:
 
-> [SUPPLEMENTARY-MATERIAL-v1.4.8.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.4.8.pdf)
+> [SUPPLEMENTARY-MATERIAL-v1.4.9.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.4.9.pdf)
 
-Its source, `SUPPLEMENTARY-MATERIAL-v1.4.8.tex`, is one file in the
+Its source, `SUPPLEMENTARY-MATERIAL-v1.4.9.tex`, is one file in the
 repository root, and `scripts/build_supplement.py` builds it with `pdflatex`
 alone: the prose carries no `\input`, the bibliography is inline, and the only
 external files are the generated assets in `tables/`, `tikz/` and `figures/`.
@@ -491,14 +491,15 @@ Working and checked:
   an interior minimum at 360, and the backgrounds without radiation do not
   move (F9, D46, v1.4.0).
 
-Not yet right, and the work of v1.4.0:
+Not yet right, and the work after v1.4.0:
 
 - on Planck the heights stand within 6.4% of CAMB's at the three maxima, the
   first above it by that much and the third by 4.5%, with 15% at $\ell=840$
-  in the damping tail. The bundle's radiation is photons alone and its
-  damping a factor on the transfer, where CAMB carries neutrinos and diffuses
-  the photons in the hierarchy, so the remainder is not yet apportioned
-  between those and the transition below;
+  in the damping tail. The bundle's damping is a factor on the transfer,
+  evaluated at $R=0$ (T-21), where CAMB diffuses the photons in the
+  hierarchy. Both carry photons as the only radiation, since CAMB is run with
+  $N_{\rm eff}=0$, so the remainder is not yet apportioned between the
+  damping and the transition below;
 - the tight-coupling pair is integrated to six times $\eta_\ast$ and its
   moments are held after, with no slip, no growing quadrupole and no
   polarization (A-5). The photons in the constraint leave it at $\eta_\ast$;
@@ -525,8 +526,8 @@ precondition for the next, so the version numbers follow the physics.
 | **v1.1.0** | *What does the spectrum need that it does not have?* A visibility of finite width, since an instantaneous last scattering has no damping tail | Peebles' effective three-level atom replaces equilibrium Saha and becomes the default (S22): `peebles.py`, `decoupling.py`. The visibility peak moves from $z\simeq1300$ to $1107$ and widens by about 40%, and that width sets the Silk envelope | F6 · released |
 | **v1.2.0** | *Is the antecedent's own algebra self-consistent when evaluated?* The full linear source, and (102) carried with a generic $u^a$ and specialised back | the complete rank-0, 1 and 2 assembly: `coefficients.py`, `integral_solution.py`, `frame_transform.py`. Criterion 5b closes at $9.5\times10^{-6}$ against $10^{-3}$ | F9, F5, F7, D8 · released |
 | **v1.3.0** | *Is the line of sight frame-invariant?* The line-of-sight integral in frame-invariant slots, built from Paper 1's source, with the acoustic oscillator on the derived recombination grid (S33) | `line_of_sight.py`, `RANK_ONE_SOURCE = "paper 1"` in `coefficients.py`, `two_frame.py`, `acoustic.py` | F9, F10, D44, D45 · released |
-| **v1.4.0** | *What drives the oscillator?* Radiation-era driving (A-3) and the tight-coupling transition: slip and a growing quadrupole (A-5) | the radiation-era potential in the oscillator and in both slots, one initial condition and start for every mode (T-192), $k_D$ evaluated at the baryon loading the oscillator runs at, and $\Omega_r$ restored to `LCDM_MODEL` | D10, F11 · **current** |
-| **v1.5.0** | *What happens at second order in the shear?* The $\mathcal O(\varepsilon^2\ell)$ couplings that §5.5 of the antecedent discards, kept | $\tfrac25\mathrm D^c\tau_{ac}$ restored to the dipole equation; $\sigma_{ab}$ enters the oscillator instead of being dropped at $\mathcal O(t_c\varepsilon)$ | D3 · planned |
+| **v1.4.0** | *What drives the oscillator?* Radiation-era driving (A-3) | the potential solved through the radiation era with the CDM, the baryons and the photons, the photons' anisotropic stress closing it after decoupling, in the oscillator and in both slots; one initial condition and start for every mode, deep in the radiation era (T-192, T-193) | D10, F11 · **current** |
+| **v1.5.0** | *What happens when tight coupling ends, and at second order in the shear?* The tight-coupling transition (A-5), then the $\mathcal O(\varepsilon^2\ell)$ couplings that §5.5 of the antecedent discards, kept | the photon pair carried through the transition, with slip and a growing quadrupole, in place of the held moments (A-5), with $k_D$ evaluated at the baryon loading the oscillator runs at and $\Omega_r$ restored to `LCDM_MODEL`; $\tfrac25\mathrm D^c\tau_{ac}$ restored to the dipole equation; $\sigma_{ab}$ enters the oscillator instead of being dropped at $\mathcal O(t_c\varepsilon)$ | D3 · planned |
 
 v1.5.0 is the release the repository is named for. §5.5 of the antecedent
 drops the shear coupling from the oscillator at $\mathcal O(t_c\varepsilon)$
@@ -605,7 +606,7 @@ The complete record, B-1 to B-17, is
 deliberate approximations, A-1 to A-5, are
 `provenance/SOURCE-APPROXIMATIONS-v1.md`.
 
-## Current situation: v1.4.0-dev
+## Current situation
 
 This bundle is an independent Python reconstruction, from first $1+3$
 covariant principles, of the almost-Friedmann–Lemaître results of T. Gebbie,
@@ -624,12 +625,16 @@ are stated where they occur: recombination rests on an imported atomic-physics
 fit, and `functions/spectra/peebles.py` tabulates what is derived there and
 what is not.
 
-v1.3.0 released the frame-invariant line of sight (step 7). The v1.4.0-dev line
-wires the radiation era into the oscillator and into both slots, with one
-initial condition and start for every mode, and adds the tight-coupling
-transition; the release sequence above lists what each earlier release put
-back. The radiation era's three steps are in the tree: the one start, on
-Planck the solved potential, and the baryons' own term in the constraint.
+v1.3.0 released the frame-invariant line of sight (step 7). v1.4.0 wires the
+radiation era into the oscillator and into both slots, with one initial
+condition and start for every mode; the release sequence above lists what
+each earlier release put back. The radiation era is built in its three
+registered steps: the one start, on Planck the solved potential, and the
+baryons' own term in the constraint. Its test, registered before the work
+began, passes: on Planck the two frames agree to $7\times10^{-15}$, the first
+maximum lands at 205.5 inside the registered $206\pm6$, with an interior
+minimum at 360, and the backgrounds without radiation do not move. F11, the
+formation surface with the radiation era solved, is v1.4.0's lead figure.
 
 ### Artefacts
 
@@ -697,7 +702,7 @@ figures and the manifests, which measure what it costs to check the bundle
 rather than to run it.
 
 *Snapshot: CPython 3.13 on Linux x86_64 (two cores), numpy 2.5, 2026-11-18,
-on the released path of v1.4.0-dev: each mode's potential solved through the
+on v1.4.0's path: each mode's potential solved through the
 radiation era, the frame's coefficients built from it, and the three
 frame-invariant slots projected, in the CDM frame; 39 multipoles to
 $\ell=990$, 4480 modes to $k=1500$, `PLANCK_MODEL`. A benchmark is a property
@@ -779,25 +784,20 @@ public and why v1.5.0 is not on the critical path for Paper 1.
 
 ## Future situation
 
-v1.4.0 and v1.5.0 are the next two rows of the release sequence: the radiation
-era with the tight-coupling transition, then second order in the shear. In
-v1.4.0 the potential is solved with the CDM and the photon–baryon fluid
-rather than supplied, from one start deep in the radiation era for every
-mode, on the adiabatic growing mode, with the photons kept in the constraint
-after decoupling; the supplement fixes that construction before it is built.
-It registers v1.4.0's test on the frame-invariant assembly, with the
-radiation-era $\Phi$ entering the oscillator, the Sachs–Wolfe slot and the
-integrated slot together: on Planck the Newtonian and CDM spectra coincide
-below $10^{-12}$; on Planck the first maximum of $D_\ell$ lands at $206\pm6$,
-with at least one interior minimum between $\ell=300$ and $900$; and on the
-backgrounds with $\Omega_r=0$ the solve reproduces $D/a$ to $10^{-10}$, while
-their released potential, and so their spectra, do not change with the
-wiring. Einstein–de Sitter is the null control, since A-3 cannot act where
-there is no radiation era. The construction is built, in its three registered
-steps, and the test passes as registered. F11, the formation surface with the
-radiation era solved, is v1.4.0's lead figure, and D44 and D45 read the
-solved potential: on Planck the assembly carries the series, its maxima at
-$\ell=210$, 480, 705 and 990.
+v1.5.0 is the next row of the release sequence: the tight-coupling transition
+(A-5), then second order in the shear. A-5 comes first because the shear
+enters the oscillator through the quadrupole that tight coupling suppresses.
+In v1.5.0 the photon pair is carried through the transition, with slip and a
+growing quadrupole, in place of the moments v1.4.0 holds after $6\eta_\ast$,
+and the diffusion scale is evaluated at the baryon loading the oscillator
+runs at. Its test is registered before the work begins, against the heights
+v1.4.0 records and does not gate: within 6.4% of CAMB's at the three maxima
+on Planck and 15% at $\ell=840$. The construction it starts from is
+v1.4.0's: the potential solved with the CDM, the baryons and the photons from
+one start deep in the radiation era, whose registered test passes, with the
+two frames agreeing to $7\times10^{-15}$ on Planck and the first maximum at
+205.5. D44 and D45 read that potential: on Planck the assembly carries the
+series, its maxima at $\ell=210$, 480, 705 and 990.
 
 | | what it adds, physically |
 |---|---|
@@ -807,8 +807,8 @@ $\ell=210$, 480, 705 and 990.
 An envelope term is not changed while the source assembly beneath it is being
 measured, because moving the envelope moves the number the measurement reads,
 and a second-order term added to a linear assembly that is not yet right adds
-a second unknown. v1.4.0 and v1.5.0 therefore follow v1.3.0 rather than run
-beside it.
+a second unknown. A-5 and the shear terms therefore follow v1.4.0 rather
+than run beside it.
 
 ## Scientific boundary
 
@@ -982,7 +982,7 @@ content. The full history is in `CHANGELOG.md`; the decisions behind it are in
 | Item | Value |
 |---|---|
 | **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMBR lensing in the exact 1+3 covariant radiation hierarchy*, Paper 1, University of Cape Town. arXiv:astro-ph/9912072v4, [doi:10.48550/arXiv.astro-ph/9912072](https://doi.org/10.48550/arXiv.astro-ph/9912072). Submitted 2026-10-16. CC BY 4.0. Cite it with the version suffix: the bare identifier has carried three documents, `v2` the legacy 1999 work, `v3` the correction and `v4` this paper |
-| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.4.8.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.4.8.pdf) |
+| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.4.9.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.4.9.pdf) |
 | **GitHub repository** | [timgebbie/frame-covariant-cmb-reproducibility](https://github.com/timgebbie/frame-covariant-cmb-reproducibility) |
 | **ZivaHub/Figshare DOI** | [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509), live. The concept DOI always resolves to the latest version, so it is the one to cite |
 | **Associated antecedent** | Gebbie, T.; Dunsby, P. K. S.; Ellis, G. F. R. (2000). *1+3 covariant cosmic microwave background anisotropies II: the almost-Friedmann–Lemaître model*. Annals of Physics **282**, 321–394. [doi:10.1006/aphy.2000.6034](https://doi.org/10.1006/aphy.2000.6034) |

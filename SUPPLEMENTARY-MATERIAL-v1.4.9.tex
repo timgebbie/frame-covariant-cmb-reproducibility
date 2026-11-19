@@ -1,5 +1,20 @@
 % Computational supplement to the associated paper.
 %
+% v1.4.9, 2026-11-19.  The supplement as it should read at the v1.4.0 tag
+% (PI, 19 November): v1.4.0 is the radiation era (A-3) alone, and A-5 moves to
+% v1.5.0 as its first step (PI's decision of the same day).
+%   - Every printed statement of the v1.4.0-dev line is in release voice:
+%     the abstract, Part I's situation, the Future situation's development
+%     sequence, the A-3 paragraph, the registered test's tense, the
+%     discussion's (102) item, the v1.3.0 retrospective, the planned end and
+%     Q16.  The \date label is left to scripts/bump_release.py at the tag.
+%   - A subsection on v1.4.0 joins the release history: what it establishes
+%     and what it does not.
+%   - D42's five sentences cite the instrument as it stood at bundle 3bb4490,
+%     whose column read as -C_1 was C_1's Thomson half (T-199), with the
+%     restated D42 beside them.
+%   - The finding range is T-1 to T-200.  Equations unchanged.
+%
 % v1.4.8, 2026-11-19.  The radiation era's third step on the record, the
 % regenerated figures and diagnostics read, and (F.1)'s overall sign fixed.
 %   - Step 3 (bundle 33298fc): the A-3 record at four places reads it, and
@@ -524,7 +539,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.4.8 --- 19 November 2026\\
+\date{Supplement v1.4.9 --- 19 November 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.4.0-dev}
 
 \begin{document}
@@ -557,17 +572,20 @@ numerical resolution, parameter choices and interpretive limits. The first-order
 in a common observer frame, and on the line-of-sight integrand it becomes
 three conditions on the matching coefficients. The antecedent's coefficients,
 as built, fail two of them. Paper~1's own source satisfies all three, and the
-assembly built from it, which v1.3.0 releases, gives one spectrum in the
-Newtonian and CDM frames and sums back to the integral it rearranges, with an
-acoustic series on Einstein--de~Sitter but not yet on the Planck background.
+assembly built from it, released in v1.3.0, gives one spectrum in the
+Newtonian and CDM frames and sums back to the integral it rearranges.
 The integration-by-parts reconstruction of the published line-of-sight
-solution identifies four discrepancies in the antecedent's assembly. On the
-Planck background the first-peak position and the secondary peaks are not yet
-recovered, and below $\ell\simeq30$ the spectrum carries an incomplete
-radiation era and the start rule that comes with it (T-192), which is
-approximation A-3 and the work of v1.4.0. Findings are recorded
+solution identifies four discrepancies in the antecedent's assembly. v1.4.0
+adds the radiation era, approximation A-3: every mode starts deep in the
+radiation era on the adiabatic growing mode, and its potential is solved with
+the CDM, the baryons and the photons, whose anisotropic stress closes it after
+decoupling. On the Planck background the acoustic series is then in place.
+The first maximum lies at $\ell=205.5$, inside the registered $206\pm6$, and
+the maxima and the first interior minimum fall where CAMB's do on the same
+grid. The heights are recorded and not gated, and the tight-coupling
+transition, A-5, is left to the next release. Findings are recorded
 against the antecedent (B-1 to B-17) and against the implementation (T-1 to
-T-192), and an inventory of findings is not treated as a certification of
+T-200), and an inventory of findings is not treated as a certification of
 the physical calculation. CAMB and CLASS provide external comparisons, not
 inputs or calibration targets, and the supplement makes no claim of new
 physics. The identifier \texttt{astro-ph/9912072v4} refers to Paper~1; the
@@ -649,21 +667,21 @@ are deliberately distinct.}
 \section{Current situation}
 \label{sec:current-situation}
 
-\texttt{v1.3.0} was tagged on 4 November 2026, and this edition opens the
-supplement's \texttt{v1.4.0-dev} line. The released Python reconstruction
-has progressed from free-streaming and PSTF mode recursions in v1.0.0,
-through a finite-width scattering visibility in v1.1.0 and the full linear
-source and frame-specialised integral assembly in v1.2.0, to the
-line-of-sight integral in frame-invariant slots in v1.3.0, built from
-Paper~1's source and summed back to the integral it rearranges. The
-v1.4.0 work is the radiation era (A-3), now built in three steps
-(\S\ref{sec:a3-construction}), with A-5 to follow. The pinned README revision
+\texttt{v1.3.0} was tagged on 4 November 2026, and this supplement documents
+\texttt{v1.4.0}. The released Python reconstruction has progressed from
+free-streaming and PSTF mode recursions in v1.0.0, through a finite-width
+scattering visibility in v1.1.0 and the full linear source and
+frame-specialised integral assembly in v1.2.0, to the line-of-sight integral
+in frame-invariant slots in v1.3.0, built from Paper~1's source and summed
+back to the integral it rearranges, and to the radiation era in v1.4.0, built
+in three registered steps (\S\ref{sec:a3-construction}). The tight-coupling
+transition, A-5, moves to v1.5.0 (\S\ref{sec:future-situation}). The pinned README revision
 this section cites was \texttt{v1.3.0-dev}, with \texttt{v1.2.0} the last
 tagged release named there.
 At v1.3.0 oscillations had been recovered and the physical spectrum had
 \emph{not}: the primary peak placement, the low-$\ell$ plateau and the
 secondary peak structure were unresolved, as the repository's own
-qualification records. On the \texttt{v1.4.0-dev} line, with the radiation
+qualification records. In v1.4.0, with the radiation
 era solved, all three are in place on the Planck background: the first
 maximum at $205.5$, inside the registered $206\pm6$; the curve below
 $\ell\simeq30$ within $1.8\%$ of CAMB's shape; and maxima at $\ell=210$,
@@ -1228,11 +1246,13 @@ or measurement required to resolve them.
 v1.3.0 resolved the source assembly without relaxing the
 common-physical-endpoint frame test: the three slots are each
 frame-invariant and sum back to the integral they rearrange.
-As the README specifies, \texttt{v1.4.0} is reserved for radiation-era
-driving (A-3), the tight-coupling transition and slip/quadrupole terms
-(A-5); its lead figure is F11, the formation surface with the radiation era
-solved, and its test, registered in \S\ref{sec:first-peak}, is met at the
-third step (\S\ref{sec:a3-construction}). A-5 is what remains of v1.4.0. \texttt{v1.5.0} then restores the nonlinear shear terms retained
+\texttt{v1.4.0} adds radiation-era driving (A-3). Its lead figure is F11,
+the formation surface with the radiation era solved, and its test, registered
+in \S\ref{sec:first-peak}, is met at the third step
+(\S\ref{sec:a3-construction}). The tight-coupling transition and the slip and
+quadrupole terms (A-5) move to \texttt{v1.5.0} as its first step, because the
+shear enters the oscillator through the quadrupole that tight coupling
+suppresses. \texttt{v1.5.0} then restores the nonlinear shear terms retained
 in the exact $1+3$ hierarchy but absent from the linear oscillator,
 with the intended endpoint being an implementation of the
 full \emph{in-scope} physics introduced in Paper~1, using antecedent
@@ -2697,8 +2717,9 @@ Einstein--de~Sitter is therefore a null control and not a weak case.
 A diagnostic that claims to separate the late ISW must return \emph{exactly
 zero} on it. A small number is a failure, not a pass.
 
-\paragraph{Approximation A-3.} The released $\Phi$ is the matter-dominated
-one and has no radiation era in it; that absence is approximation A-3. The
+\paragraph{Approximation A-3.} The $\Phi$ released in v1.3.0 is the
+matter-dominated one and has no radiation era in it; that absence is
+approximation A-3. The
 radiation-era potential is derived in closed form --- with $c_s^2=\tfrac13$ and
 $\mathcal H=1/\eta$ the evolution equation becomes
 $\Phi''+4\eta^{-1}\Phi'+\tfrac13k^2\Phi=0$, whose regular solution is
@@ -2711,12 +2732,13 @@ $\Phi''+4\eta^{-1}\Phi'+\tfrac13k^2\Phi=0$, whose regular solution is
 so $\Phi\to\Phi_i$ as $x\to0$ and $\Phi\simeq-3\Phi_i\cos x/x^2$ for $x\gg1$:
 decaying as $x^{-2}$ while oscillating. Because it decays on the same
 timescale the mode oscillates, it drives the oscillator \emph{resonantly}, and
-that amplification is missing from every peak \emph{height} this bundle
-produces. \eqref{eq:radiation-potential} is implemented as a diagnostic and is
-not wired into the released pipeline. D24 found A-3 unconnected to the peak
-\emph{position} while the line of sight carried the coefficients as built. The
-radiation era is wired in v1.4.0, after v1.3.0 is released without it, and the
-test of it is registered in \S\ref{sec:first-peak}.
+that amplification is missing from every peak \emph{height} v1.3.0 produces.
+\eqref{eq:radiation-potential} is a diagnostic and a check, and it is not
+wired into the pipeline. D24 found A-3 unconnected to the peak
+\emph{position} while the line of sight carried the coefficients as built.
+v1.4.0 solves the potential through the radiation era instead
+(\S\ref{sec:a3-construction}), and the test of it, registered in
+\S\ref{sec:first-peak}, passes.
 
 % ===========================================================================
 \subsection{Two corrections to the antecedent}
@@ -3201,15 +3223,16 @@ and the integrated slot carries the potential's decay as the boundary does.
 
 That is approximation A-3. It is derived in closed form in this
 bundle as $\Phi=3\Phi_i\,j_1(x)/x$ with $x=k\eta/\sqrt3$
-(\eqref{eq:radiation-potential}), it is gated by
-\texttt{tests/test\_radiation\_potential.py}, and it is not wired into
-\texttt{solve\_acoustic}. Wiring it is v1.4.0's work, with the tight-coupling
-transition and the slip and quadrupole terms of A-5
-(\S\ref{sec:future-situation}); v1.3.0 is released without it.
+(\eqref{eq:radiation-potential}) and gated by
+\texttt{tests/test\_radiation\_potential.py}. v1.3.0 is released without it.
+v1.4.0 does not wire the closed form in. It solves the potential through the
+radiation era (\S\ref{sec:a3-construction}), and the closed form stays a
+diagnostic and a check. The tight-coupling transition and the slip and
+quadrupole terms of A-5 move to v1.5.0 (\S\ref{sec:future-situation}).
 
-\paragraph{The registered test.} On 4 November the v1.4.0 run is registered
+\paragraph{The registered test.} On 4 November the v1.4.0 run was registered
 on the frame-invariant assembly \eqref{eq:assembly-invariant}, before any of
-that work begins. It follows the sum-back of \S\ref{sec:w-form}, so that the
+that work began. It follows the sum-back of \S\ref{sec:w-form}, so that the
 slots are read through an evaluation independent of them. Wired means that the radiation-era
 $\Phi$ enters every place $\Phi$ enters: the oscillator's forcing and so the
 boundary value, the Sachs--Wolfe slot and the integrated slot. Wiring it into
@@ -3257,7 +3280,7 @@ super-horizon factor, interpolates exactly where the modes that set the first
 peak enter the sound horizon. The solved potential carries its own transfer,
 so Bond and Efstathiou's (J.5) is not applied to it; its late-time
 $\Phi(k)/\Phi(k\to0)$ against (J.5) at the same shape parameter is recorded,
-not gated. Three features of the solve are fixed before it is built.
+not gated. Three features of the solve were fixed before it was built.
 
 The start and the initial condition are one rule for every mode. The start
 $\eta_i$ lies deep in the radiation era and outside the horizon for every $k$
@@ -4118,24 +4141,33 @@ secondaries is not a weight question. Neither run is yet among this bundle's rel
 withdrawn account stand as measurements. The first peak of (102) as built sits
 at $0.9994\,\ell_A$; its reading as one surviving snapshot of the undriven
 source goes with the account (\S\ref{sec:first-peak}). (102)'s spectrum under
-\texttt{split\_by\_parts} rises to one maximum and decays with no trough. D42
-separates each coefficient from its pedestal with a running mean
-one acoustic period wide, a filter with a zero at the acoustic frequency that
-cannot leak the oscillation into the pedestal: $\hat v_B$ and $-C_1$ carry the
-wave at $26.5\%$ and $22.1\%$ modulation, and $C_0$, in the CDM frame, at
-$0.12\%$. Read directly, none of the three crosses zero below $k=600$: each
-oscillates on a pedestal larger than the oscillation.
+\texttt{split\_by\_parts} rises to one maximum and decays with no trough. D42,
+as it stood at bundle \texttt{3bb4490}, separated each coefficient from its
+pedestal with a running mean one acoustic period wide. It read $\hat v_B$ at
+$26.5\%$ modulation and $C_0$, in the CDM frame, at $0.12\%$, and a column it
+labelled $-C_1$ at $22.1\%$, which was the Thomson half of $C_1$,
+$-\kappa'v_B/k$, with $C_1$'s sign (T-199). Read directly, none crossed zero
+below $k=600$. The restated D42 fits each source in windows one acoustic
+period wide and calibrates the fit on known waves of the source's own shape.
+In the environment of 3 November the Sachs--Wolfe source at $\eta_*$ carries
+the wave at $A/|P|$ of $0.5$ to $0.8$, on a pedestal larger than the
+oscillation. With the radiation era solved it oscillates through zero, with
+$A/|P|$ from $4$ to $21$, at the table's sound horizon to $0.8\%$, and the
+Doppler source is in quadrature with it to $1.3\%$ of $\pi/2$.
 
 \paragraph{The rank-zero frame rule.} The frame rule for rank zero is
 measured. Under a change of frame $C_0$ shifts by $+kv/3$ and $\tfrac k3\tau_1$ by $-kv/3$, so only their
 sum is a physical object. The sum agrees between the Newtonian and CDM frames
 to $2.1\times10^{-14}$ over the visibility window for $k=2$--$600$, which is
 double-precision roundoff, while $C_0$ alone is $0$ in the Newtonian frame and
-$185$ in the CDM frame at $k=300$ (D42). $C_0$ is built from the
+$185$ in the CDM frame at $k=300$ (D42 at \texttt{3bb4490}). The restated
+D42 reads the bracket as $C_0$ under Paper~1's source, which equals it
+identically, and finds the two frames agreeing to $2.4\times10^{-15}$. $C_0$
+is built from the
 shear, which vanishes in a shear-free frame, so there the bracket \emph{is}
 $\tfrac k3\tau_1$, the photon dipole relative to a shear-free $u^a$, and it
 crosses zero four times below $k=400$, near $106$, $174$, $266$ and $340$
-(D42). The source carries the acoustic wave, and a statement about $C_0$ alone
+(D42 at \texttt{3bb4490}). The source carries the acoustic wave, and a statement about $C_0$ alone
 is a statement about a frame.
 
 \paragraph{The frame conditions.} At first order
@@ -4165,8 +4197,8 @@ Rank zero is frame-invariant alone, the scattering half of rank one pairs
 with $C_2$, and the gravitational half pairs with $C_2'$. No
 $\int\mathcal V=1$ collapse enters, so the conditions hold at the
 visibility's finite width. The second is T-82: $\hat v_B+C_2$ agrees between
-the frames to machine precision, and it holds. The first fails, by D42's $0$
-against $185$. The third fails as well, and it can be
+the frames to machine precision, and it holds. The first fails, by the $0$
+against $185$ of D42 at \texttt{3bb4490}. The third fails as well, and it can be
 read off this bundle's own transformation laws. The moving projector shifts
 $\delta T$ by $-\mathcal Hv/k$, the CDM frame sets $\tilde\Phi_A=0$, and
 $v'+\mathcal Hv=-k\Phi_A$, so $\delta T+\Phi_A$ shifts by $+v'/k$ and
@@ -4871,7 +4903,8 @@ $-2v'/k$. Paper~1's source corrects both. Its rank-one gravitational term has
 the opposite sign, so $-C_1'$ carries $-\tfrac k3\tau_1$ and the row's
 $+\tfrac k3\tau_1$ cancels it rather than doubling it. The rank-zero
 coefficient is then the bracket $C_0+\tfrac k3\tau_1$, frame-invariant to
-$2.1\times10^{-14}$ (D42). The table of \S\ref{sec:w-form} shows that
+$2.1\times10^{-14}$ (D42 at \texttt{3bb4490}) and to $2.4\times10^{-15}$ in the
+restated D42. The table of \S\ref{sec:w-form} shows that
 neither correction works alone, and C8h--C8k in \texttt{c8} reproduce its
 rank-zero and gravitational columns from the frame table. So T-107 refutes the
 restoration alone, and the row is required together with the rank-one sign.
@@ -6574,9 +6607,10 @@ with the superseded C5 result specifically identified.
         projection, but the slot-and-weight assignment of $C_1$
         (\S\ref{sec:frame-discrepancy}). Its assembly in frame-invariant
         slots (\S\ref{sec:w-form}) gives one $C_\ell$ in both frames to
-        $4\times10^{-14}$ (D44); the acoustic peaks it carries are the
-        undriven oscillator's, odd present and even absent, and the driving
-        is v1.4.0's.
+        $4\times10^{-14}$ (D44). At v1.3.0 the acoustic peaks it carried
+        were the undriven oscillator's, odd present and even absent. v1.4.0
+        supplies the driving, and the series is in place on the Planck
+        background (\S\ref{sec:a3-construction}).
 \end{itemize}
 
 
@@ -6731,7 +6765,7 @@ abstract syntax tree and fails when the code holds a discretisation the
 register does not name; the model table, derived from the
 \texttt{Background} objects the code integrates rather than transcribed from
 a parameter sheet; and the theory audit, generated from self-contained
-instruments that import no project code, six at the time and thirteen now.
+instruments that import no project code, six at the time and fourteen now.
 
 The acoustic half did not go as planned, and the record says so. It began as
 a search for the missing peaks and became the localisation in
@@ -6751,21 +6785,59 @@ within $1.8\%$ of CAMB's shape (F9, \S\ref{sec:a3-construction}).
 v1.3.0 did not bound the envelope approximations A-3, A-5 and the damping
 inputs, which were deferred to v1.4.0 because changing an envelope term
 mid-measurement moves the number being measured for reasons unrelated to it.
-The radiation era, A-3, is built (\S\ref{sec:a3-construction}); A-5 and the
-damping inputs remain. No release has
+v1.4.0 builds the radiation era, A-3 (\S\ref{sec:release-v140}), and A-5 and
+the damping inputs move to v1.5.0. No release has
 bounded the accuracy of the source as distinct from the consistency of its
 assembly. The recombination grid moved the primary term by $1.2\%$ and both
 routes of criterion~5b share it, so the criterion cannot see it; that is
 recorded as a stated limit of v1.2.0, and the grid was derived from the
 visibility's own width immediately after the tag (S33).
 
+\subsection{v1.4.0: the radiation era}
+\label{sec:release-v140}
+v1.4.0 solves the potential through the radiation era, approximation A-3, in
+the three steps registered before it was built (\S\ref{sec:a3-construction}).
+Every mode starts deep in the radiation era and outside the horizon, on the
+adiabatic growing mode placed on both constraints. Its potential is integrated
+from the momentum constraint with the CDM, the baryons and the photons, the
+baryons carrying their own term, and after decoupling the photons'
+anisotropic stress closes $\Phi_A$ through \eqref{eq:stress-constraint}. The
+energy constraint is never integrated, and it closes to $3.5\times10^{-10}$ of
+its terms at $\eta_*$ at every $k$.
+
+The test registered on 4 November is met. On \texttt{PLANCK\_MODEL} the two
+frames give one spectrum to $7\times10^{-15}$ at every multipole, which is
+\emph{(e)}. The first maximum lies at $\ell=205.5=0.770\,\ell_A$, inside the
+registered $206\pm6$, with the first interior minimum at $360$, which is
+\emph{(f)}. On the backgrounds without radiation the solve reproduces $D/a$ to
+$2.6\times10^{-11}$, which is \emph{(g1)}, and leaves their spectra unchanged
+bit for bit, which is \emph{(g2)}. On \texttt{PLANCK\_MODEL} the maxima fall at
+$\ell=210$, $480$ and $720$ and the first interior minimum at $360$, where
+CAMB's fall on the same grid, and below $\ell\simeq30$ the curve lies within
+$1.8\%$ of CAMB's shape. F11, the formation surface with the radiation era
+solved, is the release's lead figure.
+
+v1.4.0 does not establish the heights. They are recorded beside \emph{(f)} and
+gated nowhere: within $6.4\%$ of CAMB's at the three maxima, $6.2\%$ rms over
+$30\le\ell\le990$, and $15\%$ low at $\ell=840$ in the damping tail. The line
+of sight still reads the tight-coupling pair, held after $6\,\eta_*$, damping
+enters as a factor on the transfer, and there is no slip, no growing
+quadrupole and no polarisation. That is approximation A-5, which moves to
+v1.5.0 as its first step. The diffusion scale is still evaluated at $R=0$
+(T-21), and \texttt{LCDM\_MODEL} still carries no radiation. The bundle's
+radiation is photons alone, as in the CAMB and CLASS runs it is compared
+with, which set $N_{\rm eff}=0$. The late integrated term on the $\Lambda$
+backgrounds is measured, $21\%$ of today's $C_2$ on \texttt{PLANCK\_MODEL}
+(F11) and $0.25$ of it on \texttt{LCDM\_MODEL} (D45), and no registration
+scores it.
+
 \paragraph{Planned end of the implementation sequence.}
 The physics-facing objective of v1.5.0 is to bring the \emph{full
 in-scope physics introduced in Paper~1} into the implementation:
 the $O(\varepsilon^2\ell)$ kinematic couplings, their frame
 relabelling and lensing/aberration interpretation, after v1.3.0
-has closed the linear assembly and v1.4.0 has supplied the
-radiation-era and tight-coupling ingredients. Every antecedent
+closed the linear assembly and v1.4.0 supplied the radiation era, and with
+the tight-coupling transition (A-5) as its first step. Every antecedent
 relation must be used with the corrections and provenance
 qualifications recorded in Paper~1 and this supplement. This is
 the \emph{planned endpoint}, not a claim that v1.5.0 has been
@@ -7296,7 +7368,7 @@ settled it where something has. The supporting history is in
   the radiation-era construction carries them after decoupling by the
   hierarchy with its gravitational sources of ranks zero and one
   (\S\ref{sec:a3-construction}, D46). The line of sight still reads the held
-  pair, on the released path and on the \texttt{v1.4.0-dev} line, until A-5,
+  pair, in v1.3.0 and in v1.4.0, until A-5,
   and $\mathcal V(\eta_{\rm couple})/\mathcal V(\eta_*)$ is not measured.
   T-145 measured the hold. T-147's numbers for releasing it ran on a
   continuation handed over in reversed relative phase (T-195) and are void
