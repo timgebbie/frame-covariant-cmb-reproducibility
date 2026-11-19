@@ -2,9 +2,9 @@
 
 > **Generated, not transcribed. Do not edit by hand.**
 >
-> Produced by `tests/frame/gen_theory_audit.py` at 2026-11-18 08:15 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
+> Produced by `tests/frame/gen_theory_audit.py` at 2026-11-19 06:31 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
 
-**Status: ALL CHECKS PASS** — 73 assertions across 14 instruments.
+**Status: ALL CHECKS PASS** — 76 assertions across 14 instruments.
 
 ## What this document does not establish — read first
 
@@ -334,7 +334,7 @@ A boost and its inverse return a directional temperature to round-off, while the
 
 ### The photons' anisotropic stress
 
-With the potentials defined by $E_{ab}\mp\tfrac12\pi_{ab}$ and the photons' stress $\pi_{ab}=\tfrac8{15}\rho_\gamma\tau_{ab}$ from their brightness, $k^2(\Phi_A+\Phi_H)=\tfrac85\mathcal H^2\Omega_\gamma\tau_2$ in the phase of (F.1), whose monopole is $-\delta T$. Outside the horizon after decoupling the free-streaming quadrupole makes $(\Phi_A+\Phi_H)/\Phi_A$ negative, peaking at $-\tfrac4{15}\Omega_\gamma(\eta_\ast)$ at $\sqrt2\eta_\ast$ in a matter era and at $-0.042$ near $1.6\eta_\ast$ on the Planck background.
+With the potentials defined by $E_{ab}\mp\tfrac12\pi_{ab}$ and the photons' stress $\pi_{ab}=\tfrac8{15}\rho_\gamma\tau_{ab}$ from their brightness, $k^2(\Phi_A+\Phi_H)=\tfrac85\mathcal H^2\Omega_\gamma\tau_2$ in the phase of (F.1), whose monopole is $-\delta T$. Annals~II puts the pair on the same harmonics, so the dipole is shared and the pair's multipoles are $(-1)^{\ell+1}$ times those of (F.1). Outside the horizon after decoupling the free-streaming quadrupole makes $(\Phi_A+\Phi_H)/\Phi_A$ negative, peaking at $-\tfrac4{15}\Omega_\gamma(\eta_\ast)$ at $\sqrt2\eta_\ast$ in a matter era and at $-0.042$ near $1.6\eta_\ast$ on the Planck background.
 
 | assertion | verdict |
 |---|---|
@@ -344,6 +344,9 @@ With the potentials defined by $E_{ab}\mp\tfrac12\pi_{ab}$ and the photons' stre
 | C14b  Annals II's dust case E_ab = k^2 Phi_H Q_ab is the rule applied | **PASS** |
 | C14b  free streaming in this phase: tau_2' = k tau_1, tau_0' = -(k/3) tau_1 | **PASS** |
 | C14b  the monopole of (F.1) is minus the gradient variable dT | **PASS** — -1 |
+| C14b  Annals II's D^b Q_ab = -(2/3)(ak)^-1(-k^2+3K) Q_a holds for Annals I's Q_a only: the dipole is shared | **PASS** |
+| C14b  the pair's multipoles are (-1)^(l+1) times (F.1)'s, sources included | **PASS** |
+| C14b  the other overall sign, (-1)^l, fails once the sources are in (negative control) | **PASS** |
 | C14c  matter-era control recovers -(4/15) Omega_g(eta_*) at sqrt(2) eta_* | **PASS** — 1.0000, 1.418 |
 | C14c  PLANCK_MODEL extremum -0.042 near 1.6 eta_*, negative as the covariant sign requires | **PASS** — -0.0423 at 1.64 |
 | C14c  the opposite phase paired with [C14] reverses the sign (negative control) | **PASS** — +0.0423 |
@@ -359,13 +362,13 @@ With the potentials defined by $E_{ab}\mp\tfrac12\pi_{ab}$ and the photons' stre
 | `planck_at_10` | -0.00393705 |
 | `opposite_phase` | 0.0422804 |
 
-*Instrument: `tests/frame/c14_photon_anisotropic_stress.py`, sha256 `f1a6e562e3dc…`*
+*Instrument: `tests/frame/c14_photon_anisotropic_stress.py`, sha256 `963ede728a0c…`*
 
 ## Provenance
 
 | | |
 |---|---|
-| generated | 2026-11-18 08:15 UTC |
+| generated | 2026-11-19 06:31 UTC |
 | python | 3.13.18 |
 | numpy | 2.5.3 |
 | scipy | 1.18.1 |

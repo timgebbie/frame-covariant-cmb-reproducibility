@@ -1,5 +1,37 @@
 % Computational supplement to the associated paper.
 %
+% v1.4.8, 2026-11-19.  The radiation era's third step on the record, the
+% regenerated figures and diagnostics read, and (F.1)'s overall sign fixed.
+%   - Step 3 (bundle 33298fc): the A-3 record at four places reads it, and
+%     (f) is the first maximum and the interior minimum and not the heights,
+%     which are recorded and gated nowhere (sites A-D, re-derived from D46,
+%     D44 and CAMB's table; two roundings measured: 1.5e-5 and 1.8%).  F9's
+%     205.5 is F9's estimator, which gives CAMB 206.1.
+%   - The places that stated v1.3.0's or step 2's Planck state as current:
+%     Part I's situation and dependency table, the A-1 paragraph, the
+%     oscillator's apportioning sentence, the first-peak comparison, the
+%     conformity section, the gates' paragraph, the v1.3.0 retrospective, the
+%     discriminator paragraph (F11 counts 21% of C_2 late on PLANCK_MODEL).
+%   - Figures regenerated (T-196, T-197): (102)'s two frames differ by a
+%     median of 89%, worst 99.9% (F5, T-59), not 15%; the autos and twice the
+%     crosses reproduce C_l to 7.2e-16 and the autos alone are off by 0.19;
+%     F5 cannot show a total common to two frames; Q5 reads F2's 0.06% and
+%     0.03%, rising with l.
+%   - sec:w-form on D44 and D45 rerun on the solved potential: (a)-(c) at
+%     their current values, (d) holding on PLANCK_MODEL (four maxima, trough
+%     at 375), EdS and LCDM moved by the first step's start (T-193), and the
+%     cross-spectra of the slots.
+%   - T-147's numbers are void as measured (T-195), in the conformity
+%     footnote and Q16; Q16 superseded for the photons as a source of
+%     gravity, the line of sight still reading the held pair (A-5).
+%   - sec:a3-construction: Annals II puts the pair on Annals I's harmonics
+%     (its D^b Q_ab relation holds for that Q_a only), so the dipole is
+%     shared and the pair's multipoles are (-1)^(l+1) times (F.1)'s; the
+%     control continuation's reversed dipole carries (F.1) with the other
+%     overall sign.  eq:pair-conformal no longer misquoted.  Step 2's dipole
+%     check recorded.  c14 gates the harmonic and the map (C14b).
+%   - Equations unchanged.
+%
 % v1.4.7, 2026-11-18.  The photons' anisotropic stress, and the edition
 % advanced for the captions regenerated under the v1.4.6 name.
 %   - sec:a3-construction: the constraint eq:stress-constraint,
@@ -73,7 +105,8 @@
 %   - Numbers brought to the record.  The mean-square coefficient
 %     (2l+1)^2/beta_l leaves the double range at l = 1008 (exact rational),
 %     where T-17's record says ~1500; the frame gap of (102) as built is
-%     quoted by its median alone, 15% (F5, D6), and the released assembly's
+%     quoted by its median alone, 15% (F5, D6) [89% since F5's
+%     regeneration, T-197; v1.4.8], and the released assembly's
 %     4e-14 (D44) stands beside it; the external-code distance is the
 %     regenerated table of 31 October, 86.2% across the peaks, not the
 %     pre-repair 137%/97.8%/17.2%; the released peak is quoted at the one
@@ -491,7 +524,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.4.7 --- 18 November 2026\\
+\date{Supplement v1.4.8 --- 19 November 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.4.0-dev}
 
 \begin{document}
@@ -623,13 +656,21 @@ through a finite-width scattering visibility in v1.1.0 and the full linear
 source and frame-specialised integral assembly in v1.2.0, to the
 line-of-sight integral in frame-invariant slots in v1.3.0, built from
 Paper~1's source and summed back to the integral it rearranges. The
-v1.4.0 work is the radiation era (A-3) with A-5. The pinned README revision
+v1.4.0 work is the radiation era (A-3), now built in three steps
+(\S\ref{sec:a3-construction}), with A-5 to follow. The pinned README revision
 this section cites was \texttt{v1.3.0-dev}, with \texttt{v1.2.0} the last
 tagged release named there.
-Oscillations have been recovered; the physical spectrum has \emph{not}:
-the primary peak placement, ordinary low-$\ell$ plateau and secondary
-peak structure remain unresolved, in agreement with the repository's
-own recorded qualification. The existing Python files verify distinct
+At v1.3.0 oscillations had been recovered and the physical spectrum had
+\emph{not}: the primary peak placement, the low-$\ell$ plateau and the
+secondary peak structure were unresolved, as the repository's own
+qualification records. On the \texttt{v1.4.0-dev} line, with the radiation
+era solved, all three are in place on the Planck background: the first
+maximum at $205.5$, inside the registered $206\pm6$; the curve below
+$\ell\simeq30$ within $1.8\%$ of CAMB's shape; and maxima at $\ell=210$,
+$480$ and $720$ with the first interior minimum at $360$, where CAMB's fall
+on the same grid. The physical spectrum is still not claimed. The heights are
+recorded and not gated, they wait on A-5, and the bundle's radiation is
+photons alone. The existing Python files verify distinct
 algebraic and numerical steps, rather than certifying every assumption
 or the complete observed sky.
 
@@ -877,7 +918,9 @@ construction closes \(\Phi_A\), term by term: the moment
 \(\pi_{ab}=\tfrac{8\pi}{15}\Pi_{ab}\) and the linearised
 \(\pi_{ab}=\tfrac8{15}\rho_\gamma\tau_{ab}\) by quadrature on the sphere; the
 mode rule \(\mathrm D_{\langle a}\mathrm D_{b\rangle}X=-(k/a)^2XQ_{ab}\), the
-phase of (F.1) and its monopole \(-\delta T\), symbolically on a plane wave;
+phase of (F.1) and its monopole \(-\delta T\), and the harmonics
+\emph{Annals~II} puts the pair on, on which its multipoles are
+\((-1)^{\ell+1}\) times those of (F.1), symbolically on a plane wave;
 and the size of \(\Phi_A+\Phi_H\) outside the horizon after decoupling,
 \(-\tfrac4{15}\Omega_\gamma(\eta_*)\) at \(\sqrt2\,\eta_*\) in a matter era
 and \(-0.042\) near \(1.6\,\eta_*\) on \texttt{PLANCK\_MODEL}
@@ -1121,10 +1164,12 @@ established as (102)'s missing late-time weight. The assembly of
 D45 measures its slots directly (\S\ref{sec:w-form}): on
 \texttt{LCDM\_MODEL}, with no radiation in its background, the Sachs--Wolfe
 source at last scattering is $\Phi_A/3$ to three figures and the integrated
-slot carries the late $2\Delta\Phi$; on \texttt{PLANCK\_MODEL} the
-Sachs--Wolfe source is $0.187$ against $\Phi_A/3=0.310$, because the
-radiation era is half present, and the plateau there is A-3's, not a v1.3.0
-claim.
+slot carries the late $2\Delta\Phi$. On \texttt{PLANCK\_MODEL} the released
+potential gave a Sachs--Wolfe source of $0.187$ against $\Phi_A/3=0.310$,
+because the radiation era was half present, so the plateau there was A-3's
+and not a v1.3.0 claim. With the radiation era solved the source is the
+registered $0.379\,\Phi_A(\eta_*)$, and the curve below $\ell\simeq30$ lies
+within $1.8\%$ of CAMB's shape (\S\ref{sec:a3-construction}).
 
 
 \paragraph{Asserted, not gated.}
@@ -1153,9 +1198,16 @@ or measurement required to resolve them.
 \item The heights of the acoustic series on the Planck background. The
   displacement of the first maximum and the missing even peaks were the
   radiation era's: with the potential solved through it
-  (\S\ref{sec:a3-construction}) the first maximum is at $204.6$ against CAMB's
-  $206.1$ and the even peaks appear, while the heights, $15$ to $25\%$ low
-  between $\ell=60$ and $550$, are scored as \emph{(f)} after the third step. A-3 was ruled out for
+  (\S\ref{sec:a3-construction}) the first maximum is at
+  $205.5=0.770\,\ell_A$, inside the registered $206\pm6$, and the series is
+  in place, with maxima at $\ell=210$, $480$ and $720$ on D46's grid and the
+  first interior minimum at $360$, where CAMB's maxima and CAMB's first
+  interior minimum fall too. \emph{(f)} is scored on the first maximum and
+  the interior minimum and on nothing else. The heights are recorded beside
+  them and gated nowhere: relative to $\ell=30$ they lie within $6.4\%$ of
+  CAMB at the three maxima and $6.2\%$ rms over $30\le\ell\le990$, and $15\%$
+  low at $\ell=840$, in the damping tail where damping is still applied as a
+  factor (A-5). A-3 was ruled out for
   (102)'s $\kappa''$-suppressed configuration, a property of that
   configuration and not of the project. On Einstein--de~Sitter the
   assembly of \eqref{eq:assembly-invariant} carries the series (D44,
@@ -1179,7 +1231,8 @@ frame-invariant and sum back to the integral they rearrange.
 As the README specifies, \texttt{v1.4.0} is reserved for radiation-era
 driving (A-3), the tight-coupling transition and slip/quadrupole terms
 (A-5); its lead figure is F11, the formation surface with the radiation era
-wired, and its test is registered in \S\ref{sec:first-peak}. \texttt{v1.5.0} then restores the nonlinear shear terms retained
+solved, and its test, registered in \S\ref{sec:first-peak}, is met at the
+third step (\S\ref{sec:a3-construction}). A-5 is what remains of v1.4.0. \texttt{v1.5.0} then restores the nonlinear shear terms retained
 in the exact $1+3$ hierarchy but absent from the linear oscillator,
 with the intended endpoint being an implementation of the
 full \emph{in-scope} physics introduced in Paper~1, using antecedent
@@ -1277,17 +1330,20 @@ carry the late-time sources to the observer under $W$ rather than
   $\mathcal V\mathcal D$ & the late share at $\ell=2$ becomes $O(0.1)$ on
   \texttt{PLANCK\_MODEL} and stays exactly $0$ on Einstein--de~Sitter. The
   assembly of \eqref{eq:assembly-invariant} carries them at $W$, and D44
-  finds $2.7\times10^{-23}$ on Einstein--de~Sitter; the share at $\ell=2$ on
-  \texttt{PLANCK\_MODEL} is not yet reported & --- & measurement \\
+  finds $2.6\times10^{-23}$ on Einstein--de~Sitter. On \texttt{PLANCK\_MODEL},
+  with the potential solved, F11 counts $21\%$ of today's $C_2$ laid down
+  after the visibility has closed & --- & measurement \\
 a peak repair that holds the two frames together & CDM and Newtonian peaks
-  within the released $15\%$, not $3.1\times$ apart. Closed by D44: the
+  within the gap (102) already had, not $3.1\times$ apart. Closed by D44: the
   three slots give one spectrum in both frames, to $4\times10^{-14}$ & --- &
   measurement \\
 whether A-3 is the remainder once such a repair exists & wire A-3 in: it must
-  move the peak down and must land short of $0.7723\,\ell_A$. The criterion
-  is to be restated against the assembly of \eqref{eq:assembly-invariant},
-  whose \texttt{PLANCK\_MODEL} maximum is already at $0.71\,\ell_A$ &
-  restatement & both \\
+  move the peak down and must land short of $0.7723\,\ell_A$. Closed by the
+  third step: the criterion, restated against the assembly of
+  \eqref{eq:assembly-invariant} as \emph{(f)}, is met, the
+  \texttt{PLANCK\_MODEL} maximum moving from $0.71\,\ell_A$ to
+  $0.770\,\ell_A$, short of $0.7723\,\ell_A$, with the first interior minimum
+  at $360$ (D46) & --- & both \\
 whether the $j_\ell'$ counterpart moves the peak & restore that slot alone; it
   must move the peak down or not at all. The assembly of
   \eqref{eq:assembly-invariant} carries it, in the Doppler slot & --- &
@@ -2429,10 +2485,12 @@ conformal Newtonian gauge is usually \emph{completed} by frame along a
 shear-free congruence; in each case the gauge condition fixes coordinates and a
 separate stipulation fixes the observers. A statement that is frame-dependent
 here will appear in a metric treatment as a statement that depends on which
-gauge was chosen, and the two dependences are not the same dependence. That is
-why figure~F5 can show the \emph{total} common to two frames while the
-\emph{decomposition} differs: the split into ranks is frame-dependent and the
-observable is not, and neither fact is about coordinates.
+gauge was chosen, and the two dependences are not the same dependence. The
+split into ranks is frame-dependent and the observable is not, and neither
+fact is about coordinates. Figure~F5 draws the split in both frames and
+cannot show a total common to them, because the total (102) builds is not
+frame-invariant (T-59). The common total is the assembly of
+\S\ref{sec:w-form}, one $C_\ell$ in both frames (D44).
 
 The same distinction fixes the status of v1.5.0. Because v1.0.0 is the
 general case, v1.5.0's restricted case is a recovery and a check --- it
@@ -2482,7 +2540,7 @@ the frame velocity carry one normalisation.
 
 \paragraph{Two-frame spectra.} An assembled spectrum is computed in two
 frames only through the three-slot assembly, \eqref{eq:assembly-invariant},
-whose two frames give one $C_\ell$ to $4.2\times10^{-14}$
+whose two frames give one $C_\ell$ to $3.9\times10^{-14}$
 (\S\ref{sec:w-form}). Re-evaluating \emph{Annals~II}'s Eqs.~(177)--(179) on
 transformed fields does not give one, as an earlier draft of this section
 claimed it did. Those equations are Newtonian-frame expressions: they descend from (106), which the corrections record flags in
@@ -2811,8 +2869,10 @@ unprojected. That reading is withdrawn with the account in
 \S\ref{sec:first-peak}: the released maximum is the envelope of a term carrying
 the frame velocity, and the frame-invariant assembly, still undriven, puts the
 first maximum at $0.71\,\ell_A$ on \texttt{PLANCK\_MODEL} and $0.87\,\ell_A$ on
-Einstein--de~Sitter (\S\ref{sec:w-form}). How the remaining displacement
-divides between the absent driving and the assembly is not yet apportioned.
+Einstein--de~Sitter (\S\ref{sec:w-form}). With the radiation era solved the
+first maximum on \texttt{PLANCK\_MODEL} is at $0.770\,\ell_A$ against CAMB's
+$0.7723\,\ell_A$ (\S\ref{sec:a3-construction}), so nearly all of the
+remaining displacement was the absent driving's.
 
 % === END source expansion: supplementary-materials/section-oscillator-v1.4.0.tex ===
 
@@ -3089,7 +3149,8 @@ the released peak is some $17\%$ further out than an undriven monopole
 projects. That comparison is of the released assembly, whose maximum
 \S\ref{sec:oscillator} and the paragraph on the released first peak above no
 longer read as a projected extremum; the frame-invariant assembly, undriven,
-puts it at $0.71\,\ell_A$, below the projection's $0.852$.
+puts it at $0.71\,\ell_A$, below the projection's $0.852$, and driven through
+the radiation era at $0.770\,\ell_A$ (\S\ref{sec:a3-construction}).
 
 % ===========================================================================
 \subsection{Two closed candidates}
@@ -3317,10 +3378,22 @@ free-streaming rows are those of (F.1),
 $\tau_2'=k\tau_1-\tfrac9{35}k\tau_3$ and
 $\tau_1'=-k(\delta T+\Phi_A)-\tfrac4{15}k\tau_2$, and the monopole (F.1)
 carries is $-\delta T$: (F.1) at $\ell=0$ reads $\tau_0'=-\tfrac k3\tau_1$
-where \eqref{eq:pair-conformal} reads $\delta T'=\tfrac k3\tau_1-\Phi_H'$,
+where $\delta T'$ in \eqref{eq:pair-conformal} carries $+\tfrac k3\tau_1$,
 because $\delta T$ is the coefficient of the gradient of $\ln T$ and (F.1)'s
-$\tau_0$ the coefficient of $\ln T$ itself. A hierarchy carried in the other
-phase reverses $\tau_2$, and with it the sign of \eqref{eq:stress-constraint}.
+$\tau_0$ the coefficient of $\ln T$ itself. The dipole is one object in both.
+\emph{Annals~II} sets $\tau_a=\tau_1Q_a$ and
+$\mathrm D_a\ln T=(k/a)\,\delta T\,Q_a$ on \emph{Annals~I}'s harmonics and uses
+$\mathrm D^bQ_{ab}=-\tfrac23(ak)^{-1}(-k^2+3K)Q_a$, which holds for
+$Q_a=-(a/k)\mathrm D_aQ$ and fails for its negative. The pair's multipoles
+are therefore $(-1)^{\ell+1}$ times those of (F.1), and the overall sign is
+fixed by the harmonics, not chosen. The control continuation,
+\texttt{TAU\_CONTINUATION="free\_stream"}, reverses the dipole at the
+hand-over instead of the monopole (T-195). Its hierarchy carries no source
+and returns only $\delta T$ and $\tau_1$, so it returns them correctly, but
+it carries every rank of (F.1) with the opposite sign, and a source added to
+it, or a $\tau_2$ read from it, would inherit that sign. A hierarchy carried
+in the other phase reverses $\tau_2$, and with it the sign of
+\eqref{eq:stress-constraint}.
 At the hand-over from the pair to the hierarchy the monopole is therefore
 $-\delta T$, or the hierarchy is carried in the pair's phase at every rank;
 taking $\delta T$ as the monopole of (F.1) starts rank zero and rank one in
@@ -3407,9 +3480,32 @@ $-0.05473\,\Phi_A(\eta_*)$ on the $\Lambda$-free twin of
 being the photons' free streaming after $\eta_*$; \emph{(e)} holds to
 $3.2\times10^{-15}$, \emph{(g1)} to $2.6\times10^{-11}$ and \emph{(g2)} bit for
 bit; halving $\eta_i$ moves $D_\ell$ by $4.0\times10^{-7}$ of its maximum; and
-$(\Phi_A+\Phi_H)/\Phi_A$ reaches $-0.0432$ at $1.63\,\eta_*$. With the stress the
+$(\Phi_A+\Phi_H)/\Phi_A$ reaches $-0.0432$ at $1.63\,\eta_*$. The dipole after
+$\eta_*$ approaches $-\tfrac13k\eta\Phi_A$ as the radiation's share falls, at
+$1.154$ of it at $3\,\eta_*$, $1.057$ at $10\,\eta_*$ and $1.024$ at
+$30\,\eta_*$, where a hand-over in mixed phase would run it at about five
+times that rate. With the stress the
 energy constraint closes to $10^{-11}$ as $R\to0$, and with $\Phi_A=-\Phi_H$ it
 fails at $2$ to $4\times10^{-4}$.
+
+The third step adds the baryons' own term to the constraint and is on the main
+line (D46, F9). It meets the registration: \emph{(e)} holds to
+$7\times10^{-15}$ on F9 at every multipole, \emph{(g1)} to
+$2.6\times10^{-11}$ and \emph{(g2)} bit for bit; the first maximum of $D_\ell$
+on \texttt{PLANCK\_MODEL} is at $205.5=0.770\,\ell_A$, inside the registered
+$206\pm6$, and by the shared prominence rule the maxima are at $\ell=210$,
+$480$ and $720$ with the first interior minimum at $360$, CAMB's maxima and
+CAMB's first interior minimum falling on the same grid. \emph{(f)} is met on
+both of its features. With the baryons' term in it the energy constraint,
+which is never integrated, closes to $3.5\times10^{-10}$ of its terms at
+$\eta_*$ at every $k$, against up to $3\%$ at the second step; halving
+$\eta_i$ moves no $D_\ell$ by more than $1.5\times10^{-5}$ of its maximum,
+against the registered $10^{-4}$; replacing \eqref{eq:stress-constraint} by
+$\Phi_A=-\Phi_H$ moves $D_\ell$ by $1.3\%$; and $(\Phi_A+\Phi_H)/\Phi_A$ still
+reaches $-0.0432$ at $1.63\,\eta_*$. The heights are recorded and not scored:
+relative to $\ell=30$ they lie within $6.4\%$ of CAMB at the three maxima and
+$6.2\%$ rms over $30\le\ell\le990$, $15\%$ low at $\ell=840$ in the damping
+tail, and within $1.8\%$ of CAMB's shape below $\ell\simeq30$.
 
 \paragraph{An Einstein--de~Sitter number not yet reconciled.} The released
 Einstein--de~Sitter first peak is reported at $\ell_1=220$ against
@@ -4201,17 +4297,18 @@ $j_\ell$ slot and returned, as $\hat v_B$, to the $j_\ell'$ slot it came
 from. The difference of the two sides of \eqref{eq:assembly-invariant} is
 zero in exact symbols, for arbitrary $W$, $\kappa'$ and coefficients.
 
-\paragraph{The registrations scored.} D44, released on 4 November, scores
+\paragraph{The registrations scored.} D44, released on 4 November and rerun
+on the solved potential at v1.4.0, scores
 the four registrations on Einstein--de~Sitter, $\Lambda$CDM and
 \texttt{PLANCK\_MODEL}: at the coefficients for $k=2$ to $400$, and in the
 transfer on F9's $k$ grid to $k=1500$. Registration \emph{(a)} holds. With
 Paper~1's signs the largest relative frame shift over the window
-$W>10^{-10}$ is at most $3.3\times10^{-13}$ at rank zero,
-$2.6\times10^{-13}$ in the scattering condition and $6.1\times10^{-16}$ in the
+$W>10^{-10}$ is at most $3.0\times10^{-13}$ at rank zero,
+$2.4\times10^{-13}$ in the scattering condition and $6.1\times10^{-16}$ in the
 gravitational one, while as built the rank-zero and gravitational conditions
-fail at order one, $1.0$ and $1.4$--$1.8$. Registration \emph{(b)} holds: in
+fail at order one, $1.0$ and $1.5$--$2.0$. Registration \emph{(b)} holds: in
 the Newtonian frame the $W$-carried gravitational content equals
-$-(\Phi_A'-\Phi_H')$ to $4.6\times10^{-16}$, against $18$ to $2\times10^{11}$
+$-(\Phi_A'-\Phi_H')$ to $4.4\times10^{-16}$, against $10^2$ to $2\times10^{11}$
 as built, so $\tfrac k3\tau_1$ cancels.
 
 Registration \emph{(c)} was printed against the bracket at $W$ with its
@@ -4220,52 +4317,67 @@ statement about the uncollapsed identity, which is the three-slot assembly
 term for term, because the collapsed form keeps
 $-\kappa'(\eta_*)\Delta C_2(\eta_*)$ at the boundary and drops the bulk
 partners that cancel it. In that form it holds. The three slots give one
-$C_\ell$ in both frames to $4.2\times10^{-14}$, and each mode to
-$2.5\times10^{-8}$, below D44's stated thresholds of $10^{-12}$ for $C_\ell$
+$C_\ell$ in both frames to $3.9\times10^{-14}$, and each mode to
+$2.8\times10^{-8}$, below D44's stated thresholds of $10^{-12}$ for $C_\ell$
 and $10^{-6}$ per mode; and on
 Einstein--de~Sitter the integrated slot carries a fraction
-$2.7\times10^{-23}$ of the power, so no power is put late where the
+$2.6\times10^{-23}$ of the power, so no power is put late where the
 potentials are constant. A competing prediction, that this slot would carry
 late power there, is refuted. The collapsed form, measured
-alongside, differs between the frames at order one, $1.1$ to $1.6$, as the
+alongside, differs between the frames at order one, $1.2$ to $1.6$, as the
 restatement said it would.
 
-Registration \emph{(d)} holds on Einstein--de~Sitter and fails on
-\texttt{PLANCK\_MODEL}. The three slots are identical in the two frames on
-every background. On Einstein--de~Sitter, with $\ell_A=190.6$, they put
-maxima of $D_\ell$ at $\ell=165$ and $495$ and a trough at $360$: an interior
-minimum between $\ell=300$ and $900$, the criterion carried from
-3 November, with the first maximum at $0.87\,\ell_A$. On $\Lambda$CDM they put
-maxima at $150$ and $450$ with no trough that meets the shared prominence
-rule. On \texttt{PLANCK\_MODEL} they put a single maximum, at $0.71\,\ell_A$,
-and no trough, where CAMB and CLASS put maxima at $206$, $491$, $730$, $1014$
-and $1276$ ($1277$ for CLASS). The registration reads a failure of \emph{(d)} with
-\emph{(a)}--\emph{(c)} holding as a loss of the series that is not a frame
-defect, and names the admissibility condition as what remains. The first half
-holds on \texttt{PLANCK\_MODEL}. The second does not apply, because the
-assembly scored satisfies the admissibility condition by construction. What
-separates \texttt{PLANCK\_MODEL} from the backgrounds that carry the series is
-not yet scored. D45 measures where the slots cancel, and no pair cancels at
-$\ell=100$--$400$: there the integrated slot is $1$--$5\%$ of $C_\ell$ and twice
-the cross-spectrum of the Sachs--Wolfe and integrated slots adds $11$--$16\%$,
-in phase. D44's $2.1$ is the integrated slot's auto-spectrum at $\ell=5$, and
-from $\ell=2$ to $10$ twice that cross-spectrum runs from $-1.9$ to $-3.1$ of
-the total, against $-0.12$ at $\ell=2$ on $\Lambda$CDM. The cause is in the
-potential both slots read, and it is A-3's. \texttt{PLANCK\_MODEL}'s
-background carries radiation, so $D/a$ falls by $7\%$ before $\eta_*$ and by
-$10\%$ more by matter domination, while the monopole starts from the matter-era
-adiabatic value $-\tfrac23\Phi_A$ and the radiation-era potential
-\eqref{eq:radiation-potential} is not wired: the radiation era is half
-present. The Sachs--Wolfe source at last scattering is then $0.187$ against
-$\Phi_A/3=0.310$, with $0.535$ in the integrated slot. \texttt{LCDM\_MODEL},
-whose background carries no radiation, returns $\Phi_A/3$ to three figures,
-$0.3331$, and $2\Delta\Phi=0.442$ in the integrated slot. F9's
-\texttt{PLANCK\_MODEL} curve below $\ell\simeq30$, its dip near $\ell=5$
-included, is therefore the incomplete radiation era of A-3 and not a
-prediction of v1.3.0, and its bump at $\ell\simeq7$--$12$ is the start rule
-that comes with it, which gives a band of modes the matter-era condition on
-a potential that has already decayed (T-192). The radiation era is
-v1.4.0's, constructed in \S\ref{sec:a3-construction}.
+Registration \emph{(d)} holds on Einstein--de~Sitter and, with the potential
+solved through the radiation era, on \texttt{PLANCK\_MODEL}. The three slots
+are identical in the two frames on every background, to
+$5.3\times10^{-15}$ on \texttt{PLANCK\_MODEL}. On Einstein--de~Sitter, with
+$\ell_A=190.6$, they put maxima of $D_\ell$ at $\ell=165$ and $495$ and a
+trough at $345$: an interior minimum between $\ell=300$ and $900$, the
+criterion carried from 3 November, with the first maximum at $0.84\,\ell_A$.
+The trough was at $360$ and the first maximum at $0.87\,\ell_A$ before the
+first step gave every start its growing-mode dipole (T-193). On $\Lambda$CDM
+they put maxima at $135$ and $435$, the first at $0.82\,\ell_A$, with no
+trough that meets the shared prominence rule. On \texttt{PLANCK\_MODEL}, with
+$\ell_A=266.8$, they put maxima at $210$, $480$, $705$ and $990$ and a first
+trough at $375$ on D44's $\Delta\ell=15$ grid, with the first maximum at
+$0.77\,\ell_A$, where CAMB and CLASS put maxima at $206$, $491$, $730$,
+$1014$ and $1276$ ($1277$ for CLASS).
+
+The registration reads a failure of \emph{(d)} with \emph{(a)}--\emph{(c)}
+holding as a loss of the series that is not a frame defect, and names the
+admissibility condition as what remains. On the released potential
+\texttt{PLANCK\_MODEL} gave that failure, a single maximum at $0.71\,\ell_A$
+and no trough. The first half of the reading held there. The second did not
+apply, because the assembly scored satisfies the admissibility condition by
+construction. What separated \texttt{PLANCK\_MODEL} from the backgrounds that
+carry the series was the potential both slots read, and it was A-3's.
+\texttt{PLANCK\_MODEL}'s background carries radiation, so $D/a$ falls by
+$7\%$ before $\eta_*$ and by $10\%$ more by matter domination, while the
+released monopole started from the matter-era adiabatic value
+$-\tfrac23\Phi_A$ and the radiation-era potential
+\eqref{eq:radiation-potential} was not wired: the radiation era was half
+present. The Sachs--Wolfe source at last scattering was then $0.187$ against
+$\Phi_A/3=0.310$, with $0.535$ in the integrated slot, where
+\texttt{LCDM\_MODEL}, whose background carries no radiation, returns
+$\Phi_A/3$ to three figures, $0.3331$, and $2\Delta\Phi=0.442$ in the
+integrated slot. F9's \texttt{PLANCK\_MODEL} curve below $\ell\simeq30$, its
+dip near $\ell=5$ included, was therefore the incomplete radiation era and
+not a prediction of v1.3.0, and its bump at $\ell\simeq7$--$12$ was the start
+rule that came with it, which gave a band of modes the matter-era condition
+on a potential that had already decayed (T-192). With the radiation era
+solved (\S\ref{sec:a3-construction}) the series appears.
+
+D45 measures where the slots cancel, and on the solved potential no pair
+cancels at $\ell=100$--$400$. There the integrated slot's own spectrum is
+$0.7$--$6.6\%$ of $C_\ell$, and twice its cross-spectrum with the
+Sachs--Wolfe slot adds up to $22\%$, largest at $\ell=165$--$180$ and $21\%$
+at the first maximum, in phase, turning negative near $\ell=370$. The maxima
+are the same with and without the integrated slot. From $\ell=2$ to $10$
+twice that cross-spectrum runs from $-0.38$ to $-0.27$ of the total, against
+$-0.12$ at $\ell=2$ on $\Lambda$CDM, and the integrated slot's own spectrum
+is at most $0.38$ of the total, at $\ell=2$. On the released potential the
+same cross-spectrum ran from $-1.9$ to $-3.1$, and the integrated slot's own
+spectrum reached $2.1$, at $\ell=5$.
 
 \paragraph{The sum-back.} The sum-back asked for on 3 November, the three
 slots and the total derivative against the direct integral mode by mode,
@@ -4965,7 +5077,8 @@ $0.2826\,\ell_A$ --- a factor of $3.1$ between two frames whose $\ell\ge2$
 multipoles are equal at first order in $v$ (GDE99~(37)). A
 configuration that moves the CDM peak toward the target while pulling the
 frames $3.1\times$ apart has made the frame disagreement worse, not better,
-and (102)'s median gap of $15\%$ is what it was supposed to close. It is not
+and (102)'s frame gap, a median of $89\%$ (F5), is what it was supposed to
+close. It is not
 a repair, and nothing below is a result. The rows are kept because the
 comparison is instructive and because the frame check is the cheapest
 discriminator this section has.
@@ -5795,12 +5908,13 @@ in both frames to $4\times10^{-14}$ from the assembly of
 the gravitational slots at $W$ and the scattering slot at $\mathcal V$ by
 construction, so no weight switch selects them; and its registration
 \emph{(a)} measures the frame shift of the matched coefficients at
-$10^{-13}$, the check the \texttt{frame\_transform.py} row asked for. Still
-owed are the late integrated term on the $\Lambda$ backgrounds, which no
-registration of \S\ref{sec:w-form} scores; the continuation of the photon
-hierarchy past decoupling, which \S\ref{sec:a3-construction} specifies and
-which is not built; and the spectrum itself, whose peak heights and plateau
-are the radiation era's.
+$10^{-13}$, the check the \texttt{frame\_transform.py} row asked for. Three
+things are still owed. The late integrated term on the $\Lambda$ backgrounds
+is measured (F11, D45) and scored by no registration of \S\ref{sec:w-form}. The
+photon hierarchy past decoupling is built as the photons' source of gravity
+(\S\ref{sec:a3-construction}), while the line of sight still reads the held
+pair (A-5). And the spectrum's heights, recorded beside \emph{(f)} and gated
+nowhere, wait on A-5.
 
 \subsection{Acceptance order for the physical spectrum}
 
@@ -5814,36 +5928,48 @@ it must be permitted to accumulate after the visibility has closed.
 A source weighted only by $\mathcal V$ cannot pass that late-time test
 if its potential evolution occurs where $\mathcal V$ is negligible. The
 assembly of \eqref{eq:assembly-invariant} carries the integrated term at
-$W$, and on Einstein--de~Sitter its slot holds $2.7\times10^{-23}$ of the
-power (registration \emph{(c)}, \S\ref{sec:w-form}); the $\Lambda$
-backgrounds are not scored against this condition in this
-document.\footnote{\texttt{TAU\_CONTINUATION="freeze"} in
+$W$, and on Einstein--de~Sitter its slot holds $2.6\times10^{-23}$ of the
+power (registration \emph{(c)}, \S\ref{sec:w-form}). On
+\texttt{PLANCK\_MODEL}, with the potential solved, $21\%$ of today's $C_2$ is
+laid down after the visibility has closed (F11), and no registration scores
+the $\Lambda$ backgrounds against this condition.\footnote{\texttt{TAU\_CONTINUATION="freeze"} in
 \texttt{functions/spectra/pipeline.py} holds the acoustic pair at its value
 at the end of the coupling window, on the released route as on (102)'s.
 Finding T-145 read the freeze as what prevents the $C_0$--dipole
-cancellation at late times; T-147 re-scored that on $\Lambda$CDM and the
-Planck set and refuted the mechanism, since removing the freeze moves the
-bracket by $9$ to $25\%$ and produces no cancellation on any background. In
+cancellation at late times, and T-147 re-scored that on $\Lambda$CDM and the
+Planck set by removing the freeze. T-147's numbers are void as measured: the
+free-streaming continuation it ran on handed the pair over with its monopole
+and dipole in reversed relative phase (T-195), and they are re-measured at
+the next full regeneration. The mechanism does not rest on them. In
 the released assembly the $\tfrac k3\tau_1$ in $-C_1^{\rm grav\prime}$ is
 cancelled by the $a\mathcal B_0$ that Paper~1's source carries in $C_0$,
 which registration \emph{(b)} of \S\ref{sec:w-form} measures to
-$4.6\times10^{-16}$, and no late-time limit of $\tau_1$ is involved. The
+$4.4\times10^{-16}$, and no late-time limit of $\tau_1$ is involved. The
 freeze remains a defect in its own right: the \texttt{free\_stream} branch
 carries no gravitational source, and the continuation the radiation era
-asks for is the hierarchy with its rank-zero and rank-one sources
-(\S\ref{sec:a3-construction}).}
+asks for is the hierarchy with its rank-zero and rank-one sources, which the
+construction carries as the photons' source of gravity
+(\S\ref{sec:a3-construction}) while the line of sight still reads the held
+pair (A-5).}
 These are separate conditions from the existence of acoustic
 oscillations in the source or the agreement of two internally shared
 normalisation routes. The released spectrum is therefore a reconstruction
-of the line of sight and not yet the physical $C_\ell$.\footnote{F9 draws the
+of the line of sight and not yet the physical $C_\ell$. On the solved
+potential the acoustic series is in place, and what separates it from the
+physical $C_\ell$ is A-5 and the bundle's radiation being photons
+alone.\footnote{F9 draws the
 assembly of \eqref{eq:assembly-invariant} since 4 November. At v1.3.0 its odd
 acoustic peaks were present on the Planck background and its even peaks
 absent, the first maximum was at $0.71\,\ell_A$ against the matched $0.7723$,
 and the low-$\ell$ plateau was not recovered. With the potential solved through
-the radiation era (\S\ref{sec:a3-construction}) the first maximum is at $204.6$
-against CAMB's $206.1$, the even peaks appear near $510$ and $690$, the curve
-below $\ell=30$ lies within $1.4\%$ of CAMB's shape, and the heights are $15$
-to $25\%$ low between $\ell=60$ and $550$. The synthetic checks below infer no
+the radiation era (\S\ref{sec:a3-construction}) the first maximum is at
+$205.5=0.770\,\ell_A$ by F9's estimator, which puts CAMB's at $206.1$, and
+inside the registered $206\pm6$, the acoustic series is
+in place with maxima at $\ell=210$, $480$ and $720$ and the first interior
+minimum at $360$, CAMB's falling on the same grid points, the curve below
+$\ell=30$ lies within $1.8\%$ of CAMB's shape, and the heights, recorded and
+gated nowhere, lie within $6.4\%$ of CAMB at the three maxima and $6.2\%$ rms
+over $30\le\ell\le990$. The synthetic checks below infer no
 repair.}
 
 
@@ -6098,20 +6224,23 @@ record.
 First, a decomposition of the transfer is not a decomposition of
 $C_\ell$. Splitting $T_\ell$ into rank-0, rank-1 and rank-2 parts gives
 autocorrelations \emph{and} cross terms. Measured (F5): the autos
-together with twice the crosses reproduce $C_\ell$ to $4.7\times10^{-16}$,
-while the autos \emph{alone} are off by $0.10$. The cross terms are not
+together with twice the crosses reproduce $C_\ell$ to $7.2\times10^{-16}$,
+while the autos \emph{alone} are off by $0.19$. The cross terms are not
 a correction to be neglected; they are half the statement.
 
 Second, a frame gap in $C_\ell$ is not a frame gap in the invariant.
-The two frames of (102) as built differ by a median of $15\%$ over
-$2\le\ell\le400$ (F5, D6). That is not by itself a defect, because $C_\ell$
-as computed there is built from frame-dependent pieces while the invariance
-(102) satisfies is a statement about the total at fixed $k$, which D6
-measures separately. The size of the gap was a defect: an earlier caption of
-F9 read it as a result, that reading is withdrawn (T-101, T-121), and the
-gap is the third symptom of the bare $\kappa'$ carried inside $C_1$. The
-released assembly of \S\ref{sec:w-form} has no such gap, one $C_\ell$ in
-both frames to $4\times10^{-14}$ (D44).
+The two frames of (102) as built differ by a median of $89\%$ over
+$2\le\ell\le400$, worst $99.9\%$ (F5, T-59). A frame gap in $C_\ell$ would not
+by itself be a defect, because $C_\ell$ as computed there is built from
+frame-dependent pieces while the invariance (102) is meant to satisfy is a
+statement about the total at fixed $k$, which D6 measures separately. This
+gap is one: an earlier caption of F9 read it as a result, that reading is
+withdrawn (T-101, T-121), and the gap is the third symptom of the bare
+$\kappa'$ carried inside $C_1$. Until F5 was regenerated (T-197) this
+paragraph quoted a median of $15\%$, from a figure drawn before the
+line-of-sight weight and the dipole's normalisation were settled. The
+assembly of \S\ref{sec:w-form} has no such gap, one $C_\ell$ in both frames
+to $4\times10^{-14}$ (D44).
 
 Third, a ratio of two spectra is not a ratio of two amplitudes.
 $D_\ell=\ell(\ell+1)C_\ell/2\pi$ is renormalised at $\ell=30$ in every released
@@ -6202,8 +6331,9 @@ two-route $C_\ell$ difference & reported, now bitwise zero since \textbf{T-17}
 No gate in this section validates the assembled spectrum. The checks above
 pass, and they pass on (102) as built, whose first acoustic peak sits at
 $0.6476\,\ell_A$ against the matched $0.7723$; the released assembly's first
-maximum sits at $0.71\,\ell_A$ on the Planck set (F9), and none of these
-gates reaches it either. There is no
+maximum sat at $0.71\,\ell_A$ on the Planck set, and with the radiation era
+solved it is at $0.770\,\ell_A$ (F9), scored by the registered \emph{(f)} and
+reached by none of these gates. There is no
 contradiction in that, and it is why the table has its third column: every
 one of these gates holds fixed, or is indifferent to, the part that is
 wrong. T-3 is the standing statement
@@ -6611,15 +6741,18 @@ separated that had been one symptom. The frame gap was localised to the
 slot-and-weight assignment of $C_1$ and then removed by the assembly of
 \S\ref{sec:w-form}, which gives one $C_\ell$ in both frames to
 $4\times10^{-14}$ (D44) and sums back to the integral it rearranges (D45).
-The peak heights are the undriven oscillator's, odd peaks present and even
-peaks absent, with the first maximum at $0.71\,\ell_A$ on the Planck set
-against the matched $0.7723$ (F9), and the plateau on that background is not
-recovered (T-192).
+At v1.3.0 the peak heights were the undriven oscillator's, odd peaks present
+and even peaks absent, with the first maximum at $0.71\,\ell_A$ on the Planck
+set against the matched $0.7723$, and the plateau on that background was not
+recovered (T-192). With the radiation era solved the series is in place, with
+the first maximum at $0.770\,\ell_A$ and the curve below $\ell\simeq30$
+within $1.8\%$ of CAMB's shape (F9, \S\ref{sec:a3-construction}).
 
-v1.3.0 has not bounded the envelope approximations A-3, A-5 and the damping
-inputs, which are deferred to v1.4.0 because changing an envelope term
-mid-measurement moves the number being measured for reasons unrelated to it;
-the radiation era is v1.4.0's (\S\ref{sec:a3-construction}). No release has
+v1.3.0 did not bound the envelope approximations A-3, A-5 and the damping
+inputs, which were deferred to v1.4.0 because changing an envelope term
+mid-measurement moves the number being measured for reasons unrelated to it.
+The radiation era, A-3, is built (\S\ref{sec:a3-construction}); A-5 and the
+damping inputs remain. No release has
 bounded the accuracy of the source as distinct from the consistency of its
 assembly. The recombination grid moved the primary term by $1.2\%$ and both
 routes of criterion~5b share it, so the criterion cannot see it; that is
@@ -6941,11 +7074,15 @@ built differentiates a coefficient holding a rate and separates $\hat v_B$
 from $C_2$, and its gravitational coefficients fail two of the three frame
 conditions \eqref{eq:frame-conditions}. The assembly meeting all three
 (\S\ref{sec:w-form}) puts the odd maxima back on Einstein--de~Sitter and
-$\Lambda$CDM and a single maximum on \texttt{PLANCK\_MODEL} (D44, registration
-\emph{(d)}; F9). The even peaks it leaves out are the undriven oscillator's:
-with the potential solved through the radiation era
-(\S\ref{sec:a3-construction}) they appear on \texttt{PLANCK\_MODEL}, near $510$
-and $690$, and the first maximum moves to $204.6$ against CAMB's $206.1$.
+$\Lambda$CDM and, at v1.3.0 on the released potential, a single maximum on
+\texttt{PLANCK\_MODEL} (registration \emph{(d)}). The even peaks it left out
+were the undriven oscillator's. With the potential solved through the
+radiation era (\S\ref{sec:a3-construction}) the series appears on
+\texttt{PLANCK\_MODEL}: D44 finds maxima at $\ell=210$, $480$, $705$ and $990$
+and a first trough at $375$ on its $\Delta\ell=15$ grid, D46 finds maxima at
+$\ell=210$, $480$ and $720$ and a first interior minimum at $360$ on its
+$\Delta\ell=30$ grid, and the first maximum is at $0.770\,\ell_A=205.5$,
+inside the registered $206\pm6$.
 
 \section{Implications}
 \label{sec:implications}
@@ -7120,8 +7257,9 @@ settled it where something has. The supporting history is in
 \midrule
 \textbf{Q5} & Does the full $1+3$ treatment predict excess power at low
   $\ell$? & A rank-0/2 share that rises at low $\ell$ rather than with it.
-  \textbf{F2}'s third panel measures it and finds the share flat at the
-  quadrupole, which parks the question rather than answering it \\
+  \textbf{F2}'s third panel measures it: the share is $0.06\%$ at the
+  quadrupole and $0.03\%$ at $\ell=4$ and rises only with $\ell$, which parks
+  the question rather than answering it \\
 \textbf{Q9} & The discretisations are audited; the \emph{physical} ranges are
   not & A stated validity range per approximation, with the measurement that
   bounds it \\
@@ -7154,14 +7292,15 @@ settled it where something has. The supporting history is in
 \textbf{Q16} & \textbf{Is the tight-coupling source frozen late enough?}
   $\delta T$ and $\tau_1$ are held at $\eta_{\rm couple}=6\eta_*$, after
   which no scattering drives the pair, on the condition that the visibility
-  has closed by then. & To be superseded. In the radiation-era construction,
-  ruled before it is built, the photons after decoupling are carried by the
-  hierarchy with its gravitational sources of ranks zero and one, and the held
-  pair is not the photons (\S\ref{sec:a3-construction}). On the released path
-  the hold stands and $\mathcal V(\eta_{\rm couple})/\mathcal V(\eta_*)$ is
-  not measured; T-145 measured the hold, and T-147 found that releasing it
-  moves the bracket of (102) by $9$ to $25\%$ without producing a
-  cancellation \\
+  has closed by then. & Superseded for the photons as a source of gravity:
+  the radiation-era construction carries them after decoupling by the
+  hierarchy with its gravitational sources of ranks zero and one
+  (\S\ref{sec:a3-construction}, D46). The line of sight still reads the held
+  pair, on the released path and on the \texttt{v1.4.0-dev} line, until A-5,
+  and $\mathcal V(\eta_{\rm couple})/\mathcal V(\eta_*)$ is not measured.
+  T-145 measured the hold. T-147's numbers for releasing it ran on a
+  continuation handed over in reversed relative phase (T-195) and are void
+  as measured \\
 \textbf{Q17} & \textbf{Is the frame-shift coefficient right on the background
   where it is predicted in closed form?} On Einstein--de~Sitter the shift is
   constant, \eqref{eq:eds-boost-constant}, so the derivative comparison is
@@ -7221,14 +7360,18 @@ deposition on every background including the one where zero is correct, and
 a fault manufacturing it would show on Einstein--de~Sitter; neither
 signature is present.
 
-The second half has run in part. With the integrated term carried at $W$ in
-the assembly of \S\ref{sec:w-form}, the late share on Einstein--de~Sitter is
-$2.7\times10^{-23}$ (D44, registration \emph{(c)}), which is the control
-holding. The late share at $\ell=2$ on the two $\Lambda$ backgrounds is not
-yet reported; it must be non-zero there, and if it stays zero discrepancy~(i)
-is not the mechanism and a second effect shares its signature. That is the
-discriminator, and it is what turns the reading above from consistent-with
-into established.
+The second half has run. With the integrated term carried at $W$ in the
+assembly of \S\ref{sec:w-form}, the late share on Einstein--de~Sitter is
+$2.6\times10^{-23}$ (D44, registration \emph{(c)}), which is the control
+holding. The late share at $\ell=2$ on the two $\Lambda$ backgrounds had to be
+non-zero, or discrepancy~(i) was not the mechanism and a second effect shared
+its signature. It is non-zero on both. On \texttt{LCDM\_MODEL}, whose
+potential is constant until $\Lambda$, the integrated slot is all late, and
+D45's slot spectra put the late share of $C_2$ at $0.25$: the slot's own
+$0.36$ with its crosses, $-0.12$ and $+0.01$. On \texttt{PLANCK\_MODEL}, with
+the potential solved, F11 counts $21\%$ of today's $C_2$ laid down after the
+visibility has closed. By the discriminator's own test the reading above is
+established.
 
 % === END source expansion: supplementary-materials/questions-open-v1.4.0.tex ===
 

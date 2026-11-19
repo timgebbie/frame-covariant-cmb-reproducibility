@@ -311,3 +311,14 @@ matter-era closed form peaks at $-\tfrac4{15}\Omega_\gamma(\eta_\ast)$ at
 $\sqrt2\eta_\ast$, and on the Planck background the integration gives $-0.042$
 near $1.6\eta_\ast$.
 
+**The overall sign is fixed, not chosen** (added 2026-11-19). *Annals II*
+puts the acoustic pair on *Annals I*'s harmonics: beside
+$\tau_a=\tau_1Q_a$ and $\mathrm D_a\ln T=(k/a)\delta T\thinspace Q_a$ it uses
+$\mathrm D^bQ_{ab}=-\tfrac23(ak)^{-1}(-k^2+3K)Q_a$, which holds for
+$Q_a=-(a/k)\mathrm D_aQ$ and fails for its negative. The dipole is therefore
+one object in the pair and in (F.1), and with the sources of ranks zero and
+one the pair's multipoles are $(-1)^{\ell+1}$ times those of (F.1). The other
+overall sign, $(-1)^\ell$, keeps the relative phase and maps the free rows,
+and it fails on the sources; that is the negative control. It matters the
+first time a quadrupole leaves a continuation for the stress constraint.
+

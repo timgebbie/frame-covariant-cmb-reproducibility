@@ -27,7 +27,13 @@ C14b  the mode rule and the phase of the hierarchy, symbolically on a plane
       free-streaming rows tau_0' = -(k/3) tau_1 and tau_2' = k tau_1 of (F.1)
       in this phase; and the monopole of (F.1) is minus the gradient variable
       dT that the acoustic pair carries.  Annals II's dust case,
-      E_ab = k^2 Phi_H Q_ab with Phi_A = -Phi_H, is the rule applied;
+      E_ab = k^2 Phi_H Q_ab with Phi_A = -Phi_H, is the rule applied.
+      Added 2026-11-19: the overall sign.  Annals II puts the pair on Annals
+      I's harmonics, through D^b Q_ab = -(2/3)(ak)^-1 (-k^2 + 3K) Q_a, which
+      holds for Q_a = -(a/k) D_a Q and fails for its negative, so the dipole
+      is one object in the pair and in (F.1); with the sources of ranks zero
+      and one, the pair's multipoles are then (-1)^(l+1) times (F.1)'s, and
+      the other overall sign, (-1)^l, fails (the negative control);
 C14c  the size after decoupling.  Outside the horizon the free-streaming
       quadrupole grows from the dipole and [C14] gives (Phi_A+Phi_H)/Phi_A.
       Its matter-era closed form, -(16/15) Omega_g(eta_*) (eta_*/eta)^2
@@ -50,7 +56,9 @@ AUDIT_TITLE = "The photons' anisotropic stress"
 AUDIT_PROSE = ("With the potentials defined by $E_{ab}\\mp\\tfrac12\\pi_{ab}$ and the photons' "
                "stress $\\pi_{ab}=\\tfrac8{15}\\rho_\\gamma\\tau_{ab}$ from their brightness, "
                "$k^2(\\Phi_A+\\Phi_H)=\\tfrac85\\mathcal H^2\\Omega_\\gamma\\tau_2$ in the phase of (F.1), "
-               "whose monopole is $-\\delta T$. Outside the horizon after decoupling the "
+               "whose monopole is $-\\delta T$. Annals~II puts the pair on the same harmonics, so "
+               "the dipole is shared and the pair's multipoles are $(-1)^{\\ell+1}$ times those of "
+               "(F.1). Outside the horizon after decoupling the "
                "free-streaming quadrupole makes $(\\Phi_A+\\Phi_H)/\\Phi_A$ negative, peaking at "
                "$-\\tfrac4{15}\\Omega_\\gamma(\\eta_\\ast)$ at $\\sqrt2\\eta_\\ast$ in a matter era "
                "and at $-0.042$ near $1.6\\eta_\\ast$ on the Planck background.")
@@ -135,6 +143,49 @@ report('C14b  free streaming in this phase: tau_2\' = k tau_1, tau_0\' = -(k/3) 
        row2_ok and row0_ok)
 report('C14b  the monopole of (F.1) is minus the gradient variable dT',
        monopole_sign == -1, f'{monopole_sign}')
+
+# The overall sign, added 2026-11-19.  Annals II carries the pair on these
+# harmonics: beside tau_a = tau_1 Q_a and D_a ln T = (k/a) dT Q_a it uses
+# D^b Q_ab = -(2/3)(ak)^-1 (-k^2 + 3K) Q_a, from (-k/a)^-l D_<A_l> Q = Q_A_l
+# (its footnote to the scalar-potential decomposition), here a = 1, K = 0.
+# That relation holds for Annals I's Q_a and fails for its negative, so the
+# dipole is one object in the pair and in (F.1), and only the monopole turns.
+divQab = [sum(sp.diff(Qab[i][j], xs[j]) for j in range(3)) for i in range(3)]
+annals2_rel = lambda qa: all(sp.simplify(divQab[i] - sp.Rational(2, 3) * k * qa[i]) == 0
+                             for i in range(3))
+shared_dipole = annals2_rel(Qa) and not annals2_rel([-q for q in Qa])
+report("C14b  Annals II's D^b Q_ab = -(2/3)(ak)^-1(-k^2+3K) Q_a holds for Annals I's Q_a "
+       "only: the dipole is shared", shared_dipole)
+
+# With the sources of ranks zero and one the map between the two hierarchies
+# is then fixed, overall sign included.  (F.1) in this phase:
+#   tau_l' = k [tau_{l-1} - w_l tau_{l+1}],  w_l = (l+1)^2 / ((2l+3)(2l+1)),
+# with +Phi_H' on tau_0 (the pair's -Phi_H' on dT = -tau_0) and -k Phi_A on
+# tau_1 (A_a = D_a Phi_A on the shared Q_a).  The pair's phase, as the
+# radiation-era solve carries it:
+#   sigma_l' = k [w_l sigma_{l+1} - sigma_{l-1}] - d_l0 Phi_H' - d_l1 k Phi_A.
+# sigma_l = (-1)^(l+1) tau_l maps one onto the other at every rank; (-1)^l,
+# which keeps the same relative phase and the other overall sign, maps the
+# free rows and fails on the sources -- the negative control.
+LMAP = 6
+tl = sp.symbols('tl0:%d' % (LMAP + 1))
+dPhiH, PhiA = sp.symbols('dPhiH PhiA')
+wl = [sp.Rational((l + 1) ** 2, (2 * l + 3) * (2 * l + 1)) for l in range(LMAP + 1)]
+def rows_F1(l):
+    r = k * ((tl[l - 1] if l else 0) - wl[l] * tl[l + 1])
+    return r + (dPhiH if l == 0 else 0) - (k * PhiA if l == 1 else 0)
+def rows_pair(l, sgn):
+    sig = lambda j: sgn(j) * tl[j] if j >= 0 else 0
+    r = k * (wl[l] * sig(l + 1) - sig(l - 1))
+    return r - (dPhiH if l == 0 else 0) - (k * PhiA if l == 1 else 0)
+maps = lambda sgn: all(sp.expand(rows_pair(l, sgn) - sgn(l) * rows_F1(l)) == 0
+                       for l in range(LMAP))
+map_ok = maps(lambda j: (-1) ** (j + 1))
+map_other = maps(lambda j: (-1) ** j)
+report("C14b  the pair's multipoles are (-1)^(l+1) times (F.1)'s, sources included",
+       map_ok)
+report("C14b  the other overall sign, (-1)^l, fails once the sources are in (negative control)",
+       not map_other)
 
 # --------------------------------------------------------------------------
 # C14c -- outside the horizon after decoupling.  Scaled conformal time x with
