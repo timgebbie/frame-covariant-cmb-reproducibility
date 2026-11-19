@@ -114,7 +114,7 @@ first interior minimum at 360, which are CAMB's on the same grid. Relative to
 $\ell=30$ the Planck heights are within 6.4% of CAMB's at the three maxima,
 the rms difference over $30\le\ell\le990$ is 6.2%, and the largest, 15% at
 $\ell=840$, is in the damping tail. Below $\ell\simeq30$ the Planck curve lies
-within 1.7% of CAMB's shape, where at step 1 it lay at 0.54 to 0.62 against
+within 1.8% of CAMB's shape, where at step 1 it lay at 0.54 to 0.62 against
 CAMB's 0.78: the solved potential carries the radiation era the matter-era one
 omitted. The baryons' own term in the constraint (step 3) raised the heights
 by up to 30% from step 2's, where the baryons moved with the CDM. The photons'
