@@ -1,14 +1,23 @@
-r"""The nine weighting configurations, frozen bit-for-bit against a digest.
+r"""The nine weighting configurations, frozen against their values.
 
-**Why a digest and not a tolerance.** Every finding in `provenance/` that names
-a weighting --- **T-94**, **T-101**, **T-121**, **T-144**, **T-154**,
-**T-155** --- is a number produced by one of these nine configurations. If a
-refactor of the control surface moved any of them by so much as an ulp, every
-one of those rows would silently become a statement about a configuration that
-no longer exists, and nothing in the suite would say so. A tolerance would hide
-exactly the size of change a refactor produces.
+**Why a freeze.** Every finding in `provenance/` that names a weighting ---
+**T-94**, **T-101**, **T-121**, **T-144**, **T-154**, **T-155** --- is a
+number produced by one of these nine configurations. If a refactor of the
+control surface moved any of them, every one of those rows would silently
+become a statement about a configuration that no longer exists, and nothing in
+the suite would say so.
 
-So the gate is equality of bytes.
+**Why values at a stated tolerance, and not bytes (T-198).** Until 19 November
+the gate was equality of bytes, digested. Bytes are a fact about the platform
+as well as the physics: the transfer passes through Radau (rtol $10^{-8}$) and
+DOP853 (rtol $10^{-10}$), whose step control turns a last-bit difference in a
+platform's mathematics library into a difference at the integrator's
+tolerance. On Windows all nine digests failed while $\ell=2$ agreed with the
+seven digits printed beside each. So the gate is the four values per
+configuration, relative to the largest of them, at `RTOL` $=10^{-7}$: ten times
+the loosest integrator tolerance in the chain, and 44 times below the smallest
+move a change of physics has made here ($4.4\times10^{-6}$, T-180). A refactor
+that is a renaming moves nothing at that level; a change of physics moves more.
 
 **What it is for.** It was written the hour before the four mutually-exclusive
 booleans `bracket_all_at_w`, `slot_weight_split`, `isw_only_at_w` and
@@ -21,9 +30,9 @@ claim being made, and is otherwise unfalsifiable.
 them are controls and at most one is the assembly; the file asserts only that
 whatever they were, they still are.
 
-**If one of these digests has to change**, it is because the physics changed,
+**If one of these values has to change**, it is because the physics changed,
 and that is a finding: record it in `provenance/` with the old and the new
-value before touching the literal here. A digest edited to make a suite go
+value before touching the literal here. A value edited to make a suite go
 green is the end of this file's usefulness.
 """
 from __future__ import annotations
@@ -91,10 +100,28 @@ INTENDED = {
     "split_by_parts_partners": "split_by_parts",
 }
 
-#: Taken 2026-10-26 from the boolean control surface, before `weighting=`
-#: existed. The comment is the $\ell=2$ transfer, so that a failure can be read
-#: without rerunning anything.
-FROZEN: dict[str, str] = {
+#: **The transfer at `ELLS`, to 17 digits** (T-198), taken on Linux at
+#: `3bb4490`, where all nine T-180 digests still held. $\ell=200$ is
+#: $10^{-43}$, far below $j_\ell$'s turn-on at this $k$, which is why the
+#: comparison is relative to each configuration's largest value.
+RTOL = 1e-7
+FROZEN: dict[str, tuple[float, float, float, float]] = {
+    "released": (6.0818393806066879e+00, 5.0118307169475651e+00, 2.9666064952878979e+00, -4.8951906225847324e-43),
+    "bracket_at_w": (-7.1217279562188978e+00, -3.4788472296617408e+00, -1.0346847052274033e+00, -1.8179520471898235e-45),
+    "bracket_at_w_partners": (-7.1401362284356304e+00, -3.4972587597214728e+00, -1.0488419756390914e+00, -9.9417497627425927e-46),
+    "slot_split": (-1.2173229460314272e+00, 1.3785550909151059e+00, 1.8313577558321525e+00, -4.7819262137616551e-43),
+    "slot_split_isw_half": (-3.7096294577557415e-01, 1.8250576292581335e+00, 2.0474902748434984e+00, -4.8276522806494253e-43),
+    "slot_split_thomson_shear": (-2.0527664484815205e+01, -1.4479843752350556e+01, -7.4992197519120865e+00, 1.0875743644503329e-42),
+    "isw_at_w": (6.0658221124482958e+00, 5.0065055578188558e+00, 2.9664784528490413e+00, -4.8951906223554387e-43),
+    "split_by_parts": (-7.1193332644146663e+00, -3.4762439535225127e+00, -1.0325644306986768e+00, -1.7870335963940883e-45),
+    "split_by_parts_partners": (-7.1377415366313972e+00, -3.4946554835822439e+00, -1.0467217011103651e+00, -9.6325652547852379e-46),
+}
+
+#: **The digests this file froze until T-198**, kept as the record they are:
+#: taken 2026-10-26 from the boolean control surface, before `weighting=`
+#: existed, and re-frozen at T-180. The comment is the $\ell=2$ transfer.
+#: Nothing reads them; `FROZEN` above reproduces every one on Linux.
+DIGESTS_T180: dict[str, str] = {
     # **RE-FROZEN 2026-10-30, T-180.** The nine digests below replace the nine
     # taken before the `weighting=` refactor. The reason is authorised and
     # measured rather than convenient: `RecombinationHistory.build`'s `n_eta`
@@ -163,14 +190,16 @@ def _digest(common, coeffs, **flags) -> tuple[str, np.ndarray]:
 
 @pytest.mark.parametrize("name", sorted(MODES))
 def test_the_configuration_still_produces_the_number_it_did(name, fixture):
-    """**The gate.** Byte equality against the pre-refactor tree."""
+    """**The gate.** The four values, relative to the largest, within `RTOL`."""
     common, coeffs = fixture
-    got, t = _digest(common, coeffs, **MODES[name])
-    assert got == FROZEN[name], (
-        f"`{name}` has moved. ell=2 is now {t[0]:+.6e}; the digest frozen "
-        f"before the `weighting=` refactor is {FROZEN[name]} and this tree "
-        f"produces {got}. Either the refactor changed the physics -- in which "
-        "case it is not a renaming and the finding that cites this "
+    _, t = _digest(common, coeffs, **MODES[name])
+    frozen = np.asarray(FROZEN[name])
+    moved = float(np.max(np.abs(t - frozen)) / np.max(np.abs(frozen)))
+    assert moved < RTOL, (
+        f"`{name}` has moved by {moved:.1e} of its largest value, against "
+        f"{RTOL:.0e}. ell=2 is now {t[0]:+.10e} and was frozen at "
+        f"{frozen[0]:+.10e}. Either the refactor changed the physics -- in "
+        "which case it is not a renaming and the finding that cites this "
         "configuration has to be revisited -- or something upstream of the "
         "integral moved. Do not edit the literal to make this pass.")
 

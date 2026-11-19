@@ -268,3 +268,26 @@ def test_the_git_comparison_catches_a_set_difference_that_counts_would_miss():
     assert tracked != here, "and the sets are not"
     assert tracked - here == {"data/.gitkeep"}
     assert here - tracked == {"supplementary-materials/handover.tex"}
+
+
+def test_the_order_is_the_same_on_every_platform():
+    """**T-200.** One order of bundle paths whatever the path flavour.
+
+    `PureWindowsPath` sorts case-insensitively and `PurePosixPath` does not, so
+    sorting either flavour directly orders these names two ways; the manifests
+    are text, and two orders of the same lines are two manifests.
+    """
+    from pathlib import PurePosixPath, PureWindowsPath
+
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from _bundle_files import order_key
+
+    names = ["source/source-v1.1.6/independent_checks_v1.1.6.py",
+             "source/source-v1.1.6/TG-FrameCovariantCMBR-v1.1.6-arxiv.zip",
+             "README.md", "captions/F9-acoustic-spectrum.md", "a-b/c", "a/b"]
+    windows = [PureWindowsPath(n).as_posix() for n in sorted(map(PureWindowsPath, names))]
+    posix = [str(n) for n in sorted(map(PurePosixPath, names))]
+    assert windows != posix, "the control: the two flavours must disagree"
+    by_key_w = sorted((PureWindowsPath(n).as_posix() for n in names), key=order_key)
+    by_key_p = sorted((PurePosixPath(n).as_posix() for n in names), key=order_key)
+    assert by_key_w == by_key_p == posix

@@ -26,7 +26,7 @@ prominence rule the maxima stand at $\\ell=210$, 480 and 720 and the first
 interior minimum at 360, where CAMB's do. Relative to $\\ell=30$ the heights
 are within 6.4\\% of CAMB's at the three maxima and 15\\% at most in the
 damping tail; below $\\ell\\simeq30$ the \\texttt{PLANCK\\_MODEL} curve lies
-within 1.7\\% of CAMB's shape.
+within 1.8\\% of CAMB's shape.
 Einstein--de~Sitter and $\\Lambda$CDM have no radiation era and keep the
 released potential: their first peaks stay at $\\ell\\simeq160$ and $140$, and
 an undriven, baryon-loaded oscillator gives them odd peaks alone
@@ -55,7 +55,7 @@ from one start deep in the radiation era (the radiation era's construction,
 steps 1 to 3), and the even peaks stand beside the odd ones: by the shared
 prominence rule the maxima are at ℓ = 210, 480 and 720 and the first interior
 minimum at 360, CAMB's on the same grid, with the first maximum at 205.5
-against CAMB's 206.1. Below ℓ ≈ 30 the curve lies within 1.7 per cent of
+against CAMB's 206.1. Below ℓ ≈ 30 the curve lies within 1.8 per cent of
 CAMB's shape. On
 Einstein–de Sitter and ΛCDM, which have no radiation era, the even peaks are
 absent: with no radiation-era driving the oscillation's zero point is set by

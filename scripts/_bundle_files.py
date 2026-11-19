@@ -109,8 +109,23 @@ class GitIgnore:
         return decided
 
 
+def order_key(rel: str) -> list[str]:
+    r"""The one ordering of bundle paths: by POSIX parts, case-sensitive.
+
+    **T-200.** `sorted()` on `Path` objects is not this on every machine: a
+    `WindowsPath` compares case-insensitively, so `independent_checks_...py`
+    sorted before `TG-...zip` on Windows and after it on Linux. Every
+    manifest line agreed and the manifests did not, so the immutable gate
+    failed on a clean Windows tree and named no file. This key is what a
+    `PosixPath` sorts by on Linux, so the order the manifests were written in
+    does not move.
+    """
+    return rel.split("/")
+
+
 def _walk(root: Path):
-    for p in sorted(root.rglob("*")):
+    for p in sorted(root.rglob("*"),
+                    key=lambda q: order_key(q.relative_to(root).as_posix())):
         if not p.is_file():
             continue
         rel = p.relative_to(root)

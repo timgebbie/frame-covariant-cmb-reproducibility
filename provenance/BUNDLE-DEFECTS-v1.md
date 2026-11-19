@@ -13068,3 +13068,86 @@ change, their axes and annotations are taken from the data where a range or a
 word had been fixed for the old numbers, and their captions say what they now
 show. D44 and D45 are listed stale until they are recomputed on the solved
 potential.
+
+## T-198 — The weighting freeze compared bytes, and bytes are a fact about the platform
+
+`tests/test_weighting_modes_are_frozen.py` froze nine weighting configurations
+as SHA-256 digests of their transfers. On Windows, at `3bb4490`, all nine
+failed while $\ell=2$ agreed with the seven digits printed beside each digest;
+on Linux all nine held. The transfer passes through Radau (rtol $10^{-8}$) and
+DOP853 (rtol $10^{-10}$), and adaptive step control turns a last-bit
+difference between two platforms' mathematics libraries into a difference at
+the integrator's tolerance. A digest cannot tell that from a change of
+physics, so the gate tested the platform. Repaired: the four values per
+configuration are frozen to 17 digits, taken on Linux where every digest
+held, and compared relative to the largest at $10^{-7}$ — ten times the
+loosest integrator tolerance, and 44 times below the smallest move a change of
+physics has made there, $4.4\times10^{-6}$ at T-180. The digests are kept
+beside the values as the record. Nothing in the physics moved.
+
+## T-199 — D42 measured a configuration the release no longer uses, with a statistic that could not see what its reading claimed
+
+D42 asked whether the source at the visibility peak oscillates in $k$. As
+built it read the antecedent's matching (`source="as built"`), the per-mode
+start and the released potential, none of which the released spectrum uses
+since the radiation era (T-192 to T-194). Its `minus_c1` column was $C_1$'s
+Thomson half, $-\kappa'v_B/k$, with $C_1$'s sign rather than $-C_1$'s, which at
+fixed $\eta_\ast$ is $v_B/k$ rescaled. Its instrument counted sign changes after
+a running mean, which cannot see phase, so the reading's "correctly phased"
+had not been measured; and the running mean's width was a number of samples,
+equal to the acoustic period only because the grid steps by one. Its scored
+reading of 3 November, that the series was lost between the source and the
+spectrum, is answered by F9 and D44.
+
+Restated: D42 reads the three frame-invariant slots' sources of
+`line_of_sight.three_slots` and $C_0$ at $\eta_\ast$, in F9's environment and
+with Paper 1's signs, by a least-squares fit in acoustic windows (a cubic
+pedestal, a wave at the table's $r_s$ with a linear envelope), each series'
+sound horizon calibrated on known waves of its own shape. Controls: the frames
+agree to $2.5\times10^{-13}$, and $C_0$ under Paper 1's source equals the
+antecedent's bracket $C_0-a\mathcal B_0$ exactly. The first run of the
+restated instrument fitted a constant amplitude and read the Doppler source as
+$\hat v_B+C_2$; a known wave with a $1/k$ envelope came back 3% short, the size
+of what it returned there, so the envelope terms and the slot's own coefficient
+$k(\hat v_B+C_2)$ were added and the outcomes left as fixed.
+
+**What it shows.** The Sachs–Wolfe and Doppler sources oscillate through zero
+at the table's sound horizon (0.992 and 0.991, bias 0.3%) and in quadrature,
+to 1.3% of $\pi/2$ in every scored window. Against the 3 November environment
+the radiation era multiplies the Sachs–Wolfe wave at $\eta_\ast$ by 8 at
+$k\sim200$ and 44 at $k\sim500$, and lifts it off a pedestal it rode on
+($A/|P|$ 0.5–0.8): the driving of modes that enter the horizon in the
+radiation era. The integrated slot, smooth before, carries a wave of the
+potential's own with $A/|P|\approx1$. D42 runs in `run_all.py`.
+
+## T-200 — The bundle's file order was the platform's, so the manifests could not pass on Windows
+
+`_bundle_files._walk` sorted `Path` objects. A `WindowsPath` compares
+case-insensitively, so `independent_checks_v1.1.6.py` sorted before
+`TG-FrameCovariantCMBR-v1.1.6-arxiv.zip` on Windows and after it on Linux. The
+manifests are compared as text: every line agreed, their order did not, and
+`make_manifests.py --check` failed the immutable manifest on a clean Windows
+tree while naming no file, which is what was seen. Repaired: one key, POSIX
+parts compared case-sensitively (`order_key`), which is what Linux sorted by,
+so no manifest line moves; a mismatch with no entry moved now says so; and
+`tests/test_bundle_file_selection.py` checks the order against both path
+flavours.
+
+## T-195, amended 2026-11-19 — the hand-over carries (F.1) with the opposite overall sign
+
+T-195 states that the pair's multipoles are $(-1)^\ell$ times (F.1)'s. The
+supplement (v1.4.8, sec:a3-construction) shows the overall sign is fixed by
+the harmonics and not chosen: *Annals II* puts the pair on *Annals I*'s
+harmonics, whose $\mathrm D^bQ_{ab}$ relation holds for
+$Q_a=-(a/k)\mathrm D_aQ$ alone, so the dipole is one object in both and the
+pair's multipoles are $(-1)^{\ell+1}$ times (F.1)'s, $\tau_0^{(F.1)}=-\delta T$.
+The control continuation hands over $\delta T$ and $-\tau_1$: the right phase
+between rank zero and rank one, and every rank of (F.1) with the opposite
+sign. It carries no source and returns only $\delta T$ and $\tau_1$, so it
+returns them correctly, T-195's measurement stands, and nothing computed
+today moves; the step-2 and step-3 solve carries the hierarchy in the pair's
+phase at every rank, with the sign of eq:stress-constraint matched. A
+$\tau_2$ read from the continuation, or a source added to it, would inherit
+the wrong sign, which is where A-5 begins. Repaired with the first change A-5
+makes to `functions/` — the hand-over passes $-\delta T$ and $\tau_1$ ---
+since any byte there re-stamps every artefact.

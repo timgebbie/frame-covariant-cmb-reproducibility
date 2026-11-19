@@ -5,6 +5,41 @@ All notable changes to this bundle are recorded here. The version policy is in
 
 ## [Unreleased] — v1.4.0 in preparation
 
+### The sources at the visibility peak, D19 restated, and the suite on Windows
+
+- **D42 reads the released sources in $k$** (T-199): the three frame-invariant
+  slots' sources and $C_0$ at $\eta_\ast$, in F9's environment and with Paper
+  1's signs, by a fit in acoustic windows (pedestal, amplitude with its slope,
+  phase), each series' sound horizon calibrated on known waves of its own
+  shape. The Sachs–Wolfe and Doppler sources oscillate through zero at the
+  table's sound horizon (0.992, 0.991) and in quadrature to 1.3% of $\pi/2$.
+  Against the 3 November environment (`--antecedent`) the radiation era
+  multiplies the Sachs–Wolfe wave at $\eta_\ast$ by 8 at $k\sim200$ and 44 at
+  $k\sim500$ and lifts it off its pedestal. The frames agree to
+  $2.5\times10^{-13}$, and $C_0$ under Paper 1's source is the antecedent's
+  bracket $C_0-a\mathcal B_0$ exactly. It had read the antecedent's matching,
+  start and potential, with a column that was $C_1$'s Thomson half and a sign
+  count that could not see phase. D42 now runs in `run_all.py`.
+- **D19 measures the 3 November table** on the live coefficients: $\gamma$ is
+  5/2 as printed, 1/3 with $\alpha_0$ alone, and 0 with $a\mathcal B_0$ beside
+  it, under the antecedent's matching and under Paper 1's source; $C_1$ and
+  $C_2$ do not move with the row, and the ledger is clean. It had asserted 0
+  for `"corrected"`, which meant both corrections on 21 October.
+- **The suite passes on Windows** (T-198, T-200): the weighting freeze
+  compares values at $10^{-7}$ rather than bytes, which the integrators'
+  step control makes a fact about the platform; and the bundle's file order is
+  POSIX parts on every machine, where `sorted()` on Windows paths had ignored
+  case and failed the manifests while naming no file.
+- **Corrected:** halving $\eta_i$ moves $D_\ell$ by $1.5\times10^{-5}$ of its
+  maximum, and below $\ell\simeq30$ the Planck curve lies within 1.8% of
+  CAMB's shape (1.75% at $\ell=2$); these read $1.6\times10^{-5}$ and 1.7%.
+- **T-195 amended:** the supplement fixes (F.1)'s overall sign by the
+  harmonics, $\tau_0=-\delta T$ with the dipole shared. The control
+  continuation hands over $\delta T$ and $-\tau_1$, every rank with the
+  opposite sign; it returns only $\delta T$ and $\tau_1$, so nothing computed
+  moves, and the hand-over is repaired with A-5's first change to
+  `functions/`.
+
 ### D44 and D45 on the solved potential, and what one spectrum costs now
 
 - **D44 and D45 read the solved potential** (`potential="solved"`), and D44's
@@ -121,10 +156,10 @@ after it, as registered.
   - relative to $\ell=30$ the heights are within 6.4% of CAMB's at the three
     maxima, with an rms difference of 6.2% over $30\le\ell\le990$ and 15% at
     most, at $\ell=840$ in the damping tail;
-  - below $\ell\simeq30$ the curve lies within 1.7% of CAMB's shape;
+  - below $\ell\simeq30$ the curve lies within 1.8% of CAMB's shape;
   - the baryons' own term raised the heights by up to 30% from step 2's.
 - **Recorded beside the test (D46):**
-  - halving $\eta_i$ moves $D_\ell$ by $1.6\times10^{-5}$ of its maximum,
+  - halving $\eta_i$ moves $D_\ell$ by $1.5\times10^{-5}$ of its maximum,
     against the registered $10^{-4}$;
   - the photons' anisotropic stress moves $D_\ell$ by 1.3% of its maximum;
   - $(\Phi_A+\Phi_H)/\Phi_A$ after $\eta_*$ outside the horizon has its

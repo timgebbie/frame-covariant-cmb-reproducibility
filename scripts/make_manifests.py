@@ -300,9 +300,13 @@ def main() -> int:
             for name in moved:
                 by_class.setdefault(artefact_class(name), []).append(name)
 
-            blocking = label == "immutable" or "exact" in by_class
+            blocking = label == "immutable" or "exact" in by_class or not moved
             print(f"{'FAIL' if blocking else 'DRIFT'}  {manifest.name} "
                   f"does not match the tree")
+            if not moved:
+                # T-200: a failure that names no file names its cause.
+                print("        every entry agrees and their order does not: "
+                      "the tree was listed in another order (T-200)")
             # `bounded` is listed too. A residual's bytes move on every machine
             # by design, and a drift report that leaves them out says the file
             # did not move when it did: F1's residuals regenerated different

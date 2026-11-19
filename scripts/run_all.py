@@ -231,11 +231,12 @@ DIAGNOSTICS: list[tuple[str, str]] = [
     # wrongly. Finding T-101.
     ("D18 the kappa' ledger against the released assembly",
      "scripts/diagnostic_d18_released_kappa_ledger.py"),
-    # D19 is the acceptance measurement for the ell=0 row control. It is kept
-    # after T-107 REFUTED the correction it measures, for D14's reason: a
-    # withdrawn variant that cannot be regenerated cannot be checked. Its four
-    # conditions all PASS and the repair is still wrong -- which is M14, and
-    # the reason it is in the harness rather than in a notebook.
+    # D19 measures the ell=0 row on the live coefficients, read with the
+    # table of 3 November: the frame shift of C_0 is 5/2 as printed, 1/3 with
+    # alpha_0 alone, and 0 with a B_0 beside it -- under the antecedent's
+    # matching (T-105, refuted by T-107 and kept regenerable, D14's reason) and
+    # under Paper 1's source, the released row. Restated 2026-11-19: it had
+    # asserted 0 for "corrected", which meant both corrections on 21 October.
     ("D19 the ell=0 row control, measured on the live coefficients",
      "scripts/diagnostic_d19_monopole_row.py"),
     # D20 is T-108's measurement and T-109's evidence: what the two h defects
@@ -360,6 +361,13 @@ DIAGNOSTICS: list[tuple[str, str]] = [
     # ratio, which is M15 and the lesson of T-147 and T-148.
     ("D35 which bracket term accumulates",
      "scripts/diagnostic_d35_which_term_accumulates.py"),
+    # D42 reads the three frame-invariant slots' sources at the visibility
+    # peak in k, on F9's environment: pedestal, amplitude, phase and the
+    # source's own sound horizon in acoustic windows, each series calibrated
+    # on known waves of its own shape. Restated 2026-11-19 (T-199); about five
+    # minutes, so it runs with the rest.
+    ("D42 the sources at the visibility peak, in k",
+     "scripts/diagnostic_d42_does_the_source_oscillate_in_k.py"),
     # **D44 and D45 are split for F9's reason and carry F9's guard.** Their
     # per-mode runs take hours and checkpoint outside the tree; `--report`
     # writes every number the report prints to CSVs stamped with the sources,

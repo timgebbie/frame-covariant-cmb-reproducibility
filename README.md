@@ -628,8 +628,8 @@ v1.3.0 released the frame-invariant line of sight (step 7). The v1.4.0-dev line
 wires the radiation era into the oscillator and into both slots, with one
 initial condition and start for every mode, and adds the tight-coupling
 transition; the release sequence above lists what each earlier release put
-back. Two of the radiation era's three steps are in the tree: the one start,
-and on Planck the solved potential.
+back. The radiation era's three steps are in the tree: the one start, on
+Planck the solved potential, and the baryons' own term in the constraint.
 
 ### Artefacts
 
