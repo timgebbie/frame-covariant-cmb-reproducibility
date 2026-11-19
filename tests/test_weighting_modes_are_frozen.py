@@ -100,21 +100,26 @@ INTENDED = {
     "split_by_parts_partners": "split_by_parts",
 }
 
-#: **The transfer at `ELLS`, to 17 digits** (T-198), taken on Linux at
-#: `3bb4490`, where all nine T-180 digests still held. $\ell=200$ is
-#: $10^{-43}$, far below $j_\ell$'s turn-on at this $k$, which is why the
-#: comparison is relative to each configuration's largest value.
+#: **The transfer at `ELLS`, to 17 digits** (T-198), taken on Linux.
+#: $\ell=200$ is $10^{-43}$, far below $j_\ell$'s turn-on at this $k$, which
+#: is why the comparison is relative to each configuration's largest value.
+#:
+#: **Re-frozen 2026-11-19, T-201.** The oscillator's loading now reads the
+#: background's photon density, derived from $T_0$, where it read the rounded
+#: $2.47\times10^{-5}$: $R$ falls by 0.12%. Every configuration moves, by
+#: $6.6\times10^{-5}$ to $1.5\times10^{-3}$ of its largest value, the size on
+#: each row; the $\ell=2$ value frozen at T-198 is kept beside it.
 RTOL = 1e-7
 FROZEN: dict[str, tuple[float, float, float, float]] = {
-    "released": (6.0818393806066879e+00, 5.0118307169475651e+00, 2.9666064952878979e+00, -4.8951906225847324e-43),
-    "bracket_at_w": (-7.1217279562188978e+00, -3.4788472296617408e+00, -1.0346847052274033e+00, -1.8179520471898235e-45),
-    "bracket_at_w_partners": (-7.1401362284356304e+00, -3.4972587597214728e+00, -1.0488419756390914e+00, -9.9417497627425927e-46),
-    "slot_split": (-1.2173229460314272e+00, 1.3785550909151059e+00, 1.8313577558321525e+00, -4.7819262137616551e-43),
-    "slot_split_isw_half": (-3.7096294577557415e-01, 1.8250576292581335e+00, 2.0474902748434984e+00, -4.8276522806494253e-43),
-    "slot_split_thomson_shear": (-2.0527664484815205e+01, -1.4479843752350556e+01, -7.4992197519120865e+00, 1.0875743644503329e-42),
-    "isw_at_w": (6.0658221124482958e+00, 5.0065055578188558e+00, 2.9664784528490413e+00, -4.8951906223554387e-43),
-    "split_by_parts": (-7.1193332644146663e+00, -3.4762439535225127e+00, -1.0325644306986768e+00, -1.7870335963940883e-45),
-    "split_by_parts_partners": (-7.1377415366313972e+00, -3.4946554835822439e+00, -1.0467217011103651e+00, -9.6325652547852379e-46),
+    "released": (6.0841647234773566e+00, 5.0137472357850870e+00, 2.9677405216525701e+00, -4.8970561297303281e-43),  # T-198 l=2 +6.0818393806e+00, moved 3.8e-04
+    "bracket_at_w": (-7.1212534940121968e+00, -3.4786134647235110e+00, -1.0345785124378986e+00, -1.8177177751000572e-45),  # T-198 l=2 -7.1217279562e+00, moved 6.7e-05
+    "bracket_at_w_partners": (-7.1396617662289268e+00, -3.4970249947832439e+00, -1.0487357828495867e+00, -9.9394070418449267e-46),  # T-198 l=2 -7.1401362284e+00, moved 6.6e-05
+    "slot_split": (-1.2145069174097463e+00, 1.3807195291331269e+00, 1.8326072457895981e+00, -4.7838009931753028e-43),  # T-198 l=2 -1.2173229460e+00, moved 1.5e-03
+    "slot_split_isw_half": (-3.6863760290490755e-01, 1.8269741480956549e+00, 2.0486243012081697e+00, -4.8295177877950210e-43),  # T-198 l=2 -3.7096294578e-01, moved 1.1e-03
+    "slot_split_thomson_shear": (-2.0524848456193528e+01, -1.4477679314132537e+01, -7.4979702619546424e+00, 1.0873868865089679e-42),  # T-198 l=2 -2.0527664485e+01, moved 1.4e-04
+    "isw_at_w": (6.0681474553189618e+00, 5.0084220766563776e+00, 2.9676124792137140e+00, -4.8970561295010336e-43),  # T-198 l=2 +6.0658221124e+00, moved 3.8e-04
+    "split_by_parts": (-7.1188576332898643e+00, -3.4760089788989070e+00, -1.0324572959480482e+00, -1.7868044067195530e-45),  # T-198 l=2 -7.1193332644e+00, moved 6.7e-05
+    "split_by_parts_partners": (-7.1372659055065961e+00, -3.4944205089586386e+00, -1.0466145663597362e+00, -9.6302733580398840e-46),  # T-198 l=2 -7.1377415366e+00, moved 6.7e-05
 }
 
 #: **The digests this file froze until T-198**, kept as the record they are:

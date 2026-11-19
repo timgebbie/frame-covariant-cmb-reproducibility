@@ -42,7 +42,7 @@ import numpy as np
 from scipy.integrate import cumulative_trapezoid, solve_ivp
 from scipy.interpolate import CubicSpline
 
-from functions.background.flrw import Background
+from functions.background.flrw import OMEGA_GAMMA_H2, Background
 
 __all__ = [
     "ACOUSTIC_START_EPSILON",
@@ -159,13 +159,16 @@ def adiabatic_growing_mode(
 
 
 def baryon_photon_ratio(
-    a: np.ndarray | float, *, omega_b_h2: float = 0.0224, omega_gamma_h2: float = 2.47e-5
+    a: np.ndarray | float, *, omega_b_h2: float = 0.0224,
+    omega_gamma_h2: float = OMEGA_GAMMA_H2,
 ) -> np.ndarray:
     """R = 3 rho_B / 4 rho_gamma, which scales as a.
 
-    `omega_gamma_h2` is a **standard** value and not one the antecedent supplies;
-    it is recorded as such in the parameter table, because it enters only here
-    and through the sound speed.
+    `omega_gamma_h2` is not one the antecedent supplies. It is the background's
+    own, `flrw.OMEGA_GAMMA_H2`, derived from $T_0=2.7255$ K, so the loading and
+    the radiation the background integrates are one photon density (T-201:
+    until 2026-11-19 this default was the rounded $2.47\times10^{-5}$, 0.12%
+    below it).
     """
     return (3.0 * omega_b_h2 / (4.0 * omega_gamma_h2)) * np.asarray(a, dtype=float)
 
@@ -316,7 +319,7 @@ def solve_acoustic(
     phi_a: np.ndarray,
     phi_h: np.ndarray,
     omega_b_h2: float = 0.0224,
-    omega_gamma_h2: float = 2.47e-5,
+    omega_gamma_h2: float = OMEGA_GAMMA_H2,
     expansion_coupling: bool = True,
     initial: tuple[float, float] | None = None,
 ) -> AcousticSolution:

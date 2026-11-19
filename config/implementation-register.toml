@@ -576,11 +576,11 @@ note = "the paper's own standard CDM model"
 [[parameters]]
 symbol = "$\\Omega_\\gamma h^2$"
 code = "OMEGA_GAMMA_H2"
-value = "$2.47\\times10^{-5}$"
+value = "$2.47298\\times10^{-5}$"
 units = "---"
-source = "standard"
-where = "scripts/derive_ell_range.py"
-note = "\\textbf{not from Annals II.} Enters only through $R(\\eta_*)$, hence $c_s$"
+source = "derived"
+where = "functions/background/flrw.py"
+note = "\\textbf{not from Annals II.} Derived from $T_0=2.7255$ K; the background's radiation and the oscillator's loading $R$, hence $c_s$, read the one value (T-201)"
 
 [[parameters]]
 symbol = "tolerance"

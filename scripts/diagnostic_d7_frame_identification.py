@@ -53,12 +53,12 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from functions.background.flrw import OMEGA_GAMMA_H2  # noqa: E402,F401
 from functions.spectra.acoustic import solve_acoustic  # noqa: E402
 from functions.spectra.frame_transform import cdm_frame_shift  # noqa: E402
 from functions.spectra.two_frame import build_environment  # noqa: E402
 
 OMEGA_B_H2 = 0.0224
-OMEGA_GAMMA_H2 = 2.47e-5
 H0 = 0.5                      # the bundle's fiducial h for the CDM model
 K_COM = (5.0, 20.0, 60.0, 140.0, 300.0)
 

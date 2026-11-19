@@ -70,7 +70,7 @@ why the $\ell=k\Delta\eta$ comparisons in this record are meaningful at all.
 | | value in the code | source |
 |---|---|---|
 | `omega_b_h2` | 0.0224 | **Planck 2018 VI abstract**, $\Omega_bh^2=0.0224\pm0.0001$. Table 2's baseline column gives $0.02237\pm0.00015$ |
-| `omega_gamma_h2` | 2.47e-5 | the photon density at $T_0=2.7255$ K, the value Planck 2018 VI adopts (its footnote 14, citing Fixsen 2009) |
+| `omega_gamma_h2` | 2.47298e-5 (`flrw.OMEGA_GAMMA_H2`) | derived from $T_0=2.7255$ K, the temperature Planck 2018 VI adopts (its footnote 14, citing Fixsen 2009); until 2026-11-19 the oscillator's loading read the rounded 2.47e-5 while the background derived this one (T-201) |
 
 Neither was cited before. Both are now, and `tables/parameters` is where they
 belong at v1.2.0.
