@@ -606,7 +606,7 @@ The complete record, B-1 to B-17, is
 deliberate approximations, A-1 to A-5, are
 `provenance/SOURCE-APPROXIMATIONS-v1.md`.
 
-## Current situation
+## Current situation: v1.4.0-dev
 
 This bundle is an independent Python reconstruction, from first $1+3$
 covariant principles, of the almost-Friedmann–Lemaître results of T. Gebbie,
