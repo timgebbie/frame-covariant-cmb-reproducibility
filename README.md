@@ -10,7 +10,7 @@ and an integrated slot, each invariant under a change of frame. The two frames
 give one $C_\ell$ to $4\times10^{-14}$ (D44), the slots sum back to the
 integral they rearrange (D45), and F9 and F10 are drawn from them.
 
-Supplement: **v1.4.9** — `SUPPLEMENTARY-MATERIAL-v1.4.9.tex`. The supplement
+Supplement: **v1.4.10** — `SUPPLEMENTARY-MATERIAL-v1.4.10.tex`. The supplement
 has its own version line. An edition records the state of the documentation
 and does not assert that the computational release above has advanced, so
 `scripts/_versions.py` reads the supplement's name from this line and never
@@ -30,9 +30,9 @@ University of Cape Town, 2026, arXiv:astro-ph/9912072v4
 
 The supplementary-materials document is included here:
 
-> [SUPPLEMENTARY-MATERIAL-v1.4.9.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.4.9.pdf)
+> [SUPPLEMENTARY-MATERIAL-v1.4.10.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.4.10.pdf)
 
-Its source, `SUPPLEMENTARY-MATERIAL-v1.4.9.tex`, is one file in the
+Its source, `SUPPLEMENTARY-MATERIAL-v1.4.10.tex`, is one file in the
 repository root, and `scripts/build_supplement.py` builds it with `pdflatex`
 alone: the prose carries no `\input`, the bibliography is inline, and the only
 external files are the generated assets in `tables/`, `tikz/` and `figures/`.
@@ -638,12 +638,14 @@ formation surface with the radiation era solved, is v1.4.0's lead figure.
 
 ### Artefacts
 
-Eleven figures and twenty-nine diagnostics, each aimed at one physical question.
+Eleven figures and thirty-three diagnostics, each aimed at one physical
+question.
 A figure's suffix is the release in which it was first drawn, so F1, F3 and F4
 read `v1.0.0`, and F9, first drawn at v1.2.0, was redrawn from the v1.3.0
-assembly under the same name. The instruments after D30, among them D44 and
-D45, which score the v1.3.0 assembly, are reported in the supplement; D45
-enters this table when `scripts/run_all.py` runs it.
+assembly under the same name. D32 to D35, instruments of the search for a
+repair of (102), run in `scripts/run_all.py` and are recorded in
+`provenance/BUNDLE-DEFECTS-v1.md`. D42 and D44 to D46 score the v1.3.0
+assembly and v1.4.0's radiation era, and they close the table.
 `tests/test_readme_artefacts.py` checks every row against `figures/` and
 `scripts/run_all.py`.
 
@@ -672,7 +674,7 @@ enters this table when `scripts/run_all.py` runs it.
 | **D8** criterion 5b's gate | (102) against (177)–(179) on this bundle's own pipeline (S4c): $9.544\times10^{-6}$ at worst against $10^{-3}$, over three backgrounds, nine modes and six multipoles | `v1.2.0` |
 | **D9** the acoustic scale | the antecedent's own $\ell_j=\|r_\theta/r_s\|\thinspace j\pi$, both sides computable here and never compared there: it disagrees by 2.0 to 2.8 times (T-51) | `v1.3.0` |
 | **D4** the monopole, and which rank carries $C_\ell$ | the antecedent's statement that there is no monopole temperature anisotropy in the CGI approach, made executable. Under the weight every caller of (102) then took, the rank-0 monopole sector is 0.002% of $C_\ell$ and the rank-1 dipole 100.5% of it (T-57). Runs both weights every time | `v1.3.0` |
-| **D10** what A-3 costs | the released driving holds $\Phi$ constant below the recombination grid's first point while modes start earlier (T-51), so the oscillator crosses the radiation era on a potential that does not decay. Reports which modes have a radiation era to see and how much $\Phi$ the held form omits, 0.13% at $k=10$ and 105% at $k=600$, and stops there, because the acoustic grid carries 3 to 26 points below equality (T-64) | `v1.3.0` |
+| **D10** what A-3 cost v1.3.0 | v1.3.0's driving held $\Phi$ constant below the recombination grid's first point while modes started earlier (T-51), so the oscillator crossed the radiation era on a potential that did not decay. It reports which modes have a radiation era to see and how much $\Phi$ the held form omits, 0.13% at $k=10$ and 105% at $k=600$, and stops there, because that acoustic grid carried 3 to 26 points below equality (T-64). v1.4.0 solves the potential through the radiation era instead (D46) | `v1.3.0` |
 | **D11** the $\ell=0$ driving terms | the two driving terms of the $\ell=0$ equation, $-\Phi_H'$ and $\tfrac k3\tau_1$, and $a\mathcal B_0=-\tfrac k3\tau_1$ counted once (T-79). $\Phi_H'$ is machine zero on Einstein–de Sitter and 59% of $a\mathcal B_0$ on Planck at $k=10$ | `v1.3.0` |
 | **D12** $v_B+\sigma$ at the source | CAMB's single $g(v_b+\sigma)$ object differenced between the two frames before any projection: no transfer, no $j_\ell$, no weight. $9.3\times10^{-16}$ to $1.8\times10^{-13}$ at every $k$ on both backgrounds, so the rank-1 source is frame-consistent and (102)'s gap is downstream of it (T-82) | `v1.3.0` |
 | **D13** the by-parts 2×2 | the same transport source direct and through its fully integrated-by-parts form, with identical endpoints, in both frames. Both identities hold, since the residual falls under refinement, and the two frames differ by 1.0 to 1.8 of scale, which excludes boundary-against-bulk bookkeeping (T-85) | `v1.3.0` |
@@ -692,6 +694,10 @@ enters this table when `scripts/run_all.py` runs it.
 | **D28** the restoration crosses, at released $\kappa''$ | the configurations that survived D26, run at released $\kappa''$. Cross B gives a first peak at $0.8691\thinspace\ell_A$ in the CDM frame and $0.2770$ in the Newtonian frame, a factor of 3.1 apart, and is not adopted, since $\ell\ge2$ is frame-invariant at first order | `v1.3.0` |
 | **D29** B-17's identity, at released $\kappa''$ | the identity itself, and the first instrument to implement it; `slot_weight_split` is a different claim, which splits $C_1'$ and leaves $\kappa''\tilde v_B$ where it was (T-125). Registered before it ran, and checkpointed row by row (T-127) | `v1.3.0` |
 | **D30** when the spectrum is laid down | the formation-surface instrument on (102): $C_\ell$ accumulated in conformal time inside the quadrature, one pass, with the $\eta_0$ slice required to equal the integral it decomposes. The late share is 0.0000 on all three backgrounds, where ΛCDM and Planck require $O(0.1)$ and Einstein–de Sitter requires exactly zero, and the Einstein–de Sitter null control is the falsifier (T-128) | `v1.3.0` |
+| **D42** the sources at the visibility peak, in $k$ | each slot's source at $\eta_\ast$ fitted in windows one acoustic period wide, each fit calibrated on known waves of the source's own shape (restated, T-199). The Sachs–Wolfe and Doppler sources oscillate through zero at the table's sound horizon, 0.992 and 0.991, in quadrature to 1.3% of $\pi/2$, and against the environment of 3 November the radiation era multiplies the Sachs–Wolfe wave by 8 at $k\sim200$ and 44 at $k\sim500$ | `v1.4.0` |
+| **D44** the line of sight in frame-invariant slots | the four registrations of the assembly with Paper 1's source: the three frame conditions to $3.0\times10^{-13}$, the integrated source against each mode's own $-(\Phi_A'-\Phi_H')$ to $4\times10^{-16}$, and one $C_\ell$ in both frames to $3.9\times10^{-14}$. On the solved potential the series holds on Planck, maxima at $\ell=210$, 480, 705 and 990 and a trough at 375 on its $\Delta\ell=15$ grid, and on Einstein–de Sitter | `v1.4.0` |
+| **D45** the slots summed back | the three slots against the direct integral they rearrange: the difference falls by 4.00 when the step halves, on ΛCDM and Planck in both frames, so it is the direct integral's quadrature and the slot weights stand. On Planck at $\ell=100$ to 400 twice the cross-spectrum of the integrated and Sachs–Wolfe slots adds up to 22%, in phase, and the maxima are the same without the integrated slot | `v1.4.0` |
+| **D46** the solved potential, scored as registered | the radiation era's construction: Kodama and Sasaki's super-horizon fall to $3\times10^{-10}$, the energy constraint, which the solve never integrates, to $3.5\times10^{-10}$ at every $k$, $D/a$ to $2.6\times10^{-11}$ on the backgrounds without radiation, and the photons' anisotropic stress, $(\Phi_A+\Phi_H)/\Phi_A=-0.0432$ at $1.63\thinspace\eta_\ast$ against the registered $-0.042$. With F9 it carries the registered test: the first maximum at 205.5 inside $206\pm6$, the first interior minimum at 360 | `v1.4.0` |
 | *D3* | *deferred to v1.5.0 (S-b)*: a cross-check, not an acceptance artefact. It was once deferred to v1.1.0, which shipped without it (T-47), and `run_all.py` now fails on a deferral to a released version | — |
 
 ### Compute cost
@@ -982,7 +988,7 @@ content. The full history is in `CHANGELOG.md`; the decisions behind it are in
 | Item | Value |
 |---|---|
 | **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMBR lensing in the exact 1+3 covariant radiation hierarchy*, Paper 1, University of Cape Town. arXiv:astro-ph/9912072v4, [doi:10.48550/arXiv.astro-ph/9912072](https://doi.org/10.48550/arXiv.astro-ph/9912072). Submitted 2026-10-16. CC BY 4.0. Cite it with the version suffix: the bare identifier has carried three documents, `v2` the legacy 1999 work, `v3` the correction and `v4` this paper |
-| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.4.9.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.4.9.pdf) |
+| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.4.10.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.4.10.pdf) |
 | **GitHub repository** | [timgebbie/frame-covariant-cmb-reproducibility](https://github.com/timgebbie/frame-covariant-cmb-reproducibility) |
 | **ZivaHub/Figshare DOI** | [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509), live. The concept DOI always resolves to the latest version, so it is the one to cite |
 | **Associated antecedent** | Gebbie, T.; Dunsby, P. K. S.; Ellis, G. F. R. (2000). *1+3 covariant cosmic microwave background anisotropies II: the almost-Friedmann–Lemaître model*. Annals of Physics **282**, 321–394. [doi:10.1006/aphy.2000.6034](https://doi.org/10.1006/aphy.2000.6034) |

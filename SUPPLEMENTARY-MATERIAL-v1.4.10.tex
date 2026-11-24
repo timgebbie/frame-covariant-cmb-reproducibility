@@ -1,5 +1,22 @@
 % Computational supplement to the associated paper.
 %
+% v1.4.10, 2026-11-24.  The claims and evidence tables brought to v1.4.0
+% (PI, 24 November), and the figure section re-spliced from captions/.
+%   - tab:status reads the solved potential: the assembly's row carries D44's
+%     series on PLANCK_MODEL and Einstein-de Sitter, the first-peak row the
+%     registered (f) met, the plateau row the registered 0.379 Phi_A(eta_*)
+%     and CAMB's shape to 1.8%; a row for the radiation era (D46, c14) joins
+%     step four.  The paragraph mapping the frame instruments onto the table
+%     follows it: two rows name one, c14 and c3.
+%   - tab:dev-claim-tests and its introduction leave the v1.3.0-dev voice:
+%     c1 to c12 entered with v1.3.0, c13 and c14 with v1.4.0.
+%   - The release sequence by physical objective gains v1.4.0's item.
+%   - The figure section is regenerated from captions/ by
+%     scripts/make_figure_pages.py: one line moves, F9's low-l shape, 1.7% to
+%     the measured 1.8%.
+%   - Rebuilt for the parameter table bundle c8190a2 moved (omega_gamma h^2
+%     from T_0).  Equations unchanged.
+%
 % v1.4.9, 2026-11-19.  The supplement as it should read at the v1.4.0 tag
 % (PI, 19 November): v1.4.0 is the radiation era (A-3) alone, and A-5 moves to
 % v1.5.0 as its first step (PI's decision of the same day).
@@ -539,7 +556,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.4.9 --- 19 November 2026\\
+\date{Supplement v1.4.10 --- 24 November 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.4.0-dev}
 
 \begin{document}
@@ -753,34 +770,34 @@ does not reach.
 The statements these instruments carry are the steps of the chain
 Table~\ref{tab:status} records, and the correspondence is not one instrument to
 one step. Steps one to three are settled by inspection and index algebra and
-have no instrument in this directory at all. Step four is gated by the
-oscillator's peak spacing and step five by \textbf{G1} against four external
-hierarchies, both of them repository diagnostics rather than frame checks.
-Exactly one row of Table~\ref{tab:status} names an instrument from the set
-below --- step six, where \textbf{c3} measures that (102) is not the exact
-integration by parts of its own integral. What eight of the remaining thirteen
-establish sits beneath the table rather than in it: the conditions the
-matching coefficients must satisfy for the frame law to hold, which are prior
-to every row and are the reason a failing row can be localised at all. The
-other five bear on rows without being named in them. \textbf{c10} scores the
-phase that step four's row says it does not establish, and finds that a
-criterion of exact phase accepts the undriven oscillator and rejects the
-driven one; \textbf{c11} extends \textbf{c9}'s admissibility condition to a
-by-parts taken against the kernel; and \textbf{c12} states the rate at which a
-grid must sample the visibility, which every row that reads a spectrum relies
-on. Two carry derivations that later sections rest on: \textbf{c13} the
-endpoint map and the late support of the integrated term, for the frame
-comparison of \S\ref{sec:los-conformity-v138}, and \textbf{c14} the photons'
-anisotropic stress, with which the radiation-era construction of
-\S\ref{sec:a3-construction} closes $\Phi_A$. The inventory below should be read in that light, and not as a count of
+have no instrument in this directory at all. Step four's first row is gated
+by the oscillator's peak spacing and step five by \textbf{G1} against four
+external hierarchies, both of them repository diagnostics rather than frame
+checks. Two rows of Table~\ref{tab:status} name an instrument from the set
+below. In step four's second row, the radiation era, \textbf{c14} carries the
+photons' anisotropic stress, with which the construction of
+\S\ref{sec:a3-construction} closes $\Phi_A$. In step six \textbf{c3} measures
+that (102) is not the exact integration by parts of its own integral. What
+eight of the remaining twelve establish sits beneath the table rather than in
+it: the conditions the matching coefficients must satisfy for the frame law
+to hold, which are prior to every row and are the reason a failing row can be
+localised at all. The other four bear on rows without being named in them.
+\textbf{c10} scores the phase that step four's first row says it does not
+establish, and finds that a criterion of exact phase accepts the undriven
+oscillator and rejects the driven one; \textbf{c11} extends \textbf{c9}'s
+admissibility condition to a by-parts taken against the kernel; \textbf{c12}
+states the rate at which a grid must sample the visibility, which every row
+that reads a spectrum relies on; and \textbf{c13} carries the endpoint map and
+the late support of the integrated term, on which the frame comparison of
+\S\ref{sec:los-conformity-v138} rests. The inventory below should be read in that light, and not as a count of
 certified steps.
 
-The source tree at the pinned \texttt{v1.3.0-dev} commit also contains
-independent, claim-facing Python instruments that are \emph{absent}
-from the \texttt{v1.0.0}, \texttt{v1.1.0} and \texttt{v1.2.0} tags.
-This is part of the \emph{current} repository situation, not a
-future Lean deliverable and not an increment in the physics-release
-sequence. The fourteen instruments in \texttt{tests/frame/} use
+The source tree also contains independent, claim-facing Python
+instruments that the \texttt{v1.0.0}, \texttt{v1.1.0} and \texttt{v1.2.0}
+tags do not: \textbf{c1} to \textbf{c12} entered with \texttt{v1.3.0}, and
+\textbf{c13} and \textbf{c14} with \texttt{v1.4.0}. They are part of the
+repository's verification, not a future Lean deliverable and not an increment
+in the physics-release sequence. The fourteen instruments in \texttt{tests/frame/} use
 self-contained kernel, visibility and frame constructions rather than
 importing the spectral solver, and \path{tests/frame/run_all.py} invokes each
 in an isolated subprocess under \texttt{-I}.
@@ -796,7 +813,9 @@ has not rerun the pinned repository suite as part of this editorial gate.
 \begingroup\footnotesize
 \setlength\LTleft{0pt}\setlength\LTright{\fill}\setlength\LTcapwidth{\textwidth}
 \begin{longtable}{@{}p{0.16\textwidth}p{0.36\textwidth}p{0.39\textwidth}@{}}
-\caption{New \texttt{v1.3.0-dev} claim-facing Python checks.
+\caption{Claim-facing Python checks in \texttt{tests/frame/}: \textbf{c1}
+to \textbf{c12} since \texttt{v1.3.0}, \textbf{c13} and \textbf{c14} since
+\texttt{v1.4.0}.
 The inventory is distinct from software implementation tests. The
 status is what the source asserts or refutes, not independent
 certification of Paper~1 or of the observed spectrum.}\label{tab:dev-claim-tests}\\
@@ -804,7 +823,7 @@ certification of Paper~1 or of the observed spectrum.}\label{tab:dev-claim-tests
 \textbf{Python file} & \textbf{Scope and Paper~1 connection}
 & \textbf{Critical qualification}\\\midrule
 \endfirsthead
-\multicolumn{3}{@{}l}{\emph{Table \thetable{} continued: v1.3.0-dev Paper~1 verification}}\\
+\multicolumn{3}{@{}l}{\emph{Table \thetable{} continued: Paper~1 verification}}\\
 \toprule
 \textbf{Python file} & \textbf{Scope and Paper~1 connection}
 & \textbf{Critical qualification}\\\midrule
@@ -6547,7 +6566,7 @@ exists in the tree, and what is outstanding is stated rather than omitted.
 \begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{figures/f9-acoustic-spectrum-v1.4.0.pdf}
-\caption[The angular spectrum with the acoustic peaks, in both frames]{\textbf{F9 --- The angular spectrum with the acoustic peaks, in both frames.} The angular power spectrum for the three backgrounds this bundle ships --- CDM (Einstein--de~Sitter), $\Lambda$CDM and the stamped Planck~2018 set --- as shape, $D_\ell$ renormalised at $\ell=30$. The line of sight is the supplement's eq.~\eqref{eq:assembly-invariant}, built from the coefficients with Paper~1's source signs: the Sachs--Wolfe and Doppler terms where photons scatter and the integrated Sachs--Wolfe term along the path, each invariant under a change of frame, with no coefficient that holds the scattering rate differentiated. Since v1.4.0 the visibility and the opacity come from one $\kappa$ on the line-of-sight grid (\textbf{T-191}), every mode starts at one time deep in the radiation era, on the adiabatic growing mode (\textbf{T-192}, \textbf{T-193}), and on Planck each mode's potential is solved with the CDM, the baryons and the photons from that start, from a state on both constraints (\textbf{T-194}), so one $\Phi(k,\eta)$ drives the oscillator and fills both slots.\\[2pt] \textbf{(a)} The spectrum in the CDM frame. On Planck the first peak is at $\ell\simeq206$ ($0.77\,\ell_A$), as for CAMB and CLASS, and by the shared prominence rule the maxima stand at $\ell=210$, 480 and 720 and the first interior minimum at 360, where CAMB's do. Relative to $\ell=30$ the heights are within 6.4\% of CAMB's at the three maxima and 15\% at most in the damping tail; below $\ell\simeq30$ the \texttt{PLANCK\_MODEL} curve lies within 1.7\% of CAMB's shape. Einstein--de~Sitter and $\Lambda$CDM have no radiation era and keep the released potential: their first peaks stay at $\ell\simeq160$ and $140$, and an undriven, baryon-loaded oscillator gives them odd peaks alone (\textbf{A-3}). CAMB and CLASS are context, not a target (decision~\textbf{S4c}).\\[2pt] \textbf{(b)} Both frames, from one solve. The Newtonian and CDM spectra coincide to $3.3\times10^{-14}$ at every multipole: a first-order change of frame moves only the dipole, and here it moves nothing at $\ell\ge2$.\\[2pt]\footnotesize\emph{Evidence category:} acceptance. \emph{Generated by} \texttt{scripts/figure\_f9\_acoustic\_spectrum.py}. \emph{Standalone caption:} \texttt{captions/F9-acoustic-spectrum.md}.}
+\caption[The angular spectrum with the acoustic peaks, in both frames]{\textbf{F9 --- The angular spectrum with the acoustic peaks, in both frames.} The angular power spectrum for the three backgrounds this bundle ships --- CDM (Einstein--de~Sitter), $\Lambda$CDM and the stamped Planck~2018 set --- as shape, $D_\ell$ renormalised at $\ell=30$. The line of sight is the supplement's eq.~\eqref{eq:assembly-invariant}, built from the coefficients with Paper~1's source signs: the Sachs--Wolfe and Doppler terms where photons scatter and the integrated Sachs--Wolfe term along the path, each invariant under a change of frame, with no coefficient that holds the scattering rate differentiated. Since v1.4.0 the visibility and the opacity come from one $\kappa$ on the line-of-sight grid (\textbf{T-191}), every mode starts at one time deep in the radiation era, on the adiabatic growing mode (\textbf{T-192}, \textbf{T-193}), and on Planck each mode's potential is solved with the CDM, the baryons and the photons from that start, from a state on both constraints (\textbf{T-194}), so one $\Phi(k,\eta)$ drives the oscillator and fills both slots.\\[2pt] \textbf{(a)} The spectrum in the CDM frame. On Planck the first peak is at $\ell\simeq206$ ($0.77\,\ell_A$), as for CAMB and CLASS, and by the shared prominence rule the maxima stand at $\ell=210$, 480 and 720 and the first interior minimum at 360, where CAMB's do. Relative to $\ell=30$ the heights are within 6.4\% of CAMB's at the three maxima and 15\% at most in the damping tail; below $\ell\simeq30$ the \texttt{PLANCK\_MODEL} curve lies within 1.8\% of CAMB's shape. Einstein--de~Sitter and $\Lambda$CDM have no radiation era and keep the released potential: their first peaks stay at $\ell\simeq160$ and $140$, and an undriven, baryon-loaded oscillator gives them odd peaks alone (\textbf{A-3}). CAMB and CLASS are context, not a target (decision~\textbf{S4c}).\\[2pt] \textbf{(b)} Both frames, from one solve. The Newtonian and CDM spectra coincide to $3.3\times10^{-14}$ at every multipole: a first-order change of frame moves only the dipole, and here it moves nothing at $\ell\ge2$.\\[2pt]\footnotesize\emph{Evidence category:} acceptance. \emph{Generated by} \texttt{scripts/figure\_f9\_acoustic\_spectrum.py}. \emph{Standalone caption:} \texttt{captions/F9-acoustic-spectrum.md}.}
 \label{fig:f9}
 \end{figure}
 
@@ -6585,8 +6604,8 @@ antecedents, remain the pivot for interpreting both classes of tests.
 A later solver regression test becomes evidence for a Paper~1 claim
 only when its derivation, assumptions and independence have also been
 checked.
-The additional claim-facing instruments in the current development branch
-are inventoried separately in Table~\ref{tab:dev-claim-tests},
+The claim-facing instruments of \texttt{tests/frame/} are inventoried
+separately in Table~\ref{tab:dev-claim-tests},
 with the superseded C5 result specifically identified.
 
 \subsection{Release sequence by physical objective}
@@ -6608,9 +6627,14 @@ with the superseded C5 result specifically identified.
         (\S\ref{sec:frame-discrepancy}). Its assembly in frame-invariant
         slots (\S\ref{sec:w-form}) gives one $C_\ell$ in both frames to
         $4\times10^{-14}$ (D44). At v1.3.0 the acoustic peaks it carried
-        were the undriven oscillator's, odd present and even absent. v1.4.0
-        supplies the driving, and the series is in place on the Planck
-        background (\S\ref{sec:a3-construction}).
+        were the undriven oscillator's, odd present and even absent.
+  \item v1.4.0 asked \emph{what drives the oscillator?} and answered: the
+        radiation era. The potential is solved with the CDM, the baryons and
+        the photons from one start deep in the radiation era, the photons'
+        anisotropic stress closing it after decoupling
+        (\S\ref{sec:a3-construction}), and the test registered before the
+        work began passes: on the Planck background the series is in place
+        (\S\ref{sec:release-v140}).
 \end{itemize}
 
 
