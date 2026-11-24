@@ -10,7 +10,7 @@ and an integrated slot, each invariant under a change of frame. The two frames
 give one $C_\ell$ to $4\times10^{-14}$ (D44), the slots sum back to the
 integral they rearrange (D45), and F9 and F10 are drawn from them.
 
-Supplement: **v1.4.10** — `SUPPLEMENTARY-MATERIAL-v1.4.10.tex`. The supplement
+Supplement: **v1.4.11** — `SUPPLEMENTARY-MATERIAL-v1.4.11.tex`. The supplement
 has its own version line. An edition records the state of the documentation
 and does not assert that the computational release above has advanced, so
 `scripts/_versions.py` reads the supplement's name from this line and never
@@ -30,9 +30,9 @@ University of Cape Town, 2026, arXiv:astro-ph/9912072v4
 
 The supplementary-materials document is included here:
 
-> [SUPPLEMENTARY-MATERIAL-v1.4.10.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.4.10.pdf)
+> [SUPPLEMENTARY-MATERIAL-v1.4.11.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.4.11.pdf)
 
-Its source, `SUPPLEMENTARY-MATERIAL-v1.4.10.tex`, is one file in the
+Its source, `SUPPLEMENTARY-MATERIAL-v1.4.11.tex`, is one file in the
 repository root, and `scripts/build_supplement.py` builds it with `pdflatex`
 alone: the prose carries no `\input`, the bibliography is inline, and the only
 external files are the generated assets in `tables/`, `tikz/` and `figures/`.
@@ -276,13 +276,15 @@ Before last scattering photons
 and baryons are tightly coupled, and the rank-0 and rank-1 multipoles obey the
 acoustic pair (152)/(153),
 
-$$\tau_1'=-\frac{R'}{1+R}\tau_1-\frac{k}{1+R}\delta T-k\Phi_A, \qquad \delta T'=-\mathcal H\Phi_A-\Phi_H'+\tfrac k3\tau_1\quad(152, 153)$$
+$$\tau_1'=-\frac{R'}{1+R}\tau_1-\frac{k}{1+R}\delta T-k\Phi_A, \qquad \delta T'=-\Phi_H'+\tfrac k3\tau_1\quad(152, 153)$$
 
-with $R$ the baryon loading. Its $\cos(kr_s)$ is the acoustic series. Dropping
-$-\mathcal H\Phi_A$ is *Annals II*'s small-scale approximation, which turns
-the pair into (154), and the released solver integrates the pair with that
-term dropped (`expansion_coupling=False` in every released route). Whether the
-oscillator should carry $-\mathcal H\Phi_A$ is not yet settled. Each mode
+with $R$ the baryon loading. Its $\cos(kr_s)$ is the acoustic series. *Annals
+II*'s (153) carries $-\mathcal H\Phi_A$ besides and drops it as its
+small-scale approximation to reach (154). The $1+3$ equations do not carry
+the term: the lapse term of the expansion gradient cancels the commutator's,
+so the step to (154) is exact, and the released solver's pair
+(`expansion_coupling=False` in every released route) is the $1+3$ equation
+(the supplement's third correction to the antecedent; `tests/frame/c15`). Each mode
 starts at one conformal time $\eta_i$, deep in the radiation era and outside
 every horizon ($k_{\max}\eta_i=10^{-2}$), on the adiabatic growing mode:
 $\delta T=-\tfrac12\Phi_A$ and $\tau_1=-\tfrac12k\eta_i\Phi_A$, or the
@@ -988,7 +990,7 @@ content. The full history is in `CHANGELOG.md`; the decisions behind it are in
 | Item | Value |
 |---|---|
 | **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMBR lensing in the exact 1+3 covariant radiation hierarchy*, Paper 1, University of Cape Town. arXiv:astro-ph/9912072v4, [doi:10.48550/arXiv.astro-ph/9912072](https://doi.org/10.48550/arXiv.astro-ph/9912072). Submitted 2026-10-16. CC BY 4.0. Cite it with the version suffix: the bare identifier has carried three documents, `v2` the legacy 1999 work, `v3` the correction and `v4` this paper |
-| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.4.10.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.4.10.pdf) |
+| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.4.11.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.4.11.pdf) |
 | **GitHub repository** | [timgebbie/frame-covariant-cmb-reproducibility](https://github.com/timgebbie/frame-covariant-cmb-reproducibility) |
 | **ZivaHub/Figshare DOI** | [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509), live. The concept DOI always resolves to the latest version, so it is the one to cite |
 | **Associated antecedent** | Gebbie, T.; Dunsby, P. K. S.; Ellis, G. F. R. (2000). *1+3 covariant cosmic microwave background anisotropies II: the almost-Friedmann–Lemaître model*. Annals of Physics **282**, 321–394. [doi:10.1006/aphy.2000.6034](https://doi.org/10.1006/aphy.2000.6034) |

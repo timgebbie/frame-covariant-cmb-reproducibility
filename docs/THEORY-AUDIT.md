@@ -2,9 +2,9 @@
 
 > **Generated, not transcribed. Do not edit by hand.**
 >
-> Produced by `tests/frame/gen_theory_audit.py` at 2026-11-19 08:37 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
+> Produced by `tests/frame/gen_theory_audit.py` at 2026-11-24 16:30 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
 
-**Status: ALL CHECKS PASS** — 76 assertions across 14 instruments.
+**Status: ALL CHECKS PASS** — 86 assertions across 15 instruments.
 
 ## What this document does not establish — read first
 
@@ -364,11 +364,37 @@ With the potentials defined by $E_{ab}\mp\tfrac12\pi_{ab}$ and the photons' stre
 
 *Instrument: `tests/frame/c14_photon_anisotropic_stress.py`, sha256 `963ede728a0c…`*
 
+### The temperature row of the acoustic pair
+
+Annals~II's (153) carries $-H\Phi_A$, which it drops as the small-scale approximation. The $1+3$ equations do not carry it: (147)'s $H\tilde A_a$, the commutator's, is cancelled by the lapse term of the expansion gradient, $\tfrac13\mathrm D_a\Theta=\mathrm D_a(\dot\Phi_H-H\Phi_A)$ from the shear-free frame's $E_{ab}$ equation and $(0\alpha)$ constraint, which (149) writes as $\mathrm D_a\dot\Phi_H$. The row is $\delta T'=-\Phi_H'+\tfrac k3\tau_1$, and the antecedent's own super-horizon condition, constant under it, drifts as $-2\Phi_A\ln\eta$ under the printed row.
+
+| assertion | verdict |
+|---|---|
+| C15a  D_<a Q_b> = -(k/a) Q_ab and D^a Q_a = (k/a) Q on Annals I's harmonics | **PASS** |
+| C15b  (147) is the energy equation carried through the 1+3 commutator; its H A_a is the commutator's | **PASS** |
+| C15c  E_ab equation and (0 alpha) constraint: (1/3) D_a Theta = D_a(Phi_H^. - H Phi_A) | **PASS** — -PhiA(t)*Derivative(a(t), t)/a(t) + Derivative(PhiH(t), t) |
+| C15d  the 1+3 row is dT^. = -Phi_H^. + (k/a) tau_1/3: the H Phi_A cancels | **PASS** — k*tau1(t)/(3*a(t)) - Derivative(PhiH(t), t) |
+| C15d  negative control: (149)'s D_a Phi_H^. for (1/3) D_a Theta returns (153) as printed | **PASS** — (k*tau1(t)/3 - PhiA(t)*Derivative(a(t), t) - a(t)*Derivative(PhiH(t), t))/a(t) |
+| C15d  negative control: dropping (147)'s commutator term returns +H Phi_A instead | **PASS** |
+| C15d  Annals II's (153) as printed carries -H Phi_A, which the 1+3 equations do not | **DEFECT PRESENT** — defect in the antecedent |
+| C15e  the adiabatic dT outside the horizon, -(2/3) Phi_A as (180)-(181) start from and -Phi_i/2 in the radiation era, is constant under the 1+3 row | **PASS** — -5.6e-06, -8.3e-06 |
+| C15e  under (153) as printed it drifts as -2 Phi_A ln(eta) (matter), -Phi_i ln(eta) (radiation) | **PASS** — -9.2102, -4.6051 |
+| C15f  comparator: the metric's normal observers give (1/3) delta Theta = -H psi - phi^., i.e. C15c under psi = Phi_A, phi = -Phi_H | **PASS** — 0 |
+
+| measured | value |
+|---|---|
+| `matter_drift_13` | -5.55e-06 |
+| `matter_drift_printed` | -9.21024 |
+| `radiation_drift_13` | -8.33e-06 |
+| `radiation_drift_printed` | -4.60513 |
+
+*Instrument: `tests/frame/c15_temperature_row.py`, sha256 `664e5af391ea…`*
+
 ## Provenance
 
 | | |
 |---|---|
-| generated | 2026-11-19 08:37 UTC |
+| generated | 2026-11-24 16:30 UTC |
 | python | 3.13.18 |
 | numpy | 2.5.3 |
 | scipy | 1.18.1 |

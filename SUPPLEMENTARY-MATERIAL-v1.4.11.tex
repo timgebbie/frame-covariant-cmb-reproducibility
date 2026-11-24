@@ -1,5 +1,22 @@
 % Computational supplement to the associated paper.
 %
+% v1.4.11, 2026-11-24.  The -H Phi_A of Annals II's (153) ruled (PI, 24 Nov).
+%   - The 1+3 equations do not carry it.  (147)'s H A_a is the commutator of
+%     u^a nabla_a with D_a; (149) writes (1/3) D_a Theta as D_a Phi_H^., where
+%     the shear-free frame's (0 alpha) constraint and E_ab equation give
+%     D_a(Phi_H^. - H Phi_A), and the lapse term cancels the commutator's.  The
+%     row is dT' = -Phi_H' + (k/3) tau_1, the step from (153) to (154) is exact,
+%     and the released expansion_coupling=False is the 1+3 equation.  The
+%     antecedent's own super-horizon condition settles it: constant under the
+%     1+3 row, drifting as -2 Phi_A ln(eta) under the printed one.
+%   - A third correction to the antecedent in the oscillator section, with
+%     eq:expansion-gradient; eq:pair-conformal and the sound-speed display
+%     carry the 1+3 row, and the antecedent's printed (152)-(153) stay as
+%     printed; the line-of-sight section's open sentence is closed.
+%   - c15, the fifteenth instrument, derives the row symbolically, with the
+%     printed form and the dropped commutator as negative controls, the
+%     super-horizon limit, and the metric's normal observers as comparator.
+%
 % v1.4.10, 2026-11-24.  The claims and evidence tables brought to v1.4.0
 % (PI, 24 November), and the figure section re-spliced from captions/.
 %   - tab:status reads the solved potential: the assembly's row carries D44's
@@ -556,7 +573,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.4.10 --- 24 November 2026\\
+\date{Supplement v1.4.11 --- 24 November 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.4.0-dev}
 
 \begin{document}
@@ -778,31 +795,33 @@ below. In step four's second row, the radiation era, \textbf{c14} carries the
 photons' anisotropic stress, with which the construction of
 \S\ref{sec:a3-construction} closes $\Phi_A$. In step six \textbf{c3} measures
 that (102) is not the exact integration by parts of its own integral. What
-eight of the remaining twelve establish sits beneath the table rather than in
+eight of the remaining thirteen establish sits beneath the table rather than in
 it: the conditions the matching coefficients must satisfy for the frame law
 to hold, which are prior to every row and are the reason a failing row can be
-localised at all. The other four bear on rows without being named in them.
+localised at all. The other five bear on rows without being named in them.
 \textbf{c10} scores the phase that step four's first row says it does not
 establish, and finds that a criterion of exact phase accepts the undriven
 oscillator and rejects the driven one; \textbf{c11} extends \textbf{c9}'s
 admissibility condition to a by-parts taken against the kernel; \textbf{c12}
 states the rate at which a grid must sample the visibility, which every row
-that reads a spectrum relies on; and \textbf{c13} carries the endpoint map and
+that reads a spectrum relies on; \textbf{c13} carries the endpoint map and
 the late support of the integrated term, on which the frame comparison of
-\S\ref{sec:los-conformity-v138} rests. The inventory below should be read in that light, and not as a count of
+\S\ref{sec:los-conformity-v138} rests; and \textbf{c15} derives the
+oscillator's temperature row, on which both of step four's rows rest, and
+finds the antecedent's (153) carrying a term the $1+3$ equations do not. The inventory below should be read in that light, and not as a count of
 certified steps.
 
 The source tree also contains independent, claim-facing Python
 instruments that the \texttt{v1.0.0}, \texttt{v1.1.0} and \texttt{v1.2.0}
 tags do not: \textbf{c1} to \textbf{c12} entered with \texttt{v1.3.0}, and
-\textbf{c13} and \textbf{c14} with \texttt{v1.4.0}. They are part of the
+\textbf{c13} to \textbf{c15} with \texttt{v1.4.0}. They are part of the
 repository's verification, not a future Lean deliverable and not an increment
-in the physics-release sequence. The fourteen instruments in \texttt{tests/frame/} use
+in the physics-release sequence. The fifteen instruments in \texttt{tests/frame/} use
 self-contained kernel, visibility and frame constructions rather than
 importing the spectral solver, and \path{tests/frame/run_all.py} invokes each
 in an isolated subprocess under \texttt{-I}.
 \path{tests/test_frame_checks.py}, which is the bundle's own harness, gates
-all fourteen: it discovers them from the directory rather than from a list,
+all fifteen: it discovers them from the directory rather than from a list,
 since 27 October (finding T-155), so an instrument is gated the day it lands.
 Editions v1.3.18 to v1.3.25 said it invoked seven and left \texttt{c8} through
 \texttt{c11} ungated: true when written on the morning of 27 October, and
@@ -814,7 +833,7 @@ has not rerun the pinned repository suite as part of this editorial gate.
 \setlength\LTleft{0pt}\setlength\LTright{\fill}\setlength\LTcapwidth{\textwidth}
 \begin{longtable}{@{}p{0.16\textwidth}p{0.36\textwidth}p{0.39\textwidth}@{}}
 \caption{Claim-facing Python checks in \texttt{tests/frame/}: \textbf{c1}
-to \textbf{c12} since \texttt{v1.3.0}, \textbf{c13} and \textbf{c14} since
+to \textbf{c12} since \texttt{v1.3.0}, \textbf{c13} to \textbf{c15} since
 \texttt{v1.4.0}.
 The inventory is distinct from software implementation tests. The
 status is what the source asserts or refutes, not independent
@@ -964,7 +983,19 @@ and \(-0.042\) near \(1.6\,\eta_*\) on \texttt{PLANCK\_MODEL}
 & The size is an estimate, with decoupling instantaneous and the potential of
 \citet{KodamaSasaki1984}; the build measures it. A hierarchy's phase paired
 with the constraint's sign is the negative control: the other phase gives
-the other sign.\\
+the other sign.\\[3pt]
+\texttt{c15\_\allowbreak{}temperature\_\allowbreak{}row.py} & Added 2026-11-24.
+The temperature row of the acoustic pair from the $1+3$ equations: (147) as
+the photons' energy equation through the commutator of $u^a\nabla_a$ with
+$\mathrm D_a$; \eqref{eq:expansion-gradient} from the shear-free frame's
+$E_{ab}$ equation and $(0\alpha)$ constraint; the row
+$\delta T'=-\Phi_H'+\tfrac k3\tau_1$, with the printed (153) and the dropped
+commutator as negative controls; the adiabatic condition outside the horizon,
+constant under the row and drifting as $-2\Phi_A\ln\eta$ under (153) as
+printed
+& The derivation is linear and in the shear-free frame. The metric's normal
+observers give the same expansion gradient and are carried as a comparator,
+not as the derivation.\\
 \end{longtable}
 \endgroup
 
@@ -2684,22 +2715,25 @@ the pair by \emph{``ignoring the expansion coupled term (i.e.\ the small scale
 approximation)''}.
 
 The pair is implemented and (154) is derived from it, not the other way
-round. In conformal time, multiplying through by $a$,
+round. In conformal time, multiplying through by $a$, and with the
+temperature row as the $1+3$ equations give it,
 \begin{equation}
   \tau_1'=-\frac{R'}{1+R}\tau_1-\frac{k}{1+R}\delta T-k\Phi_A,
   \qquad
-  \delta T'=-\mathcal H\Phi_A-\Phi_H'+\frac k3\tau_1 ,
+  \delta T'=-\Phi_H'+\frac k3\tau_1 ,
   \label{eq:pair-conformal}
 \end{equation}
-and dropping $-\mathcal H\Phi_A$ reproduces (154) exactly.
+which reproduces (154) exactly. (153) as printed carries $-H\Phi_A$ besides,
+and the $1+3$ equations do not: it is the third correction below.
 
-The ordering matters. Implementing (154)
-directly would bake the small-scale approximation into the only object that
-exists, and no figure could ever show its cost. Implemented as a pair with a
-switch, the approximation becomes a measurement: the difference between the two
-integrations \emph{is} its size, at any $k$ and any $\eta$, and the gate asserts
-what makes it a \emph{small-scale} approximation --- that it must matter less as
-$k$ grows. This is the move of the scale-factor rule of
+The ordering matters, and it is how the term was found. Implementing (154)
+directly would have taken the paper's word that the term is a small-scale
+approximation, and nothing could have shown otherwise. Implemented as a pair
+with a switch on that term, the term became a measurement. The gate asserts
+that it matters less as $k$ grows, and the derivation below shows that it is
+not in the $1+3$ equation at all. The switch's default,
+\texttt{expansion\_coupling=False}, is the $1+3$ row, and the printed row is
+kept as a control, as the printed (181) and (J.5) are. This is the move of the scale-factor rule of
 \S\ref{sec:source-derivatives}: reconstruct the antecedent's general
 object, and let its printed specialisation fall out as a checkable
 consequence.
@@ -2760,7 +2794,7 @@ v1.4.0 solves the potential through the radiation era instead
 \S\ref{sec:first-peak}, passes.
 
 % ===========================================================================
-\subsection{Two corrections to the antecedent}
+\subsection{Three corrections to the antecedent}
 
 \paragraph{B-8: the constant term of (181).} (181) carries the wrong sign on
 its constant term. The closed-form solution at last scattering is
@@ -2798,9 +2832,43 @@ why the text's own check, \emph{``$T(k)\sim+1$ on large scales''}, passes on the
 wrong form. Only the $k^{-2}$ falloff distinguishes them, and that is what the
 fit is a fit to.
 
-Both are the same shape of error and both are caught the same way, by
-evaluating the antecedent's own stated limit on the antecedent's own printed
-expression. Neither needed an external code.
+\paragraph{The expansion term of (153).} (153) carries $-H\Phi_A$, and the
+$1+3$ equations do not. \emph{Annals~II} writes the Newtonian-frame monopole
+twice. Its (147),
+$(\tilde{\mathrm D}_a\ln T)\dot{}+H(\tilde{\mathrm D}_a\ln T+\tilde A_a)
++\tfrac13\tilde{\mathrm D}_a\tilde\Theta=-\tfrac13\mathrm D_a(\mathrm D_c\tilde\tau^c)$,
+is the gradient of the photons' energy equation carried through the
+commutator of $u^a\nabla_a$ with $\mathrm D_a$, and the commutator's
+$(\ln T)\dot{}\,\tilde A_a=-H\tilde A_a$ is the $H\tilde A_a$ printed there.
+Its (149) then writes $\tfrac13\tilde{\mathrm D}_a\tilde\Theta$ as
+$\mathrm D_a\dot\Phi_H$. In the shear-free frame the $(0\alpha)$ constraint
+gives $\tfrac23\mathrm D_a\Theta=q_a$, and the $E_{ab}$ equation with the
+potentials of \eqref{eq:stress-potentials} gives
+$\mathrm D_{\langle a}\mathrm D_{b\rangle}(\dot\Phi_H-H\Phi_A)=\tfrac12\mathrm
+D_{\langle a}q_{b\rangle}$, so
+\begin{equation}
+  \tfrac13\mathrm D_a\Theta=\mathrm D_a\big(\dot\Phi_H-H\Phi_A\big),
+  \label{eq:expansion-gradient}
+\end{equation}
+with the lapse term. That term cancels the commutator's, and (147) in modes
+is $\delta T'=-\Phi_H'+\tfrac k3\tau_1$: (153) without its first term. (149)'s
+form returns (153) as printed, which places the slip there
+(\texttt{c15}). The antecedent's own limit settles which form is right.
+Outside the horizon the adiabatic $\delta T=-\tfrac23\Phi_A$ that (180) and
+(181) start from is constant under the $1+3$ row. Under the printed row it
+drifts as $-2\Phi_A\ln\eta$ in the matter era, about $-9.2\,\Phi_A$ over a
+hundredfold in $\eta$, and as $-\Phi_i\ln\eta$ in the radiation era. The
+paper's step from (153) to (154), \emph{``ignoring the expansion coupled term
+(i.e.\ the small scale approximation)''}, is therefore exact and not an
+approximation, and the released oscillator, run with
+\texttt{expansion\_coupling=False}, integrates the $1+3$ equation. The normal
+observers of the perturbed metric give \eqref{eq:expansion-gradient} as well,
+$\tfrac13\delta\Theta=-H\psi-\dot\phi$ with $\psi=\Phi_A$ and $\phi=-\Phi_H$;
+that is a comparator and not the derivation.
+
+All three are the same shape of error and all three are caught the same way,
+by evaluating the antecedent's own stated limit on the antecedent's own
+printed expression. None needed an external code.
 
 % ===========================================================================
 \subsection{The sound horizon and the start}
@@ -2861,9 +2929,9 @@ peak spacing & $\Delta\ell=\pi r_\theta/r_s$, the antecedent's own formula,
   ratio $\mathbf{0.995}$ \\
 the same, \texttt{z\_max} control & what the pre-T-51 start does to it &
   $568.7$, ratio $2.95$ \\
-pair $\to$ (154) & that dropping $-\mathcal H\Phi_A$ reproduces the printed
-  oscillator, and that the difference falls with $k$ & exact; small-scale
-  behaviour asserted \\
+pair $\to$ (154) & that the pair without (153)'s printed $-\mathcal H\Phi_A$
+  reproduces the printed oscillator, and that the printed term matters less as
+  $k$ grows & exact; the printed row a control \\
 ODE $\to$ (180) & that the integration converges to the closed form when $R$
   is held constant & --- \\
 B-8 & the $r_s^*\to0$ limit of both forms of (181) & $\tfrac13\Phi_A$ against
@@ -2950,17 +3018,19 @@ of every measurement made before 4 November.
 % ===========================================================================
 \subsection{The sound speed}
 
-\emph{Annals~II}~(152) and (153) are the covariant acoustic pair:
+\emph{Annals~II}~(152) and (153) are the covariant acoustic pair, the
+second as the $1+3$ equations give it, without its printed $-\mathcal H\Phi_A$
+(\S\ref{sec:oscillator}):
 \begin{align}
   \tilde\tau_1'&=-\frac{R'}{1+R}\,\tilde\tau_1-\frac{k}{1+R}\,\delta\tilde T-k\Phi_A,
     \tag{152}\label{eq:152-peak}\\
-  \delta\tilde T'&=-\mathcal H\Phi_A-\Phi_H'+\frac k3\,\tilde\tau_1 .
-    \tag{153}\label{eq:153-peak}
+  \delta\tilde T'&=-\Phi_H'+\frac k3\,\tilde\tau_1 .
+    \label{eq:153-peak}
 \end{align}
 
 The sound speed is the antecedent's own, derived and not assumed. Eliminating
 $\tilde\tau_1$ between the pair, \eqref{eq:153-peak} gives
-$\tilde\tau_1=\frac3k\big(\delta\tilde T'+\mathcal H\Phi_A+\Phi_H'\big)$;
+$\tilde\tau_1=\frac3k\big(\delta\tilde T'+\Phi_H'\big)$;
 substituting into \eqref{eq:152-peak} and multiplying by $k/3$ returns
 \begin{equation}
   \delta\tilde T''+\frac{R'}{1+R}\,\delta\tilde T'+k^2c_s^2\,\delta\tilde T
@@ -2969,8 +3039,8 @@ substituting into \eqref{eq:152-peak} and multiplying by $k/3$ returns
   \boxed{\;c_s^2=\frac{1}{3(1+R)}\;}
   \label{eq:covariant-oscillator}
 \end{equation}
-with $\mathcal F=(\mathcal H\Phi_A)'+\Phi_H''+R'(\mathcal H\Phi_A+\Phi_H')/(1+R)$
-the forcing carried by the potentials. These are the standard sound speed and
+with $\mathcal F=\Phi_H''+R'\Phi_H'/(1+R)$ the forcing carried by the
+potentials, which is (154)'s. These are the standard sound speed and
 the standard baryon-drag coefficient $R'/(1+R)$, with nothing imported. The
 coefficient of $\delta\tilde T$ in the eliminated equation is
 $k^2/[3(1+R)]$ exactly; the residual of the elimination is zero symbolically.
@@ -4455,8 +4525,8 @@ $(\delta T+\Phi_A)(\eta_*)$, the solution of the pair (152)--(153) that this
 bundle integrates and the oscillator's gates certify
 (\S\ref{sec:oscillator}). (106) is that solution's exact derivative on the
 grid the pair is integrated on. The released solver runs with
-\texttt{expansion\_coupling=False}, which drops the $-\mathcal H\Phi_A$ of
-(153) as (154) does, so that in the Newtonian frame
+\texttt{expansion\_coupling=False}, the $1+3$ row without (153)'s printed
+$-\mathcal H\Phi_A$ (\S\ref{sec:oscillator}), so that in the Newtonian frame
 $(\delta T+\Phi_A)'=\Phi_A'-\Phi_H'+\tfrac k3\tau_1$, and with
 \texttt{A\_B1\_PRIME\_EXPANSION\_TERMS=False}, the comoving-$k$ convention of
 T-67 rather than a dropped term, (106) gives
@@ -4495,9 +4565,8 @@ $0.185$ at $k=2.7$ to $0.296$ at $k=2.8$, and F9 carries a bump at
 $\ell\simeq7$--$12$, inside the region v1.3.0 already gives to A-3. The start
 and the initial condition are redefined with the radiation era. v1.3.32 and
 v1.3.33 gave the difference to $-\mathcal H\Phi_A$, which neither expression
-contains. Whether the oscillator should carry $-\mathcal H\Phi_A$ at all is a
-question about the oscillator rather than the pairing, and is not settled
-here.
+contains, and which the $1+3$ equations do not carry at all
+(\S\ref{sec:oscillator}, \texttt{c15}).
 
 \paragraph{The relative sign between slots.} D44 probes the relative sign
 between slots, which no frame test can see, by reversing the Doppler slot; the
@@ -6789,7 +6858,7 @@ abstract syntax tree and fails when the code holds a discretisation the
 register does not name; the model table, derived from the
 \texttt{Background} objects the code integrates rather than transcribed from
 a parameter sheet; and the theory audit, generated from self-contained
-instruments that import no project code, six at the time and fourteen now.
+instruments that import no project code, six at the time and fifteen now.
 
 The acoustic half did not go as planned, and the record says so. It began as
 a search for the missing peaks and became the localisation in

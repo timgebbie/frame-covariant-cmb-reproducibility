@@ -1,4 +1,4 @@
-# Frame checks — fourteen instruments, for `tests/`
+# Frame checks — fifteen instruments, for `tests/`
 
 **P1-T, 2026-10-19; count corrected and `c9` added 2026-10-26; `c10` and `c11`
 added 2026-10-26; `c12` added 2026-10-29; `c13` added 2026-11-11.** Thirteen self-contained instruments behind the
@@ -239,7 +239,7 @@ different suites:
 | `tests/test_frame_checks.py` | P1-B | `c1`–`c7` | **neither `c8` nor `c9` is gated by the bundle's own harness**; both pass `run_all.py` and nothing else |
 
 The first two are globs over this directory now, P1-B's repair of 2026-10-26, so
-all fourteen are carried and the fifteenth is carried the day it lands. **The third
+all fifteen are carried and the sixteenth is carried the day it lands. **The third
 became a glob on the afternoon of 2026-10-27** (`33c1c7f`, finding T-155):
 `tests/test_frame_checks.py` discovers `c*.py` here and sorts them by number,
 so the bundle's harness has gated every instrument in this directory since
@@ -322,3 +322,30 @@ overall sign, $(-1)^\ell$, keeps the relative phase and maps the free rows,
 and it fails on the sources; that is the negative control. It matters the
 first time a quadrupole leaves a continuation for the stress constraint.
 
+## c15 — the temperature row of the acoustic pair
+
+*Annals II* reaches its oscillator (154) from the pair (152)–(153) by
+"ignoring the expansion coupled term (i.e. the small scale approximation)",
+the $-H\Phi_A$ of (153). **The $1+3$ equations do not carry that term.** Its
+(147), $(\tilde{\mathrm D}_a\ln T)\dot{}+H(\tilde{\mathrm D}_a\ln T+\tilde A_a)
++\tfrac13\tilde{\mathrm D}_a\tilde\Theta=-\tfrac13\mathrm D_a(\mathrm D_c\tilde\tau^c)$,
+is the photons' energy equation carried through the commutator of $u^a\nabla_a$
+with $\mathrm D_a$; the $H\tilde A_a$ in it is the commutator's, and it is right.
+Its (149) writes $\tfrac13\tilde{\mathrm D}_a\tilde\Theta$ as
+$\mathrm D_a\dot\Phi_H$. In the shear-free frame the $(0\alpha)$ constraint,
+$\tfrac23\mathrm D_a\Theta=q_a$, and the $E_{ab}$ equation with *Annals II*'s
+potentials, $\mathrm D_{\langle a}\mathrm D_{b\rangle}(\dot\Phi_H-H\Phi_A)
+=\tfrac12\mathrm D_{\langle a}q_{b\rangle}$, give
+$\tfrac13\mathrm D_a\Theta=\mathrm D_a(\dot\Phi_H-H\Phi_A)$. Its lapse term
+cancels the commutator's, and the row is $\delta T'=-\Phi_H'+\tfrac k3\tau_1$.
+
+C15a checks the harmonic rules the algebra uses on a plane wave; C15b derives
+(147); C15c the expansion gradient; C15d the row, with two negative controls
+(149's form returns the printed (153), and dropping the commutator returns
+$+H\Phi_A$). C15e is the antecedent's own limit: outside the horizon the
+adiabatic $\delta T$ that (180)–(181) start from is constant under the row
+and drifts as $-2\Phi_A\ln\eta$ under the printed one. C15f is a comparator,
+not the derivation: the perturbed metric's normal observers give
+$\tfrac13\delta\Theta=-H\psi-\dot\phi$, which is C15c under $\psi=\Phi_A$,
+$\phi=-\Phi_H$. The released solver's `expansion_coupling=False` is therefore
+the $1+3$ equation and not an approximation.
