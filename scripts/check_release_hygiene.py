@@ -685,8 +685,19 @@ def check_generated_csvs_are_stamped(failures: list[str]) -> str:
               and derived_rel not in stale):
             stale.append(derived_rel)
     if stale:
+        # **T-203: a stale stamp fails.** It used to be listed under the PASS
+        # banner with exit 0, so from 19 to 25 November a tree on which 0 of 15
+        # artefacts were its code's read as passing, to the suite and to the
+        # PI's clean checkout alike: T-54's class, a clean banner over a stale
+        # artefact, inside the instrument written to close it. A change to
+        # `functions/` lands with the regeneration that re-stamps it; until then
+        # its branch is red, which is what it is.
+        failures.append(
+            f"{len(stale)} of {len(STAMPED)} generated CSVs carry a stamp this "
+            f"tree's code does not compute; regenerate them: {', '.join(stale)} "
+            "(T-197, T-203).")
         return (f"      {len(STAMPED) - len(stale)}/{len(STAMPED)} generated CSVs carry this "
-                f"tree's stamp; to regenerate before a release: {', '.join(stale)}.")
+                f"tree's stamp.")
     return f"      {len(STAMPED)}/{len(STAMPED)} generated CSVs carry this tree's stamp."
 
 

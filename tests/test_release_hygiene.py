@@ -240,9 +240,9 @@ def test_a_generated_csv_without_its_stamp_is_refused(tmp_path, monkeypatch):
     """**T-197.** F3 to F7 went out at v1.3.0 with numbers their code no longer
     produced, by up to four orders of magnitude, and every gate passed: only F9
     and F10 named the code that wrote them. A generated CSV with no stamp must
-    fail; one whose stamp this tree no longer computes is listed for
-    regeneration and does not fail, because development moves `functions/`
-    before it regenerates and the release route replots or regenerates.
+    fail, and so must one whose stamp this tree no longer computes (T-203):
+    listed under PASS, a stale stamp let a tree with none of its artefacts
+    current read as passing for six days.
     """
     import check_release_hygiene as gate
     from _fingerprint import source_fingerprint, stamp
@@ -262,8 +262,8 @@ def test_a_generated_csv_without_its_stamp_is_refused(tmp_path, monkeypatch):
     assert failures == [] and "1/1" in note, (failures, note)
 
     failures, note = verdict("# sources: 0000000000000000\n" + body)
-    assert failures == [] and csv_path.name in note, (
-        "a stamp this tree does not compute must be named for regeneration")
+    assert len(failures) == 1 and csv_path.name in failures[0], (
+        "a stamp this tree does not compute passed the gate: T-203")
     assert source_fingerprint(ROOT / script) != "0000000000000000"
 
     failures, _ = verdict(body)
@@ -279,6 +279,6 @@ def test_a_generated_csv_without_its_stamp_is_refused(tmp_path, monkeypatch):
     assert len(failures) == 1 and "does not name" in failures[0], failures
     failures, note = verdict(own + "# reads: x at 2222222222222222\n" + body,
                              reads=((str(csv_path), str(source)),))
-    assert failures == [] and csv_path.name in note, (
-        "a CSV summed from a source that has since been regenerated must be "
-        "named for regeneration")
+    assert len(failures) == 1 and csv_path.name in failures[0], (
+        "a CSV summed from a source that has since been regenerated passed "
+        "the gate: T-203")

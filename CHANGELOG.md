@@ -42,6 +42,11 @@ All notable changes to this bundle are recorded here. The version policy is in
   resumed any row whose configuration it recognised. A checkpoint now names the
   sources that wrote it and resumes only this tree's rows, with a test that
   another code's row is recomputed; D32 to D35 are recomputed from scratch.
+- **A stale stamp fails the hygiene gate** (T-203). It was listed under the
+  PASS banner with exit 0, so from 19 to 25 November a tree on which none of
+  the fifteen stamped artefacts was its code's read as passing, to the suite
+  and to a clean checkout. A change to `functions/` now lands with the
+  regeneration that re-stamps it.
 - **B-18 registered**: (153)'s $-H\Phi_A$ is not in the 1+3 equations, since
   (149) drops the lapse term of the expansion gradient; the text is the
   supplement's (v1.4.11), gated by `c15`. `expansion_coupling=False` is the
@@ -49,6 +54,33 @@ All notable changes to this bundle are recorded here. The version policy is in
 - **The release status emits v1.4.0**, which the generator's tuple had left
   out (T-87's class): the radiation era, F9 and F11 at R, and v1.5.0's
   prototypes carry A-5, T-21 and `LCDM_MODEL`'s $\Omega_r$.
+
+### The supplement and the README at the tag (v1.4.8 to v1.4.12)
+
+- **v1.4.8** (`979cdc3`): the radiation era's third step on the record in four
+  places, with the registered test's (f) the first maximum and the interior
+  minimum and the heights recorded and gated nowhere; the regenerated figures
+  read (F5's frames differ by a median of 89%, F2's cost 0.06% and 0.03%); and
+  (F.1)'s overall sign fixed by *Annals I*'s harmonics, on which *Annals II*
+  puts the pair: its multipoles are $(-1)^{\ell+1}$ times (F.1)'s.
+- **v1.4.9** (`4fbcc16`): both documents in release voice. v1.4.0 is the
+  radiation era alone; A-5, $k_D$ at the baryon loading (T-21) and
+  `LCDM_MODEL`'s $\Omega_r$ move to v1.5.0; the reference runs set
+  $N_{\rm eff}=0$, as the bundle does; D42's earlier numbers are cited as at
+  `3bb4490` beside the restated instrument; a v1.4.0 subsection joins the
+  release history. `2b0963f` restored two attribution tags in the frame
+  instruments and added the README's AI-use disclosure; `c83a503` restored the
+  current-situation label `bump_release.py` flips.
+- **v1.4.10** (`ef1149a`): the claims and evidence tables brought to v1.4.0,
+  `tab:status` reading the solved potential with a row for the radiation era
+  (D46, `c14`); the figure section re-spliced.
+- **v1.4.11** (`ee5c2e2`): the $-H\Phi_A$ of *Annals II*'s (153) is not in the
+  1+3 equations, since (149) drops the lapse term of the expansion gradient
+  (B-18); `eq:expansion-gradient`, and the fifteenth frame instrument `c15`,
+  with two negative controls. The released `expansion_coupling=False` is the
+  1+3 equation.
+- **v1.4.12** (`13de4f2`): the figure section re-spliced from the regenerated
+  captions.
 
 ### The sources at the visibility peak, D19 restated, and the suite on Windows
 
@@ -75,15 +107,16 @@ All notable changes to this bundle are recorded here. The version policy is in
   step control makes a fact about the platform; and the bundle's file order is
   POSIX parts on every machine, where `sorted()` on Windows paths had ignored
   case and failed the manifests while naming no file.
-- **Corrected:** halving $\eta_i$ moves $D_\ell$ by $1.5\times10^{-5}$ of its
-  maximum, and below $\ell\simeq30$ the Planck curve lies within 1.8% of
+- **Corrected:** at step 3 halving $\eta_i$ moved $D_\ell$ by
+  $1.5\times10^{-5}$ of its maximum (it is $1.3\times10^{-5}$ on the release
+  tree, T-201), and below $\ell\simeq30$ the Planck curve lies within 1.8% of
   CAMB's shape (1.75% at $\ell=2$); these read $1.6\times10^{-5}$ and 1.7%.
 - **T-195 amended:** the supplement fixes (F.1)'s overall sign by the
   harmonics, $\tau_0=-\delta T$ with the dipole shared. The control
   continuation hands over $\delta T$ and $-\tau_1$, every rank with the
   opposite sign; it returns only $\delta T$ and $\tau_1$, so nothing computed
-  moves, and the hand-over is repaired with A-5's first change to
-  `functions/`.
+  moves. The hand-over is repaired in the release's one change to
+  `functions/` (`c8190a2`; see the release regeneration above).
 
 ### D44 and D45 on the solved potential, and what one spectrum costs now
 
@@ -205,7 +238,8 @@ after it, as registered.
   - the baryons' own term raised the heights by up to 30% from step 2's.
 - **Recorded beside the test (D46):**
   - halving $\eta_i$ moves $D_\ell$ by $1.5\times10^{-5}$ of its maximum,
-    against the registered $10^{-4}$;
+    against the registered $10^{-4}$ ($1.3\times10^{-5}$ on the release tree,
+    T-201);
   - the photons' anisotropic stress moves $D_\ell$ by 1.3% of its maximum;
   - $(\Phi_A+\Phi_H)/\Phi_A$ after $\eta_*$ outside the horizon has its
     extremum at $-0.0432$ at $1.63\eta_*$, against $-0.042$ near $1.6\eta_*$

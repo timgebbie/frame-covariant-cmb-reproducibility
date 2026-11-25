@@ -13204,3 +13204,22 @@ control that the same code's row is. D32–D35 are recomputed from scratch on
 the release tree. D24's and D29's checkpoints, which carry a timestamp
 column, are kept out of the bundle (`.gitignore`); D36 and D38–D40, which `run_all.py`
 does not run, carry their committed tables from the code that wrote them.
+
+## T-203 — The hygiene gate printed a stale stamp under PASS and exited 0
+
+`check_release_hygiene.check_generated_csvs_are_stamped` failed an unstamped
+CSV and only listed a stale one, in a note printed under the PASS banner; the
+gate exited 0 and so did the suite's `test_the_gate_passes_on_this_tree`. From
+`4d4f7fd` on 19 November, which merged a change to `functions/` without the
+regeneration that re-stamps, to `13de4f2` on 25 November, public `main` carried
+0 of 15 artefacts its code computed and every gate, the suite and a clean
+checkout on the PI's machine read it as passing. That is T-54's class, a clean
+banner over a stale artefact, inside the instrument written to close it; a
+scheduled read-only check of 25 November measured it on a fresh clone. The
+choice not to fail was deliberate (T-197), on the reasoning that the release
+route replots and refuses a stale stamp, which it does; but a gate whose PASS
+does not mean the tree is current misleads every reader of it but that route.
+Repaired: a stale stamp, or a CSV computed from a source since regenerated, is
+a failure naming what to regenerate, and the test's two staleness cases now
+assert the failure. A change to `functions/` lands with its regeneration, and
+its branch is red until then.
