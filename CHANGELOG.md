@@ -24,6 +24,12 @@ All notable changes to this bundle are recorded here. The version policy is in
   built is not frame-invariant at any $k$ measured and points to D44's three
   conditions; `tests/test_frame_invariance_reading.py` holds a falling median,
   one of order one and the empty sets to their readings.
+- **D24's carried $\ell_A$ follows the one photon density** to 266.720. The
+  value D24 divides by is D20's column, which reads 266.72 since T-201, and
+  the literal had stayed at 266.750. The target $206/\ell_A$ is 0.77235 (it
+  was 0.77226). No verdict moves: D24's controls pass and every
+  $\ell_{\rm peak}$ reproduces, and only the ratio column moves, by 0.011%.
+  D27 imports the value.
 
 ### Changed
 

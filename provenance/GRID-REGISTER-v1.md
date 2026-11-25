@@ -138,7 +138,7 @@ plausible grid change reaches. Finding **T-79**.
 
 ### `k_com` — the k grid the Phi' sweep integrates C_ell on
 
-`scripts/diagnostic_d24_phi_prime_sweep.py:326`, `np.linspace`
+`scripts/diagnostic_d24_phi_prime_sweep.py:332`, `np.linspace`
 
 `required_k_points(K_MAX, r_theta)` at 3 samples per j_ell^2
 oscillation --- finding **T-56**, the same derivation F9 and D4 use. `K_MAX` is
@@ -484,7 +484,7 @@ Linear at `DK`. This script's entire output IS a convergence measurement, so its
 
 ### `ELLS` — the multipole grid the Phi' sweep locates the first peak on
 
-`scripts/diagnostic_d24_phi_prime_sweep.py:102`, `np.arange`
+`scripts/diagnostic_d24_phi_prime_sweep.py:103`, `np.arange`
 
 Dense at spacing 5 through `arange(100, 421, 5)` and sparse below,
 because the sweep reports **ell_peak by parabolic interpolation on three

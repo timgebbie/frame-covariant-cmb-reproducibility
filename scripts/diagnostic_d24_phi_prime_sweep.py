@@ -40,11 +40,12 @@ bit-identical, the sweep is measuring the split rather than the physics.
 READING THE RESULT
 ------------------
 Reported as $\ell_{\rm peak}(\lambda)/\ell_A$ so the numbers land beside
-**1.00** (undriven) and **0.772** (matched CAMB, $206/266.750$). $\ell_A$ is
+**1.00** (undriven) and **0.772** (matched CAMB, $206/266.720$). $\ell_A$ is
 carried in the output so a later reader cannot mistake the background. **Was
 $0.757$ at $\ell_A=272.177$ until T-181** --- the recombination repair of
-2026-10-21 moved the bundle's acoustic scale and the target moved with it;
-the verdict did not, and the constant carries the reasoning.
+2026-10-21 moved the bundle's acoustic scale and the target moved with it,
+as it did again, from $266.750$, with the one photon density (T-201); the
+verdict did not, and the constant carries the reasoning.
 
   flat in BOTH kappa'' runs      the channel is DEAD. The defect is upstream
                                  of Phi'; A-3 cannot fix it however well
@@ -106,7 +107,7 @@ ELLS = np.unique(np.concatenate([
 #: reader does not mistake it for F9's grid.
 K_MAX = 600.0
 
-#: Matched CAMB's own ratio, 206/266.750. Carried explicitly -- P1-T \S3.
+#: Matched CAMB's own ratio, 206/266.720. Carried explicitly -- P1-T \S3.
 #:
 #: **T-181: this was 272.177 and the number it came from was superseded on
 #: 2026-10-21.** `f887301` set `RECOMBINATION_H = "corrected"` and PLANCK's
@@ -126,7 +127,12 @@ K_MAX = 600.0
 #: it explicitly is also what let it go stale. Whether a gate normalises by a
 #: frozen scale or a live one is a pre-registration question. The value is
 #: P1-B's; the rule is not.
-ELL_A = 266.750
+#:
+#: **266.720 since 25 November (T-201, T-204).** One photon density, the one
+#: $T_0$ gives, lowers $R$ by 0.12% and lengthens $r_s$ by 0.011%: D20's
+#: column and the model table read $266.72$ ($266.71996$), and the literal
+#: follows them. The target is $0.77235$ (was $0.77226$); no verdict moves.
+ELL_A = 266.720
 TARGET = 206.0 / ELL_A
 
 FRAMES = ("newtonian", "cdm")
