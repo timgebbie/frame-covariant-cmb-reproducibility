@@ -22,22 +22,22 @@ B-3 — Annals II (199), p. 372, checked against the integral
 
 Acoustic scale, from Annals II §8.3.2's own model
   n = 1, h = 0.5, Omega_B = 0.05, flat matter-dominated, z_* = 1100
-  R(eta_*)  = 0.3447
-  c_s       = 0.4979
+  R(eta_*)  = 0.3443
+  c_s       = 0.4980
   eta_*     = 0.06027 / H0
   dEta_*    = 1.93973 / H0
   r_s       = 0.03001 / H0
-  ell_A     = pi dEta_* / r_s = 203.1
+  ell_A     = pi dEta_* / r_s = 203.0
 
 Dropped acoustic modulation, 1 - cos(k r_s), with k ~ ell / dEta_*
     ell =   2    k r_s = 0.0309      0.05%
     ell =   5    k r_s = 0.0774      0.30%
     ell =  10    k r_s = 0.1547      1.19%
     ell =  15    k r_s = 0.2321      2.68%
-    ell =  20    k r_s = 0.3094      4.75%
+    ell =  20    k r_s = 0.3095      4.75%
     ell =  25    k r_s = 0.3868      7.39%
-    ell =  30    k r_s = 0.4641     10.58%
-    ell =  40    k r_s = 0.6188     18.54%
+    ell =  30    k r_s = 0.4642     10.58%
+    ell =  40    k r_s = 0.6189     18.55%
 
 Largest ell at each tolerance
       1.0%   ell <=   9

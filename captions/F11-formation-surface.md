@@ -13,7 +13,7 @@ epochs from the start of recombination to today. Both slots of
 eq.~\\eqref{eq:assembly-invariant} read the potential solved with the CDM, the
 baryons and the photons from one start deep in the radiation era
 (\\S\\ref{sec:a3-construction}); each slot is accumulated to each epoch, and the
-$\\eta_0$ column is the full integral to $3.4\\times10^{-14}$.\\\\[2pt]
+$\\eta_0$ column is the full integral to $4.5\\times10^{-14}$.\\\\[2pt]
 \\textbf{(a)} $D_\\ell$ against $\\ell$, epoch by epoch, normalised once by the
 maximum of today's curve. The acoustic series is in place at decoupling, at an
 eighth of today's height, and grows into today's first three maxima as the
@@ -48,7 +48,7 @@ acoustic maxima are on it.
 | late share at ℓ = 90, its largest above ℓ = 30 | **+0.19** |
 | late share at the first maximum, ℓ = 210 | **+0.08** |
 | late share from ℓ = 325 to 910 | **+0.001 to +0.019** |
-| η₀ column against the full integral | 3.4e-14 |
+| η₀ column against the full integral | 4.5e-14 |
 
 The late share is the fraction of today's C_ℓ laid down after
 (η − η\*) = 0.01 (η₀ − η\*), when the visibility has closed. It is positive at

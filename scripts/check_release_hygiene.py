@@ -635,6 +635,18 @@ STAMPED = (
      "scripts/diagnostic_d45_the_slots_sum_back.py"),
     ("diagnostics/d46-the-solved-potential.csv",
      "scripts/diagnostic_d46_the_solved_potential.py"),
+    # T-199 stamped D42; T-202 stamped the checkpoints D32 to D35 keep, which
+    # are their tables. Listed so that a stale one is named, as the rest are.
+    ("diagnostics/d42-does-the-source-oscillate-in-k.csv",
+     "scripts/diagnostic_d42_does_the_source_oscillate_in_k.py"),
+    ("diagnostics/d32-isw-discriminator.csv",
+     "scripts/diagnostic_d32_isw_discriminator.py"),
+    ("diagnostics/d33-w-path-integral.csv",
+     "scripts/diagnostic_d33_w_path_integral.py"),
+    ("diagnostics/d34-split-by-parts.csv",
+     "scripts/diagnostic_d34_split_by_parts.py"),
+    ("diagnostics/d35-which-term-accumulates.csv",
+     "scripts/diagnostic_d35_which_term_accumulates.py"),
 )
 
 #: A generated CSV computed from another generated CSV names the stamp it read.

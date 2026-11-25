@@ -34,6 +34,7 @@ from __future__ import annotations
 
 import csv
 import datetime
+import inspect
 import os
 import pathlib
 import sys
@@ -42,19 +43,41 @@ import sys
 class Checkpoint:
     """A CSV that a diagnostic appends to as each configuration completes."""
 
-    def __init__(self, path: pathlib.Path, fields: tuple[str, ...]) -> None:
+    def __init__(self, path: pathlib.Path, fields: tuple[str, ...], *,
+                 sources: str | None = None) -> None:
         self.path = pathlib.Path(path)
         self.fields = ("configuration",) + tuple(
             f for f in fields if f != "configuration") + ("utc",)
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self._rows: list[dict[str, str]] = []
+        # **Keyed on the code as well as the configuration --- T-202.** A row
+        # is resumed only if the file names the sources this tree computes,
+        # `source_fingerprint` of `functions/` and the calling script, the
+        # stamp every generated CSV carries (T-197). Keyed on the configuration
+        # alone, a release regeneration resumed D35's rows of 26 October and
+        # D34's of 27 October on a tree whose physics had moved since, and
+        # printed them as this tree's.
+        self.sources = sources if sources is not None else _caller_sources()
+        self._stale = False
         if self.path.exists():
             with self.path.open(newline="", encoding="utf-8") as fh:
-                self._rows = list(csv.DictReader(fh))
-            done = len({r["configuration"] for r in self._rows})
-            print(f"  [resume] {self.path.name}: {len(self._rows)} row(s) "
-                  f"from {done} configuration(s) already computed; "
-                  f"those are skipped", file=sys.stderr, flush=True)
+                first = fh.readline()
+                stamp = (first.split(":", 1)[1].strip()
+                         if first.startswith("# sources:") else None)
+                if stamp == self.sources:
+                    self._rows = list(csv.DictReader(fh))
+            if stamp != self.sources:
+                self._stale = True
+                print(f"  [stale] {self.path.name}: written by "
+                      f"{stamp or 'unstamped code'}, this tree computes "
+                      f"{self.sources}; every configuration is recomputed",
+                      file=sys.stderr, flush=True)
+            else:
+                done = len({r["configuration"] for r in self._rows})
+                print(f"  [resume] {self.path.name}: {len(self._rows)} row(s) "
+                      f"from {done} configuration(s) already computed by this "
+                      f"tree's code; those are skipped", file=sys.stderr,
+                      flush=True)
         # **No file until there is a row to put in it --- 2026-11-03, T-189.**
         # This branch used to write the CSV header here, on construction, so
         # the released artefact existed before the diagnostic had computed
@@ -132,10 +155,15 @@ class Checkpoint:
                       .strftime("%Y-%m-%dT%H:%M:%SZ")}
         row.update({k: str(v) for k, v in values.items()})
         self._rows.append(row)
-        fresh = not self.path.exists()
-        with self.path.open("a", newline="", encoding="utf-8") as fh:
-            writer = csv.DictWriter(fh, self.fields)
+        fresh = self._stale or not self.path.exists()
+        self._stale = False
+        with self.path.open("w" if fresh else "a", newline="",
+                            encoding="utf-8") as fh:
+            # LF, as every other generated CSV here: the default "\r\n" mixed
+            # with the stamp line fails the portability gate (T-202).
+            writer = csv.DictWriter(fh, self.fields, lineterminator="\n")
             if fresh:
+                fh.write(f"# sources: {self.sources}\n")
                 writer.writeheader()
             writer.writerow({k: row.get(k, "") for k in self.fields})
             fh.flush()
@@ -168,3 +196,11 @@ class Checkpoint:
             out.append("  " + "  ".join(
                 r.get(c, "").ljust(width[c]) for c in cols))
         return "\n".join(out)
+
+
+def _caller_sources() -> str:
+    """The stamp of the script that builds the checkpoint, as T-197 stamps a CSV."""
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+    from _fingerprint import source_fingerprint
+    caller = inspect.stack()[2].filename
+    return source_fingerprint(caller)

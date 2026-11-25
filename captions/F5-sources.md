@@ -16,10 +16,10 @@ in the frame it is written in}, while the rank decomposition is what~(89)
 produces and is defined in every frame. A figure comparing two frames must be
 drawn in a decomposition both of them have.\\\\[2pt]
 The ranks sum to the total, to $0$ exactly in the Newtonian frame and
-$1.8\\times10^{-16}$ in the CDM frame --- which is the check that the
+$5.5\\times10^{-16}$ in the CDM frame --- which is the check that the
 decomposition is a decomposition and not three curves that happen to be near
 the answer. At the $C_\\ell$ level the autos and twice the crosses reproduce
-$C_\\ell$ to $7.2\\times10^{-16}$ while the autos \\emph{alone} are off by
+$C_\\ell$ to $8.8\\times10^{-16}$ while the autos \\emph{alone} are off by
 $0.19$: $C_\\ell$ is quadratic in the transfer, so the cross terms are not a
 correction to be neglected but half the statement.\\\\[2pt]
 The frame disagreement is the result, and it has its own panel. The two

@@ -13151,3 +13151,56 @@ $\tau_2$ read from the continuation, or a source added to it, would inherit
 the wrong sign, which is where A-5 begins. Repaired with the first change A-5
 makes to `functions/` — the hand-over passes $-\delta T$ and $\tau_1$ ---
 since any byte there re-stamps every artefact.
+
+## T-195, repaired 2026-11-19 — the hand-over carries (F.1) at every rank
+
+`c8190a2`: `_continue_by_free_streaming` turns the monopole in and out and
+passes the dipole as it stands, so what it carries is (F.1), the overall sign
+fixed by *Annals I*'s harmonics as the amendment above records. Ranks 0 and 1
+come back bit for bit as before, checked at $k=5$, 50, 300 and 1200; a
+quadrupole read from the continuation now has (F.1)'s sign. T-195's
+$\sigma_\ell=(-1)^\ell\tau_\ell$ for the step-2 solve's hierarchy reads
+$\sigma_\ell=(-1)^{\ell+1}\tau_\ell$: its $\sigma_0=\delta T$ and
+$\sigma_1=\tau_1$ follow from that and not from $(-1)^\ell$, and the solve,
+which carries the pair's phase at every rank, is unchanged.
+
+## T-201 — The oscillator's baryon loading read a rounded photon density
+
+`acoustic.baryon_photon_ratio` and `solve_acoustic` defaulted to
+$\omega_\gamma=2.47\times10^{-5}$, rounded, while the background derives
+$2.47298\times10^{-5}$ from $T_0=2.7255$ K (`flrw.OMEGA_GAMMA_H2`), so $R$ was
+0.12% high against the background's own radiation. In the radiation era's
+momentum budget $W_b=\tfrac43RW_\gamma$ carried the same error on both sides,
+so the energy constraint could not see it. Repaired in `c8190a2`: the loading
+reads the background's value, as do D7, `derive_ell_range.py`, the parameter
+tables and the parameter record.
+
+**What it moved, measured by the release regeneration.** On Planck the first
+maximum stays at 205.5 and the maxima and first minimum at 210, 480, 720 and
+360; the heights relative to CAMB go from $+6.42$, $-1.41$, $+4.48$% to
+$+6.37$, $-1.35$, $+4.50$%, the rms over $30\le\ell\le990$ from 6.18 to 6.19%,
+$\ell=840$ from $-14.94$ to $-14.97$%, the low-$\ell$ shape from 1.75 to 1.76%.
+ΛCDM's first maximum moves from 139.9 to 139.8. F11's late shares are unchanged
+to four places at $\ell=2$, 16 and 90. D46's halving of $\eta_i$ moves $D_\ell$
+by $1.31\times10^{-5}$ of its maximum where it read $1.55\times10^{-5}$; the
+transfer against (J.5) moves in the fourth place. The nine frozen weightings
+moved by $6.6\times10^{-5}$ to $1.5\times10^{-3}$ of their largest value and are
+re-frozen (T-198's rule).
+
+## T-202 — The diagnostics' checkpoints were keyed on the configuration and not on the code
+
+`scripts/_resumable.Checkpoint`, written for T-127 so that a long diagnostic
+survives a lost container, resumed any row whose configuration label it found
+in its CSV, whatever code had written it. The release regeneration's
+`run_all.py --rerun` therefore recomputed nothing of D35 and printed rows of
+26 October as this tree's; D34's rows were of 26 and 27 October, and D32 and
+D33 resumed some configurations and recomputed others, a table of two codes.
+The CSVs carried no stamp, so neither the hygiene gate nor the manifests could
+tell. Repaired: a checkpoint names the sources that wrote it, `# sources:` as
+T-197's CSVs do, and resumes only rows this tree's code computed; any other
+file is recomputed from its first configuration. A test writes a checkpoint
+under another stamp and asserts that its row is not resumed, beside the
+control that the same code's row is. D32–D35 are recomputed from scratch on
+the release tree. D24's and D29's checkpoints, which carry a timestamp
+column, are kept out of the bundle (`.gitignore`); D36 and D38–D40, which `run_all.py`
+does not run, carry their committed tables from the code that wrote them.

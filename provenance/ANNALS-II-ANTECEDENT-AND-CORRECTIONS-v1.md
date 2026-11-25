@@ -1680,3 +1680,48 @@ knowing (102) is wrong by 10–250% and not knowing what the right expression is
 — an asymmetry against every other entry here. **P1-T's objection, and it is
 upheld on the precedent rather than on the authorship.**
 
+## B-18 — (153) carries an expansion term the 1+3 equations do not: (149) drops the lapse term of the expansion gradient
+
+*Text written by P1-T, 2026-11-24.*
+
+*Annals II* writes the Newtonian-frame radiation monopole twice. **(147)**,
+$(\tilde{\mathrm D}_a\ln T)\dot{}+H(\tilde{\mathrm D}_a\ln T+\tilde A_a)+\tfrac13\tilde{\mathrm D}_a\tilde\Theta=-\tfrac13\mathrm D_a(\mathrm D_c\tilde\tau^c)$,
+is the photons' energy equation carried through the commutator of
+$u^a\nabla_a$ with $\mathrm D_a$; its $H\tilde A_a$ is the commutator's
+$(\ln T)\dot{}\thinspace\tilde A_a$ with $(\ln T)\dot{}=-H$, and it is right.
+**(149)** writes $\tfrac13\tilde{\mathrm D}_a\tilde\Theta$ as $\mathrm D_a\dot\Phi_H$.
+
+| | correct | printed |
+|---|---|---|
+| (149) | $\tfrac13\mathrm D_a\Theta=\mathrm D_a(\dot\Phi_H-H\Phi_A)$ | $\tfrac13\mathrm D_a\Theta=\mathrm D_a\dot\Phi_H$ |
+| (153) | $\dot{\delta T}=-\dot\Phi_H+\tfrac ka\tfrac{\tau_1}3$ | $\dot{\delta T}=-H\Phi_A-\dot\Phi_H+\tfrac ka\tfrac{\tau_1}3$ |
+
+The correct (149) follows from two shear-free-frame relations. The $(0\alpha)$
+constraint gives $\tfrac23\mathrm D_a\Theta=q_a$. The $E_{ab}$ equation with
+$E_{ab}+\tfrac12\pi_{ab}=-\mathrm D_{\langle a}\mathrm D_{b\rangle}\Phi_H$ and
+$\pi_{ab}=-\mathrm D_{\langle a}\mathrm D_{b\rangle}(\Phi_A+\Phi_H)$ gives
+$\mathrm D_{\langle a}\mathrm D_{b\rangle}(\dot\Phi_H-H\Phi_A)=\tfrac12\mathrm D_{\langle a}q_{b\rangle}$.
+The lapse term cancels (147)'s commutator term.
+
+**The antecedent's own limit decides it.** Outside the horizon the adiabatic
+$\delta T=-\tfrac23\Phi_A$ that (180)–(181) start from is constant under the
+corrected row. Under the printed one it drifts as $-2\Phi_A\ln\eta$ in the
+matter era, $-9.2\Phi_A$ over a hundredfold in $\eta$.
+
+*Annals II* drops the term to reach (154), calling that "the small scale
+approximation". The step is exact, so (154) holds without it. The bundle's
+`expansion_coupling=False`, the default on every released route since
+before v1.3.0, integrates the corrected row, and no released number moves.
+
+Instrument `tests/frame/c15_temperature_row.py`:
+- C15b derives (147).
+- C15c derives the corrected (149).
+- C15d derives the row, with (149) as printed returning (153) as printed
+  as one negative control, and the dropped commutator returning
+  $+H\Phi_A$ as the other.
+- C15e checks the limit above.
+- C15f is the perturbed metric's normal observers,
+  $\tfrac13\delta\Theta=-H\psi-\dot\phi$, carried as a comparator only.
+
+Supplement v1.4.11, the oscillator section, *Three corrections to the
+antecedent*.

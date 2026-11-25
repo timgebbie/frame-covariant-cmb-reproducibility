@@ -58,3 +58,8 @@ f9.log
 # finished artefact to anyone reading the tree.
 diagnostics/*-partial.csv
 outputs/*-partial.csv
+
+# Checkpoints the D24 and D29 sweeps keep beside their reports: resumable state
+# with a timestamp column, not artefacts. 45ba9a3 removed an empty D24 one.
+diagnostics/d24-phi-prime-sweep.csv
+diagnostics/d29-the-identity.csv

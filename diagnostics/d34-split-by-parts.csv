@@ -1,49 +1,50 @@
+# sources: a0362d86b3c0b507
 configuration,background,metric,value,gate,utc
-released || EdS,EdS,newtonian/late2,1.012470e-05,4.377e-13,2026-10-26T06:06:43Z
-released || EdS,EdS,newtonian/bump7,4.281893e-01,4.377e-13,2026-10-26T06:06:43Z
-released || EdS,EdS,newtonian/D2_D30,1.615657e+00,4.377e-13,2026-10-26T06:06:43Z
-released || EdS,EdS,newtonian/peak,nan,4.377e-13,2026-10-26T06:06:43Z
-released || EdS,EdS,cdm/late2,1.146399e-05,4.377e-13,2026-10-26T06:06:43Z
-released || EdS,EdS,cdm/bump7,1.403573e+01,4.377e-13,2026-10-26T06:06:43Z
-released || EdS,EdS,cdm/D2_D30,1.722119e+00,4.377e-13,2026-10-26T06:06:43Z
-released || EdS,EdS,cdm/peak,2.224830e+02,4.377e-13,2026-10-26T06:06:43Z
-released || LCDM,LCDM,newtonian/late2,1.318165e-05,8.203e-12,2026-10-26T06:11:53Z
-released || LCDM,LCDM,newtonian/bump7,5.216019e-01,8.203e-12,2026-10-26T06:11:53Z
-released || LCDM,LCDM,newtonian/D2_D30,1.538006e+00,8.203e-12,2026-10-26T06:11:53Z
-released || LCDM,LCDM,newtonian/peak,nan,8.203e-12,2026-10-26T06:11:53Z
-released || LCDM,LCDM,cdm/late2,1.555169e-05,8.203e-12,2026-10-26T06:11:53Z
-released || LCDM,LCDM,cdm/bump7,7.947226e+00,8.203e-12,2026-10-26T06:11:53Z
-released || LCDM,LCDM,cdm/D2_D30,9.619592e-01,8.203e-12,2026-10-26T06:11:53Z
-released || LCDM,LCDM,cdm/peak,2.161116e+02,8.203e-12,2026-10-26T06:11:53Z
-released || PLANCK,PLANCK,newtonian/late2,-1.232330e-05,2.904e-11,2026-10-26T06:16:56Z
-released || PLANCK,PLANCK,newtonian/bump7,6.336089e-01,2.904e-11,2026-10-26T06:16:56Z
-released || PLANCK,PLANCK,newtonian/D2_D30,1.922848e+00,2.904e-11,2026-10-26T06:16:56Z
-released || PLANCK,PLANCK,newtonian/peak,nan,2.904e-11,2026-10-26T06:16:56Z
-released || PLANCK,PLANCK,cdm/late2,2.023668e-05,2.904e-11,2026-10-26T06:16:56Z
-released || PLANCK,PLANCK,cdm/bump7,8.819846e+00,2.904e-11,2026-10-26T06:16:56Z
-released || PLANCK,PLANCK,cdm/D2_D30,5.735552e-01,2.904e-11,2026-10-26T06:16:56Z
-released || PLANCK,PLANCK,cdm/peak,2.659302e+02,2.904e-11,2026-10-26T06:16:56Z
-split by-parts || EdS,EdS,newtonian/late2,9.893681e-01,1.785e-12,2026-10-26T06:20:14Z
-split by-parts || EdS,EdS,newtonian/bump7,2.823685e-01,1.785e-12,2026-10-26T06:20:14Z
-split by-parts || EdS,EdS,newtonian/D2_D30,9.067218e-02,1.785e-12,2026-10-26T06:20:14Z
-split by-parts || EdS,EdS,newtonian/peak,6.794857e+01,1.785e-12,2026-10-26T06:20:14Z
-split by-parts || EdS,EdS,cdm/late2,9.999770e-01,1.785e-12,2026-10-26T06:20:14Z
-split by-parts || EdS,EdS,cdm/bump7,2.933405e-01,1.785e-12,2026-10-26T06:20:14Z
-split by-parts || EdS,EdS,cdm/D2_D30,9.674392e-02,1.785e-12,2026-10-26T06:20:14Z
-split by-parts || EdS,EdS,cdm/peak,1.470693e+02,1.785e-12,2026-10-26T06:20:14Z
-split by-parts || LCDM,LCDM,newtonian/late2,9.919757e-01,3.460e-13,2026-10-26T06:27:15Z
-split by-parts || LCDM,LCDM,newtonian/bump7,2.934473e-01,3.460e-13,2026-10-26T06:27:15Z
-split by-parts || LCDM,LCDM,newtonian/D2_D30,9.867262e-02,3.460e-13,2026-10-26T06:27:15Z
-split by-parts || LCDM,LCDM,newtonian/peak,6.766224e+01,3.460e-13,2026-10-26T06:27:15Z
-split by-parts || LCDM,LCDM,cdm/late2,9.999837e-01,3.460e-13,2026-10-26T06:27:15Z
-split by-parts || LCDM,LCDM,cdm/bump7,2.527800e-01,3.460e-13,2026-10-26T06:27:15Z
-split by-parts || LCDM,LCDM,cdm/D2_D30,7.973617e-02,3.460e-13,2026-10-26T06:27:15Z
-split by-parts || LCDM,LCDM,cdm/peak,2.355659e+02,3.460e-13,2026-10-26T06:27:15Z
-split by-parts || PLANCK,PLANCK,newtonian/late2,9.953539e-01,2.506e-12,2026-10-26T06:34:30Z
-split by-parts || PLANCK,PLANCK,newtonian/bump7,3.020286e-01,2.506e-12,2026-10-26T06:34:30Z
-split by-parts || PLANCK,PLANCK,newtonian/D2_D30,1.043891e-01,2.506e-12,2026-10-26T06:34:30Z
-split by-parts || PLANCK,PLANCK,newtonian/peak,6.045579e+01,2.506e-12,2026-10-26T06:34:30Z
-split by-parts || PLANCK,PLANCK,cdm/late2,9.998428e-01,2.506e-12,2026-10-26T06:34:30Z
-split by-parts || PLANCK,PLANCK,cdm/bump7,2.661660e-01,2.506e-12,2026-10-26T06:34:30Z
-split by-parts || PLANCK,PLANCK,cdm/D2_D30,8.446469e-02,2.506e-12,2026-10-26T06:34:30Z
-split by-parts || PLANCK,PLANCK,cdm/peak,1.833625e+02,2.506e-12,2026-10-26T06:34:30Z
+released || EdS,EdS,newtonian/late2,1.010886e-05,1.193e-11,2026-11-25T08:09:01Z
+released || EdS,EdS,newtonian/bump7,4.282738e-01,1.193e-11,2026-11-25T08:09:01Z
+released || EdS,EdS,newtonian/D2_D30,1.615811e+00,1.193e-11,2026-11-25T08:09:01Z
+released || EdS,EdS,newtonian/peak,nan,1.193e-11,2026-11-25T08:09:01Z
+released || EdS,EdS,cdm/late2,1.145133e-05,1.193e-11,2026-11-25T08:09:01Z
+released || EdS,EdS,cdm/bump7,1.401964e+01,1.193e-11,2026-11-25T08:09:01Z
+released || EdS,EdS,cdm/D2_D30,1.719918e+00,1.193e-11,2026-11-25T08:09:01Z
+released || EdS,EdS,cdm/peak,2.224605e+02,1.193e-11,2026-11-25T08:09:01Z
+released || LCDM,LCDM,newtonian/late2,1.317272e-05,5.418e-12,2026-11-25T08:11:53Z
+released || LCDM,LCDM,newtonian/bump7,5.216564e-01,5.418e-12,2026-11-25T08:11:53Z
+released || LCDM,LCDM,newtonian/D2_D30,1.538174e+00,5.418e-12,2026-11-25T08:11:53Z
+released || LCDM,LCDM,newtonian/peak,nan,5.418e-12,2026-11-25T08:11:53Z
+released || LCDM,LCDM,cdm/late2,1.554665e-05,5.418e-12,2026-11-25T08:11:53Z
+released || LCDM,LCDM,cdm/bump7,7.938613e+00,5.418e-12,2026-11-25T08:11:53Z
+released || LCDM,LCDM,cdm/D2_D30,9.607958e-01,5.418e-12,2026-11-25T08:11:53Z
+released || LCDM,LCDM,cdm/peak,2.160963e+02,5.418e-12,2026-11-25T08:11:53Z
+released || PLANCK,PLANCK,newtonian/late2,-1.231327e-05,3.338e-12,2026-11-25T08:14:34Z
+released || PLANCK,PLANCK,newtonian/bump7,6.336899e-01,3.338e-12,2026-11-25T08:14:34Z
+released || PLANCK,PLANCK,newtonian/D2_D30,1.922989e+00,3.338e-12,2026-11-25T08:14:34Z
+released || PLANCK,PLANCK,newtonian/peak,nan,3.338e-12,2026-11-25T08:14:34Z
+released || PLANCK,PLANCK,cdm/late2,2.020840e-05,3.338e-12,2026-11-25T08:14:34Z
+released || PLANCK,PLANCK,cdm/bump7,8.809341e+00,3.338e-12,2026-11-25T08:14:34Z
+released || PLANCK,PLANCK,cdm/D2_D30,5.733538e-01,3.338e-12,2026-11-25T08:14:34Z
+released || PLANCK,PLANCK,cdm/peak,2.659115e+02,3.338e-12,2026-11-25T08:14:34Z
+split by-parts || EdS,EdS,newtonian/late2,9.893582e-01,2.450e-13,2026-11-25T08:16:12Z
+split by-parts || EdS,EdS,newtonian/bump7,2.824034e-01,2.450e-13,2026-11-25T08:16:12Z
+split by-parts || EdS,EdS,newtonian/D2_D30,9.068470e-02,2.450e-13,2026-11-25T08:16:12Z
+split by-parts || EdS,EdS,newtonian/peak,6.791813e+01,2.450e-13,2026-11-25T08:16:12Z
+split by-parts || EdS,EdS,cdm/late2,9.999770e-01,2.450e-13,2026-11-25T08:16:12Z
+split by-parts || EdS,EdS,cdm/bump7,2.933282e-01,2.450e-13,2026-11-25T08:16:12Z
+split by-parts || EdS,EdS,cdm/D2_D30,9.673897e-02,2.450e-13,2026-11-25T08:16:12Z
+split by-parts || EdS,EdS,cdm/peak,1.471091e+02,2.450e-13,2026-11-25T08:16:12Z
+split by-parts || LCDM,LCDM,newtonian/late2,9.919682e-01,2.247e-12,2026-11-25T08:19:41Z
+split by-parts || LCDM,LCDM,newtonian/bump7,2.934945e-01,2.247e-12,2026-11-25T08:19:41Z
+split by-parts || LCDM,LCDM,newtonian/D2_D30,9.869396e-02,2.247e-12,2026-11-25T08:19:41Z
+split by-parts || LCDM,LCDM,newtonian/peak,6.763053e+01,2.247e-12,2026-11-25T08:19:41Z
+split by-parts || LCDM,LCDM,cdm/late2,9.999837e-01,2.247e-12,2026-11-25T08:19:41Z
+split by-parts || LCDM,LCDM,cdm/bump7,2.527691e-01,2.247e-12,2026-11-25T08:19:41Z
+split by-parts || LCDM,LCDM,cdm/D2_D30,7.973262e-02,2.247e-12,2026-11-25T08:19:41Z
+split by-parts || LCDM,LCDM,cdm/peak,2.357310e+02,2.247e-12,2026-11-25T08:19:41Z
+split by-parts || PLANCK,PLANCK,newtonian/late2,9.953507e-01,4.175e-12,2026-11-25T08:23:08Z
+split by-parts || PLANCK,PLANCK,newtonian/bump7,3.020750e-01,4.175e-12,2026-11-25T08:23:08Z
+split by-parts || PLANCK,PLANCK,newtonian/D2_D30,1.044129e-01,4.175e-12,2026-11-25T08:23:08Z
+split by-parts || PLANCK,PLANCK,newtonian/peak,6.043185e+01,4.175e-12,2026-11-25T08:23:08Z
+split by-parts || PLANCK,PLANCK,cdm/late2,9.998429e-01,4.175e-12,2026-11-25T08:23:08Z
+split by-parts || PLANCK,PLANCK,cdm/bump7,2.661508e-01,4.175e-12,2026-11-25T08:23:08Z
+split by-parts || PLANCK,PLANCK,cdm/D2_D30,8.445952e-02,4.175e-12,2026-11-25T08:23:08Z
+split by-parts || PLANCK,PLANCK,cdm/peak,1.834878e+02,4.175e-12,2026-11-25T08:23:08Z

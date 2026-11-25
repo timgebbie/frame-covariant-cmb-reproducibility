@@ -129,7 +129,7 @@ unscored, the instrument's bias on that shape being 2.3%.
 
 ==============================================================================
   PLANCK, released: start 'radiation era', potential 'solved', Paper 1's source signs
-  r_s = 0.036832, acoustic period 2 pi / r_s = 170.59 in k, eta_* at the visibility maximum
+  r_s = 0.036836, acoustic period 2 pi / r_s = 170.57 in k, eta_* at the visibility maximum
 ==============================================================================
 
   CONTROL instrument
@@ -137,7 +137,7 @@ unscored, the instrument's bias on that shape being 2.3%.
     the floor is a threshold inside COHERENT; each series' sound horizon is calibrated below, on known waves with its own envelope and A/|P|
 
   CONTROL frame, worst relative Newtonian-vs-CDM gap over the visibility window
-    sachs_wolfe 1.0e-15   doppler 2.3e-15   integrated 2.5e-13   c0 2.4e-15
+    sachs_wolfe 1.1e-15   doppler 3.3e-15   integrated 3.3e-13   c0 2.6e-15
 
   CONTROL identity, C_0 (Paper 1) against C_0 - a B_0 (as built): 0.0e+00
 
@@ -145,41 +145,41 @@ unscored, the instrument's bias on that shape being 2.3%.
   THE SOURCE AT eta_*, IN k
 ==============================================================================
 
-  sachs_wolfe:  sound horizon r_src / r_s = 0.99219, instrument bias on this shape 3.0e-03 (within 2%)
+  sachs_wolfe:  sound horizon r_src / r_s = 0.99218, instrument bias on this shape 3.0e-03 (within 2%)
     COHERENT
         k   pedestal P  amplitude A    A/|P|   phase   residual  
-      100   1.4480e-01   8.1132e-01    5.603   2.900   1.75e-05  (reported)
-      200   2.3062e-01   9.7224e-01    4.216   2.817   1.35e-05
-      300   1.1098e-01   1.1089e+00    9.992   2.829   9.25e-06
-      400   1.0347e-01   1.1955e+00   11.554   2.866   5.82e-06
-      500   6.0731e-02   1.2483e+00   20.555   2.898   3.86e-06
+      100   1.4450e-01   8.1119e-01    5.614   2.900   1.75e-05  (reported)
+      200   2.3047e-01   9.7224e-01    4.219   2.817   1.35e-05
+      300   1.1083e-01   1.1090e+00   10.006   2.829   9.26e-06
+      400   1.0341e-01   1.1956e+00   11.561   2.866   5.83e-06
+      500   6.0663e-02   1.2484e+00   20.579   2.898   3.86e-06
 
-  doppler:  sound horizon r_src / r_s = 0.99079, instrument bias on this shape 2.8e-03 (within 2%)
+  doppler:  sound horizon r_src / r_s = 0.99078, instrument bias on this shape 2.8e-03 (within 2%)
     COHERENT
         k   pedestal P  amplitude A    A/|P|   phase   residual  
-      100   8.5595e-02   1.0906e+00   12.741  -1.847   9.15e-06  (reported)
-      200  -1.0209e-01   1.3361e+00   13.088  -1.916   1.12e-05
-      300   3.3403e-02   1.5159e+00   45.383  -1.890   8.05e-06
-      400  -2.0265e-02   1.6223e+00   80.053  -1.853   3.87e-06
-      500   4.9463e-03   1.6906e+00  341.784  -1.822   1.19e-06
+      100   8.5706e-02   1.0907e+00   12.726  -1.847   9.16e-06  (reported)
+      200  -1.0204e-01   1.3365e+00   13.097  -1.916   1.12e-05
+      300   3.3398e-02   1.5163e+00   45.400  -1.890   8.05e-06
+      400  -2.0238e-02   1.6227e+00   80.183  -1.853   3.86e-06
+      500   4.9256e-03   1.6910e+00  343.319  -1.822   1.18e-06
 
-  integrated:  sound horizon r_src / r_s = 0.95110, instrument bias on this shape 2.3e-02 (unscored: the instrument's bias on this shape exceeds 1%)
+  integrated:  sound horizon r_src / r_s = 0.95111, instrument bias on this shape 2.3e-02 (unscored: the instrument's bias on this shape exceeds 1%)
     COHERENT in amplitude; sound horizon unscored
         k   pedestal P  amplitude A    A/|P|   phase   residual  
-      100   5.1786e+00   2.3214e+00    0.448  -2.849   6.68e-05  (reported)
-      200   2.0887e+00   2.1893e+00    1.048  -2.500   8.76e-05
-      300   1.6083e+00   1.7529e+00    1.090  -2.224   5.09e-05
-      400   1.0968e+00   1.3721e+00    1.251  -2.066   2.55e-05
-      500   9.0180e-01   1.1182e+00    1.240  -1.970   1.73e-05
+      100   5.1767e+00   2.3204e+00    0.448  -2.849   6.68e-05  (reported)
+      200   2.0876e+00   2.1885e+00    1.048  -2.500   8.77e-05
+      300   1.6081e+00   1.7523e+00    1.090  -2.224   5.10e-05
+      400   1.0964e+00   1.3716e+00    1.251  -2.066   2.56e-05
+      500   9.0168e-01   1.1178e+00    1.240  -1.970   1.73e-05
 
-  c0:  sound horizon r_src / r_s = 0.98490, instrument bias on this shape 2.1e-03 (within 2%)
+  c0:  sound horizon r_src / r_s = 0.98489, instrument bias on this shape 2.1e-03 (within 2%)
     COHERENT
         k   pedestal P  amplitude A    A/|P|   phase   residual  
-      100  -8.8641e+00   4.5858e+01    5.173  -2.015   1.92e-03  (reported)
-      200   2.0207e+00   9.7809e+01   48.403  -1.930   1.36e-03
-      300  -2.6443e+00   1.5773e+02   59.650  -1.885   8.98e-04
-      400   1.1517e+00   2.2101e+02  191.898  -1.848   6.07e-04
-      500  -1.3415e+00   2.8568e+02  212.957  -1.817   3.90e-04
+      100  -8.8662e+00   4.5868e+01    5.173  -2.015   1.92e-03  (reported)
+      200   2.0271e+00   9.7833e+01   48.262  -1.930   1.36e-03
+      300  -2.6459e+00   1.5777e+02   59.629  -1.885   9.00e-04
+      400   1.1539e+00   2.2108e+02  191.591  -1.848   6.07e-04
+      500  -1.3409e+00   2.8576e+02  213.107  -1.817   3.90e-04
 
   QUADRATURE, Doppler phase minus Sachs-Wolfe phase at the table's r_s, in units of pi/2 (reported):
     k~100 +0.978   k~200 +0.987   k~300 +0.996   k~400 +0.996   k~500 +0.995

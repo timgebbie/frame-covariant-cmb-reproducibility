@@ -26,18 +26,18 @@ one finding earlier.
 === EdS ===   does v_B + sigma agree between the columns?
       k     |d(v_b)|     |d(C_2)|   |d(v_b - C_2)|   |d(v_b + C_2)|
   ------------------------------------------------------------------
-      1    1.218e+00    1.000e+00        1.098e+00        9.337e-16
-     10    1.210e+00    1.000e+00        1.095e+00        1.606e-15
-     60    1.089e+00    1.000e+00        1.043e+00        4.251e-15
-    300    1.006e+00    1.000e+00        1.003e+00        6.525e-14
+      1    1.222e+00    1.000e+00        1.100e+00        1.033e-15
+     10    1.214e+00    1.000e+00        1.097e+00        2.188e-15
+     60    1.091e+00    1.000e+00        1.043e+00        4.028e-15
+    300    1.006e+00    1.000e+00        1.003e+00        5.353e-14
 
 === PLANCK ===   does v_B + sigma agree between the columns?
       k     |d(v_b)|     |d(C_2)|   |d(v_b - C_2)|   |d(v_b + C_2)|
   ------------------------------------------------------------------
-      1    1.198e+00    1.000e+00        1.090e+00        1.249e-15
-     10    1.180e+00    1.000e+00        1.083e+00        1.640e-15
-     60    1.041e+00    1.000e+00        1.020e+00        1.018e-14
-    300    1.002e+00    1.000e+00        1.001e+00        1.797e-13
+      1    1.203e+00    1.000e+00        1.092e+00        8.884e-16
+     10    1.184e+00    1.000e+00        1.084e+00        2.222e-15
+     60    1.042e+00    1.000e+00        1.020e+00        9.718e-15
+    300    1.002e+00    1.000e+00        1.001e+00        1.393e-13
 
   Columns 1 and 2 are the two halves apart; one of columns 3 and 4
   is the CAMB combination. Machine zero there puts the defect
@@ -48,14 +48,14 @@ one finding earlier.
   Newtonian v_b minus CDM v_b, against the boost v/k it should be.
   bg          k   |res|/|v/k|   corr(res, v/k)   corr(res, d/d.eta)
   ------------------------------------------------------------------
-  EdS         1     1.669e-16            0.029               -0.016
-  EdS        10     3.425e-16           -0.114                0.100
-  EdS        60     4.121e-16           -0.312                0.135
-  EdS       300     2.287e-16           -0.207                0.023
-  PLANCK      1     1.499e-16           -0.017               -0.007
-  PLANCK     10     3.076e-16           -0.062                0.030
-  PLANCK     60     3.702e-16           -0.042               -0.021
-  PLANCK    300     4.109e-16           -0.164               -0.104
+  EdS         1     1.669e-16            0.027               -0.018
+  EdS        10     3.425e-16           -0.090                0.031
+  EdS        60     4.121e-16           -0.000               -0.006
+  EdS       300     4.574e-16           -0.209                0.024
+  PLANCK      1     1.499e-16           -0.016               -0.007
+  PLANCK     10     3.076e-16            0.222                0.110
+  PLANCK     60     3.702e-16            0.037                0.002
+  PLANCK    300     4.109e-16           -0.165               -0.100
 
   A residual aligned with v/k is a BOOST failure. One aligned with
   d(v_b)/d(eta) is a PHASE error between two integrations, and is a

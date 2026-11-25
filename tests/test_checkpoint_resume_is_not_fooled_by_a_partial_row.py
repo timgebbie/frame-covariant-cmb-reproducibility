@@ -177,11 +177,30 @@ def test_the_first_row_writes_the_header(tmp_path):
     cp.add("cfg || EdS", background="EdS", metric="a", value="1.0")
 
     lines = cp.path.read_text(encoding="utf-8").splitlines()
-    assert lines[0].split(",") == list(cp.fields)
-    assert len(lines) == 2, lines
+    assert lines[0] == f"# sources: {cp.sources}", lines[0]   # T-202
+    assert lines[1].split(",") == list(cp.fields)
+    assert len(lines) == 3, lines
 
     # and it resumes, which is the whole point of writing it at all
     assert _cp(tmp_path, "one.csv").has("cfg || EdS", expect=1)
+
+
+def test_rows_another_code_wrote_are_recomputed_not_resumed(tmp_path):
+    """**T-202.** A checkpoint keyed on the configuration alone resumed rows of
+    26 October into a release regeneration a month later. A file whose stamp is
+    not this code's is not resumed, and the first new row replaces it."""
+    cp = Checkpoint(tmp_path / "old.csv", FIELDS, sources="0123456789abcdef")
+    cp.add("cfg || EdS", background="EdS", metric="a", value="1.0")
+    stale = _cp(tmp_path, "old.csv")
+    assert stale.sources != "0123456789abcdef"
+    assert not stale.has("cfg || EdS"), "another code's row was resumed"
+    stale.add("cfg || EdS", background="EdS", metric="a", value="2.0")
+    text = stale.path.read_text(encoding="utf-8")
+    assert text.startswith(f"# sources: {stale.sources}\n")
+    assert "1.0" not in text and text.count("cfg || EdS") == 1
+
+    # the control: the same code's file is resumed
+    assert _cp(tmp_path, "old.csv").has("cfg || EdS", expect=1)
 
 
 def test_the_negative_control_a_written_checkpoint_does_exist(tmp_path):

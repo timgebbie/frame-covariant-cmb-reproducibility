@@ -1,43 +1,56 @@
+# sources: 1f33b09def63347c
 configuration,background,metric,value,gate,utc
-released || EdS,EdS,newtonian/late2,1.012470e-05,6.443e-13,2026-10-25T17:01:39Z
-released || EdS,EdS,newtonian/D2_D30,1.615657e+00,6.443e-13,2026-10-25T17:01:39Z
-released || EdS,EdS,newtonian/peak,nan,6.443e-13,2026-10-25T17:01:39Z
-released || EdS,EdS,cdm/late2,1.146522e-05,6.443e-13,2026-10-25T17:01:39Z
-released || EdS,EdS,cdm/D2_D30,1.722341e+00,6.443e-13,2026-10-25T17:01:39Z
-released || EdS,EdS,cdm/peak,2.200000e+02,6.443e-13,2026-10-25T17:01:39Z
-released || LCDM,LCDM,newtonian/late2,1.318165e-05,1.248e-11,2026-10-25T17:03:08Z
-released || LCDM,LCDM,newtonian/D2_D30,1.538004e+00,1.248e-11,2026-10-25T17:03:08Z
-released || LCDM,LCDM,newtonian/peak,nan,1.248e-11,2026-10-25T17:03:08Z
-released || LCDM,LCDM,cdm/late2,1.555229e-05,1.248e-11,2026-10-25T17:03:08Z
-released || LCDM,LCDM,cdm/D2_D30,9.619777e-01,1.248e-11,2026-10-25T17:03:08Z
-released || LCDM,LCDM,cdm/peak,2.200000e+02,1.248e-11,2026-10-25T17:03:08Z
-released || PLANCK,PLANCK,newtonian/late2,-1.232302e-05,8.459e-13,2026-10-25T17:04:39Z
-released || PLANCK,PLANCK,newtonian/D2_D30,1.922761e+00,8.459e-13,2026-10-25T17:04:39Z
-released || PLANCK,PLANCK,newtonian/peak,nan,8.459e-13,2026-10-25T17:04:39Z
-released || PLANCK,PLANCK,cdm/late2,2.022345e-05,8.459e-13,2026-10-25T17:04:39Z
-released || PLANCK,PLANCK,cdm/D2_D30,5.744377e-01,8.459e-13,2026-10-25T17:04:39Z
-released || PLANCK,PLANCK,cdm/peak,2.600000e+02,8.459e-13,2026-10-25T17:04:39Z
-(98) ISW at W || EdS,EdS,newtonian/late2,1.012470e-05,4.731e-13,2026-10-25T17:05:21Z
-(98) ISW at W || EdS,EdS,newtonian/D2_D30,1.615657e+00,4.731e-13,2026-10-25T17:05:21Z
-(98) ISW at W || EdS,EdS,newtonian/peak,nan,4.731e-13,2026-10-25T17:05:21Z
-(98) ISW at W || EdS,EdS,cdm/late2,1.146522e-05,4.731e-13,2026-10-25T17:05:21Z
-(98) ISW at W || EdS,EdS,cdm/D2_D30,1.722341e+00,4.731e-13,2026-10-25T17:05:21Z
-(98) ISW at W || EdS,EdS,cdm/peak,2.200000e+02,4.731e-13,2026-10-25T17:05:21Z
-(98) ISW at W || LCDM,LCDM,newtonian/late2,-2.401219e-05,3.784e-12,2026-10-25T17:06:52Z
-(98) ISW at W || LCDM,LCDM,newtonian/D2_D30,1.537947e+00,3.784e-12,2026-10-25T17:06:52Z
-(98) ISW at W || LCDM,LCDM,newtonian/peak,nan,3.784e-12,2026-10-25T17:06:52Z
-(98) ISW at W || LCDM,LCDM,cdm/late2,-3.113017e-04,3.784e-12,2026-10-25T17:06:52Z
-(98) ISW at W || LCDM,LCDM,cdm/D2_D30,9.616634e-01,3.784e-12,2026-10-25T17:06:52Z
-(98) ISW at W || LCDM,LCDM,cdm/peak,2.200000e+02,3.784e-12,2026-10-25T17:06:52Z
-(98) ISW at W || PLANCK,PLANCK,newtonian/late2,-1.684762e-04,2.649e-11,2026-10-25T17:08:23Z
-(98) ISW at W || PLANCK,PLANCK,newtonian/D2_D30,1.920253e+00,2.649e-11,2026-10-25T17:08:23Z
-(98) ISW at W || PLANCK,PLANCK,newtonian/peak,nan,2.649e-11,2026-10-25T17:08:23Z
-(98) ISW at W || PLANCK,PLANCK,cdm/late2,6.243414e-04,2.649e-11,2026-10-25T17:08:23Z
-(98) ISW at W || PLANCK,PLANCK,cdm/D2_D30,5.740384e-01,2.649e-11,2026-10-25T17:08:23Z
-(98) ISW at W || PLANCK,PLANCK,cdm/peak,2.600000e+02,2.649e-11,2026-10-25T17:08:23Z
-(98) ISW at W + free-streamed source || EdS,EdS,newtonian/late2,1.012165e-05,5.073e-13,2026-10-25T17:12:44Z
-(98) ISW at W + free-streamed source || EdS,EdS,newtonian/D2_D30,1.615657e+00,5.073e-13,2026-10-25T17:12:44Z
-(98) ISW at W + free-streamed source || EdS,EdS,newtonian/peak,nan,5.073e-13,2026-10-25T17:12:44Z
-(98) ISW at W + free-streamed source || EdS,EdS,cdm/late2,1.144063e-05,5.073e-13,2026-10-25T17:12:44Z
-(98) ISW at W + free-streamed source || EdS,EdS,cdm/D2_D30,1.722341e+00,5.073e-13,2026-10-25T17:12:44Z
-(98) ISW at W + free-streamed source || EdS,EdS,cdm/peak,2.200000e+02,5.073e-13,2026-10-25T17:12:44Z
+released || EdS,EdS,newtonian/late2,1.010886e-05,5.740e-13,2026-11-25T08:02:34Z
+released || EdS,EdS,newtonian/D2_D30,1.615811e+00,5.740e-13,2026-11-25T08:02:34Z
+released || EdS,EdS,newtonian/peak,nan,5.740e-13,2026-11-25T08:02:34Z
+released || EdS,EdS,cdm/late2,1.145257e-05,5.740e-13,2026-11-25T08:02:34Z
+released || EdS,EdS,cdm/D2_D30,1.720142e+00,5.740e-13,2026-11-25T08:02:34Z
+released || EdS,EdS,cdm/peak,2.200000e+02,5.740e-13,2026-11-25T08:02:34Z
+released || LCDM,LCDM,newtonian/late2,1.317272e-05,1.110e-12,2026-11-25T08:04:46Z
+released || LCDM,LCDM,newtonian/D2_D30,1.538173e+00,1.110e-12,2026-11-25T08:04:46Z
+released || LCDM,LCDM,newtonian/peak,nan,1.110e-12,2026-11-25T08:04:46Z
+released || LCDM,LCDM,cdm/late2,1.554726e-05,1.110e-12,2026-11-25T08:04:46Z
+released || LCDM,LCDM,cdm/D2_D30,9.608146e-01,1.110e-12,2026-11-25T08:04:46Z
+released || LCDM,LCDM,cdm/peak,2.200000e+02,1.110e-12,2026-11-25T08:04:46Z
+released || PLANCK,PLANCK,newtonian/late2,-1.231299e-05,3.346e-12,2026-11-25T08:07:01Z
+released || PLANCK,PLANCK,newtonian/D2_D30,1.922902e+00,3.346e-12,2026-11-25T08:07:01Z
+released || PLANCK,PLANCK,newtonian/peak,nan,3.346e-12,2026-11-25T08:07:01Z
+released || PLANCK,PLANCK,cdm/late2,2.019520e-05,3.346e-12,2026-11-25T08:07:01Z
+released || PLANCK,PLANCK,cdm/D2_D30,5.742353e-01,3.346e-12,2026-11-25T08:07:01Z
+released || PLANCK,PLANCK,cdm/peak,2.600000e+02,3.346e-12,2026-11-25T08:07:01Z
+(98) ISW at W || EdS,EdS,newtonian/late2,1.010886e-05,7.040e-13,2026-11-25T08:07:59Z
+(98) ISW at W || EdS,EdS,newtonian/D2_D30,1.615811e+00,7.040e-13,2026-11-25T08:07:59Z
+(98) ISW at W || EdS,EdS,newtonian/peak,nan,7.040e-13,2026-11-25T08:07:59Z
+(98) ISW at W || EdS,EdS,cdm/late2,1.145257e-05,7.040e-13,2026-11-25T08:07:59Z
+(98) ISW at W || EdS,EdS,cdm/D2_D30,1.720142e+00,7.040e-13,2026-11-25T08:07:59Z
+(98) ISW at W || EdS,EdS,cdm/peak,2.200000e+02,7.040e-13,2026-11-25T08:07:59Z
+(98) ISW at W || LCDM,LCDM,newtonian/late2,-2.391064e-05,1.399e-11,2026-11-25T08:10:12Z
+(98) ISW at W || LCDM,LCDM,newtonian/D2_D30,1.538116e+00,1.399e-11,2026-11-25T08:10:12Z
+(98) ISW at W || LCDM,LCDM,newtonian/peak,nan,1.399e-11,2026-11-25T08:10:12Z
+(98) ISW at W || LCDM,LCDM,cdm/late2,-3.096487e-04,1.399e-11,2026-11-25T08:10:12Z
+(98) ISW at W || LCDM,LCDM,cdm/D2_D30,9.605022e-01,1.399e-11,2026-11-25T08:10:12Z
+(98) ISW at W || LCDM,LCDM,cdm/peak,2.200000e+02,1.399e-11,2026-11-25T08:10:12Z
+(98) ISW at W || PLANCK,PLANCK,newtonian/late2,-1.675208e-04,1.848e-12,2026-11-25T08:12:28Z
+(98) ISW at W || PLANCK,PLANCK,newtonian/D2_D30,1.921262e+00,1.848e-12,2026-11-25T08:12:28Z
+(98) ISW at W || PLANCK,PLANCK,newtonian/peak,nan,1.848e-12,2026-11-25T08:12:28Z
+(98) ISW at W || PLANCK,PLANCK,cdm/late2,6.183028e-04,1.848e-12,2026-11-25T08:12:28Z
+(98) ISW at W || PLANCK,PLANCK,cdm/D2_D30,5.731647e-01,1.848e-12,2026-11-25T08:12:28Z
+(98) ISW at W || PLANCK,PLANCK,cdm/peak,2.600000e+02,1.848e-12,2026-11-25T08:12:28Z
+(98) ISW at W + free-streamed source || EdS,EdS,newtonian/late2,1.011246e-05,7.856e-13,2026-11-25T08:18:58Z
+(98) ISW at W + free-streamed source || EdS,EdS,newtonian/D2_D30,1.615811e+00,7.856e-13,2026-11-25T08:18:58Z
+(98) ISW at W + free-streamed source || EdS,EdS,newtonian/peak,nan,7.856e-13,2026-11-25T08:18:58Z
+(98) ISW at W + free-streamed source || EdS,EdS,cdm/late2,1.149587e-05,7.856e-13,2026-11-25T08:18:58Z
+(98) ISW at W + free-streamed source || EdS,EdS,cdm/D2_D30,1.720142e+00,7.856e-13,2026-11-25T08:18:58Z
+(98) ISW at W + free-streamed source || EdS,EdS,cdm/peak,2.200000e+02,7.856e-13,2026-11-25T08:18:58Z
+(98) ISW at W + free-streamed source || LCDM,LCDM,newtonian/late2,-2.390743e-05,4.100e-11,2026-11-25T08:35:28Z
+(98) ISW at W + free-streamed source || LCDM,LCDM,newtonian/D2_D30,1.538116e+00,4.100e-11,2026-11-25T08:35:28Z
+(98) ISW at W + free-streamed source || LCDM,LCDM,newtonian/peak,nan,4.100e-11,2026-11-25T08:35:28Z
+(98) ISW at W + free-streamed source || LCDM,LCDM,cdm/late2,-3.095913e-04,4.100e-11,2026-11-25T08:35:28Z
+(98) ISW at W + free-streamed source || LCDM,LCDM,cdm/D2_D30,9.605022e-01,4.100e-11,2026-11-25T08:35:28Z
+(98) ISW at W + free-streamed source || LCDM,LCDM,cdm/peak,2.200000e+02,4.100e-11,2026-11-25T08:35:28Z
+(98) ISW at W + free-streamed source || PLANCK,PLANCK,newtonian/late2,-1.675096e-04,1.027e-11,2026-11-25T08:52:40Z
+(98) ISW at W + free-streamed source || PLANCK,PLANCK,newtonian/D2_D30,1.921262e+00,1.027e-11,2026-11-25T08:52:40Z
+(98) ISW at W + free-streamed source || PLANCK,PLANCK,newtonian/peak,nan,1.027e-11,2026-11-25T08:52:40Z
+(98) ISW at W + free-streamed source || PLANCK,PLANCK,cdm/late2,6.183299e-04,1.027e-11,2026-11-25T08:52:40Z
+(98) ISW at W + free-streamed source || PLANCK,PLANCK,cdm/D2_D30,5.731647e-01,1.027e-11,2026-11-25T08:52:40Z
+(98) ISW at W + free-streamed source || PLANCK,PLANCK,cdm/peak,2.600000e+02,1.027e-11,2026-11-25T08:52:40Z

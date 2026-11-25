@@ -1,43 +1,44 @@
+# sources: d72eafcd61f8c857
 configuration,background,ell,late_share,utc
-"split by-parts, untouched || EdS",EdS,2,0.998805,2026-10-26T11:03:20Z
-"split by-parts, untouched || EdS",EdS,7,0.999621,2026-10-26T11:03:20Z
-"split by-parts, untouched || EdS",EdS,30,0.999910,2026-10-26T11:03:20Z
-"split by-parts, untouched || LCDM",LCDM,2,0.999203,2026-10-26T11:03:44Z
-"split by-parts, untouched || LCDM",LCDM,7,0.999764,2026-10-26T11:03:44Z
-"split by-parts, untouched || LCDM",LCDM,30,0.999955,2026-10-26T11:03:44Z
-C_0 suppressed || EdS,EdS,2,0.801439,2026-10-26T11:03:56Z
-C_0 suppressed || EdS,EdS,7,0.931001,2026-10-26T11:03:56Z
-C_0 suppressed || EdS,EdS,30,0.984338,2026-10-26T11:03:56Z
-C_0 suppressed || LCDM,LCDM,2,0.805858,2026-10-26T11:04:19Z
-C_0 suppressed || LCDM,LCDM,7,0.934632,2026-10-26T11:04:19Z
-C_0 suppressed || LCDM,LCDM,30,0.985039,2026-10-26T11:04:19Z
-C_2'' suppressed || EdS,EdS,2,0.998805,2026-10-26T11:04:30Z
-C_2'' suppressed || EdS,EdS,7,0.999621,2026-10-26T11:04:30Z
-C_2'' suppressed || EdS,EdS,30,0.999910,2026-10-26T11:04:30Z
-C_2'' suppressed || LCDM,LCDM,2,0.999205,2026-10-26T11:04:54Z
-C_2'' suppressed || LCDM,LCDM,7,0.999764,2026-10-26T11:04:54Z
-C_2'' suppressed || LCDM,LCDM,30,0.999955,2026-10-26T11:04:54Z
-C_1^grav' suppressed || EdS,EdS,2,0.998653,2026-10-26T11:05:06Z
-C_1^grav' suppressed || EdS,EdS,7,0.999570,2026-10-26T11:05:06Z
-C_1^grav' suppressed || EdS,EdS,30,0.999890,2026-10-26T11:05:06Z
-C_1^grav' suppressed || LCDM,LCDM,2,0.999132,2026-10-26T11:05:31Z
-C_1^grav' suppressed || LCDM,LCDM,7,0.999741,2026-10-26T11:05:31Z
-C_1^grav' suppressed || LCDM,LCDM,30,0.999948,2026-10-26T11:05:31Z
-partners suppressed || EdS,EdS,2,0.999945,2026-10-26T11:05:43Z
-partners suppressed || EdS,EdS,7,0.999980,2026-10-26T11:05:43Z
-partners suppressed || EdS,EdS,30,0.999983,2026-10-26T11:05:43Z
-partners suppressed || LCDM,LCDM,2,0.999967,2026-10-26T11:06:07Z
-partners suppressed || LCDM,LCDM,7,0.999988,2026-10-26T11:06:07Z
-partners suppressed || LCDM,LCDM,30,0.999991,2026-10-26T11:06:07Z
-bracket emptied entirely || EdS,EdS,2,-0.000156,2026-10-26T12:11:02Z
-bracket emptied entirely || EdS,EdS,7,-0.000882,2026-10-26T12:11:02Z
-bracket emptied entirely || EdS,EdS,30,-0.002897,2026-10-26T12:11:02Z
-bracket emptied entirely || LCDM,LCDM,2,-0.000202,2026-10-26T12:11:25Z
-bracket emptied entirely || LCDM,LCDM,7,-0.001190,2026-10-26T12:11:25Z
-bracket emptied entirely || LCDM,LCDM,30,-0.004247,2026-10-26T12:11:25Z
-C_0 and partners suppressed || EdS,EdS,2,0.988994,2026-10-26T12:11:38Z
-C_0 and partners suppressed || EdS,EdS,7,0.996332,2026-10-26T12:11:38Z
-C_0 and partners suppressed || EdS,EdS,30,0.997887,2026-10-26T12:11:38Z
-C_0 and partners suppressed || LCDM,LCDM,2,0.990251,2026-10-26T12:12:02Z
-C_0 and partners suppressed || LCDM,LCDM,7,0.996770,2026-10-26T12:12:02Z
-C_0 and partners suppressed || LCDM,LCDM,30,0.997908,2026-10-26T12:12:02Z
+"split by-parts, untouched || EdS",EdS,2,0.998788,2026-11-25T08:31:51Z
+"split by-parts, untouched || EdS",EdS,7,0.999615,2026-11-25T08:31:51Z
+"split by-parts, untouched || EdS",EdS,30,0.999908,2026-11-25T08:31:51Z
+"split by-parts, untouched || LCDM",LCDM,2,0.999193,2026-11-25T08:32:15Z
+"split by-parts, untouched || LCDM",LCDM,7,0.999761,2026-11-25T08:32:15Z
+"split by-parts, untouched || LCDM",LCDM,30,0.999954,2026-11-25T08:32:15Z
+C_0 suppressed || EdS,EdS,2,0.798998,2026-11-25T08:32:27Z
+C_0 suppressed || EdS,EdS,7,0.930016,2026-11-25T08:32:27Z
+C_0 suppressed || EdS,EdS,30,0.984094,2026-11-25T08:32:27Z
+C_0 suppressed || LCDM,LCDM,2,0.803631,2026-11-25T08:32:51Z
+C_0 suppressed || LCDM,LCDM,7,0.933762,2026-11-25T08:32:51Z
+C_0 suppressed || LCDM,LCDM,30,0.984822,2026-11-25T08:32:51Z
+C_2'' suppressed || EdS,EdS,2,0.998788,2026-11-25T08:33:03Z
+C_2'' suppressed || EdS,EdS,7,0.999615,2026-11-25T08:33:03Z
+C_2'' suppressed || EdS,EdS,30,0.999908,2026-11-25T08:33:03Z
+C_2'' suppressed || LCDM,LCDM,2,0.999195,2026-11-25T08:33:29Z
+C_2'' suppressed || LCDM,LCDM,7,0.999761,2026-11-25T08:33:29Z
+C_2'' suppressed || LCDM,LCDM,30,0.999954,2026-11-25T08:33:29Z
+C_1^grav' suppressed || EdS,EdS,2,0.998634,2026-11-25T08:33:41Z
+C_1^grav' suppressed || EdS,EdS,7,0.999563,2026-11-25T08:33:41Z
+C_1^grav' suppressed || EdS,EdS,30,0.999888,2026-11-25T08:33:41Z
+C_1^grav' suppressed || LCDM,LCDM,2,0.999121,2026-11-25T08:34:06Z
+C_1^grav' suppressed || LCDM,LCDM,7,0.999738,2026-11-25T08:34:06Z
+C_1^grav' suppressed || LCDM,LCDM,30,0.999947,2026-11-25T08:34:06Z
+partners suppressed || EdS,EdS,2,0.999945,2026-11-25T08:34:19Z
+partners suppressed || EdS,EdS,7,0.999980,2026-11-25T08:34:19Z
+partners suppressed || EdS,EdS,30,0.999983,2026-11-25T08:34:19Z
+partners suppressed || LCDM,LCDM,2,0.999967,2026-11-25T08:34:43Z
+partners suppressed || LCDM,LCDM,7,0.999988,2026-11-25T08:34:43Z
+partners suppressed || LCDM,LCDM,30,0.999991,2026-11-25T08:34:43Z
+bracket emptied entirely || EdS,EdS,2,-0.000156,2026-11-25T08:34:56Z
+bracket emptied entirely || EdS,EdS,7,-0.000882,2026-11-25T08:34:56Z
+bracket emptied entirely || EdS,EdS,30,-0.002894,2026-11-25T08:34:56Z
+bracket emptied entirely || LCDM,LCDM,2,-0.000202,2026-11-25T08:35:21Z
+bracket emptied entirely || LCDM,LCDM,7,-0.001190,2026-11-25T08:35:21Z
+bracket emptied entirely || LCDM,LCDM,30,-0.004243,2026-11-25T08:35:21Z
+C_0 and partners suppressed || EdS,EdS,2,0.988983,2026-11-25T08:35:33Z
+C_0 and partners suppressed || EdS,EdS,7,0.996328,2026-11-25T08:35:33Z
+C_0 and partners suppressed || EdS,EdS,30,0.997884,2026-11-25T08:35:33Z
+C_0 and partners suppressed || LCDM,LCDM,2,0.990240,2026-11-25T08:35:58Z
+C_0 and partners suppressed || LCDM,LCDM,7,0.996766,2026-11-25T08:35:58Z
+C_0 and partners suppressed || LCDM,LCDM,30,0.997905,2026-11-25T08:35:58Z

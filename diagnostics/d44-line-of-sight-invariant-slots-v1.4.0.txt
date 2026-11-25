@@ -44,31 +44,31 @@ WHAT IS MEASURED
 
     CAMB and CLASS enter only after all of the above is scored, as context.
 
-sources: 49e809cb29743c49
+sources: af9fc09955d045ed
 
 1. COEFFICIENTS, k = 2..400: largest relative frame shift over W > 1e-10
                        rank zero  scattering  gravitational  (b) source-ISW
-   EdS      as built     1.0e+00     1.1e-13        1.8e+00         2.1e+11
-   EdS      paper 1      1.2e-13     1.1e-13        6.0e-16         4.4e-16
-   LCDM     as built     1.0e+00     2.4e-13        1.5e+00         1.0e+02
-   LCDM     paper 1      3.0e-13     2.4e-13        6.1e-16         4.0e-16
+   EdS      as built     1.0e+00     1.2e-13        1.8e+00         2.1e+11
+   EdS      paper 1      1.2e-13     1.2e-13        6.0e-16         4.1e-16
+   LCDM     as built     1.0e+00     2.8e-13        1.5e+00         1.0e+02
+   LCDM     paper 1      2.6e-13     2.8e-13        6.5e-16         4.3e-16
    PLANCK   as built     1.0e+00     1.8e-14        2.0e+00         1.9e+02
-   PLANCK   paper 1      2.1e-14     1.8e-14        5.6e-16         4.0e-16
+   PLANCK   paper 1      2.0e-14     1.8e-14        5.6e-16         4.2e-16
 
 2-3. PER MODE, max over modes of max_l |T_N - T_C| / max_l |T|; each slot against the whole
      three-slot transfer, so a slot that is zero to rounding reads as rounding
-   EdS      three 2.8e-08  slot sw 9.7e-15  slot dop 1.8e-13  slot isw 2.8e-08  five 1.8e+00  direct 1.5e+00  five vs three (CDM) 1.8e+00  identity (c) 1.6e+00
-   LCDM     three 1.9e-10  slot sw 5.0e-16  slot dop 9.0e-16  slot isw 1.9e-10  five 2.1e-01  direct 1.4e+00  five vs three (CDM) 1.0e+00  identity (c) 1.2e+00
-   PLANCK   three 1.8e-10  slot sw 2.0e-15  slot dop 2.9e-15  slot isw 1.8e-10  five 8.4e-02  direct 1.8e+00  five vs three (CDM) 1.1e+00  identity (c) 1.3e+00
+   EdS      three 3.0e-08  slot sw 9.1e-15  slot dop 1.7e-13  slot isw 3.0e-08  five 1.8e+00  direct 1.5e+00  five vs three (CDM) 1.8e+00  identity (c) 1.6e+00
+   LCDM     three 1.7e-10  slot sw 3.1e-16  slot dop 8.1e-16  slot isw 1.7e-10  five 2.1e-01  direct 1.4e+00  five vs three (CDM) 1.0e+00  identity (c) 1.2e+00
+   PLANCK   three 1.8e-10  slot sw 2.1e-15  slot dop 3.5e-15  slot isw 1.8e-10  five 8.4e-02  direct 1.6e+00  five vs three (CDM) 1.1e+00  identity (c) 1.3e+00
 
 4. C_l (Paper 1's signs). Frame residual max_l |C_N - C_C| / C_N; maxima and troughs of D_l;
    first maximum / l_A.
 
    EdS  (l_A = 190.6)
-     three     frame residual 2.9e-14
+     three     frame residual 3.2e-14
        Newtonian maxima [165.0, 495.0]  troughs [345.0]  first 161 = 0.84 l_A
        CDM       maxima [165.0, 495.0]  troughs [345.0]  first 161 = 0.84 l_A
-     reversed  frame residual 2.4e-14
+     reversed  frame residual 2.1e-14
        Newtonian maxima [165.0, 495.0]  troughs [360.0]  first 164 = 0.86 l_A
        CDM       maxima [165.0, 495.0]  troughs [360.0]  first 164 = 0.86 l_A
      five      frame residual 8.2e-04
@@ -80,10 +80,10 @@ sources: 49e809cb29743c49
      integrated-slot auto-spectrum / total, max over l: 2.6e-23
 
    LCDM  (l_A = 170.5)
-     three     frame residual 3.9e-14
+     three     frame residual 3.5e-14
        Newtonian maxima [135.0, 435.0]  troughs []  first 140 = 0.82 l_A
        CDM       maxima [135.0, 435.0]  troughs []  first 140 = 0.82 l_A
-     reversed  frame residual 3.8e-14
+     reversed  frame residual 3.6e-14
        Newtonian maxima [150.0, 450.0]  troughs []  first 144 = 0.85 l_A
        CDM       maxima [150.0, 450.0]  troughs []  first 144 = 0.85 l_A
      five      frame residual 2.2e-04
@@ -94,23 +94,23 @@ sources: 49e809cb29743c49
        CDM       maxima [60.0]  troughs []  first 53 = 0.31 l_A
      integrated-slot auto-spectrum / total, max over l: 3.6e-01
 
-   PLANCK  (l_A = 266.8)
-     three     frame residual 5.3e-15
+   PLANCK  (l_A = 266.7)
+     three     frame residual 4.7e-15
        Newtonian maxima [210.0, 480.0, 705.0, 990.0]  troughs [375.0]  first 205 = 0.77 l_A
        CDM       maxima [210.0, 480.0, 705.0, 990.0]  troughs [375.0]  first 205 = 0.77 l_A
-     reversed  frame residual 1.3e-14
+     reversed  frame residual 8.4e-15
        Newtonian maxima [210.0, 465.0, 720.0, 990.0]  troughs [570.0]  first 208 = 0.78 l_A
        CDM       maxima [210.0, 465.0, 720.0, 990.0]  troughs [570.0]  first 208 = 0.78 l_A
      five      frame residual 4.6e-04
        Newtonian maxima [210.0, 480.0, 705.0, 990.0]  troughs [375.0]  first 205 = 0.77 l_A
        CDM       maxima [210.0, 480.0, 705.0, 990.0]  troughs [375.0]  first 205 = 0.77 l_A
      direct    frame residual 7.3e-01
-       Newtonian maxima [60.0, 375.0]  troughs []  first 61 = 0.23 l_A
-       CDM       maxima [60.0, 375.0]  troughs []  first 61 = 0.23 l_A
+       Newtonian maxima [60.0, 375.0]  troughs []  first 60 = 0.23 l_A
+       CDM       maxima [60.0, 375.0]  troughs []  first 60 = 0.23 l_A
      integrated-slot auto-spectrum / total, max over l: 3.8e-01
 
 SCORED
-   frame, three slots: worst C_l residual 3.9e-14 -> below 1e-12
+   frame, three slots: worst C_l residual 3.5e-14 -> below 1e-12
    (d) series, three slots, Newtonian (troughs between maxima): EdS 2 maxima / 1 troughs, LCDM 2 maxima / 0 troughs, PLANCK 4 maxima / 1 troughs
    (c) is section 2-3's 'identity (c)' column, transfer level.
 

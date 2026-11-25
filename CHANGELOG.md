@@ -5,6 +5,51 @@ All notable changes to this bundle are recorded here. The version policy is in
 
 ## [Unreleased] — v1.4.0 in preparation
 
+### The release regeneration: the hand-over's sign, one photon density, and every artefact re-stamped
+
+- **The hand-over carries (F.1) with its own sign** (T-195, repaired). The
+  pair's multipoles are $(-1)^{\ell+1}$ times (F.1)'s, the overall sign fixed
+  by *Annals I*'s harmonics (supplement, `sec:a3-construction`), so
+  `_continue_by_free_streaming` turns the monopole in and out and passes the
+  dipole as it stands. Ranks 0 and 1 come back bit for bit; a quadrupole read
+  from the continuation now has (F.1)'s sign. `radiation_era.py` states
+  $(-1)^{\ell+1}$ and names the 1+3 derivation of the species, Ma &
+  Bertschinger the comparator.
+- **One photon density** (T-201). The oscillator's loading $R$ read the rounded
+  $\omega_\gamma=2.47\times10^{-5}$ while the background derives
+  $2.47298\times10^{-5}$ from $T_0=2.7255$ K; it reads the background's now,
+  and $R$ falls by 0.12%. On Planck the first maximum stays at 205.5 and the
+  maxima and the first minimum at 210, 480, 720 and 360; the heights relative
+  to CAMB move from $+6.42$, $-1.41$, $+4.48$% to $+6.37$, $-1.35$, $+4.50$%,
+  the rms over $30\le\ell\le990$ from 6.18 to 6.19% and $\ell=840$ from
+  $-14.94$ to $-14.97$%; below $\ell\simeq30$ the curve stays within 1.8%
+  (1.76% at $\ell=2$). ΛCDM's first maximum moves from 139.9 to 139.8. F11's
+  late shares are unchanged to four places at $\ell=2$ and 90 (0.2059,
+  0.1883) and move from 0.0830 to 0.0829 at 210.
+- **Every stamped artefact regenerated** on the release tree, F1 to F11 and
+  D44 to D46, and every diagnostic `run_all.py` runs, D0 to D42; their
+  verdicts are unchanged. D44: the three conditions hold to
+  $2.8\times10^{-13}$, the frames to $3.5\times10^{-14}$ in $C_\ell$, and
+  Planck's maxima stay at 210, 480, 705 and 990 with the trough at 375
+  ($\ell_A=266.7$). D45: the sum-back residual falls by 4.00 to 4.01 with the
+  step, and $\int\mathcal V=0.99983$. D46: halving $\eta_i$ moves $D_\ell$ by
+  $1.31\times10^{-5}$ of its maximum, the frames agree to $2.1\times10^{-15}$,
+  and the energy constraint closes to $3.5\times10^{-10}$. Criterion 5b's gate
+  (D8) reads $5.1\times10^{-6}$ against $10^{-3}$. Captions F4, F5, F9, F10 and
+  F11 carry the regenerated numbers.
+- **The diagnostics' checkpoints are keyed on the code** (T-202): D32 to D35
+  had resumed rows of 26 and 27 October into the rerun, because a checkpoint
+  resumed any row whose configuration it recognised. A checkpoint now names the
+  sources that wrote it and resumes only this tree's rows, with a test that
+  another code's row is recomputed; D32 to D35 are recomputed from scratch.
+- **B-18 registered**: (153)'s $-H\Phi_A$ is not in the 1+3 equations, since
+  (149) drops the lapse term of the expansion gradient; the text is the
+  supplement's (v1.4.11), gated by `c15`. `expansion_coupling=False` is the
+  1+3 equation, and no released number moves.
+- **The release status emits v1.4.0**, which the generator's tuple had left
+  out (T-87's class): the radiation era, F9 and F11 at R, and v1.5.0's
+  prototypes carry A-5, T-21 and `LCDM_MODEL`'s $\Omega_r$.
+
 ### The sources at the visibility peak, D19 restated, and the suite on Windows
 
 - **D42 reads the released sources in $k$** (T-199): the three frame-invariant
@@ -395,10 +440,15 @@ alone, on the released potential.
 
 ### Planned
 
-- **F11**, the formation surface with the radiation era wired, as the lead
-  figure (drawn 18 November 2026; see above). F10 and F9 keep their identifiers and files and move down by their
-  captions' `order`. Registered as deferred to v1.4.0 in `run_all.py`, so the
-  release refuses to ship without it.
+- **A-5, the tight-coupling transition**, moves to v1.5.0 (PI, 19 November
+  2026): the photon pair carried through the transition, with slip and a
+  growing quadrupole, in place of the held moments. It is the precondition of
+  second order in the shear, whose coupling enters the oscillator through the
+  quadrupole tight coupling suppresses, and its registration comes first.
+  With it go $k_D$ at the baryon loading the oscillator runs at (T-21) and
+  $\Omega_r$ in `LCDM_MODEL`. v1.4.0 is the radiation era (A-3) alone.
+- D3 stays deferred to v1.5.0 (S45). F11, deferred to v1.4.0, is drawn and its
+  deferral discharged.
 
 ## [1.3.0] — 2026-11-04
 

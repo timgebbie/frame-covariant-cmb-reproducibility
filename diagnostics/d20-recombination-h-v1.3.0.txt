@@ -24,14 +24,14 @@ arithmetic rather than by choice.**
 ==============================================================================
   quantity                     released      corrected      ratio
   ----------------------------------------------------------------
-  kappa'(eta_*)                  381.92         440.44     1.1532
+  kappa'(eta_*)                  381.88         440.38     1.1532
   z_*                            1125.6         1089.4     0.9678
   eta_*                        0.059585       0.060567     1.0165
   r_theta                        1.9404         1.9394     0.9995
   visibility FWHM             0.0056457      0.0051548     0.9130
-  visibility peak                150.46         157.78     1.0487
-  r_s (sound horizon)          0.031639       0.032086     1.0141
-  l_A = pi r_theta / r_s         192.67          189.9     0.9856
+  visibility peak                150.81         158.25     1.0493
+  r_s (sound horizon)          0.031642       0.032088     1.0141
+  l_A = pi r_theta / r_s         192.66         189.88     0.9856
 
   z_* against CAMB/CLASS at N_eff = 0 (1088.5):
       released   1125.62   (+37.12, +3.41%)
@@ -43,14 +43,14 @@ arithmetic rather than by choice.**
 ==============================================================================
   quantity                     released      corrected      ratio
   ----------------------------------------------------------------
-  kappa'(eta_*)                  232.17         230.53     0.9929
+  kappa'(eta_*)                  232.14          230.5     0.9929
   z_*                            1109.5         1077.4     0.9711
   eta_*                         0.10958        0.11119     1.0148
   r_theta                        3.1955         3.1939     0.9995
   visibility FWHM             0.0097165      0.0093116     0.9583
-  visibility peak                88.343         88.271     0.9992
-  r_s (sound horizon)          0.058124       0.058858     1.0126
-  l_A = pi r_theta / r_s         172.72         170.48     0.9870
+  visibility peak                88.554         88.486     0.9992
+  r_s (sound horizon)          0.058129       0.058863     1.0126
+  l_A = pi r_theta / r_s          172.7         170.46     0.9870
 
   z_* against CAMB/CLASS at N_eff = 0 (1088.5):
       released   1109.49   (+20.99, +1.93%)
@@ -62,14 +62,14 @@ arithmetic rather than by choice.**
 ==============================================================================
   quantity                     released      corrected      ratio
   ----------------------------------------------------------------
-  kappa'(eta_*)                  264.19         258.04     0.9767
+  kappa'(eta_*)                  264.16         258.01     0.9767
   z_*                            1114.6         1079.4     0.9684
   eta_*                        0.069738       0.071321     1.0227
   r_theta                         3.129         3.1274     0.9995
   visibility FWHM             0.0087059      0.0083102     0.9545
-  visibility peak                97.393         97.687     1.0030
-  r_s (sound horizon)          0.036114       0.036832     1.0199
-  l_A = pi r_theta / r_s         272.19         266.75     0.9800
+  visibility peak                97.668         97.967     1.0031
+  r_s (sound horizon)          0.036118       0.036836     1.0199
+  l_A = pi r_theta / r_s         272.16         266.72     0.9800
 
   z_* against CAMB/CLASS at N_eff = 0 (1088.5):
       released   1114.64   (+26.14, +2.40%)

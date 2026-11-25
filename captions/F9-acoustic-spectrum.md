@@ -33,7 +33,7 @@ an undriven, baryon-loaded oscillator gives them odd peaks alone
 (\\textbf{A-3}). CAMB and CLASS are context, not a target
 (decision~\\textbf{S4c}).\\\\[2pt]
 \\textbf{(b)} Both frames, from one solve. The Newtonian and CDM spectra
-coincide to $3.3\\times10^{-14}$ at every multipole: a first-order change of
+coincide to $3.2\\times10^{-14}$ at every multipole: a first-order change of
 frame moves only the dipole, and here it moves nothing at $\\ell\\ge2$.
 """
 +++
@@ -48,7 +48,7 @@ covariant line of sight, for three backgrounds, in two frames.
 | | EdS | ΛCDM | Planck |
 |---|---:|---:|---:|
 | first peak, ℓ | 160 | 140 | 206 |
-| largest frame gap, any ℓ | 2.9e-14 | 3.3e-14 | 3.3e-14 |
+| largest frame gap, any ℓ | 3.2e-14 | 3.0e-14 | 7.8e-15 |
 
 On Planck the potential is solved with the CDM, the baryons and the photons
 from one start deep in the radiation era (the radiation era's construction,

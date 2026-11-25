@@ -11,7 +11,7 @@ surface it sweeps. Planck~2018, CDM frame, 25 multipoles from $\\ell=2$ to
 $\\ell=300$, fourteen epochs from the start of recombination to today. The line
 of sight is eq.~\\eqref{eq:assembly-invariant} with Paper~1's source signs,
 each slot accumulated to each epoch; the $\\eta_0$ column is the full integral
-to $1.7\\times10^{-14}$.\\\\[2pt]
+to $1.4\\times10^{-14}$.\\\\[2pt]
 \\textbf{(a)} $D_\\ell$ against $\\ell$, epoch by epoch, normalised once by the
 maximum of today's curve. \\textbf{(b)} $C_\\ell(\\eta)/C_\\ell(\\eta_0)$ over
 the $(\\ell,\\eta)$ plane.\\\\[2pt]
@@ -49,7 +49,7 @@ the right of recombination, which is the late integrated Sachs–Wolfe effect.
 | late share at ℓ = 2, 3, 4 | **−0.32, −0.41, −0.46** |
 | late share at ℓ = 5–25 | **−0.48 to −0.04** (late power cancels earlier power) |
 | late share above ℓ = 30 | **+0.01 to +0.15**, largest at ℓ = 80 |
-| η₀ column against the full integral | 1.7e-14 |
+| η₀ column against the full integral | 1.4e-14 |
 
 Regenerated on 18 November 2026 (T-197), on the one radiation-era start of
 v1.4.0's first step and the released potential. At v1.3.0 the quadrupole's

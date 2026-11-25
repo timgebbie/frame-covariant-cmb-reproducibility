@@ -56,12 +56,12 @@ THE FOUR THINGS MEASURED
 ==============================================================================
       k     printed/built   corrected/built         +b0/built  corrected/paper1
   ----------------------------------------------------------------------------
-     10         2.500e+00         3.333e-01         1.712e-16         1.712e-16
+     10         2.500e+00         3.333e-01         1.164e-16         1.164e-16
                    0.0000            0.0000            0.0196            0.0196
-     60         2.500e+00         3.333e-01         1.136e-16         1.136e-16
-                   0.0000            0.0000            0.2535            0.2533
-    300         2.500e+00         3.333e-01         1.304e-16         1.304e-16
-                   0.0000            0.0000            5.2567            5.2670
+     60         2.500e+00         3.333e-01         9.525e-17         9.525e-17
+                   0.0000            0.0000            0.2534            0.2531
+    300         2.500e+00         3.333e-01         9.108e-17         9.108e-17
+                   0.0000            0.0000            5.2499            5.2671
   S48 ledger, corrected, as built: kappa'-carrying part of C_0 = 0.000e+00  (CLEAN)
   S48 ledger, corrected+b0, as built: kappa'-carrying part of C_0 = 0.000e+00  (CLEAN)
   S48 ledger, corrected, paper 1 (released): kappa'-carrying part of C_0 = 0.000e+00  (CLEAN)
@@ -71,12 +71,12 @@ THE FOUR THINGS MEASURED
 ==============================================================================
       k     printed/built   corrected/built         +b0/built  corrected/paper1
   ----------------------------------------------------------------------------
-     10         2.500e+00         3.333e-01         1.292e-16         1.292e-16
+     10         2.500e+00         3.333e-01         1.600e-16         1.600e-16
                    0.0000            0.0000            0.0296            0.0295
-     60         2.500e+00         3.333e-01         1.135e-16         1.135e-16
-                   0.0000            0.0000            0.1810            0.1807
-    300         2.500e+00         3.333e-01         1.104e-16         1.104e-16
-                   0.0000            0.0000            2.2681            2.2595
+     60         2.500e+00         3.333e-01         1.234e-16         1.234e-16
+                   0.0000            0.0000            0.1809            0.1806
+    300         2.500e+00         3.333e-01         7.874e-17         7.874e-17
+                   0.0000            0.0000            2.2657            2.2571
   S48 ledger, corrected, as built: kappa'-carrying part of C_0 = 0.000e+00  (CLEAN)
   S48 ledger, corrected+b0, as built: kappa'-carrying part of C_0 = 0.000e+00  (CLEAN)
   S48 ledger, corrected, paper 1 (released): kappa'-carrying part of C_0 = 0.000e+00  (CLEAN)
@@ -86,15 +86,15 @@ THE FOUR THINGS MEASURED
 ==============================================================================
   PASS   A1  gamma = 2.5 for printed, as built              worst 4.4e-16
   PASS   A2  gamma = 0.333333 for corrected, as built       worst 5.6e-17
-  PASS   A3  gamma = 0 for corrected+b0, as built           worst 1.7e-16
-  PASS   A4  gamma = 0 for corrected, paper 1 (released)    worst 1.7e-16
+  PASS   A3  gamma = 0 for corrected+b0, as built           worst 1.6e-16
+  PASS   A4  gamma = 0 for corrected, paper 1 (released)    worst 1.6e-16
   PASS   A5  C_1 does not move with the row                 worst 0.0e+00
   PASS   A6  C_2 does not move with the row                 worst 0.0e+00
   PASS   A7  every corrected C_0 is clean under S48         worst 0.0e+00
   Newtonian rank-0 source, printed, as built              |C_0|/|C_1| 0.0000 to 0.0000
   Newtonian rank-0 source, corrected, as built            |C_0|/|C_1| 0.0000 to 0.0000
-  Newtonian rank-0 source, corrected+b0, as built         |C_0|/|C_1| 0.0196 to 5.2567
-  Newtonian rank-0 source, corrected, paper 1 (released)  |C_0|/|C_1| 0.0196 to 5.2670
+  Newtonian rank-0 source, corrected+b0, as built         |C_0|/|C_1| 0.0196 to 5.2499
+  Newtonian rank-0 source, corrected, paper 1 (released)  |C_0|/|C_1| 0.0196 to 5.2671
 
   READING THIS
   ------------

@@ -174,7 +174,7 @@ ARTEFACTS: list[Artefact] = [
              script="scripts/figure_f10_formation_surface.py",
              tests=("test_the_slots_accumulated_to_eta_0_are_the_slots",),
              note="each slot accumulated in eta on Planck, both frames; the eta_0 "
-                  "column is the full integral to 2e-14. After the visibility "
+                  "column is the full integral to 1.4e-14. After the visibility "
                   "closes the integrated Sachs-Wolfe term deposits 1-15% of "
                   "today's C_l above l = 30 and cancels 4-48% of it at l = 2-25 "
                   "(regenerated 18 November 2026, T-197), where every F10 drawn "
@@ -188,10 +188,38 @@ ARTEFACTS: list[Artefact] = [
                     "test_e_the_two_frames_agree_under_the_solved_potential"),
              note="F10 with both slots on the potential solved through the "
                   "radiation era, to l = 910, v1.4.0's lead figure; the eta_0 "
-                  "column is the full integral to 3e-14. The late integrated "
+                  "column is the full integral to 4.5e-14. The late integrated "
                   "Sachs-Wolfe term deposits a positive share at every "
                   "multipole, 21% of C_2 and 19% at l = 90, where on the "
                   "released potential it cancels 4-48% from l = 2 to 25"),
+    Artefact("the radiation era (A-3): one start, the potential solved, the baryons' own term",
+             "R", "v1.4.0",
+             module="functions.spectra.radiation_era",
+             objects=("solve_mode",),
+             script="scripts/diagnostic_d46_the_solved_potential.py",
+             tests=("test_the_start_lies_on_both_constraints",
+                    "test_g1_the_solve_is_d_over_a_where_omega_r_vanishes",
+                    "test_g2_the_wiring_cannot_move_a_background_without_radiation",
+                    "test_the_energy_constraint_closes_with_the_baryons_own_term",
+                    "test_e_the_two_frames_agree_under_the_solved_potential"),
+             note="every mode from one start deep in the radiation era on the "
+                  "growing mode, its potential integrated with the CDM, the "
+                  "baryons and the photons (sec:a3-construction, three "
+                  "registered steps). The registered test passes on F9 and "
+                  "D46: (e) the frames agree; (f) the first maximum at 205.5 "
+                  "against 206 +- 6, with an interior minimum at 360; (g1) D/a "
+                  "where Omega_r = 0; (g2) those backgrounds unchanged. The "
+                  "heights are recorded, not gated"),
+    Artefact("F9 - the angular spectrum with the radiation era solved", "R", "v1.4.0",
+             module="functions.spectra.radiation_era",
+             objects=("solve_mode",),
+             script="scripts/figure_f9_acoustic_spectrum.py",
+             tests=("test_e_the_two_frames_agree_under_the_solved_potential",
+                    "test_the_three_slots_give_one_transfer_in_both_frames"),
+             note="the v1.3.0 figure on the solved potential: on Planck the "
+                  "maxima at l = 210, 480 and 720 and the first interior "
+                  "minimum at 360, CAMB's on the same grid, the first maximum "
+                  "at 205.5 against CAMB's 206.1 by one estimator"),
     Artefact("the stamped Planck 2018 set, wired as PLANCK_MODEL", "S", "v1.2.0",
              module="functions.background.flrw",
              objects=("PLANCK_MODEL", "OMEGA_GAMMA_H2"),
@@ -325,6 +353,13 @@ ARTEFACTS: list[Artefact] = [
                      "the interface spec S24 is accepted but not frozen (S25)")),
     Artefact("bundle1-v1.5.0's factorised interface", "P", "v1.5.0",
              blocks=("S24 accepted as option (a); the contract is not yet code",)),
+    # Moved from v1.4.0 on 19 November 2026 with A-5: v1.4.0 is A-3 alone.
+    Artefact("A-5, the tight-coupling transition: slip and a growing quadrupole", "P", "v1.5.0",
+             blocks=("its registration is the supplement's, and comes first",)),
+    Artefact("k_D at the baryon loading the oscillator runs at (T-21)", "P", "v1.5.0",
+             blocks=("diffusion_scale is still called with R = 0",)),
+    Artefact("Omega_r restored to LCDM_MODEL", "P", "v1.5.0",
+             blocks=("LCDM_MODEL carries Omega_r = 0.0; the radiation era runs on PLANCK_MODEL",)),
 ]
 
 #: What each release is waiting on, beyond its own artefacts.
@@ -335,6 +370,8 @@ GATES: dict[str, tuple[str, ...]] = {
     "v1.2.0": ("none. Criterion 5b closed 2026-10-15 under decision S4c: "
                "gated on (102) against (177)-(179) at 9.5e-06 against 1e-03, "
                "with CAMB and CLASS reported alongside as context",),
+    "v1.4.0": ("none. The registered test of sec:a3-construction passes: "
+               "(e), (f), (g1) and (g2) on F9 and D46",),
     "v1.5.0": ("Paper 1 (S2)", "v1.2.0, because a correction can only be read "
                "where the thing it corrects is already right"),
 }
@@ -427,7 +464,9 @@ def render(artefacts: list[Artefact]) -> str:
     # the generated file had no v1.3.0 section at all while the tree was
     # v1.3.0-dev with D9-D17, S40-S45 and T-51..T-96 landed. A generator
     # that cannot emit a release is a register that silently omits it.
-    for release in ("v1.0.0", "v1.1.0", "v1.2.0", "v1.3.0", "v1.5.0"):
+    # **v1.4.0 was missing from this tuple until 2026-11-24**, T-87's class
+    # again: F11 was declared at v1.4.0 and the generated file never showed it.
+    for release in ("v1.0.0", "v1.1.0", "v1.2.0", "v1.3.0", "v1.4.0", "v1.5.0"):
         here = [a for a in artefacts if a.release == release]
         if not here:
             continue

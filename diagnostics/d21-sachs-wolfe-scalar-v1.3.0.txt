@@ -40,26 +40,26 @@ their own earlier wording and against this file's first draft.
   ------------------------------------------------------------
       2 newtonian          0.993177              9.195e-02
       2 cdm                0.993177              9.195e-02
-     10 newtonian          0.938372              5.463e-02
-     10 cdm                0.938372              5.463e-02
-     60 newtonian         -0.483459                    nan
-     60 cdm               -0.483459                    nan
-    300 newtonian         -0.957360                    nan
-    300 cdm               -0.957360                    nan
+     10 newtonian          0.938375              5.462e-02
+     10 cdm                0.938375              5.462e-02
+     60 newtonian         -0.483331                    nan
+     60 cdm               -0.483331                    nan
+    300 newtonian         -0.956633                    nan
+    300 cdm               -0.956633                    nan
 
 ==============================================================================
   PLANCK
 ==============================================================================
       k frame        ratio at eta_*   worst, super-horizon
   ------------------------------------------------------------
-      2 newtonian          0.621685              1.066e+00
-      2 cdm                0.621685              1.066e+00
-     10 newtonian          0.552134              2.722e-01
-     10 cdm                0.552134              2.722e-01
-     60 newtonian         -1.384886                    nan
-     60 cdm               -1.384886                    nan
-    300 newtonian         -0.688628                    nan
-    300 cdm               -0.688628                    nan
+      2 newtonian          0.621685              1.065e+00
+      2 cdm                0.621685              1.065e+00
+     10 newtonian          0.552143              2.722e-01
+     10 cdm                0.552143              2.722e-01
+     60 newtonian         -1.384457                    nan
+     60 cdm               -1.384457                    nan
+    300 newtonian         -0.687372                    nan
+    300 cdm               -0.687372                    nan
 
   READING THIS
   ------------
