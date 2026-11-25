@@ -1,14 +1,21 @@
 # 1+3 covariant CMB anisotropies reproducibility bundle
 
-Version: **v1.4.0-dev** — the radiation era on the frame-invariant line of
-sight: the radiation-era potential and the driving it gives the acoustic
-oscillator (approximation A-3). The supplement registered the test of this
-work before the work began, and the test passes.
-**Last release: v1.3.0** — 4 November 2026: the line-of-sight integral
-assembled from Paper 1's linear redshift source as a Sachs–Wolfe, a Doppler
-and an integrated slot, each invariant under a change of frame. The two frames
-give one $C_\ell$ to $4\times10^{-14}$ (D44), the slots sum back to the
-integral they rearrange (D45), and F9 and F10 are drawn from them.
+Version: **v1.4.0** — the radiation era on the frame-invariant line of
+sight. Each mode starts deep in the radiation era on the adiabatic growing
+mode, and its potential is solved with the CDM, the baryons and the photons,
+the photons' anisotropic stress closing it after decoupling; that potential
+drives the acoustic oscillator and both slots (approximation A-3). The
+supplement registered the test of this work before the work began, and the
+test passes: on Planck the first maximum lies at 205.5, inside the registered
+$206\pm6$, and the maxima and the first interior minimum fall where CAMB's do
+on the same grid. The heights are recorded and not gated; the tight-coupling
+transition (A-5) is v1.5.0's.
+**Last release: v1.4.0** — 25 November 2026. The previous release, v1.3.0
+(tagged 2026-11-04), assembled the line-of-sight integral from Paper 1's
+linear redshift source as a Sachs–Wolfe, a Doppler and an integrated slot,
+each invariant under a change of frame: the two frames give one $C_\ell$ to
+$4\times10^{-14}$ (D44), the slots sum back to the integral they rearrange
+(D45), and F9 and F10 are drawn from them.
 
 Supplement: **v1.4.14** — `SUPPLEMENTARY-MATERIAL-v1.4.14.tex`. The supplement
 has its own version line. An edition records the state of the documentation
@@ -529,7 +536,7 @@ precondition for the next, so the version numbers follow the physics.
 | **v1.1.0** | *What does the spectrum need that it does not have?* A visibility of finite width, since an instantaneous last scattering has no damping tail | Peebles' effective three-level atom replaces equilibrium Saha and becomes the default (S22): `peebles.py`, `decoupling.py`. The visibility peak moves from $z\simeq1300$ to $1107$ and widens by about 40%, and that width sets the Silk envelope | F6 · released |
 | **v1.2.0** | *Is the antecedent's own algebra self-consistent when evaluated?* The full linear source, and (102) carried with a generic $u^a$ and specialised back | the complete rank-0, 1 and 2 assembly: `coefficients.py`, `integral_solution.py`, `frame_transform.py`. Criterion 5b closes at $9.5\times10^{-6}$ against $10^{-3}$ | F9, F5, F7, D8 · released |
 | **v1.3.0** | *Is the line of sight frame-invariant?* The line-of-sight integral in frame-invariant slots, built from Paper 1's source, with the acoustic oscillator on the derived recombination grid (S33) | `line_of_sight.py`, `RANK_ONE_SOURCE = "paper 1"` in `coefficients.py`, `two_frame.py`, `acoustic.py` | F9, F10, D44, D45 · released |
-| **v1.4.0** | *What drives the oscillator?* Radiation-era driving (A-3) | the potential solved through the radiation era with the CDM, the baryons and the photons, the photons' anisotropic stress closing it after decoupling, in the oscillator and in both slots; one initial condition and start for every mode, deep in the radiation era (T-192, T-193) | D10, F11 · **current** |
+| **v1.4.0** | *What drives the oscillator?* Radiation-era driving (A-3) | the potential solved through the radiation era with the CDM, the baryons and the photons, the photons' anisotropic stress closing it after decoupling, in the oscillator and in both slots; one initial condition and start for every mode, deep in the radiation era (T-192, T-193) | D10, F11 · released |
 | **v1.5.0** | *What happens when tight coupling ends, and at second order in the shear?* The tight-coupling transition (A-5), then the $\mathcal O(\varepsilon^2\ell)$ couplings that §5.5 of the antecedent discards, kept | the photon pair carried through the transition, with slip and a growing quadrupole, in place of the held moments (A-5), with $k_D$ evaluated at the baryon loading the oscillator runs at and $\Omega_r$ restored to `LCDM_MODEL`; $\tfrac25\mathrm D^c\tau_{ac}$ restored to the dipole equation; $\sigma_{ab}$ enters the oscillator instead of being dropped at $\mathcal O(t_c\varepsilon)$ | D3 · planned |
 
 v1.5.0 is the release the repository is named for. §5.5 of the antecedent
@@ -609,7 +616,7 @@ The complete record, B-1 to B-18, is
 deliberate approximations, A-1 to A-5, are
 `provenance/SOURCE-APPROXIMATIONS-v1.md`.
 
-## Current situation: v1.4.0-dev
+## Current situation: v1.4.0
 
 This bundle is an independent Python reconstruction, from first $1+3$
 covariant principles, of the almost-Friedmann–Lemaître results of T. Gebbie,
@@ -928,7 +935,7 @@ both from the repository root, where the path says which one is meant.
 
 ## Verification status
 
-**Released as v1.3.0; this tree is v1.4.0-dev.** Every artefact carries a
+**Released as v1.4.0; this tree is v1.4.0.** Every artefact carries a
 maturity rung, and a release gates on the rung (S27).
 `provenance/RELEASE-STATUS-v1.md` carries the rungs and is generated and
 verified: a claim whose module, object, test or harness entry is missing fails
@@ -963,9 +970,9 @@ This file does not assert where the released tag sits. The repository carries
 that, so this file carries the check (T-30):
 
 ```
-git tag --list v1.3.0                                  # does it exist
-git log --oneline -1 v1.3.0                            # where does it point
-git merge-base --is-ancestor v1.3.0 HEAD; echo $?      # 0 if it is behind the tip
+git tag --list v1.4.0                                  # does it exist
+git log --oneline -1 v1.4.0                            # where does it point
+git merge-base --is-ancestor v1.4.0 HEAD; echo $?      # 0 if it is behind the tip
 ```
 
 `PORTABLE-MANIFEST-SHA256.txt` is the manifest that binds: it excludes the

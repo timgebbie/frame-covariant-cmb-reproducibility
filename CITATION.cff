@@ -5,10 +5,10 @@ type: software
 # Tracks the tag that exists, not the one being prepared. GitHub's "Cite this
 # repository" reads this field, so a version here that has not been released
 # asserts a release that cannot be fetched.
-version: "1.3.0"
+version: "1.4.0"
 # Stamped by scripts/bump_release.py together with the version above, so the
 # two cannot disagree about which release this file describes.
-date-released: 2026-11-04
+date-released: 2026-11-25
 authors:
   - family-names: Gebbie
     given-names: Tim
@@ -42,7 +42,7 @@ preferred-citation:
   url: "https://arxiv.org/abs/astro-ph/9912072v4"
   version: "v4"
   license: CC-BY-4.0
-  notes: "Paper 1, arXiv:astro-ph/9912072v4, submitted to General Relativity and Gravitation 2026-10-16. CITE IT VERSIONED: v4 is Paper 1, v3 is the correction, v1/v2 are the legacy 1999 work."
+  notes: "Paper 1, arXiv:astro-ph/9912072v4, submitted 2026-10-16. CITE IT VERSIONED: v4 is Paper 1, v3 is the correction, v1/v2 are the legacy 1999 work."
 keywords:
   - cosmic microwave background
   - 1+3 covariant formalism

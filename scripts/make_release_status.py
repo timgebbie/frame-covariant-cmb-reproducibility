@@ -180,7 +180,7 @@ ARTEFACTS: list[Artefact] = [
                   "(regenerated 18 November 2026, T-197), where every F10 drawn "
                   "from (102) showed none"),
     Artefact("F11 - the formation surface with the radiation era solved",
-             "R", "v1.4.0",
+             "S", "v1.4.0",
              module="functions.spectra.radiation_era",
              objects=("solve_mode",),
              script="scripts/figure_f10_formation_surface.py",
@@ -193,7 +193,7 @@ ARTEFACTS: list[Artefact] = [
                   "multipole, 21% of C_2 and 19% at l = 90, where on the "
                   "released potential it cancels 4-48% from l = 2 to 25"),
     Artefact("the radiation era (A-3): one start, the potential solved, the baryons' own term",
-             "R", "v1.4.0",
+             "S", "v1.4.0",
              module="functions.spectra.radiation_era",
              objects=("solve_mode",),
              script="scripts/diagnostic_d46_the_solved_potential.py",
@@ -210,7 +210,7 @@ ARTEFACTS: list[Artefact] = [
                   "against 206 +- 6, with an interior minimum at 360; (g1) D/a "
                   "where Omega_r = 0; (g2) those backgrounds unchanged. The "
                   "heights are recorded, not gated"),
-    Artefact("F9 - the angular spectrum with the radiation era solved", "R", "v1.4.0",
+    Artefact("F9 - the angular spectrum with the radiation era solved", "S", "v1.4.0",
              module="functions.spectra.radiation_era",
              objects=("solve_mode",),
              script="scripts/figure_f9_acoustic_spectrum.py",

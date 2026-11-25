@@ -3,7 +3,7 @@
 All notable changes to this bundle are recorded here. The version policy is in
 `README.md` under *Version-control policy*.
 
-## [Unreleased] — v1.4.0 in preparation
+## [1.4.0] — 2026-11-25
 
 ### The release regeneration: the hand-over's sign, one photon density, and every artefact re-stamped
 
@@ -61,7 +61,7 @@ All notable changes to this bundle are recorded here. The version policy is in
   out (T-87's class): the radiation era, F9 and F11 at R, and v1.5.0's
   prototypes carry A-5, T-21 and `LCDM_MODEL`'s $\Omega_r$.
 
-### The supplement and the README at the tag (v1.4.8 to v1.4.13)
+### The supplement and the README at the tag (v1.4.8 to v1.4.14)
 
 - **v1.4.8** (`979cdc3`): the radiation era's third step on the record in four
   places, with the registered test's (f) the first maximum and the interior
@@ -87,6 +87,13 @@ All notable changes to this bundle are recorded here. The version policy is in
   1+3 equation.
 - **v1.4.12** (`13de4f2`): the figure section re-spliced from the regenerated
   captions. **v1.4.13**: the model table it inputs regenerated (T-204).
+- **v1.4.14** (`d93fe65`): the release edition. Every number quoted from an
+  artefact the regeneration moved is re-read against it, among them the two
+  frames on Planck to $8\times10^{-15}$, the $\eta_i$ halving
+  $1.3\times10^{-5}$, D44's conditions to $2.8\times10^{-13}$ and criterion
+  5b's $5.1\times10^{-6}$ on the release tree; D18's $\kappa'(\eta_\ast)$ and
+  D45's halving paragraph are brought to the shipped reports; B-18 enters at
+  its sites.
 
 ### The sources at the visibility peak, D19 restated, and the suite on Windows
 
