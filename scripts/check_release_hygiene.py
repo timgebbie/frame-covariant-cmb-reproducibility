@@ -649,14 +649,23 @@ STAMPED = (
      "scripts/diagnostic_d35_which_term_accumulates.py"),
 )
 
+#: Generated documents that carry the stamp in their own comment syntax
+#: (`<!-- sources: -->`, `% sources:`) --- T-204. The model table is the one the
+#: supplement inputs, so a stale one is a stale number in print.
+STAMPED_DOCUMENTS = (
+    ("provenance/MODEL-PARAMETERS-v1.3.0.md", "scripts/make_model_table.py"),
+    ("tables/model-parameters-v1.3.0.tex", "scripts/make_model_table.py"),
+    ("tables/model-parameters-layout-v1.3.5.tex", "scripts/make_model_table.py"),
+)
+
 #: A generated CSV computed from another generated CSV names the stamp it read.
 #: F4 is F3's $C_\ell$ summed, so a regenerated F3 makes F4 stale as surely as
 #: F4's own code changing does.
 READS = (("outputs/f4-correlation.csv", "outputs/f3-angular-spectrum.csv"),)
 
 
-def check_generated_csvs_are_stamped(failures: list[str]) -> str:
-    """Every generated CSV names the code that wrote it; the stale ones are listed."""
+def check_generated_files_are_stamped(failures: list[str]) -> str:
+    """Every generated file names the code that wrote it, and a stale one fails."""
     sys.path.insert(0, str(ROOT / "scripts"))
     from _fingerprint import source_fingerprint, stamp_of
     stale: list[str] = []
@@ -673,6 +682,17 @@ def check_generated_csvs_are_stamped(failures: list[str]) -> str:
             continue
         if carried != source_fingerprint(script):
             stale.append(csv_rel)
+    for doc_rel, script_rel in STAMPED_DOCUMENTS:
+        doc, script = ROOT / doc_rel, ROOT / script_rel
+        if not doc.is_file() or not script.is_file():
+            failures.append(f"{doc_rel} or its generator {script_rel} is missing.")
+            continue
+        head = "".join(doc.read_text(encoding="utf-8").splitlines(True)[:3])
+        found = re.search(r"sources:\s*([0-9a-f]{16})", head)
+        if not found:
+            failures.append(f"{doc_rel} carries no sources stamp (T-204).")
+        elif found.group(1) != source_fingerprint(script):
+            stale.append(doc_rel)
     for derived_rel, source_rel in READS:
         derived = ROOT / derived_rel
         if not derived.is_file():
@@ -684,6 +704,7 @@ def check_generated_csvs_are_stamped(failures: list[str]) -> str:
         elif (not reads[0].rstrip().endswith(stamp_of(ROOT / source_rel))
               and derived_rel not in stale):
             stale.append(derived_rel)
+    n = len(STAMPED) + len(STAMPED_DOCUMENTS)
     if stale:
         # **T-203: a stale stamp fails.** It used to be listed under the PASS
         # banner with exit 0, so from 19 to 25 November a tree on which 0 of 15
@@ -693,12 +714,9 @@ def check_generated_csvs_are_stamped(failures: list[str]) -> str:
         # `functions/` lands with the regeneration that re-stamps it; until then
         # its branch is red, which is what it is.
         failures.append(
-            f"{len(stale)} of {len(STAMPED)} generated CSVs carry a stamp this "
-            f"tree's code does not compute; regenerate them: {', '.join(stale)} "
-            "(T-197, T-203).")
-        return (f"      {len(STAMPED) - len(stale)}/{len(STAMPED)} generated CSVs carry this "
-                f"tree's stamp.")
-    return f"      {len(STAMPED)}/{len(STAMPED)} generated CSVs carry this tree's stamp."
+            f"{len(stale)} of {n} generated files carry a stamp this tree's code "
+            f"does not compute; regenerate them: {', '.join(stale)} (T-197, T-203).")
+    return f"      {n - len(stale)}/{n} generated files carry this tree's stamp."
 
 
 def main() -> int:
@@ -711,7 +729,7 @@ def main() -> int:
     artefacts = check_no_build_artefacts(failures)
     audited = check_generated_artefacts_are_current(failures)
     freshness = check_built_artefacts_are_not_stale(failures)
-    stamps = check_generated_csvs_are_stamped(failures)
+    stamps = check_generated_files_are_stamped(failures)
 
     if failures:
         print(f"FAIL  {len(failures)} release-hygiene problem(s):")

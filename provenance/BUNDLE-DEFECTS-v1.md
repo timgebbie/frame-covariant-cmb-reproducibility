@@ -13223,3 +13223,19 @@ Repaired: a stale stamp, or a CSV computed from a source since regenerated, is
 a failure naming what to regenerate, and the test's two staleness cases now
 assert the failure. A change to `functions/` lands with its regeneration, and
 its branch is red until then.
+
+## T-204 — The model table the supplement inputs stood outside the harness
+
+`scripts/make_model_table.py` writes the table of the three backgrounds three
+ways: `provenance/MODEL-PARAMETERS-v1.3.0.md`, `tables/model-parameters-v1.3.0.tex`
+and `tables/model-parameters-layout-v1.3.5.tex`, which the supplement inputs.
+Each carries the stamp of the code that wrote it, and nothing ran the generator:
+it was not in `run_all.py`, and no gate read the stamp, which stood at 31
+October. The v1.4.0 release regeneration rewrote every artefact `run_all.py`
+knows of and left this one, so the supplement went on printing $R(\eta_\ast)$,
+$r_s$ and $\ell_A$ from before T-201. Regenerated, on Planck: $R(\eta_\ast)$
+0.628678 → 0.627922, $r_s$ 0.0368321 → 0.0368363, $\ell_A$ 266.75 → 266.72 (on
+Einstein–de Sitter 190.581 → 190.564, ΛCDM 170.476 → 170.461). Repaired:
+`run_all.py` runs the generator before the supplement build, and the hygiene
+gate checks the three renderings' stamps beside the CSVs' (a stale one fails,
+T-203); the supplement advances to v1.4.13 for the changed input.

@@ -521,6 +521,12 @@ def main() -> int:
     print("\n--- tables " + "-" * 50)
     if run([sys.executable, "scripts/make_tables.py"], "audit tables"):
         failures.append("tables")
+    # **The model table, which the supplement inputs, is generated here --- T-204.**
+    # It stood outside this harness from 31 October, so the v1.4.0 release
+    # regeneration left it stale and the supplement printed R(eta_*), r_s and
+    # l_A from older code. It runs before the supplement build, which reads it.
+    if run([sys.executable, "scripts/make_model_table.py", "--write"], "model table"):
+        failures.append("model table")
     # **The figure-pages step is retired, not skipped.** From v1.3.14 the
     # supplement is one consolidated file carrying its figure pages inline and
     # inputting no fragment set, so this generator wrote

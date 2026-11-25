@@ -254,9 +254,10 @@ def test_a_generated_csv_without_its_stamp_is_refused(tmp_path, monkeypatch):
     def verdict(text: str, reads=()) -> tuple[list[str], str]:
         csv_path.write_text(text, encoding="utf-8")
         monkeypatch.setattr(gate, "STAMPED", ((str(csv_path), script),))
+        monkeypatch.setattr(gate, "STAMPED_DOCUMENTS", ())
         monkeypatch.setattr(gate, "READS", reads)
         failures: list[str] = []
-        return failures, gate.check_generated_csvs_are_stamped(failures)
+        return failures, gate.check_generated_files_are_stamped(failures)
 
     failures, note = verdict(stamp(ROOT / script) + body)
     assert failures == [] and "1/1" in note, (failures, note)
@@ -282,3 +283,37 @@ def test_a_generated_csv_without_its_stamp_is_refused(tmp_path, monkeypatch):
     assert len(failures) == 1 and csv_path.name in failures[0], (
         "a CSV summed from a source that has since been regenerated passed "
         "the gate: T-203")
+
+
+def test_a_generated_table_with_a_stale_stamp_is_refused(tmp_path, monkeypatch):
+    """**T-204.** The model table the supplement inputs carries its stamp in its
+    own comment syntax and stood outside the harness from 31 October: the v1.4.0
+    regeneration rewrote every artefact `run_all.py` knew of and the supplement
+    went on printing $R(\\eta_\\ast)$ and $\\ell_A$ from older code. Its stamp is
+    read as a CSV's is, and a stale or missing one fails.
+    """
+    import check_release_hygiene as gate
+    from _fingerprint import source_fingerprint
+
+    script = "scripts/make_model_table.py"
+    table = tmp_path / "model-parameters.tex"
+    monkeypatch.setattr(gate, "STAMPED", ())
+    monkeypatch.setattr(gate, "READS", ())
+    monkeypatch.setattr(gate, "STAMPED_DOCUMENTS", ((str(table), script),))
+
+    def verdict(text: str) -> tuple[list[str], str]:
+        table.write_text(text, encoding="utf-8")
+        failures: list[str] = []
+        return failures, gate.check_generated_files_are_stamped(failures)
+
+    body = "\\begin{tabular}{lr}\n$\\ell_A$ & 266.72 \\\\\n\\end{tabular}\n"
+    current = source_fingerprint(ROOT / script)
+    failures, note = verdict(f"% caption copy\n% sources: {current}\n" + body)
+    assert failures == [] and "1/1" in note, (failures, note)
+
+    failures, note = verdict("% sources: 0000000000000000\n" + body)
+    assert len(failures) == 1 and table.name in failures[0] and "0/1" in note, (
+        "a table this tree's code does not compute passed the gate: T-204")
+
+    failures, _ = verdict(body)
+    assert len(failures) == 1 and "no sources stamp" in failures[0], failures

@@ -42,6 +42,12 @@ All notable changes to this bundle are recorded here. The version policy is in
   resumed any row whose configuration it recognised. A checkpoint now names the
   sources that wrote it and resumes only this tree's rows, with a test that
   another code's row is recomputed; D32 to D35 are recomputed from scratch.
+- **The model table is in the harness** (T-204). `make_model_table.py` stood
+  outside `run_all.py` from 31 October, so the supplement's table of the three
+  backgrounds printed $R(\eta_\ast)$, $r_s$ and $\ell_A$ from older code:
+  regenerated, Planck's $R(\eta_\ast)$ is 0.627922 (was 0.628678), $r_s$
+  0.0368363 (0.0368321) and $\ell_A$ 266.72 (266.75). The hygiene gate now
+  checks the stamps of the table's three renderings as it does the CSVs'.
 - **A stale stamp fails the hygiene gate** (T-203). It was listed under the
   PASS banner with exit 0, so from 19 to 25 November a tree on which none of
   the fifteen stamped artefacts was its code's read as passing, to the suite
@@ -55,7 +61,7 @@ All notable changes to this bundle are recorded here. The version policy is in
   out (T-87's class): the radiation era, F9 and F11 at R, and v1.5.0's
   prototypes carry A-5, T-21 and `LCDM_MODEL`'s $\Omega_r$.
 
-### The supplement and the README at the tag (v1.4.8 to v1.4.12)
+### The supplement and the README at the tag (v1.4.8 to v1.4.13)
 
 - **v1.4.8** (`979cdc3`): the radiation era's third step on the record in four
   places, with the registered test's (f) the first maximum and the interior
@@ -80,7 +86,7 @@ All notable changes to this bundle are recorded here. The version policy is in
   with two negative controls. The released `expansion_coupling=False` is the
   1+3 equation.
 - **v1.4.12** (`13de4f2`): the figure section re-spliced from the regenerated
-  captions.
+  captions. **v1.4.13**: the model table it inputs regenerated (T-204).
 
 ### The sources at the visibility peak, D19 restated, and the suite on Windows
 
