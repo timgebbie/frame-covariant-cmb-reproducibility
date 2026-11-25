@@ -47,7 +47,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from _bundle_files import bundle_files  # noqa: E402
+from _bundle_files import bundle_files, order_key  # noqa: E402
 
 REPOSITORY = "frame-covariant-cmb-reproducibility"
 
@@ -69,10 +69,11 @@ GATES = (
 def build(version: str, destination: Path) -> tuple[Path, int]:
     """Write the archive and return its path and file count."""
     prefix = f"{REPOSITORY}-{version}"
-    files = sorted(
-        bundle_files(ROOT),
-        key=lambda p: str(p.relative_to(ROOT)).replace("\\", "/"),
-    )
+    # The members in the bundle's one order, POSIX parts (T-200), which the
+    # manifests use too. A string sort of the joined path would put `a-b/`
+    # before `a/`: a second order for the same set.
+    files = sorted(bundle_files(ROOT),
+                   key=lambda p: order_key(p.relative_to(ROOT).as_posix()))
 
     destination.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(destination, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as archive:

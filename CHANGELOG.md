@@ -5,7 +5,27 @@ All notable changes to this bundle are recorded here. The version policy is in
 
 ## [Unreleased] — v1.5.0 in preparation
 
+### Corrected in the v1.4.0 record
+
+- **D42's summary** read the frames as agreeing to $2.5\times10^{-13}$, the
+  value before the one photon density (T-201); its frame control on the
+  release tree reads $3.3\times10^{-13}$, and the summary now quotes it. Every
+  other number in the report reproduces bit for bit. The v1.4.0 entry below
+  carries the earlier value.
+- **D45's sum-back** falls by 4.00 in every band and both frames. The v1.4.0
+  entry's "4.00 to 4.01" took its 4.01 from the five-against-three row, a
+  different comparison.
+
+### Changed
+
+- `make_release_archive.py` takes its members in the bundle's one file order,
+  POSIX parts (T-200), as the manifests do. For v1.4.0's 342 files the two
+  orders agree, so that archive is unchanged.
+
 ## [1.4.0] — 2026-11-25
+
+Tag `v1.4.0` on `50c8e2c`. Archive `frame-covariant-cmb-reproducibility-v1.4.0.zip`, 342 files, SHA-256
+`7d97dcb836f12db32339556e1775e7838f47f79d116e1cd332dc853ae5a8d8d1`.
 
 ### The release regeneration: the hand-over's sign, one photon density, and every artefact re-stamped
 
