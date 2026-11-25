@@ -1,5 +1,15 @@
 % Computational supplement to the associated paper.
 %
+% v1.5.0, 2026-11-25.  The first edition of the v1.5.0-dev line (P1-T).  The PI's
+%   scope of 25 November: v1.5.0 is the tight-coupling transition (A-5) alone,
+%   with the diffusion scale at the oscillator's baryon loading (T-21) and
+%   LCDM_MODEL's radiation; the O(eps^2 l) couplings move to v1.6.0.  The
+%   released quadrupole feedback is unpolarised (9/10), and the polarised one
+%   (3/4) a measured sensitivity.  A-5 removes the diffusion factor from the
+%   released path, T-21 surviving as the envelope it is scored against.  Every
+%   "v1.5.0" that meant the shear couplings now reads v1.6.0; the
+%   computational label is v1.5.0-dev.
+%
 % v1.4.14, 2026-11-25.  The release edition (P1-T).  Every number quoted from an
 %   artefact the release regeneration moved is re-read against 13de4f2: the
 %   frames on Planck to 8e-15 (was 7e-15), F9's worst gap 3.2e-14, the eta_i
@@ -592,8 +602,8 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.4.14 --- 25 November 2026\\
-  Paper~1 verification ledger and chapter layout; computational v1.4.0}
+\date{Supplement v1.5.0 --- 25 November 2026\\
+  Paper~1 verification ledger and chapter layout; computational v1.5.0-dev}
 
 \begin{document}
 \maketitle
@@ -635,8 +645,9 @@ the CDM, the baryons and the photons, whose anisotropic stress closes it after
 decoupling. On the Planck background the acoustic series is then in place.
 The first maximum lies at $\ell=205.5$, inside the registered $206\pm6$, and
 the maxima and the first interior minimum fall where CAMB's do on the same
-grid. The heights are recorded and not gated, and the tight-coupling
-transition, A-5, is left to the next release. Findings are recorded
+grid. The heights are recorded and not gated. The tight-coupling
+transition, A-5, is v1.5.0, and the second order in the shear v1.6.0.
+Findings are recorded
 against the antecedent (B-1 to B-18) and against the implementation (T-1 to
 T-200), and an inventory of findings is not treated as a certification of
 the physical calculation. CAMB and CLASS provide external comparisons, not
@@ -728,7 +739,8 @@ frame-specialised integral assembly in v1.2.0, to the line-of-sight integral
 in frame-invariant slots in v1.3.0, built from Paper~1's source and summed
 back to the integral it rearranges, and to the radiation era in v1.4.0, built
 in three registered steps (\S\ref{sec:a3-construction}). The tight-coupling
-transition, A-5, moves to v1.5.0 (\S\ref{sec:future-situation}). The pinned README revision
+transition, A-5, is v1.5.0, and the second order in the shear v1.6.0
+(\S\ref{sec:future-situation}). The pinned README revision
 this section cites was \texttt{v1.3.0-dev}, with \texttt{v1.2.0} the last
 tagged release named there.
 At v1.3.0 oscillations had been recovered and the physical spectrum had
@@ -1318,11 +1330,21 @@ frame-invariant and sum back to the integral they rearrange.
 \texttt{v1.4.0} adds radiation-era driving (A-3). Its lead figure is F11,
 the formation surface with the radiation era solved, and its test, registered
 in \S\ref{sec:first-peak}, is met at the third step
-(\S\ref{sec:a3-construction}). The tight-coupling transition and the slip and
-quadrupole terms (A-5) move to \texttt{v1.5.0} as its first step, because the
-shear enters the oscillator through the quadrupole that tight coupling
-suppresses. \texttt{v1.5.0} then restores the nonlinear shear terms retained
-in the exact $1+3$ hierarchy but absent from the linear oscillator,
+(\S\ref{sec:a3-construction}). \texttt{v1.5.0} is the tight-coupling
+transition and the slip and quadrupole terms (A-5), with the diffusion scale
+evaluated at the baryon loading the oscillator runs at (T-21) and
+\texttt{LCDM\_MODEL}'s radiation restored. The PI set that scope on
+25 November, as he set A-3 apart from A-5 for v1.4.0: the shear enters the
+oscillator through the quadrupole that tight coupling suppresses, and A-5
+moves the heights against which the shear terms are to be scored. The
+quadrupole's Thomson feedback is unpolarised on the released path, since
+Paper~1 computes no polarisation, and the polarised feedback is measured
+beside it as a registered sensitivity. Carried through the transition, the
+hierarchy diffuses the photons itself, so A-5 removes the diffusion factor
+from the released path; T-21's scale survives as the envelope the hierarchy
+is scored against while tight coupling holds. \texttt{v1.6.0} then restores
+the nonlinear shear terms retained in the exact $1+3$ hierarchy but absent
+from the linear oscillator,
 with the intended endpoint being an implementation of the
 full \emph{in-scope} physics introduced in Paper~1, using antecedent
 equations subject to the corrections documented here;
@@ -2473,7 +2495,7 @@ calculation performed in the Newtonian frame returns what an observer in the CDM
 frame measures. That is the licence for the Bardeen-variable route, and it is
 a first-order licence.
 
-At $O(\epsilon^2\ell)$ it lapses. The couplings v1.5.0 adds are products of two
+At $O(\epsilon^2\ell)$ it lapses. The couplings v1.6.0 adds are products of two
 first-order quantities, and a product of two frame-dependent quantities is not
 frame-invariant just because each factor's leading frame-dependence cancels.
 Then the frame has to be the one the observer is actually in, and that is
@@ -2484,7 +2506,7 @@ machinery that is frame-dependent --- in the Newtonian frame one rank carries
 everything, in the CDM frame all three are occupied --- and its first two panels
 are the first-order invariance that currently makes that difference harmless.
 The figure shows both at once, which is why it is the right figure to carry into
-v1.5.0: it is a picture of exactly what stops cancelling.
+v1.6.0: it is a picture of exactly what stops cancelling.
 
 \paragraph{The external codes' frames.} Criterion~5b compares this bundle
 against CAMB and CLASS, and has to check the frame each evolves in. That comparison is
@@ -2581,8 +2603,8 @@ cannot show a total common to them, because the total (102) builds is not
 frame-invariant (T-59). The common total is the assembly of
 \S\ref{sec:w-form}, one $C_\ell$ in both frames (D44).
 
-The same distinction fixes the status of v1.5.0. Because v1.0.0 is the
-general case, v1.5.0's restricted case is a recovery and a check --- it
+The same distinction fixes the status of v1.6.0. Because v1.0.0 is the
+general case, v1.6.0's restricted case is a recovery and a check --- it
 must return v1.0.0's numbers, and that requirement is the regression test rather
 than a new result.
 
@@ -6583,7 +6605,7 @@ The external codes of criterion 5b are compared in
 CLASS each model and what the comparison cannot settle. Neither carries the
 $1+3$ covariant formalism, neither distinguishes mode from multipole
 coefficients, and neither carries the $O(\varepsilon^2\ell)$ couplings of
-v1.5.0. So 5b is a check on the linear reconstruction and cannot validate
+v1.6.0. So 5b is a check on the linear reconstruction and cannot validate
 the nonlinear extension, which is why v1.0.0 must carry no $O(\ell)$
 coupling: if one leaked in, the disagreement with CAMB and CLASS would be
 indistinguishable from a bug. The canonical parameter set switches reionisation, lensing and
@@ -6690,7 +6712,7 @@ normalisation, frame and Sachs--Wolfe checks providing specifically
 identified evidence. A test of a source identity is evidence about
 that identity; it is not a claim that the complete lensing and
 aberration system has been implemented or independently certified.
-Second, the subsequent v1.1.0--v1.5.0 physics releases successively
+Second, the subsequent v1.1.0--v1.6.0 physics releases successively
 introduce physical terms into the software. Their acceptance tests
 measure the \emph{implementation} and cannot replace verification
 of the claims of Paper~1.
@@ -6946,8 +6968,8 @@ gated nowhere: within $6.4\%$ of CAMB's at the three maxima, $6.2\%$ rms over
 $30\le\ell\le990$, and $15\%$ low at $\ell=840$ in the damping tail. The line
 of sight still reads the tight-coupling pair, held after $6\,\eta_*$, damping
 enters as a factor on the transfer, and there is no slip, no growing
-quadrupole and no polarisation. That is approximation A-5, which moves to
-v1.5.0 as its first step. The diffusion scale is still evaluated at $R=0$
+quadrupole and no polarisation. That is approximation A-5, which is
+v1.5.0. The diffusion scale is still evaluated at $R=0$
 (T-21), and \texttt{LCDM\_MODEL} still carries no radiation. The bundle's
 radiation is photons alone, as in the CAMB and CLASS runs it is compared
 with, which set $N_{\rm eff}=0$. The late integrated term on the $\Lambda$
@@ -6956,15 +6978,15 @@ backgrounds is measured, $21\%$ of today's $C_2$ on \texttt{PLANCK\_MODEL}
 scores it.
 
 \paragraph{Planned end of the implementation sequence.}
-The physics-facing objective of v1.5.0 is to bring the \emph{full
+The physics-facing objective of v1.6.0 is to bring the \emph{full
 in-scope physics introduced in Paper~1} into the implementation:
 the $O(\varepsilon^2\ell)$ kinematic couplings, their frame
 relabelling and lensing/aberration interpretation, after v1.3.0
-closed the linear assembly and v1.4.0 supplied the radiation era, and with
-the tight-coupling transition (A-5) as its first step. Every antecedent
+closed the linear assembly, v1.4.0 supplied the radiation era and v1.5.0 the
+tight-coupling transition (A-5). Every antecedent
 relation must be used with the corrections and provenance
 qualifications recorded in Paper~1 and this supplement. This is
-the \emph{planned endpoint}, not a claim that v1.5.0 has been
+the \emph{planned endpoint}, not a claim that v1.6.0 has been
 implemented, that all components have been independently
 certified, or that Paper~1 computes out-of-scope tensor amplitudes
 or polarisation.
@@ -8417,9 +8439,9 @@ precedent; the $\Lambda$CDM column is new.
 
 \paragraph{Beyond v2.0.0.} The published bounds are first order in the anisotropy
 parameter. The natural extension is the next order, and this project is placed to
-make it because v1.5.0 supplies the $O(\varepsilon^2\ell)$ couplings a
+make it because v1.6.0 supplies the $O(\varepsilon^2\ell)$ couplings a
 second-order argument needs and no external code carries them. Stated as a
-direction and not a plan: it is gated on v1.5.0, and the correction's sign and
+direction and not a plan: it is gated on v1.6.0, and the correction's sign and
 size are unknown until it is done. It is recorded so the v2.0.0 table is built in
 a shape that can take it. See
 \texttt{provenance/ALMOST-EGS-BOUNDS-v1.md}.
