@@ -3,6 +3,8 @@
 All notable changes to this bundle are recorded here. The version policy is in
 `README.md` under *Version-control policy*.
 
+## [Unreleased] — v1.5.0 in preparation
+
 ## [1.4.0] — 2026-11-25
 
 ### The release regeneration: the hand-over's sign, one photon density, and every artefact re-stamped

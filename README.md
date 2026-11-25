@@ -1,21 +1,19 @@
 # 1+3 covariant CMB anisotropies reproducibility bundle
 
-Version: **v1.4.0** — the radiation era on the frame-invariant line of
-sight. Each mode starts deep in the radiation era on the adiabatic growing
-mode, and its potential is solved with the CDM, the baryons and the photons,
-the photons' anisotropic stress closing it after decoupling; that potential
-drives the acoustic oscillator and both slots (approximation A-3). The
-supplement registered the test of this work before the work began, and the
-test passes: on Planck the first maximum lies at 205.5, inside the registered
-$206\pm6$, and the maxima and the first interior minimum fall where CAMB's do
-on the same grid. The heights are recorded and not gated; the tight-coupling
-transition (A-5) is v1.5.0's.
-**Last release: v1.4.0** — 25 November 2026. The previous release, v1.3.0
-(tagged 2026-11-04), assembled the line-of-sight integral from Paper 1's
-linear redshift source as a Sachs–Wolfe, a Doppler and an integrated slot,
-each invariant under a change of frame: the two frames give one $C_\ell$ to
-$4\times10^{-14}$ (D44), the slots sum back to the integral they rearrange
-(D45), and F9 and F10 are drawn from them.
+Version: **v1.5.0-dev** — the tight-coupling transition (approximation A-5).
+The photon pair is carried through the end of tight coupling, with the
+baryons' slip and a quadrupole that grows as scattering weakens, in place of
+the moments v1.4.0 holds after $6\eta_\ast$. Thomson scattering feeds the
+quadrupole back unpolarised, and the polarised feedback is measured beside
+it. The diffusion scale is evaluated at the baryon loading the oscillator
+runs at, and `LCDM_MODEL` carries its radiation. The supplement registers the
+test of this work before the work begins.
+**Last release: v1.4.0** — 25 November 2026: the radiation era on the
+frame-invariant line of sight. Each mode starts deep in the radiation era on
+the adiabatic growing mode, and its potential is solved with the CDM, the
+baryons and the photons; that potential drives the acoustic oscillator and
+both slots (A-3). On Planck the first maximum lies at 205.5, inside the
+registered $206\pm6$, and the heights are recorded and not gated.
 
 Supplement: **v1.4.14** — `SUPPLEMENTARY-MATERIAL-v1.4.14.tex`. The supplement
 has its own version line. An edition records the state of the documentation
@@ -537,12 +535,15 @@ precondition for the next, so the version numbers follow the physics.
 | **v1.2.0** | *Is the antecedent's own algebra self-consistent when evaluated?* The full linear source, and (102) carried with a generic $u^a$ and specialised back | the complete rank-0, 1 and 2 assembly: `coefficients.py`, `integral_solution.py`, `frame_transform.py`. Criterion 5b closes at $9.5\times10^{-6}$ against $10^{-3}$ | F9, F5, F7, D8 · released |
 | **v1.3.0** | *Is the line of sight frame-invariant?* The line-of-sight integral in frame-invariant slots, built from Paper 1's source, with the acoustic oscillator on the derived recombination grid (S33) | `line_of_sight.py`, `RANK_ONE_SOURCE = "paper 1"` in `coefficients.py`, `two_frame.py`, `acoustic.py` | F9, F10, D44, D45 · released |
 | **v1.4.0** | *What drives the oscillator?* Radiation-era driving (A-3) | the potential solved through the radiation era with the CDM, the baryons and the photons, the photons' anisotropic stress closing it after decoupling, in the oscillator and in both slots; one initial condition and start for every mode, deep in the radiation era (T-192, T-193) | D10, F11 · released |
-| **v1.5.0** | *What happens when tight coupling ends, and at second order in the shear?* The tight-coupling transition (A-5), then the $\mathcal O(\varepsilon^2\ell)$ couplings that §5.5 of the antecedent discards, kept | the photon pair carried through the transition, with slip and a growing quadrupole, in place of the held moments (A-5), with $k_D$ evaluated at the baryon loading the oscillator runs at and $\Omega_r$ restored to `LCDM_MODEL`; $\tfrac25\mathrm D^c\tau_{ac}$ restored to the dipole equation; $\sigma_{ab}$ enters the oscillator instead of being dropped at $\mathcal O(t_c\varepsilon)$ | D3 · planned |
+| **v1.5.0** | *What happens when tight coupling ends?* The tight-coupling transition (A-5) | the photon pair carried through the transition, with the baryons' slip and a growing quadrupole in place of the moments held after $6\eta_\ast$; Thomson scattering's unpolarised feedback on the quadrupole, with the polarised feedback measured beside it; $k_D$ evaluated at the baryon loading the oscillator runs at (T-21), and $\Omega_r$ restored to `LCDM_MODEL` | D3 · **current** |
+| **v1.6.0** | *What happens at second order in the shear?* The $\mathcal O(\varepsilon^2\ell)$ couplings that §5.5 of the antecedent discards, kept | $\tfrac25\mathrm D^c\tau_{ac}$ restored to the dipole equation; $\sigma_{ab}$ enters the oscillator instead of being dropped at $\mathcal O(t_c\varepsilon)$ | planned |
 
-v1.5.0 is the release the repository is named for. §5.5 of the antecedent
+v1.6.0 is the release the repository is named for. §5.5 of the antecedent
 drops the shear coupling from the oscillator at $\mathcal O(t_c\varepsilon)$
-on the grounds that $\sigma_{ab}$ is first order, and v1.5.0 stops assuming
-it. The term it restores, $\tfrac25\mathrm D^c\tau_{ac}$, enters the rank-one
+on the grounds that $\sigma_{ab}$ is first order, and v1.6.0 stops assuming
+it. v1.5.0 comes first: A-5 makes the quadrupole through which the shear
+enters the oscillator, and it moves the heights v1.4.0 records, so the shear
+terms are scored against an A-5 baseline (the PI, 25 November). The term it restores, $\tfrac25\mathrm D^c\tau_{ac}$, enters the rank-one
 row of the matching, the row v1.3.0 placed in frame-invariant slots, so the
 shear will enter an assembly whose frame behaviour is already measured. The
 shear itself is computed: `cdm_frame_shear` returns $\sigma$, $\dot\sigma$ and
@@ -616,7 +617,7 @@ The complete record, B-1 to B-18, is
 deliberate approximations, A-1 to A-5, are
 `provenance/SOURCE-APPROXIMATIONS-v1.md`.
 
-## Current situation: v1.4.0
+## Current situation: v1.5.0-dev
 
 This bundle is an independent Python reconstruction, from first $1+3$
 covariant principles, of the almost-Friedmann–Lemaître results of T. Gebbie,
@@ -635,16 +636,19 @@ are stated where they occur: recombination rests on an imported atomic-physics
 fit, and `functions/spectra/peebles.py` tabulates what is derived there and
 what is not.
 
-v1.3.0 released the frame-invariant line of sight (step 7). v1.4.0 wires the
-radiation era into the oscillator and into both slots, with one initial
-condition and start for every mode; the release sequence above lists what
-each earlier release put back. The radiation era is built in its three
+v1.3.0 released the frame-invariant line of sight (step 7). v1.4.0, tagged
+on 25 November, wires the radiation era into the oscillator and into both
+slots, with one initial condition and start for every mode; the release
+sequence above lists what each earlier release put back. The radiation era is built in its three
 registered steps: the one start, on Planck the solved potential, and the
 baryons' own term in the constraint. Its test, registered before the work
 began, passes: on Planck the two frames agree to $8\times10^{-15}$, the first
 maximum lands at 205.5 inside the registered $206\pm6$, with an interior
 minimum at 360, and the backgrounds without radiation do not move. F11, the
 formation surface with the radiation era solved, is v1.4.0's lead figure.
+The v1.5.0-dev line is open for A-5. Its construction is registered in the
+supplement before it is built, and until it lands this tree computes what
+v1.4.0 released.
 
 ### Artefacts
 
@@ -796,17 +800,22 @@ The decisions that constrain the physics:
 
 **S19** fixes the release order: Paper 1 submitted, then this repository
 public, then each release public as it lands. That is why the repository is
-public and why v1.5.0 is not on the critical path for Paper 1.
+public and why v1.5.0 and v1.6.0 are not on the critical path for Paper 1.
 
 ## Future situation
 
 v1.5.0 is the next row of the release sequence: the tight-coupling transition
-(A-5), then second order in the shear. A-5 comes first because the shear
-enters the oscillator through the quadrupole that tight coupling suppresses.
-In v1.5.0 the photon pair is carried through the transition, with slip and a
-growing quadrupole, in place of the moments v1.4.0 holds after $6\eta_\ast$,
-and the diffusion scale is evaluated at the baryon loading the oscillator
-runs at. Its test is registered before the work begins, against the heights
+(A-5). v1.6.0 then takes the second order in the shear. The PI split them on
+25 November, as he split A-3 from A-5 for v1.4.0: A-5 moves the heights v1.4.0
+records, and the shear enters the oscillator through the quadrupole that
+tight coupling suppresses, so the shear terms are scored against an A-5
+baseline. In v1.5.0 the photon pair is carried through the transition, with
+the baryons' slip and a growing quadrupole, in place of the moments v1.4.0
+holds after $6\eta_\ast$. The quadrupole's Thomson feedback is unpolarised on
+the released path, since Paper 1 computes no polarisation, and the polarised
+feedback is measured beside it as a registered sensitivity. The diffusion
+scale is evaluated at the baryon loading the oscillator runs at, and
+`LCDM_MODEL` carries its radiation. Its test is registered before the work begins, against the heights
 v1.4.0 records and does not gate: within 6.4% of CAMB's at the three maxima
 on Planck and 15% at $\ell=840$. The construction it starts from is
 v1.4.0's: the potential solved with the CDM, the baryons and the photons from
@@ -823,8 +832,8 @@ series, its maxima at $\ell=210$, 480, 705 and 990.
 An envelope term is not changed while the source assembly beneath it is being
 measured, because moving the envelope moves the number the measurement reads,
 and a second-order term added to a linear assembly that is not yet right adds
-a second unknown. A-5 and the shear terms therefore follow v1.4.0 rather
-than run beside it.
+a second unknown. A-5 therefore follows v1.4.0, and the shear terms follow
+A-5, rather than run beside them.
 
 ## Scientific boundary
 
@@ -935,7 +944,7 @@ both from the repository root, where the path says which one is meant.
 
 ## Verification status
 
-**Released as v1.4.0; this tree is v1.4.0.** Every artefact carries a
+**Released as v1.4.0; this tree is v1.5.0-dev.** Every artefact carries a
 maturity rung, and a release gates on the rung (S27).
 `provenance/RELEASE-STATUS-v1.md` carries the rungs and is generated and
 verified: a claim whose module, object, test or harness entry is missing fails
