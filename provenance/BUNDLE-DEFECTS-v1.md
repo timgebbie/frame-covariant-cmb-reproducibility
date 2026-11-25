@@ -13239,3 +13239,19 @@ Einstein–de Sitter 190.581 → 190.564, ΛCDM 170.476 → 170.461). Repaired:
 `run_all.py` runs the generator before the supplement build, and the hygiene
 gate checks the three renderings' stamps beside the CSVs' (a stale one fails,
 T-203); the supplement advances to v1.4.13 for the changed input.
+
+## T-205 — A generated record's readings stood as fixed text over a table that no longer supported them
+
+`provenance/FRAME-INVARIANCE-MEASUREMENT-v1.md` (D6, the F5 measurement of
+(102) in two frames) computes every number it prints, and its two readings were
+fixed sentences: the median disagreement "falls ... roughly like `1/k`", and
+the spread in $\ell$ is flat at one set of $k$ and not at another. Measured with
+the coefficients as built, the table shows a median of order one at every $k$
+(1.00 to 1.84), so the record printed "falls from 1.00e+00 at `k = 1` to
+1.00e+00 at `k = 1`, roughly like `1/k`" and, with the second set empty, "At
+k =  it is not". Both shipped in v1.4.0. Repaired: each reading is chosen by
+the table (`_reading_in_k`, `_reading_in_l` in `scripts/measure_frame_invariance.py`);
+the record now says that (102) as built is not frame-invariant at any $k$
+measured, and points to D44's three conditions; and
+`tests/test_frame_invariance_reading.py` holds a falling median, a median of
+order one and the empty sets to their readings.

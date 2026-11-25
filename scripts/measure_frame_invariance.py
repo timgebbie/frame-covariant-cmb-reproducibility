@@ -115,6 +115,75 @@ def residual_decomposition(k: float, env: dict, table: BesselTable,
     return {"gravitational": grav, "thomson": thom}
 
 
+
+def _ks(ks) -> str:
+    return ", ".join(f"{k:.0f}" for k in ks)
+
+
+def _reading_in_k(per_k: dict, best: float) -> list[str]:
+    """The claim about `k`, read from the table: **T-205**.
+
+    The numbers below were always computed, and the claims were not: "closer as
+    `k` grows, roughly like `1/k`" stood as fixed text, and once (102) was
+    measured with the coefficients as built the table showed a median of order
+    one at every `k` under a sentence saying it fell. A claim is a reading of
+    the table, so it is chosen by the table.
+    """
+    ks = sorted(per_k)
+    meds = np.array([per_k[k][0] for k in ks])
+    slope = float(np.polyfit(np.log(ks), np.log(meds), 1)[0])
+    if meds[-1] < 0.5 * meds[0]:
+        shape = ("   roughly like `1/k` across the grid" if -1.5 < slope < -0.5
+                 else "   across the grid")
+        return [
+            "1. **Close, and closer as `k` grows.** The median disagreement falls",
+            f"   from {meds[0]:.2e} at `k = {ks[0]:.0f}` to {per_k[best][0]:.2e} at"
+            f" `k = {best:.0f}`,",
+            f"{shape} (log-log slope {slope:.2f}). Before **T-25** and **T-27** the",
+            "   same measurement gave one to two hundred percent and, at most `k`,",
+            "   the opposite sign.",
+        ]
+    return [
+        "1. **Of order one at every `k`.** The median disagreement runs from",
+        f"   {meds.min():.2e} to {meds.max():.2e} across the grid and does not fall",
+        f"   with `k` (log-log slope {slope:.2f}): (102) with the coefficients as",
+        "   built is not frame-invariant at any scale measured here. **D44**",
+        "   measures the three frame conditions one by one: as built, the",
+        "   rank-zero and gravitational conditions fail at order one and the",
+        "   scattering condition holds; with Paper 1's source signs all three hold",
+        "   to the integrator's tolerance, and the released line of sight is built",
+        "   from them.",
+    ]
+
+
+def _reading_in_l(flat: list, ragged: list) -> list[str]:
+    """The claim about `l`, read from the table (T-205): either set may be empty."""
+    if flat and ragged:
+        lines = [
+            "2. **The residual is flat in `l` at fixed `k`** wherever the Newtonian",
+            f"   total is not itself passing through zero: at k = {_ks(flat)} the",
+            "   spread over `l` is under 1.5.",
+            f"   At k = {_ks(ragged)} it is not, and there the ratio is reporting",
+            "   where the oscillation was sampled rather than the size of the",
+            "   discrepancy --- T-6 in the continuum.",
+        ]
+    elif flat:
+        lines = [
+            "2. **The residual is flat in `l` at fixed `k`**: the spread over `l`",
+            f"   is under 1.5 at every `k` on the grid ({_ks(flat)}).",
+        ]
+    else:
+        lines = [
+            "2. **The residual is not flat in `l` at any `k`**: the spread over `l`",
+            f"   is 1.5 or more at k = {_ks(ragged)}, where the ratio reports where",
+            "   the oscillation was sampled rather than the size of the discrepancy",
+            "   --- T-6 in the continuum.",
+        ]
+    return lines + [
+        "   Flatness in `l` is the signature of a residual living in the `C_A`,",
+        "   which are `l`-independent, rather than in the projection.",
+    ]
+
 def main() -> int:
     env = build_environment(float(K_COM.max()), line_of_sight_weight="printed")
     needed = required_multipoles(ELLS)
@@ -248,25 +317,9 @@ def main() -> int:
     for k in sorted(per_k):
         med, lo, hi = per_k[k]
         lines.append(f"| {k:.1f} | {med:.2e} | {hi / lo:.1f} | {sector[k]:.1f} |")
+    lines += ["", "## What the numbers say", ""]
+    lines += _reading_in_k(per_k, best) + _reading_in_l(flat, ragged)
     lines += [
-        "",
-        "## What the numbers say",
-        "",
-        f"1. **Close, and closer as `k` grows.** The median disagreement falls",
-        f"   from {per_k[min(per_k)][0]:.2e} at `k = {min(per_k):.0f}` to"
-        f" {per_k[best][0]:.2e} at `k = {best:.0f}`,",
-        "   roughly like `1/k` across the grid. Before **T-25** and **T-27** the",
-        "   same measurement gave one to two hundred percent and, at most `k`,",
-        "   the opposite sign.",
-        f"2. **The residual is flat in `l` at fixed `k`** wherever the Newtonian",
-        f"   total is not itself passing through zero: at k = "
-        + ", ".join(f"{k:.0f}" for k in flat)
-        + " the spread over `l` is under 1.5.",
-        f"   At k = " + ", ".join(f"{k:.0f}" for k in ragged) + " it is not, and",
-        "   there the ratio is reporting where the oscillation was sampled rather",
-        "   than the size of the discrepancy --- T-6 in the continuum. Flatness in",
-        "   `l` is the signature of a residual living in the `C_A`, which are",
-        "   `l`-independent, rather than in the projection.",
         "3. **The rank-one sector cancels exactly, and that is the sharpest thing",
         "   here.** Writing the shifts out, `dC_2' - dC_1` loses its `v'/k` terms",
         "   identically and `dC_0 - dC_1' + dC_2''` loses its `v''/k` terms",

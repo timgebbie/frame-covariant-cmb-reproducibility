@@ -91,18 +91,19 @@ floor buys reproducibility of the file, not a correction to its claim.
 
 ## What the numbers say
 
-1. **Close, and closer as `k` grows.** The median disagreement falls
-   from 1.00e+00 at `k = 1` to 1.00e+00 at `k = 1`,
-   roughly like `1/k` across the grid. Before **T-25** and **T-27** the
-   same measurement gave one to two hundred percent and, at most `k`,
-   the opposite sign.
-2. **The residual is flat in `l` at fixed `k`** wherever the Newtonian
-   total is not itself passing through zero: at k = 1, 5, 20, 60, 140, 300 the spread over `l` is under 1.5.
-   At k =  it is not, and
-   there the ratio is reporting where the oscillation was sampled rather
-   than the size of the discrepancy --- T-6 in the continuum. Flatness in
-   `l` is the signature of a residual living in the `C_A`, which are
-   `l`-independent, rather than in the projection.
+1. **Of order one at every `k`.** The median disagreement runs from
+   1.00e+00 to 1.84e+00 across the grid and does not fall
+   with `k` (log-log slope -0.02): (102) with the coefficients as
+   built is not frame-invariant at any scale measured here. **D44**
+   measures the three frame conditions one by one: as built, the
+   rank-zero and gravitational conditions fail at order one and the
+   scattering condition holds; with Paper 1's source signs all three hold
+   to the integrator's tolerance, and the released line of sight is built
+   from them.
+2. **The residual is flat in `l` at fixed `k`**: the spread over `l`
+   is under 1.5 at every `k` on the grid (1, 5, 20, 60, 140, 300).
+   Flatness in `l` is the signature of a residual living in the `C_A`,
+   which are `l`-independent, rather than in the projection.
 3. **The rank-one sector cancels exactly, and that is the sharpest thing
    here.** Writing the shifts out, `dC_2' - dC_1` loses its `v'/k` terms
    identically and `dC_0 - dC_1' + dC_2''` loses its `v''/k` terms

@@ -15,6 +15,15 @@ All notable changes to this bundle are recorded here. The version policy is in
 - **D45's sum-back** falls by 4.00 in every band and both frames. The v1.4.0
   entry's "4.00 to 4.01" took its 4.01 from the five-against-three row, a
   different comparison.
+- **The F5 record's readings are chosen by its table** (T-205).
+  `provenance/FRAME-INVARIANCE-MEASUREMENT-v1.md` measures (102) in two frames
+  with the coefficients as built, and its median disagreement is of order one
+  at every $k$ (1.00 to 1.84). Its fixed sentences said the median fell
+  "roughly like $1/k$", from 1.00e+00 at $k=1$ to 1.00e+00 at $k=1$, and
+  printed an empty set of $k$ as a sentence. The record now says that (102) as
+  built is not frame-invariant at any $k$ measured and points to D44's three
+  conditions; `tests/test_frame_invariance_reading.py` holds a falling median,
+  one of order one and the empty sets to their readings.
 
 ### Changed
 
