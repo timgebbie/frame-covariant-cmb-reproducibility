@@ -1,5 +1,20 @@
 % Computational supplement to the associated paper.
 %
+% v1.4.14, 2026-11-25.  The release edition (P1-T).  Every number quoted from an
+%   artefact the release regeneration moved is re-read against 13de4f2: the
+%   frames on Planck to 8e-15 (was 7e-15), F9's worst gap 3.2e-14, the eta_i
+%   halving 1.3e-5 (was 1.5e-5), D44's conditions (2.6e-13, 2.8e-13, 6.5e-16),
+%   (b) 4.3e-16, C_l 3.5e-14, per mode 3.0e-8, Planck 4.7e-15 and l_A 266.7,
+%   the restated D42 2.6e-15, F5 8.8e-16, criterion 5b 5.1e-6 worst and
+%   5.0e-11 median on the release tree (v1.2.0's 9.5e-6 and 2.7e-8 kept as
+%   history), D12 8.9e-16 to 1.4e-13, D13's refinement and its 0.32 to 1.82,
+%   D16's shares (94--98%, 0.01%, 0.15%) and kappa'' at eta_*.  Found on the
+%   way and brought to the shipped reports: D18's kappa'(eta_*), 4.40e2 and
+%   2.58e2 (3.82e2 and 2.64e2 were the values before T-108's correction), and
+%   D45's halving and T-191 paragraph, which described the floor before its
+%   repair.  B-18 at its sites: the paragraph title, Part I's range.  The
+%   budget's l_A = 266.750 is kept as that day's, with the release tree's 266.72.
+%
 % v1.4.13, 2026-11-25.  The model table regenerated on 4f97b35: tables/model-parameters-layout-v1.3.5.tex carries the background's photon density (T-201, T-204), which moves R(eta_*), r_s and l_A.
 %
 % v1.4.12, 2026-11-25.  The release regeneration on ee5c2e2: the figure section re-spliced from captions/ (F4, F5, F9, F10, F11 carry the regenerated numbers).
@@ -577,7 +592,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.4.13 --- 25 November 2026\\
+\date{Supplement v1.4.14 --- 25 November 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.4.0-dev}
 
 \begin{document}
@@ -622,7 +637,7 @@ The first maximum lies at $\ell=205.5$, inside the registered $206\pm6$, and
 the maxima and the first interior minimum fall where CAMB's do on the same
 grid. The heights are recorded and not gated, and the tight-coupling
 transition, A-5, is left to the next release. Findings are recorded
-against the antecedent (B-1 to B-17) and against the implementation (T-1 to
+against the antecedent (B-1 to B-18) and against the implementation (T-1 to
 T-200), and an inventory of findings is not treated as a certification of
 the physical calculation. CAMB and CLASS provide external comparisons, not
 inputs or calibration targets, and the supplement makes no claim of new
@@ -2614,7 +2629,7 @@ the frame velocity carry one normalisation.
 
 \paragraph{Two-frame spectra.} An assembled spectrum is computed in two
 frames only through the three-slot assembly, \eqref{eq:assembly-invariant},
-whose two frames give one $C_\ell$ to $3.9\times10^{-14}$
+whose two frames give one $C_\ell$ to $3.5\times10^{-14}$
 (\S\ref{sec:w-form}). Re-evaluating \emph{Annals~II}'s Eqs.~(177)--(179) on
 transformed fields does not give one, as an earlier draft of this section
 claimed it did. Those equations are Newtonian-frame expressions: they descend from (106), which the corrections record flags in
@@ -2836,7 +2851,7 @@ why the text's own check, \emph{``$T(k)\sim+1$ on large scales''}, passes on the
 wrong form. Only the $k^{-2}$ falloff distinguishes them, and that is what the
 fit is a fit to.
 
-\paragraph{The expansion term of (153).} (153) carries $-H\Phi_A$, and the
+\paragraph{B-18: the expansion term of (153).} (153) carries $-H\Phi_A$, and the
 $1+3$ equations do not. \emph{Annals~II} writes the Newtonian-frame monopole
 twice. Its (147),
 $(\tilde{\mathrm D}_a\ln T)\dot{}+H(\tilde{\mathrm D}_a\ln T+\tilde A_a)
@@ -3116,7 +3131,8 @@ be re-run; it is not a gate and nothing is scored against it.
 \subsection{The budget}
 
 The budget is a total, and the split inside it does not survive. Against
-$\ell_A=266.750$ for \texttt{PLANCK\_MODEL}, four configurations are
+$\ell_A=266.750$ for \texttt{PLANCK\_MODEL}, that day's value ($266.72$ on the
+release tree, with the background's photon density, T-201), four configurations are
 measured in this bundle. The $\ell_1$ column is the measurement; the two
 columns right of it are that column divided by $\ell_A$. 31 October 2026 is
 the first date on which the two carry the same repair:
@@ -3606,7 +3622,7 @@ fails at $2$ to $4\times10^{-4}$.
 
 The third step adds the baryons' own term to the constraint and is on the main
 line (D46, F9). It meets the registration: \emph{(e)} holds to
-$7\times10^{-15}$ on F9 at every multipole, \emph{(g1)} to
+$8\times10^{-15}$ on F9 at every multipole, \emph{(g1)} to
 $2.6\times10^{-11}$ and \emph{(g2)} bit for bit; the first maximum of $D_\ell$
 on \texttt{PLANCK\_MODEL} is at $205.5=0.770\,\ell_A$, inside the registered
 $206\pm6$, and by the shared prominence rule the maxima are at $\ell=210$,
@@ -3615,7 +3631,7 @@ CAMB's first interior minimum falling on the same grid. \emph{(f)} is met on
 both of its features. With the baryons' term in it the energy constraint,
 which is never integrated, closes to $3.5\times10^{-10}$ of its terms at
 $\eta_*$ at every $k$, against up to $3\%$ at the second step; halving
-$\eta_i$ moves no $D_\ell$ by more than $1.5\times10^{-5}$ of its maximum,
+$\eta_i$ moves no $D_\ell$ by more than $1.3\times10^{-5}$ of its maximum,
 against the registered $10^{-4}$; replacing \eqref{eq:stress-constraint} by
 $\Phi_A=-\Phi_H$ moves $D_\ell$ by $1.3\%$; and $(\Phi_A+\Phi_H)/\Phi_A$ still
 reaches $-0.0432$ at $1.63\,\eta_*$. The heights are recorded and not scored:
@@ -3993,9 +4009,10 @@ other is deleted, and what remains is a term the exact form does not contain.
 \paragraph{The magnitude.} What survives is $\mathcal V\kappa''\hat v_B$
 against a physical Doppler source $\mathcal V\hat v_B$, so the ratio is
 $\kappa''$. At the visibility maximum $\kappa''=-\kappa'^2$ (c7), and with
-$\kappa'(\eta_*)=3.82\times10^2$ on Einstein--de~Sitter that is
-$|\kappa''|\simeq1.5\times10^5$ in the bundle's units. T-94 measures
-$1.8\times10^5$: it is $\kappa''$, not an anomaly.
+$\kappa'(\eta_*)=4.40\times10^2$ on Einstein--de~Sitter that is
+$|\kappa''|\simeq1.9\times10^5$ in the bundle's units. T-94 measured
+$1.8\times10^5$, and D16 reads $\kappa''(\eta_*)=-1.87\times10^5$ on the
+release tree: it is $\kappa''$, not an anomaly.
 
 \paragraph{The $j_\ell'$ slot and the boundary.} \eqref{eq:byparts-rank1}
 was applied to all of $C_1$. The scattering half was already in final form at
@@ -4203,7 +4220,7 @@ brings tilts rather than features, and concluded an envelope; the conclusion
 does not follow. The identities
 \eqref{eq:weight-w-byparts}--\eqref{eq:kernel-weights} stand as mathematics,
 and the account of the series built on them is withdrawn, with the
-attribution that went with it. The term measured at $93$--$97\%$ of (102)'s
+attribution that went with it. The term measured at $94$--$98\%$ of (102)'s
 bulk, $\mathcal V\kappa''\hat v_B$, belongs to the admissibility
 condition of \S\ref{sec:assembly-rederived} and not to the weight: $C_1$ holds
 $\kappa'\hat v_B$ by (90), so differentiating $C_1$ under either weight
@@ -4255,7 +4272,7 @@ to $2.1\times10^{-14}$ over the visibility window for $k=2$--$600$, which is
 double-precision roundoff, while $C_0$ alone is $0$ in the Newtonian frame and
 $185$ in the CDM frame at $k=300$ (D42 at \texttt{3bb4490}). The restated
 D42 reads the bracket as $C_0$ under Paper~1's source, which equals it
-identically, and finds the two frames agreeing to $2.4\times10^{-15}$. $C_0$
+identically, and finds the two frames agreeing to $2.6\times10^{-15}$. $C_0$
 is built from the
 shear, which vanishes in a shear-free frame, so there the bracket \emph{is}
 $\tfrac k3\tau_1$, the photon dipole relative to a shear-free $u^a$, and it
@@ -4428,12 +4445,12 @@ the four registrations on Einstein--de~Sitter, $\Lambda$CDM and
 \texttt{PLANCK\_MODEL}: at the coefficients for $k=2$ to $400$, and in the
 transfer on F9's $k$ grid to $k=1500$. Registration \emph{(a)} holds. With
 Paper~1's signs the largest relative frame shift over the window
-$W>10^{-10}$ is at most $3.0\times10^{-13}$ at rank zero,
-$2.4\times10^{-13}$ in the scattering condition and $6.1\times10^{-16}$ in the
+$W>10^{-10}$ is at most $2.6\times10^{-13}$ at rank zero,
+$2.8\times10^{-13}$ in the scattering condition and $6.5\times10^{-16}$ in the
 gravitational one, while as built the rank-zero and gravitational conditions
 fail at order one, $1.0$ and $1.5$--$2.0$. Registration \emph{(b)} holds: in
 the Newtonian frame the $W$-carried gravitational content equals
-$-(\Phi_A'-\Phi_H')$ to $4.4\times10^{-16}$, against $10^2$ to $2\times10^{11}$
+$-(\Phi_A'-\Phi_H')$ to $4.3\times10^{-16}$, against $10^2$ to $2\times10^{11}$
 as built, so $\tfrac k3\tau_1$ cancels.
 
 Registration \emph{(c)} was printed against the bracket at $W$ with its
@@ -4442,8 +4459,8 @@ statement about the uncollapsed identity, which is the three-slot assembly
 term for term, because the collapsed form keeps
 $-\kappa'(\eta_*)\Delta C_2(\eta_*)$ at the boundary and drops the bulk
 partners that cancel it. In that form it holds. The three slots give one
-$C_\ell$ in both frames to $3.9\times10^{-14}$, and each mode to
-$2.8\times10^{-8}$, below D44's stated thresholds of $10^{-12}$ for $C_\ell$
+$C_\ell$ in both frames to $3.5\times10^{-14}$, and each mode to
+$3.0\times10^{-8}$, below D44's stated thresholds of $10^{-12}$ for $C_\ell$
 and $10^{-6}$ per mode; and on
 Einstein--de~Sitter the integrated slot carries a fraction
 $2.6\times10^{-23}$ of the power, so no power is put late where the
@@ -4455,7 +4472,7 @@ restatement said it would.
 Registration \emph{(d)} holds on Einstein--de~Sitter and, with the potential
 solved through the radiation era, on \texttt{PLANCK\_MODEL}. The three slots
 are identical in the two frames on every background, to
-$5.3\times10^{-15}$ on \texttt{PLANCK\_MODEL}. On Einstein--de~Sitter, with
+$4.7\times10^{-15}$ on \texttt{PLANCK\_MODEL}. On Einstein--de~Sitter, with
 $\ell_A=190.6$, they put maxima of $D_\ell$ at $\ell=165$ and $495$ and a
 trough at $345$: an interior minimum between $\ell=300$ and $900$, the
 criterion carried from 3 November, with the first maximum at $0.84\,\ell_A$.
@@ -4463,7 +4480,7 @@ The trough was at $360$ and the first maximum at $0.87\,\ell_A$ before the
 first step gave every start its growing-mode dipole (T-193). On $\Lambda$CDM
 they put maxima at $135$ and $435$, the first at $0.82\,\ell_A$, with no
 trough that meets the shared prominence rule. On \texttt{PLANCK\_MODEL}, with
-$\ell_A=266.8$, they put maxima at $210$, $480$, $705$ and $990$ and a first
+$\ell_A=266.7$, they put maxima at $210$, $480$, $705$ and $990$ and a first
 trough at $375$ on D44's $\Delta\ell=15$ grid, with the first maximum at
 $0.77\,\ell_A$, where CAMB and CLASS put maxima at $206$, $491$, $730$,
 $1014$ and $1276$ ($1277$ for CLASS).
@@ -4512,11 +4529,17 @@ the end points against a direct quadrature built from the same arrays, in
 both frames, for $k=2$ to $1500$, and their difference falls by a factor of
 $4.00$ when the $\eta$ step halves, in every band. It is quadrature, and it is
 the direct integral's: under the halving the slots move by at most
-$6\times10^{-5}$ and the direct integral by $5\times10^{-2}$ to $8\times10^2$.
-Five slots against three in the CDM frame is the same quadrature. The one
-floor that does not fall is T-191, $\int\mathcal V=0.99914$, because the
-visibility is interpolated apart from the opacity whose derivative it is;
-with $\mathcal V=W'$ it goes. An evaluation independent of the slots now
+$4\times10^{-4}$ and the direct integral by $6\times10^{-2}$ to $2\times10^4$.
+Five slots against three in the CDM frame is the same quadrature on
+$\Lambda$CDM, falling by $4.00$ in every band; on \texttt{PLANCK\_MODEL} it
+falls by $4.01$ above $k=400$, and below it, where it is at most
+$1.5\times10^{-3}$, by $1.85$ and $1.02$. T-191's floor,
+$\int\mathcal V=0.99914$ while the visibility was interpolated apart from the
+opacity whose derivative it is, is gone with its repair: both now come from
+one $\kappa$ on the grid, and $\int\mathcal V=0.99983$ on
+\texttt{PLANCK\_MODEL} at the released step and $0.99996$ at half of it, a
+quadrature residual that falls by four. With $\mathcal V=W'$ the slots move by
+at most $3\times10^{-3}$. An evaluation independent of the slots now
 confirms their weights.
 
 \paragraph{The $C_1^{\rm grav}$ under $\mathcal V$.} The identity is an
@@ -4796,8 +4819,8 @@ is withdrawn. \eqref{eq:w-form} is three things:
       factor. D18 measures what (102)'s boundary carries instead:
       with \texttt{boundary\_weight\_w} \texttt{False}, $C_1(\eta_*)$ enters
       under the diffusion factor alone --- no $W$, no $\mathcal V$ --- so its
-      bare $\kappa'(\eta_*)$, $3.82\times10^2$ on Einstein--de~Sitter and
-      $2.64\times10^2$ on \texttt{PLANCK\_MODEL}, stands under no exponential
+      bare $\kappa'(\eta_*)$, $4.40\times10^2$ on Einstein--de~Sitter and
+      $2.58\times10^2$ on \texttt{PLANCK\_MODEL}, stands under no exponential
       suppression at all.
 \end{enumerate}
 
@@ -4995,7 +5018,7 @@ $-2v'/k$. Paper~1's source corrects both. Its rank-one gravitational term has
 the opposite sign, so $-C_1'$ carries $-\tfrac k3\tau_1$ and the row's
 $+\tfrac k3\tau_1$ cancels it rather than doubling it. The rank-zero
 coefficient is then the bracket $C_0+\tfrac k3\tau_1$, frame-invariant to
-$2.1\times10^{-14}$ (D42 at \texttt{3bb4490}) and to $2.4\times10^{-15}$ in the
+$2.1\times10^{-14}$ (D42 at \texttt{3bb4490}) and to $2.6\times10^{-15}$ in the
 restated D42. The table of \S\ref{sec:w-form} shows that
 neither correction works alone, and C8h--C8k in \texttt{c8} reproduce its
 rank-zero and gravitational columns from the frame table. So T-107 refutes the
@@ -5062,8 +5085,8 @@ weight; it is required, and \eqref{eq:w-form} produces it whenever a
 streaming term is integrated. The one from differentiating a
 coefficient is not required by anything. Only the provenance
 distinguishes them, so the flag is raised on the provenance. At $\eta_*$ in
-this bundle's units D18 measures $\kappa'=3.82\times10^2$ on
-Einstein--de~Sitter and $2.64\times10^2$ on \texttt{PLANCK\_MODEL}, so a
+this bundle's units D18 measures $\kappa'=4.40\times10^2$ on
+Einstein--de~Sitter and $2.58\times10^2$ on \texttt{PLANCK\_MODEL}, so a
 spurious power of it is two to three orders. What the flag may no
 longer do is settle a question on its own.
 
@@ -5072,7 +5095,7 @@ T-121 is its review. \S\ref{sec:source-derivatives} gives
 $-C_1\simeq k^{-1}(a\mathcal B_1+\kappa'v_B)$ --- a coefficient holding a bare
 $\kappa'$ --- and (102) then differentiates it.
 \S\ref{sec:frame-discrepancy} measures the consequence:
-$\mathcal V\kappa''\hat v_B$ is $93$--$97\%$ of (102)'s integrand, and
+$\mathcal V\kappa''\hat v_B$ is $94$--$98\%$ of (102)'s integrand, and
 D24 measures $99.8\%$ of $|C_1'|$ in the Newtonian frame and
 $109.8\%$ in CDM on the live path. The flag asks whether that is a defect;
 D24 answers it at the level of the observable. Suppressing
@@ -5095,7 +5118,7 @@ on it.
 \paragraph{A local statement, not a general one.} $\kappa''=-\kappa'^2$ holds
 at the visibility maximum, where $\dot{\mathcal V}=0$. So the reading
 of $\mathcal V\kappa''\hat v_B$ as \emph{three powers of $\kappa'$} is local to
-that point, and the measured $93$--$97\%$ share follows because $\mathcal V$
+that point, and the measured $94$--$98\%$ share follows because $\mathcal V$
 concentrates the integrand there. It is not a statement about the integrand at
 arbitrary $\eta$. D24's $99.8$--$109.8\%$ is measured against $|C_1'|$ on the
 live path and is the number to quote for the share.
@@ -5545,7 +5568,7 @@ Differencing the two columns on identical histories and before any
 projection, with no transfer function, no $j_\ell$, no weight and no damping,
 \begin{equation}
   \bigl\lvert\Delta(\hat v_B + C_2)\bigr\rvert
-  \;\in\;\bigl[\,9.3\times10^{-16},\;1.8\times10^{-13}\,\bigr],
+  \;\in\;\bigl[\,8.9\times10^{-16},\;1.4\times10^{-13}\,\bigr],
   \qquad k\in\{1,10,60,300\},
 \end{equation}
 on both the Einstein--de~Sitter and the Planck backgrounds. The source
@@ -5569,17 +5592,17 @@ and the last sign is $+k$. Evaluating the left side (call it $A$) and the right
 side ($B$) on identical histories and identical endpoints, with $M=-C_1$, in
 each frame gives four numbers. Both identities hold: $\lvert A-B\rvert/\lvert
 A\rvert$ sits at $10^{-3}$--$10^{-2}$ and falls under grid refinement,
-$2.83\times10^{-3}\to2.20\times10^{-3}\to2.04\times10^{-3}$ at $(k,\ell)=(10,2)$,
-and $1.105\to0.279\to0.0727$ at $(300,2)$, about $4\times$ per doubling, which
+$1.95\times10^{-3}\to1.01\times10^{-3}\to7.81\times10^{-4}$ at $(k,\ell)=(10,2)$,
+and $1.719\to0.436\to0.115$ at $(300,2)$, about $4\times$ per doubling, which
 is second order and is what the trapezoidal rule gives on an oscillatory
 integrand.
 
 Since $A$ and $B$ are the same integral by an exact identity, a difference has
 only two available explanations, and refinement removes one of them.
 Boundary-against-bulk bookkeeping is excluded. But
-$\lvert A_N - A_C\rvert$ is $1.00$ to $1.78$ of scale in every valid cell, with
-the sign reversed between columns: the coefficient definitions carry the whole
-of the gap.
+$\lvert A_N - A_C\rvert$ is $0.32$ to $1.82$ of scale in every valid cell, with
+the sign reversed between columns in all of them but the two at
+$(k,\ell)=(300,50)$: the coefficient definitions carry the whole of the gap.
 
 \paragraph{A withdrawn corroboration.}
 At low $k$ the ratio $A_C/A_N$ is independent of $\ell$ to four figures. That
@@ -5795,18 +5818,20 @@ integrand:
 \toprule
 term & EdS $k{=}10$ & $k{=}60$ & $k{=}300$ & PLANCK $k{=}10$ & $k{=}60$ \\
 \midrule
-$\mathcal V\kappa''\hat v_B$ & \textbf{0.935} & \textbf{0.971} & 0.616 & \textbf{0.933} & \textbf{0.974} \\
-$\mathcal V\kappa'\hat v_B'$ & 0.066 & 0.024 & 0.314 & 0.065 & 0.015 \\
-$\mathcal V\tfrac k3\tau_1$ & 0.0002 & 0.0064 & 0.082 & 0.0004 & 0.013 \\
-$\mathcal V(\Phi_A'-\Phi_H')$ & 0 & 0 & 0 & 0.0018 & 0.0028 \\
+$\mathcal V\kappa''\hat v_B$ & \textbf{0.944} & \textbf{0.976} & 0.614 & \textbf{0.938} & \textbf{0.972} \\
+$\mathcal V\kappa'\hat v_B'$ & 0.056 & 0.020 & 0.336 & 0.061 & 0.016 \\
+$\mathcal V\tfrac k3\tau_1$ & 0.0001 & 0.0050 & 0.060 & 0.0003 & 0.012 \\
+$\mathcal V(\Phi_A'-\Phi_H')$ & 0 & 0 & 0 & 0.0015 & 0.0025 \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-One term is $93$--$97\%$ of the integrand; the acoustic driving is
-$0.02\%$ and the ISW, where there is one, $0.18\%$. Against the source it
+One term is $94$--$98\%$ of the integrand; the acoustic driving is
+$0.01\%$ and the ISW, where there is one, $0.15\%$. Against the source it
 stands for --- the physical Doppler $g\hat v_B=W\kappa'\hat v_B$ --- it is
-$1.81\times10^{5}$ (EdS) and $8.99\times10^{4}$ (PLANCK), and
+$\kappa''$ itself, $1.87\times10^{5}$ (EdS) and $6.94\times10^{4}$ (PLANCK)
+in magnitude at $\eta_*$ (T-94 measured $1.81\times10^{5}$ and
+$8.99\times10^{4}$), and
 $\kappa''\simeq-\kappa'^2$, so it carries three powers of $\kappa'$
 where the source carries one.
 
@@ -6069,7 +6094,7 @@ the next full regeneration. The mechanism does not rest on them. In
 the released assembly the $\tfrac k3\tau_1$ in $-C_1^{\rm grav\prime}$ is
 cancelled by the $a\mathcal B_0$ that Paper~1's source carries in $C_0$,
 which registration \emph{(b)} of \S\ref{sec:w-form} measures to
-$4.4\times10^{-16}$, and no late-time limit of $\tau_1$ is involved. The
+$4.3\times10^{-16}$, and no late-time limit of $\tau_1$ is involved. The
 freeze remains a defect in its own right: the \texttt{free\_stream} branch
 carries no gravitational source, and the continuation the radiation era
 asks for is the hierarchy with its rank-zero and rank-one sources, which the
@@ -6349,7 +6374,7 @@ record.
 First, a decomposition of the transfer is not a decomposition of
 $C_\ell$. Splitting $T_\ell$ into rank-0, rank-1 and rank-2 parts gives
 autocorrelations \emph{and} cross terms. Measured (F5): the autos
-together with twice the crosses reproduce $C_\ell$ to $7.2\times10^{-16}$,
+together with twice the crosses reproduce $C_\ell$ to $8.8\times10^{-16}$,
 while the autos \emph{alone} are off by $0.19$. The cross terms are not
 a correction to be neglected; they are half the statement.
 
@@ -6388,7 +6413,7 @@ The two route comparisons in this bundle check different things.
   alone & exact in $\mathbb Q$ to $\ell=2000$ \\
 \textbf{criterion 5b}: (102) against (177)--(179) & the \emph{assembly order}
   alone --- generic-then-specialised against Newtonian-from-the-start &
-  $9.5\times10^{-6}$ against a $10^{-3}$ bar \\
+  $5.1\times10^{-6}$ against a $10^{-3}$ bar \\
 \bottomrule
 \end{tabularx}
 \end{center}
@@ -6414,7 +6439,7 @@ A-1 and A-2 record the difference, and at $C_\ell$ the two weightings differ
 by a factor of eighty across the Sachs--Wolfe plateau for that reason alone.
 Weighting both sides alike removes the one thing the comparison is not
 about, so that what remains is the assembly algebra, and 5b's
-$9.5\times10^{-6}$ therefore says nothing about the weight question of
+$5.1\times10^{-6}$ therefore says nothing about the weight question of
 \S\ref{sec:w-form}.
 
 \paragraph{External codes.} 5b says nothing about agreement with an external
@@ -6423,8 +6448,9 @@ code either. CAMB and CLASS are drawn as context and are not a target
 itemised by approximation rather than totalled, in the table of
 \S\ref{sec:comparison}; the released
 assembly's distance is F9's, with first maxima at $165.4$, $143.8$ and
-$188.5$ at v1.3.0 and $159.6$, $139.9$ and $188.1$ with the radiation era's
-start (T-193), against the external codes' $206$, and the driving that sets
+$188.5$ at v1.3.0, $159.6$, $139.9$ and $188.1$ with the radiation era's
+start (T-193), and $159.6$, $139.8$ and $205.5$ with it solved (v1.4.0),
+against the external codes' $206$, and the driving that sets
 the heights is A-3's. A bundle gated on an external code would be measuring that
 code; this one is gated on its own two routes and reports the distance
 separately.
@@ -6441,7 +6467,7 @@ rational weights & that \eqref{eq:186}'s and \eqref{eq:187-188}'s prefactors are
   both exactly~1, as rationals, to $\ell=2000$ &
   anything about $\tau_\ell$: the weights cancel whatever multiplies them \\
 \textbf{criterion 5b} & that the generic and Newtonian assemblies agree, at
-  $9.5\times10^{-6}$ & the background, the recombination history, the acoustic
+  $5.1\times10^{-6}$ & the background, the recombination history, the acoustic
   solve, the Bessel table, the damping, or \emph{the weight} --- every one of
   them is shared \\
 rank decomposition & that the ranks sum to the total, $4.1\times10^{-16}$ in
@@ -6514,8 +6540,9 @@ The paper states the relation and carries it out on the page; computing both
 forms and comparing them is the part of the claim arithmetic can settle, and
 it had not been done. Measured here over three
 backgrounds, nine modes $0.3\le k\le600$ and $2\le\ell\le600$, the two agree to
-$9.5\times10^{-6}$ worst and $2.7\times10^{-8}$ median against a gate of
-$10^{-3}$. The comparison is stated at the transfer level at fixed $k$ with the
+$5.1\times10^{-6}$ worst and $5.0\times10^{-11}$ median against a gate of
+$10^{-3}$ on the release tree, and to $9.5\times10^{-6}$ and
+$2.7\times10^{-8}$ when the criterion closed at v1.2.0. The comparison is stated at the transfer level at fixed $k$ with the
 same line-of-sight weight on both sides: at $C_\ell$ the two branches differ by
 a factor of eighty in the plateau, and that difference is the weight the
 line-of-sight integral carries, a property of what (102) prints, recorded as
@@ -6903,7 +6930,7 @@ energy constraint is never integrated, and it closes to $3.5\times10^{-10}$ of
 its terms at $\eta_*$ at every $k$.
 
 The test registered on 4 November is met. On \texttt{PLANCK\_MODEL} the two
-frames give one spectrum to $7\times10^{-15}$ at every multipole, which is
+frames give one spectrum to $8\times10^{-15}$ at every multipole, which is
 \emph{(e)}. The first maximum lies at $\ell=205.5=0.770\,\ell_A$, inside the
 registered $206\pm6$, with the first interior minimum at $360$, which is
 \emph{(f)}. On the backgrounds without radiation the solve reproduces $D/a$ to
@@ -7476,7 +7503,7 @@ settled it where something has. The supporting history is in
   zero on both sides and tests nothing there. & Answered by D44's
   registration \emph{(a)}: with Paper~1's signs the three frame conditions
   hold at the coefficients on every background, the gravitational one to
-  $6.1\times10^{-16}$ (\S\ref{sec:w-form}) \\
+  $6.5\times10^{-16}$ (\S\ref{sec:w-form}) \\
 \bottomrule
 \end{tabularx}
 \end{center}
