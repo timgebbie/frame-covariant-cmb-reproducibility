@@ -33,6 +33,14 @@ All notable changes to this bundle are recorded here. The version policy is in
 
 ### Changed
 
+- **D3 is discharged** (S45), the last deferral. The sources against $k$ are
+  D42's, linear in each mode, for the line of sight the bundle releases, and
+  criterion 5b evaluates the antecedent's printed split, (177)–(179), against
+  (102) mode by mode; `run_all.py` records the four things D3 would have
+  measured and where each is measured now. The README's deferral guard reads
+  the deferred set three ways --- the strict parser, a looser reading and
+  `DEFERRED`'s keys --- and requires them equal, where it required the set to
+  be non-empty and so failed on a tree with no deferral.
 - `make_release_archive.py` takes its members in the bundle's one file order,
   POSIX parts (T-200), as the manifests do. For v1.4.0's 342 files the two
   orders agree, so that archive is unchanged.

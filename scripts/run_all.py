@@ -118,7 +118,21 @@ DEFERRED: dict[str, tuple[str, str]] = {
     # its STATED question looks safe can be the only instrument pointed at a
     # different question entirely, and nothing in the deferral records what
     # else it would have measured.
-    "D3  source terms against k": ("v1.5.0", "S45"),   # S-b, renumbered T-87/S45
+    # **D3 was here and is DISCHARGED**, 2026-11-26 (S45). It had been deferred
+    # since v1.0.0 --- to v1.1.0, then to v1.5.0 under T-47 --- as "the source
+    # terms (177)-(179) plotted directly against k". D4's lesson above is that
+    # a deferral must say what else it would have measured, so the four things
+    # D3 would have measured are written down with where each is measured now:
+    #   * its stated question, the sources against k, linear in each mode:
+    #     D42, for the line of sight the bundle releases;
+    #   * the antecedent's printed Newtonian split, (177)-(179): criterion 5b's
+    #     column, (102) against (177)-(179) mode by mode at every release; F5
+    #     (in ranks) and D44 measure the split's frame dependence;
+    #   * (178)'s kappa'' v_B: D16, where it is 94 to 98% of (102)'s Newtonian
+    #     integrand at k <= 60;
+    #   * the damping envelope (177)-(179) carry, D(eta_0, k) and
+    #     exp[-(k/k_D)^2]: from v1.5.1, T-21's k_D at R(eta), the envelope the
+    #     hierarchy is scored against.
     # **F11 was here and is DISCHARGED**, drawn 2026-11-18: the PI's figure
     # plan for v1.4.0 (2026-11-04), F10 with the radiation era solved, is in
     # STAGES above. It is removed rather than left with a stale target, as F6
@@ -143,7 +157,6 @@ DIAGNOSTICS: list[tuple[str, str]] = [
     ("D0  criterion 5 ell range, and B-3", "scripts/derive_ell_range.py"),
     ("D1  relative-sign control", "scripts/diagnostic_d1_sign_control.py"),
     ("D2  round-trip residual (a number)", "scripts/diagnostic_d2_roundtrip.py"),
-    ("D3  source terms against k", "scripts/diagnostic_d3_sources.py"),
     ("D4  no monopole in the CGI approach", "scripts/diagnostic_d4_monopole.py"),
     ("D5  criterion 5a: the Sachs-Wolfe limit", "scripts/diagnostic_d5_sachs_wolfe.py"),
     # D6 writes provenance/FRAME-INVARIANCE-MEASUREMENT-v1.md, whose prose is

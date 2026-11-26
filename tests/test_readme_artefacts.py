@@ -52,13 +52,7 @@ def _rows() -> dict[str, str]:
 
 
 def _deferred() -> set[str]:
-    tags = set()
-    for m in DEFERRED_ROW.finditer(README):
-        tags.add(m.group("tag"))
-    # the `*D3*, *D4*` row names two tags in one cell
-    if re.search(r"^\|\s*\*D3\*,\s*\*D4\*", README, re.M):
-        tags |= {"D3", "D4"}
-    return tags
+    return {m.group("tag") for m in DEFERRED_ROW.finditer(README)}
 
 
 def test_the_table_is_not_empty():
@@ -68,7 +62,36 @@ def test_the_table_is_not_empty():
         f"the README artefact table parsed to {len(rows)} rows. Either it has "
         "been removed or its formatting changed and this file's regex is now "
         "measuring nothing.")
-    assert _deferred(), "no deferred rows parsed; the same hazard"
+
+
+#: Any line that starts a table row with an *italic* artefact tag. Looser than
+#: `DEFERRED_ROW`, which also asks for an em dash in the last cell, and unable
+#: to match a bold tag.
+ANY_ITALIC_TAGGED_ROW = re.compile(r"^\|\s*\*([FD]\d+)\*", re.M)
+
+
+def test_the_deferred_rows_and_the_harness_name_the_same_set():
+    """**The deferral half's guard is a second reading, not a count.**
+
+    `assert _deferred()` stood above as a floor --- a regex that matches nothing
+    passes every test below it --- and it failed the day the last deferral, D3,
+    was discharged: a correct tree. A floor measures the wrong thing, as M14
+    says for the drawn half. The deferred set is read three ways --- the strict
+    parser, a looser reading of the same text, and the keys of `DEFERRED` in
+    `run_all.py` --- and the three must agree whether the set is empty or not.
+    That also catches a deferral in the harness that the README omits, which
+    nothing checked before.
+    """
+    strict = _deferred()
+    loose = set(ANY_ITALIC_TAGGED_ROW.findall(README))
+    block = RUN_ALL[RUN_ALL.index("DEFERRED:"):RUN_ALL.index("DEFERRED_TO_V1_1")]
+    harness = set(re.findall(r'^\s*"([FD]\d+)\s', block, re.M))
+    assert strict == loose == harness, (
+        f"the README's deferred rows parse to {sorted(strict)}, a looser reading "
+        f"of the same text gives {sorted(loose)}, and run_all.py's DEFERRED "
+        f"holds {sorted(harness)}. A malformed row hides from the strict "
+        "parser; a deferral missing from one side is a promise the other "
+        "does not keep.")
 
 
 #: Any line that *starts a table row with a bold artefact tag*. Deliberately
