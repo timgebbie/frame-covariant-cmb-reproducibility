@@ -33,6 +33,14 @@ All notable changes to this bundle are recorded here. The version policy is in
 
 ### Changed
 
+- **The damping coefficient and the quadrupole's collision term are one
+  input** (T-206): $f_2=1-\bar f_2$, with $\bar f_2=\tfrac1{10}$ derived from
+  the unpolarised Thomson phase function, so Kaiser's $\tfrac89$ is derived
+  rather than imported and $\tfrac45$ is $\bar f_2=0$, A-5 itself. The
+  released envelope is the polarised $\tfrac{16}{15}$ (`F2_DEFAULT`, the PI,
+  15 October), which S31a had recorded as tight coupling; its row now says
+  so. A-5 carries $\bar f_2=\tfrac1{10}$ and removes the envelope in the
+  same change.
 - **D3 is discharged** (S45), the last deferral. The sources against $k$ are
   D42's, linear in each mode, for the line of sight the bundle releases, and
   criterion 5b evaluates the antecedent's printed split, (177)–(179), against

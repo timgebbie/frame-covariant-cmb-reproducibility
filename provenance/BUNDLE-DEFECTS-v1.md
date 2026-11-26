@@ -13255,3 +13255,36 @@ the record now says that (102) as built is not frame-invariant at any $k$
 measured, and points to D44's three conditions; and
 `tests/test_frame_invariance_reading.py` holds a falling median, a median of
 order one and the empty sets to their readings.
+
+## T-206 — The damping coefficient and the quadrupole's collision term are one input: $f_2=1-\bar f_2$
+
+Paper 1's collision term (38),
+$C[\tau]\simeq\sigma_Tn_E(\bar f_1e^av^B_a+\bar f_2e^ae^b\tau_{ab}-\tau)$, and
+the damping coefficient $\tfrac45f_2^{-1}$ of (dif-damp-correct) carry the
+same $\ell$-weight, and the tree set them independently, quoting both values.
+Integrating the unpolarised Thomson phase function
+$\tfrac{3}{16\pi}(1+\mu^2)$ against a PSTF brightness in index algebra, only
+ranks 0 and 2 survive, at every $\ell$, and
+$I(e)=\tau_0+\tfrac1{10}\tau_{ab}e^ae^b$. So $\bar f_2=\tfrac1{10}$ and
+$f_2=1-\bar f_2=\tfrac9{10}$: Kaiser's unpolarised value, derived rather than
+imported, with $\tfrac45f_2^{-1}=\tfrac89$ and the rank-two collision term
+$-\tfrac9{10}\kappa'\tau_{ab}$. The phase function is the one import. The
+polarised $f_2=\tfrac34$ ($\bar f_2=\tfrac14$) needs the polarisation
+hierarchy's closure and stays imported until it is derived. Derived by P1-T,
+26 November; the supplement's registration of A-5 carries it.
+
+- **S31's open question is answered.** $\tfrac45$ "matches neither standard
+  coefficient" because it is $f_2=1$, that is $\bar f_2=0$: A-5 itself,
+  written in the envelope. The paper's two values are two cases of one
+  weight, which answers T-43's question whether they compose.
+- **The released path sets the one input twice.** The collision term carries
+  $\bar f_2=0$, and `F2_DEFAULT = F2_POLARISED` (the PI, 2026-10-15) damps
+  every figure and diagnostic that passes it with $\tfrac{16}{15}$. T-43's
+  closing sentence ("`F2_DEFAULT` is therefore left at tight coupling") and
+  S31a's ("`F2_DEFAULT = F2_TIGHT_COUPLING`") predate that move; the tree is
+  right, and S31a's row now says so.
+- **What A-5 must do.** Carry $\bar f_2=\tfrac1{10}$, not $\tfrac9{10}$, and
+  take the envelope off in the same change, or the diffusion is counted twice.
+  The two envelopes differ by $\sqrt{6/5}=1.09545$ in $k_D$: on Planck at
+  $\eta_\ast$, $k_D$ is 557.1 with $\tfrac{16}{15}$ and 610.3 with
+  $\tfrac89$ at $R=0$.
