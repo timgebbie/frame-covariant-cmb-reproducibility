@@ -1,13 +1,17 @@
 # 1+3 covariant CMB anisotropies reproducibility bundle
 
 Version: **v1.5.0-dev** — the tight-coupling transition (approximation A-5).
-The photon pair is carried through the end of tight coupling, with the
-baryons' slip and a quadrupole that grows as scattering weakens, in place of
-the moments v1.4.0 holds after $6\eta_\ast$. Thomson scattering feeds the
-quadrupole back unpolarised, and the polarised feedback is measured beside
-it. The diffusion scale is evaluated at the baryon loading the oscillator
-runs at, and `LCDM_MODEL` carries its radiation. The supplement registers the
-test of this work before the work begins.
+The recombination first gains helium on every background, as the CAMB and
+CLASS spectra it is compared with carry it, and `LCDM_MODEL` gains its
+radiation. Then the photons are carried through the end of tight coupling,
+with the baryons' slip and a quadrupole that grows as scattering weakens, in
+place of the moments v1.4.0 holds after $6\eta_\ast$. Thomson scattering
+feeds the quadrupole back unpolarised, and the polarised feedback is measured
+beside it. The hierarchy then diffuses the photons itself, so the diffusion
+factor comes off, and its scale, at the baryon loading, is kept as the
+envelope the hierarchy is scored against. Supplement v1.5.1 registers the
+three steps before any is built: the physics is gated and the heights are
+recorded.
 **Last release: v1.4.0** — 25 November 2026: the radiation era on the
 frame-invariant line of sight. Each mode starts deep in the radiation era on
 the adiabatic growing mode, and its potential is solved with the CDM, the
@@ -15,7 +19,7 @@ baryons and the photons; that potential drives the acoustic oscillator and
 both slots (A-3). On Planck the first maximum lies at 205.5, inside the
 registered $206\pm6$, and the heights are recorded and not gated.
 
-Supplement: **v1.5.0** — `SUPPLEMENTARY-MATERIAL-v1.5.0.tex`. The supplement
+Supplement: **v1.5.1** — `SUPPLEMENTARY-MATERIAL-v1.5.1.tex`. The supplement
 has its own version line. An edition records the state of the documentation
 and does not assert that the computational release above has advanced, so
 `scripts/_versions.py` reads the supplement's name from this line and never
@@ -35,9 +39,9 @@ University of Cape Town, 2026, arXiv:astro-ph/9912072v4
 
 The supplementary-materials document is included here:
 
-> [SUPPLEMENTARY-MATERIAL-v1.5.0.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.5.0.pdf)
+> [SUPPLEMENTARY-MATERIAL-v1.5.1.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.5.1.pdf)
 
-Its source, `SUPPLEMENTARY-MATERIAL-v1.5.0.tex`, is one file in the
+Its source, `SUPPLEMENTARY-MATERIAL-v1.5.1.tex`, is one file in the
 repository root, and `scripts/build_supplement.py` builds it with `pdflatex`
 alone: the prose carries no `\input`, the bibliography is inline, and the only
 external files are the generated assets in `tables/`, `tikz/` and `figures/`.
@@ -62,7 +66,7 @@ together. Panel (b) is $C_\ell(\eta)/C_\ell(\eta_0)$ over the plane of $\ell$
 and $(\eta-\eta_\ast)/(\eta_0-\eta_\ast)$. The line of sight is the
 supplement's `eq:assembly-invariant` with Paper 1's source signs, each slot
 accumulated to each epoch. Written out, the curve at epoch $\eta$ is the three
-frame-invariant slots of step 7 integrated from the start up to $\eta$:
+frame-invariant slots of step 8 integrated from the start up to $\eta$:
 
 $$C_\ell(\eta)\propto\int\mathrm dk\thinspace k^2P(k)\thinspace\Theta_\ell(k;\eta)^2,\qquad \Theta_\ell(k;\eta)=\int_{\eta_{\rm i}}^{\eta}\left[W(C_0-G')K-\mathcal V\thinspace G\thinspace K-\mathcal V(\hat v_B+C_2)K'\right]\mathrm d\eta'$$
 
@@ -245,7 +249,7 @@ and $a\mathcal B_2=a\sigma$. Paper 1's linear redshift source, its Eq. (37), is
 the same source written on the right, $\mathcal B^{\rm P1}=-\mathcal B$, and it
 stands against the Thomson Doppler term with the opposite sign. The matching's
 rank-one row needs that sign: (89) prints $-(a\mathcal B_1+\kappa'v_B)$, the
-frame conditions of step 7 select $a\mathcal B_1-\kappa'v_B$, and the two
+frame conditions of step 8 select $a\mathcal B_1-\kappa'v_B$, and the two
 agree once $a\mathcal B^{\rm P1}_1=-k(\delta T+\Phi_A)$ stands in
 $\mathcal B_1$'s place, which is how the code carries it.
 `functions/spectra/coefficients.py`.
@@ -264,7 +268,7 @@ is second order. Only $\tau_0$ is of order one, which is why the dipole moves
 and nothing above it does. The bundle computes the spectrum in the Newtonian
 frame, $\tilde\sigma_{ab}\simeq0$, and in the CDM frame, and the two must
 agree, so a disagreement is a defect and not physics. F5 and D6 measure that
-for (102), and D44 for the assembly of step 7.
+for (102), and D44 for the assembly of step 8.
 `functions/spectra/frame_transform.py`, `functions/frames.py`.
 
 The same $v^a$ also moves the direction basis, which is aberration, and that
@@ -304,7 +308,7 @@ every horizon ($k_{\max}\eta_i=10^{-2}$), on the adiabatic growing mode:
 $\delta T=-\tfrac12\Phi_A$ and $\tau_1=-\tfrac12k\eta_i\Phi_A$, or the
 matter-era $\delta T=-\tfrac23\Phi_A$, $\tau_1=-\tfrac13k\eta_i\Phi_A$ where
 $\Omega_r=0$. It is integrated to six times $\eta_\ast$, after which its
-moments are held. On a background with radiation the potential that drives it
+moments are held; step 5 replaces the hold. On a background with radiation the potential that drives it
 is solved with the CDM, the baryons and the photons from the same start
 (`radiation_era.solve_mode`, steps 2 and 3), with the start placed on both
 constraints (T-194), rather than supplied as $D/a$ with (J.5). The baryons
@@ -319,7 +323,37 @@ solved from Peebles' equation, and the grid is derived from the visibility's
 own width (**S33**). `functions/spectra/acoustic.py`, `decoupling.py`,
 `peebles.py`.
 
-#### 5. Free streaming
+#### 5. The tight-coupling transition
+
+Step 4's pair is the hierarchy at zeroth order in the scattering time
+$1/\kappa'$, and it stops describing the photons before they last scatter: at
+the visibility maximum on `PLANCK_MODEL`, $x=k/\kappa'$ is already 0.26 at
+the first acoustic maximum and 1.04 at $\ell=840$. v1.5.0 carries the photons
+through the end of tight coupling with Thomson scattering in step 1's
+hierarchy. Thomson's phase function returns the monopole and a tenth of the
+quadrupole and nothing else, so the quadrupole scatters out at
+$\tfrac9{10}\kappa'$, and the baryons drag the dipole. In the pair's phase,
+$\sigma_\ell=(-1)^{\ell+1}\tau_\ell$,
+
+$$\sigma_1'=k\left[\tfrac4{15}\sigma_2-\sigma_0\right]-k\Phi_A+\kappa'(v_b-\sigma_1),\qquad \sigma_2'=k\left[\tfrac9{35}\sigma_3-\sigma_1\right]-\tfrac9{10}\kappa'\sigma_2,\qquad v_b'=-\mathcal Hv_b-k\Phi_A+\frac{\kappa'}R(\sigma_1-v_b)$$
+
+To first order in $1/\kappa'$ the baryons slip,
+$v_b-\sigma_1=R(k\sigma_0-\mathcal H\sigma_1)/[(1+R)\kappa']$, and the
+quadrupole grows, $\tau_2=\tfrac{10}9(k/\kappa')\tau_1$. Together they damp
+the oscillator at the rate of Hu & Sugiyama's $8/9$, which is Kaiser's
+$f_2=9/10$ derived rather than quoted (`tests/frame/c16`), so the hierarchy
+diffuses the photons itself and the factor $e^{-(k/k_D)^2}$ comes off the
+line of sight; $k_D$ stays as the envelope the hierarchy is scored against
+(`tests/frame/c17`). The released feedback is unpolarised, since Paper 1
+computes no polarisation, and the polarised $16/15$ is measured beside it.
+The line of sight reads the hierarchy wherever the visibility is live, so the
+hold goes; the Doppler slot reads the baryons' own velocity; and the
+quadrupole adds a fourth slot, $\mathcal V\thinspace\tfrac1{10}\tau_2(K/3+K''/k^2)$,
+which is frame-invariant. Supplement v1.5.1 registers the construction and
+its test before it is built, after helium enters the recombination and
+`LCDM_MODEL` gains its radiation.
+
+#### 6. Free streaming
 
 After decoupling $\kappa'\to0$, and by step 2 the
 gravitational source vanishes for $\ell\ge3$. What is left of step 1 is a
@@ -330,7 +364,7 @@ $$-(\beta_\ell\tau_\ell)' =k\left[\frac{\ell+1}{2\ell+3}\thinspace (\beta_{\ell+
 
 The source supplies $\ell=0,1,2$, and every multipole above them is streamed up
 by this recursion. Its closed-form solution is $j_\ell(k(\eta_0-\eta))$, which
-is why the kernel in step 6 is a spherical Bessel function rather than a
+is why the kernel in step 7 is a spherical Bessel function rather than a
 fitted window: the projection is the hierarchy's own solution and not an
 approximation imposed on it. Appendix F writes the recursion three ways: (F.1)
 in proper time with the comoving wavenumber, (F.3) above, and (F.4) in the
@@ -342,10 +376,10 @@ $(2\ell+1)$ on the left although its own preceding text specifies the division
 (B-2); the bundle divides. `functions/harmonics/free_streaming.py`,
 `weights.py`, `external.py`.
 
-#### 6. The matching and the integral solution
+#### 7. The matching and the integral solution
 
 At decoupling the free-streaming
-solution of step 5 is matched to the source rank by rank, (89), giving three
+solution of step 6 is matched to the source rank by rank, (89), giving three
 coefficients:
 
 $$C_0=p_0\thinspace (a\mathcal B_2),\qquad C_1=p_1\thinspace \tfrac1k\negthinspace \left(a\mathcal B_1+\kappa'\hat v_B\right),\qquad C_2=p_2\thinspace \tfrac1{k^2}(a\mathcal B_2)\quad(89)$$
@@ -368,11 +402,11 @@ $$\frac{\beta_\ell\thinspace \tau_\ell(\eta_0)}{2\ell+1}\simeq[C_2'-C_1]_{\eta_\
 
 Its second term is the rank-two boundary, the only place in (102) where the
 projection couples $\ell$ to $\ell\pm1$, at the boundary rather than along the
-path as in step 5. (102) is kept as built for comparison; v1.3.0 releases the
-assembly of step 7 in its place. `functions/spectra/coefficients.py`,
+path as in step 6. (102) is kept as built for comparison; v1.3.0 releases the
+assembly of step 8 in its place. `functions/spectra/coefficients.py`,
 `integral_solution.py`.
 
-#### 7. The frame-invariant assembly
+#### 8. The frame-invariant assembly
 
 A change of frame moves only the dipole (step 3), so for every $\ell\ge2$ the line-of-sight integrand
 $W\lbrace C_0K+C_1K'+C_2K''\rbrace$ may change only by a total derivative.
@@ -385,7 +419,7 @@ $$\Delta C_0=0,\qquad \Delta C_1^{\rm scatt}=\kappa'\Delta C_2,\qquad \Delta C_1
 Rank zero is invariant on its own, the Thomson half of rank one pairs with
 $C_2$, and the gravitational half pairs with $C_2'$.
 
-The coefficients of step 6 as built satisfy the second condition and fail the
+The coefficients of step 7 as built satisfy the second condition and fail the
 other two. Paper 1's own source supplies both repairs: its rank-one
 gravitational term stands against the Thomson Doppler term with the opposite
 sign, so the rank-one row carries $a\mathcal B^{\rm P1}_1=-k(\delta T+\Phi_A)$
@@ -446,7 +480,7 @@ baryons' own term in the constraint (step 3) the series is in place on
 and maxima at $\ell=210$, 480 and 720 with the first interior minimum at 360,
 where CAMB's fall on the same grid. The heights are recorded and not gated.
 
-#### 8. The spectrum by two routes
+#### 9. The spectrum by two routes
 
 The observable is assembled from three
 factors: the primordial power $P(k)$, the transfer $T_\ell(k)$ the line of
@@ -471,7 +505,7 @@ because $\alpha_\ell=(2\ell+1)/\beta_\ell$ makes the prefactor exactly one,
 asserted in exact rationals rather than floating point. A slip in $\beta_\ell$
 or $\alpha_\ell$ therefore cannot hide in the spectrum, since it would have to
 survive an identity, and the variable in which the normalisation vanishes is
-the one step 5's solution is bare in. The covariant route is the one that
+the one step 6's solution is bare in. The covariant route is the one that
 generalises: (186) is a statement about mode coefficients and holds only for
 almost-Robertson–Walker geometries, while (187) is a multipole mean square and
 holds generally, which is why every released figure plots the multipole
@@ -543,7 +577,7 @@ precondition for the next, so the version numbers follow the physics.
 | **v1.2.0** | *Is the antecedent's own algebra self-consistent when evaluated?* The full linear source, and (102) carried with a generic $u^a$ and specialised back | the complete rank-0, 1 and 2 assembly: `coefficients.py`, `integral_solution.py`, `frame_transform.py`. Criterion 5b closes at $9.5\times10^{-6}$ against $10^{-3}$ | F9, F5, F7, D8 · released |
 | **v1.3.0** | *Is the line of sight frame-invariant?* The line-of-sight integral in frame-invariant slots, built from Paper 1's source, with the acoustic oscillator on the derived recombination grid (S33) | `line_of_sight.py`, `RANK_ONE_SOURCE = "paper 1"` in `coefficients.py`, `two_frame.py`, `acoustic.py` | F9, F10, D44, D45 · released |
 | **v1.4.0** | *What drives the oscillator?* Radiation-era driving (A-3) | the potential solved through the radiation era with the CDM, the baryons and the photons, the photons' anisotropic stress closing it after decoupling, in the oscillator and in both slots; one initial condition and start for every mode, deep in the radiation era (T-192, T-193) | D10, F11 · released |
-| **v1.5.0** | *What happens when tight coupling ends?* The tight-coupling transition (A-5) | the photon pair carried through the transition, with the baryons' slip and a growing quadrupole in place of the moments held after $6\eta_\ast$; Thomson scattering's unpolarised feedback on the quadrupole, with the polarised feedback measured beside it; $k_D$ evaluated at the baryon loading the oscillator runs at (T-21), and $\Omega_r$ restored to `LCDM_MODEL` | F9 · **current** |
+| **v1.5.0** | *What happens when tight coupling ends?* The tight-coupling transition (A-5) | helium in the recombination on every background, as CAMB and CLASS carry it, and $\Omega_r$ restored to `LCDM_MODEL`; then the photon pair carried through the transition, with the baryons' slip and a growing quadrupole in place of the moments held after $6\eta_\ast$; Thomson scattering's unpolarised feedback on the quadrupole, with the polarised feedback measured beside it; the diffusion factor removed, with $k_D$ at the baryon loading (T-21) kept as the envelope the hierarchy is scored against | F9 · **current** |
 | **v1.6.0** | *What happens at second order in the shear?* The $\mathcal O(\varepsilon^2\ell)$ couplings that §5.5 of the antecedent discards, kept | $\tfrac25\mathrm D^c\tau_{ac}$ restored to the dipole equation; $\sigma_{ab}$ enters the oscillator instead of being dropped at $\mathcal O(t_c\varepsilon)$ | planned |
 
 v1.6.0 is the release the repository is named for. §5.5 of the antecedent
@@ -614,11 +648,11 @@ rather than to agree with it. These findings change what the code computes:
 - B-10: (J.5) prints the transfer function with $+1/\nu$ where the fit
   requires $-1/\nu$. Both forms are implemented, for the same reason.
 - B-11 and B-16: (89)'s $\ell=0$ row prints $j_0''(0)$ as $+\tfrac13$ and
-  carries $\alpha_2$ where $\alpha_0$ belongs (step 6).
+  carries $\alpha_2$ where $\alpha_0$ belongs (step 7).
 - B-17: (102) is not the exact integration by parts of its own integral. It
   carries the integrated term at $\mathcal V\mathcal D$ where the exact
   identity wants $W$, which removes the late integrated Sachs–Wolfe effect.
-  The released line of sight no longer uses (102) (step 7).
+  The released line of sight no longer uses (102) (step 8).
 
 The complete record, B-1 to B-18, is
 `provenance/ANNALS-II-ANTECEDENT-AND-CORRECTIONS-v1.md`, and the antecedent's
@@ -644,7 +678,7 @@ are stated where they occur: recombination rests on an imported atomic-physics
 fit, and `functions/spectra/peebles.py` tabulates what is derived there and
 what is not.
 
-v1.3.0 released the frame-invariant line of sight (step 7). v1.4.0, tagged
+v1.3.0 released the frame-invariant line of sight (step 8). v1.4.0, tagged
 on 25 November, wires the radiation era into the oscillator and into both
 slots, with one initial condition and start for every mode; the release
 sequence above lists what each earlier release put back. The radiation era is built in its three
@@ -654,9 +688,11 @@ began, passes: on Planck the two frames agree to $8\times10^{-15}$, the first
 maximum lands at 205.5 inside the registered $206\pm6$, with an interior
 minimum at 360, and the backgrounds without radiation do not move. F11, the
 formation surface with the radiation era solved, is v1.4.0's lead figure.
-The v1.5.0-dev line is open for A-5. Its construction is registered in the
-supplement before it is built, and until it lands this tree computes what
-v1.4.0 released.
+The v1.5.0-dev line is open. Supplement v1.5.1 registers its three steps
+before any is built: helium in the recombination on every background,
+`LCDM_MODEL`'s radiation, and the tight-coupling transition (A-5), each scored
+against the one before. Until they land this tree computes what v1.4.0
+released.
 
 ### Artefacts
 
@@ -822,9 +858,16 @@ holds after $6\eta_\ast$. The quadrupole's Thomson feedback is unpolarised on
 the released path, since Paper 1 computes no polarisation, and the polarised
 feedback is measured beside it as a registered sensitivity. The diffusion
 scale is evaluated at the baryon loading the oscillator runs at, and
-`LCDM_MODEL` carries its radiation. Its test is registered before the work begins, against the heights
-v1.4.0 records and does not gate: within 6.4% of CAMB's at the three maxima
-on Planck and 15% at $\ell=840$. The construction it starts from is
+`LCDM_MODEL` carries its radiation. Helium enters the recombination first, on
+every background (the PI, 26 November): the CAMB and CLASS spectra carry it,
+and measured with CAMB it moves the heights by 0.3% at the first maximum and
+2.5 to 4.9% at the second and third. The test is registered in supplement
+v1.5.1 before the work begins. The physics is gated: the hierarchy's damping
+against T-21's envelope, the sign of the tight-coupling quadrupole in the
+stress constraint, the frame invariance, the convergence, and the first
+maximum and interior minimum of (f). The heights are recorded, as v1.4.0
+recorded them, within 6.4% of CAMB's at the three maxima on Planck and 15% at
+$\ell=840$, and the two analytic envelopes bracket what A-5 can do to them. The construction it starts from is
 v1.4.0's: the potential solved with the CDM, the baryons and the photons from
 one start deep in the radiation era, whose registered test passes, with the
 two frames agreeing to $8\times10^{-15}$ on Planck and the first maximum at
@@ -1014,7 +1057,7 @@ content. The full history is in `CHANGELOG.md`; the decisions behind it are in
 | Item | Value |
 |---|---|
 | **Associated paper** | Gebbie, Tim (2026). *Frame covariance of CMBR lensing in the exact 1+3 covariant radiation hierarchy*, Paper 1, University of Cape Town. arXiv:astro-ph/9912072v4, [doi:10.48550/arXiv.astro-ph/9912072](https://doi.org/10.48550/arXiv.astro-ph/9912072). Submitted 2026-10-16. CC BY 4.0. Cite it with the version suffix: the bare identifier has carried three documents, `v2` the legacy 1999 work, `v3` the correction and `v4` this paper |
-| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.5.0.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.5.0.pdf) |
+| **Supplementary PDF** | [SUPPLEMENTARY-MATERIAL-v1.5.1.pdf](supplementary-materials/SUPPLEMENTARY-MATERIAL-v1.5.1.pdf) |
 | **GitHub repository** | [timgebbie/frame-covariant-cmb-reproducibility](https://github.com/timgebbie/frame-covariant-cmb-reproducibility) |
 | **ZivaHub/Figshare DOI** | [10.25375/uct.34069509](https://doi.org/10.25375/uct.34069509), live. The concept DOI always resolves to the latest version, so it is the one to cite |
 | **Associated antecedent** | Gebbie, T.; Dunsby, P. K. S.; Ellis, G. F. R. (2000). *1+3 covariant cosmic microwave background anisotropies II: the almost-Friedmann–Lemaître model*. Annals of Physics **282**, 321–394. [doi:10.1006/aphy.2000.6034](https://doi.org/10.1006/aphy.2000.6034) |

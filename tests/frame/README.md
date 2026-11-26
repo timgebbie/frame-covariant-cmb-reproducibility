@@ -1,9 +1,13 @@
-# Frame checks — fifteen instruments, for `tests/`
+# Frame checks — seventeen instruments, for `tests/`
 
 **P1-T, 2026-10-19; count corrected and `c9` added 2026-10-26; `c10` and `c11`
-added 2026-10-26; `c12` added 2026-10-29; `c13` added 2026-11-11.** Thirteen self-contained instruments behind the
-frame-covariance conditions, plus the generator that turns them into
-`docs/THEORY-AUDIT.md`.
+added 2026-10-26; `c12` added 2026-10-29; `c13` and `c14` added 2026-11-11;
+`c15` added 2026-11-24; `c16` and `c17` added 2026-11-26.** Seventeen
+self-contained instruments behind the frame-covariance conditions and the
+constructions that must keep them, plus the generator that turns them into
+`docs/THEORY-AUDIT.md`. Until 26 November this paragraph counted thirteen
+and the table below stopped at `c12`; the title had been corrected and
+the rest had not.
 
 ```
 python3 doctor.py                                      # why the suite will or will not run here
@@ -88,6 +92,13 @@ construction. Requires `numpy`, `scipy`, `sympy`.
 | `c10_oscillator_phase.py` | **the acceptance criterion for the acoustic step is blind to the driving it was meant to gate.** Eliminating `τ̃₁` between *Annals II* (152) and (153) returns `δT̃″ + [R'/(1+R)]δT̃' + k²c_s²δT̃ = −(k²/3)Φ_A − 𝓕` with `c_s² = 1/[3(1+R)]` exactly and the standard baryon-drag coefficient; nothing is imported to get it. On a **constant** `Φ` the boundary value `(δT̃+Φ_A)(η_*)` is a pure cosine of amplitude `Φ/3` and its phase is **zero**; on a decaying `Φ` the phase is non-zero at every `k`. So a *"tracks `cos(kr_s)` in exact phase"* criterion **accepts the undriven solution and rejects the driven one** — the step that should have caught **A-3** certifies its absence. The Einstein–de Sitter null, `Ω_r = 0` and `Φ` constant and phase exactly zero, is the control that separates a driving mechanism from a fit (P1-T, 2026-10-26) |
 | `c11_kernel_partner.py` | **a by-parts taken against the kernel has three terms, not two, and the one that is easy to drop is the one that keeps the source out of the post-decoupling span.** `d(WCK)/dη = 𝒱CK + WC'K + WCK'`, whose integral is a pure boundary term; the boundary at `η₀` is **exactly zero** for `ℓ ≥ 1` because `j_ℓ(0) = 0`, and the boundary at `η_i` is bounded by `e^{−κ}(η_i)`. So `∫WC'K = −∫𝒱CK − ∫WCK'` exactly, to 5.4e-8 across `2 ≤ ℓ ≤ 600`. The Sachs–Wolfe term `𝒱CK` puts 5.5e-7 of its mass outside the visibility; the differentiated term `WC'K` puts **0.75 to 0.99** of its mass outside it — a separation of 1.4e6. Keeping `WC'K` without its `WCK'` partner therefore replaces a recombination-confined source with one that accumulates to today, and the discarded partner is 2.7 to 1.9e3 times the Sachs–Wolfe term it leaves behind. **With `Φ` constant this does not go away**, because `C₁^grav` still carries the free streaming of `δT̃`, which is why the Einstein–de Sitter null is the control that sees it. `c9`'s two-term condition is the special case in which the kernel is held fixed (P1-T, 2026-10-26) |
 | `c12_sampling_bound.py` | **the rate at which a grid must sample the visibility, and the three candidate scales are one scale.** $\mathcal V=\kappa'e^{-\kappa}$ gives $\mathcal V'=(\kappa''+\kappa'^2)e^{-\kappa}$ and $e^{-\kappa}$ never vanishes, so the peak sits exactly where $\kappa''=-\kappa'^2$ — which makes the Thomson scale height $-\kappa'/\kappa''$ and the optical-depth e-fold $1/\kappa'$ **identically the same number** there, not approximately and not as a property of recombination but as the content of the stationarity condition (C12b, to 7.4e-15). The kernel is exactly band-limited by the Rayleigh expansion, so a product convolves and the two requirements **add** rather than one flooring the other: $2\pi/h\ge k_{\max}+\nu_{\mathcal V}$, with the cost of not adding them measured at 161x. The bound is not on sampling $\mathcal V$ but on **building** $\kappa$: accumulating it by trapezoid leaves $\delta\kappa=-(h^2/12)\kappa''$, so $\delta(\int\mathcal V)/\int\mathcal V=-(h\kappa'(\eta_\ast))^2/12$ and a coarse grid **lowers** the visibility. The rule $h\kappa'(\eta_\ast)\le\sqrt{12\varepsilon}$ returns $N\ge7737$ on PLANCK at one part in a thousand against `N_ETA_FLOOR = 8000`, **deriving T-58's measured constant to three per cent and closing S33** (P1-T, 2026-10-29) |
+| `c7_kappa_ledger.py` | **the κ′ ledger, a review flag and not a prohibition** (T-113, S48). The integrating factor sends the gravitational source to $W$ and the in-scattered Thomson source to $\mathcal V=W\kappa'$; $W(\kappa'S)=\mathcal VS$ is exact, so a coefficient may hold κ′, and the flag is kept because every assembly that failed trips it |
+| `c8_rank0_partner.py` | **where the monopole source enters.** $\tfrac k3\tau_1=-a\mathcal B_0$ is the rank-0 source and $C_0$ the rank-2 source leaking into $\ell=0$; their shifts cancel and their values need not. Under Paper 1's sign the one configuration meeting all three frame conditions carries $a\mathcal B_0$ with the sign corrected (C8h–C8k) |
+| `c13_endpoint_and_late_support.py` | **the endpoint map and the late support.** A boost and its inverse return a directional temperature to round-off, so raw multipoles of two frames are not the frame comparison; the optical depth runs towards the observer, so $W'=\mathcal V$, and a late potential reaches $\int Wg$ in full and $\int\mathcal Vg$ not at all |
+| `c14_photon_anisotropic_stress.py` | **the photons' anisotropic stress**: $k^2(\Phi_A+\Phi_H)=\tfrac85\mathcal H^2\Omega_\gamma\tau_2$ in the phase of (F.1), the pair's multipoles $(-1)^{\ell+1}$ times (F.1)'s with the overall sign fixed by the harmonics, and $-0.042$ near $1.6\eta_\ast$ outside the horizon on the Planck background |
+| `c15_temperature_row.py` | **the temperature row of the acoustic pair**: the $1+3$ equations give $\delta T'=-\Phi_H'+\tfrac k3\tau_1$ without (153)'s $-H\Phi_A$, whose commutator term the lapse term cancels; the released `expansion_coupling=False` is the equation, not an approximation |
+| `c16_thomson_rank2_weight.py` | **the Thomson in-scattering weight at every rank, in index algebra.** With the sphere moments in their pairing form, a term of the in-scattering survives only when every index of the PSTF brightness pairs with one of the phase function's two $e$-indices, so ranks other than 0 and 2 vanish at every $\ell$ and the survivors are $\tau_0+\tfrac1{10}\tau_{ab}e^ae^b$: $\bar f_2=\tfrac1{10}$ and Kaiser's $f_2=1-\bar f_2=\tfrac9{10}$, derived rather than imported. The negative control carries $\bar f_2=\tfrac9{10}$, the number printed throughout the tree, to a damping coefficient nine times too large |
+| `c17_tight_coupling_transition.py` | **the tight-coupling transition, A-5, before it is built.** With c16's weight, the first-order slip and quadrupole damp the acoustic root at T-21's rate, $\tfrac89$ on the released path and $\tfrac{16}{15}$ polarised, which the full hierarchy's slow eigenvalue meets to $O(x^2)$; the quadrupole enters the stress constraint with the ruled sign and the line of sight as a fourth, frame-invariant slot |
 
 ## Five things to read before trusting the output
 
@@ -349,3 +360,79 @@ not the derivation: the perturbed metric's normal observers give
 $\tfrac13\delta\Theta=-H\psi-\dot\phi$, which is C15c under $\psi=\Phi_A$,
 $\phi=-\Phi_H$. The released solver's `expansion_coupling=False` is therefore
 the $1+3$ equation and not an approximation.
+
+## c16 — the in-scattering weight at every rank
+
+`c16_thomson_rank2_weight.py`, derived by a scheduled run on 2026-11-26 and
+landed the same day. A-5 lifts $\bar f_2=0$ in Paper 1's Eq. (38), so the
+release that builds it must supply $\bar f_2$, and the tree carried Kaiser's
+$f_2$ only as a quotation. Both are $\ell$-weights, and §3b of the project's
+rules settles an $\ell$-weight in index algebra or not at all. The sphere
+moments are checked against their pairing form; the PSTF bases are built as
+the kernel of the trace map, not from a quoted formula; and the in-scattering
+of every PSTF tensor of ranks 1 and 3 to 6 vanishes, as the counting argument
+says it must at every rank. The two survivors give $\bar f_2=\tfrac1{10}$
+and $f_2=1-\bar f_2$, so *Annals II*'s printed $\tfrac45$ is $\bar f_2=0$:
+approximation A-5 written into the envelope. The polarised
+$\bar f_2=\tfrac14$ needs the polarisation hierarchy's tight-coupling
+closure, which this file does not derive and names as imported.
+
+## c17 — the tight-coupling transition
+
+`c17_tight_coupling_transition.py`, added 2026-11-26, before any part of A-5
+is built. Supplement v1.5.1 registers the construction (`sec:a5-construction`)
+and this instrument checks it from Paper 1's collision term,
+$C[\tau]\simeq\sigma_{\rm T}n_e(\bar f_1e^av^B_a+\bar f_2e^ae^b\tau_{ab}-\tau)$,
+and the $1+3$ hierarchy alone.
+
+C17a confirms c16 on a test field: random PSTF tensors integrated by
+quadrature, a representation and so confirmatory under §3b. The monopole
+comes back whole, the dipole and the octupole not at all, and the quadrupole
+at one tenth, and the Doppler term carries $\bar f_1=1$. The quadrupole therefore scatters out at $\tfrac9{10}\kappa'$,
+and the $f_2$ of *Annals II*'s (169) is $1-\bar f_2$. The polarised
+$\tfrac34$ is a comparator here, read from Ma & Bertschinger's E-mode moments
+held at their tight-coupling values; Paper 1 computes no polarisation, and
+the released path does not carry it.
+
+C17b puts Thomson's term into the rows of both phases. The map
+$\sigma_\ell=(-1)^{\ell+1}\tau_\ell$ survives with the baryon velocity one
+object in both, as the dipole is, and $(-1)^\ell$ now fails at the Thomson
+dipole as well as at the sources. C17c expands to first order in
+$1/\kappa'$: the slip $v_b-\sigma_1=R(k\sigma_0-\mathcal H\sigma_1)/[(1+R)\kappa']$
+and the quadrupole $\tau_2=\tfrac{10}9(k/\kappa')\tau_1$ in the phase of
+(F.1).
+
+C17d is the reason A-5 can drop the diffusion factor. The first-order system
+damps its acoustic root at
+$\Gamma=k^2[R^2/(1+R)+\tfrac45(1-\bar f_2)^{-1}]/[6(1+R)\kappa']$, which is
+T-21's integrand: $\tfrac45$, $\tfrac89$ and $\tfrac{16}{15}$ at
+$\bar f_2=0$, $\tfrac1{10}$ and $\tfrac14$. The full hierarchy with constant
+coefficients and $\ell_{\max}=40$ has a slow eigenvalue that meets $\Gamma$ to
+$O(x^2)$ in $x=k/\kappa'$ for all three, $2\times10^{-5}$ at $x=0.01$. A
+hand-over from the pair errs in the slow amplitude by $O(x^2)$ when the slip
+and quadrupole are left at zero and by $O(x^4)$ when they are set at first
+order, $2.3\times10^{-6}$ and $3.9\times10^{-10}$ at $x=0.01$. The hierarchy
+diffuses the photons itself, and a factor on top would count the diffusion
+twice.
+
+C17e carries the tight-coupling quadrupole into the stress constraint, the
+first place the ruled sign bites before decoupling:
+$k^2(\Phi_A+\Phi_H)=\tfrac{16}9\mathcal H^2\Omega_\gamma(k/\kappa')\tau_1$,
+the same in either phase with its own constraint, and reversed when a phase
+is paired with the other's (the negative control). Outside the horizon in the
+radiation era the ratio is $-\tfrac89\Omega_\gamma/(\eta\kappa')$, negative
+as after decoupling.
+
+C17f is the line of sight. The matching rows, which are index algebra, give a rank-two forcing the
+kernel
+$j_\ell/3+j_\ell''$ beside the rank-zero $j_\ell$, and a plane-wave projection
+confirms it, so the in-scattered quadrupole is a fourth slot,
+$\mathcal V\bar f_2\tau_2(K/3+K''/k^2)$, carried at $\mathcal V$ on the
+undifferentiated $\tau_2$. With $\sigma_2=\tfrac{15}2\Theta_2$ it is
+$-\tfrac14\mathcal V\Theta_2(j_\ell+3j_\ell'')$, the standard form at the
+Sachs–Wolfe slot's sign, a confirmation that imports Ma & Bertschinger's
+normalisation as the bundle identifies it. GDE99 (37) leaves the quadrupole
+unmoved by a boost at first order, so the slot and the slip are
+frame-invariant; an exact Lorentz transformation of a test brightness
+confirms it, moving the dipole by the boost and the quadrupole only at
+second order.

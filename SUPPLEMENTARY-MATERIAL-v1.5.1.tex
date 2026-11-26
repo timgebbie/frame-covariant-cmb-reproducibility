@@ -1,5 +1,24 @@
 % Computational supplement to the associated paper.
 %
+% v1.5.1, 2026-11-26.  The registration of v1.5.0, before any of it is built
+%   (P1-T).  A new section, sec:a5-construction, between the first acoustic
+%   peak and free streaming, as step 5 of the README's chain: the collision
+%   term with fbar_2 = 1/10 derived in index algebra (c16) and Kaiser's
+%   f_2 = 1 - fbar_2; the hierarchy with Thomson scattering and the baryons'
+%   drag; the first-order slip and quadrupole, in modes and in 1+3 form, and
+%   the switch; the damping, T-21's envelope and the brackets the two envelopes
+%   put on the heights; the fourth, in-scattered slot; helium on every
+%   background and LCDM's radiation; and the registered test, (h) to (m), with
+%   (e), (f) and (g1) kept.  The PI's rulings of 26 November: the physics is
+%   gated and the heights recorded; helium on every background, before A-5.
+%   - The polarised-coefficient paragraph called 4/5 the released value; it has
+%     been 16/15 since 15 October (S31a, T-43).  Rewritten, with the release
+%     tree's k_D at R = 0.
+%   - Q15 (helium) measured; Q16 (the hold) closed by A-5's construction; the
+%     time conversion of the estimate beside Figure 1 settled.
+%   - Two frame instruments, c16 and c17.  The bridge f_2 = 1 - fbar_2 is
+%     finding T-206.  The finding range is T-1 to T-206.
+%
 % v1.5.0, 2026-11-25.  The first edition of the v1.5.0-dev line (P1-T).  The PI's
 %   scope of 25 November: v1.5.0 is the tight-coupling transition (A-5) alone,
 %   with the diffusion scale at the oscillator's baryon loading (T-21) and
@@ -602,7 +621,7 @@
 
 \title{Computational Supplement:\\\large Frame covariance of CMBR lensing in the exact $1+3$ covariant radiation hierarchy}
 \author{Tim Gebbie}
-\date{Supplement v1.5.0 --- 25 November 2026\\
+\date{Supplement v1.5.1 --- 26 November 2026\\
   Paper~1 verification ledger and chapter layout; computational v1.5.0-dev}
 
 \begin{document}
@@ -645,11 +664,12 @@ the CDM, the baryons and the photons, whose anisotropic stress closes it after
 decoupling. On the Planck background the acoustic series is then in place.
 The first maximum lies at $\ell=205.5$, inside the registered $206\pm6$, and
 the maxima and the first interior minimum fall where CAMB's do on the same
-grid. The heights are recorded and not gated. The tight-coupling
-transition, A-5, is v1.5.0, and the second order in the shear v1.6.0.
+grid. The heights are recorded and not gated. v1.5.0 adds helium to the
+recombination and then the tight-coupling transition, A-5, registered before
+either is built, and the second order in the shear is v1.6.0.
 Findings are recorded
 against the antecedent (B-1 to B-18) and against the implementation (T-1 to
-T-200), and an inventory of findings is not treated as a certification of
+T-206), and an inventory of findings is not treated as a certification of
 the physical calculation. CAMB and CLASS provide external comparisons, not
 inputs or calibration targets, and the supplement makes no claim of new
 physics. The identifier \texttt{astro-ph/9912072v4} refers to Paper~1; the
@@ -738,9 +758,10 @@ scattering visibility in v1.1.0 and the full linear source and
 frame-specialised integral assembly in v1.2.0, to the line-of-sight integral
 in frame-invariant slots in v1.3.0, built from Paper~1's source and summed
 back to the integral it rearranges, and to the radiation era in v1.4.0, built
-in three registered steps (\S\ref{sec:a3-construction}). The tight-coupling
-transition, A-5, is v1.5.0, and the second order in the shear v1.6.0
-(\S\ref{sec:future-situation}). The pinned README revision
+in three registered steps (\S\ref{sec:a3-construction}). v1.5.0 adds
+helium to the recombination and then the tight-coupling transition, A-5,
+registered in three steps before any is built (\S\ref{sec:a5-construction}),
+and the second order in the shear is v1.6.0 (\S\ref{sec:future-situation}). The pinned README revision
 this section cites was \texttt{v1.3.0-dev}, with \texttt{v1.2.0} the last
 tagged release named there.
 At v1.3.0 oscillations had been recovered and the physical spectrum had
@@ -752,8 +773,9 @@ maximum at $205.5$, inside the registered $206\pm6$; the curve below
 $\ell\simeq30$ within $1.8\%$ of CAMB's shape; and maxima at $\ell=210$,
 $480$ and $720$ with the first interior minimum at $360$, where CAMB's fall
 on the same grid. The physical spectrum is still not claimed. The heights are
-recorded and not gated, they wait on A-5, and the bundle's radiation is
-photons alone. The existing Python files verify distinct
+recorded and not gated, they wait on A-5, the bundle's radiation is
+photons alone, and until v1.5.0's first step its recombination is hydrogen
+alone. The existing Python files verify distinct
 algebraic and numerical steps, rather than certifying every assumption
 or the complete observed sky.
 
@@ -1317,7 +1339,7 @@ or measurement required to resolve them.
   plateau morphology as a whole.
 \item Six is a modelling choice. $\eta_{\rm couple}=\min(\eta_0,
   6\eta_*)$ is not derived and is not claimed to be; Q16 is what would
-  close it.
+  close it. A-5 removes the hold (\S\ref{sec:a5-construction}).
 \end{itemize}
 
 \section{Future situation}
@@ -1333,7 +1355,11 @@ in \S\ref{sec:first-peak}, is met at the third step
 (\S\ref{sec:a3-construction}). \texttt{v1.5.0} is the tight-coupling
 transition and the slip and quadrupole terms (A-5), with the diffusion scale
 evaluated at the baryon loading the oscillator runs at (T-21) and
-\texttt{LCDM\_MODEL}'s radiation restored. The PI set that scope on
+\texttt{LCDM\_MODEL}'s radiation restored. On 26 November the PI put helium
+into the recombination on every background as the release's first step,
+since the CAMB and CLASS spectra the heights are read against carry it, and
+ruled that the physics is gated and the heights recorded;
+\S\ref{sec:a5-construction} registers the three steps. The PI set that scope on
 25 November, as he set A-3 apart from A-5 for v1.4.0: the shear enters the
 oscillator through the quadrupole that tight coupling suppresses, and A-5
 moves the heights against which the shear terms are to be scored. The
@@ -1461,11 +1487,12 @@ whether the $j_\ell'$ counterpart moves the peak & restore that slot alone; it
   measurement \\
 the rank-one extra term $(\star)$ & two readings exist and this bundle chooses
   neither & --- & derivation \\
-helium, \textbf{Q15} & $\lesssim0.5\%$ at the first peak; material only in the
-  damping tail & scoped to v1.2.0 & measurement \\
-the tight-coupling window, \textbf{Q16} & assert
-  $\mathcal V(\eta_{\rm couple})/\mathcal V(\eta_*)$ below a stated threshold
-  on every background & --- & measurement \\
+helium, \textbf{Q15} & measured with CAMB on 26 November: $0.3\%$ at the
+  first maximum and $2.5$ to $4.9\%$ at the second and third, relative to
+  $\ell=30$; v1.5.0's first step puts it in & v1.5.0, step one & measurement \\
+the tight-coupling window, \textbf{Q16} & no window: A-5 carries the photons
+  by the hierarchy until the visibility still to come falls below $10^{-4}$
+  & v1.5.0, A-5 & measurement \\
 \bottomrule
 \end{tabularx}
 \end{center}
@@ -2024,7 +2051,9 @@ isotropic $\dot\kappa(e^av^B_a-\tau)$ of its Eq.~(68). This release takes $\bar 
 $\mathcal S_2=0$: no polarisation feedback and no quadrupole
 in-scattering. That is approximation A-5 stated at the collision
 term rather than at the oscillator, and \S\ref{sec:w-form} shows it cannot
-produce a frame disagreement at linear order.
+produce a frame disagreement at linear order. \S\ref{sec:a5-construction}
+registers the release that lifts it, with $\bar f_2=\tfrac1{10}$ derived in
+index algebra.
 
 % ===========================================================================
 \subsection{Gates on the hierarchy}
@@ -2665,9 +2694,8 @@ two parts in a thousand. That is not a frame dependence of the sky. The
 convergence figure which would test footnote~29 on p.~365 in both frames
 requires the generic-$u^a$ hierarchy and is deferred with it.
 
-\paragraph{The polarised quadrupole coefficient.} One coefficient is
-changed for criterion~5b, and only there. The photon quadrupole's Thomson
-collision term carries
+\paragraph{The polarised quadrupole coefficient.} The photon quadrupole's
+Thomson collision term carries
 the temperature quadrupole together with the monopole and quadrupole of the
 E-mode polarisation, so polarisation feeds back into the temperature
 hierarchy and strengthens the diffusion damping. CAMB and CLASS both include
@@ -2679,37 +2707,41 @@ switch for it. Truncating CLASS's polarisation hierarchy from 10 to 4 moves the
 acoustic band by 0.043\%, which bounds the hierarchy's \emph{depth} and not the
 \emph{feedback}.
 
-The only way to compare like for like is therefore to carry the polarised
-coefficient here, for that comparison alone. In the quadrupole term of its
-Eq.~(168) \emph{Annals~II} prints $4/5$; Hu \& Sugiyama's unpolarised form is
-$8/9$; with polarisation it is $16/15$. Measured on \texttt{PLANCK\_MODEL}:
+The coefficient that carries it is Kaiser's $f_2$. In the quadrupole term of
+its Eq.~(168) \emph{Annals~II} prints $4/5$, and its Eq.~(169) replaces that by
+$\tfrac45f_2^{-1}$, with $f_2=9/10$ for anisotropic scattering, which is Hu
+\& Sugiyama's $8/9$, and $f_2=3/4$ for polarisation, which is $16/15$. By
+\eqref{eq:a5-bridge}, $f_2=1-\bar f_2$ with $\bar f_2$ the in-scattered
+fraction of the quadrupole in Paper~1's Eq.~(38) (T-206): the printed $4/5$ is
+$\bar f_2=0$, $8/9$ is unpolarised Thomson scattering's $\tfrac1{10}$, and
+$16/15$ is the $\tfrac14$ that the E-mode moments return at tight coupling.
+Measured on \texttt{PLANCK\_MODEL} at $R=0$, on the release tree:
 
 \begin{center}\small
 \begin{tabular}{@{}lccc@{}}
 \toprule
 & coefficient & $k_D(\eta_*)$ & ratio \\
 \midrule
-\emph{Annals~II} (168), as printed & $4/5$ & \textbf{619.9} & 1.000 \\
-Hu \& Sugiyama, unpolarised & $8/9$ & 588.1 & 0.949 \\
-with polarisation & $16/15$ & \textbf{536.9} & \textbf{0.866} \\
+\emph{Annals~II} (168), as printed & $4/5$ & \textbf{643.3} & 1.000 \\
+Hu \& Sugiyama, unpolarised & $8/9$ & 610.3 & 0.949 \\
+with polarisation & $16/15$ & \textbf{557.1} & \textbf{0.866} \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\noindent a 13.4\% reduction in $k_D$, which takes $e^{-(k/k_D)^2}$ from 0.660
-to 0.574 at $k=400$ and from 0.189 to 0.109 at $k=800$. It is one of the
+\noindent a 13.4\% reduction in $k_D$, which takes $e^{-(k/k_D)^2}$ from 0.679
+to 0.597 at $k=400$ and from 0.213 to 0.127 at $k=800$. It is one of the
 dominant terms in criterion~5b's residual.
 
-$4/5$ remains the default and the released value. Every figure,
-diagnostic and released number in this bundle uses it, because the bundle
-reproduces and $4/5$ is what the page prints. $16/15$ is reached only through an
-explicit argument, by criterion~5b (decision~S31, finding~T-39).
-\emph{Annals~II}'s $4/5$ is the isotropic-scattering coefficient, and the
-paper supplies both standard ones itself: its Eq.~(169), following Kaiser,
-replaces $4/5$ by $\tfrac45f_2^{-1}$, with $f_2=9/10$ for anisotropic
-scattering, which is Hu \& Sugiyama's $8/9$, and $f_2=3/4$ for polarisation,
-which is $16/15$. The released $4/5$ is therefore (168) as printed, not a
-misprint, and criterion~5b carries (169) at $f_2=3/4$.
+The released value is $16/15$. \texttt{F2\_DEFAULT} has been
+\texttt{F2\_POLARISED} since 15 October 2026, when the PI moved the default
+to the corrected form that the paper carries downstream (decision~S31a,
+finding~T-43). Every figure and diagnostic passes it, and criterion~5b carries
+(169) at the same $f_2=3/4$. Until v1.5.1 this paragraph called $4/5$ the
+released value, which it has not been since then. The released path therefore
+sets one input twice: $\bar f_2=0$ in its collision term and $\bar f_2=\tfrac14$
+in its damping factor. A-5 removes the factor and carries
+$\bar f_2=\tfrac1{10}$ in the hierarchy (\S\ref{sec:a5-construction}).
 
 % Steps 4 and 5 of the physics chain, 2026-10-24.
 
@@ -3487,7 +3519,7 @@ free-streaming continuation the bundle carries as a control has no
 gravitational source, and the tight-coupling pair held from $6\eta_*$ is not the photons
 after decoupling. Leaving the pair at decoupling is the least of approximation
 A-5, and the slip, the growing quadrupole and the polarization refine that
-transition and are scored after it. The CDM and the baryons, pressureless once
+transition and are scored after it (\S\ref{sec:a5-construction}). The CDM and the baryons, pressureless once
 the baryons are released, are carried to $\eta_0$. After $\eta_*$ the
 free-streaming photons carry anisotropic stress, and the construction closes
 $\Phi_A$ with it.
@@ -3674,6 +3706,361 @@ reconciled with it. Nothing in this section rests on either.
 % === END source expansion: supplementary-materials/section-first-peak-v1.3.15.tex ===
 
 
+
+
+% ---------------------------------------------------------------------------
+% The tight-coupling transition (A-5): construction and registered test.
+%
+% Written 2026-11-26 by the Paper 1 stream (P1-T), before any part of it is
+% built.  The PI's rulings: scope (25 November) -- v1.5.0 is A-5 alone, with
+% T-21's k_D and LCDM_MODEL's radiation, the released feedback unpolarised and
+% the polarised one a measured sensitivity; heights (26 November) -- the
+% physics is gated and the heights recorded; helium (26 November) -- Y_p on
+% every background, as v1.5.0's first step, before A-5.  Instruments: c16
+% (the in-scattering weight, index algebra) and c17 (the construction).
+% ---------------------------------------------------------------------------
+\section{The tight-coupling transition}
+\label{sec:a5-construction}
+
+The released line of sight reads the photons through the end of tight
+coupling with three approximations that together make A-5. The acoustic pair
+\eqref{eq:pair-conformal} runs to $\eta_{\rm couple}=6\eta_*$ and is held
+there, so the Sachs--Wolfe and Doppler slots read a fluid that never
+decouples. The collision term carries $\bar f_2=0$, so the pair has no slip
+and no quadrupole and cannot diffuse. The diffusion it lacks is applied
+afterwards as a factor $e^{-(k/k_D)^2}$ on the two scattering slots, with
+$k_D$ taken at $\eta_*$, at $R=0$ and with the polarised coefficient. At the
+visibility maximum on \texttt{PLANCK\_MODEL} the expansion parameter of tight
+coupling, $x=k/\kappa'$, is already $0.26$ at the first maximum, $0.59$ at
+the second, $0.89$ at the third and $1.04$ at $\ell=840$, so the pair
+misdescribes the source at every acoustic peak, the first included.
+
+v1.5.0 replaces the pair and the factor with the photons themselves, carried
+through the transition by the hierarchy with Thomson scattering in it. It is
+built in three steps, each scored against the one before, as A-3 was:
+helium enters the recombination on every background; \texttt{LCDM\_MODEL}
+gains its radiation; and then the transition is built. This section registers
+all three on 26 November 2026, before any of them is built.
+
+\subsection{The collision term}
+\label{sec:a5-collision}
+
+Paper~1's collision term, Eq.~(38),
+$C[\tau]\simeq\sigma_{\rm T}n_E\big(\bar f_1e^av^B_a+\bar f_2e^ae^b\tau_{ab}-\tau\big)$,
+has one $\ell$-weight to supply, and the tree has carried it only as a
+quotation. Integrating Thomson's unpolarised phase function
+$\tfrac3{16\pi}(1+\mu^2)$ against a brightness on its PSTF multipoles, with
+the sphere moments in their pairing form, a term survives only when every
+index of the brightness pairs with one of the phase function's two
+$e$-indices. Every rank but zero and two therefore vanishes, at every
+$\ell$, and the survivors are
+\begin{equation}
+  \tfrac34\!\int\!\frac{\mathrm d\Omega'}{4\pi}\big[1+(e_ae'^a)^2\big]\tau(e')
+  =\tau_0+\tfrac1{10}\tau_{ab}e^ae^b ,
+  \qquad
+  \bar f_2=\tfrac1{10},\qquad f_2=1-\bar f_2 .
+  \label{eq:a5-bridge}
+\end{equation}
+The photon monopole returns whole, which is photon number and the control on
+the phase function's normalisation, and the photon dipole returns nothing:
+$\bar f_1=1$ is the electrons' $v^B_a$ and not a photon $\ell$-weight.
+\texttt{tests/frame/c16\_\allowbreak{}thomson\_\allowbreak{}rank2\_\allowbreak{}weight.py}
+holds the derivation in index algebra, and
+\texttt{tests/frame/c17\_\allowbreak{}tight\_\allowbreak{}coupling\_\allowbreak{}transition.py}
+confirms it on a test field.
+
+So Kaiser's $f_2$ in \emph{Annals~II}'s Eq.~(169) is $1-\bar f_2$, and the
+three damping coefficients are three values of one input (finding T-206). The printed $4/5$ of
+(168) is $\bar f_2=0$: approximation A-5 written into the envelope. Hu \&
+Sugiyama's $8/9$ is $\bar f_2=\tfrac1{10}$, unpolarised Thomson scattering.
+The polarised $16/15$ is $\bar f_2=\tfrac14$, which is what the E-mode moments
+return when held at their tight-coupling values; that closure is imported
+from the polarisation hierarchy and not derived here. The released path of
+v1.4.0 sets the one input twice, to two values: $\bar f_2=0$ in the collision
+term and $16/15$ in the factor.
+
+A-5's released collision term is $\bar f_1=1$, $\bar f_2=\tfrac1{10}$, since
+Paper~1 computes no polarisation. The polarised feedback is measured beside
+it as a sensitivity, with $\bar f_2=\tfrac14$ in the hierarchy and in the line
+of sight. That value is exact while tight coupling holds and overstates the
+feedback after decoupling, so the sensitivity bounds it.
+
+\subsection{The hierarchy through the transition}
+
+With \eqref{eq:a5-bridge} in \eqref{eq:transport-exact}, the hierarchy and the
+baryons read, in the pair's phase $\sigma_\ell=(-1)^{\ell+1}\tau_\ell$ of
+\S\ref{sec:a3-construction},
+\begin{align}
+  \sigma_0'&=\tfrac k3\sigma_1-\Phi_H', &
+  \sigma_1'&=k\big[\tfrac4{15}\sigma_2-\sigma_0\big]-k\Phi_A+\kappa'(v_b-\sigma_1),
+  \nonumber\\
+  \sigma_2'&=k\big[\tfrac9{35}\sigma_3-\sigma_1\big]-(1-\bar f_2)\kappa'\sigma_2, &
+  \sigma_\ell'&=k\big[w_\ell\sigma_{\ell+1}-\sigma_{\ell-1}\big]-\kappa'\sigma_\ell
+  \quad(\ell\ge3),
+  \nonumber\\
+  v_b'&=-\mathcal Hv_b-k\Phi_A+\frac{\kappa'}R(\sigma_1-v_b), &
+  \delta_b'&=kv_b-3\Phi_H' .
+  \label{eq:a5-hierarchy}
+\end{align}
+The baryon velocity is one object in both phases, as the dipole is, and the
+map $(-1)^{\ell+1}$ survives Thomson's term while $(-1)^\ell$ fails at its
+dipole as it fails at the sources (c17). The rank-zero row carries no
+collision term, which is photon number again, and the drag conserves momentum
+with $R=3\rho_b/(4\rho_\gamma)$. At zeroth order in $1/\kappa'$ the photon and
+baryon rows return the pair (152). The hierarchy is closed at $\ell_{\max}$ by
+the free-streaming truncation the solve already uses, with $-\kappa'\sigma_{\ell_{\max}}$
+beside it.
+
+Three things change with it. The baryons are no longer released as dust at
+$\eta_*$: the drag releases them, as the scattering rate falls. The photons
+enter the momentum and stress constraints through the transition with their
+own velocity and quadrupole, where the construction of
+\S\ref{sec:a3-construction} handed the pair over to a collisionless hierarchy
+at $\eta_*$. And the line of sight reads the hierarchy where the visibility
+is live, so nothing is held.
+
+\subsection{Tight coupling and the switch}
+
+Early, $\kappa'$ is so large that \eqref{eq:a5-hierarchy} is stiff, and the
+photons are carried there by the expansion in the scattering time $1/\kappa'$,
+to first order in both $k/\kappa'$ and $\mathcal H/\kappa'$:
+\begin{equation}
+  v_b-\sigma_1=\frac{R\,(k\sigma_0-\mathcal H\sigma_1)}{(1+R)\kappa'},\qquad
+  \sigma_2=-\frac{k\,\sigma_1}{(1-\bar f_2)\kappa'},
+  \label{eq:a5-tight}
+\end{equation}
+so that in the phase of (F.1) $\tau_2=\tfrac{10}9(k/\kappa')\tau_1$ on the
+released path. In $1+3$ form the quadrupole is the rank-two row of
+\eqref{eq:transport-exact} with its time derivative and its divergence one
+rank up dropped at this order, and with $\tau_b\simeq v^B_b$:
+\begin{equation}
+  \tau_{ab}\simeq-\frac{1}{(1-\bar f_2)\,\Gamma_{\rm T}}
+  \Big[\sigma_{ab}+\mathrm D_{\langle a}v^B_{b\rangle}\Big],\qquad
+  \Gamma_{\rm T}=n_e\sigma_{\rm T}=\kappa'/a .
+  \label{eq:a5-quadrupole-covariant}
+\end{equation}
+In the Newtonian frame $\sigma_{ab}=0$, and the mode form is
+\eqref{eq:a5-tight}. A boost shifts $\sigma_{ab}$ by
+$\mathrm D_{\langle a}v_{b\rangle}$ and $v^B_b$ by $-v_b$, so the bracket is
+frame-invariant, as $\tau_{ab}$ must be. This is the estimate retained beside
+Figure~\ref{fig:history-flow}, $\tau_{ab}\simeq-(\kappa')^{-1}
+[\sigma_{ab}+\mathrm D_{\langle a}v^B_{b\rangle}]$, with its rate read in
+proper time and its in-scattering factor $(1-\bar f_2)^{-1}$ restored. The
+shear reaches the photons here, through the quadrupole that tight coupling
+suppresses, which is where v1.6.0's couplings act. The pair is carried with
+both. Its momentum row is the photon
+and baryon rows summed,
+$(1+R)\sigma_1'=-R'\sigma_1-k\sigma_0-(1+R)k\Phi_A+\tfrac4{15}k\sigma_2-R(\Delta'+\mathcal H\Delta)$,
+with $\Delta=v_b-\sigma_1$ and $\sigma_2$ from \eqref{eq:a5-tight} and
+$\Delta'$ taken along the zeroth-order pair.
+
+The switch to \eqref{eq:a5-hierarchy} falls at the first of $x=10^{-2}$ and
+$\mathcal H/\kappa'=10^{-2}$, and the hierarchy starts from the first-order
+state: slip and quadrupole set by \eqref{eq:a5-tight}, higher ranks zero. With
+constant coefficients a hand-over with the slip and quadrupole left at zero
+errs in the slow amplitude by $O(x^2)$, and one at first order by $O(x^4)$:
+$2.3\times10^{-6}$ and $3.9\times10^{-10}$ at $x=10^{-2}$ (c17). On
+\texttt{PLANCK\_MODEL} with helium, $\mathcal H/\kappa'$ reaches $10^{-2}$ at
+$z=1358$ for every $k$, and $x$ reaches it before the recombination history
+begins, at $z=3000$, for $k>156$; there the history is extended upward in
+Saha equilibrium.
+
+Before decoupling the tight-coupling quadrupole enters
+\eqref{eq:stress-constraint}, which is the first place the ruled overall sign
+acts before $\eta_*$. In either phase, each with its own constraint,
+\begin{equation}
+  k^2(\Phi_A+\Phi_H)=\tfrac{16}9\,\mathcal H^2\Omega_\gamma\frac k{\kappa'}\,\tau_1 ,
+  \label{eq:a5-stress}
+\end{equation}
+and outside the horizon in the radiation era, where
+$\tau_1=-\tfrac12k\eta\Phi_A$, it gives
+$(\Phi_A+\Phi_H)/\Phi_A=-\tfrac89\Omega_\gamma/(\eta\kappa')$: negative, as
+it is after decoupling (\eqref{eq:stress-superhorizon}), and independent of
+$k$. Pairing one phase's quadrupole with the other's constraint reverses the
+sign, which is the negative control (c17). Because the ratio does not vanish
+as $k\to0$, the transition moves the potential of every mode, the
+super-horizon ones included, by a fraction of order $\Omega_\gamma\mathcal H/\kappa'$
+as last scattering approaches; no $k$ is a null control for A-5 on that
+account.
+
+\subsection{The damping and its envelope}
+
+The first-order system damps its acoustic root at
+\begin{equation}
+  \Gamma=\frac{k^2}{6(1+R)\kappa'}\Big[\frac{R^2}{1+R}+\frac45\,\frac1{1-\bar f_2}\Big],
+  \label{eq:a5-damping}
+\end{equation}
+with no shift of frequency at that order. Integrated over $\eta$, $\Gamma/k^2$
+is T-21's $k_D^{-2}$ with the coefficient of \eqref{eq:a5-bridge}: $4/5$,
+$8/9$ and $16/15$ at $\bar f_2=0$, $\tfrac1{10}$ and $\tfrac14$. The full
+hierarchy with constant coefficients and $\ell_{\max}=40$ has a slow
+eigenvalue whose real part meets $-\Gamma$ to $O(x^2)$ for all three,
+$2.0\times10^{-5}$ at $x=10^{-2}$ (c17). The hierarchy therefore diffuses the
+photons itself, and a factor applied on top of it would count the diffusion
+twice. A-5 removes the factor from the released path. T-21's $k_D$, at the
+baryon loading $R(\eta)$ and with $8/9$, survives as the envelope the
+hierarchy is scored against where tight coupling holds, and not as a factor.
+
+The envelope does not decide the heights. Evaluated at $\eta_*$ alone it
+raises the height at $\ell=840$ by $19\%$ over v1.4.0's factor; averaged over
+the visibility, $\int\mathcal V e^{-(k/k_D(\eta))^2}\mathrm d\eta$, it lowers
+it by $19\%$, because the damping keeps growing through the visibility's
+tail. The two bracket what A-5 can do to the heights through the damping, and
+the tail physics that decides between them is what A-5 computes for the first
+time. Relative to $\ell=30$ and to the step before it, on the recombination
+with helium:
+
+\begin{center}\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+$\ell$ & $210$ & $480$ & $720$ & $840$ \\
+\midrule
+envelope at $\eta_*$ & $1.011$ & $1.058$ & $1.136$ & $1.189$ \\
+envelope over the visibility & $0.924$ & $0.850$ & $0.815$ & $0.811$ \\
+released over polarised, at $\eta_*$ & $1.003$ & $1.018$ & $1.042$ & $1.057$ \\
+released over polarised, over the visibility & $1.011$ & $1.036$ & $1.066$ & $1.084$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+A height still $15\%$ low at $\ell=840$ after A-5 therefore cannot say that
+the factor stayed on, although the envelope at $\eta_*$ alone would suggest
+it. Whether the factor is applied is a property of the released path, and it
+is tested as one.
+
+\subsection{The line of sight through the transition}
+
+The slots of \eqref{eq:assembly-invariant} keep their weights and kernels and
+change what they read. The Sachs--Wolfe slot reads the hierarchy's
+$\sigma_0=\delta T$. The Doppler slot reads $\hat v_B=v_b/k$, the baryons'
+own velocity, where the pair supplied $\tau_1$. $C_0$'s rank-zero source
+$\tfrac k3\tau_1$ is the photons' dipole $\sigma_1$, and the integrated slot is
+unchanged in form, $-(\Phi_A'-\Phi_H')$, because the rank-zero row it rests on
+carries no collision term. The in-scattered quadrupole adds a fourth slot. In
+the matching it enters beside the gravitational rank-two source with the
+opposite sign, one on each side of \eqref{eq:transport-exact}, and the rows
+of \S\ref{sec:source-derivatives} give it $C_0=\tfrac13\kappa'\bar f_2\tau_2$
+and $C_2=\kappa'\bar f_2\tau_2/k^2$, so that
+\begin{equation}
+  W\big(C_0K+C_2K''\big)=\mathcal V\,\bar f_2\,\tau_2\Big(\frac K3+\frac{K''}{k^2}\Big),
+  \label{eq:a5-quadrupole-slot}
+\end{equation}
+carried at $\mathcal V$ on the undifferentiated $\tau_2$, since
+$W\kappa'=\mathcal V$, and never integrated by parts. With Ma \&
+Bertschinger's normalisation as the bundle identifies it,
+$\sigma_2=\tfrac{15}2\Theta_2$, the slot is
+$-\tfrac14\mathcal V\Theta_2(j_\ell+3j_\ell'')$, the standard form at the
+Sachs--Wolfe slot's sign (c17). GDE99~(37) leaves $\tau_{A_\ell}$ unmoved for
+$\ell\ge2$ at first order in the boost, and the boost shifts $v_b$ and
+$\sigma_1$ alike, so the fourth slot and the slip are each frame-invariant and
+the three conditions of \eqref{eq:frame-conditions} are untouched.
+
+The slots carry no diffusion factor. The hierarchy is carried as long as the
+line of sight reads it, until the visibility still to come, $1-W$, falls
+below $10^{-4}$, which on \texttt{PLANCK\_MODEL} is at $7.9\,\eta_*$; past
+that the photons supply no source to the slots, and the point is registered
+with its convergence. That closes Q16: no hold remains, so its threshold has
+nothing to assert.
+
+\subsection{Helium and the radiation of $\Lambda$CDM}
+
+\paragraph{Helium.} The bundle's recombination is hydrogen alone, by the
+scope \texttt{functions/spectra/peebles.py} states, while the CAMB and CLASS
+spectra F9 draws carry $Y_{\rm He}=0.245$. Measured
+with CAMB on the specialised Planck model, helium alone moves the heights
+relative to $\ell=30$ by $-0.3\%$, $-2.5\%$, $-4.9\%$ and $-3.0\%$ at
+$\ell=210$, $480$, $720$ and $840$. Against a helium-free CAMB the release
+tree's residuals are $+6.0\%$, $-3.9\%$, $-0.6\%$ and $-17.5\%$ rather than
+$+6.4\%$, $-1.4\%$, $+4.5\%$ and $-15.0\%$. The comparison was therefore not
+like for like, and this answers Q15. The first step puts $Y_p=0.245$ into the
+recombination on every background through $n_{\rm H}=(1-Y_p)\,n_b$, in Saha,
+in the Peebles equation and in the Thomson scale. Helium's own electrons,
+which are present above $z\simeq2000$ where the visibility has no support,
+are not carried, and their omission lowers $\kappa'$ there by $8\%$. On
+\texttt{PLANCK\_MODEL} the visibility maximum moves from $z=1079.4$ to
+$1088.1$, against CAMB's $1087.5$; $k_D(\eta_*)$ at $R(\eta)$ with $16/15$
+from $0.1430$ to $0.1365\,{\rm Mpc}^{-1}$, against CAMB's $0.1347$; and
+$\ell_A$ from $266.720$ to $268.058$, which leaves \emph{(f)}'s $206\pm6$
+clear. On the other two backgrounds the visibility widens by $4$ to $5\%$
+and $k_D$ falls by $4$ to $9\%$.
+
+\paragraph{The radiation of $\Lambda$CDM.} The second step gives
+\texttt{LCDM\_MODEL} its photons, as \texttt{PLANCK\_MODEL} has them:
+$\Omega_r=\Omega_\gamma h^2/h^2=5.047\times10^{-5}$ at the $h=0.7$ its figures
+use, $\Omega_m=0.3$ and $\Omega_\Lambda=0.7-\Omega_r$, so that
+$z_{\rm eq}=5943$. $\Lambda$CDM then carries the solved potential of
+\S\ref{sec:a3-construction}, and its spectrum moves, which is recorded. From
+this step on, \emph{(g1)} and \emph{(g2)} are measured on
+Einstein--de~Sitter alone. Criterion~5b's two routes are the antecedent's
+own writings and do not read A-5; their background moves with this step and
+5b is measured again at its gate.
+
+\subsection{The registered test}
+
+Each step is gated on the physics it changes and scored against the step
+before it. Registered, on 26 November 2026, before any step is built:
+
+\emph{(h)} Helium: on \texttt{PLANCK\_MODEL} the visibility maximum lands at
+$z=1088.1$ and $k_D(\eta_*)$ at $0.1365\,{\rm Mpc}^{-1}$, each to $10^{-3}$ of
+the value this section measures, and \emph{(f)} holds.
+
+\emph{(i)} The envelope: with the potentials set to zero, the hierarchy's
+acoustic amplitude divided by the undamped pair's equals
+$e^{-k^2/k_D^2(\eta)}$, with $8/9$ and $R(\eta)$, to $3\%$ of the exponent at
+the epoch where $x=0.1$, for $k=150$, $300$, $600$ and $1000$. On
+\texttt{PLANCK\_MODEL} with helium that epoch is $0.894$, $0.827$, $0.682$
+and $0.565\,\eta_*$, and the exponents are $0.0171$, $0.0438$, $0.0736$ and
+$0.0691$. With $\bar f_2=\tfrac14$ the same holds against $16/15$, and with
+$\bar f_2=0$ against $4/5$, which is the negative control: the three
+coefficients lie $9$ and $18\%$ apart, and $3\%$ resolves them.
+
+\emph{(j)} The stress constraint before decoupling: outside the horizon,
+while $\mathcal H/\kappa'\le10^{-2}$, $(\Phi_A+\Phi_H)/\Phi_A$ is negative and
+equals \eqref{eq:a5-stress} to $10\%$.
+
+\emph{(k)} The predecessor: with $\bar f_2=0$, the slip held at zero, the pair
+held from $6\eta_*$ and the factor applied, the construction returns the
+transfer of the step before it to $10^{-10}$. The factor is absent from the
+released path, which sums the four slots with unit weight; it survives only
+in criterion~5b's routes, where (177)--(179) print it.
+
+\emph{(l)} Convergence: doubling $\ell_{\max}$, halving both switch thresholds
+and lowering the end of the reading from $10^{-4}$ to $10^{-5}$ each move
+$D_\ell$ by less than $10^{-4}$ of its maximum over $2\le\ell\le1000$.
+
+\emph{(m)} The constraints: the energy constraint, which is never integrated,
+closes to $10^{-9}$ of its terms at $\eta_*$ at every $k$, now with the
+photons' slip and quadrupole in the momentum and stress constraints.
+
+\emph{(e)}, \emph{(f)} and \emph{(g1)} hold at every step: the Newtonian and
+CDM spectra coincide below $10^{-12}$, and the fourth slot's two frames agree
+to $10^{-12}$ at every $\eta$; the first maximum lies inside $206\pm6$ and the
+first interior minimum at $360$ on D46's grid; and the solved potential on
+Einstein--de~Sitter equals $D/a$ to $10^{-10}$. \emph{(g2)} becomes:
+Einstein--de~Sitter keeps the released potential bit for bit, and its
+spectrum moves by helium and by A-5 alone.
+
+Recorded and not gated, as the PI ruled on 26 November: the heights relative
+to $\ell=30$ at the three maxima, at $\ell=840$ and as the rms over
+$30\le\ell\le990$, against CAMB and CLASS, after each step; A-5's change
+against the brackets above, a height outside them being a finding about the
+tail and not a failure; the polarised sensitivity, with the released spectrum
+over the polarised one expected between the table's two rows; and A-5's
+change taken apart in four, by removing the factor alone, then carrying the
+hierarchy through the transition, then reading the baryons' own velocity in
+the Doppler slot, and then adding the quadrupole slot.
+
+What a failure would mean. If \emph{(i)} fails, the hierarchy does not diffuse
+the photons at T-21's rate, and the first place to look is a coefficient:
+$\bar f_2$ entering as $\tfrac9{10}$ gives a quadrupole damped at
+$\kappa'/10$, nine times too slowly, which c16's negative control exists to
+catch. If \emph{(j)} fails in sign, the ruled sign of
+\S\ref{sec:a3-construction} is not carried into the tight-coupling quadrupole.
+If \emph{(k)} fails, the new path does not contain the old, which is an
+implementation defect to be read before any height. If the heights fall
+outside the brackets, the visibility's tail carries physics that neither
+envelope has.
 
 
 % === BEGIN exact v1.3.0 source expansion: supplementary-materials/section-free-streaming-v1.4.0.tex ===
@@ -4123,10 +4510,10 @@ integrating factor.
 The v1.3.6 diagram also gave
 $\tau_{ab}\simeq-(\kappa')^{-1}
 [\sigma_{ab}+\mathrm D_{\langle a}v^B_{b\rangle}]$.
-It is retained as reported, but its proper/conformal-time conversion remains
-open.\footnote{Here $\kappa'$ is a conformal-time rate whereas the unscaled
-kinematic tensors use proper-time derivatives. The published tensor
-relation has not been independently certified.}
+It is retained as reported, and \eqref{eq:a5-quadrupole-covariant} settles
+the proper/conformal-time conversion that stood open here: the rate is the
+proper-time $\Gamma_{\rm T}=\kappa'/a$, and Thomson's in-scattering adds
+$(1-\bar f_2)^{-1}$, so the diagram's form is the case $\bar f_2=0$.
 Neither this estimate, the $\bar f_2=0$ approximation nor the proposed
 $W$-form is presented as an independently verified consequence of the exact
 brightness hierarchy. The accepted original TikZ is retained unchanged.
@@ -4873,7 +5260,9 @@ $\mathcal S_2\propto\tau_{ab}$, and GDE99~(37) leaves $\tau_{A_\ell}$ invariant
 for $\ell\ge2$ \emph{at first order in $v$} --- those multipoles are already
 first-order small, so what a boost would generate from them is second order ---
 whence $\Delta\mathcal S_2=0$ and dropping the term changes both columns by the
-same amount. It is a \S\ref{sec:frame-discrepancy} Triage~C site ---
+same amount. At A-5 it is $\tfrac1{10}\tau_{ab}$, and it enters the line of sight
+as a fourth slot, frame-invariant on the same argument
+(\S\ref{sec:a5-construction}). It is a \S\ref{sec:frame-discrepancy} Triage~C site ---
 it can ruin the spectrum and it cannot be seen by a frame instrument --- and
 listing it as a candidate for the frame gap confuses the two questions the
 triage tables exist to separate.
@@ -7506,7 +7895,11 @@ settled it where something has. The supporting history is in
   recombines earlier and shifts $x_e$, hence $\kappa'$, $\eta_*$, the
   visibility width and the damping scale. & $\eta_*$ and $k_D$ recomputed with
   helium, against the percent-level differences the peak comparison turns on.
-  \emph{Not measured} \\
+  Measured on 26 November: with $Y_p=0.245$ the visibility maximum on
+  \texttt{PLANCK\_MODEL} moves from $z=1079.4$ to $1088.1$ and $k_D(\eta_*)$
+  falls by $4.6\%$, and in CAMB helium moves the heights by $-0.3$ to $-4.9\%$
+  at the three maxima. v1.5.0's first step puts it in
+  (\S\ref{sec:a5-construction}) \\
 \textbf{Q16} & \textbf{Is the tight-coupling source frozen late enough?}
   $\delta T$ and $\tau_1$ are held at $\eta_{\rm couple}=6\eta_*$, after
   which no scattering drives the pair, on the condition that the visibility
@@ -7516,6 +7909,9 @@ settled it where something has. The supporting history is in
   (\S\ref{sec:a3-construction}, D46). The line of sight still reads the held
   pair, in v1.3.0 and in v1.4.0, until A-5,
   and $\mathcal V(\eta_{\rm couple})/\mathcal V(\eta_*)$ is not measured.
+  A-5's construction removes the hold: the hierarchy is carried until the
+  visibility still to come falls below $10^{-4}$
+  (\S\ref{sec:a5-construction}).
   T-145 measured the hold. T-147's numbers for releasing it ran on a
   continuation handed over in reversed relative phase (T-195) and are void
   as measured \\
@@ -8347,6 +8743,8 @@ any of the four, and \S\ref{sec:open-questions} is where that stands.
 \paragraph{The collision residual.} The collision residual is largest where
 the quadrupole is made. This release takes $\bar f_2=0$, so $\mathcal S_2=0$ by approximation A-5, and
 the final term of \eqref{eq:egs-shear-identity} is $-\kappa'\tau_{ab}$ exactly.
+With A-5's $\bar f_2=\tfrac1{10}$ it is $-\tfrac9{10}\kappa'\tau_{ab}$
+(\S\ref{sec:a5-construction}).
 $\kappa'$ is not small near last scattering; it is the rate whose exponential
 integral defines the visibility, and \S\ref{sec:kappa-ledger} places the
 visibility maximum at $\kappa''=-\kappa'^2$. The one term carrying no

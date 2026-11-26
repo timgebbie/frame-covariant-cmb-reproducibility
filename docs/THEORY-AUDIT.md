@@ -2,9 +2,9 @@
 
 > **Generated, not transcribed. Do not edit by hand.**
 >
-> Produced by `tests/frame/gen_theory_audit.py` at 2026-11-24 16:30 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
+> Produced by `tests/frame/gen_theory_audit.py` at 2026-11-26 06:40 UTC. Every number below is read from the machine-readable record of the instrument named beside it. To change this document, change the instrument.
 
-**Status: ALL CHECKS PASS** — 86 assertions across 15 instruments.
+**Status: ALL CHECKS PASS** — 139 assertions across 17 instruments.
 
 ## What this document does not establish — read first
 
@@ -390,11 +390,100 @@ Annals~II's (153) carries $-H\Phi_A$, which it drops as the small-scale approxim
 
 *Instrument: `tests/frame/c15_temperature_row.py`, sha256 `664e5af391ea…`*
 
+### The Thomson in-scattering weight at every rank
+
+The unpolarised Thomson phase function $\tfrac3{16\pi}(1+\mu^2)$, integrated against a PSTF brightness $\tau_{A_\ell}e^{A_\ell}$ with the sphere moments $\langle e^{a_1}\negthinspace\cdots e^{a_n}\rangle$ in their pairing form, returns $\tau_0+\tfrac1{10}\tau_{ab}e^ae^b$ and nothing else: a term survives only when every $\tau$-index is paired to one of the two $e$-indices, so ranks other than 0 and 2 vanish identically at every $\ell$. Hence $\bar f_2=\tfrac1{10}$ in Paper~1's Eq.~(38) and $f_2=1-\bar f_2=\tfrac9{10}$, Kaiser's unpolarised coefficient derived rather than imported, with $\tfrac45f_2^{-1}=\tfrac89$. The rank-one in-scattering from the brightness is zero, so $\bar f_1=1$ is a statement about $v^B_a$ and not a photon $\ell$-weight. The monopole returns exactly, on $e_ae^a=1$, which is the control on the phase function's normalisation.
+
+| assertion | verdict |
+|---|---|
+| C16  moments n=0 | **PASS** — pairing form reproduces every component (sorted tuples; both sides symmetric) |
+| C16  moments n=1 | **PASS** — pairing form reproduces every component (sorted tuples; both sides symmetric) |
+| C16  moments n=2 | **PASS** — pairing form reproduces every component (sorted tuples; both sides symmetric) |
+| C16  moments n=3 | **PASS** — pairing form reproduces every component (sorted tuples; both sides symmetric) |
+| C16  moments n=4 | **PASS** — pairing form reproduces every component (sorted tuples; both sides symmetric) |
+| C16  moments n=5 | **PASS** — pairing form reproduces every component (sorted tuples; both sides symmetric) |
+| C16  moments n=6 | **PASS** — pairing form reproduces every component (sorted tuples; both sides symmetric) |
+| C16  PSTF dim l=0 | **PASS** — kernel of the trace map has dimension 1 (expected 1) |
+| C16  PSTF dim l=1 | **PASS** — kernel of the trace map has dimension 3 (expected 3) |
+| C16  in-scattering l=1 | **PASS** — vanishes for every PSTF tensor of this rank |
+| C16  PSTF dim l=2 | **PASS** — kernel of the trace map has dimension 5 (expected 5) |
+| C16  PSTF dim l=3 | **PASS** — kernel of the trace map has dimension 7 (expected 7) |
+| C16  in-scattering l=3 | **PASS** — vanishes for every PSTF tensor of this rank |
+| C16  PSTF dim l=4 | **PASS** — kernel of the trace map has dimension 9 (expected 9) |
+| C16  in-scattering l=4 | **PASS** — vanishes for every PSTF tensor of this rank |
+| C16  PSTF dim l=5 | **PASS** — kernel of the trace map has dimension 11 (expected 11) |
+| C16  in-scattering l=5 | **PASS** — vanishes for every PSTF tensor of this rank |
+| C16  PSTF dim l=6 | **PASS** — kernel of the trace map has dimension 13 (expected 13) |
+| C16  in-scattering l=6 | **PASS** — vanishes for every PSTF tensor of this rank |
+| C16  monopole preserved | **PASS** — I = (e1**2/4 + e2**2/4 + e3**2/4 + 3/4) x tau_0 = 1 x tau_0 on e_a e^a = 1 (control on the phase function's normalisation) |
+| C16  rank-2 reading is |e|-independent | **PASS** — I and tau_ab e^a e^b are both homogeneous of degree 2, so fbar_2 is well defined off the sphere as well as on it |
+| C16  fbar_2 | **PASS** — I = 1/10 x tau_ab e^a e^b for all 5 PSTF tensors |
+| C16  bridge f_2 = 1 - fbar_2 | **PASS** — f_2 = 1 - 1/10 = 9/10, Kaiser's unpolarised value, DERIVED |
+| C16  rank-2 collision | **PASS** — C_2 = -kappa' (1 - fbar_2) tau_ab = -(9/10) kappa' tau_ab |
+| C16  rank-1 photon in-scattering | **PASS** — zero, so fbar_1 = 1 is a statement about v^B_a and not a photon l-weight |
+| C16  unpolarised damping | **PASS** — (4/5) f_2^-1 = (4/5)/(9/10) = 8/9, Hu & Sugiyama's 8/9 |
+| C16  polarised damping | **PASS** — (4/5)/(3/4) = 16/15; the polarised f_2 = 3/4 is NOT derived here -- see the note |
+| C16  the 6/5 the two differ by | **PASS** — (16/15)/(8/9) = 6/5 = (9/10)/(3/4) |
+| C16  the confusion is caught | **PASS** — fbar_2 = 9/10 gives f_2 = 1/10 and (4/5) f_2^-1 = 8, 9x the right coefficient; the quadrupole would be damped at kappa'/10, not 9kappa'/10 |
+
+| measured | value |
+|---|---|
+| `fbar_2` | 0.1 |
+| `f_2` | 0.9 |
+| `damping_unpolarised` | 0.888889 |
+| `damping_polarised` | 1.06667 |
+| `negative_control_coefficient` | 8 |
+
+*Instrument: `tests/frame/c16_thomson_rank2_weight.py`, sha256 `d707a8a84117…`*
+
+### The tight-coupling transition (A-5)
+
+With Thomson scattering returning $\bar f_2=\tfrac1{10}$ of the photon quadrupole, which c16 settles in index algebra, the quadrupole scatters out at $\tfrac9{10}\kappa'$ and Kaiser's $f_2$ is $1-\bar f_2$. To first order in $1/\kappa'$ the baryons slip by $R(k\delta T-\mathcal H\tau_1)/[(1+R)\kappa']$ and the quadrupole is $\tau_2=\tfrac{10}9(k/\kappa')\tau_1$. The acoustic root then damps at $\Gamma=k^2[R^2/(1+R)+\tfrac45(1-\bar f_2)^{-1}]/[6(1+R)\kappa']$, which is T-21's envelope: $\tfrac45$, $\tfrac89$ and $\tfrac{16}{15}$ at $\bar f_2=0$, $\tfrac1{10}$ and $\tfrac14$, and the full hierarchy's slow eigenvalue meets it to $O(x^2)$. The quadrupole enters the stress constraint with the ruled sign, and the line of sight as a fourth slot, $\mathcal V\bar f_2\tau_2(K/3+K''/k^2)$, which is frame-invariant.
+
+| assertion | verdict |
+|---|---|
+| C17a  confirmatory of c16: Thomson scattering returns the monopole and neither the dipole nor the octupole | **PASS** |
+| C17a  confirmatory of c16: it returns one tenth of the quadrupole, fbar_2 = 1/10 | **PASS** — 0.100000000000000 |
+| C17a  in-scattering carries the baryon velocity: fbar_1 = 1 | **PASS** — 6.1e-17 |
+| C17a  the E-mode moments at tight coupling return 1/4 of the quadrupole: 1 - fbar_2 = 3/4 (comparator) | **PASS** — 1/4 |
+| C17b  with Thomson's term the pair's multipoles are (-1)^(l+1) times (F.1)'s, v_B shared as the dipole is | **PASS** |
+| C17b  (-1)^l fails at the Thomson dipole term too (negative control) | **PASS** |
+| C17b  the drag conserves momentum with R = 3 rho_b/(4 rho_gamma) | **PASS** |
+| C17b  at zeroth order the photon and baryon rows give the pair (152) | **PASS** |
+| C17c  the slip: v_b - sigma_1 = R (k sigma_0 - H sigma_1) / ((1+R) kappa') | **PASS** |
+| C17c  the quadrupole: sigma_2 = -k sigma_1 / ((1 - fbar_2) kappa') | **PASS** |
+| C17c  in the phase of (F.1), tau_2 = (10/9)(k/kappa') tau_1 on the released path | **PASS** — 10/9 |
+| C17d  the acoustic root at zeroth order is i k c_s, c_s^2 = 1/(3(1+R)) | **PASS** |
+| C17d  at first order it damps at Gamma = k^2 [R^2/(1+R) + (4/5)/(1-fbar_2)] / (6 (1+R) kappa'), with no shift of frequency | **PASS** |
+| C17d  4/5, 8/9 and 16/15 at fbar_2 = 0, 1/10 and 1/4: Annals II's (168) and (169) | **PASS** — 4/5, 8/9, 16/15 |
+| C17d  Gamma/k^2 is T-21's integrand [R^2 + (4/5) f_2^-1 (1+R)] / (6 kappa' (1+R)^2) | **PASS** |
+| C17d  the full hierarchy's slow eigenvalue damps at Gamma, to O(x^2), for all three | **PASS** — 1.1e-04 worst, x <= 0.02 |
+| C17d  the hand-over errs by O(x^2) at zeroth order and O(x^4) at first order | **PASS** — 2.3e-06 and 3.9e-10 at x = 0.01 |
+| C17e  k^2 (Phi_A + Phi_H) = (16/9) Hc^2 Omega_g (k/kappa') tau_1, the same in either phase | **PASS** |
+| C17e  a quadrupole in one phase with the other phase's constraint reverses the sign (negative control) | **PASS** |
+| C17e  outside the horizon in the radiation era (Phi_A + Phi_H)/Phi_A = -(8/9) Omega_g / (eta kappa'), negative | **PASS** — -8*Omega_gamma/(9*eta*kappa_p) |
+| C17f  confirmatory (Rayleigh convention): a rank-two source projects with -(j'' + j/3) beside the rank-zero j | **PASS** — 2.5e-14 |
+| C17f  the matching rows give C_0 = r_2/3 and C_2 = r_2/k^2: the kernel K/3 + K''/k^2 | **PASS** |
+| C17f  confirmatory (Ma & Bertschinger, sigma_2 = (15/2) Theta_2): the slot is -(1/4) V Theta_2 (j + 3 j''), the standard form at the Sachs-Wolfe slot's sign | **PASS** |
+| C17f  confirmatory of GDE99 (37): a boost moves the dipole by beta and the quadrupole only at second order (beta^2, beta x anisotropy): the slot and the slip are frame-invariant | **PASS** |
+
+| measured | value |
+|---|---|
+| `fbar_2` | 0.1 |
+| `fbar_2_polarised` | 0.25 |
+| `eigen_rel_err_x01` | -2.02e-05 |
+| `handover_zeroth_x01` | 2.29e-06 |
+| `handover_first_x01` | -3.89e-10 |
+| `boost_quadrupole_kinematic` | 7.50e-10 |
+| `boost_quadrupole_bilinear` | 5.96e-10 |
+
+*Instrument: `tests/frame/c17_tight_coupling_transition.py`, sha256 `12a4af40299a…`*
+
 ## Provenance
 
 | | |
 |---|---|
-| generated | 2026-11-24 16:30 UTC |
+| generated | 2026-11-26 06:40 UTC |
 | python | 3.13.18 |
 | numpy | 2.5.3 |
 | scipy | 1.18.1 |

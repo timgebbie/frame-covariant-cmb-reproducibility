@@ -31,6 +31,27 @@ All notable changes to this bundle are recorded here. The version policy is in
   $\ell_{\rm peak}$ reproduces, and only the ratio column moves, by 0.011%.
   D27 imports the value.
 
+### The supplement and the README (v1.5.0, v1.5.1)
+
+- **v1.5.0** (`2a8281f`): the v1.5.0-dev line's scope. v1.5.0 is A-5 alone,
+  with T-21's $k_D$ and `LCDM_MODEL`'s radiation, and the second order in the
+  shear moves to v1.6.0; the released quadrupole feedback is unpolarised and
+  the polarised one a measured sensitivity. The README's key figure gains the
+  formation surface written out as one equation.
+- **v1.5.1**: v1.5.0 registered before any of it is built, in a new section
+  between the first acoustic peak and free streaming, and as step 5 of the
+  README's chain. Thomson scattering returns a tenth of the photon quadrupole,
+  derived in index algebra (`c16`), so Kaiser's $f_2$ is $1-\bar f_2$ and
+  *Annals II*'s printed $4/5$ is A-5's $\bar f_2=0$. The first-order slip and
+  quadrupole damp the oscillator at T-21's rate, which the full hierarchy meets
+  to $O(x^2)$ (`c17`), so A-5 removes the diffusion factor and keeps $k_D$ as
+  the envelope it is scored against. The in-scattered quadrupole is a fourth,
+  frame-invariant slot. Helium enters the recombination first, on every
+  background, and `LCDM_MODEL` gains its radiation; the physics is gated and
+  the heights recorded (the PI, 26 November). The polarised-coefficient
+  paragraph called $4/5$ the released value, which it has not been since
+  15 October, and is rewritten.
+
 ### Changed
 
 - **The damping coefficient and the quadrupole's collision term are one
