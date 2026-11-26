@@ -65,11 +65,11 @@ import ast
 import re
 import subprocess
 import sys
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from _bundle_files import BINARY_SUFFIXES, bundle_files  # noqa: E402
+from _bundle_files import BINARY_SUFFIXES, bundle_files, inside, nested_trees  # noqa: E402
 from _versions import (  # noqa: E402
     supplement_figures,
     supplement_pdf,
@@ -344,8 +344,8 @@ def check_model_dependent_defaults(failures: list[str]) -> str:
     import re as _re
     inheriting = 0
     total = 0
-    for path in sorted(ROOT.rglob("*.py")):
-        if ".git" in path.parts or "dist" in path.parts:
+    for path in bundle_files(ROOT):
+        if path.suffix != ".py":
             continue
         try:
             tree = ast.parse(path.read_text(encoding="utf-8"))
@@ -368,10 +368,12 @@ def check_no_build_artefacts(failures: list[str]) -> str:
     """A build artefact in the tree is a file nothing generates and nothing reads."""
     bad_suffix = {".log", ".err", ".aux", ".out", ".toc", ".fls", ".fdb_latexmk",
                   ".synctex.gz", ".bbl", ".blg"}
+    copies = nested_trees(ROOT)
     found = [p.relative_to(ROOT).as_posix()
              for p in ROOT.rglob("*")
              if p.is_file() and p.suffix in bad_suffix
-             and ".git" not in p.parts and "dist" not in p.parts]
+             and ".git" not in p.parts and "dist" not in p.parts
+             and not inside(PurePosixPath(p.relative_to(ROOT).as_posix()), copies)]
     if found:
         failures.append("build artefacts in the tree, which no generator "
                         "produces and no gate reads: " + ", ".join(sorted(found)))

@@ -27,6 +27,7 @@ file exists rather than a fourth.
 from __future__ import annotations
 
 import re
+import sys
 from pathlib import Path
 
 import pytest
@@ -51,18 +52,16 @@ def _rendered_markdown() -> list[str]:
     parser, ``\eta_*`` is correct there, and enforcing these rules on the
     supplement would be the mirror-image mistake.
     """
-    # The directories `.gitignore` keeps out of every commit are skipped with
-    # `.git` itself: github.com renders only what is committed. pytest writes
-    # its own README.md into `.pytest_cache` on a first run, so without it the
-    # second run of the suite tested seven more rules than the first.
-    skip = {".git", "__pycache__", "node_modules", "sources", "correction",
-            ".pytest_cache", ".venv", "venv", ".ipynb_checkpoints"}
-    out = []
-    for p_ in sorted(ROOT.rglob("*.md")):
-        if skip & set(p_.parts):
-            continue
-        out.append(p_.relative_to(ROOT).as_posix())
-    return out
+    # github.com renders only what is committed, and the bundle's one file
+    # list is that set: `.gitignore` respected, `.git` and `.pytest_cache`
+    # (where pytest writes a README.md of its own) left out, and a copy of the
+    # bundle sitting inside the tree left out whole (T-207). This walk had its
+    # own skip list, which named the same 44 files until a clean-checkout clone
+    # inside the tree added 44 more and grew the cosmetic backlog.
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from _bundle_files import bundle_files
+    return [p_.relative_to(ROOT).as_posix() for p_ in bundle_files(ROOT)
+            if p_.suffix == ".md"]
 
 
 MARKDOWN = _rendered_markdown()

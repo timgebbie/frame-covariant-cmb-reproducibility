@@ -13288,3 +13288,22 @@ hierarchy's closure and stays imported until it is derived. Derived by P1-T,
   The two envelopes differ by $\sqrt{6/5}=1.09545$ in $k_D$: on Planck at
   $\eta_\ast$, $k_D$ is 557.1 with $\tfrac{16}{15}$ and 610.3 with
   $\tfrac89$ at $R=0$.
+
+## T-207 — A copy of the bundle inside the working tree was walked as the bundle
+
+A clean-checkout clone made from inside the PI's working tree sat in it whole,
+as `frame-covariant-cmb-reproducibility/` with its own `.git`. `pytest` from the
+root found two `tests/conftest.py` and stopped on `ImportPathMismatchError`
+before any test ran. The bundle's one file list walks the filesystem, so the
+manifests, the portability gate and the release archive would have taken the
+copy's files as the bundle's: the archive's own gates would have refused it, and
+named the wrong cause. An extracted release archive inside the tree is the same
+case without a `.git`. Repaired: `_bundle_files.nested_trees` recognises a
+directory that carries its own `.git` or its own `FILE-MANIFEST-SHA256.txt` as
+another tree, and leaves it out whole (the gates list its files among those
+present but not the bundle's); `pytest.ini` sets `testpaths = tests`; and
+the three walks that went round the one list follow it or skip a copy: the
+rendered-markdown tests take their files from it (the same 44), and the
+hygiene gate's call-site count and build-artefact scan leave a copy out. With a
+clone of v1.4.0 inside the tree the suite and every gate pass. The working
+tree's copy is the PI's and stays where he puts it.

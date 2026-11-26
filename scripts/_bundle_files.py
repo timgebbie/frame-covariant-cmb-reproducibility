@@ -134,14 +134,50 @@ def _walk(root: Path):
         yield p, PurePosixPath(rel.as_posix())
 
 
+#: What marks a directory as a whole copy of a tree rather than a part of this
+#: one: a clone carries its own `.git`, and an extracted release archive its own
+#: manifest. No directory of the bundle itself carries either.
+TREE_MARKERS = (".git", "FILE-MANIFEST-SHA256.txt")
+
+
+def nested_trees(root: Path) -> list[PurePosixPath]:
+    """The directories inside `root` that are another copy of a tree.
+
+    **T-207.** A clean-checkout clone made from inside the working tree sat in
+    it as `frame-covariant-cmb-reproducibility/`, and every file of it was
+    walked as the bundle's: `pytest` stopped on two `tests.conftest` modules,
+    and the manifests and the archive would have taken a second bundle in. A
+    copy is recognised by its own marker and left out whole; the outermost
+    copy is named, since a copy can hold a copy.
+    """
+    found: set[PurePosixPath] = set()
+    for marker in TREE_MARKERS:
+        for path in root.rglob(marker):
+            rel = path.parent.relative_to(root)
+            if rel.parts and not (set(rel.parts) & EXCLUDE_DIRS):
+                found.add(PurePosixPath(rel.as_posix()))
+    return sorted(
+        (t for t in found
+         if not any(o != t and t.parts[:len(o.parts)] == o.parts for o in found)),
+        key=lambda t: order_key(t.as_posix()))
+
+
+def inside(rel: PurePosixPath, trees: list[PurePosixPath]) -> bool:
+    """Whether `rel` lies in one of `trees` (as `nested_trees` names them)."""
+    return any(rel.parts[:len(t.parts)] == t.parts for t in trees)
+
+
 def bundle_files(root: Path) -> list[Path]:
     """Every file that *is* the bundle, in sorted order, on any machine.
 
     This is the one list. A file absent from it is absent from the fingerprint,
     absent from the portability gate, and absent from the released archive.
+    A copy of a tree sitting inside it is not part of it (T-207).
     """
     ign = GitIgnore.read(root)
-    return [p for p, rel in _walk(root) if not ign.ignores(rel)]
+    trees = nested_trees(root)
+    return [p for p, rel in _walk(root)
+            if not ign.ignores(rel) and not inside(rel, trees)]
 
 
 def ignored_but_present(root: Path) -> list[PurePosixPath]:
@@ -153,4 +189,6 @@ def ignored_but_present(root: Path) -> list[PurePosixPath]:
     leaving `.aux` files behind is normal and must not block a release.
     """
     ign = GitIgnore.read(root)
-    return [rel for _p, rel in _walk(root) if ign.ignores(rel)]
+    trees = nested_trees(root)
+    return [rel for _p, rel in _walk(root)
+            if ign.ignores(rel) or inside(rel, trees)]

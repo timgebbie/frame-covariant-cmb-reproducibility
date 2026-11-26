@@ -54,6 +54,14 @@ All notable changes to this bundle are recorded here. The version policy is in
 
 ### Changed
 
+- **A copy of the bundle inside the working tree is not the bundle** (T-207).
+  A clean-checkout clone made inside the tree stopped `pytest` on two
+  `tests.conftest` modules, and the file list behind the manifests and the
+  archive walked it as the bundle's own. A directory carrying its own `.git` or
+  `FILE-MANIFEST-SHA256.txt` is now left out whole, `pytest.ini` collects
+  `tests/` alone, and the walks that went round the one file list (the
+  rendered-markdown tests, the hygiene gate's call-site count and
+  build-artefact scan) follow it or skip a copy.
 - **The damping coefficient and the quadrupole's collision term are one
   input** (T-206): $f_2=1-\bar f_2$, with $\bar f_2=\tfrac1{10}$ derived from
   the unpolarised Thomson phase function, so Kaiser's $\tfrac89$ is derived
