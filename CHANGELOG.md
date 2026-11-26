@@ -54,6 +54,15 @@ All notable changes to this bundle are recorded here. The version policy is in
 
 ### Changed
 
+- **The release status follows the scope**: v1.5.0 lists its three registered
+  steps, helium first, then LCDM's radiation, then the transition with T-21's
+  $k_D$ as the envelope it is scored against; the quartic contribution, the
+  nonlinear couplings and S24's factorised interface move to v1.6.0, gated on
+  Paper 1 and on the A-5 baseline.
+- **Found: the heights were read against references with helium** (T-208).
+  F9's CAMB and CLASS carry $Y_{\rm He}=0.245$ and the recombination is
+  hydrogen alone; helium moves the heights by $-0.3$ to $-4.9$%, which v1.5.0's
+  first step puts right.
 - **A copy of the bundle inside the working tree is not the bundle** (T-207).
   A clean-checkout clone made inside the tree stopped `pytest` on two
   `tests.conftest` modules, and the file list behind the manifests and the

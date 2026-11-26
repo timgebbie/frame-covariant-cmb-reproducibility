@@ -70,18 +70,27 @@ harness entry is missing fails the script instead of appearing here.
 | **S** | the radiation era (A-3): one start, the potential solved, the baryons' own term | `functions.spectra.radiation_era`; `scripts/diagnostic_d46_the_solved_potential.py`; `test_the_start_lies_on_both_constraints`; `test_g1_the_solve_is_d_over_a_where_omega_r_vanishes`; `test_g2_the_wiring_cannot_move_a_background_without_radiation`; `test_the_energy_constraint_closes_with_the_baryons_own_term`; `test_e_the_two_frames_agree_under_the_solved_potential`; every mode from one start deep in the radiation era on the growing mode, its potential integrated with the CDM, the baryons and the photons (sec:a3-construction, three registered steps). The registered test passes on F9 and D46: (e) the frames agree; (f) the first maximum at 205.5 against 206 +- 6, with an interior minimum at 360; (g1) D/a where Omega_r = 0; (g2) those backgrounds unchanged. The heights are recorded, not gated |
 | **S** | F9 - the angular spectrum with the radiation era solved | `functions.spectra.radiation_era`; `scripts/figure_f9_acoustic_spectrum.py`; `test_e_the_two_frames_agree_under_the_solved_potential`; `test_the_three_slots_give_one_transfer_in_both_frames`; the v1.3.0 figure on the solved potential: on Planck the maxima at l = 210, 480 and 720 and the first interior minimum at 360, CAMB's on the same grid, the first maximum at 205.5 against CAMB's 206.1 by one estimator |
 
-## v1.5.0 — 5×P
+## v1.5.0 — 4×P
 
-- **Gate:** Paper 1 (S2)
-- **Gate:** v1.2.0, because a correction can only be read where the thing it corrects is already right
+- **Gate:** the registered test of sec:a5-construction: (h) to (m), with (e), (f) and (g1) at every step
 
 | | artefact | evidence |
 |---|---|---|
-| **P** | the quartic contribution and the nonlinear couplings | **blocked:** gated on Paper 1 (S2); **blocked:** the interface spec S24 is accepted but not frozen (S25) |
-| **P** | bundle1-v1.5.0's factorised interface | **blocked:** S24 accepted as option (a); the contract is not yet code |
-| **P** | A-5, the tight-coupling transition: slip and a growing quadrupole | **blocked:** its registration is the supplement's, and comes first |
-| **P** | k_D at the baryon loading the oscillator runs at (T-21) | **blocked:** diffusion_scale is still called with R = 0 |
-| **P** | Omega_r restored to LCDM_MODEL | **blocked:** LCDM_MODEL carries Omega_r = 0.0; the radiation era runs on PLANCK_MODEL |
+| **P** | helium in the recombination, Y_p = 0.245 on every background | **blocked:** registered as step 1 with gate (h); the recombination is hydrogen-only while F9's CAMB and CLASS carry Y_He = 0.245 (T-208) |
+| **P** | Omega_r restored to LCDM_MODEL | **blocked:** registered as step 2; LCDM_MODEL carries Omega_r = 0.0 |
+| **P** | A-5, the tight-coupling transition: slip and a growing quadrupole | **blocked:** registered as step 3 with gates (i) to (m); the pair is held from 6 eta_* and the slots read no quadrupole |
+| **P** | T-21's k_D at the baryon loading, the envelope A-5 is scored against | **blocked:** the released path still applies exp[-(k/k_D)^2] with R = 0 and 16/15; A-5 removes the factor and keeps k_D as the envelope of gate (i) |
+
+## v1.6.0 — 2×P
+
+- **Gate:** Paper 1 (S2)
+- **Gate:** v1.2.0, because a correction can only be read where the thing it corrects is already right
+- **Gate:** v1.5.0, the A-5 baseline the shear couplings are scored against
+
+| | artefact | evidence |
+|---|---|---|
+| **P** | the quartic contribution and the nonlinear couplings | **blocked:** gated on Paper 1 (S2); **blocked:** the interface spec S24 is accepted but not frozen (S25); **blocked:** scored against the A-5 baseline v1.5.0 releases |
+| **P** | the factorised interface of S24 (named bundle1-v1.5.0 there) | **blocked:** S24 accepted as option (a); the contract is not yet code |
 
 ## How to read this
 

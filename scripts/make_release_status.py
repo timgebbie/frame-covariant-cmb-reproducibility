@@ -347,19 +347,30 @@ ARTEFACTS: list[Artefact] = [
                      "against the stamped reference/ CSVs",)),
 
 
-    # ---- v1.5.0, gated --------------------------------------------------
-    Artefact("the quartic contribution and the nonlinear couplings", "P", "v1.5.0",
-             blocks=("gated on Paper 1 (S2)",
-                     "the interface spec S24 is accepted but not frozen (S25)")),
-    Artefact("bundle1-v1.5.0's factorised interface", "P", "v1.5.0",
-             blocks=("S24 accepted as option (a); the contract is not yet code",)),
+    # ---- v1.5.0: A-5 alone (the PI, 25 November), registered at v1.5.1 ----
+    # Built in the three registered steps of sec:a5-construction, each scored
+    # against the one before: helium, LCDM's radiation, then the transition.
+    Artefact("helium in the recombination, Y_p = 0.245 on every background", "P", "v1.5.0",
+             blocks=("registered as step 1 with gate (h); the recombination is "
+                     "hydrogen-only while F9's CAMB and CLASS carry Y_He = 0.245 (T-208)",)),
+    Artefact("Omega_r restored to LCDM_MODEL", "P", "v1.5.0",
+             blocks=("registered as step 2; LCDM_MODEL carries Omega_r = 0.0",)),
     # Moved from v1.4.0 on 19 November 2026 with A-5: v1.4.0 is A-3 alone.
     Artefact("A-5, the tight-coupling transition: slip and a growing quadrupole", "P", "v1.5.0",
-             blocks=("its registration is the supplement's, and comes first",)),
-    Artefact("k_D at the baryon loading the oscillator runs at (T-21)", "P", "v1.5.0",
-             blocks=("diffusion_scale is still called with R = 0",)),
-    Artefact("Omega_r restored to LCDM_MODEL", "P", "v1.5.0",
-             blocks=("LCDM_MODEL carries Omega_r = 0.0; the radiation era runs on PLANCK_MODEL",)),
+             blocks=("registered as step 3 with gates (i) to (m); the pair is "
+                     "held from 6 eta_* and the slots read no quadrupole",)),
+    Artefact("T-21's k_D at the baryon loading, the envelope A-5 is scored against", "P", "v1.5.0",
+             blocks=("the released path still applies exp[-(k/k_D)^2] with R = 0 "
+                     "and 16/15; A-5 removes the factor and keeps k_D as the "
+                     "envelope of gate (i)",)),
+
+    # ---- v1.6.0: the second order in the shear (moved 25 November) --------
+    Artefact("the quartic contribution and the nonlinear couplings", "P", "v1.6.0",
+             blocks=("gated on Paper 1 (S2)",
+                     "the interface spec S24 is accepted but not frozen (S25)",
+                     "scored against the A-5 baseline v1.5.0 releases")),
+    Artefact("the factorised interface of S24 (named bundle1-v1.5.0 there)", "P", "v1.6.0",
+             blocks=("S24 accepted as option (a); the contract is not yet code",)),
 ]
 
 #: What each release is waiting on, beyond its own artefacts.
@@ -372,8 +383,11 @@ GATES: dict[str, tuple[str, ...]] = {
                "with CAMB and CLASS reported alongside as context",),
     "v1.4.0": ("none. The registered test of sec:a3-construction passes: "
                "(e), (f), (g1) and (g2) on F9 and D46",),
-    "v1.5.0": ("Paper 1 (S2)", "v1.2.0, because a correction can only be read "
-               "where the thing it corrects is already right"),
+    "v1.5.0": ("the registered test of sec:a5-construction: (h) to (m), "
+               "with (e), (f) and (g1) at every step",),
+    "v1.6.0": ("Paper 1 (S2)", "v1.2.0, because a correction can only be read "
+               "where the thing it corrects is already right",
+               "v1.5.0, the A-5 baseline the shear couplings are scored against"),
 }
 
 #: **The R -> S promotion is part of the release act, not a follow-up.**
@@ -466,7 +480,8 @@ def render(artefacts: list[Artefact]) -> str:
     # that cannot emit a release is a register that silently omits it.
     # **v1.4.0 was missing from this tuple until 2026-11-24**, T-87's class
     # again: F11 was declared at v1.4.0 and the generated file never showed it.
-    for release in ("v1.0.0", "v1.1.0", "v1.2.0", "v1.3.0", "v1.4.0", "v1.5.0"):
+    for release in ("v1.0.0", "v1.1.0", "v1.2.0", "v1.3.0", "v1.4.0", "v1.5.0",
+                    "v1.6.0"):
         here = [a for a in artefacts if a.release == release]
         if not here:
             continue

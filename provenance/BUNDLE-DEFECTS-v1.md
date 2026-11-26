@@ -13307,3 +13307,18 @@ rendered-markdown tests take their files from it (the same 44), and the
 hygiene gate's call-site count and build-artefact scan leave a copy out. With a
 clone of v1.4.0 inside the tree the suite and every gate pass. The working
 tree's copy is the PI's and stays where he puts it.
+
+## T-208 — The heights were read against references with helium, from a recombination without it
+
+F9 draws CAMB and CLASS with $Y_{\rm He}=0.245$, and the bundle's recombination
+is hydrogen alone, by the scope `functions/spectra/peebles.py` states. Every
+height recorded against them, from v1.3.0 to v1.4.0, compared two
+recombinations. Measured with CAMB on the specialised Planck model, helium
+alone moves the heights relative to $\ell=30$ by $-0.3$%, $-2.5$%, $-4.9$%
+and $-3.0$% at $\ell=210$, 480, 720 and 840; against a helium-free CAMB the
+release tree's residuals are $+6.0$%, $-3.9$%, $-0.6$% and $-17.5$% rather
+than $+6.4$%, $-1.4$%, $+4.5$% and $-15.0$%. This answers the supplement's
+Q15. Measured by P1-T, 26 November. Not repaired here: v1.5.0's first
+registered step puts $Y_p=0.245$ into the recombination on every background,
+through $n_{\rm H}=(1-Y_p)n_b$ in Saha, in the Peebles equation and in the
+Thomson scale (supplement, `sec:a5-construction`, gate (h)).
